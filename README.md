@@ -149,10 +149,10 @@ erDiagram
     RACE ||--o{ NPC : "race"
     RACE ||--o{ CHARACTER : "race"
 
-    CLASS ||--o{ "CLASS_RACE" : "allows"
-    CLASS ||--o{ "PET_CLASS_RESTRICTION" : "restricts"
-    CLASS ||--o{ NPC : "class"
-    CLASS ||--o{ CHARACTER : "class"
+    "CLASS" ||--o{ "CLASS_RACE" : "allows"
+    "CLASS" ||--o{ "PET_CLASS_RESTRICTION" : "restricts"
+    "CLASS" ||--o{ NPC : "class"
+    "CLASS" ||--o{ CHARACTER : "class"
 
     PET ||--o{ "PET_CLASS_RESTRICTION" : "class restriction"
     PET ||--o{ "PET_RACE_RESTRICTION" : "race restriction"
