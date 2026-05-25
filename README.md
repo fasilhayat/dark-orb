@@ -144,13 +144,13 @@ erDiagram
 
     RACE ||--o{ SUBRACE : "has"
     RACE ||--o{ RACE_SPECIAL_ABILITY : "has"
-    RACE ||--o{ CLASS_RACE : "allows"
+    RACE ||--o{ "CLASS_RACE" : "allows"
     RACE ||--o{ PET_RACE_RESTRICTION : "restricts"
     RACE ||--o{ NPC : "race"
     RACE ||--o{ CHARACTER : "race"
 
     CLASS ||--o{ CLASS_RACE : "allows"
-    CLASS ||--o{ PET_CLASS_RESTRICTION : "restricts"
+    CLASS ||--o{ "PET_CLASS_RESTRICTION" : "restricts"
     CLASS ||--o{ NPC : "class"
     CLASS ||--o{ CHARACTER : "class"
 
