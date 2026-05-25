@@ -149,13 +149,13 @@ erDiagram
     RACE ||--o{ NPC : "race"
     RACE ||--o{ CHARACTER : "race"
 
-    CLASS ||--o{ CLASS_RACE : "allows"
+    CLASS ||--o{ "CLASS_RACE" : "allows"
     CLASS ||--o{ "PET_CLASS_RESTRICTION" : "restricts"
     CLASS ||--o{ NPC : "class"
     CLASS ||--o{ CHARACTER : "class"
 
-    PET ||--o{ PET_CLASS_RESTRICTION : "class restriction"
-    PET ||--o{ PET_RACE_RESTRICTION : "race restriction"
+    PET ||--o{ "PET_CLASS_RESTRICTION" : "class restriction"
+    PET ||--o{ "PET_RACE_RESTRICTION" : "race restriction"
 
     EQUIPMENT_SLOT ||--o{ CHARACTER_EQUIPMENT : "slot"
     CHARACTER ||--o{ CHARACTER_EQUIPMENT : "equipped"
@@ -238,7 +238,7 @@ erDiagram
         text description
     }
 
-    CLASS {
+    "CLASS" {
         serial id
         int hit_die_id
         varchar name
@@ -246,7 +246,7 @@ erDiagram
         text description
     }
 
-    CLASS_RACE {
+    "CLASS_RACE" {
         int class_id
         int race_id
     }
@@ -273,7 +273,7 @@ erDiagram
         text description
     }
 
-    PET_CLASS_RESTRICTION {
+    "PET_CLASS_RESTRICTION" {
         int pet_id
         int class_id
     }
