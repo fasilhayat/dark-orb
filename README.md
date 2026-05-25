@@ -112,80 +112,80 @@ The following Mermaid ER diagram reflects the core relationships defined in `.po
 
 ```mermaid
 erDiagram
-    DIE_TYPE ||--o{ CLASS : "hit die"
-    DIE_TYPE ||--o{ PET : "damage die"
-    DIE_TYPE ||--o{ WEAPON : "damage die"
-    DIE_TYPE ||--o{ SPELL : "damage die"
+    "DIE_TYPE" ||--o{ "CLASS" : "hit die"
+    "DIE_TYPE" ||--o{ "PET" : "damage die"
+    "DIE_TYPE" ||--o{ "WEAPON" : "damage die"
+    "DIE_TYPE" ||--o{ "SPELL" : "damage die"
 
-    DAMAGE_TYPE ||--o{ WEAPON : "weapon damage type"
-    DAMAGE_TYPE ||--o{ SPELL : "spell damage type"
+    "DAMAGE_TYPE" ||--o{ "WEAPON" : "weapon damage type"
+    "DAMAGE_TYPE" ||--o{ "SPELL" : "spell damage type"
 
-    ATTACK_TYPE ||--o{ WEAPON : "attack type"
+    "ATTACK_TYPE" ||--o{ "WEAPON" : "attack type"
 
-    ARMOR_CATEGORY ||--o{ ARMOR : "category"
+    "ARMOR_CATEGORY" ||--o{ "ARMOR" : "category"
 
-    GEAR_QUALITY ||--o{ WEAPON : "quality"
-    GEAR_QUALITY ||--o{ ARMOR : "quality"
-    GEAR_QUALITY ||--o{ RING : "quality"
-    GEAR_QUALITY ||--o{ AMULET : "quality"
-    GEAR_QUALITY ||--o{ GIRDLE : "quality"
+    "GEAR_QUALITY" ||--o{ "WEAPON" : "quality"
+    "GEAR_QUALITY" ||--o{ "ARMOR" : "quality"
+    "GEAR_QUALITY" ||--o{ "RING" : "quality"
+    "GEAR_QUALITY" ||--o{ "AMULET" : "quality"
+    "GEAR_QUALITY" ||--o{ "GIRDLE" : "quality"
 
-    ITEM_SET ||--o{ WEAPON : "contains"
-    ITEM_SET ||--o{ ARMOR : "contains"
-    ITEM_SET ||--o{ SET_BONUS : "has"
+    "ITEM_SET" ||--o{ "WEAPON" : "contains"
+    "ITEM_SET" ||--o{ "ARMOR" : "contains"
+    "ITEM_SET" ||--o{ "SET_BONUS" : "has"
 
-    RACE ||--o{ SUBRACE : "has"
-    RACE ||--o{ RACE_SPECIAL_ABILITY : "has"
-    RACE ||--o{ CLASS_RACE : "available for"
-    RACE ||--o{ PET_RACE_RESTRICTION : "restricted to"
-    RACE ||--o{ NPC : "belongs to"
-    RACE ||--o{ CHARACTER : "belongs to"
+    "RACE" ||--o{ "SUBRACE" : "has"
+    "RACE" ||--o{ "RACE_SPECIAL_ABILITY" : "has"
+    "RACE" ||--o{ "CLASS_RACE" : "available for"
+    "RACE" ||--o{ "PET_RACE_RESTRICTION" : "restricted to"
+    "RACE" ||--o{ "NPC" : "belongs to"
+    "RACE" ||--o{ "CHARACTER" : "belongs to"
 
-    CLASS ||--o{ CLASS_RACE : "available for"
-    CLASS ||--o{ PET_CLASS_RESTRICTION : "restricted to"
-    CLASS ||--o{ NPC : "belongs to"
-    CLASS ||--o{ CHARACTER : "belongs to"
+    "CLASS" ||--o{ "CLASS_RACE" : "available for"
+    "CLASS" ||--o{ "PET_CLASS_RESTRICTION" : "restricted to"
+    "CLASS" ||--o{ "NPC" : "belongs to"
+    "CLASS" ||--o{ "CHARACTER" : "belongs to"
 
-    DEITY_ALIGNMENT ||--o{ DEITY : "alignment"
+    "DEITY_ALIGNMENT" ||--o{ "DEITY" : "alignment"
 
-    SPELL_SCHOOL ||--o{ SPELL : "school"
+    "SPELL_SCHOOL" ||--o{ "SPELL" : "school"
 
-    EQUIPMENT_SLOT ||--o{ CHARACTER_EQUIPMENT : "slot"
+    "EQUIPMENT_SLOT" ||--o{ "CHARACTER_EQUIPMENT" : "slot"
 
-    CHARACTER ||--o{ CHARACTER_EQUIPMENT : "owns"
-    CHARACTER ||--o{ CHARACTER_INVENTORY : "owns"
+    "CHARACTER" ||--o{ "CHARACTER_EQUIPMENT" : "owns"
+    "CHARACTER" ||--o{ "CHARACTER_INVENTORY" : "owns"
 
-    PET ||--o{ PET_CLASS_RESTRICTION : "class restrictions"
-    PET ||--o{ PET_RACE_RESTRICTION : "race restrictions"
+    "PET" ||--o{ "PET_CLASS_RESTRICTION" : "class restrictions"
+    "PET" ||--o{ "PET_RACE_RESTRICTION" : "race restrictions"
 
-    DIE_TYPE {
+    "DIE_TYPE" {
       serial id
       varchar name
       int sides
     }
 
-    DAMAGE_TYPE {
+    "DAMAGE_TYPE" {
       serial id
       varchar name
     }
 
-    ATTACK_TYPE {
+    "ATTACK_TYPE" {
       serial id
       varchar name
     }
 
-    ARMOR_CATEGORY {
+    "ARMOR_CATEGORY" {
       serial id
       varchar name
     }
 
-    GEAR_QUALITY {
+    "GEAR_QUALITY" {
       serial id
       varchar name
       int sort_order
     }
 
-    RACE {
+    "RACE" {
       serial id
       varchar name
       int strength_bonus
@@ -198,21 +198,21 @@ erDiagram
       timestamp created_at
     }
 
-    SUBRACE {
+    "SUBRACE" {
       serial id
       int race_id
       varchar name
       text description
     }
 
-    RACE_SPECIAL_ABILITY {
+    "RACE_SPECIAL_ABILITY" {
       serial id
       int race_id
       varchar name
       text description
     }
 
-    CLASS {
+    "CLASS" {
       serial id
       int hit_die_id
       varchar name
@@ -220,17 +220,17 @@ erDiagram
       text description
     }
 
-    CLASS_RACE {
+    "CLASS_RACE" {
       int class_id
       int race_id
     }
 
-    DEITY_ALIGNMENT {
+    "DEITY_ALIGNMENT" {
       serial id
       varchar name
     }
 
-    DEITY {
+    "DEITY" {
       serial id
       int alignment_id
       varchar name
@@ -238,7 +238,7 @@ erDiagram
       varchar domain
     }
 
-    PET {
+    "PET" {
       serial id
       int damage_die_id
       varchar name
@@ -247,23 +247,23 @@ erDiagram
       text description
     }
 
-    PET_CLASS_RESTRICTION {
+    "PET_CLASS_RESTRICTION" {
       int pet_id
       int class_id
     }
 
-    PET_RACE_RESTRICTION {
+    "PET_RACE_RESTRICTION" {
       int pet_id
       int race_id
     }
 
-    WEAPON_TYPE {
+    "WEAPON_TYPE" {
       serial id
       varchar name
       text description
     }
 
-    WEAPON {
+    "WEAPON" {
       serial id
       int weapon_type_id
       int damage_die_id
@@ -281,7 +281,7 @@ erDiagram
       timestamp created_at
     }
 
-    ARMOR {
+    "ARMOR" {
       serial id
       int armor_category_id
       int gear_quality_id
@@ -298,20 +298,20 @@ erDiagram
       timestamp created_at
     }
 
-    ITEM_SET {
+    "ITEM_SET" {
       serial id
       varchar name
       text description
     }
 
-    SET_BONUS {
+    "SET_BONUS" {
       serial id
       int set_id
       int pieces_required
       text effect_description
     }
 
-    RING {
+    "RING" {
       serial id
       int gear_quality_id
       varchar name
@@ -322,7 +322,7 @@ erDiagram
       text curse_effect
     }
 
-    AMULET {
+    "AMULET" {
       serial id
       int gear_quality_id
       varchar name
@@ -333,7 +333,7 @@ erDiagram
       text curse_effect
     }
 
-    GIRDLE {
+    "GIRDLE" {
       serial id
       int gear_quality_id
       varchar name
@@ -344,7 +344,7 @@ erDiagram
       text curse_effect
     }
 
-    NPC {
+    "NPC" {
       serial id
       int race_id
       int class_id
@@ -363,12 +363,12 @@ erDiagram
       timestamp created_at
     }
 
-    SPELL_SCHOOL {
+    "SPELL_SCHOOL" {
       serial id
       varchar name
     }
 
-    SPELL {
+    "SPELL" {
       serial id
       int school_id
       int damage_die_id
@@ -378,7 +378,7 @@ erDiagram
       text description
     }
 
-    CHARACTER {
+    "CHARACTER" {
       serial id
       int race_id
       int class_id
@@ -400,7 +400,7 @@ erDiagram
       timestamp updated_at
     }
 
-    CHARACTER_EQUIPMENT {
+    "CHARACTER_EQUIPMENT" {
       serial id
       int character_id
       int slot_id
@@ -408,7 +408,7 @@ erDiagram
       int item_id
     }
 
-    CHARACTER_INVENTORY {
+    "CHARACTER_INVENTORY" {
       serial id
       int character_id
       varchar item_type
@@ -416,7 +416,7 @@ erDiagram
       int quantity
     }
 
-    EQUIPMENT_SLOT {
+    "EQUIPMENT_SLOT" {
       serial id
       varchar name
     }
