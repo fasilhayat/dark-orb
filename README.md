@@ -114,7 +114,7 @@ The following Mermaid ER diagram reflects the core relationships defined in `.po
 
 ```mermaid
 erDiagram
-    DIE_TYPE ||--o{ CLASS : "hit die"
+    DIE_TYPE ||--o{ "CLASS" : "hit die"
     DIE_TYPE ||--o{ PET : "damage die"
     DIE_TYPE ||--o{ WEAPON : "damage die"
     DIE_TYPE ||--o{ SPELL : "damage die"
