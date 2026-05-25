@@ -111,8 +111,6 @@ The script also creates reusable database functions for retrieving races, subrac
 The following Mermaid ER diagram reflects the core relationships defined in `.postgres-init/postgres-init.sql`.
 
 ```mermaid
-ER
-%%{ init: { "er": { "layoutDirection": "LR" } } }%%
 erDiagram
     DIE_TYPE ||--o{ CLASS : "hit die"
     DIE_TYPE ||--o{ PET : "damage die"
