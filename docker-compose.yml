@@ -42,4 +42,4 @@ services:
       - app-network
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__battle-arenaDatabase: "Host=battle-arena-db;Port=5432;Database=battle-arena_data;Username=postgres;Password=postgres"
+      ConnectionStrings__ArenaDatabase: "Host=battle-arena-db;Port=5432;Database=battle-arena_data;Username=postgres;Password=postgres"

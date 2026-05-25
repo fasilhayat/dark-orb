@@ -5,7 +5,7 @@ BattleArena is a homebrew fantasy RPG backend and data model for a Dungeons & Dr
 ## Project goals
 
 - Provide a REST API for combat, character management, equipment, accessories, and NPC data.
-- Seed a rich fantasy world with races, classes, deities, pets, weapons, armor, rings, amulets, girdles, item sets, NPCs, spells, and sample characters.
+- Seed a rich fantasy world with races, classes, deities, pets, weapons, armor, accessories (rings, amulets, girdles), item sets, NPCs, spells, and sample characters.
 - Support a Docker-based development workflow with PostgreSQL and the ASP.NET API.
 - Provide a shared lore reference in [notes/battle-arena-lore.md](notes/battle-arena-lore.md).
 
@@ -86,9 +86,8 @@ The PostgreSQL initialization script lives in `.postgres-init/postgres-init.sql`
 - `armor`
 - `item_set`
 - `set_bonus`
-- `ring`
-- `amulet`
-- `girdle`
+- `accessory_type`
+- `accessory`
 - `npc`
 - `spell`
 - `character`
@@ -97,14 +96,17 @@ The PostgreSQL initialization script lives in `.postgres-init/postgres-init.sql`
 
 ### Stored functions and procedures
 
-The script also creates reusable database functions for retrieving races, subraces, abilities, classes, weapons, armor, spells, deities, pets, characters, item sets, rings, amulets, girdles, and NPCs. It also includes stored procedures for updating and deleting characters.
+The script also creates reusable database functions for retrieving races, subraces, abilities, classes, weapons, armor, spells, deities, pets, characters, item sets, accessories (filterable by type: Ring, Amulet, Girdle), and NPCs. It also includes stored procedures for updating and deleting characters.
 
 ### Scheduled maintenance
 
-`pg_cron` is enabled, and two scheduled jobs are configured:
+`pg_cron` is enabled, and the following scheduled jobs are configured:
 
-- `vacuum_arena_tables` — runs weekly at 02:00
-- `clean_cron_logs` — runs daily at 01:00
+- `vacuum_weapon` — VACUUM ANALYZE on `arena_data.weapon`, weekly at 02:00 Sunday
+- `vacuum_armor` — VACUUM ANALYZE on `arena_data.armor`, weekly at 02:00 Sunday
+- `vacuum_race` — VACUUM ANALYZE on `arena_data.race`, weekly at 02:00 Sunday
+- `vacuum_character` — VACUUM ANALYZE on `arena_data.character`, weekly at 02:00 Sunday
+- `clean_cron_logs` — purges `cron.job_run_details` older than 5 days, daily at 01:00
 
 ## ER diagram
 
@@ -112,313 +114,298 @@ The following Mermaid ER diagram reflects the core relationships defined in `.po
 
 ```mermaid
 erDiagram
-    "DIE_TYPE" ||--o{ "CLASS" : "hit die"
-    "DIE_TYPE" ||--o{ "PET" : "damage die"
-    "DIE_TYPE" ||--o{ "WEAPON" : "damage die"
-    "DIE_TYPE" ||--o{ "SPELL" : "damage die"
+    DIE_TYPE ||--o{ CLASS : "hit die"
+    DIE_TYPE ||--o{ PET : "damage die"
+    DIE_TYPE ||--o{ WEAPON : "damage die"
+    DIE_TYPE ||--o{ SPELL : "damage die"
 
-    "DAMAGE_TYPE" ||--o{ "WEAPON" : "weapon damage type"
-    "DAMAGE_TYPE" ||--o{ "SPELL" : "spell damage type"
+    DAMAGE_TYPE ||--o{ WEAPON : "damage"
+    DAMAGE_TYPE ||--o{ SPELL : "damage"
 
-    "ATTACK_TYPE" ||--o{ "WEAPON" : "attack type"
+    ATTACK_TYPE ||--o{ WEAPON : "attack"
 
-    "ARMOR_CATEGORY" ||--o{ "ARMOR" : "category"
+    WEAPON_TYPE ||--o{ WEAPON : "type"
 
-    "GEAR_QUALITY" ||--o{ "WEAPON" : "quality"
-    "GEAR_QUALITY" ||--o{ "ARMOR" : "quality"
-    "GEAR_QUALITY" ||--o{ "RING" : "quality"
-    "GEAR_QUALITY" ||--o{ "AMULET" : "quality"
-    "GEAR_QUALITY" ||--o{ "GIRDLE" : "quality"
+    ARMOR_CATEGORY ||--o{ ARMOR : "category"
 
-    "ITEM_SET" ||--o{ "WEAPON" : "contains"
-    "ITEM_SET" ||--o{ "ARMOR" : "contains"
-    "ITEM_SET" ||--o{ "SET_BONUS" : "has"
+    GEAR_QUALITY ||--o{ WEAPON : "quality"
+    GEAR_QUALITY ||--o{ ARMOR : "quality"
+    GEAR_QUALITY ||--o{ ACCESSORY : "quality"
 
-    "RACE" ||--o{ "SUBRACE" : "has"
-    "RACE" ||--o{ "RACE_SPECIAL_ABILITY" : "has"
-    "RACE" ||--o{ "CLASS_RACE" : "available for"
-    "RACE" ||--o{ "PET_RACE_RESTRICTION" : "restricted to"
-    "RACE" ||--o{ "NPC" : "belongs to"
-    "RACE" ||--o{ "CHARACTER" : "belongs to"
+    ACCESSORY_TYPE ||--o{ ACCESSORY : "type"
 
-    "CLASS" ||--o{ "CLASS_RACE" : "available for"
-    "CLASS" ||--o{ "PET_CLASS_RESTRICTION" : "restricted to"
-    "CLASS" ||--o{ "NPC" : "belongs to"
-    "CLASS" ||--o{ "CHARACTER" : "belongs to"
+    ITEM_SET ||--o{ WEAPON : "contains"
+    ITEM_SET ||--o{ ARMOR : "contains"
+    ITEM_SET ||--o{ SET_BONUS : "has bonuses"
 
-    "DEITY_ALIGNMENT" ||--o{ "DEITY" : "alignment"
+    DEITY_ALIGNMENT ||--o{ DEITY : "alignment"
 
-    "SPELL_SCHOOL" ||--o{ "SPELL" : "school"
+    SPELL_SCHOOL ||--o{ SPELL : "school"
 
-    "EQUIPMENT_SLOT" ||--o{ "CHARACTER_EQUIPMENT" : "slot"
+    RACE ||--o{ SUBRACE : "has"
+    RACE ||--o{ RACE_SPECIAL_ABILITY : "has"
+    RACE ||--o{ CLASS_RACE : "allows"
+    RACE ||--o{ PET_RACE_RESTRICTION : "restricts"
+    RACE ||--o{ NPC : "race"
+    RACE ||--o{ CHARACTER : "race"
 
-    "CHARACTER" ||--o{ "CHARACTER_EQUIPMENT" : "owns"
-    "CHARACTER" ||--o{ "CHARACTER_INVENTORY" : "owns"
+    CLASS ||--o{ CLASS_RACE : "allows"
+    CLASS ||--o{ PET_CLASS_RESTRICTION : "restricts"
+    CLASS ||--o{ NPC : "class"
+    CLASS ||--o{ CHARACTER : "class"
 
-    "PET" ||--o{ "PET_CLASS_RESTRICTION" : "class restrictions"
-    "PET" ||--o{ "PET_RACE_RESTRICTION" : "race restrictions"
+    PET ||--o{ PET_CLASS_RESTRICTION : "class restriction"
+    PET ||--o{ PET_RACE_RESTRICTION : "race restriction"
 
-    "DIE_TYPE" {
-      serial id
-      varchar name
-      int sides
+    EQUIPMENT_SLOT ||--o{ CHARACTER_EQUIPMENT : "slot"
+    CHARACTER ||--o{ CHARACTER_EQUIPMENT : "equipped"
+    CHARACTER ||--o{ CHARACTER_INVENTORY : "inventory"
+
+    DIE_TYPE {
+        serial id
+        varchar name
+        int sides
     }
 
-    "DAMAGE_TYPE" {
-      serial id
-      varchar name
+    DAMAGE_TYPE {
+        serial id
+        varchar name
     }
 
-    "ATTACK_TYPE" {
-      serial id
-      varchar name
+    ATTACK_TYPE {
+        serial id
+        varchar name
     }
 
-    "ARMOR_CATEGORY" {
-      serial id
-      varchar name
+    ARMOR_CATEGORY {
+        serial id
+        varchar name
     }
 
-    "GEAR_QUALITY" {
-      serial id
-      varchar name
-      int sort_order
+    GEAR_QUALITY {
+        serial id
+        varchar name
+        int sort_order
     }
 
-    "RACE" {
-      serial id
-      varchar name
-      int strength_bonus
-      int dexterity_bonus
-      int stamina_bonus
-      int intelligence_bonus
-      int wisdom_bonus
-      int charisma_bonus
-      text description
-      timestamp created_at
+    WEAPON_TYPE {
+        serial id
+        varchar name
+        text description
     }
 
-    "SUBRACE" {
-      serial id
-      int race_id
-      varchar name
-      text description
+    ACCESSORY_TYPE {
+        serial id
+        varchar name
     }
 
-    "RACE_SPECIAL_ABILITY" {
-      serial id
-      int race_id
-      varchar name
-      text description
+    ACCESSORY {
+        serial id
+        int accessory_type_id
+        int gear_quality_id
+        varchar name
+        varchar effect_type
+        int effect_value
+        boolean cursed
+        text description
+        text curse_effect
     }
 
-    "CLASS" {
-      serial id
-      int hit_die_id
-      varchar name
-      int base_strike_rating
-      text description
+    RACE {
+        serial id
+        varchar name
+        int strength_bonus
+        int dexterity_bonus
+        int stamina_bonus
+        int intelligence_bonus
+        int wisdom_bonus
+        int charisma_bonus
+        text description
+        timestamp created_at
     }
 
-    "CLASS_RACE" {
-      int class_id
-      int race_id
+    SUBRACE {
+        serial id
+        int race_id
+        varchar name
+        text description
     }
 
-    "DEITY_ALIGNMENT" {
-      serial id
-      varchar name
+    RACE_SPECIAL_ABILITY {
+        serial id
+        int race_id
+        varchar name
+        text description
     }
 
-    "DEITY" {
-      serial id
-      int alignment_id
-      varchar name
-      text description
-      varchar domain
+    CLASS {
+        serial id
+        int hit_die_id
+        varchar name
+        int base_strike_rating
+        text description
     }
 
-    "PET" {
-      serial id
-      int damage_die_id
-      varchar name
-      int armor_class
-      int hit_points
-      text description
+    CLASS_RACE {
+        int class_id
+        int race_id
     }
 
-    "PET_CLASS_RESTRICTION" {
-      int pet_id
-      int class_id
+    DEITY_ALIGNMENT {
+        serial id
+        varchar name
     }
 
-    "PET_RACE_RESTRICTION" {
-      int pet_id
-      int race_id
+    DEITY {
+        serial id
+        int alignment_id
+        varchar name
+        text description
+        varchar domain
     }
 
-    "WEAPON_TYPE" {
-      serial id
-      varchar name
-      text description
+    PET {
+        serial id
+        int damage_die_id
+        varchar name
+        int armor_class
+        int hit_points
+        text description
     }
 
-    "WEAPON" {
-      serial id
-      int weapon_type_id
-      int damage_die_id
-      int damage_type_id
-      int attack_type_id
-      int gear_quality_id
-      int set_id
-      varchar name
-      int damage_count
-      int hands
-      int attack_bonus
-      boolean cursed
-      text description
-      text curse_effect
-      timestamp created_at
+    PET_CLASS_RESTRICTION {
+        int pet_id
+        int class_id
     }
 
-    "ARMOR" {
-      serial id
-      int armor_category_id
-      int gear_quality_id
-      int set_id
-      varchar name
-      int armor_class
-      int max_dexterity_bonus
-      boolean stealth_disadvantage
-      int strength_requirement
-      int armor_class_bonus
-      boolean cursed
-      text description
-      text curse_effect
-      timestamp created_at
+    PET_RACE_RESTRICTION {
+        int pet_id
+        int race_id
     }
 
-    "ITEM_SET" {
-      serial id
-      varchar name
-      text description
+    WEAPON {
+        serial id
+        int weapon_type_id
+        int damage_die_id
+        int damage_type_id
+        int attack_type_id
+        int gear_quality_id
+        int set_id
+        varchar name
+        int damage_count
+        int hands
+        int attack_bonus
+        boolean cursed
+        text description
+        text curse_effect
+        timestamp created_at
     }
 
-    "SET_BONUS" {
-      serial id
-      int set_id
-      int pieces_required
-      text effect_description
+    ARMOR {
+        serial id
+        int armor_category_id
+        int gear_quality_id
+        int set_id
+        varchar name
+        int armor_class
+        int max_dexterity_bonus
+        boolean stealth_disadvantage
+        int strength_requirement
+        int armor_class_bonus
+        boolean cursed
+        text description
+        text curse_effect
+        timestamp created_at
     }
 
-    "RING" {
-      serial id
-      int gear_quality_id
-      varchar name
-      varchar effect_type
-      int effect_value
-      boolean cursed
-      text description
-      text curse_effect
+    ITEM_SET {
+        serial id
+        varchar name
+        text description
     }
 
-    "AMULET" {
-      serial id
-      int gear_quality_id
-      varchar name
-      varchar effect_type
-      int effect_value
-      boolean cursed
-      text description
-      text curse_effect
+    SET_BONUS {
+        serial id
+        int set_id
+        int pieces_required
+        text effect_description
     }
 
-    "GIRDLE" {
-      serial id
-      int gear_quality_id
-      varchar name
-      varchar effect_type
-      int effect_value
-      boolean cursed
-      text description
-      text curse_effect
+    NPC {
+        serial id
+        int race_id
+        int class_id
+        varchar name
+        int level
+        int strength
+        int dexterity
+        int stamina
+        int intelligence
+        int wisdom
+        int charisma
+        boolean is_merchant
+        boolean is_quest_giver
+        boolean is_hostile
+        text biography
+        timestamp created_at
     }
 
-    "NPC" {
-      serial id
-      int race_id
-      int class_id
-      varchar name
-      int level
-      int strength
-      int dexterity
-      int stamina
-      int intelligence
-      int wisdom
-      int charisma
-      boolean is_merchant
-      boolean is_quest_giver
-      boolean is_hostile
-      text biography
-      timestamp created_at
+    SPELL_SCHOOL {
+        serial id
+        varchar name
     }
 
-    "SPELL_SCHOOL" {
-      serial id
-      varchar name
+    SPELL {
+        serial id
+        int school_id
+        int damage_die_id
+        int damage_type_id
+        varchar name
+        int mana_cost
+        text description
     }
 
-    "SPELL" {
-      serial id
-      int school_id
-      int damage_die_id
-      int damage_type_id
-      varchar name
-      int mana_cost
-      text description
+    CHARACTER {
+        serial id
+        int race_id
+        int class_id
+        varchar name
+        int level
+        int strength
+        int dexterity
+        int stamina
+        int intelligence
+        int wisdom
+        int charisma
+        int strength_percentile
+        int max_hit_points
+        int current_hit_points
+        int experience_points
+        int strike_rating
+        int turn_speed
+        timestamp created_at
+        timestamp updated_at
     }
 
-    "CHARACTER" {
-      serial id
-      int race_id
-      int class_id
-      varchar name
-      int level
-      int strength
-      int dexterity
-      int stamina
-      int intelligence
-      int wisdom
-      int charisma
-      int strength_percentile
-      int max_hit_points
-      int current_hit_points
-      int experience_points
-      int strike_rating
-      int turn_speed
-      timestamp created_at
-      timestamp updated_at
+    CHARACTER_EQUIPMENT {
+        serial id
+        int character_id
+        int slot_id
+        varchar item_type
+        int item_id
     }
 
-    "CHARACTER_EQUIPMENT" {
-      serial id
-      int character_id
-      int slot_id
-      varchar item_type
-      int item_id
+    CHARACTER_INVENTORY {
+        serial id
+        int character_id
+        varchar item_type
+        int item_id
+        int quantity
     }
 
-    "CHARACTER_INVENTORY" {
-      serial id
-      int character_id
-      varchar item_type
-      int item_id
-      int quantity
-    }
-
-    "EQUIPMENT_SLOT" {
-      serial id
-      varchar name
+    EQUIPMENT_SLOT {
+        serial id
+        varchar name
     }
 ```
 

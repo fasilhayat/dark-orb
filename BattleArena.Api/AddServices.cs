@@ -11,7 +11,7 @@ public static class AddServices
     public static void AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("ArenaDatabase")
-            ?? "Host=arena-db;Port=5432;Database=arena_data;Username=postgres;Password=postgres";
+            ?? "Host=battle-arena-db;Port=5432;Database=battle-arena_data;Username=postgres;Password=postgres";
 
         services.AddScoped<IDbContext>(_ => new DbContext(connectionString));
         services.AddScoped<IDiceService, DiceService>();

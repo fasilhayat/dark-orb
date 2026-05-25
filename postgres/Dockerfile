@@ -1,3 +1,3 @@
-FROM postgres:13
+FROM postgres:17
 
-RUN apt-get update && apt-get install -y postgresql-13-cron && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y postgresql-17-cron && rm -rf /var/lib/apt/lists/*

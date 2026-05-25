@@ -653,86 +653,57 @@ UPDATE arena_data.weapon SET set_id = (SELECT id FROM arena_data.item_set WHERE 
 UPDATE arena_data.weapon SET set_id = (SELECT id FROM arena_data.item_set WHERE name = 'Dragonborn Legacy') WHERE name IN ('Dragon''s Fury');
 
 -- ============================================================
--- RINGS
+-- ACCESSORIES (Rings, Amulets, Girdles)
+-- Normalised: one reference table for type, one data table for all entries.
 -- ============================================================
 
-CREATE TABLE IF NOT EXISTS arena_data.ring (
+CREATE TABLE IF NOT EXISTS arena_data.accessory_type (
     id SERIAL PRIMARY KEY,
-    gear_quality_id INTEGER NOT NULL DEFAULT 5 REFERENCES arena_data.gear_quality(id),
-    name VARCHAR(100) NOT NULL UNIQUE,
-    effect_type VARCHAR(50) NOT NULL DEFAULT 'none',
-    effect_value INTEGER NOT NULL DEFAULT 0,
-    cursed BOOLEAN NOT NULL DEFAULT FALSE,
-    description TEXT DEFAULT '',
-    curse_effect TEXT DEFAULT ''
+    name VARCHAR(50) NOT NULL UNIQUE
 );
 
-INSERT INTO arena_data.ring (name, description, gear_quality_id, effect_type, effect_value)
-SELECT src.name, src.description, gq.id, src.effect, src.value
-FROM (VALUES
-    ('Band of the Bull',   'A thick iron band etched with a charging bull. Grants +2 Strength.',     'Rare', 'Strength',     2),
-    ('Serpent Ring',       'A coiled jade serpent that sharpens the mind. Grants +2 Intelligence.',  'Rare', 'Intelligence', 2),
-    ('Ring of the Fox',    'A silver ring engraved with a running fox. Grants +2 Dexterity.',        'Rare', 'Dexterity',    2),
-    ('Titan Ring',         'A massive stone ring worn by giants. Grants +3 Strength.',               'Epic', 'Strength',     3),
-    ('Ring of Arcane Focus','A crystal ring pulsing with magical energy. Reduces spell mana cost.',  'Rare', 'ManaCost',    -1),
-    ('Ring of Shadows',    'A dark ring that drinks the light around it. +1 AC, +1 Stealth.',       'Epic', 'ArmorClass',   1),
-    ('Cursed Ring of Greed','A glittering gold ring that feels warm to the touch. +2 Charisma but -2 Stamina from sleepless nights.', 'Legendary', 'Charisma', 2)
+INSERT INTO arena_data.accessory_type (name) VALUES
+    ('Ring'), ('Amulet'), ('Girdle')
 ON CONFLICT (name) DO NOTHING;
 
--- Set cursed ring
-UPDATE arena_data.ring SET cursed = TRUE, curse_effect = '-2 Stamina, cannot be removed' WHERE name = 'Cursed Ring of Greed';
-
--- ============================================================
--- AMULETS / NECKLACES
--- ============================================================
-
-CREATE TABLE IF NOT EXISTS arena_data.amulet (
+CREATE TABLE IF NOT EXISTS arena_data.accessory (
     id SERIAL PRIMARY KEY,
-    gear_quality_id INTEGER NOT NULL DEFAULT 5 REFERENCES arena_data.gear_quality(id),
-    name VARCHAR(100) NOT NULL UNIQUE,
-    effect_type VARCHAR(50) NOT NULL DEFAULT 'none',
-    effect_value INTEGER NOT NULL DEFAULT 0,
-    cursed BOOLEAN NOT NULL DEFAULT FALSE,
-    description TEXT DEFAULT '',
-    curse_effect TEXT DEFAULT ''
+    accessory_type_id INTEGER NOT NULL REFERENCES arena_data.accessory_type(id),
+    gear_quality_id   INTEGER NOT NULL DEFAULT 5 REFERENCES arena_data.gear_quality(id),
+    name              VARCHAR(100) NOT NULL UNIQUE,
+    effect_type       VARCHAR(50)  NOT NULL DEFAULT 'none',
+    effect_value      INTEGER      NOT NULL DEFAULT 0,
+    cursed            BOOLEAN      NOT NULL DEFAULT FALSE,
+    description       TEXT DEFAULT '',
+    curse_effect      TEXT DEFAULT ''
 );
 
-INSERT INTO arena_data.amulet (name, description, gear_quality_id, effect_type, effect_value)
-SELECT src.name, src.description, gq.id, src.effect, src.value
+INSERT INTO arena_data.accessory (name, description, accessory_type_id, gear_quality_id, effect_type, effect_value, cursed, curse_effect)
+SELECT src.name, src.description, atype.id, gq.id, src.effect, src.value, src.cursed, src.curse
 FROM (VALUES
-    ('Amulet of the Archon',  'A golden pendant bearing the crest of the celestial realm. +2 Wisdom, +1 Holy damage.',   'Epic', 'Wisdom', 2),
-    ('Heartstone Pendant',    'A warm gem that pulses like a heartbeat. +20 Max HP, +1 Stamina.',                       'Rare', 'HitPoints', 20),
-    ('Dragon Tooth Amulet',   'A sharp fang from a young dragon, still humming with power. +1 Strength, +1 Fire Resist.','Rare', 'Strength', 1),
-    ('Locket of Lost Souls',  'A black iron locket containing ash from the Shadowfell. +2 Intelligence, attracts undead.','Epic','Intelligence', 2),
-    ('Silver Cross of Hope',  'A simple silver cross that glows faintly in darkness. +1 Wisdom, Fear Resistance.',       'Uncommon', 'Wisdom', 1)
-ON CONFLICT (name) DO NOTHING;
-
--- ============================================================
--- GIRDLES / BELTS
--- ============================================================
-
-CREATE TABLE IF NOT EXISTS arena_data.girdle (
-    id SERIAL PRIMARY KEY,
-    gear_quality_id INTEGER NOT NULL DEFAULT 5 REFERENCES arena_data.gear_quality(id),
-    name VARCHAR(100) NOT NULL UNIQUE,
-    effect_type VARCHAR(50) NOT NULL DEFAULT 'none',
-    effect_value INTEGER NOT NULL DEFAULT 0,
-    cursed BOOLEAN NOT NULL DEFAULT FALSE,
-    description TEXT DEFAULT '',
-    curse_effect TEXT DEFAULT ''
-);
-
-INSERT INTO arena_data.girdle (name, description, gear_quality_id, effect_type, effect_value)
-SELECT src.name, src.description, gq.id, src.effect, src.value
-FROM (VALUES
-    ('Girdle of Giant Strength','A thick leather belt woven from giant hair. Grants 18/00 Strength to any wearer.',     'Legendary', 'Strength', 18),
-    ('Belt of the Ram',         'A bronze belt with a ram''s head buckle. +2 Constitution, +1 Charge damage.',          'Rare', 'Stamina', 2),
-    ('Sash of Shadows',         'A dark silk sash that blends into darkness. +1 Dexterity, +1 Stealth.',                'Rare', 'Dexterity', 1),
-    ('Iron Buckle of Vigor',    'A simple iron buckle that fortifies the body. +1 Stamina, +5 Max HP.',                 'Uncommon', 'Stamina', 1),
-    ('Cursed Girdle of Weakness','An ornate golden belt that feels heavy. +3 Charisma but -3 Strength (drains your power).','Legendary', 'Charisma', 3)
-ON CONFLICT (name) DO NOTHING;
-
-UPDATE arena_data.girdle SET cursed = TRUE, curse_effect = '-3 Strength, -1 max HP per day worn' WHERE name = 'Cursed Girdle of Weakness';
+    -- Rings
+    ('Band of the Bull',          'A thick iron band etched with a charging bull. Grants +2 Strength.',                                                          'Ring',   'Rare',      'Strength',      2, FALSE, ''),
+    ('Serpent Ring',              'A coiled jade serpent that sharpens the mind. Grants +2 Intelligence.',                                                        'Ring',   'Rare',      'Intelligence',  2, FALSE, ''),
+    ('Ring of the Fox',           'A silver ring engraved with a running fox. Grants +2 Dexterity.',                                                              'Ring',   'Rare',      'Dexterity',     2, FALSE, ''),
+    ('Titan Ring',                'A massive stone ring worn by giants. Grants +3 Strength.',                                                                     'Ring',   'Epic',      'Strength',      3, FALSE, ''),
+    ('Ring of Arcane Focus',      'A crystal ring pulsing with magical energy. Reduces spell mana cost.',                                                         'Ring',   'Rare',      'ManaCost',     -1, FALSE, ''),
+    ('Ring of Shadows',           'A dark ring that drinks the light around it. +1 AC, +1 Stealth.',                                                              'Ring',   'Epic',      'ArmorClass',    1, FALSE, ''),
+    ('Cursed Ring of Greed',      'A glittering gold ring that feels warm to the touch. +2 Charisma but -2 Stamina from sleepless nights.',                       'Ring',   'Legendary', 'Charisma',      2, TRUE,  '-2 Stamina, cannot be removed'),
+    -- Amulets
+    ('Amulet of the Archon',      'A golden pendant bearing the crest of the celestial realm. +2 Wisdom, +1 Holy damage.',                                       'Amulet', 'Epic',      'Wisdom',        2, FALSE, ''),
+    ('Heartstone Pendant',        'A warm gem that pulses like a heartbeat. +20 Max HP, +1 Stamina.',                                                             'Amulet', 'Rare',      'HitPoints',    20, FALSE, ''),
+    ('Dragon Tooth Amulet',       'A sharp fang from a young dragon, still humming with power. +1 Strength, +1 Fire Resist.',                                    'Amulet', 'Rare',      'Strength',      1, FALSE, ''),
+    ('Locket of Lost Souls',      'A black iron locket containing ash from the Shadowfell. +2 Intelligence, attracts undead.',                                    'Amulet', 'Epic',      'Intelligence',  2, FALSE, ''),
+    ('Silver Cross of Hope',      'A simple silver cross that glows faintly in darkness. +1 Wisdom, Fear Resistance.',                                            'Amulet', 'Uncommon',  'Wisdom',        1, FALSE, ''),
+    -- Girdles
+    ('Girdle of Giant Strength',  'A thick leather belt woven from giant hair. Grants 18/00 Strength to any wearer.',                                             'Girdle', 'Legendary', 'Strength',     18, FALSE, ''),
+    ('Belt of the Ram',           'A bronze belt with a ram''s head buckle. +2 Constitution, +1 Charge damage.',                                                 'Girdle', 'Rare',      'Stamina',       2, FALSE, ''),
+    ('Sash of Shadows',           'A dark silk sash that blends into darkness. +1 Dexterity, +1 Stealth.',                                                        'Girdle', 'Rare',      'Dexterity',     1, FALSE, ''),
+    ('Iron Buckle of Vigor',      'A simple iron buckle that fortifies the body. +1 Stamina, +5 Max HP.',                                                         'Girdle', 'Uncommon',  'Stamina',       1, FALSE, ''),
+    ('Cursed Girdle of Weakness', 'An ornate golden belt that feels heavy. +3 Charisma but -3 Strength (drains your power).',                                    'Girdle', 'Legendary', 'Charisma',      3, TRUE,  '-3 Strength, -1 max HP per day worn')
+) AS src(name, description, type_name, quality_name, effect, value, cursed, curse)
+JOIN arena_data.accessory_type atype ON atype.name = src.type_name
+JOIN arena_data.gear_quality    gq    ON gq.name    = src.quality_name;
 
 -- ============================================================
 -- NPC CHARACTERS
@@ -1244,45 +1215,30 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- ============================================================
--- RING / AMULET / GIRDLE FUNCTIONS
+-- ACCESSORY FUNCTIONS
 -- ============================================================
 
-CREATE OR REPLACE FUNCTION arena_data.fn_get_rings()
-RETURNS TABLE(id INTEGER, name VARCHAR, description TEXT, quality VARCHAR, effect_type VARCHAR, effect_value INTEGER, cursed BOOLEAN, curse_effect TEXT) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT r.id, r.name::VARCHAR, r.description::TEXT,
-           gq.name::VARCHAR AS quality,
-           r.effect_type, r.effect_value, r.cursed, r.curse_effect::TEXT
-    FROM arena_data.ring r
-    JOIN arena_data.gear_quality gq ON gq.id = r.gear_quality_id
-    ORDER BY gq.sort_order, r.name;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION arena_data.fn_get_amulets()
-RETURNS TABLE(id INTEGER, name VARCHAR, description TEXT, quality VARCHAR, effect_type VARCHAR, effect_value INTEGER, cursed BOOLEAN, curse_effect TEXT) AS $$
+CREATE OR REPLACE FUNCTION arena_data.fn_get_accessories(
+    p_type VARCHAR(50) DEFAULT NULL
+)
+RETURNS TABLE(
+    id INTEGER, name VARCHAR, description TEXT,
+    accessory_type VARCHAR, quality VARCHAR,
+    effect_type VARCHAR, effect_value INTEGER,
+    cursed BOOLEAN, curse_effect TEXT
+) AS $$
 BEGIN
     RETURN QUERY
     SELECT a.id, a.name::VARCHAR, a.description::TEXT,
-           gq.name::VARCHAR AS quality,
-           a.effect_type, a.effect_value, a.cursed, a.curse_effect::TEXT
-    FROM arena_data.amulet a
-    JOIN arena_data.gear_quality gq ON gq.id = a.gear_quality_id
-    ORDER BY gq.sort_order, a.name;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION arena_data.fn_get_girdles()
-RETURNS TABLE(id INTEGER, name VARCHAR, description TEXT, quality VARCHAR, effect_type VARCHAR, effect_value INTEGER, cursed BOOLEAN, curse_effect TEXT) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT g.id, g.name::VARCHAR, g.description::TEXT,
-           gq.name::VARCHAR AS quality,
-           g.effect_type, g.effect_value, g.cursed, g.curse_effect::TEXT
-    FROM arena_data.girdle g
-    JOIN arena_data.gear_quality gq ON gq.id = g.gear_quality_id
-    ORDER BY gq.sort_order, g.name;
+           atype.name::VARCHAR AS accessory_type,
+           gq.name::VARCHAR    AS quality,
+           a.effect_type, a.effect_value,
+           a.cursed, a.curse_effect::TEXT
+    FROM arena_data.accessory a
+    JOIN arena_data.accessory_type atype ON atype.id = a.accessory_type_id
+    JOIN arena_data.gear_quality   gq    ON gq.id    = a.gear_quality_id
+    WHERE (p_type IS NULL OR atype.name = p_type)
+    ORDER BY atype.name, gq.sort_order, a.name;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1311,17 +1267,18 @@ $$ LANGUAGE plpgsql;
 
 -- ============================================================
 -- pg_cron SETUP
+-- pg_cron is configured via cron.database_name=battle-arena_data,
+-- so all jobs run directly in this database — no dblink needed.
 -- ============================================================
 
-CREATE EXTENSION IF NOT EXISTS dblink;
 CREATE EXTENSION IF NOT EXISTS pg_cron;
 
-SELECT cron.schedule('vacuum_arena_tables', '0 2 * * 0',
-    $$
-    SELECT dblink_exec('dbname=arena_data', 'VACUUM ANALYZE arena_data.weapon; VACUUM ANALYZE arena_data.armor; VACUUM ANALYZE arena_data.race; VACUUM ANALYZE arena_data.character;');
-    $$);
+-- Vacuum arena tables weekly (Sunday at 2am)
+SELECT cron.schedule('vacuum_weapon',    '0 2 * * 0', 'VACUUM ANALYZE arena_data.weapon');
+SELECT cron.schedule('vacuum_armor',     '0 2 * * 0', 'VACUUM ANALYZE arena_data.armor');
+SELECT cron.schedule('vacuum_race',      '0 2 * * 0', 'VACUUM ANALYZE arena_data.race');
+SELECT cron.schedule('vacuum_character', '0 2 * * 0', 'VACUUM ANALYZE arena_data.character');
 
+-- Clean old cron logs daily (1am)
 SELECT cron.schedule('clean_cron_logs', '0 1 * * *',
-    $$
-    SELECT dblink_exec('dbname=arena_data', 'DELETE FROM cron.job_run_details WHERE end_time < NOW() - INTERVAL ''5 days''; VACUUM ANALYZE cron.job_run_details;');
-    $$);
+    $$DELETE FROM cron.job_run_details WHERE end_time < NOW() - INTERVAL '5 days'$$);

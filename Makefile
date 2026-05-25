@@ -16,15 +16,15 @@ help:
 	@cmd /C "echo 	make test-coverage  	- Run unit tests with coverage"
 	@cmd /C "echo 	make build-local    	- Build the .NET solution locally"
 
-build:
+build: publish
 	@echo Building Docker containers...
 	docker compose build
 
-build-no-cache:
+build-no-cache: publish
 	@echo Building Docker containers without cache...
 	docker compose build --no-cache
 
-up:
+up: publish
 	@echo Starting the containers...
 	docker compose up -d
 
@@ -35,7 +35,7 @@ down:
 restart: down up
 	@echo Restarted the containers.
 
-reset: down
+reset: down publish
 	docker compose up -d --build
 	@echo Containers rebuilt and restarted.
 
@@ -53,6 +53,7 @@ clean:
 	docker compose down -v
 	@echo Removing database files...
 	powershell -Command "if (Test-Path '.containers/postgres') { Remove-Item -Recurse -Force '.containers/postgres'; Write-Host 'Removed .containers/postgres' } else { Write-Host 'No database files to remove.' }"
+	powershell -Command "if (Test-Path 'publish') { Remove-Item -Recurse -Force 'publish'; Write-Host 'Removed publish/' } else { Write-Host 'No publish output to remove.' }"
 	@echo Clean complete.
 
 test:
@@ -61,5 +62,7 @@ test:
 test-coverage:
 	dotnet test BattleArena.sln /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 
-build-local:
-	dotnet build BattleArena.sln
+build-local: publish
+
+publish:
+	dotnet publish BattleArena.Api/BattleArena.Api.csproj -c Release -o ./publish
