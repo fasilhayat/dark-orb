@@ -1,0 +1,24 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+*.userprefs
+*.csproj.user
+.vs/
+
+## Docker
+.containers/
+
+## IDE
+.idea/
+*.swp
+.vscode/
+
+## Coverage
+coveragereport/
+*.opencover.xml
+
+## Secrets
+api_key.secret
+*.pfx
