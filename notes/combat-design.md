@@ -296,5 +296,3 @@ If you want, the next step is to upgrade this document into a production-grade d
 - edge-case handling for multi-hit AoE and simultaneous death triggers
 
 That is the point where it becomes implementable without interpretation ambiguity.
-
-Du har nået grænsen for chats med dataana
