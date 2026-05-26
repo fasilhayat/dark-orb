@@ -1,7 +1,7 @@
-using BattleArena.Application.Interfaces;
-using BattleArena.Core.Entities;
-
 namespace BattleArena.Api.Endpoints;
+
+using Application.Interfaces;
+using Core.Entities;
 
 public static class CharacterEndpoint
 {
