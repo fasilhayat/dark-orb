@@ -89,20 +89,23 @@ public class BattleSimulator : IBattleSimulator
                 }
 
                 var meterNow = isFighter ? fighterMeter.CurrentValue : opponentMeter.CurrentValue;
+                var isSpell  = attackSource is Core.Entities.Spell;
                 log.Add(new BattleLogEntry
                 {
                     Tick = tick,
                     ActorName = actor.Name,
                     EventType = "TurnStart",
-                    TurnMeterBefore = meterNow,
+                    TurnMeterBefore  = meterNow,
                     IsReady  = true,
                     IsActive = true,
-                    Message = $"{actor.Name} takes their turn  (TM: {meterNow})"
+                    AttackSourceName = attackSource.Name,
+                    IsSpell  = isSpell,
+                    Message  = $"{actor.Name} takes their turn  (TM: {meterNow})"
                 });
 
                 // ── RESOLVE ATTACK ─────────────────────────────────────────────────
                 var result = _combat.ResolveAttack(actor, target, attackSource);
-                log.Add(BuildAttackEntry(tick, actor.Name, attackSource.Name, target.Name, result));
+                log.Add(BuildAttackEntry(tick, actor.Name, attackSource.Name, isSpell, target.Name, result));
 
                 // ── APPLY DAMAGE ───────────────────────────────────────────────────
                 if (result.IsHit)
@@ -215,7 +218,7 @@ public class BattleSimulator : IBattleSimulator
         Message  = $"{name}  TM: {before} -> {actorMeter.CurrentValue}  (+{actorMeter.CurrentValue - before})"
     };
 
-    private static BattleLogEntry BuildAttackEntry(int tick, string actorName, string attackSourceName, string targetName, AttackResult result)
+    private static BattleLogEntry BuildAttackEntry(int tick, string actorName, string attackSourceName, bool isSpell, string targetName, AttackResult result)
     {
         var outcome = result.IsCriticalHit ? "CRITICAL HIT!" :
                       result.IsFumble     ? "FUMBLE!" :
@@ -251,6 +254,8 @@ public class BattleSimulator : IBattleSimulator
             IsCritical = result.IsCriticalHit,
             IsFumble = result.IsFumble,
             DamageDealt = result.Damage,
+            AttackSourceName = attackSourceName,
+            IsSpell = isSpell,
             Phrase = phrase,
             Message = msg
         };

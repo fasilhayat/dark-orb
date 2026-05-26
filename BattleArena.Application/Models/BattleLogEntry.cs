@@ -34,4 +34,9 @@ public class BattleLogEntry
 
     // Narrative flavour phrase set by CombatNarrator on Attack events
     public string? Phrase { get; set; }
+
+    // The weapon or spell used in this action (present on TurnStart and Attack events).
+    public string? AttackSourceName { get; set; }
+    // True when the attack source is a spell, false for melee/ranged weapons.
+    public bool IsSpell { get; set; }
 }

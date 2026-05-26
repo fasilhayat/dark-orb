@@ -294,9 +294,13 @@ void PlayTurnBased()
                 case "TurnStart":
                 {
                     var target = e.ActorName == fighter1.Name ? fighter2.Name : fighter1.Name;
+                    var verb   = e.IsSpell ? "conjures" : "readies";
+                    var src    = e.AttackSourceName ?? "weapon";
                     CW("  >> ", ConsoleColor.DarkCyan);
                     CW($"{e.ActorName.ToUpper()}", CharColor(e.ActorName));
-                    CW(" readies their attack on ");
+                    CW($" {verb} ");
+                    CW($"[{src}]", e.IsSpell ? ConsoleColor.Magenta : ConsoleColor.Yellow);
+                    CW(" targeting ");
                     CW(target, CharColor(target));
                     CWL("!", ConsoleColor.White);
                     Console.WriteLine();
@@ -348,6 +352,7 @@ void PlayTurnBased()
         }
 
         Console.WriteLine();
+        CWL("  " + new string('─', 65), ConsoleColor.DarkGray);
         var battleOver = turnEntries.Any(e => e.EventType == "Death" || e.EventType == "KnockedOut");
         CWL(battleOver
             ? "  Battle over!  Press any key for results..."
@@ -374,6 +379,15 @@ void PlayRealTime()
         [fighter1.Name] = fighter1.MaxHitPoints,
         [fighter2.Name] = fighter2.MaxHitPoints
     };
+
+    // Track live TM values so we can render the readiness bars on action ticks.
+    var curTm = new Dictionary<string, int>
+    {
+        [fighter1.Name] = 0,
+        [fighter2.Name] = 0
+    };
+    var curTmReady  = new Dictionary<string, bool> { [fighter1.Name] = false, [fighter2.Name] = false };
+    var curTmActive = new Dictionary<string, bool> { [fighter1.Name] = false, [fighter2.Name] = false };
 
     int quietStart = -1;
     int quietEnd = -1;
@@ -406,6 +420,10 @@ void PlayRealTime()
         {
             foreach (var e in entries.Where(e => e.EventType == "TurnMeterGain"))
             {
+                // Keep TM values current for the readiness bars on action ticks.
+                curTm[e.ActorName]      = e.TurnMeterAfter ?? 0;
+                curTmReady[e.ActorName] = e.IsReady;
+
                 if (quietStart < 0)
                 {
                     quietStart = e.Tick;
@@ -434,7 +452,7 @@ void PlayRealTime()
         activeActor = attacker;
 
         Console.WriteLine();
-        CWL("  " + new string('-', 65), ConsoleColor.DarkCyan);
+        CWL("  " + new string('═', 65), ConsoleColor.DarkCyan);
         CW($"  Tick {tickGroup.Key,-3}  |  ", ConsoleColor.DarkGray);
         CW($"{attacker.ToUpper()}", CharColor(attacker));
         CW("  HP ");
@@ -443,7 +461,15 @@ void PlayRealTime()
         CW($"{target.ToUpper()}", CharColor(target));
         CW("  HP ");
         CWL($"{targetHp}/{targetMax}", targetHp > targetMax / 2 ? ConsoleColor.Green : ConsoleColor.Red);
-        CWL("  " + new string('-', 65), ConsoleColor.DarkCyan);
+        CWL("  " + new string('═', 65), ConsoleColor.DarkCyan);
+
+        // Show readiness bars: attacker is ACTING (green), other is building (gray/cyan).
+        curTmActive[attacker] = true;
+        curTmActive[target]   = false;
+        Console.WriteLine();
+        ShowTm(attacker, curTm.GetValueOrDefault(attacker), curTmReady.GetValueOrDefault(attacker), isActive: true);
+        ShowTm(target,   curTm.GetValueOrDefault(target),   curTmReady.GetValueOrDefault(target),   isActive: false);
+        Console.WriteLine();
 
         Thread.Sleep(300);
 
@@ -458,7 +484,10 @@ void PlayRealTime()
                     Console.WriteLine();
                     CW("  >> ", ConsoleColor.DarkCyan);
                     CW($"{e.ActorName.ToUpper()}", CharColor(e.ActorName));
-                    CW(" readies their attack on ");
+                    var rtVerb = e.IsSpell ? " conjures " : " readies ";
+                    CW(rtVerb);
+                    CW($"[{e.AttackSourceName ?? "weapon"}]", e.IsSpell ? ConsoleColor.Magenta : ConsoleColor.Yellow);
+                    CW(" targeting ");
                     CW(target, CharColor(target));
                     CWL("!", ConsoleColor.White);
                     break;
@@ -489,10 +518,20 @@ void PlayRealTime()
                     break;
 
                 case "TurnEnd":
+                    // Update TM to the reset value (after -100) so bars reflect post-turn state.
+                    curTm[e.ActorName]       = e.TurnMeterAfter ?? 0;
+                    curTmReady[e.ActorName]  = e.IsReady;
+                    curTmActive[e.ActorName] = false;
                     Console.WriteLine();
                     CW("  ");
                     CW(e.ActorName, CharColor(e.ActorName));
                     CWL(" ends their turn.", ConsoleColor.DarkGray);
+                    Console.WriteLine();
+                    ShowTm(fighter1.Name, curTm[fighter1.Name], curTmReady[fighter1.Name], curTmActive[fighter1.Name]);
+                    ShowTm(fighter2.Name, curTm[fighter2.Name], curTmReady[fighter2.Name], curTmActive[fighter2.Name]);
+                    // Closing separator — visually ends this turn block.
+                    Console.WriteLine();
+                    CWL("  " + new string('─', 65), ConsoleColor.DarkGray);
                     break;
 
                 case "Death":
@@ -637,9 +676,21 @@ void ShowSheet(string role, BattleArena.Core.Entities.Character ch, BattleArena.
 
 void PrintAttack(BattleLogEntry e)
 {
-    var total = (e.DieRoll ?? 0) + (e.AttackPower ?? 0);
+    var total  = (e.DieRoll ?? 0) + (e.AttackPower ?? 0);
     var margin = total - (e.DefensePower ?? 0);
+    var src    = e.AttackSourceName ?? "Unknown";
+    var srcCol = e.IsSpell ? ConsoleColor.Magenta : ConsoleColor.Yellow;
 
+    // ── Attack source header ──────────────────────────────────────────────────
+    Console.WriteLine();
+    CW("  ", ConsoleColor.White);
+    CW($"{e.ActorName}", CharColor(e.ActorName));
+    CW(e.IsSpell ? " casts " : " attacks with ");
+    CW($"[{src}]", srcCol);
+    Console.WriteLine();
+    CWL("  " + new string('-', 45), ConsoleColor.DarkGray);
+
+    // ── Roll line ─────────────────────────────────────────────────────────────
     Console.WriteLine();
     CW("  Roll  "); CW($"d20 = {e.DieRoll,2}", ConsoleColor.Yellow);
     CW("   Attack Power "); CW($"{e.AttackPower}", ConsoleColor.Yellow);
@@ -688,15 +739,23 @@ void PrintAttack(BattleLogEntry e)
 
 void ShowHp(string name, int current, int max, int w = 24)
 {
-    var pct = (double)Math.Max(0, current) / Math.Max(1, max);
-    var filled = (int)(pct * w);
-    var barCol = pct > 0.5 ? ConsoleColor.Green : pct > 0.25 ? ConsoleColor.Yellow : ConsoleColor.Red;
+    var pct    = (double)Math.Max(0, current) / Math.Max(1, max);
+    // Always show at least 1 filled block while the character is still alive.
+    var filled = current > 0 ? Math.Max(1, (int)(pct * w)) : 0;
+
+    // Single colour for the entire bar, switching at HP thresholds:
+    //   > 50 % → all green   25–50 % → all yellow   ≤ 25 % → all red
+    var barCol = pct > 0.5  ? ConsoleColor.Green
+               : pct > 0.25 ? ConsoleColor.Yellow
+               :               ConsoleColor.Red;
 
     Console.Write("  ");
     CW($"{name,-10}", CharColor(name));
     Console.Write("  HP [");
     Console.ForegroundColor = barCol;
-    Console.Write(new string('#', filled) + new string('-', w - filled));
+    Console.Write(new string('\u2588', filled));
+    Console.ForegroundColor = ConsoleColor.DarkGray;
+    Console.Write(new string('\u2591', w - filled));
     Console.ResetColor();
     Console.WriteLine($"]  {Math.Max(0, current),3} / {max,3}");
 }
@@ -704,17 +763,19 @@ void ShowHp(string name, int current, int max, int w = 24)
 void ShowTm(string name, int current, bool isReady = false, bool isActive = false, int w = 24)
 {
     var filled = (int)(Math.Min(1.0, current / 100.0) * w);
-    var barCol = isActive ? ConsoleColor.Green : isReady ? ConsoleColor.Cyan : ConsoleColor.DarkGray;
+    // TM bar uses thin pipes for filled and spaces for empty; always Cyan.
     var nameCol = CharColor(name);
 
     Console.Write("  ");
     CW($"{name,-10}", nameCol);
     Console.Write("  TM [");
-    Console.ForegroundColor = barCol;
-    Console.Write(new string('|', filled) + new string('.', w - filled));
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.Write(new string('|', filled));
+    Console.ForegroundColor = ConsoleColor.DarkGray;
+    Console.Write(new string(' ', w - filled));
     Console.ResetColor();
     Console.Write($"]  {current,4}");
-    if (isActive) { Console.ForegroundColor = ConsoleColor.Green; Console.Write("  ACTING"); Console.ResetColor(); }
+    if (isActive) { Console.ForegroundColor = ConsoleColor.Green;  Console.Write("  ACTING"); Console.ResetColor(); }
     else if (isReady) { Console.ForegroundColor = ConsoleColor.Cyan; Console.Write("  READY"); Console.ResetColor(); }
     Console.WriteLine();
 }
