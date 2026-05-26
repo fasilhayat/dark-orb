@@ -231,6 +231,11 @@ var attackMap = new Dictionary<string, BattleArena.Core.Entities.IAttackSource?>
     [mordak.Name] = null
 };
 
+// ── Block layout constants ────────────────────────────────────────────────────
+const int BLOCK_W   = 35;  // total block width including │ border chars
+const int CONTENT_W = 31;  // content between border+space: BLOCK_W - 4
+const int BAR_W     = 14;  // fill width of TM / HP bars
+
 // ── Outer state (shared by play functions via closure) ────────────────────────
 string activeActor = "";
 BattleResult result = null!;
@@ -499,97 +504,266 @@ BattleArena.Core.Entities.IAttackSource GetSheetAttackSource(
         .First();
 }
 
+// ── BuildDisplayStates ────────────────────────────────────────────────────────
+// Creates an initial display snapshot for every combatant (full HP, TM = 0).
+
+Dictionary<string, CharDisplayState> BuildDisplayStates()
+{
+    var dict = new Dictionary<string, CharDisplayState>();
+    foreach (var m in heroParty.Members)
+        dict[m.Character.Name] = new CharDisplayState
+        {
+            Name   = m.Character.Name,
+            MaxHp  = maxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
+            Hp     = maxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
+            IsHero = true
+        };
+    foreach (var m in enemyParty.Members)
+        dict[m.Character.Name] = new CharDisplayState
+        {
+            Name   = m.Character.Name,
+            MaxHp  = maxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
+            Hp     = maxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
+            IsHero = false
+        };
+    return dict;
+}
+
+// ── DrawBattleScreen ──────────────────────────────────────────────────────────
+// Clears the console and renders the left-right battle layout:
+//   Heroes (left column)  ║  Enemies (right column)
+// The active combatant is highlighted with ╔═╗ white borders.
+
+void DrawBattleScreen(Dictionary<string, CharDisplayState> states, int tick)
+{
+    Console.Clear();
+    PrintHeader();
+
+    var heroes  = heroParty.Members.Select(m => states[m.Character.Name]).ToList();
+    var enemies = enemyParty.Members.Select(m => states[m.Character.Name]).ToList();
+
+    bool isDuel = scenario == 'D';
+    var leftLabel  = isDuel ? "── CHARACTER 1 ──" : "── HEROES ──────";
+    var rightLabel = isDuel ? "── CHARACTER 2 ──" : "── ENEMIES ──────";
+
+    Console.WriteLine();
+    Console.Write("  ");
+    CW($"Tick {tick,-4}  ", ConsoleColor.DarkGray);
+    CW(leftLabel,  isDuel ? ConsoleColor.White  : ConsoleColor.Blue);
+    CW("─────────── vs ───────────", ConsoleColor.DarkGray);
+    CWL(rightLabel, isDuel ? ConsoleColor.White : ConsoleColor.DarkMagenta);
+    Console.WriteLine();
+
+    var empty    = BuildEmptyBlock();
+    int maxCount = Math.Max(heroes.Count, enemies.Count);
+
+    for (var i = 0; i < maxCount; i++)
+    {
+        var left  = i < heroes .Count ? BuildCharBlock(heroes [i]) : empty;
+        var right = i < enemies.Count ? BuildCharBlock(enemies[i]) : empty;
+        PrintBlockPair(left, right);
+        if (i < maxCount - 1) Console.WriteLine();
+    }
+
+    Console.WriteLine();
+    Console.ForegroundColor = ConsoleColor.DarkGray;
+    Console.Write("  " + new string('─', 77));
+    Console.ResetColor();
+    Console.WriteLine();
+}
+
+// ── BuildEmptyBlock / BuildCharBlock ─────────────────────────────────────────
+
+List<List<Seg>> BuildEmptyBlock()
+{
+    var blank = new List<Seg> { new Seg(new string(' ', BLOCK_W), ConsoleColor.Black) };
+    return new List<List<Seg>> { blank, blank, blank, blank, blank };
+}
+
+// Returns 5 lines: top border, name+weapon, TM bar, HP bar, bottom border.
+// Each line is a List<Seg> whose total visual width = BLOCK_W (35).
+//
+// Width checks:
+//   Top/bot border : ┌ + (CONTENT_W+2)×─ + ┐ = 1+33+1 = 35  ✓
+//   Content line   : │ + space + content(31) + space + │ = 35  ✓
+//     Name content : indicator(2)+name(10)+"   "(3)+"["+weapon(14)+"]"(16) = 31  ✓
+//     TM content   : "  TM ["(6)+bars(14)+"]  "(3)+" {tm,3}"(4)+"/100"(4) = 31  ✓
+//     HP content   : " HP ["(5)+bars(14)+"]  "(3)+hp(3)+" / "(3)+max(3)   = 31  ✓
+List<List<Seg>> BuildCharBlock(CharDisplayState s)
+{
+    var active = s.IsActive;
+    var dead   = !s.IsAlive;
+
+    var borderFg = active     ? ConsoleColor.White
+                 : dead       ? ConsoleColor.DarkGray
+                 : s.IsHero   ? ConsoleColor.Blue
+                 :               ConsoleColor.DarkMagenta;
+
+    char h  = active ? '═' : '─';
+    char tl = active ? '╔' : '┌';
+    char tr = active ? '╗' : '┐';
+    char bl = active ? '╚' : '└';
+    char br = active ? '╝' : '┘';
+    char vb = active ? '║' : '│';
+
+    var top = new List<Seg> { new Seg($"{tl}{new string(h, CONTENT_W + 2)}{tr}", borderFg) };
+    var bot = new List<Seg> { new Seg($"{bl}{new string(h, CONTENT_W + 2)}{br}", borderFg) };
+
+    if (dead)
+    {
+        var status   = s.Hp <= -10 ? "[ SLAIN  ]" : "[ K.O.   ]";   // 10 chars
+        var namePart = $"  ✕ {s.Name.ToUpper()}".PadRight(CONTENT_W - status.Length);
+        var empty    = new string(' ', CONTENT_W);
+        return new List<List<Seg>>
+        {
+            top,
+            CL(vb, borderFg, new Seg(namePart, ConsoleColor.DarkGray), new Seg(status, ConsoleColor.DarkRed)),
+            CL(vb, borderFg, new Seg(empty, ConsoleColor.DarkGray)),
+            CL(vb, borderFg, new Seg(empty, ConsoleColor.DarkGray)),
+            bot
+        };
+    }
+
+    // Name + weapon line
+    var indicator = active ? "► " : "  ";
+    var indicFg   = active ? ConsoleColor.White : s.IsHero ? ConsoleColor.Cyan : ConsoleColor.Red;
+    var nameStr   = (s.Name.Length > 10 ? s.Name.ToUpper()[..10] : s.Name.ToUpper()).PadRight(10);
+    var weapTrunc = s.Weapon.Length > 14 ? s.Weapon[..14] : s.Weapon.PadRight(14);
+    var weapStr   = $"[{weapTrunc}]"; // always 16 chars
+
+    var nameLine = CL(vb, borderFg,
+        new Seg(indicator, indicFg),
+        new Seg(nameStr,   active ? ConsoleColor.White : ConsoleColor.White),
+        new Seg("   ",     ConsoleColor.DarkGray),
+        new Seg(weapStr,   active ? ConsoleColor.Yellow : ConsoleColor.Gray));
+
+    // TM bar line
+    var tmFilled = Math.Min(BAR_W, (int)(Math.Min(1.0, s.Tm / 100.0) * BAR_W));
+    var tmLine   = CL(vb, borderFg,
+        new Seg("  TM [",                       ConsoleColor.DarkGray),
+        new Seg(new string('|', tmFilled),       ConsoleColor.Cyan),
+        new Seg(new string('░', BAR_W-tmFilled), ConsoleColor.DarkGray),
+        new Seg("]  ",                           ConsoleColor.DarkGray),
+        new Seg($" {s.Tm,3}",                    ConsoleColor.Cyan),
+        new Seg("/100",                          ConsoleColor.DarkGray));
+
+    // HP bar line
+    var pct      = (double)Math.Max(0, s.Hp) / Math.Max(1, s.MaxHp);
+    var hpFilled = s.Hp > 0 ? Math.Max(1, (int)(pct * BAR_W)) : 0;
+    var hpFg     = HpColor(s.Hp, s.MaxHp);
+    var hpLine   = CL(vb, borderFg,
+        new Seg(" HP [",                        ConsoleColor.DarkGray),
+        new Seg(new string('█', hpFilled),      hpFg),
+        new Seg(new string('░', BAR_W-hpFilled),ConsoleColor.DarkGray),
+        new Seg("]  ",                          ConsoleColor.DarkGray),
+        new Seg($"{Math.Max(0, s.Hp),3}",       hpFg),
+        new Seg(" / ",                          ConsoleColor.DarkGray),
+        new Seg($"{s.MaxHp,-3}",                ConsoleColor.DarkGray));
+
+    return new List<List<Seg>> { top, nameLine, tmLine, hpLine, bot };
+}
+
+// Builds a full block content line: vb + ' ' + [segs] + ' ' + vb  (= BLOCK_W chars).
+// Content segs must sum to CONTENT_W (31) characters.
+List<Seg> CL(char vb, ConsoleColor borderFg, params Seg[] segs)
+{
+    var line = new List<Seg> { new Seg($"{vb} ", borderFg) };
+    line.AddRange(segs);
+    line.Add(new Seg($" {vb}", borderFg));
+    return line;
+}
+
+// ── PrintBlockPair ────────────────────────────────────────────────────────────
+// Renders two blocks side by side:  "  " + left(35) + "  ║  " + right(35)  = 77 chars.
+
+void PrintBlockPair(List<List<Seg>> left, List<List<Seg>> right)
+{
+    var maxLines = Math.Max(left.Count, right.Count);
+    var blank    = new List<Seg> { new Seg(new string(' ', BLOCK_W), ConsoleColor.Black) };
+
+    for (var i = 0; i < maxLines; i++)
+    {
+        var l = i < left .Count ? left [i] : blank;
+        var r = i < right.Count ? right[i] : blank;
+
+        Console.Write("  ");
+        foreach (var seg in l) { Console.ForegroundColor = seg.Fg; Console.Write(seg.Text); }
+        Console.ResetColor();
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.Write("  ║  ");
+        Console.ResetColor();
+        foreach (var seg in r) { Console.ForegroundColor = seg.Fg; Console.Write(seg.Text); }
+        Console.ResetColor();
+        Console.WriteLine();
+    }
+}
+
 // ── PlayTurnBased ─────────────────────────────────────────────────────────────
+// Replays the battle log one turn at a time.  Each keypress advances one turn.
+// State (HP, TM, alive) is updated incrementally from log events before display.
 
 void PlayTurnBased()
 {
-    // Group log entries into turns (each turn starts at a TurnStart event).
-    var turns = new List<List<BattleLogEntry>>();
-    List<BattleLogEntry>? current = null;
-    foreach (var e in result.Log)
+    var states     = BuildDisplayStates();
+    var turnEvents = new List<BattleLogEntry>();
+    bool inTurn    = false;
+    int  turnCount = 0;
+    int  turnTick  = 0;
+    string actorName = "";
+
+    void FlushTurn()
     {
-        if (e.EventType == "TurnStart") { current = new(); turns.Add(current); }
-        if (current != null && e.EventType != "TurnMeterGain") current.Add(e);
-    }
+        if (!inTurn || turnEvents.Count == 0) return;
 
-    for (var idx = 0; idx < turns.Count; idx++)
-    {
-        var turnEntries = turns[idx];
-        var tick        = turnEntries.FirstOrDefault()?.Tick ?? 0;
+        var ts    = turnEvents.First(e => e.EventType == "TurnStart");
+        var actSt = states.GetValueOrDefault(ts.ActorName);
+        var tgtSt = states.GetValueOrDefault(ts.TargetName ?? "");
 
-        Console.Clear();
-        PrintHeader();
+        DrawBattleScreen(states, turnTick);
 
-        var ts         = turnEntries.FirstOrDefault(e => e.EventType == "TurnStart");
-        var actorName  = ts?.ActorName  ?? "?";
-        var targetName = ts?.TargetName ?? "?";
-        activeActor    = actorName;
-
-        CWL($"\n  Turn {idx + 1}  |  Tick {tick}", ConsoleColor.DarkGray);
-        CW("  "); CW(actorName.ToUpper(), CharColor(actorName));
-        CW("  HP "); CW($"{curHp.GetValueOrDefault(actorName)}/{maxHp.GetValueOrDefault(actorName)}",
-            HpColor(curHp.GetValueOrDefault(actorName), maxHp.GetValueOrDefault(actorName, 1)));
-        CW("   ->   ");
-        CW(targetName.ToUpper(), CharColor(targetName));
-        CW("  HP "); CWL($"{curHp.GetValueOrDefault(targetName)}/{maxHp.GetValueOrDefault(targetName)}",
-            HpColor(curHp.GetValueOrDefault(targetName), maxHp.GetValueOrDefault(targetName, 1)));
-        CWL("  " + new string('-', 65), ConsoleColor.DarkCyan);
+        Console.WriteLine();
+        CW($"  Turn {turnCount}  ", ConsoleColor.DarkGray);
+        CW("│  ", ConsoleColor.DarkGray);
+        CW(ts.ActorName.ToUpper(), actSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
+        CW("  ─→  ", ConsoleColor.DarkGray);
+        CWL(ts.TargetName?.ToUpper() ?? "?", tgtSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
         Console.WriteLine();
 
-        ShowAllHp();
-        Console.WriteLine();
-        ShowTmForTick(tick);
-        Console.WriteLine();
-
-        foreach (var e in turnEntries)
+        foreach (var e in turnEvents)
         {
             switch (e.EventType)
             {
                 case "TurnStart":
                 {
-                    var verb = e.IsSpell ? "conjures" : "readies";
+                    var verb = e.IsSpell == true ? "conjures" : "readies";
                     CW("  >> ", ConsoleColor.DarkCyan);
-                    CW(e.ActorName.ToUpper(), CharColor(e.ActorName));
+                    CW(e.ActorName, actSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
                     CW($" {verb} ");
-                    CW($"[{e.AttackSourceName ?? "weapon"}]", e.IsSpell ? ConsoleColor.Magenta : ConsoleColor.Yellow);
+                    CW($"[{e.AttackSourceName}]", e.IsSpell == true ? ConsoleColor.Magenta : ConsoleColor.Yellow);
                     CW(" targeting ");
-                    CW(targetName, CharColor(targetName));
+                    CW(ts.TargetName ?? "?", tgtSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
                     CWL("!", ConsoleColor.White);
                     Console.WriteLine();
                     break;
                 }
-
                 case "Attack":
                     PrintAttack(e);
                     break;
-
                 case "Damage":
-                    curHp[e.ActorName] = e.TargetHpAfter ?? curHp.GetValueOrDefault(e.ActorName);
                     Console.WriteLine();
-                    CW("  "); CW(e.ActorName, CharColor(e.ActorName));
+                    CW("  "); CW(e.ActorName, ConsoleColor.White);
                     CW(" takes "); CW($"{e.DamageDealt}", ConsoleColor.Red);
-                    CWL($" damage!   HP: {e.TargetHpBefore} -> {e.TargetHpAfter}", ConsoleColor.DarkGray);
-                    Console.WriteLine();
-                    ShowAllHp();
+                    CWL($" damage   HP: {e.TargetHpBefore} -> {Math.Max(0, e.TargetHpAfter ?? 0)}", ConsoleColor.DarkGray);
                     break;
-
                 case "FumblePenalty":
                     CWL($"\n  {e.Message}", ConsoleColor.DarkYellow);
                     break;
-
-                case "TurnEnd":
-                    Console.WriteLine();
-                    CW("  "); CW(e.ActorName, CharColor(e.ActorName));
-                    CWL(" ends their turn.", ConsoleColor.DarkGray);
-                    break;
-
                 case "Death":
                     Console.WriteLine();
                     CWL("  " + new string('*', 65), ConsoleColor.Red);
                     CWL($"  *** {e.Message} ***", ConsoleColor.Red);
                     CWL("  " + new string('*', 65), ConsoleColor.Red);
                     break;
-
                 case "KnockedOut":
                     Console.WriteLine();
                     CWL("  " + new string('~', 65), ConsoleColor.DarkYellow);
@@ -600,13 +774,60 @@ void PlayTurnBased()
         }
 
         Console.WriteLine();
-        CWL("  " + new string('─', 65), ConsoleColor.DarkGray);
-        var battleOver = turnEntries.Any(e => e.EventType is "Death" or "KnockedOut");
-        CWL(battleOver ? "  Battle over!  Press any key for results..."
-                       : "  Press any key for next turn...", ConsoleColor.DarkGray);
+        CWL("  " + new string('─', 77), ConsoleColor.DarkGray);
+        var over = turnEvents.Any(e => e.EventType is "Death" or "KnockedOut");
+        CWL(over ? "  Battle over!  Press any key for results..."
+                 : "  Press any key for next turn...", ConsoleColor.DarkGray);
         Console.ReadKey(true);
+
+        if (states.TryGetValue(actorName, out var actorDisp)) actorDisp.IsActive = false;
+        turnEvents.Clear();
+        inTurn = false;
     }
 
+    foreach (var e in result.Log)
+    {
+        switch (e.EventType)
+        {
+            case "TurnMeterGain":
+                if (states.TryGetValue(e.ActorName, out var tmSt))
+                    tmSt.Tm = e.TurnMeterAfter ?? 0;
+                break;
+
+            case "TurnStart":
+                FlushTurn();
+                inTurn    = true;
+                turnCount++;
+                turnTick  = e.Tick;
+                actorName = e.ActorName;
+                if (states.TryGetValue(e.ActorName, out var actSt2))
+                {
+                    actSt2.IsActive = true;
+                    actSt2.Weapon   = e.AttackSourceName ?? "";
+                }
+                turnEvents.Add(e);
+                break;
+
+            case "Damage":
+                if (states.TryGetValue(e.ActorName, out var dmgSt))
+                    dmgSt.Hp = e.TargetHpAfter ?? dmgSt.Hp;
+                if (inTurn) turnEvents.Add(e);
+                break;
+
+            case "Death":
+            case "KnockedOut":
+                if (states.TryGetValue(e.ActorName, out var defSt))
+                { defSt.IsAlive = false; defSt.IsActive = false; }
+                if (inTurn) turnEvents.Add(e);
+                break;
+
+            default:
+                if (inTurn) turnEvents.Add(e);
+                break;
+        }
+    }
+
+    FlushTurn();
     activeActor = "";
 }
 
@@ -614,38 +835,23 @@ void PlayTurnBased()
 
 void PlayRealTime()
 {
-    var byTick = result.Log.GroupBy(e => e.Tick).OrderBy(g => g.Key).ToList();
+    var states  = BuildDisplayStates();
+    var byTick  = result.Log.GroupBy(e => e.Tick).OrderBy(g => g.Key).ToList();
 
-    CWL("\n  BATTLE BEGINS\n", ConsoleColor.Cyan);
-    CWL("  " + new string('=', 65) + "\n", ConsoleColor.DarkCyan);
-
-    var allM = heroParty.Members.Concat(enemyParty.Members).ToList();
-
-    var curTm       = allM.ToDictionary(m => m.Character.Name, _ => 0);
-    var curTmReady  = allM.ToDictionary(m => m.Character.Name, _ => false);
-    var curTmActive = allM.ToDictionary(m => m.Character.Name, _ => false);
-
+    // Track quiet TM-only runs to summarise them as "... N ticks pass"
     int quietStart = -1, quietEnd = -1;
-    var quietTmStart = new Dictionary<string, int>();
-    var quietTmEnd   = new Dictionary<string, int>();
 
     void FlushQuiet()
     {
         if (quietStart < 0) return;
         if (quietEnd > quietStart + 1)
         {
-            CWL($"\n  ... {quietEnd - quietStart + 1} ticks pass", ConsoleColor.DarkGray);
-            foreach (var n in quietTmStart.Keys)
-            {
-                var start = quietTmStart[n];
-                var end   = quietTmEnd.GetValueOrDefault(n, start);
-                CWL($"      {n,-12}  TM: {start,3} -> {end,3}", ConsoleColor.DarkGray);
-            }
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine($"\n  ... {quietEnd - quietStart + 1} quiet ticks (TM building)");
+            Console.ResetColor();
             Thread.Sleep(80);
         }
         quietStart = quietEnd = -1;
-        quietTmStart.Clear();
-        quietTmEnd.Clear();
     }
 
     foreach (var tickGroup in byTick)
@@ -653,21 +859,14 @@ void PlayRealTime()
         var entries   = tickGroup.ToList();
         var hasAction = entries.Any(e => e.EventType == "TurnStart");
 
+        // Apply TM updates regardless of whether this is a quiet tick
+        foreach (var e in entries.Where(e => e.EventType == "TurnMeterGain"))
+            if (states.TryGetValue(e.ActorName, out var st)) st.Tm = e.TurnMeterAfter ?? 0;
+
         if (!hasAction)
         {
-            foreach (var e in entries.Where(e => e.EventType == "TurnMeterGain"))
-            {
-                curTm[e.ActorName]      = e.TurnMeterAfter ?? 0;
-                curTmReady[e.ActorName] = e.IsReady;
-
-                if (quietStart < 0)
-                {
-                    quietStart = e.Tick;
-                    quietTmStart[e.ActorName] = e.TurnMeterBefore ?? 0;
-                }
-                quietEnd = e.Tick;
-                quietTmEnd[e.ActorName] = e.TurnMeterAfter ?? 0;
-            }
+            if (quietStart < 0) quietStart = tickGroup.Key;
+            quietEnd = tickGroup.Key;
             Thread.Sleep(40);
             continue;
         }
@@ -676,28 +875,17 @@ void PlayRealTime()
 
         var turnStart = entries.First(e => e.EventType == "TurnStart");
         var attacker  = turnStart.ActorName;
-        var target    = turnStart.TargetName ?? "?";
         activeActor   = attacker;
 
-        Console.WriteLine();
-        CWL("  " + new string('=', 65), ConsoleColor.DarkCyan);
-        CW($"  Tick {tickGroup.Key,-3}  |  ", ConsoleColor.DarkGray);
-        CW(attacker.ToUpper(), CharColor(attacker));
-        CW("  HP "); CW($"{curHp.GetValueOrDefault(attacker)}/{maxHp.GetValueOrDefault(attacker)}",
-            HpColor(curHp.GetValueOrDefault(attacker), maxHp.GetValueOrDefault(attacker, 1)));
-        CW("   ->   ");
-        CW(target.ToUpper(), CharColor(target));
-        CW("  HP ");
-        CWL($"{curHp.GetValueOrDefault(target)}/{maxHp.GetValueOrDefault(target)}",
-            HpColor(curHp.GetValueOrDefault(target), maxHp.GetValueOrDefault(target, 1)));
-        CWL("  " + new string('=', 65), ConsoleColor.DarkCyan);
+        // Mark active / update weapon
+        foreach (var st in states.Values) st.IsActive = false;
+        if (states.TryGetValue(attacker, out var actSt))
+        {
+            actSt.IsActive = true;
+            actSt.Weapon   = turnStart.AttackSourceName ?? actSt.Weapon;
+        }
 
-        curTmActive[attacker] = true;
-        if (curTmActive.ContainsKey(target)) curTmActive[target] = false;
-        Console.WriteLine();
-        ShowAllTm(curTm, curTmReady, curTmActive);
-        Console.WriteLine();
-
+        DrawBattleScreen(states, tickGroup.Key);
         Thread.Sleep(300);
 
         foreach (var e in entries)
@@ -708,15 +896,20 @@ void PlayRealTime()
                     break;
 
                 case "TurnStart":
+                {
+                    var tgtSt  = states.GetValueOrDefault(e.TargetName ?? "");
+                    var verb   = e.IsSpell == true ? "conjures" : "readies";
                     Console.WriteLine();
                     CW("  >> ", ConsoleColor.DarkCyan);
-                    CW(e.ActorName.ToUpper(), CharColor(e.ActorName));
-                    CW(e.IsSpell ? " conjures " : " readies ");
-                    CW($"[{e.AttackSourceName ?? "weapon"}]", e.IsSpell ? ConsoleColor.Magenta : ConsoleColor.Yellow);
+                    CW(e.ActorName, actSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
+                    CW($" {verb} ");
+                    CW($"[{e.AttackSourceName}]", e.IsSpell == true ? ConsoleColor.Magenta : ConsoleColor.Yellow);
                     CW(" targeting ");
-                    CW(target, CharColor(target));
+                    CW(e.TargetName ?? "?", tgtSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
                     CWL("!", ConsoleColor.White);
+                    Thread.Sleep(200);
                     break;
+                }
 
                 case "Attack":
                     Thread.Sleep(500);
@@ -724,35 +917,34 @@ void PlayRealTime()
                     break;
 
                 case "Damage":
+                {
                     Thread.Sleep(200);
-                    curHp[e.ActorName] = e.TargetHpAfter ?? curHp.GetValueOrDefault(e.ActorName);
+                    if (states.TryGetValue(e.ActorName, out var dmgSt))
+                        dmgSt.Hp = e.TargetHpAfter ?? dmgSt.Hp;
                     Console.WriteLine();
-                    CW("  "); CW(e.ActorName, CharColor(e.ActorName));
+                    CW("  "); CW(e.ActorName, ConsoleColor.White);
                     CW(" takes "); CW($"{e.DamageDealt}", ConsoleColor.Red);
-                    CWL($" damage!   HP: {e.TargetHpBefore} -> {e.TargetHpAfter}", ConsoleColor.DarkGray);
-                    Console.WriteLine();
-                    ShowAllHp();
+                    CWL($" damage   HP: {e.TargetHpBefore} -> {Math.Max(0, e.TargetHpAfter ?? 0)}", ConsoleColor.DarkGray);
                     Thread.Sleep(800);
                     break;
+                }
 
                 case "FumblePenalty":
                     CWL($"  {e.Message}", ConsoleColor.DarkYellow);
                     break;
 
                 case "TurnEnd":
-                    curTm[e.ActorName]       = e.TurnMeterAfter ?? 0;
-                    curTmReady[e.ActorName]  = e.IsReady;
-                    curTmActive[e.ActorName] = false;
+                    if (states.TryGetValue(e.ActorName, out var endSt))
+                    { endSt.IsActive = false; endSt.Tm = e.TurnMeterAfter ?? endSt.Tm; }
                     Console.WriteLine();
-                    CW("  "); CW(e.ActorName, CharColor(e.ActorName));
-                    CWL(" ends their turn.", ConsoleColor.DarkGray);
-                    Console.WriteLine();
-                    ShowAllTm(curTm, curTmReady, curTmActive);
-                    Console.WriteLine();
-                    CWL("  " + new string('─', 65), ConsoleColor.DarkGray);
+                    CWL("  " + new string('─', 77), ConsoleColor.DarkGray);
+                    Thread.Sleep(300);
                     break;
 
                 case "Death":
+                {
+                    if (states.TryGetValue(e.ActorName, out var deathSt))
+                    { deathSt.IsAlive = false; deathSt.IsActive = false; }
                     Thread.Sleep(500);
                     Console.WriteLine();
                     CWL("  " + new string('*', 65), ConsoleColor.Red);
@@ -760,8 +952,12 @@ void PlayRealTime()
                     CWL("  " + new string('*', 65), ConsoleColor.Red);
                     Thread.Sleep(1500);
                     break;
+                }
 
                 case "KnockedOut":
+                {
+                    if (states.TryGetValue(e.ActorName, out var koSt))
+                    { koSt.IsAlive = false; koSt.IsActive = false; }
                     Thread.Sleep(500);
                     Console.WriteLine();
                     CWL("  " + new string('~', 65), ConsoleColor.DarkYellow);
@@ -769,6 +965,7 @@ void PlayRealTime()
                     CWL("  " + new string('~', 65), ConsoleColor.DarkYellow);
                     Thread.Sleep(1500);
                     break;
+                }
             }
         }
     }
@@ -840,63 +1037,6 @@ void PrintSummary()
     CWL($"\n  Battle length :  {result.TotalTicks} ticks", ConsoleColor.White);
     CWL("\n  " + new string('=', 62), ConsoleColor.Cyan);
     Console.WriteLine();
-}
-
-// ── ShowAllHp ─────────────────────────────────────────────────────────────────
-
-void ShowAllHp()
-{
-    var multi = heroParty.Members.Count > 1 || enemyParty.Members.Count > 1;
-    if (multi) { CW("  "); CWL("── Heroes ───────────────", ConsoleColor.Cyan); }
-    foreach (var m in heroParty.Members)
-        ShowHp(m.Character.Name, curHp.GetValueOrDefault(m.Character.Name), maxHp.GetValueOrDefault(m.Character.Name, 1));
-    if (multi)
-    {
-        Console.WriteLine();
-        CW("  "); CWL("── Enemies ──────────────", ConsoleColor.Red);
-    }
-    foreach (var m in enemyParty.Members)
-        ShowHp(m.Character.Name, curHp.GetValueOrDefault(m.Character.Name), maxHp.GetValueOrDefault(m.Character.Name, 1));
-}
-
-// ── ShowAllTm (real-time live state) ─────────────────────────────────────────
-
-void ShowAllTm(Dictionary<string, int> tmValues, Dictionary<string, bool> tmReady, Dictionary<string, bool> tmActive)
-{
-    var multi = heroParty.Members.Count > 1 || enemyParty.Members.Count > 1;
-    if (multi) { CW("  "); CWL("── Heroes ───────────────", ConsoleColor.Cyan); }
-    foreach (var m in heroParty.Members)
-    {
-        var n = m.Character.Name;
-        ShowTm(n, tmValues.GetValueOrDefault(n), tmReady.GetValueOrDefault(n), tmActive.GetValueOrDefault(n));
-    }
-    if (multi) { Console.WriteLine(); CW("  "); CWL("── Enemies ──────────────", ConsoleColor.Red); }
-    foreach (var m in enemyParty.Members)
-    {
-        var n = m.Character.Name;
-        ShowTm(n, tmValues.GetValueOrDefault(n), tmReady.GetValueOrDefault(n), tmActive.GetValueOrDefault(n));
-    }
-}
-
-// ── ShowTmForTick (turn-based — reads from log) ───────────────────────────────
-
-void ShowTmForTick(int tick)
-{
-    var multi   = heroParty.Members.Count > 1 || enemyParty.Members.Count > 1;
-    var entries = result.Log.Where(e => e.EventType == "TurnMeterGain" && e.Tick == tick).ToList();
-
-    if (multi) { CW("  "); CWL("── Heroes ───────────────", ConsoleColor.Cyan); }
-    foreach (var m in heroParty.Members)
-    {
-        var e = entries.FirstOrDefault(x => x.ActorName == m.Character.Name);
-        if (e != null) ShowTm(e.ActorName, e.TurnMeterAfter ?? 0, e.IsReady, e.IsActive);
-    }
-    if (multi) { Console.WriteLine(); CW("  "); CWL("── Enemies ──────────────", ConsoleColor.Red); }
-    foreach (var m in enemyParty.Members)
-    {
-        var e = entries.FirstOrDefault(x => x.ActorName == m.Character.Name);
-        if (e != null) ShowTm(e.ActorName, e.TurnMeterAfter ?? 0, e.IsReady, e.IsActive);
-    }
 }
 
 // ── PrintHeader ───────────────────────────────────────────────────────────────
@@ -1039,26 +1179,6 @@ void ShowHp(string name, int current, int max, int w = 24)
     Console.WriteLine($"]  {Math.Max(0, current),3} / {max,3}");
 }
 
-// ── ShowTm ────────────────────────────────────────────────────────────────────
-
-void ShowTm(string name, int current, bool isReady = false, bool isActive = false, int w = 24)
-{
-    var filled = (int)(Math.Min(1.0, current / 100.0) * w);
-
-    Console.Write("  ");
-    CW($"{name,-10}", CharColor(name));
-    Console.Write("  TM [");
-    Console.ForegroundColor = ConsoleColor.Cyan;
-    Console.Write(new string('|', filled));
-    Console.ForegroundColor = ConsoleColor.DarkGray;
-    Console.Write(new string(' ', w - filled));
-    Console.ResetColor();
-    Console.Write($"]  {current,4}");
-    if (isActive)     { Console.ForegroundColor = ConsoleColor.Green; Console.Write("  ACTING"); Console.ResetColor(); }
-    else if (isReady) { Console.ForegroundColor = ConsoleColor.Cyan;  Console.Write("  READY");  Console.ResetColor(); }
-    Console.WriteLine();
-}
-
 // ── HpColor ───────────────────────────────────────────────────────────────────
 
 static ConsoleColor HpColor(int current, int max)
@@ -1106,6 +1226,23 @@ static int DieSides(BattleArena.Core.Entities.Enums.DieType d) => d switch
     BattleArena.Core.Entities.Enums.DieType.D20 => 20,
     _                                            => 0
 };
+
+// ── Seg / CharDisplayState ────────────────────────────────────────────────────
+// Lightweight types used by the left/right visual layout helpers.
+
+record Seg(string Text, ConsoleColor Fg = ConsoleColor.Gray);
+
+class CharDisplayState
+{
+    public required string Name   { get; init; }
+    public required int    MaxHp  { get; init; }
+    public required bool   IsHero { get; init; }
+    public int    Hp       { get; set; }
+    public int    Tm       { get; set; }
+    public bool   IsActive { get; set; }
+    public bool   IsAlive  { get; set; } = true;
+    public string Weapon   { get; set; } = "";
+}
 
 // ── ManualConsoleTargetSelector ───────────────────────────────────────────────
 // Used in Manual targeting mode: pauses during simulation so the player can
