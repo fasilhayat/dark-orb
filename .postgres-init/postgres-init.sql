@@ -242,21 +242,21 @@ INSERT INTO arena_data.class (name, description, hit_die_id, base_strike_rating)
 ) AS src(name, description, die_name, strike_rating)
 JOIN arena_data.die_type d ON d.name = src.die_name;
 
--- Class-race restrictions per ideas.txt
+-- Class-race restrictions
 INSERT INTO arena_data.class_race (class_id, race_id)
 SELECT c.id, r.id
 FROM (VALUES
-    ('Barbarian', 'Human'),
-    ('Knight', 'Human'),
-    ('Paladin', 'Human'),
-    ('Priest', 'Human'), ('Priest', 'Elf'), ('Priest', 'Dwarf'), ('Priest', 'Lizard'),
-    ('Priest', 'Kobold'), ('Priest', 'Halfling'),
-    ('Mage', 'Human'), ('Mage', 'Elf'),
-    ('Bard', 'Human'),
-    ('Druid', 'Elf'),
-    ('Fighter', 'Elf'), ('Fighter', 'Dwarf'), ('Fighter', 'Lizard'),
-    ('Fighter', 'Kobold'), ('Fighter', 'Orc'), ('Fighter', 'Ogre'), ('Fighter', 'Halfling'),
-    ('Rogue', 'Elf'), ('Rogue', 'Halfling'), ('Rogue', 'Kobold')
+    ('Barbarian', 'Human'), ('Barbarian', 'Orc'), ('Barbarian', 'Ogre'), ('Barbarian', 'Dwarf'),
+    ('Knight',    'Human'), ('Knight',    'Elf'), ('Knight',    'Dwarf'), ('Knight',    'Orc'),
+    ('Paladin',   'Human'), ('Paladin',   'Elf'), ('Paladin',   'Dwarf'),
+    ('Priest',    'Human'), ('Priest',    'Elf'), ('Priest',    'Dwarf'), ('Priest',    'Lizard'),
+    ('Priest',    'Kobold'), ('Priest',   'Halfling'), ('Priest',  'Orc'),
+    ('Mage',      'Human'), ('Mage',      'Elf'), ('Mage',      'Kobold'),
+    ('Bard',      'Human'), ('Bard',      'Elf'), ('Bard',      'Halfling'),
+    ('Druid',     'Human'), ('Druid',     'Elf'), ('Druid',     'Halfling'), ('Druid',    'Lizard'),
+    ('Fighter',   'Human'), ('Fighter',   'Elf'), ('Fighter',   'Dwarf'), ('Fighter',   'Lizard'),
+    ('Fighter',   'Kobold'), ('Fighter',  'Orc'), ('Fighter',   'Ogre'), ('Fighter',   'Halfling'),
+    ('Rogue',     'Human'), ('Rogue',     'Elf'), ('Rogue',     'Dwarf'), ('Rogue',     'Halfling'), ('Rogue', 'Kobold')
 ) AS src(class_name, race_name)
 JOIN arena_data.class c ON c.name = src.class_name
 JOIN arena_data.race r ON r.name = src.race_name;

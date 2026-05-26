@@ -28,6 +28,7 @@
 19. [NPCs](#19-npcs)
 20. [Spells](#20-spells)
 21. [Subraces & Special Abilities](#21-subraces--special-abilities)
+22. [Leveling & Experience](#22-leveling--experience)
 
 ---
 
@@ -40,7 +41,7 @@
 |:---:|:---:|:---:|:---:|:---:|:---:|
 | +1 | +1 | +1 | +1 | +1 | +1 |
 
-Available classes: Barbarian, Knight, Paladin, Priest, Mage, Bard
+Available classes: Barbarian, Knight, Paladin, Priest, Mage, Bard, Fighter, Rogue, Druid
 
 ---
 
@@ -52,7 +53,7 @@ Available classes: Barbarian, Knight, Paladin, Priest, Mage, Bard
 | +0 | +2 | +0 | +2 | +0 | +1 |
 
 Special Ability: **Magic Resistance** — Advantage on saving throws against magical effects.
-Available classes: Priest, Mage, Druid, Fighter, Rogue
+Available classes: Knight, Paladin, Priest, Mage, Bard, Druid, Fighter, Rogue
 Subraces: High Elf, Dark Elf, Forest Elf
 
 ---
@@ -65,7 +66,7 @@ Subraces: High Elf, Dark Elf, Forest Elf
 | +2 | +0 | +2 | +0 | +1 | +0 |
 
 Special Ability: **Magic Resistance** — Advantage on saving throws against magical effects.
-Available classes: Priest, Fighter
+Available classes: Barbarian, Knight, Paladin, Priest, Fighter, Rogue
 Subraces: Mountain Dwarf, Hill Dwarf
 
 ---
@@ -78,7 +79,7 @@ Subraces: Mountain Dwarf, Hill Dwarf
 | +2 | +0 | +1 | +0 | +0 | +0 |
 
 Special Ability: **Poison Immunity** — Immune to poison damage and the poisoned condition.
-Available classes: Priest, Fighter
+Available classes: Priest, Druid, Fighter
 Subraces: Swamp Lizard, Desert Lizard, Forest Lizard
 
 ---
@@ -104,7 +105,7 @@ Special Abilities: **Fear Immunity**, **Cause Fear**, **Stun**
 | +0 | +2 | +0 | +1 | +0 | +0 |
 
 Special Ability: **Magic Resistance** — Advantage on saving throws against magical effects.
-Available classes: Priest, Fighter, Rogue
+Available classes: Priest, Mage, Fighter, Rogue
 
 ---
 
@@ -128,7 +129,7 @@ Subraces: Fire Demon, Shadow Demon
 | +3 | +0 | +1 | +0 | +0 | +0 |
 
 Special Ability: **Extra Strength** — +2 bonus to melee damage rolls.
-Available classes: Fighter
+Available classes: Barbarian, Knight, Priest, Fighter
 Subraces: Green Orc, Blue Orc, Red Orc
 
 ---
@@ -141,7 +142,7 @@ Subraces: Green Orc, Blue Orc, Red Orc
 | +3 | +0 | +2 | +0 | +0 | +0 |
 
 Special Abilities: **Magic Resistance**, **Extra Strength**
-Available classes: Fighter
+Available classes: Barbarian, Fighter
 Subraces: Mountain Ogre, Hill Ogre, Desert Ogre, Forest Ogre
 
 ---
@@ -154,7 +155,7 @@ Subraces: Mountain Ogre, Hill Ogre, Desert Ogre, Forest Ogre
 | +0 | +2 | +1 | +0 | +1 | +1 |
 
 Special Abilities: **Taunt**, **Fear Immunity**
-Available classes: Priest, Fighter, Rogue
+Available classes: Priest, Bard, Druid, Fighter, Rogue
 Subraces: Forest Halfling, Hill Halfling
 
 ---

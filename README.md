@@ -17,30 +17,34 @@ BattleArena is a homebrew fantasy RPG backend and data model for a Dungeons & Dr
   - ASP.NET Core Web API
   - Configures services, Swagger, and endpoint mappings
 - `BattleArena.Application`
-  - Application interfaces and services for combat, character creation, dice rolls, and orchestration
+  - Application interfaces and services for combat, character creation, dice rolls, orchestrations, and XP/leveling logic (LevelProgression, LevelingService)
 - `BattleArena.Core`
   - Domain entities and shared contracts
 - `BattleArena.Infrastructure`
   - PostgreSQL data access, repositories, and database context
+- `BattleArena.Demo`
+  - Console-based demo app for running turn-based and realtime battles with narrated playback
 - `BattleArena.UnitTests`
-  - Unit tests for application behavior
+  - Unit tests for application behavior and XP/leveling logic
 - `BattleArena.AcceptanceTests`
   - Acceptance tests written with Reqnroll
 
 ### Runtime behavior
 
 - The API starts on port `8585` in Docker and exposes Swagger at `/swagger`.
-- The database is initialized from `.postgres-init/postgres-init.sql` when the container is first created.
+- The database is initialized from `.postgres-init/postgres-init.sql` when the container is first created (includes character XP, NPC flag, and biography fields).
 - The API uses PostgreSQL via `BattleArena.Infrastructure` and registers repositories and services through `BattleArena.Api/AddServices.cs`.
+- The `BattleArena.Demo` console app provides turn-based and realtime battle playback, with post-battle XP calculations based on enemy difficulty, crits, fumbles, and battle duration.
 
 ## Lore and world setting
 
-The world lore is documented in [notes/battle-arena-lore.md](notes/battle-arena-lore.md). The current lore emphasizes:
+The world lore is documented in [notes/battle-arena-lore.md](notes/battle-arena-lore.md) across 22 sections covering races, classes, deities, pets, weapons, armor, accessories, item sets, NPCs, spells, subraces, and a leveling & experience system. The current lore emphasizes:
 
 - A homebrew AD&D-inspired fantasy realm with gods, races, and ancient artifacts.
 - A combat model driven by `StrikeRating`, armor class, and `d20`-style rolls.
 - An economy of gear quality tiers (`Common`, `Uncommon`, `Rare`, `Epic`, `Legendary`).
 - A narrative focus on legendary weapons, cursed items, item sets, and NPC-driven quests.
+- A 12-level progression system with class archetypes, strike rating bonuses, and accessory slot unlocks.
 
 ### Core lore pillars
 
@@ -52,6 +56,7 @@ The world lore is documented in [notes/battle-arena-lore.md](notes/battle-arena-
 6. **Accessories**: Rings, amulets, and girdles with stat effects and curses
 7. **NPCs**: Merchants, quest givers, hostile enemies, and lore-bearing characters
 8. **Spells**: Area-of-effect, control, and utility spells across schools
+9. **Leveling & Experience**: 12-level progression, class archetypes (Martial / Caster / Hybrid), strike rating bonuses, accessory slot unlocks, and XP formula factoring difficulty, crits, fumbles, and battle duration
 
 ## Database model
 
@@ -96,7 +101,7 @@ The PostgreSQL initialization script lives in `.postgres-init/postgres-init.sql`
 
 ### Stored functions and procedures
 
-The script also creates reusable database functions for retrieving races, subraces, abilities, classes, weapons, armor, spells, deities, pets, characters, item sets, accessories (filterable by type: Ring, Amulet, Girdle), and NPCs. It also includes stored procedures for updating and deleting characters.
+The script also creates reusable database functions for retrieving races, subraces, abilities, classes, weapons, armor, spells, deities, pets, characters (including `npc`, `biography`, `experience_points` fields), item sets, accessories (filterable by type: Ring, Amulet, Girdle), and NPCs. It also includes stored procedures for creating, updating, and deleting characters — with full support for NPC flags, biographies, and experience points.
 
 ### Scheduled maintenance
 
@@ -114,7 +119,7 @@ The following Mermaid ER diagram reflects the core relationships defined in `.po
 
 ```mermaid
 erDiagram
-    DIE_TYPE ||--o{ "CLASS" : "hit die"
+    DIE_TYPE ||--o{ CHAR_CLASS : "hit die"
     DIE_TYPE ||--o{ PET : "damage die"
     DIE_TYPE ||--o{ WEAPON : "damage die"
     DIE_TYPE ||--o{ SPELL : "damage die"
@@ -144,18 +149,18 @@ erDiagram
 
     RACE ||--o{ SUBRACE : "has"
     RACE ||--o{ RACE_SPECIAL_ABILITY : "has"
-    RACE ||--o{ "CLASS_RACE" : "allows"
+    RACE ||--o{ CLASS_RACE : "allows"
     RACE ||--o{ PET_RACE_RESTRICTION : "restricts"
     RACE ||--o{ NPC : "race"
     RACE ||--o{ CHARACTER : "race"
 
-    "CLASS" ||--o{ "CLASS_RACE" : "allows"
-    "CLASS" ||--o{ "PET_CLASS_RESTRICTION" : "restricts"
-    "CLASS" ||--o{ NPC : "class"
-    "CLASS" ||--o{ CHARACTER : "class"
+    CHAR_CLASS ||--o{ CLASS_RACE : "allows"
+    CHAR_CLASS ||--o{ PET_CLASS_RESTRICTION : "restricts"
+    CHAR_CLASS ||--o{ NPC : "class"
+    CHAR_CLASS ||--o{ CHARACTER : "class"
 
-    PET ||--o{ "PET_CLASS_RESTRICTION" : "class restriction"
-    PET ||--o{ "PET_RACE_RESTRICTION" : "race restriction"
+    PET ||--o{ PET_CLASS_RESTRICTION : "class restriction"
+    PET ||--o{ PET_RACE_RESTRICTION : "race restriction"
 
     EQUIPMENT_SLOT ||--o{ CHARACTER_EQUIPMENT : "slot"
     CHARACTER ||--o{ CHARACTER_EQUIPMENT : "equipped"
@@ -238,7 +243,7 @@ erDiagram
         text description
     }
 
-    "CLASS" {
+    CHAR_CLASS {
         serial id
         int hit_die_id
         varchar name
@@ -246,7 +251,7 @@ erDiagram
         text description
     }
 
-    "CLASS_RACE" {
+    CLASS_RACE {
         int class_id
         int race_id
     }
@@ -273,7 +278,7 @@ erDiagram
         text description
     }
 
-    "PET_CLASS_RESTRICTION" {
+    PET_CLASS_RESTRICTION {
         int pet_id
         int class_id
     }
@@ -383,6 +388,8 @@ erDiagram
         int experience_points
         int strike_rating
         int turn_speed
+        smallint npc
+        text biography
         timestamp created_at
         timestamp updated_at
     }
