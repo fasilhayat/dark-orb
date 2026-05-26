@@ -359,6 +359,42 @@ Console.ReadKey(true);
 Console.Clear();
 PrintHeader();
 
+// Show combatant stat sheets prior to battle (visible to both turn-based and realtime modes)
+Console.WriteLine();
+if (scenario == 'D')
+{
+    var f1 = heroParty.Members[0];
+    var f2 = enemyParty.Members[0];
+    var f1Atk = f1.AttackSource;
+    var f2Atk = f2.AttackSource;
+    ShowSheet("FIGHTER 1", f1.Character, f1Atk,
+        combatStats.ComputeAttackerStats(f1.Character, GetSheetAttackSource(f1.Character, f1Atk)).AttackPower,
+        combatStats.ComputeDefenderStats(f1.Character).DefensePower);
+    CWL("\n                           --- VS ---\n", ConsoleColor.DarkGray);
+    ShowSheet("FIGHTER 2", f2.Character, f2Atk,
+        combatStats.ComputeAttackerStats(f2.Character, GetSheetAttackSource(f2.Character, f2Atk)).AttackPower,
+        combatStats.ComputeDefenderStats(f2.Character).DefensePower);
+}
+else
+{
+    CWL("  ── YOUR HEROES ───────────────────────────────────────────", ConsoleColor.Cyan);
+    foreach (var m in heroParty.Members)
+    {
+        var atk = m.AttackSource;
+        ShowSheet("HERO", m.Character, atk,
+            combatStats.ComputeAttackerStats(m.Character, GetSheetAttackSource(m.Character, atk)).AttackPower,
+            combatStats.ComputeDefenderStats(m.Character).DefensePower);
+    }
+    CWL("\n  ── ENEMY HORDE ───────────────────────────────────────────", ConsoleColor.Red);
+    foreach (var m in enemyParty.Members)
+    {
+        var atk = m.AttackSource;
+        ShowSheet("ENEMY", m.Character, atk,
+            combatStats.ComputeAttackerStats(m.Character, GetSheetAttackSource(m.Character, atk)).AttackPower,
+            combatStats.ComputeDefenderStats(m.Character).DefensePower);
+    }
+}
+
 var simulator = new BattleSimulator(
     new CombatService(new DiceService(), combatStats),
     new TurnmeterService(),
@@ -984,6 +1020,7 @@ void PlayTurnBased()
                 turnCount++;
                 turnTick  = e.Tick;
                 actorName = e.ActorName;
+                activeActor = e.ActorName;
                 if (states.TryGetValue(e.ActorName, out var actSt2))
                 {
                     actSt2.IsActive = true;
@@ -1003,6 +1040,11 @@ void PlayTurnBased()
                 if (states.TryGetValue(e.ActorName, out var defSt))
                 { defSt.IsAlive = false; defSt.IsActive = false; }
                 if (inTurn) turnEvents.Add(e);
+                break;
+
+            case "TurnEnd":
+                if (states.TryGetValue(e.ActorName, out var endSt))
+                { endSt.IsActive = false; endSt.Tm = e.TurnMeterAfter ?? endSt.Tm; }
                 break;
 
             default:
@@ -1360,14 +1402,19 @@ void ShowHp(string name, int current, int max, int w = 24)
     Console.ForegroundColor = ConsoleColor.DarkGray;
     Console.Write(new string('\u2591', w - filled));
     Console.ResetColor();
-    Console.WriteLine($"]  {Math.Max(0, current),3} / {max,3}");
+    var hpDisplay = current < 0 ? current.ToString() : Math.Max(0, current).ToString();
+    Console.Write("]  ");
+    if (current < 0) CW($"{current,3}", ConsoleColor.Red);
+    else             CW($"{Math.Max(0, current),3}", barCol);
+    CWL($" / {max,3}", ConsoleColor.DarkGray);
 }
 
 // ── HpColor ───────────────────────────────────────────────────────────────────
 
 static ConsoleColor HpColor(int current, int max)
 {
-    var pct = (double)Math.Max(0, current) / Math.Max(1, max);
+    if (current <= 0) return ConsoleColor.Red;
+    var pct = (double)current / Math.Max(1, max);
     return pct > 0.5  ? ConsoleColor.Green
          : pct > 0.25 ? ConsoleColor.Yellow
          :              ConsoleColor.Red;
