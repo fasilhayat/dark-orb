@@ -17,14 +17,14 @@ namespace BattleArena.AcceptanceTests.Features
     
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "3.0.0.0")]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class CombatSystemFeature : object, global::Xunit.IClassFixture<CombatSystemFeature.FixtureData>, global::Xunit.IAsyncLifetime
+    public partial class CombatCoreAttackResolutionFeature : object, global::Xunit.IClassFixture<CombatCoreAttackResolutionFeature.FixtureData>, global::Xunit.IAsyncLifetime
     {
         
         private global::Reqnroll.ITestRunner testRunner;
         
         private static string[] featureTags = ((string[])(null));
         
-        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new global::System.Globalization.CultureInfo("en"), "Features", "Combat System", "    As a game designer\r\n    I want to resolve attacks and damage\r\n    So that com" +
+        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new global::System.Globalization.CultureInfo("en"), "Features", "Combat — Core Attack Resolution", "    As a game designer\r\n    I want to resolve attacks and damage\r\n    So that com" +
                 "bat follows the AD&D-inspired rules", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags, InitializeCucumberMessages());
         
         private global::Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
@@ -32,7 +32,7 @@ namespace BattleArena.AcceptanceTests.Features
 #line 1 "Combat.feature"
 #line hidden
         
-        public CombatSystemFeature(CombatSystemFeature.FixtureData fixtureData, global::Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public CombatCoreAttackResolutionFeature(CombatCoreAttackResolutionFeature.FixtureData fixtureData, global::Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
         }
@@ -106,12 +106,12 @@ namespace BattleArena.AcceptanceTests.Features
         
         public virtual async global::System.Threading.Tasks.Task FeatureBackgroundAsync()
         {
-#line 6
+#line 18
     #line hidden
-#line 7
+#line 19
         await testRunner.GivenAsync("a character with strength 14 and strike rating 19", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 8
+#line 20
         await testRunner.AndAsync("a weapon named \"Longsword\" with D8 damage die and +0 attack bonus", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
         }
@@ -147,7 +147,7 @@ namespace BattleArena.AcceptanceTests.Features
         }
         
         [global::Xunit.SkippableFactAttribute(DisplayName="Calculate ability modifier for various ability scores")]
-        [global::Xunit.TraitAttribute("FeatureTitle", "Combat System")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Combat — Core Attack Resolution")]
         [global::Xunit.TraitAttribute("Description", "Calculate ability modifier for various ability scores")]
         [global::Xunit.TraitAttribute("Category", "ability")]
         public async global::System.Threading.Tasks.Task CalculateAbilityModifierForVariousAbilityScores()
@@ -159,7 +159,7 @@ namespace BattleArena.AcceptanceTests.Features
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Calculate ability modifier for various ability scores", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
             string[] tagsOfRule = ((string[])(null));
             global::Reqnroll.RuleInfo ruleInfo = null;
-#line 11
+#line 25
     this.ScenarioInitialize(scenarioInfo, ruleInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -169,37 +169,37 @@ namespace BattleArena.AcceptanceTests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 6
+#line 18
     await this.FeatureBackgroundAsync();
 #line hidden
-#line 12
+#line 26
         await testRunner.WhenAsync("the ability modifier is calculated for score 8", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 13
+#line 27
         await testRunner.ThenAsync("the modifier should be -1", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 14
+#line 28
         await testRunner.WhenAsync("the ability modifier is calculated for score 10", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 15
+#line 29
         await testRunner.ThenAsync("the modifier should be 0", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 16
+#line 30
         await testRunner.WhenAsync("the ability modifier is calculated for score 14", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 17
+#line 31
         await testRunner.ThenAsync("the modifier should be 2", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 18
+#line 32
         await testRunner.WhenAsync("the ability modifier is calculated for score 18", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 19
+#line 33
         await testRunner.ThenAsync("the modifier should be 4", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 20
+#line 34
         await testRunner.WhenAsync("the ability modifier is calculated for score 20", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 21
+#line 35
         await testRunner.ThenAsync("the modifier should be 5", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -207,7 +207,7 @@ namespace BattleArena.AcceptanceTests.Features
         }
         
         [global::Xunit.SkippableFactAttribute(DisplayName="Successful melee attack hits and deals damage with strength bonus")]
-        [global::Xunit.TraitAttribute("FeatureTitle", "Combat System")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Combat — Core Attack Resolution")]
         [global::Xunit.TraitAttribute("Description", "Successful melee attack hits and deals damage with strength bonus")]
         [global::Xunit.TraitAttribute("Category", "attack")]
         public async global::System.Threading.Tasks.Task SuccessfulMeleeAttackHitsAndDealsDamageWithStrengthBonus()
@@ -219,7 +219,7 @@ namespace BattleArena.AcceptanceTests.Features
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Successful melee attack hits and deals damage with strength bonus", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
             string[] tagsOfRule = ((string[])(null));
             global::Reqnroll.RuleInfo ruleInfo = null;
-#line 24
+#line 40
     this.ScenarioInitialize(scenarioInfo, ruleInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -229,28 +229,28 @@ namespace BattleArena.AcceptanceTests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 6
+#line 18
     await this.FeatureBackgroundAsync();
 #line hidden
-#line 25
+#line 41
         await testRunner.GivenAsync("the D20 roll is 12", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 26
+#line 42
         await testRunner.AndAsync("the damage die roll is 5", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 27
+#line 43
         await testRunner.WhenAsync("the character attacks a target with armor class 5", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 28
+#line 44
         await testRunner.ThenAsync("the attack should hit", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 29
+#line 45
         await testRunner.AndAsync("the hit roll should be 12", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 30
+#line 46
         await testRunner.AndAsync("the damage should be 7", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 31
+#line 47
         await testRunner.AndAsync("the weapon used should be \"Longsword\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
             }
@@ -258,7 +258,7 @@ namespace BattleArena.AcceptanceTests.Features
         }
         
         [global::Xunit.SkippableFactAttribute(DisplayName="Attack misses when roll is too low to beat the target armor class")]
-        [global::Xunit.TraitAttribute("FeatureTitle", "Combat System")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Combat — Core Attack Resolution")]
         [global::Xunit.TraitAttribute("Description", "Attack misses when roll is too low to beat the target armor class")]
         [global::Xunit.TraitAttribute("Category", "attack")]
         public async global::System.Threading.Tasks.Task AttackMissesWhenRollIsTooLowToBeatTheTargetArmorClass()
@@ -270,7 +270,7 @@ namespace BattleArena.AcceptanceTests.Features
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Attack misses when roll is too low to beat the target armor class", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
             string[] tagsOfRule = ((string[])(null));
             global::Reqnroll.RuleInfo ruleInfo = null;
-#line 34
+#line 52
     this.ScenarioInitialize(scenarioInfo, ruleInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -280,22 +280,22 @@ namespace BattleArena.AcceptanceTests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 6
+#line 18
     await this.FeatureBackgroundAsync();
 #line hidden
-#line 35
+#line 53
         await testRunner.GivenAsync("the D20 roll is 5", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 36
+#line 54
         await testRunner.AndAsync("the damage die roll is 3", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 37
+#line 55
         await testRunner.WhenAsync("the character attacks a target with armor class 10", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 38
+#line 56
         await testRunner.ThenAsync("the attack should miss", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 39
+#line 57
         await testRunner.AndAsync("the damage should be 0", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
             }
@@ -303,7 +303,7 @@ namespace BattleArena.AcceptanceTests.Features
         }
         
         [global::Xunit.SkippableFactAttribute(DisplayName="Damage cannot go below zero even with a negative strength modifier")]
-        [global::Xunit.TraitAttribute("FeatureTitle", "Combat System")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Combat — Core Attack Resolution")]
         [global::Xunit.TraitAttribute("Description", "Damage cannot go below zero even with a negative strength modifier")]
         [global::Xunit.TraitAttribute("Category", "attack")]
         public async global::System.Threading.Tasks.Task DamageCannotGoBelowZeroEvenWithANegativeStrengthModifier()
@@ -315,7 +315,7 @@ namespace BattleArena.AcceptanceTests.Features
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Damage cannot go below zero even with a negative strength modifier", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
             string[] tagsOfRule = ((string[])(null));
             global::Reqnroll.RuleInfo ruleInfo = null;
-#line 42
+#line 63
     this.ScenarioInitialize(scenarioInfo, ruleInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -325,25 +325,25 @@ namespace BattleArena.AcceptanceTests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 6
+#line 18
     await this.FeatureBackgroundAsync();
 #line hidden
-#line 43
+#line 64
         await testRunner.GivenAsync("a character with strength 6 and strike rating 19", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 44
+#line 65
         await testRunner.AndAsync("the D20 roll is 20", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 45
+#line 66
         await testRunner.AndAsync("the damage die roll is 1", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 46
+#line 67
         await testRunner.WhenAsync("the character attacks a target with armor class 5", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 47
+#line 68
         await testRunner.ThenAsync("the attack should hit", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 48
+#line 69
         await testRunner.AndAsync("the damage should be 0", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
             }
@@ -351,7 +351,7 @@ namespace BattleArena.AcceptanceTests.Features
         }
         
         [global::Xunit.SkippableFactAttribute(DisplayName="Lower strike rating makes attacks more likely to hit")]
-        [global::Xunit.TraitAttribute("FeatureTitle", "Combat System")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Combat — Core Attack Resolution")]
         [global::Xunit.TraitAttribute("Description", "Lower strike rating makes attacks more likely to hit")]
         [global::Xunit.TraitAttribute("Category", "attack")]
         public async global::System.Threading.Tasks.Task LowerStrikeRatingMakesAttacksMoreLikelyToHit()
@@ -363,7 +363,7 @@ namespace BattleArena.AcceptanceTests.Features
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Lower strike rating makes attacks more likely to hit", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
             string[] tagsOfRule = ((string[])(null));
             global::Reqnroll.RuleInfo ruleInfo = null;
-#line 51
+#line 75
     this.ScenarioInitialize(scenarioInfo, ruleInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -373,25 +373,25 @@ namespace BattleArena.AcceptanceTests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 6
+#line 18
     await this.FeatureBackgroundAsync();
 #line hidden
-#line 52
+#line 76
         await testRunner.GivenAsync("a character with strength 16 and strike rating 15", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 53
+#line 77
         await testRunner.AndAsync("the D20 roll is 8", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 54
+#line 78
         await testRunner.AndAsync("the damage die roll is 6", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 55
+#line 79
         await testRunner.WhenAsync("the character attacks a target with armor class 5", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 56
+#line 80
         await testRunner.ThenAsync("the attack should hit", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 57
+#line 81
         await testRunner.AndAsync("the damage should be 9", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
             }
@@ -399,7 +399,7 @@ namespace BattleArena.AcceptanceTests.Features
         }
         
         [global::Xunit.SkippableFactAttribute(DisplayName="Weapon attack bonus improves hit chance")]
-        [global::Xunit.TraitAttribute("FeatureTitle", "Combat System")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Combat — Core Attack Resolution")]
         [global::Xunit.TraitAttribute("Description", "Weapon attack bonus improves hit chance")]
         [global::Xunit.TraitAttribute("Category", "attack")]
         public async global::System.Threading.Tasks.Task WeaponAttackBonusImprovesHitChance()
@@ -411,7 +411,7 @@ namespace BattleArena.AcceptanceTests.Features
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Weapon attack bonus improves hit chance", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
             string[] tagsOfRule = ((string[])(null));
             global::Reqnroll.RuleInfo ruleInfo = null;
-#line 60
+#line 87
     this.ScenarioInitialize(scenarioInfo, ruleInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -421,28 +421,28 @@ namespace BattleArena.AcceptanceTests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 6
+#line 18
     await this.FeatureBackgroundAsync();
 #line hidden
-#line 61
+#line 88
         await testRunner.GivenAsync("a character with strength 10 and strike rating 19", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 62
+#line 89
         await testRunner.AndAsync("a weapon named \"Soul Reaver\" with D12 damage die and +3 attack bonus", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 63
+#line 90
         await testRunner.AndAsync("the D20 roll is 10", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 64
+#line 91
         await testRunner.AndAsync("the damage die roll is 7", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 65
+#line 92
         await testRunner.WhenAsync("the character attacks a target with armor class 5", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 66
+#line 93
         await testRunner.ThenAsync("the attack should hit", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 67
+#line 94
         await testRunner.AndAsync("the damage should be 7", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
             }
@@ -450,7 +450,7 @@ namespace BattleArena.AcceptanceTests.Features
         }
         
         [global::Xunit.SkippableFactAttribute(DisplayName="High armor class makes attacks miss")]
-        [global::Xunit.TraitAttribute("FeatureTitle", "Combat System")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Combat — Core Attack Resolution")]
         [global::Xunit.TraitAttribute("Description", "High armor class makes attacks miss")]
         [global::Xunit.TraitAttribute("Category", "attack")]
         public async global::System.Threading.Tasks.Task HighArmorClassMakesAttacksMiss()
@@ -462,7 +462,7 @@ namespace BattleArena.AcceptanceTests.Features
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("High armor class makes attacks miss", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
             string[] tagsOfRule = ((string[])(null));
             global::Reqnroll.RuleInfo ruleInfo = null;
-#line 70
+#line 99
     this.ScenarioInitialize(scenarioInfo, ruleInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -472,22 +472,22 @@ namespace BattleArena.AcceptanceTests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 6
+#line 18
     await this.FeatureBackgroundAsync();
 #line hidden
-#line 71
+#line 100
         await testRunner.GivenAsync("the D20 roll is 10", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 72
+#line 101
         await testRunner.AndAsync("the damage die roll is 4", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 73
+#line 102
         await testRunner.WhenAsync("the character attacks a target with armor class 15", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 74
+#line 103
         await testRunner.ThenAsync("the attack should miss", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 75
+#line 104
         await testRunner.AndAsync("the damage should be 0", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
             }
@@ -495,7 +495,7 @@ namespace BattleArena.AcceptanceTests.Features
         }
         
         [global::Xunit.SkippableFactAttribute(DisplayName="Roll damage for a weapon")]
-        [global::Xunit.TraitAttribute("FeatureTitle", "Combat System")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Combat — Core Attack Resolution")]
         [global::Xunit.TraitAttribute("Description", "Roll damage for a weapon")]
         [global::Xunit.TraitAttribute("Category", "damage")]
         public async global::System.Threading.Tasks.Task RollDamageForAWeapon()
@@ -507,7 +507,7 @@ namespace BattleArena.AcceptanceTests.Features
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Roll damage for a weapon", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
             string[] tagsOfRule = ((string[])(null));
             global::Reqnroll.RuleInfo ruleInfo = null;
-#line 78
+#line 109
     this.ScenarioInitialize(scenarioInfo, ruleInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -517,19 +517,19 @@ namespace BattleArena.AcceptanceTests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 6
+#line 18
     await this.FeatureBackgroundAsync();
 #line hidden
-#line 79
+#line 110
         await testRunner.GivenAsync("the damage die roll is 7", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 80
+#line 111
         await testRunner.WhenAsync("the character rolls damage for the weapon", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 81
+#line 112
         await testRunner.ThenAsync("the damage result should be 7", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 82
+#line 113
         await testRunner.AndAsync("the damage die type should be D8", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
             }
@@ -537,7 +537,7 @@ namespace BattleArena.AcceptanceTests.Features
         }
         
         [global::Xunit.SkippableFactAttribute(DisplayName="Roll damage for a weapon with different die")]
-        [global::Xunit.TraitAttribute("FeatureTitle", "Combat System")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "Combat — Core Attack Resolution")]
         [global::Xunit.TraitAttribute("Description", "Roll damage for a weapon with different die")]
         [global::Xunit.TraitAttribute("Category", "damage")]
         public async global::System.Threading.Tasks.Task RollDamageForAWeaponWithDifferentDie()
@@ -549,7 +549,7 @@ namespace BattleArena.AcceptanceTests.Features
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Roll damage for a weapon with different die", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
             string[] tagsOfRule = ((string[])(null));
             global::Reqnroll.RuleInfo ruleInfo = null;
-#line 85
+#line 117
     this.ScenarioInitialize(scenarioInfo, ruleInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -559,22 +559,22 @@ namespace BattleArena.AcceptanceTests.Features
             else
             {
                 await this.ScenarioStartAsync();
-#line 6
+#line 18
     await this.FeatureBackgroundAsync();
 #line hidden
-#line 86
+#line 118
         await testRunner.GivenAsync("a weapon named \"Dagger\" with D4 damage die and +0 attack bonus", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 87
+#line 119
         await testRunner.AndAsync("the damage die roll is 3", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 88
+#line 120
         await testRunner.WhenAsync("the character rolls damage for the weapon", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 89
+#line 121
         await testRunner.ThenAsync("the damage result should be 3", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 90
+#line 122
         await testRunner.AndAsync("the damage die type should be D4", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
             }
@@ -588,12 +588,12 @@ namespace BattleArena.AcceptanceTests.Features
             
             async global::System.Threading.Tasks.Task global::Xunit.IAsyncLifetime.InitializeAsync()
             {
-                await CombatSystemFeature.FeatureSetupAsync();
+                await CombatCoreAttackResolutionFeature.FeatureSetupAsync();
             }
             
             async global::System.Threading.Tasks.Task global::Xunit.IAsyncLifetime.DisposeAsync()
             {
-                await CombatSystemFeature.FeatureTearDownAsync();
+                await CombatCoreAttackResolutionFeature.FeatureTearDownAsync();
             }
         }
     }

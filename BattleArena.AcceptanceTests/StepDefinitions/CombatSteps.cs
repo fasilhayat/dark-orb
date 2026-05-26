@@ -133,6 +133,27 @@ public class CombatSteps
         Assert.Equal(ParseDieType(dieName), _damageResult.DieType);
     }
 
+    [Then(@"the attack is a critical hit")]
+    public void ThenTheAttackIsACriticalHit()
+    {
+        Assert.NotNull(_attackResult);
+        Assert.True(_attackResult.IsCriticalHit);
+    }
+
+    [Then(@"the attack is a fumble")]
+    public void ThenTheAttackIsAFumble()
+    {
+        Assert.NotNull(_attackResult);
+        Assert.True(_attackResult.IsFumble);
+    }
+
+    [Then(@"the attacker receives an attack power penalty of -2")]
+    public void ThenTheAttackerReceivesAnAttackPowerPenaltyOfMinusTwo()
+    {
+        Assert.NotNull(_attackResult);
+        Assert.Equal(-2, _attackResult.AttackPowerPenalty);
+    }
+
     private static Character CreateDefender(int targetArmorClass)
     {
         return new Character
