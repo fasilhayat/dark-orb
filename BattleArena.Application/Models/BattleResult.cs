@@ -6,16 +6,21 @@ using Core.Entities.Enums;
 // The outcome of a full battle simulation run by BattleSimulator.
 public class BattleResult
 {
-    // Null only when MaxTicksReached = true
-    public Character? Winner { get; set; }
-    public Character? Loser  { get; set; }
+    // The party that won and the party that lost.
+    // Set for both party and 1v1 battles (1v1 creates single-member parties internally).
+    public Party? WinningParty { get; set; }
+    public Party? LosingParty  { get; set; }
 
-    // How the loser left the fight: KnockedOut (HP 0 to -9) or Dead (HP <= -10).
+    // How the last defeated combatant left the fight.
     public CharacterVitalStatus LoserStatus { get; set; } = CharacterVitalStatus.Alive;
 
     public int TotalTicks { get; set; }
     public List<BattleLogEntry> Log { get; set; } = new();
     public bool MaxTicksReached { get; set; }
+
+    // Convenience accessors for 1v1 results (single-member parties).
+    public Character? Winner => WinningParty?.Members.FirstOrDefault()?.Character;
+    public Character? Loser  => LosingParty?.Members.FirstOrDefault()?.Character;
 
     // Formats the full event log as a human-readable string suitable for test output.
     public string FormatLog()
@@ -31,10 +36,10 @@ public class BattleResult
                 sb.AppendLine($"           >> {entry.Phrase}");
         }
         sb.AppendLine("═══════════════════════════════════════════════════════════════");
-        if (!MaxTicksReached && Winner is not null && Loser is not null)
+        if (!MaxTicksReached && WinningParty is not null && LosingParty is not null)
         {
             var loserTag = LoserStatus == CharacterVitalStatus.Dead ? "[DEAD]" : "[KO]";
-            sb.AppendLine($"  WINNER: {Winner.Name} (HP: {Winner.CurrentHitPoints})  |  LOSER: {Loser.Name} (HP: {Loser.CurrentHitPoints}) {loserTag}  |  Ticks: {TotalTicks}");
+            sb.AppendLine($"  WINNER: {WinningParty.Name}  |  LOSER: {LosingParty.Name} {loserTag}  |  Ticks: {TotalTicks}");
         }
         else
             sb.AppendLine($"  MAX TICKS REACHED ({TotalTicks}) — battle inconclusive");

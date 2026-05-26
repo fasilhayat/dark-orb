@@ -39,4 +39,7 @@ public class BattleLogEntry
     public string? AttackSourceName { get; set; }
     // True when the attack source is a spell, false for melee/ranged weapons.
     public bool IsSpell { get; set; }
+
+    // The name of the character being targeted (present on TurnStart and Attack events).
+    public string? TargetName { get; set; }
 }
