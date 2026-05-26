@@ -1530,7 +1530,10 @@ CREATE OR REPLACE FUNCTION arena_data.fn_create_character(
     p_wisdom INTEGER,
     p_charisma INTEGER,
     p_strength_percentile INTEGER DEFAULT 0,
-    p_max_hit_points INTEGER DEFAULT 10
+    p_max_hit_points INTEGER DEFAULT 10,
+    p_npc SMALLINT DEFAULT 0,
+    p_biography TEXT DEFAULT '',
+    p_experience_points INTEGER DEFAULT 0
 )
 RETURNS INTEGER AS $$
 DECLARE
@@ -1542,11 +1545,13 @@ BEGIN
     INSERT INTO arena_data.character (
         name, race_id, class_id, level,
         strength, dexterity, stamina, intelligence, wisdom, charisma,
-        strength_percentile, max_hit_points, current_hit_points, strike_rating
+        strength_percentile, max_hit_points, current_hit_points, strike_rating,
+        npc, biography, experience_points
     ) VALUES (
         p_name, p_race_id, p_class_id, 1,
         p_strength, p_dexterity, p_stamina, p_intelligence, p_wisdom, p_charisma,
-        p_strength_percentile, p_max_hit_points, p_max_hit_points, v_strike_rating
+        p_strength_percentile, p_max_hit_points, p_max_hit_points, v_strike_rating,
+        p_npc, p_biography, p_experience_points
     ) RETURNING id INTO v_id;
 
     RETURN v_id;
@@ -1568,7 +1573,10 @@ CREATE OR REPLACE PROCEDURE arena_data.sp_update_character(
     p_wisdom INTEGER,
     p_charisma INTEGER,
     p_strength_percentile INTEGER DEFAULT 0,
-    p_current_hit_points INTEGER DEFAULT 10
+    p_current_hit_points INTEGER DEFAULT 10,
+    p_npc SMALLINT DEFAULT NULL,
+    p_biography TEXT DEFAULT NULL,
+    p_experience_points INTEGER DEFAULT NULL
 )
 AS $$
 BEGIN
@@ -1583,6 +1591,9 @@ BEGIN
         charisma = p_charisma,
         strength_percentile = p_strength_percentile,
         current_hit_points = p_current_hit_points,
+        npc = COALESCE(p_npc, npc),
+        biography = COALESCE(p_biography, biography),
+        experience_points = COALESCE(p_experience_points, experience_points),
         updated_at = NOW()
     WHERE id = p_id;
 END;
