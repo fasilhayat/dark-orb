@@ -281,7 +281,7 @@ public class BattleSimulator : IBattleSimulator
         EventType = target.IsDead ? "Death" : "KnockedOut",
         Message   = target.IsDead
             ? $"[DEAD] {target.Name} has been slain! (HP: {target.CurrentHitPoints})"
-            : $"[KO] {target.Name} is knocked unconscious! (HP: {target.CurrentHitPoints})"
+            : $"{target.Name} is unconscious! (HP: {target.CurrentHitPoints})"
     };
 
     private static BattleLogEntry BuildAttackEntry(

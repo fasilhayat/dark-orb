@@ -831,7 +831,7 @@ List<List<Seg>> BuildCharBlock(CharDisplayState s)
 
     if (dead)
     {
-        var status   = s.Hp <= -10 ? "[ SLAIN  ]" : "[ K.O.   ]";   // 10 chars
+        var status   = s.Hp <= -10 ? "[ SLAIN  ]" : "[UNCONSC ]";   // 10 chars
         var namePart = $"  ✕ {s.Name.ToUpper()}".PadRight(CONTENT_W - status.Length);
         var empty    = new string(' ', CONTENT_W);
         return new List<List<Seg>>
@@ -1255,7 +1255,7 @@ void PrintSummary()
         ShowHp(m.Character.Name, m.Character.CurrentHitPoints, maxHp.GetValueOrDefault(m.Character.Name, 1));
 
     var loserTag = result.LoserStatus == BattleArena.Core.Entities.Enums.CharacterVitalStatus.Dead
-        ? "SLAIN" : "KNOCKED OUT";
+        ? "SLAIN" : "unconscious";
     CWL($"\n  {lParty.Name} is {loserTag}!",
         result.LoserStatus == BattleArena.Core.Entities.Enums.CharacterVitalStatus.Dead
             ? ConsoleColor.Red : ConsoleColor.DarkYellow);
