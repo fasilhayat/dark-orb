@@ -10,6 +10,34 @@ Console.Title = "BattleArena — Combat Simulation";
 // ── Services ──────────────────────────────────────────────────────────────────
 var combatStats = new CombatStatsService();
 
+// ── Optional API connection (activated by BATTLE_ARENA_API_URL env var) ───────
+var apiUrl = Environment.GetEnvironmentVariable("BATTLE_ARENA_API_URL");
+List<BattleArena.Core.Entities.Character> apiRoster  = [];
+List<BattleArena.Core.Entities.Weapon>    apiWeapons = [];
+bool useApiRoster = false;
+
+if (!string.IsNullOrWhiteSpace(apiUrl))
+{
+    var api = new BattleArena.BattleArenaApiClient(apiUrl);
+    Console.Write("  Connecting to BattleArena API... ");
+    try
+    {
+        apiRoster   = api.GetCharactersAsync().GetAwaiter().GetResult();
+        apiWeapons  = api.GetWeaponsAsync().GetAwaiter().GetResult();
+        useApiRoster = apiRoster.Count > 0;
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"OK  ({apiRoster.Count} characters, {apiWeapons.Count} weapons loaded)");
+        Console.ResetColor();
+    }
+    catch (Exception ex)
+    {
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        Console.WriteLine($"unreachable ({ex.Message})");
+        Console.WriteLine("  Falling back to local characters.");
+        Console.ResetColor();
+    }
+}
+
 // ── Hero characters ───────────────────────────────────────────────────────────
 
 var longsword = new BattleArena.Core.Entities.Weapon
@@ -367,6 +395,9 @@ char PickScenario()
 
 BattleArena.Core.Entities.Character PickFighter(string label, string? excludedName)
 {
+    if (useApiRoster)
+        return PickFighterFromRoster(label, excludedName);
+
     while (true)
     {
         CW($"  Pick {label}:  ", ConsoleColor.Yellow);
@@ -390,10 +421,92 @@ BattleArena.Core.Entities.Character PickFighter(string label, string? excludedNa
     }
 }
 
+// ── PickFighterFromRoster ─────────────────────────────────────────────────────
+// Used when API roster is loaded: shows a numbered list; picks weapon after selection.
+
+BattleArena.Core.Entities.Character PickFighterFromRoster(string label, string? excludedName)
+{
+    var available = apiRoster.Where(c => c.Name != excludedName).ToList();
+    while (true)
+    {
+        Console.WriteLine();
+        CWL($"  Pick {label}:", ConsoleColor.Yellow);
+        for (var i = 0; i < available.Count; i++)
+        {
+            var ch = available[i];
+            CW($"    [{i + 1}]  ", ConsoleColor.Cyan);
+            CW($"{ch.Name,-22}", ConsoleColor.White);
+            CWL($"  Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  INT {ch.Intelligence,-3}  HP {ch.MaxHitPoints}", ConsoleColor.DarkGray);
+        }
+        CW("  > ", ConsoleColor.Cyan);
+
+        var key = Console.ReadKey(true).KeyChar;
+        if (int.TryParse(key.ToString(), out var idx) && idx >= 1 && idx <= available.Count)
+        {
+            var ch = available[idx - 1];
+            CWL(ch.Name, ConsoleColor.Cyan);
+            ch.CurrentHitPoints = ch.MaxHitPoints;
+            attackMap[ch.Name] = PickWeaponForCharacter(ch);
+            return ch;
+        }
+    }
+}
+
+// ── PickWeaponForCharacter ────────────────────────────────────────────────────
+// Shows the weapon list loaded from the API so the player can equip a character.
+
+BattleArena.Core.Entities.IAttackSource? PickWeaponForCharacter(BattleArena.Core.Entities.Character ch)
+{
+    if (!useApiRoster || apiWeapons.Count == 0) return null;
+
+    // Show melee + spell-type weapons (staves/wands) — exclude pure ranged
+    var weapons = apiWeapons
+        .Where(w => w.AttackType != BattleArena.Core.Entities.Enums.AttackType.Ranged)
+        .OrderBy(w => w.Quality)
+        .ThenBy(w => w.Name)
+        .ToList();
+
+    if (weapons.Count == 0) return null;
+
+    while (true)
+    {
+        Console.WriteLine();
+        CWL($"  Equip weapon for {ch.Name}:", ConsoleColor.Yellow);
+        for (var i = 0; i < weapons.Count; i++)
+        {
+            var w = weapons[i];
+            CW($"    [{i + 1,2}]  ", ConsoleColor.Cyan);
+            CW($"{w.Name,-26}", ConsoleColor.White);
+            var qualColor = w.Quality switch
+            {
+                BattleArena.Core.Entities.Enums.GearQuality.Legendary => ConsoleColor.Yellow,
+                BattleArena.Core.Entities.Enums.GearQuality.Epic      => ConsoleColor.Magenta,
+                BattleArena.Core.Entities.Enums.GearQuality.Rare      => ConsoleColor.Cyan,
+                _                                                       => ConsoleColor.DarkGray
+            };
+            CW($"  {w.DamageCount}d{(int)w.DamageDie}  {w.DamageType,-12}  +{w.AttackBonus} ATK", ConsoleColor.DarkGray);
+            CWL($"  [{w.Quality}]", qualColor);
+        }
+        CW("  Enter number: ", ConsoleColor.Cyan);
+
+        var input = Console.ReadLine()?.Trim();
+        if (int.TryParse(input, out var idx) && idx >= 1 && idx <= weapons.Count)
+        {
+            var chosen = weapons[idx - 1];
+            CWL($"  → {ch.Name} equips {chosen.Name}", ConsoleColor.Green);
+            return chosen;
+        }
+        CWL("  Invalid selection — try again.", ConsoleColor.DarkYellow);
+    }
+}
+
 // ── PickHeroParty ─────────────────────────────────────────────────────────────
 
 List<BattleArena.Core.Entities.Character> PickHeroParty()
 {
+    if (useApiRoster)
+        return PickHeroPartyFromRoster();
+
     var selected = new List<BattleArena.Core.Entities.Character>();
     while (true)
     {
@@ -427,6 +540,73 @@ List<BattleArena.Core.Entities.Character> PickHeroParty()
         if (idx >= 0) selected.RemoveAt(idx);
         else if (selected.Count < BattleArena.Core.Entities.Party.HeroPartyMaxSize)
             selected.Add(hero);
+    }
+}
+
+// ── PickHeroPartyFromRoster ───────────────────────────────────────────────────
+// API-roster variant: numbered list, toggle with digit keys, equip weapons on confirm.
+
+List<BattleArena.Core.Entities.Character> PickHeroPartyFromRoster()
+{
+    var selected = new List<BattleArena.Core.Entities.Character>();
+    while (true)
+    {
+        Console.Clear();
+        PrintHeader();
+        CWL($"\n  BUILD YOUR HERO PARTY  (max {BattleArena.Core.Entities.Party.HeroPartyMaxSize})", ConsoleColor.Yellow);
+        Console.WriteLine();
+
+        for (var i = 0; i < apiRoster.Count; i++)
+        {
+            var ch     = apiRoster[i];
+            var picked = selected.Any(s => s.Name == ch.Name);
+            CW($"    [{i + 1}]  ", ConsoleColor.Cyan);
+            if (picked)
+            {
+                CW($"{ch.Name,-22}", ConsoleColor.Green);
+                CWL($"  Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  INT {ch.Intelligence,-3}  HP {ch.MaxHitPoints}  [✓]", ConsoleColor.Green);
+            }
+            else
+            {
+                CW($"{ch.Name,-22}", ConsoleColor.White);
+                CWL($"  Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  INT {ch.Intelligence,-3}  HP {ch.MaxHitPoints}", ConsoleColor.DarkGray);
+            }
+        }
+
+        Console.WriteLine();
+        if (selected.Count > 0)
+        {
+            CW("  Party : ", ConsoleColor.DarkGray);
+            CWL(string.Join(", ", selected.Select(c => c.Name)), ConsoleColor.Green);
+        }
+        CWL("  Press number to toggle | [Enter] to confirm (need at least 1)\n", ConsoleColor.DarkGray);
+        CW("  > ", ConsoleColor.Cyan);
+
+        var kInfo = Console.ReadKey(true);
+        if (kInfo.Key == ConsoleKey.Enter && selected.Count > 0)
+        {
+            // Equip each selected hero who doesn't yet have a weapon
+            Console.Clear();
+            PrintHeader();
+            CWL("\n  EQUIP YOUR PARTY\n", ConsoleColor.Yellow);
+            foreach (var hero in selected)
+                if (!attackMap.ContainsKey(hero.Name))
+                    attackMap[hero.Name] = PickWeaponForCharacter(hero);
+            return selected;
+        }
+
+        if (int.TryParse(kInfo.KeyChar.ToString(), out var idx) && idx >= 1 && idx <= apiRoster.Count)
+        {
+            var hero    = apiRoster[idx - 1];
+            var existing = selected.FindIndex(c => c.Name == hero.Name);
+            if (existing >= 0)
+            {
+                selected.RemoveAt(existing);
+                attackMap.Remove(hero.Name);
+            }
+            else if (selected.Count < BattleArena.Core.Entities.Party.HeroPartyMaxSize)
+                selected.Add(hero);
+        }
     }
 }
 
@@ -485,7 +665,11 @@ void ResetCombatant(BattleArena.Core.Entities.Character character)
 
 void ResetAll()
 {
-    foreach (var (_, ch) in allHeroes) ResetCombatant(ch);
+    if (useApiRoster)
+        foreach (var ch in apiRoster) ResetCombatant(ch);
+    else
+        foreach (var (_, ch) in allHeroes) ResetCombatant(ch);
+
     ResetCombatant(krag);
     ResetCombatant(skrix);
     ResetCombatant(mordak);

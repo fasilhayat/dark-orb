@@ -1,4 +1,4 @@
-.PHONY: help build build-no-cache up down restart reset logs api-logs db-logs clean test test-coverage build-local
+.PHONY: help build build-no-cache up down restart reset logs api-logs db-logs clean test test-coverage build-local demo build-demo
 
 help:
 	@cmd /C "echo Usage:"
@@ -15,6 +15,8 @@ help:
 	@cmd /C "echo 	make test           	- Run unit tests"
 	@cmd /C "echo 	make test-coverage  	- Run unit tests with coverage"
 	@cmd /C "echo 	make build-local    	- Build the .NET solution locally"
+	@cmd /C "echo 	make build-demo     	- Build the demo Docker image"
+	@cmd /C "echo 	make demo           	- Run the interactive combat demo (starts DB+API if needed)"
 
 build: publish
 	@echo Building Docker containers...
@@ -66,3 +68,9 @@ build-local: publish
 
 publish:
 	dotnet publish BattleArena.Api/BattleArena.Api.csproj -c Release -o ./publish
+
+build-demo:
+	docker compose build battle-arena-demo
+
+demo: up
+	docker compose --profile demo run --rm battle-arena-demo

@@ -886,6 +886,25 @@ SELECT 'Karg Bloodfang', r.id, c.id, 6, 18, 10, 16, 7, 8, 9, 99, 72, 72, 13, 14
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Orc' AND c.name = 'Barbarian';
 
+-- Additional playable characters for full 6-hero party demos
+INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed)
+SELECT 'Elara Swiftwind', r.id, c.id, 5, 8, 14, 10, 18, 16, 14, 28, 28, 13, 10
+FROM arena_data.race r, arena_data.class c
+WHERE r.name = 'Elf' AND c.name = 'Mage'
+AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Elara Swiftwind');
+
+INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed)
+SELECT 'Sir Aldric Vane', r.id, c.id, 6, 17, 10, 18, 11, 13, 14, 62, 62, 14, 8
+FROM arena_data.race r, arena_data.class c
+WHERE r.name = 'Human' AND c.name = 'Knight'
+AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Sir Aldric Vane');
+
+INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed)
+SELECT 'Mira Brightholm', r.id, c.id, 4, 10, 14, 12, 15, 17, 16, 34, 34, 14, 12
+FROM arena_data.race r, arena_data.class c
+WHERE r.name = 'Human' AND c.name = 'Priest'
+AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Mira Brightholm');
+
 -- ============================================================
 -- FUNCTIONS
 -- ============================================================

@@ -40,6 +40,28 @@ services:
       - '8585:8585'
     networks:
       - app-network
+    depends_on:
+      battle-arena-db:
+        condition: service_healthy
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ConnectionStrings__ArenaDatabase: "Host=battle-arena-db;Port=5432;Database=battle-arena_data;Username=postgres;Password=postgres"
+
+  battle-arena-demo:
+    build:
+      context: .
+      dockerfile: BattleArena.Demo/Dockerfile
+    container_name: battle-arena-demo
+    stdin_open: true
+    tty: true
+    profiles:
+      - demo
+    networks:
+      - app-network
+    depends_on:
+      battle-arena-db:
+        condition: service_healthy
+      battle-arena-api:
+        condition: service_started
+    environment:
+      BATTLE_ARENA_API_URL: "http://battle-arena-api:8585"
