@@ -124,7 +124,7 @@ public class BattleSimulator : IBattleSimulator
 
                 // ── ATTACK RESOLUTION ──────────────────────────────────────────
                 var result = _combat.ResolveAttack(actorState.Character, target, attackSource);
-                await Notify(BuildAttackEntry(tick, actorState.Character.Name, attackSource.Name, isSpell, target.Name, result));
+                await Notify(BuildAttackEntry(tick, actorState.Character.Name, attackSource.Name, isSpell, target.Name, result, attackSource.DamageType));
 
                 // ── APPLY DAMAGE ───────────────────────────────────────────────
                 if (result.IsHit)
@@ -286,7 +286,7 @@ public class BattleSimulator : IBattleSimulator
 
     private static BattleLogEntry BuildAttackEntry(
         int tick, string actorName, string attackSourceName, bool isSpell,
-        string targetName, AttackResult result)
+        string targetName, AttackResult result, DamageType damageType = DamageType.Slashing)
     {
         var outcome = result.IsCriticalHit ? "CRITICAL HIT!" :
                       result.IsFumble      ? "FUMBLE!"       :
@@ -306,7 +306,7 @@ public class BattleSimulator : IBattleSimulator
         var ctx    = CombatNarrator.GetContext(
             result.HitRoll, result.HitRoll + result.AttackPower, result.DefensePower,
             result.IsHit || result.IsCriticalHit, result.IsCriticalHit, result.IsFumble);
-        var phrase = CombatNarrator.GetPhrase(actorName, targetName, ctx);
+        var phrase = CombatNarrator.GetPhrase(actorName, targetName, ctx, isSpell, damageType);
 
         return new BattleLogEntry
         {

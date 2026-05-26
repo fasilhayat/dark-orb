@@ -1,13 +1,15 @@
 namespace BattleArena.Application.Services;
 
 using Application.Models;
+using Core.Entities.Enums;
 
 // Picks a flavour phrase for each combat event based on how the roll went.
-// Phrases use {attacker} and {target} as placeholders, replaced at call time.
+// Phrases use {attacker}, {target} and {element} as placeholders, replaced at call time.
+// Weapon and spell attacks use separate phrase banks — element-specific for spells.
 // All phrase banks are hardcoded — no database or config needed.
 public static class CombatNarrator
 {
-    // ── Phrase banks ──────────────────────────────────────────────────────────
+    // ── Weapon phrase banks ─────────────────────────────────────────────────────
 
     private static readonly string[] CriticalPhrases =
     [
@@ -86,6 +88,55 @@ public static class CombatNarrator
         "{attacker} swings with confidence and connects with absolutely nothing."
     ];
 
+    // ── Spell phrase banks (element-aware) ──────────────────────────────────────
+
+    private static readonly string[] SpellCriticalPhrases =
+    [
+        "A searing eruption of {element} energy engulfs {target} — {attacker} lands a CRITICAL spell!",
+        "{attacker}'s {element} magic detonates with catastrophic force on {target}!",
+        "Pure {element} energy erupts around {target} — {attacker}'s critical blast burns through!",
+        "The {element} surges through {target}'s defences — a perfect critical strike by {attacker}!"
+    ];
+
+    private static readonly string[] SpellFumblePhrases =
+    [
+        "{attacker}'s {element} magic backfires spectacularly!",
+        "{attacker} loses control of the {element} energy, the spell sputtering into failure!",
+        "Arcane feedback jolts {attacker} as their {element} spell collapses mid-cast!"
+    ];
+
+    private static readonly string[] SpellCrushingPhrases =
+    [
+        "A torrent of {element} energy slams into {target} with overwhelming power!",
+        "{attacker} unleashes a devastating {element} blast that consumes {target}!",
+        "{target} is engulfed in {element} fury conjured by {attacker}!",
+        "The {element} magic tears through {target}'s resistance like paper!"
+    ];
+
+    private static readonly string[] SpellSolidPhrases =
+    [
+        "{attacker}'s {element} spell strikes {target} squarely.",
+        "A well-aimed bolt of {element} from {attacker} finds its mark on {target}.",
+        "{target} is caught in the full force of {attacker}'s {element} magic.",
+        "{attacker}'s {element} energy lances into {target} with precise accuracy."
+    ];
+
+    private static readonly string[] SpellGlancingPhrases =
+    [
+        "The edge of {attacker}'s {element} blast grazes {target}.",
+        "{target} partially deflects the {element} magic, taking only a glancing hit.",
+        "Sparks of {element} energy catch {target} as the spell barely connects.",
+        "{attacker}'s {element} spell clips {target} — not a clean hit, but enough."
+    ];
+
+    private static readonly string[] SpellMissPhrases =
+    [
+        "{target} dodges as {attacker}'s {element} bolt sizzles past harmlessly!",
+        "{attacker}'s {element} spell flies wide, leaving {target} untouched.",
+        "The {element} energy dissipates harmlessly as {target} sidesteps the spell!",
+        "{target} weaves aside as {attacker}'s {element} magic fizzles into nothing."
+    ];
+
     // ── Public API ────────────────────────────────────────────────────────────
 
     public static NarrativeContext GetContext(
@@ -110,8 +161,36 @@ public static class CombatNarrator
         }
     }
 
-    public static string GetPhrase(string attacker, string target, NarrativeContext context)
+    public static string GetPhrase(string attacker, string target, NarrativeContext context, bool isSpell = false, DamageType damageType = DamageType.Slashing)
     {
+        if (isSpell)
+        {
+            var element = damageType switch
+            {
+                DamageType.Fire     => "fire",
+                DamageType.Cold     => "ice",
+                DamageType.Lightning => "lightning",
+                _                   => "arcane"
+            };
+
+            var spellBank = context switch
+            {
+                NarrativeContext.CriticalHit  => SpellCriticalPhrases,
+                NarrativeContext.Fumble       => SpellFumblePhrases,
+                NarrativeContext.CrushingHit  => SpellCrushingPhrases,
+                NarrativeContext.SolidHit     => SpellSolidPhrases,
+                NarrativeContext.GlancingHit  => SpellGlancingPhrases,
+                NarrativeContext.NearMiss     => SpellMissPhrases,
+                NarrativeContext.WideMiss     => SpellMissPhrases,
+                _                             => SpellSolidPhrases
+            };
+
+            return spellBank[Random.Shared.Next(spellBank.Length)]
+                .Replace("{attacker}", attacker)
+                .Replace("{target}",   target)
+                .Replace("{element}",  element);
+        }
+
         var bank = context switch
         {
             NarrativeContext.CriticalHit  => CriticalPhrases,

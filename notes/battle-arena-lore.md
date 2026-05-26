@@ -512,4 +512,127 @@ A lower **StrikeRating** is better. Knights, Paladins, and Fighters are the most
 
 ---
 
-*Last updated: May 2026 — 10 races, 9 classes, 37 weapons, 24 armor, 7 rings, 5 amulets, 5 girdles, 3 item sets, 10 NPCs, 8 deities, 9 pets, 24 spells*
+## 22. Leveling & Experience
+
+### Max Level
+
+The maximum level in BattleArena is **12**. Reaching each level is meant to feel meaningful — early levels come quickly, while the final stretch to 12 requires dedication.
+
+### XP Thresholds
+
+| Level | Total XP Required | XP to Next Level |
+|:-----:|:-----------------:|:----------------:|
+| 1 | 0 | 100 |
+| 2 | 100 | 200 |
+| 3 | 300 | 350 |
+| 4 | 650 | 500 |
+| 5 | 1,150 | 700 |
+| 6 | 1,850 | 900 |
+| 7 | 2,750 | 1,150 |
+| 8 | 3,900 | 1,400 |
+| 9 | 5,300 | 1,700 |
+| 10 | 7,000 | 2,100 |
+| 11 | 9,100 | 2,500 |
+| 12 | 11,600 | — |
+
+### Class Archetypes
+
+Classes are grouped into three archetypes that determine their progression:
+
+| Archetype | Classes | Description |
+|:---------:|---------|-------------|
+| **Martial** | Barbarian, Fighter, Knight, Paladin | Dedicated combatants; strike rating improves fastest (every 2 levels). Fewer accessory slots — they rely on their weapons and armor. |
+| **Caster** | Mage, Priest, Druid | Magic-wielders; strike rating improves slowly (every 4 levels). They attune to magical accessories faster and unlock more slots. |
+| **Hybrid** | Rogue, Bard | Mixed combatants; strike rating improves moderately (every 3 levels). Moderate accessory slot progression. |
+
+### Strike Rating (SR) Progression
+
+A lower Strike Rating is better. The table below shows the cumulative reduction applied to the class base SR.
+
+| Level | Martial | Hybrid | Caster |
+|:-----:|:-------:|:------:|:------:|
+| 1 | 0 | 0 | 0 |
+| 2 | 0 | 0 | 0 |
+| 3 | –1 | 0 | 0 |
+| 4 | –1 | –1 | 0 |
+| 5 | –2 | –1 | –1 |
+| 6 | –2 | –1 | –1 |
+| 7 | –3 | –2 | –1 |
+| 8 | –3 | –2 | –2 |
+| 9 | –4 | –2 | –2 |
+| 10 | –4 | –3 | –2 |
+| 11 | –5 | –3 | –3 |
+| 12 | –5 | –3 | –3 |
+
+**Example:** A Level 10 Fighter (base SR 18) → effective SR = 18 – 4 = **14**.  
+A Level 10 Mage (base SR 20) → effective SR = 20 – 2 = **18**.
+
+### Accessory Slot Unlocks
+
+Accessory slots determine how many rings, amulets, and girdles a character can equip simultaneously.
+
+| Level | Martial | Hybrid | Caster |
+|:-----:|:-------:|:------:|:------:|
+| 1 | 0 | 0 | 0 |
+| 2 | 0 | 0 | 1 |
+| 3 | 1 | 1 | 1 |
+| 4 | 1 | 1 | 2 |
+| 5 | 1 | 2 | 2 |
+| 6 | 2 | 2 | 3 |
+| 7 | 2 | 2 | 3 |
+| 8 | 2 | 3 | 4 |
+| 9 | 3 | 3 | 4 |
+| 10 | 3 | 4 | 5 |
+| 11 | 3 | 4 | 5 |
+| 12 | 4 | 5 | 6 |
+
+Casters attune to magical items more readily and unlock accessory slots earlier and in greater number. Martials gain fewer slots but compensate with superior weapon training and armor proficiency.
+
+### XP from Battles
+
+After each battle, experience is awarded using the following formula:
+
+```
+Base XP   = sum(enemy levels) × 12
+Net bonus = (party crits - party fumbles) × 8
+
+Expected rounds = (party size + enemy size) × 2
+Round ratio     = actual rounds ÷ expected rounds
+Round factor    = 1.0 + |round ratio - 1.0| × 0.3   clamped to [0.5, 2.0]
+
+Total XP = floor(base XP × round factor) + net bonus
+XP per survivor = Total XP ÷ number of surviving party members (rounded down)
+```
+
+The **round factor** rewards both ends of the bell curve:
+- Fights resolved much faster than expected (high efficiency) earn a bonus.
+- Fights that drag on much longer than expected (grueling endurance) also earn a bonus.
+- Standard-length fights earn base XP with no modifier.
+
+Each **critical hit** landed by the party adds +8 XP to the pool before splitting.
+Each **fumble** by the party subtracts -8 XP.
+
+Only characters who are **alive** at the end of the battle receive XP. Unconscious or dead characters gain nothing.
+
+**Example 1 (efficient):** A party of 3 heroes defeats 3 enemies of levels 5, 4, and 3 in 5 rounds.  
+Base XP = (5 + 4 + 3) × 12 = 144  
+Expected rounds = (3 + 3) × 2 = 12  
+Round ratio = 5 ÷ 12 = 0.42 → factor = 1 + |0.42 - 1| × 0.3 = 1.17  
+Total XP (no crits or fumbles) = 144 × 1.17 = 168  
+All 3 survive → 168 ÷ 3 = **56 XP each** (efficiency bonus).
+
+**Example 2 (grueling):** Same enemies but the fight takes 20 rounds with 2 party crits and 1 fumble.  
+Base XP = 144  
+Round ratio = 20 ÷ 12 = 1.67 → factor = 1 + |1.67 - 1| × 0.3 = 1.20  
+Net bonus = (2 - 1) × 8 = +8  
+Total XP = 144 × 1.20 + 8 = 180  
+All 3 survive → 180 ÷ 3 = **60 XP each** (endurance bonus + net crit benefit).
+
+### Effective Stats
+
+- **Effective Strike Rating** = Base SR – Level SR Bonus (from the table above; minimum 1)
+- **Accessory Slots** = Determined by level and archetype (from the table above)
+
+---
+
+*Last updated: May 2026 — 10 races, 9 classes, 37 weapons, 24 armor, 7 rings, 5 amulets, 5 girdles, 3 item sets, 10 NPCs, 8 deities, 9 pets, 24 spells, 12-level progression*

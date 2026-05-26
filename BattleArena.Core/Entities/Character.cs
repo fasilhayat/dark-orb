@@ -20,6 +20,9 @@ public class Character
     public int CurrentHitPoints { get; set; }
     public int StrikeRating { get; set; }
     public int TurnSpeed { get; set; }
+    public short Npc { get; set; }
+    public string Biography { get; set; } = string.Empty;
+    public int ExperiencePoints { get; set; }
     public ArmorSlots Equipment { get; set; } = new();
     public Race? Race { get; set; }
     public List<Feat> Feats { get; set; } = new();

@@ -906,6 +906,402 @@ WHERE r.name = 'Human' AND c.name = 'Priest'
 AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Mira Brightholm');
 
 -- ============================================================
+-- NPC FLAG + BIOGRAPHY ON CHARACTER TABLE
+-- ============================================================
+
+ALTER TABLE arena_data.character ADD COLUMN IF NOT EXISTS npc SMALLINT NOT NULL DEFAULT 0 CHECK (npc IN (0, 1));
+ALTER TABLE arena_data.character ADD COLUMN IF NOT EXISTS biography TEXT DEFAULT '';
+
+-- ============================================================
+-- SEED: ADDITIONAL CHARACTERS (both heroes and NPCs)
+-- ============================================================
+
+INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
+SELECT 'Brorn Ironarm', r.id, c.id, 6, 18, 10, 18, 8, 10, 9, 68, 68, 13, 10, 0
+FROM arena_data.race r, arena_data.class c
+WHERE r.name = 'Dwarf' AND c.name = 'Barbarian'
+AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Brorn Ironarm');
+
+INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
+SELECT 'Sylas Moonshadow', r.id, c.id, 5, 10, 16, 10, 17, 14, 15, 30, 30, 14, 16, 0
+FROM arena_data.race r, arena_data.class c
+WHERE r.name = 'Elf' AND c.name = 'Rogue'
+AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Sylas Moonshadow');
+
+INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
+SELECT 'Captain Aldric', r.id, c.id, 7, 16, 12, 15, 10, 12, 13, 58, 58, 13, 10, 1
+FROM arena_data.race r, arena_data.class c
+WHERE r.name = 'Human' AND c.name = 'Fighter'
+AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Captain Aldric');
+
+INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
+SELECT 'Sister Marigold', r.id, c.id, 9, 10, 10, 12, 14, 18, 16, 48, 48, 14, 10, 1
+FROM arena_data.race r, arena_data.class c
+WHERE r.name = 'Human' AND c.name = 'Priest'
+AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Sister Marigold');
+
+INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
+SELECT 'Rorik the Wanderer', r.id, c.id, 8, 18, 10, 18, 8, 10, 9, 90, 90, 13, 10, 1
+FROM arena_data.race r, arena_data.class c
+WHERE r.name = 'Dwarf' AND c.name = 'Barbarian'
+AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Rorik the Wanderer');
+
+INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
+SELECT 'Selene Nightwhisper', r.id, c.id, 10, 8, 14, 10, 18, 14, 16, 32, 32, 14, 14, 1
+FROM arena_data.race r, arena_data.class c
+WHERE r.name = 'Elf' AND c.name = 'Mage'
+AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Selene Nightwhisper');
+
+INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
+SELECT 'Grommash Ironhide', r.id, c.id, 12, 20, 10, 18, 7, 8, 10, 112, 112, 13, 10, 1
+FROM arena_data.race r, arena_data.class c
+WHERE r.name = 'Orc' AND c.name = 'Fighter'
+AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Grommash Ironhide');
+
+INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
+SELECT 'Finn Swift', r.id, c.id, 6, 8, 18, 10, 12, 10, 16, 28, 28, 14, 18, 1
+FROM arena_data.race r, arena_data.class c
+WHERE r.name = 'Halfling' AND c.name = 'Rogue'
+AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Finn Swift');
+
+INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
+SELECT 'The Collector', r.id, c.id, 15, 10, 12, 10, 20, 16, 14, 42, 42, 15, 12, 1
+FROM arena_data.race r, arena_data.class c
+WHERE r.name = 'Human' AND c.name = 'Mage'
+AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'The Collector');
+
+INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
+SELECT 'Morgath the Pale', r.id, c.id, 14, 18, 8, 16, 10, 12, 8, 126, 126, 14, 8, 1
+FROM arena_data.race r, arena_data.class c
+WHERE r.name = 'Undead' AND c.name = 'Knight'
+AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Morgath the Pale');
+
+INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
+SELECT 'Sizzle', r.id, c.id, 5, 6, 14, 8, 16, 10, 12, 18, 18, 15, 14, 1
+FROM arena_data.race r, arena_data.class c
+WHERE r.name = 'Kobold' AND c.name = 'Mage'
+AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Sizzle');
+
+INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
+SELECT 'Ivy Thornwood', r.id, c.id, 8, 10, 14, 12, 16, 18, 14, 52, 52, 14, 14, 1
+FROM arena_data.race r, arena_data.class c
+WHERE r.name = 'Elf' AND c.name = 'Druid'
+AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Ivy Thornwood');
+
+-- NPC biographies
+
+UPDATE arena_data.character SET biography = 'A retired captain of the City Watch who now runs a small weapons shop in the market district. He lost his left eye to a goblin arrow during the Goblin Wars and claims it gave him better judgment of character.' WHERE name = 'Captain Aldric';
+
+UPDATE arena_data.character SET biography = 'A soft-spoken priestess of the Temple of Light who has healed everything from battlefield wounds to broken hearts. She never turns away the sick or poor, and the temple gardens she tends are the most beautiful in the city.' WHERE name = 'Sister Marigold';
+
+UPDATE arena_data.character SET biography = 'A dwarf who has outlived three clans and drank every tavern dry from the Iron Mountains to the coast. He wanders the realm seeking worthy drinking partners and fights worth remembering. Despite his gruff exterior, he has saved more than one village from bandits.' WHERE name = 'Rorik the Wanderer';
+
+UPDATE arena_data.character SET biography = 'A half-elf enchantress who runs an apothecary and curio shop. Her true specialty lies in identifying magical items and brokering deals between those who have them and those who seek them. She speaks four languages and is never caught off guard.' WHERE name = 'Selene Nightwhisper';
+
+UPDATE arena_data.character SET biography = 'An orc of few words and many kills. He wanders the realm seeking worthy opponents to test his steel against. Despite his fearsome reputation, he has a strict code of honor and has been known to spare foes who yield with dignity.' WHERE name = 'Grommash Ironhide';
+
+UPDATE arena_data.character SET biography = 'A halfling with an infectious grin and a talent for being where he should not be. He runs an information network that spans every tavern and market stall in the city. For a few gold coins, Finn can tell you anything about anyone.' WHERE name = 'Finn Swift';
+
+UPDATE arena_data.character SET biography = 'A mysterious figure cloaked in grey who appears at auctions, estate sales, and archaeological digs across the realm. The Collector buys rare and unusual items — never sells. His vault is rumoured to contain artifacts from the Age of Gods.' WHERE name = 'The Collector';
+
+UPDATE arena_data.character SET biography = 'An undead knight cursed to guard the Tomb of the First King for eternity. He was once a valiant paladin who broke his oath and was sentenced to unending vigilance. He speaks in a hollow whisper and his sword has never rusted.' WHERE name = 'Morgath the Pale';
+
+UPDATE arena_data.character SET biography = 'A kobold with an unhealthy obsession with fire and explosions. Sizzle sells "perfectly safe" fireworks and alchemical mixtures from a stall that has burned down four times. He insists the fires were not his fault.' WHERE name = 'Sizzle';
+
+UPDATE arena_data.character SET biography = 'A forest guardian who protects the ancient groves of the Singing Woods. She trades rare herbs, seeds, and components to those who prove they respect nature. She has not spoken a word in three years — she claims the trees speak enough for her.' WHERE name = 'Ivy Thornwood';
+
+-- ============================================================
+-- SEED: ADDITIONAL WEAPONS
+-- ============================================================
+
+-- Legendary weapons
+
+INSERT INTO arena_data.weapon (name, description, weapon_type_id, damage_die_id, damage_type_id, attack_type_id, damage_count, hands, gear_quality_id, attack_bonus)
+SELECT src.name, src.description, wt.id, d.id, dt.id, at.id, src.dmg_count, src.hands, gq.id, src.atk_bonus
+FROM (VALUES
+    ('Doomwhisper',
+     'Fashioned from the heartwood of a tree that grew on a battlefield where ten thousand fell. Each arrow sings a different death knell as it flies, and those struck by its shafts feel the cold of the grave seep into their bones.',
+     'Bow', 'D10', 'Piercing', 'Ranged', 1, 2, 'Legendary', 2),
+    ('Worldsplitter',
+     'The hammer of a forgotten earth god, shattered into seven pieces and reforged by mortal hands over seven generations. It remembers the weight of mountains, and when it strikes, the ground trembles in sympathy.',
+     'Hammer', 'D12', 'Bludgeoning', 'Melee', 1, 2, 'Legendary', 2),
+    ('Soulpiercer',
+     'A spear that has tasted the blood of a hundred warlords across three continents. Its tip glows crimson when enemies draw near, and those wounded by it feel their life force drain into the ancient weapon.',
+     'Spear', 'D10', 'Piercing', 'Melee', 1, 2, 'Legendary', 2)
+) AS src(name, description, type_name, die_name, dmg_name, atk_name, dmg_count, hands, quality_name, atk_bonus)
+JOIN arena_data.weapon_type wt ON wt.name = src.type_name
+JOIN arena_data.die_type d ON d.name = src.die_name
+JOIN arena_data.damage_type dt ON dt.name = src.dmg_name
+JOIN arena_data.attack_type at ON at.name = src.atk_name
+JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
+
+-- Epic weapons
+
+INSERT INTO arena_data.weapon (name, description, weapon_type_id, damage_die_id, damage_type_id, attack_type_id, damage_count, hands, gear_quality_id, attack_bonus)
+SELECT src.name, src.description, wt.id, d.id, dt.id, at.id, src.dmg_count, src.hands, gq.id, src.atk_bonus
+FROM (VALUES
+    ('Thunderstrike',
+     'A war hammer forged from a meteorite that struck the Temple of Storms during a thunderstorm. It crackles with residual sky-energy, and sparks dance along its head when raised in battle.',
+     'Hammer', 'D10', 'Lightning', 'Melee', 1, 1, 'Epic', 1),
+    ('Moonblade',
+     'A short sword tempered under the light of three full moons by elven smiths who whisper to the stars during the forging. The blade gleams with an ethereal silver light that casts no shadow.',
+     'ShortSword', 'D8', 'Slashing', 'Melee', 1, 1, 'Epic', 1),
+    ('Hellspine',
+     'A morning star assembled from chains pulled from the depths of the Abyss. Its spikes are still warm to the touch, and the handle is wrapped in the cured hide of a fiend that screamed for a century.',
+     'MorningStar', 'D10', 'Fire', 'Melee', 1, 1, 'Epic', 1)
+) AS src(name, description, type_name, die_name, dmg_name, atk_name, dmg_count, hands, quality_name, atk_bonus)
+JOIN arena_data.weapon_type wt ON wt.name = src.type_name
+JOIN arena_data.die_type d ON d.name = src.die_name
+JOIN arena_data.damage_type dt ON dt.name = src.dmg_name
+JOIN arena_data.attack_type at ON at.name = src.atk_name
+JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
+
+-- Rare weapons
+
+INSERT INTO arena_data.weapon (name, description, weapon_type_id, damage_die_id, damage_type_id, attack_type_id, damage_count, hands, gear_quality_id, attack_bonus)
+SELECT src.name, src.description, wt.id, d.id, dt.id, at.id, src.dmg_count, src.hands, gq.id, src.atk_bonus
+FROM (VALUES
+    ('Glimmer',
+     'A short bow strung with a strand of siren hair, traded for at great cost in the port city of Tidehold. Arrows loosed from it hum softly and curve slightly in flight toward their target.',
+     'Bow', 'D6', 'Piercing', 'Ranged', 1, 2, 'Rare', 0),
+    ('Stonefang',
+     'The jawbone of a basalt giant from the Cinder Peaks, shaped into a mace by dwarven shamans. It never chips, never dulls, and leaves crater-like dents in whatever it strikes.',
+     'Mace', 'D8', 'Bludgeoning', 'Melee', 1, 1, 'Rare', 1),
+    ('Widow''s Kiss',
+     'A slender dagger with a groove carved along the spine for delivering toxins. The assassin who first carried it was never caught, and her mark was always found with a peaceful smile.',
+     'Dagger', 'D6', 'Poison', 'Melee', 1, 1, 'Rare', 0)
+) AS src(name, description, type_name, die_name, dmg_name, atk_name, dmg_count, hands, quality_name, atk_bonus)
+JOIN arena_data.weapon_type wt ON wt.name = src.type_name
+JOIN arena_data.die_type d ON d.name = src.die_name
+JOIN arena_data.damage_type dt ON dt.name = src.dmg_name
+JOIN arena_data.attack_type at ON at.name = src.atk_name
+JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
+
+-- Uncommon weapons
+
+INSERT INTO arena_data.weapon (name, description, weapon_type_id, damage_die_id, damage_type_id, attack_type_id, damage_count, hands, gear_quality_id, attack_bonus)
+SELECT src.name, src.description, wt.id, d.id, dt.id, at.id, src.dmg_count, src.hands, gq.id, src.atk_bonus
+FROM (VALUES
+    ('River''s Edge',
+     'A solid blade forged by the river-smiths of the Telmar Crossing. Nothing remarkable, but it has never broken in battle, which is more than many swords can claim.',
+     'Sword', 'D8', 'Slashing', 'Melee', 1, 1, 'Uncommon', 0),
+    ('Brawler''s Friend',
+     'A weighted club favored by tavern enforcers and city watchmen across the realm. The leather grip is dark with years of use and the head is chipped from countless brawls.',
+     'Mace', 'D6', 'Bludgeoning', 'Melee', 1, 1, 'Uncommon', 1),
+    ('Trailblazer',
+     'A practical hand axe carried by frontier scouts and border rangers. It clears brush equally as well as it discourages wild animals and highwaymen.',
+     'Axe', 'D6', 'Slashing', 'Melee', 1, 1, 'Uncommon', 0)
+) AS src(name, description, type_name, die_name, dmg_name, atk_name, dmg_count, hands, quality_name, atk_bonus)
+JOIN arena_data.weapon_type wt ON wt.name = src.type_name
+JOIN arena_data.die_type d ON d.name = src.die_name
+JOIN arena_data.damage_type dt ON dt.name = src.dmg_name
+JOIN arena_data.attack_type at ON at.name = src.atk_name
+JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
+
+-- Common weapons
+
+INSERT INTO arena_data.weapon (name, description, weapon_type_id, damage_die_id, damage_type_id, attack_type_id, damage_count, hands, gear_quality_id)
+SELECT src.name, src.description, wt.id, d.id, dt.id, at.id, src.dmg_count, src.hands, gq.id
+FROM (VALUES
+    ('Woodcutter''s Cleaver',
+     'A heavy blade meant for splitting firewood. It can split bone just as easily.',
+     'Axe', 'D6', 'Slashing', 'Melee', 1, 1, 'Common'),
+    ('Practice Sword',
+     'A blunted training blade worn smooth by countless sparring sessions in the barracks yard.',
+     'Sword', 'D6', 'Bludgeoning', 'Melee', 1, 1, 'Common'),
+    ('Cudgel',
+     'A sturdy oak branch wrapped in fraying cloth. The poor man''s weapon, but effective enough in a pinch.',
+     'Mace', 'D4', 'Bludgeoning', 'Melee', 1, 1, 'Common')
+) AS src(name, description, type_name, die_name, dmg_name, atk_name, dmg_count, hands, quality_name)
+JOIN arena_data.weapon_type wt ON wt.name = src.type_name
+JOIN arena_data.die_type d ON d.name = src.die_name
+JOIN arena_data.damage_type dt ON dt.name = src.dmg_name
+JOIN arena_data.attack_type at ON at.name = src.atk_name
+JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
+
+-- ============================================================
+-- SEED: ADDITIONAL ARMOR
+-- ============================================================
+
+-- Legendary armor
+
+INSERT INTO arena_data.armor (name, description, armor_class, armor_category_id, max_dexterity_bonus, stealth_disadvantage, strength_requirement, gear_quality_id, armor_class_bonus)
+SELECT src.name, src.description, src.ac, acat.id, src.max_dex, src.stealth, src.str_req, gq.id, src.ac_bonus
+FROM (VALUES
+    ('Aegis of the Fallen King',
+     'The armor of the last king of Ashvale, who stood alone at the bridge of Mareth while his people fled the demon horde. It bears a hundred scars in the metal and still gleams with defiance.',
+     19, 'Heavy', 0, TRUE, 18, 'Legendary', 2),
+    ('Shroud of the Whispering Wind',
+     'Woven from the breath of a dying goddess by the silent monks of the Mountain of Silence. It weighs nothing, makes no sound when the wearer moves, and feels like standing in a gentle breeze.',
+     13, 'Light', 99, FALSE, 0, 'Legendary', 1)
+) AS src(name, description, ac, category_name, max_dex, stealth, str_req, quality_name, ac_bonus)
+JOIN arena_data.armor_category acat ON acat.name = src.category_name
+JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
+
+-- Epic armor
+
+INSERT INTO arena_data.armor (name, description, armor_class, armor_category_id, max_dexterity_bonus, stealth_disadvantage, strength_requirement, gear_quality_id, armor_class_bonus)
+SELECT src.name, src.description, src.ac, acat.id, src.max_dex, src.stealth, src.str_req, gq.id, src.ac_bonus
+FROM (VALUES
+    ('Phoenix Carapace',
+     'Scale mail fashioned from the shed carapace of a phoenix-fire elemental that was tamed by the Sun Monks. It is unnaturally light, warm to the touch, and gleams like embers in firelight.',
+     15, 'Medium', 3, FALSE, 0, 'Epic', 1),
+    ('Battlesworn Plate',
+     'Splint armor that was carried through the entirety of the Hundred Years War. Each dent and scratch on its surface tells the story of a battle survived, a comrade lost, or a foe defeated.',
+     17, 'Heavy', 0, TRUE, 15, 'Epic', 0),
+    ('Kithbound Leather',
+     'Leather armor infused with the essence of a bonded animal companion through a druidic ritual. It shifts and flexes with the wearer''s movements as if it were alive, and a low growl emanates from it when danger nears.',
+     12, 'Light', 99, FALSE, 0, 'Epic', 0)
+) AS src(name, description, ac, category_name, max_dex, stealth, str_req, quality_name, ac_bonus)
+JOIN arena_data.armor_category acat ON acat.name = src.category_name
+JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
+
+-- Rare armor
+
+INSERT INTO arena_data.armor (name, description, armor_class, armor_category_id, max_dexterity_bonus, stealth_disadvantage, strength_requirement, gear_quality_id, armor_class_bonus)
+SELECT src.name, src.description, src.ac, acat.id, src.max_dex, src.stealth, src.str_req, gq.id, src.ac_bonus
+FROM (VALUES
+    ('Ironbark Vest',
+     'A vest made from the bark of the ironbark tree, which grows only in the Singing Woods where the trees remember the First Age. Arrows and crossbow bolts bounce off it like rain off stone.',
+     12, 'Light', 99, FALSE, 0, 'Rare', 0),
+    ('Rune-etched Shield',
+     'A shield carved with ancient dwarven warding runes that glow faintly when enemies approach. The runes tell the story of the first dwarven king who stood against the Shadow.',
+     3, 'Shield', 0, FALSE, 0, 'Rare', 1),
+    ('Stalker''s Coat',
+     'A long coat of waxed leather and fine chainmail favored by bounty hunters who operate in the lawless borderlands. The interior is lined with concealed pockets designed for throwing knives, lockpicks, and escape tools.',
+     14, 'Medium', 3, FALSE, 0, 'Rare', 0)
+) AS src(name, description, ac, category_name, max_dex, stealth, str_req, quality_name, ac_bonus)
+JOIN arena_data.armor_category acat ON acat.name = src.category_name
+JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
+
+-- Uncommon armor
+
+INSERT INTO arena_data.armor (name, description, armor_class, armor_category_id, max_dexterity_bonus, stealth_disadvantage, strength_requirement, gear_quality_id, armor_class_bonus)
+SELECT src.name, src.description, src.ac, acat.id, src.max_dex, src.stealth, src.str_req, gq.id, src.ac_bonus
+FROM (VALUES
+    ('Patrol Helm',
+     'A standard-issue steel helm with a visor and the faded crest of the City Watch. It has seen its share of riots, alley fights, and night patrols through the poor quarters.',
+     15, 'Heavy', 0, TRUE, 13, 'Uncommon', 0),
+    ('Traveler''s Cloak',
+     'A waxed wool cloak worn by merchants and couriers who travel the King''s Road. It turns light rain and provides just enough protection to matter in a roadside scuffle.',
+     11, 'Light', 99, FALSE, 0, 'Uncommon', 0),
+    ('Scout''s Leathers',
+     'Soft, quiet leather armor worn by army scouts and mounted messengers. It has carried its wearer through enemy territory and back again more times than the owner can remember.',
+     12, 'Light', 99, FALSE, 0, 'Uncommon', 0)
+) AS src(name, description, ac, category_name, max_dex, stealth, str_req, quality_name, ac_bonus)
+JOIN arena_data.armor_category acat ON acat.name = src.category_name
+JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
+
+-- Common armor
+
+INSERT INTO arena_data.armor (name, description, armor_class, armor_category_id, max_dexterity_bonus, stealth_disadvantage, strength_requirement, gear_quality_id)
+SELECT src.name, src.description, src.ac, acat.id, src.max_dex, src.stealth, src.str_req, gq.id
+FROM (VALUES
+    ('Boiled Leather Vest',
+     'Leather hardened in hot wax and shaped over a wooden form. Better than nothing, and that is about all that can be said for it.',
+     11, 'Light', 99, FALSE, 0, 'Common'),
+    ('Iron Cap',
+     'A simple iron skullcap that covers the top of the head and offers a false sense of security. Worn by militia and caravan guards who cannot afford a proper helm.',
+     14, 'Heavy', 0, TRUE, 11, 'Common'),
+    ('Patched Gambeson',
+     'A padded cloth jacket that has been repaired so many times the patches have patches. It smells faintly of its previous owners, none of whom died rich.',
+     10, 'Light', 99, FALSE, 0, 'Common')
+) AS src(name, description, ac, category_name, max_dex, stealth, str_req, quality_name)
+JOIN arena_data.armor_category acat ON acat.name = src.category_name
+JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
+
+-- ============================================================
+-- SEED: ADDITIONAL ACCESSORIES
+-- ============================================================
+
+-- Legendary accessories
+
+INSERT INTO arena_data.accessory (name, description, accessory_type_id, gear_quality_id, effect_type, effect_value, cursed, curse_effect)
+SELECT src.name, src.description, atype.id, gq.id, src.effect, src.value, src.cursed, src.curse
+FROM (VALUES
+    ('Eye of the Void',
+     'A black opal the size of a thumb, set in a silver cage. It seems to contain an endless darkness that moves when observed. The wearer glimpses fragments of the future in their dreams — not always pleasant, never wrong.',
+     'Amulet', 'Legendary', 'Intelligence', 3, FALSE, ''),
+    ('Ring of Kings',
+     'A golden band worn by every sovereign of Eldergard since the founding of the realm a thousand years ago. It pulses with a warm golden light when the wearer speaks a truth that will shape history.',
+     'Ring', 'Legendary', 'Charisma', 3, FALSE, '')
+) AS src(name, description, type_name, quality_name, effect, value, cursed, curse)
+JOIN arena_data.accessory_type atype ON atype.name = src.type_name
+JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
+
+-- Epic accessories
+
+INSERT INTO arena_data.accessory (name, description, accessory_type_id, gear_quality_id, effect_type, effect_value, cursed, curse_effect)
+SELECT src.name, src.description, atype.id, gq.id, src.effect, src.value, src.cursed, src.curse
+FROM (VALUES
+    ('Ember Pendant',
+     'A pendant containing a single ember plucked from the heart of Mount Kryx by the Fire Walkers of the Smoldering Sect. It keeps the wearer warm even in the frozen wastes and glows brighter when danger is near.',
+     'Amulet', 'Epic', 'Stamina', 2, FALSE, ''),
+    ('Trickster''s Band',
+     'A silver ring engraved with a fox''s face that seems to wink at different angles. It rotates freely on the finger, never resting in the same position. Favored by gamblers, diplomats, and those who live by their wits.',
+     'Ring', 'Epic', 'Dexterity', 2, FALSE, '')
+) AS src(name, description, type_name, quality_name, effect, value, cursed, curse)
+JOIN arena_data.accessory_type atype ON atype.name = src.type_name
+JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
+
+-- Rare accessories
+
+INSERT INTO arena_data.accessory (name, description, accessory_type_id, gear_quality_id, effect_type, effect_value, cursed, curse_effect)
+SELECT src.name, src.description, atype.id, gq.id, src.effect, src.value, src.cursed, src.curse
+FROM (VALUES
+    ('Seer''s Lens',
+     'A crystal lens on a silver chain, ground by the blind seers of the Azure Monastery. Looking through it reveals invisible magical auras and hidden enchantments.',
+     'Amulet', 'Rare', 'Intelligence', 1, FALSE, ''),
+    ('Guardian''s Seal',
+     'A signet ring bearing the crest of the Iron Company — a gauntlet gripping a tower shield. It was awarded to veterans of the defense of Ironwall and grants courage to those who wear it.',
+     'Ring', 'Rare', 'Stamina', 1, FALSE, ''),
+    ('Windwalker''s Sash',
+     'A silk sash woven from the thread of sky-spiders that live among the peaks of the Cloudreach Mountains. It flutters even when there is no breeze and lightens the step of the one who wears it.',
+     'Girdle', 'Rare', 'Dexterity', 1, FALSE, ''),
+    ('Merchant''s Weight',
+     'A heavy bronze buckle said to have been used by the Master of Scales in the Grand Bazaar of Eldergard. The wearer always knows the true value of any item they hold and can sense hidden compartments.',
+     'Girdle', 'Rare', 'Charisma', 1, FALSE, '')
+) AS src(name, description, type_name, quality_name, effect, value, cursed, curse)
+JOIN arena_data.accessory_type atype ON atype.name = src.type_name
+JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
+
+-- Uncommon accessories
+
+INSERT INTO arena_data.accessory (name, description, accessory_type_id, gear_quality_id, effect_type, effect_value, cursed, curse_effect)
+SELECT src.name, src.description, atype.id, gq.id, src.effect, src.value, src.cursed, src.curse
+FROM (VALUES
+    ('Copper Band',
+     'A simple copper wedding band that has long since lost its shine. It belonged to someone''s grandmother and carries the warmth of a life well lived.',
+     'Ring', 'Uncommon', 'Stamina', 1, FALSE, ''),
+    ('Fang Necklace',
+     'A necklace of wolf fangs strung on sinew. The hunter who made it claimed it kept him from getting lost in the woods — though the fangs themselves are more likely to intimidate than to guide.',
+     'Amulet', 'Uncommon', 'Strength', 1, FALSE, ''),
+    ('Traveler''s Belt',
+     'A wide leather belt lined with small pouches and loops. It distributes weight perfectly across the hips, allowing the wearer to carry more without tiring as fast.',
+     'Girdle', 'Uncommon', 'Stamina', 1, FALSE, '')
+) AS src(name, description, type_name, quality_name, effect, value, cursed, curse)
+JOIN arena_data.accessory_type atype ON atype.name = src.type_name
+JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
+
+-- Common accessories
+
+INSERT INTO arena_data.accessory (name, description, accessory_type_id, gear_quality_id, effect_type, effect_value, cursed, curse_effect)
+SELECT src.name, src.description, atype.id, gq.id, src.effect, src.value, src.cursed, src.curse
+FROM (VALUES
+    ('Tarnished Ring',
+     'An old brass ring, green with age, found in a barrel of second-hand goods. Worth a few copper pieces and likely to turn your finger green.',
+     'Ring', 'Common', 'none', 0, FALSE, ''),
+    ('Rabbit''s Foot',
+     'A dried rabbit''s foot on a frayed piece of string. It probably does nothing, but the soldier who carried it through three campaigns swore by its luck.',
+     'Amulet', 'Common', 'none', 0, FALSE, ''),
+    ('Rope Belt',
+     'A length of braided hemp that serves as a belt. Practical, cheap, and easy to replace. Commonly worn by laborers and prisoners alike.',
+     'Girdle', 'Common', 'none', 0, FALSE, '')
+) AS src(name, description, type_name, quality_name, effect, value, cursed, curse)
+JOIN arena_data.accessory_type atype ON atype.name = src.type_name
+JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
+
+-- ============================================================
 -- FUNCTIONS
 -- ============================================================
 
@@ -1081,7 +1477,9 @@ RETURNS TABLE(
     strength INTEGER, dexterity INTEGER, stamina INTEGER,
     intelligence INTEGER, wisdom INTEGER, charisma INTEGER,
     strength_percentile INTEGER, max_hit_points INTEGER, current_hit_points INTEGER,
-    strike_rating INTEGER, turn_speed INTEGER
+    strike_rating INTEGER, turn_speed INTEGER,
+    npc SMALLINT, biography TEXT,
+    experience_points INTEGER
 ) AS $$
 BEGIN
     RETURN QUERY
@@ -1089,7 +1487,9 @@ BEGIN
            c.strength, c.dexterity, c.stamina,
            c.intelligence, c.wisdom, c.charisma,
            c.strength_percentile, c.max_hit_points, c.current_hit_points,
-           c.strike_rating, c.turn_speed
+           c.strike_rating, c.turn_speed,
+           c.npc, c.biography::TEXT,
+           c.experience_points
     FROM arena_data.character c
     ORDER BY c.name;
 END;
@@ -1101,7 +1501,9 @@ RETURNS TABLE(
     strength INTEGER, dexterity INTEGER, stamina INTEGER,
     intelligence INTEGER, wisdom INTEGER, charisma INTEGER,
     strength_percentile INTEGER, max_hit_points INTEGER, current_hit_points INTEGER,
-    strike_rating INTEGER, turn_speed INTEGER
+    strike_rating INTEGER, turn_speed INTEGER,
+    npc SMALLINT, biography TEXT,
+    experience_points INTEGER
 ) AS $$
 BEGIN
     RETURN QUERY
@@ -1109,7 +1511,9 @@ BEGIN
            c.strength, c.dexterity, c.stamina,
            c.intelligence, c.wisdom, c.charisma,
            c.strength_percentile, c.max_hit_points, c.current_hit_points,
-           c.strike_rating, c.turn_speed
+           c.strike_rating, c.turn_speed,
+           c.npc, c.biography::TEXT,
+           c.experience_points
     FROM arena_data.character c
     WHERE c.id = p_id;
 END;

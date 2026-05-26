@@ -87,6 +87,9 @@ public class CharacterRepository : ICharacterRepository
         CurrentHitPoints = (int)reader["current_hit_points"],
         StrikeRating = reader["strike_rating"] as int? ?? 20,
         TurnSpeed = reader["turn_speed"] as int? ?? 0,
-        StrengthPercentile = reader["strength_percentile"] as int? ?? 0
+        StrengthPercentile = reader["strength_percentile"] as int? ?? 0,
+        Npc = reader["npc"] as short? ?? 0,
+        Biography = reader["biography"] as string ?? string.Empty,
+        ExperiencePoints = reader["experience_points"] as int? ?? 0
     };
 }
