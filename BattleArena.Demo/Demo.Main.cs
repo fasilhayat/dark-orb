@@ -226,7 +226,8 @@ static partial class Demo
                 Name = m.Character.Name,
                 MaxHp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
                 Hp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
-                IsHero = true
+                IsHero = true,
+                Weapon = m.AttackSource?.Name ?? ""
             };
         foreach (var m in EnemyParty.Members)
             dict[m.Character.Name] = new CharDisplayState
@@ -234,7 +235,8 @@ static partial class Demo
                 Name = m.Character.Name,
                 MaxHp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
                 Hp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
-                IsHero = false
+                IsHero = false,
+                Weapon = m.AttackSource?.Name ?? ""
             };
         return dict;
     }

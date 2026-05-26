@@ -91,6 +91,11 @@ static partial class Demo
             inTurn = false;
         }
 
+        DrawBattleScreen(states, 0);
+        Console.WriteLine();
+        CWL("  Press any key for first action...", ConsoleColor.DarkGray);
+        Console.ReadKey(true);
+
         foreach (var e in Result.Log)
         {
             switch (e.EventType)
@@ -164,6 +169,9 @@ static partial class Demo
             }
             quietStart = quietEnd = -1;
         }
+
+        DrawBattleScreen(states, 0);
+        Thread.Sleep(1200);
 
         foreach (var tickGroup in byTick)
         {
