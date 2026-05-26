@@ -8,6 +8,9 @@ publish/
 *.csproj.user
 .vs/
 
+## Generated Reqnroll artifacts
+**/*.feature.cs
+
 ## Docker
 .containers/
 
