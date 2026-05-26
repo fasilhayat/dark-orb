@@ -2,7 +2,7 @@ namespace BattleArena.Core.Entities;
 
 using Core.Entities.Enums;
 
-public class Weapon
+public class Weapon : IAttackSource
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
@@ -18,4 +18,5 @@ public class Weapon
     public int ElementalDamage { get; set; }
     public ElementalType ElementalType { get; set; } = ElementalType.None;
     public int FlatDamageBonus { get; set; }
+    public bool UsesIntelligence => false;
 }

@@ -7,18 +7,21 @@ using Core.Entities.Enums;
 
 public class CombatStatsService : ICombatStatsService
 {
-    public CombatantStats ComputeAttackerStats(Character attacker, Weapon weapon)
+    public CombatantStats ComputeAttackerStats(Character attacker, IAttackSource source)
     {
         var attackEffects = attacker.ActiveStatusEffects.Where(e => e.AttackPowerModifier != 0).ToList();
         var positiveBuffs = attackEffects.Where(e => e.AttackPowerModifier > 0).ToList();
         var negativeBuffs = attackEffects.Where(e => e.AttackPowerModifier < 0).Sum(e => e.AttackPowerModifier);
+        var abilityScore = source.UsesIntelligence
+            ? attacker.Intelligence
+            : source.AttackType == AttackType.Ranged ? attacker.Dexterity : attacker.Strength;
 
         return new CombatantStats
         {
             ClassAccuracyBase = 20 - attacker.StrikeRating,
             LevelScaling = attacker.Level,
-            AttributeModifier = CalculateAbilityModifier(weapon.AttackType == AttackType.Ranged ? attacker.Dexterity : attacker.Strength),
-            WeaponAttackBonus = weapon.AttackBonus,
+            AttributeModifier = CalculateAbilityModifier(abilityScore),
+            WeaponAttackBonus = source.AttackBonus,
             SkillModifiers = attacker.Feats.Sum(f => f.AttackBonus),
             BuffModifiers =
                 ApplyBuffStacking(positiveBuffs.Where(e => e.StackRule == StackRule.Stack), e => e.AttackPowerModifier, StackRule.Stack) +

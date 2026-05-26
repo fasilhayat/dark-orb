@@ -25,4 +25,18 @@ public class Character
     public List<Feat> Feats { get; set; } = new();
     public List<StatusEffect> ActiveStatusEffects { get; set; } = new();
     public List<DamageType> Vulnerabilities { get; set; } = new();
+    public List<Spell> MemorizedSpells { get; set; } = new();
+
+    // ── Vital state (computed from CurrentHitPoints) ──────────────────────────
+    // Alive      : HP > 0         — actively fighting
+    // KnockedOut : HP 0 to -9     — unconscious, out of the fight but not slain
+    // Dead       : HP -10 or lower — permanently dead
+    public bool IsAlive      => CurrentHitPoints > 0;
+    public bool IsKnockedOut => CurrentHitPoints <= 0 && CurrentHitPoints >= -9;
+    public bool IsDead       => CurrentHitPoints <= -10;
+
+    public CharacterVitalStatus VitalStatus =>
+        IsDead       ? CharacterVitalStatus.Dead :
+        IsKnockedOut ? CharacterVitalStatus.KnockedOut :
+                       CharacterVitalStatus.Alive;
 }

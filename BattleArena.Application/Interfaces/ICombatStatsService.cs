@@ -5,6 +5,6 @@ using Core.Entities;
 
 public interface ICombatStatsService
 {
-    CombatantStats ComputeAttackerStats(Character attacker, Weapon weapon);
+    CombatantStats ComputeAttackerStats(Character attacker, IAttackSource source);
     CombatantStats ComputeDefenderStats(Character defender);
 }

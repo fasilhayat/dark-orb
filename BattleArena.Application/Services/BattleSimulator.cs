@@ -12,7 +12,8 @@ using Core.Entities.Enums;
 //   4. A fumble applies a -2 AttackPower status effect for the fumbler's next turn.
 //   5. After acting, 100 is subtracted from the actor's meter.
 //   6. Every event is recorded in a BattleLogEntry with full detail.
-//   7. Battle ends when one combatant's HP drops to 0, or maxTicks is exhausted.
+//   7. HP can go negative — 0 to -9 = knocked out (KO), -10 or lower = dead.
+//   8. Battle ends when a combatant is KO'd or killed, or maxTicks is exhausted.
 public class BattleSimulator : IBattleSimulator
 {
     private readonly ICombatService _combat;
@@ -27,8 +28,8 @@ public class BattleSimulator : IBattleSimulator
     }
 
     public BattleResult Simulate(
-        Character fighter, Weapon fighterWeapon,
-        Character opponent, Weapon opponentWeapon,
+        Character fighter, IAttackSource? fighterAttack,
+        Character opponent, IAttackSource? opponentAttack,
         int maxTicks = 1000)
     {
         var log = new List<BattleLogEntry>();
@@ -60,9 +61,17 @@ public class BattleSimulator : IBattleSimulator
 
             foreach (var isFighter in actingOrder)
             {
-                var actor  = isFighter ? fighter  : opponent;
-                var weapon = isFighter ? fighterWeapon : opponentWeapon;
+                var actor = isFighter ? fighter : opponent;
                 var target = isFighter ? opponent : fighter;
+                var attackSource = isFighter ? fighterAttack : opponentAttack;
+                if (attackSource is null)
+                {
+                    var spells = actor.MemorizedSpells;
+                    if (spells.Count == 0)
+                        throw new InvalidOperationException($"{actor.Name} has no weapon or memorized spells.");
+
+                    attackSource = spells[Random.Shared.Next(spells.Count)];
+                }
 
                 // Mark the actor as active for the duration of their turn.
                 if (isFighter) fighterMeter.IsActive  = true;
@@ -71,7 +80,7 @@ public class BattleSimulator : IBattleSimulator
                 // Expire duration-based status effects (e.g., fumble penalty) at turn start.
                 _statusEffect.TickAll(actor);
 
-                // The target may have already been killed by the other combatant this tick.
+                // The target may have already been knocked out or killed by the other combatant this tick.
                 if (target.CurrentHitPoints <= 0)
                 {
                     if (isFighter) fighterMeter.IsActive  = false;
@@ -92,24 +101,30 @@ public class BattleSimulator : IBattleSimulator
                 });
 
                 // ── RESOLVE ATTACK ─────────────────────────────────────────────────
-                var result = _combat.ResolveAttack(actor, target, weapon);
-                log.Add(BuildAttackEntry(tick, actor.Name, target.Name, result));
+                var result = _combat.ResolveAttack(actor, target, attackSource);
+                log.Add(BuildAttackEntry(tick, actor.Name, attackSource.Name, target.Name, result));
 
                 // ── APPLY DAMAGE ───────────────────────────────────────────────────
                 if (result.IsHit)
                 {
                     var hpBefore = target.CurrentHitPoints;
-                    target.CurrentHitPoints = Math.Max(0, target.CurrentHitPoints - result.Damage);
+                    // Allow HP to go negative: 0 to -9 = knocked out, -10 or lower = dead.
+                    target.CurrentHitPoints = target.CurrentHitPoints - result.Damage;
                     log.Add(BuildDamageEntry(tick, target.Name, result.Damage, hpBefore, target.CurrentHitPoints));
 
                     if (target.CurrentHitPoints <= 0)
                     {
+                        var defeatEvent = target.IsDead ? "Death" : "KnockedOut";
+                        var defeatMsg   = target.IsDead
+                            ? $"[DEAD] {target.Name} has been slain! (HP: {target.CurrentHitPoints})"
+                            : $"[KO] {target.Name} is knocked unconscious! (HP: {target.CurrentHitPoints})";
+
                         log.Add(new BattleLogEntry
                         {
                             Tick = tick,
                             ActorName = target.Name,
-                            EventType = "Death",
-                            Message = $"[DEAD] {target.Name} has been defeated!"
+                            EventType = defeatEvent,
+                            Message = defeatMsg
                         });
 
                         if (isFighter) fighterMeter.IsActive  = false;
@@ -120,7 +135,14 @@ public class BattleSimulator : IBattleSimulator
                         else
                             RecordAfterTurn(ref opponentMeter, tick, log, actor.Name);
 
-                        return new BattleResult { Winner = actor, Loser = target, TotalTicks = tick, Log = log };
+                        return new BattleResult
+                        {
+                            Winner = actor,
+                            Loser = target,
+                            LoserStatus = target.VitalStatus,
+                            TotalTicks = tick,
+                            Log = log
+                        };
                     }
                 }
 
@@ -193,18 +215,18 @@ public class BattleSimulator : IBattleSimulator
         Message  = $"{name}  TM: {before} -> {actorMeter.CurrentValue}  (+{actorMeter.CurrentValue - before})"
     };
 
-    private static BattleLogEntry BuildAttackEntry(int tick, string actorName, string targetName, AttackResult result)
+    private static BattleLogEntry BuildAttackEntry(int tick, string actorName, string attackSourceName, string targetName, AttackResult result)
     {
         var outcome = result.IsCriticalHit ? "CRITICAL HIT!" :
                       result.IsFumble     ? "FUMBLE!" :
                       result.IsHit        ? "HIT" : "MISS";
 
-        var msg = $"{actorName} -> {targetName}:  d20={result.HitRoll} + AP={result.AttackPower} = {result.HitRoll + result.AttackPower} vs DP={result.DefensePower}  ->  {outcome}";
+        var msg = $"{actorName} [{attackSourceName}] -> {targetName}: d20={result.HitRoll} + AP={result.AttackPower} = {result.HitRoll + result.AttackPower} vs DP={result.DefensePower} -> {outcome}";
 
         if (result.IsHit && result.DamageContext is { } dc)
         {
             var critTag = result.IsCriticalHit ? " [x2 CRIT]" : "";
-            msg += $"  |  Dmg: roll({dc.WeaponDiceRoll}) + attr({dc.AttributeModifier}) + flat({dc.FlatBonuses}) = {dc.BaseDamage}{critTag} x{dc.TypeMultiplier:0.0} - mit({dc.ArmorMitigation}) + elem({dc.ElementalModifiers}) = {dc.FinalDamage}";
+            msg += $" | Dmg: roll({dc.WeaponDiceRoll}) + attr({dc.AttributeModifier}) + flat({dc.FlatBonuses}) = {dc.BaseDamage}{critTag} x{dc.TypeMultiplier:0.0} - mit({dc.ArmorMitigation}) + elem({dc.ElementalModifiers}) = {dc.FinalDamage}";
         }
 
         // Pick a narrative phrase graded on roll quality

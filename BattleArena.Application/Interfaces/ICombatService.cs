@@ -5,8 +5,8 @@ using Core.Entities;
 
 public interface ICombatService
 {
-    AttackResult ResolveAttack(Character attacker, Character defender, Weapon weapon);
-    DamageContext ResolveDamage(Character attacker, Character defender, Weapon weapon, bool isCritical = false);
-    DamageRollResult RollDamage(Weapon weapon);
+    AttackResult ResolveAttack(Character attacker, Character defender, IAttackSource source);
+    DamageContext ResolveDamage(Character attacker, Character defender, IAttackSource source, bool isCritical = false);
+    DamageRollResult RollDamage(IAttackSource source);
     int CalculateAbilityModifier(int score);
 }

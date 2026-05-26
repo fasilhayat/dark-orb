@@ -1,84 +1,169 @@
-﻿using BattleArena.Application.Models;
+using BattleArena.Application.Models;
 using BattleArena.Application.Services;
 using BattleArena.Core.Entities;
 using BattleArena.Core.Entities.Enums;
 
-// ── Encoding (needed for block-character HP/TM bars on Windows) ───────────────
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 Console.Title = "BattleArena — Combat Simulation";
 
-// ── Wire up services (no DI container needed for the demo) ────────────────────
 var combatStats = new CombatStatsService();
-var simulator   = new BattleSimulator(
+var simulator = new BattleSimulator(
     new CombatService(new DiceService(), combatStats),
     new TurnmeterService(),
     new StatusEffectService());
 
-// ── Build combatants ──────────────────────────────────────────────────────────
-
-var longsword = new Weapon
+var longsword = new BattleArena.Core.Entities.Weapon
 {
-    Name = "Longsword", DamageDie = DieType.D8, DamageCount = 1,
-    DamageType = DamageType.Slashing, AttackType = AttackType.Melee, AttackBonus = 2
+    Name = "Longsword",
+    DamageDie = BattleArena.Core.Entities.Enums.DieType.D8,
+    DamageCount = 1,
+    DamageType = BattleArena.Core.Entities.Enums.DamageType.Slashing,
+    AttackType = BattleArena.Core.Entities.Enums.AttackType.Melee,
+    AttackBonus = 2
 };
-var theron = new Character
+var theron = new BattleArena.Core.Entities.Character
 {
-    Name = "Theron", Level = 5, Strength = 18, Dexterity = 12,
-    StrikeRating = 14, TurnSpeed = 10, MaxHitPoints = 50, CurrentHitPoints = 50,
-    Equipment = new ArmorSlots
+    Name = "Theron",
+    Level = 5,
+    Strength = 18,
+    Dexterity = 12,
+    Intelligence = 10,
+    StrikeRating = 14,
+    TurnSpeed = 10,
+    MaxHitPoints = 50,
+    CurrentHitPoints = 50,
+    Equipment = new BattleArena.Core.Entities.ArmorSlots
     {
-        Chest     = new Armor { Name = "Chain Mail",    ArmorClass = 5, Mitigation = 2, MaxDexterityBonus = 6 },
+        Chest = new BattleArena.Core.Entities.Armor { Name = "Chain Mail", ArmorClass = 5, Mitigation = 2, MaxDexterityBonus = 6 },
         RightHand = longsword
     }
 };
 
-var battleAxe = new Weapon
+var battleAxe = new BattleArena.Core.Entities.Weapon
 {
-    Name = "Battle Axe", DamageDie = DieType.D8, DamageCount = 1,
-    DamageType = DamageType.Slashing, AttackType = AttackType.Melee, AttackBonus = 1
+    Name = "Battle Axe",
+    DamageDie = BattleArena.Core.Entities.Enums.DieType.D8,
+    DamageCount = 1,
+    DamageType = BattleArena.Core.Entities.Enums.DamageType.Slashing,
+    AttackType = BattleArena.Core.Entities.Enums.AttackType.Melee,
+    AttackBonus = 1
 };
-var gruk = new Character
+var gruk = new BattleArena.Core.Entities.Character
 {
-    Name = "Gruk", Level = 3, Strength = 16, Dexterity = 8,
-    StrikeRating = 16, TurnSpeed = 6, MaxHitPoints = 35, CurrentHitPoints = 35,
-    Equipment = new ArmorSlots
+    Name = "Gruk",
+    Level = 3,
+    Strength = 16,
+    Dexterity = 8,
+    Intelligence = 8,
+    StrikeRating = 16,
+    TurnSpeed = 6,
+    MaxHitPoints = 35,
+    CurrentHitPoints = 35,
+    Equipment = new BattleArena.Core.Entities.ArmorSlots
     {
-        Chest     = new Armor { Name = "Leather Armor", ArmorClass = 7, Mitigation = 1, MaxDexterityBonus = 6 },
+        Chest = new BattleArena.Core.Entities.Armor { Name = "Leather Armor", ArmorClass = 7, Mitigation = 1, MaxDexterityBonus = 6 },
         RightHand = battleAxe
     }
 };
 
-var maxHp = new Dictionary<string, int>
+var fireball = new BattleArena.Core.Entities.Spell
 {
-    [theron.Name] = theron.MaxHitPoints,
-    [gruk.Name]   = gruk.MaxHitPoints
+    Name = "Fireball",
+    Description = "A blazing orb of fire",
+    School = BattleArena.Core.Entities.Enums.SpellSchool.Evocation,
+    DamageDie = BattleArena.Core.Entities.Enums.DieType.D6,
+    DamageCount = 3,
+    DamageType = BattleArena.Core.Entities.Enums.DamageType.Fire,
+    AttackBonus = 2,
+    SpellLevel = 3
+};
+var iceBolt = new BattleArena.Core.Entities.Spell
+{
+    Name = "Ice Bolt",
+    Description = "A shard of magical ice",
+    School = BattleArena.Core.Entities.Enums.SpellSchool.Evocation,
+    DamageDie = BattleArena.Core.Entities.Enums.DieType.D8,
+    DamageCount = 2,
+    DamageType = BattleArena.Core.Entities.Enums.DamageType.Cold,
+    AttackBonus = 2,
+    SpellLevel = 2
+};
+var lightningStrike = new BattleArena.Core.Entities.Spell
+{
+    Name = "Lightning Strike",
+    Description = "A bolt of crackling lightning",
+    School = BattleArena.Core.Entities.Enums.SpellSchool.Evocation,
+    DamageDie = BattleArena.Core.Entities.Enums.DieType.D10,
+    DamageCount = 2,
+    DamageType = BattleArena.Core.Entities.Enums.DamageType.Lightning,
+    AttackBonus = 3,
+    SpellLevel = 4
+};
+var lyra = new BattleArena.Core.Entities.Character
+{
+    Name = "Lyra",
+    Level = 5,
+    Strength = 8,
+    Dexterity = 14,
+    Intelligence = 18,
+    StrikeRating = 13,
+    TurnSpeed = 8,
+    MaxHitPoints = 30,
+    CurrentHitPoints = 30,
+    Equipment = new BattleArena.Core.Entities.ArmorSlots
+    {
+        Chest = new BattleArena.Core.Entities.Armor { Name = "Mage Robes", ArmorClass = 14, Mitigation = 0, MaxDexterityBonus = 6 }
+    },
+    MemorizedSpells = new List<BattleArena.Core.Entities.Spell> { fireball, iceBolt, lightningStrike }
 };
 
-// HP tracker — updated as Damage events are processed during playback
-var hp = new Dictionary<string, int>
+var characterMap = new Dictionary<char, BattleArena.Core.Entities.Character>
 {
-    [theron.Name] = theron.MaxHitPoints,
-    [gruk.Name]   = gruk.MaxHitPoints
+    ['T'] = theron,
+    ['G'] = gruk,
+    ['L'] = lyra
+};
+var attackMap = new Dictionary<string, BattleArena.Core.Entities.IAttackSource?>
+{
+    [theron.Name] = longsword,
+    [gruk.Name] = battleAxe,
+    [lyra.Name] = null
 };
 
-// Tracks who is currently acting — drives CharColor() during battle.
-// Empty string means "not in battle" (used for character sheet / summary).
 string activeActor = "";
 
-// ── Intro screen ──────────────────────────────────────────────────────────────
-
 PrintHeader();
+var fighter1 = PickFighter("Fighter 1", null);
+var fighter2 = PickFighter("Fighter 2", fighter1.Name);
+var fighter1Attack = attackMap[fighter1.Name];
+var fighter2Attack = attackMap[fighter2.Name];
 
-var theronAp = combatStats.ComputeAttackerStats(theron, longsword).AttackPower;
-var theronDp = combatStats.ComputeDefenderStats(theron).DefensePower;
-var grukAp   = combatStats.ComputeAttackerStats(gruk, battleAxe).AttackPower;
-var grukDp   = combatStats.ComputeDefenderStats(gruk).DefensePower;
+ResetCombatant(theron);
+ResetCombatant(gruk);
+ResetCombatant(lyra);
 
-ShowSheet("FIGHTER", theron, longsword, theronAp, theronDp);
+var fighter1SheetSource = GetSheetAttackSource(fighter1, fighter1Attack);
+var fighter2SheetSource = GetSheetAttackSource(fighter2, fighter2Attack);
+var fighter1Ap = combatStats.ComputeAttackerStats(fighter1, fighter1SheetSource).AttackPower;
+var fighter1Dp = combatStats.ComputeDefenderStats(fighter1).DefensePower;
+var fighter2Ap = combatStats.ComputeAttackerStats(fighter2, fighter2SheetSource).AttackPower;
+var fighter2Dp = combatStats.ComputeDefenderStats(fighter2).DefensePower;
+
+Console.WriteLine();
+ShowSheet("FIGHTER 1", fighter1, fighter1Attack, fighter1Ap, fighter1Dp);
 CWL("\n                           --- VS ---\n", ConsoleColor.DarkGray);
-ShowSheet("ORC", gruk, battleAxe, grukAp, grukDp);
+ShowSheet("FIGHTER 2", fighter2, fighter2Attack, fighter2Ap, fighter2Dp);
 
-// ── Mode selection ────────────────────────────────────────────────────────────
+var maxHp = new Dictionary<string, int>
+{
+    [fighter1.Name] = fighter1.MaxHitPoints,
+    [fighter2.Name] = fighter2.MaxHitPoints
+};
+var hp = new Dictionary<string, int>
+{
+    [fighter1.Name] = fighter1.MaxHitPoints,
+    [fighter2.Name] = fighter2.MaxHitPoints
+};
 
 CWL("\n  Choose battle mode:", ConsoleColor.Yellow);
 CW("    "); CW("[T]", ConsoleColor.Cyan); CWL("  Turn-based  -- press any key to advance each turn", ConsoleColor.White);
@@ -89,8 +174,8 @@ char mode;
 while (true)
 {
     var k = Console.ReadKey(true).KeyChar;
-    if (k is 'T' or 't') { CWL("Turn-based", ConsoleColor.Cyan);  mode = 'T'; break; }
-    if (k is 'R' or 'r') { CWL("Real-time",  ConsoleColor.Cyan);  mode = 'R'; break; }
+    if (k is 'T' or 't') { CWL("Turn-based", ConsoleColor.Cyan); mode = 'T'; break; }
+    if (k is 'R' or 'r') { CWL("Real-time", ConsoleColor.Cyan); mode = 'R'; break; }
 }
 
 CWL("\n  Press any key to start the battle...", ConsoleColor.DarkGray);
@@ -98,9 +183,7 @@ Console.ReadKey(true);
 Console.Clear();
 PrintHeader();
 
-// ── Run simulation (fast — dice resolved up-front) ───────────────────────────
-
-var result = simulator.Simulate(theron, longsword, gruk, battleAxe, 500);
+var result = simulator.Simulate(fighter1, fighter1Attack, fighter2, fighter2Attack, 500);
 
 if (mode == 'T')
     PlayTurnBased();
@@ -109,15 +192,53 @@ else
 
 PrintSummary();
 
-// ═════════════════════════════════════════════════════════════════════════════
-// TURN-BASED MODE
-// Each press of any key advances to the next combatant action.
-// The screen clears and refreshes with the current HP/TM state.
-// ═════════════════════════════════════════════════════════════════════════════
+BattleArena.Core.Entities.Character PickFighter(string label, string? excludedName)
+{
+    while (true)
+    {
+        CW($"  Pick {label}:  ", ConsoleColor.Yellow);
+        CW("[T]", ConsoleColor.Cyan); CW(" Theron   ");
+        CW("[G]", ConsoleColor.Cyan); CW(" Gruk   ");
+        CW("[L]", ConsoleColor.Cyan); CW(" Lyra", ConsoleColor.White);
+        if (!string.IsNullOrEmpty(excludedName))
+            CW($"   (cannot pick {excludedName})", ConsoleColor.DarkGray);
+        Console.WriteLine();
+        CW("  > ", ConsoleColor.Cyan);
+
+        var pick = char.ToUpperInvariant(Console.ReadKey(true).KeyChar);
+        if (!characterMap.TryGetValue(pick, out var selected))
+            continue;
+
+        if (selected.Name == excludedName)
+        {
+            CWL($"  {selected.Name} is already selected. Choose another fighter.\n", ConsoleColor.DarkYellow);
+            continue;
+        }
+
+        CWL(selected.Name, CharColor(selected.Name));
+        return selected;
+    }
+}
+
+void ResetCombatant(BattleArena.Core.Entities.Character character)
+{
+    character.CurrentHitPoints = character.MaxHitPoints;
+    character.ActiveStatusEffects.Clear();
+}
+
+BattleArena.Core.Entities.IAttackSource GetSheetAttackSource(BattleArena.Core.Entities.Character character, BattleArena.Core.Entities.IAttackSource? attackSource)
+{
+    if (attackSource is not null)
+        return attackSource;
+
+    return character.MemorizedSpells
+        .OrderByDescending(spell => spell.AttackBonus)
+        .ThenByDescending(spell => spell.DamageCount)
+        .First();
+}
+
 void PlayTurnBased()
 {
-    // Split the full log into "turns" — a new turn starts at every TurnStart entry.
-    // Each turn slice contains all events from TurnStart through TurnEnd/Death.
     var turns = new List<List<BattleLogEntry>>();
     List<BattleLogEntry>? current = null;
 
@@ -128,7 +249,7 @@ void PlayTurnBased()
             current = new List<BattleLogEntry>();
             turns.Add(current);
         }
-        // Exclude TurnMeterGain from turn slices (shown separately via ShowTm)
+
         if (current != null && e.EventType != "TurnMeterGain")
             current.Add(e);
     }
@@ -141,13 +262,11 @@ void PlayTurnBased()
         Console.Clear();
         PrintHeader();
 
-        // Identify who acts this turn for context
-        var actorName  = turnEntries.FirstOrDefault(e => e.EventType == "TurnStart")?.ActorName ?? "?";
-        var targetName = actorName == theron.Name ? gruk.Name : theron.Name;
-        var actorMax   = actorName  == theron.Name ? theron.MaxHitPoints : gruk.MaxHitPoints;
-        var targetMax2 = targetName == theron.Name ? theron.MaxHitPoints : gruk.MaxHitPoints;
+        var actorName = turnEntries.FirstOrDefault(e => e.EventType == "TurnStart")?.ActorName ?? "?";
+        var targetName = actorName == fighter1.Name ? fighter2.Name : fighter1.Name;
+        var actorMax = maxHp[actorName];
+        var targetMax = maxHp[targetName];
 
-        // Drive CharColor — active = green, waiting = dark gray
         activeActor = actorName;
 
         CWL($"\n  Turn {idx + 1}  |  Tick {tick}", ConsoleColor.DarkGray);
@@ -155,16 +274,14 @@ void PlayTurnBased()
         CW($"  HP "); CW($"{hp[actorName]}/{actorMax}", hp[actorName] > actorMax / 2 ? ConsoleColor.Green : ConsoleColor.Red);
         CW("   vs   ");
         CW($"{targetName.ToUpper()}", CharColor(targetName));
-        CW($"  HP "); CWL($"{hp[targetName]}/{targetMax2}", hp[targetName] > targetMax2 / 2 ? ConsoleColor.Green : ConsoleColor.Red);
+        CW($"  HP "); CWL($"{hp[targetName]}/{targetMax}", hp[targetName] > targetMax / 2 ? ConsoleColor.Green : ConsoleColor.Red);
         CWL("  " + new string('-', 65), ConsoleColor.DarkCyan);
         Console.WriteLine();
 
-        // HP bars at the top of each screen reflect state BEFORE this turn's damage
-        ShowHp(theron.Name, hp[theron.Name], maxHp[theron.Name]);
-        ShowHp(gruk.Name,   hp[gruk.Name],   maxHp[gruk.Name]);
+        ShowHp(fighter1.Name, hp[fighter1.Name], maxHp[fighter1.Name]);
+        ShowHp(fighter2.Name, hp[fighter2.Name], maxHp[fighter2.Name]);
         Console.WriteLine();
 
-        // Turnmeter bars pulled from the full log for this tick — use IsReady/IsActive from the entry
         foreach (var tme in result.Log.Where(e => e.EventType == "TurnMeterGain" && e.Tick == tick))
             ShowTm(tme.ActorName, tme.TurnMeterAfter ?? 0, tme.IsReady, tme.IsActive);
 
@@ -176,10 +293,10 @@ void PlayTurnBased()
             {
                 case "TurnStart":
                 {
-                    var target = e.ActorName == theron.Name ? gruk.Name : theron.Name;
-                    CW($"  >> ", ConsoleColor.DarkCyan);
+                    var target = e.ActorName == fighter1.Name ? fighter2.Name : fighter1.Name;
+                    CW("  >> ", ConsoleColor.DarkCyan);
                     CW($"{e.ActorName.ToUpper()}", CharColor(e.ActorName));
-                    CW($" readies their attack on ");
+                    CW(" readies their attack on ");
                     CW(target, CharColor(target));
                     CWL("!", ConsoleColor.White);
                     Console.WriteLine();
@@ -191,7 +308,6 @@ void PlayTurnBased()
                     break;
 
                 case "Damage":
-                    // Update HP tracker then show updated bars
                     hp[e.ActorName] = e.TargetHpAfter ?? hp[e.ActorName];
                     Console.WriteLine();
                     CW("  ");
@@ -200,8 +316,8 @@ void PlayTurnBased()
                     CW($"{e.DamageDealt}", ConsoleColor.Red);
                     CWL($" damage!   HP: {e.TargetHpBefore} -> {e.TargetHpAfter}", ConsoleColor.DarkGray);
                     Console.WriteLine();
-                    ShowHp(theron.Name, hp[theron.Name], maxHp[theron.Name]);
-                    ShowHp(gruk.Name,   hp[gruk.Name],   maxHp[gruk.Name]);
+                    ShowHp(fighter1.Name, hp[fighter1.Name], maxHp[fighter1.Name]);
+                    ShowHp(fighter2.Name, hp[fighter2.Name], maxHp[fighter2.Name]);
                     break;
 
                 case "FumblePenalty":
@@ -221,31 +337,28 @@ void PlayTurnBased()
                     CWL($"  *** {e.Message} ***", ConsoleColor.Red);
                     CWL("  " + new string('*', 65), ConsoleColor.Red);
                     break;
+
+                case "KnockedOut":
+                    Console.WriteLine();
+                    CWL("  " + new string('~', 65), ConsoleColor.DarkYellow);
+                    CWL($"  ~~~ {e.Message} ~~~", ConsoleColor.DarkYellow);
+                    CWL("  " + new string('~', 65), ConsoleColor.DarkYellow);
+                    break;
             }
         }
 
         Console.WriteLine();
-        var battleOver = turnEntries.Any(e => e.EventType == "Death");
+        var battleOver = turnEntries.Any(e => e.EventType == "Death" || e.EventType == "KnockedOut");
         CWL(battleOver
             ? "  Battle over!  Press any key for results..."
             : "  Press any key for next turn...",
             ConsoleColor.DarkGray);
         Console.ReadKey(true);
     }
-    activeActor = ""; // reset so summary uses neutral colours
+
+    activeActor = "";
 }
 
-// ═════════════════════════════════════════════════════════════════════════════
-// REAL-TIME (TICK-BASED) MODE — fully automatic, no keypresses needed
-//
-// Quiet ticks (no action) scroll by quickly (50 ms each) showing meter gains.
-// Action ticks pause and display the full attack resolution with delays:
-//   300 ms before showing who acts
-//   500 ms before showing the attack roll
-//   200 ms before showing the damage result + updated HP bars
-//   800 ms pause after damage to let the player read it
-//   1500 ms pause after a death announcement
-// ═════════════════════════════════════════════════════════════════════════════
 void PlayRealTime()
 {
     var byTick = result.Log
@@ -256,23 +369,20 @@ void PlayRealTime()
     CWL("\n  BATTLE BEGINS\n", ConsoleColor.Cyan);
     CWL("  " + new string('=', 65) + "\n", ConsoleColor.DarkCyan);
 
-    // Track HP locally for display
     var curHp = new Dictionary<string, int>
     {
-        [theron.Name] = theron.MaxHitPoints,
-        [gruk.Name]   = gruk.MaxHitPoints
+        [fighter1.Name] = fighter1.MaxHitPoints,
+        [fighter2.Name] = fighter2.MaxHitPoints
     };
 
-    int quietStart = -1;   // first tick of current quiet run
-    int quietEnd   = -1;   // last  tick of current quiet run
-    // turnmeter states captured during quiet ticks for compact summary
+    int quietStart = -1;
+    int quietEnd = -1;
     var quietTmStart = new Dictionary<string, int>();
-    var quietTmEnd   = new Dictionary<string, int>();
+    var quietTmEnd = new Dictionary<string, int>();
 
     void FlushQuiet()
     {
         if (quietStart < 0) return;
-        // Only show if at least a few ticks passed
         if (quietEnd > quietStart + 1)
         {
             var parts = quietTmStart.Keys.Select(n =>
@@ -281,6 +391,7 @@ void PlayRealTime()
                 string.Join("   ", parts), ConsoleColor.DarkGray);
             Thread.Sleep(80);
         }
+
         quietStart = quietEnd = -1;
         quietTmStart.Clear();
         quietTmEnd.Clear();
@@ -288,49 +399,49 @@ void PlayRealTime()
 
     foreach (var tickGroup in byTick)
     {
-        var entries   = tickGroup.ToList();
+        var entries = tickGroup.ToList();
         var hasAction = entries.Any(e => e.EventType == "TurnStart");
 
         if (!hasAction)
         {
-            // Accumulate meter snapshots, suppress individual lines
             foreach (var e in entries.Where(e => e.EventType == "TurnMeterGain"))
             {
-                if (quietStart < 0) { quietStart = e.Tick; quietTmStart[e.ActorName] = e.TurnMeterBefore ?? 0; }
+                if (quietStart < 0)
+                {
+                    quietStart = e.Tick;
+                    quietTmStart[e.ActorName] = e.TurnMeterBefore ?? 0;
+                }
+
                 quietEnd = e.Tick;
                 quietTmEnd[e.ActorName] = e.TurnMeterAfter ?? 0;
             }
+
             Thread.Sleep(40);
             continue;
         }
 
-        // Flush any quiet ticks before this action tick
         FlushQuiet();
 
-        // ── Identify attacker and target for this tick ────────────────────────
-        var turnStart   = entries.First(e => e.EventType == "TurnStart");
-        var attackEntry = entries.FirstOrDefault(e => e.EventType == "Attack");
-        var attacker    = turnStart.ActorName;
-        var target      = attacker == theron.Name ? gruk.Name : theron.Name;
+        var turnStart = entries.First(e => e.EventType == "TurnStart");
+        var attacker = turnStart.ActorName;
+        var target = attacker == fighter1.Name ? fighter2.Name : fighter1.Name;
 
-        var attackerHp  = curHp[attacker];
-        var targetHp    = curHp[target];
-        var attackerMax = attacker == theron.Name ? theron.MaxHitPoints : gruk.MaxHitPoints;
-        var targetMax   = target   == theron.Name ? theron.MaxHitPoints : gruk.MaxHitPoints;
+        var attackerHp = curHp[attacker];
+        var targetHp = curHp[target];
+        var attackerMax = maxHp[attacker];
+        var targetMax = maxHp[target];
 
-        // Drive CharColor for this tick
         activeActor = attacker;
 
-        // ── Action tick header ────────────────────────────────────────────────
         Console.WriteLine();
         CWL("  " + new string('-', 65), ConsoleColor.DarkCyan);
         CW($"  Tick {tickGroup.Key,-3}  |  ", ConsoleColor.DarkGray);
         CW($"{attacker.ToUpper()}", CharColor(attacker));
-        CW($"  HP ");
+        CW("  HP ");
         CW($"{attackerHp}/{attackerMax}", attackerHp > attackerMax / 2 ? ConsoleColor.Green : ConsoleColor.Red);
-        CW($"   vs   ");
+        CW("   vs   ");
         CW($"{target.ToUpper()}", CharColor(target));
-        CW($"  HP ");
+        CW("  HP ");
         CWL($"{targetHp}/{targetMax}", targetHp > targetMax / 2 ? ConsoleColor.Green : ConsoleColor.Red);
         CWL("  " + new string('-', 65), ConsoleColor.DarkCyan);
 
@@ -341,14 +452,13 @@ void PlayRealTime()
             switch (e.EventType)
             {
                 case "TurnMeterGain":
-                    // Already shown in quiet summary — skip
                     break;
 
                 case "TurnStart":
                     Console.WriteLine();
-                    CW($"  >> ", ConsoleColor.DarkCyan);
+                    CW("  >> ", ConsoleColor.DarkCyan);
                     CW($"{e.ActorName.ToUpper()}", CharColor(e.ActorName));
-                    CW($" readies their attack on ");
+                    CW(" readies their attack on ");
                     CW(target, CharColor(target));
                     CWL("!", ConsoleColor.White);
                     break;
@@ -361,16 +471,16 @@ void PlayRealTime()
                 case "Damage":
                     Thread.Sleep(200);
                     curHp[e.ActorName] = e.TargetHpAfter ?? curHp[e.ActorName];
-                    hp[e.ActorName]    = curHp[e.ActorName];
+                    hp[e.ActorName] = curHp[e.ActorName];
                     Console.WriteLine();
                     CW("  ");
                     CW($"{e.ActorName}", CharColor(e.ActorName));
-                    CW($" takes ");
+                    CW(" takes ");
                     CW($"{e.DamageDealt}", ConsoleColor.Red);
                     CWL($" damage!   HP: {e.TargetHpBefore} -> {e.TargetHpAfter}", ConsoleColor.DarkGray);
                     Console.WriteLine();
-                    ShowHp(theron.Name, curHp[theron.Name], theron.MaxHitPoints);
-                    ShowHp(gruk.Name,   curHp[gruk.Name],   gruk.MaxHitPoints);
+                    ShowHp(fighter1.Name, curHp[fighter1.Name], fighter1.MaxHitPoints);
+                    ShowHp(fighter2.Name, curHp[fighter2.Name], fighter2.MaxHitPoints);
                     Thread.Sleep(800);
                     break;
 
@@ -393,24 +503,30 @@ void PlayRealTime()
                     CWL("  " + new string('*', 65), ConsoleColor.Red);
                     Thread.Sleep(1500);
                     break;
+
+                case "KnockedOut":
+                    Thread.Sleep(500);
+                    Console.WriteLine();
+                    CWL("  " + new string('~', 65), ConsoleColor.DarkYellow);
+                    CWL($"  ~~~ {e.Message} ~~~", ConsoleColor.DarkYellow);
+                    CWL("  " + new string('~', 65), ConsoleColor.DarkYellow);
+                    Thread.Sleep(1500);
+                    break;
             }
         }
     }
 
     FlushQuiet();
-    activeActor = ""; // reset so summary uses neutral colours
+    activeActor = "";
 }
 
-// ═════════════════════════════════════════════════════════════════════════════
-// SUMMARY SCREEN
-// ═════════════════════════════════════════════════════════════════════════════
 void PrintSummary()
 {
     Console.Clear();
     PrintHeader();
 
     var winner = result.Winner;
-    var loser  = result.Loser;
+    var loser = result.Loser;
 
     Console.WriteLine();
     CW("  BATTLE COMPLETE  --  ", ConsoleColor.Green);
@@ -418,35 +534,37 @@ void PrintSummary()
     CWL(" WINS!", ConsoleColor.Green);
     CWL("  " + new string('=', 62), ConsoleColor.Cyan);
 
-    var attacks     = result.Log.Where(e => e.EventType == "Attack").ToList();
-    var hits        = attacks.Count(e => e.IsHit == true);
-    var misses      = attacks.Count(e => e.IsHit == false && e.IsFumble == false);
-    var crits       = attacks.Count(e => e.IsCritical == true);
-    var fumbles     = attacks.Count(e => e.IsFumble   == true);
-    var winnerDmg   = attacks.Where(e => e.ActorName == winner?.Name && e.IsHit == true).Sum(e => e.DamageDealt ?? 0);
-    var loserDmg    = attacks.Where(e => e.ActorName == loser?.Name  && e.IsHit == true).Sum(e => e.DamageDealt ?? 0);
+    var attacks = result.Log.Where(e => e.EventType == "Attack").ToList();
+    var hits = attacks.Count(e => e.IsHit == true);
+    var misses = attacks.Count(e => e.IsHit == false && e.IsFumble == false);
+    var crits = attacks.Count(e => e.IsCritical == true);
+    var fumbles = attacks.Count(e => e.IsFumble == true);
+    var winnerDmg = attacks.Where(e => e.ActorName == winner?.Name && e.IsHit == true).Sum(e => e.DamageDealt ?? 0);
+    var loserDmg = attacks.Where(e => e.ActorName == loser?.Name && e.IsHit == true).Sum(e => e.DamageDealt ?? 0);
 
     CWL($"\n  Total actions :  {attacks.Count}", ConsoleColor.White);
-    CW(  "  Results       :  "); CW($"{hits} hits", ConsoleColor.Green);
+    CW("  Results       :  "); CW($"{hits} hits", ConsoleColor.Green);
     CW($" / {misses} misses"); CW($" / {crits} crits", ConsoleColor.Magenta);
     CWL($" / {fumbles} fumbles", ConsoleColor.DarkYellow);
 
-    CWL($"\n  Damage dealt:", ConsoleColor.White);
+    CWL("\n  Damage dealt:", ConsoleColor.White);
     CW("    "); CW($"{winner?.Name,-12}", CharColor(winner?.Name ?? "?")); CW($"  {winnerDmg,3} dmg ", ConsoleColor.Yellow); CW("dealt to "); CWL(loser?.Name ?? "?", CharColor(loser?.Name ?? "?"));
-    CW("    "); CW($"{loser?.Name,-12}",  CharColor(loser?.Name  ?? "?")); CW($"  {loserDmg,3} dmg ",  ConsoleColor.Yellow); CW("dealt to "); CWL(winner?.Name ?? "?", CharColor(winner?.Name ?? "?"));
+    CW("    "); CW($"{loser?.Name,-12}", CharColor(loser?.Name ?? "?")); CW($"  {loserDmg,3} dmg ", ConsoleColor.Yellow); CW("dealt to "); CWL(winner?.Name ?? "?", CharColor(winner?.Name ?? "?"));
 
-    CWL($"\n  Final state:", ConsoleColor.White);
+    CWL("\n  Final state:", ConsoleColor.White);
     ShowHp(winner?.Name ?? "?", winner?.CurrentHitPoints ?? 0, maxHp.GetValueOrDefault(winner?.Name ?? "", 1));
-    ShowHp(loser?.Name  ?? "?", 0,                            maxHp.GetValueOrDefault(loser?.Name  ?? "", 1));
+    ShowHp(loser?.Name ?? "?", loser?.CurrentHitPoints ?? 0, maxHp.GetValueOrDefault(loser?.Name ?? "", 1));
+
+    var loserTag  = result.LoserStatus == BattleArena.Core.Entities.Enums.CharacterVitalStatus.Dead
+        ? "SLAIN"
+        : "KNOCKED OUT";
+    CWL($"\n  {loser?.Name} is {loserTag}! (HP: {loser?.CurrentHitPoints})", 
+        result.LoserStatus == BattleArena.Core.Entities.Enums.CharacterVitalStatus.Dead ? ConsoleColor.Red : ConsoleColor.DarkYellow);
 
     CWL($"\n  Battle length :  {result.TotalTicks} ticks", ConsoleColor.White);
     CWL("\n  " + new string('=', 62), ConsoleColor.Cyan);
     Console.WriteLine();
 }
-
-// ═════════════════════════════════════════════════════════════════════════════
-// HELPERS
-// ═════════════════════════════════════════════════════════════════════════════
 
 void PrintHeader()
 {
@@ -455,22 +573,21 @@ void PrintHeader()
     CWL("  " + new string('=', 65) + "\n", ConsoleColor.Cyan);
 }
 
-void ShowSheet(string role, Character ch, Weapon wp, int ap, int dp)
+void ShowSheet(string role, BattleArena.Core.Entities.Character ch, BattleArena.Core.Entities.IAttackSource? attackSource, int ap, int dp)
 {
-    int strMod  = (ch.Strength  - 10) / 2;
-    int dexMod  = (ch.Dexterity - 10) / 2;
-    int dexCap  = Math.Min(dexMod, ch.Equipment.Chest?.MaxDexterityBonus ?? 6);
-    int ac      = ch.Equipment.Chest?.ArmorClass ?? 0;
-    int mit     = ch.Equipment.Chest?.Mitigation ?? 0;
+    var displaySource = attackSource ?? GetSheetAttackSource(ch, attackSource);
+    var abilityScore = displaySource.UsesIntelligence ? ch.Intelligence : displaySource.AttackType == BattleArena.Core.Entities.Enums.AttackType.Ranged ? ch.Dexterity : ch.Strength;
+    var abilityMod = (abilityScore - 10) / 2;
+    var dexMod = (ch.Dexterity - 10) / 2;
+    var dexCap = Math.Min(dexMod, ch.Equipment.Chest?.MaxDexterityBonus ?? 6);
+    var ac = ch.Equipment.Chest?.ArmorClass ?? 0;
+    var mit = ch.Equipment.Chest?.Mitigation ?? 0;
 
-    // Inner content width — every Row pads to exactly this many chars
-    // so the right-side border always aligns.
     const int IW = 60;
 
     void Sep() =>
         CWL("  +" + new string('-', IW + 2) + "+", ConsoleColor.Cyan);
 
-    // Plain row — content left-aligned, padded to IW
     void Row(string content, ConsoleColor col = ConsoleColor.White)
     {
         CW("  | ", ConsoleColor.Cyan);
@@ -480,12 +597,11 @@ void ShowSheet(string role, Character ch, Weapon wp, int ap, int dp)
         CWL(" |", ConsoleColor.Cyan);
     }
 
-    // Two-column row — left text, right text pushed to far-right edge
     void Row2(string left, string right, ConsoleColor col = ConsoleColor.White)
     {
-        var inner   = " " + left;
+        var inner = " " + left;
         var padding = IW - inner.Length - right.Length;
-        var line    = inner + new string(' ', Math.Max(1, padding)) + right;
+        var line = inner + new string(' ', Math.Max(1, padding)) + right;
         CW("  | ", ConsoleColor.Cyan);
         Console.ForegroundColor = col;
         Console.Write(line.PadRight(IW));
@@ -497,12 +613,23 @@ void ShowSheet(string role, Character ch, Weapon wp, int ap, int dp)
     Row2($"{role}: {ch.Name}", $"Level {ch.Level}", CharColor(ch.Name));
     Sep();
     Row($"HP: {ch.MaxHitPoints}   TurnSpeed: {ch.TurnSpeed}   StrikeRating: {ch.StrikeRating}");
-    Row($"STR: {ch.Strength} ({Sign(strMod)}{strMod})   DEX: {ch.Dexterity} ({Sign(dexMod)}{dexMod})");
+    Row($"STR: {ch.Strength} ({Sign((ch.Strength - 10) / 2)}{(ch.Strength - 10) / 2})   DEX: {ch.Dexterity} ({Sign(dexMod)}{dexMod})   INT: {ch.Intelligence} ({Sign((ch.Intelligence - 10) / 2)}{(ch.Intelligence - 10) / 2})");
     Sep();
-    Row($"Weapon  : {wp.Name,-18} {wp.DamageCount}d{DieSides(wp.DamageDie)} {wp.DamageType,-10} +{wp.AttackBonus} atk bonus");
+
     Row($"Armor   : {ch.Equipment.Chest?.Name ?? "None",-18} AC {ac,-2}  EffAC {20 - ac,-2}  Mitigation: {mit}");
+    if (ch.MemorizedSpells.Count > 0)
+    {
+        foreach (var spell in ch.MemorizedSpells)
+            Row($"Spells  : {spell.Name,-18} {spell.DamageCount}d{DieSides(spell.DamageDie)} {spell.DamageType}");
+    }
+    else if (attackSource is not null)
+    {
+        Row($"Weapon  : {attackSource.Name,-18} {attackSource.DamageCount}d{DieSides(attackSource.DamageDie)} {attackSource.DamageType,-10} +{attackSource.AttackBonus} atk bonus");
+    }
+
     Sep();
-    Row($"Atk Power : {ap,-4}  (20-{ch.StrikeRating}) + {ch.Level} (lvl) + ({Sign(strMod)}{strMod}) (str) + {wp.AttackBonus} (wpn)");
+    var abilityLabel = displaySource.UsesIntelligence ? "int" : displaySource.AttackType == BattleArena.Core.Entities.Enums.AttackType.Ranged ? "dex" : "str";
+    Row($"Atk Power : {ap,-4}  (20-{ch.StrikeRating}) + {ch.Level} (lvl) + ({Sign(abilityMod)}{abilityMod}) ({abilityLabel}) + {displaySource.AttackBonus} (src)");
     Row($"Def Power : {dp,-4}  (20-{ac}) + ({Sign(dexCap)}{dexCap}) (dex)");
     Sep();
     Console.WriteLine();
@@ -510,20 +637,18 @@ void ShowSheet(string role, Character ch, Weapon wp, int ap, int dp)
 
 void PrintAttack(BattleLogEntry e)
 {
-    var total  = (e.DieRoll ?? 0) + (e.AttackPower ?? 0);
+    var total = (e.DieRoll ?? 0) + (e.AttackPower ?? 0);
     var margin = total - (e.DefensePower ?? 0);
 
-    // ── Roll line ────────────────────────────────────────────────────────────
     Console.WriteLine();
     CW("  Roll  "); CW($"d20 = {e.DieRoll,2}", ConsoleColor.Yellow);
-    CW("   Attack Power ");  CW($"{e.AttackPower}", ConsoleColor.Yellow);
-    CW($"  =  Total "); CW($"{total,2}", ConsoleColor.White);
-    CW($"   vs  Defence "); CW($"{e.DefensePower}", ConsoleColor.Yellow);
+    CW("   Attack Power "); CW($"{e.AttackPower}", ConsoleColor.Yellow);
+    CW("  =  Total "); CW($"{total,2}", ConsoleColor.White);
+    CW("   vs  Defence "); CW($"{e.DefensePower}", ConsoleColor.Yellow);
     CW("   |  margin ");
     if (margin >= 0) CWL($"+{margin}", ConsoleColor.Green);
-    else             CWL($"{margin}",  ConsoleColor.Red);
+    else CWL($"{margin}", ConsoleColor.Red);
 
-    // ── Outcome banner ───────────────────────────────────────────────────────
     Console.WriteLine();
     if (e.IsCritical == true)
     {
@@ -544,7 +669,6 @@ void PrintAttack(BattleLogEntry e)
         CWL($"  [ {label} ]", ConsoleColor.Red);
     }
 
-    // ── Damage breakdown ─────────────────────────────────────────────────────
     if (e.IsHit == true)
     {
         var dmgIdx = e.Message.IndexOf("Dmg:", StringComparison.Ordinal);
@@ -555,7 +679,6 @@ void PrintAttack(BattleLogEntry e)
         }
     }
 
-    // ── Narrative phrase ─────────────────────────────────────────────────────
     if (!string.IsNullOrEmpty(e.Phrase))
     {
         Console.WriteLine();
@@ -565,7 +688,7 @@ void PrintAttack(BattleLogEntry e)
 
 void ShowHp(string name, int current, int max, int w = 24)
 {
-    var pct    = (double)Math.Max(0, current) / Math.Max(1, max);
+    var pct = (double)Math.Max(0, current) / Math.Max(1, max);
     var filled = (int)(pct * w);
     var barCol = pct > 0.5 ? ConsoleColor.Green : pct > 0.25 ? ConsoleColor.Yellow : ConsoleColor.Red;
 
@@ -580,8 +703,8 @@ void ShowHp(string name, int current, int max, int w = 24)
 
 void ShowTm(string name, int current, bool isReady = false, bool isActive = false, int w = 24)
 {
-    var filled  = (int)(Math.Min(1.0, current / 100.0) * w);
-    var barCol  = isActive ? ConsoleColor.Green : isReady ? ConsoleColor.Cyan : ConsoleColor.DarkGray;
+    var filled = (int)(Math.Min(1.0, current / 100.0) * w);
+    var barCol = isActive ? ConsoleColor.Green : isReady ? ConsoleColor.Cyan : ConsoleColor.DarkGray;
     var nameCol = CharColor(name);
 
     Console.Write("  ");
@@ -591,17 +714,15 @@ void ShowTm(string name, int current, bool isReady = false, bool isActive = fals
     Console.Write(new string('|', filled) + new string('.', w - filled));
     Console.ResetColor();
     Console.Write($"]  {current,4}");
-    if      (isActive) { Console.ForegroundColor = ConsoleColor.Green; Console.Write("  ACTING"); Console.ResetColor(); }
-    else if (isReady)  { Console.ForegroundColor = ConsoleColor.Cyan;  Console.Write("  READY");  Console.ResetColor(); }
+    if (isActive) { Console.ForegroundColor = ConsoleColor.Green; Console.Write("  ACTING"); Console.ResetColor(); }
+    else if (isReady) { Console.ForegroundColor = ConsoleColor.Cyan; Console.Write("  READY"); Console.ResetColor(); }
     Console.WriteLine();
 }
 
-// Active fighter = bright green (their turn), waiting fighter = dim.
-// Outside battle both are white.
 ConsoleColor CharColor(string name) =>
-    activeActor == ""        ? ConsoleColor.White :
-    name == activeActor      ? ConsoleColor.Green :
-                               ConsoleColor.DarkGray;
+    activeActor == "" ? ConsoleColor.White :
+    name == activeActor ? ConsoleColor.Green :
+    ConsoleColor.DarkGray;
 
 void CW(string text, ConsoleColor col = ConsoleColor.White)
 {
@@ -619,10 +740,13 @@ void CWL(string text, ConsoleColor col = ConsoleColor.White)
 
 static string Sign(int n) => n >= 0 ? "+" : "";
 
-static int DieSides(DieType d) => d switch
+static int DieSides(BattleArena.Core.Entities.Enums.DieType d) => d switch
 {
-    DieType.D4   => 4,  DieType.D6  => 6,  DieType.D8  => 8,
-    DieType.D10  => 10, DieType.D12 => 12, DieType.D20 => 20,
-    _            => 0
+    BattleArena.Core.Entities.Enums.DieType.D4 => 4,
+    BattleArena.Core.Entities.Enums.DieType.D6 => 6,
+    BattleArena.Core.Entities.Enums.DieType.D8 => 8,
+    BattleArena.Core.Entities.Enums.DieType.D10 => 10,
+    BattleArena.Core.Entities.Enums.DieType.D12 => 12,
+    BattleArena.Core.Entities.Enums.DieType.D20 => 20,
+    _ => 0
 };
-

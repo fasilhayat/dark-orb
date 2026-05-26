@@ -12,7 +12,7 @@ public interface IBattleSimulator
     /// Run the battle loop until one combatant's HP reaches zero or maxTicks is exceeded.
     /// </summary>
     BattleResult Simulate(
-        Character fighter, Weapon fighterWeapon,
-        Character opponent, Weapon opponentWeapon,
+        Character fighter, IAttackSource? fighterAttack,
+        Character opponent, IAttackSource? opponentAttack,
         int maxTicks = 1000);
 }

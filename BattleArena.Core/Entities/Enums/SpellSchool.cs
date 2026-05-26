@@ -4,5 +4,6 @@ public enum SpellSchool
 {
     AoE,
     CC,
+    Evocation,
     Other
 }
