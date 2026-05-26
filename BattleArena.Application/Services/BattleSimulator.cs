@@ -66,41 +66,6 @@ public class BattleSimulator : IBattleSimulator
         {
             ct.ThrowIfCancellationRequested();
 
-            // ── DOT PHASE: tick DamageOverTime effects on all living combatants ──
-            foreach (var s in states.Where(s => s.Character.IsAlive))
-            {
-                var dotDmg = _statusEffect.TickDoT(s.Character);
-                if (dotDmg > 0)
-                {
-                    var dotName = s.Character.ActiveStatusEffects.FirstOrDefault(
-                        e => e.Type == StatusEffectType.DamageOverTime)?.Name ?? "DoT";
-                    await Notify(new BattleLogEntry
-                    {
-                        Tick             = tick,
-                        ActorName        = s.Character.Name,
-                        EventType        = "DoTTick",
-                        DamageDealt      = dotDmg,
-                        StatusEffectName = dotName,
-                        Message          = $"{s.Character.Name} suffers {dotDmg} {dotName} damage."
-                    });
-
-                    if (s.Character.CurrentHitPoints <= 0)
-                    {
-                        await Notify(BuildDefeatEntry(tick, s.Character));
-                        var opposingParty = s.PartyIndex == 0 ? enemyParty : heroParty;
-                        if (opposingParty.IsDefeated)
-                            return new BattleResult
-                            {
-                                WinningParty = s.PartyIndex == 0 ? heroParty : enemyParty,
-                                LosingParty  = opposingParty,
-                                LoserStatus  = s.Character.VitalStatus,
-                                TotalTicks   = tick,
-                                Log          = log
-                            };
-                    }
-                }
-            }
-
             // ── TICK: advance meters for every living combatant ────────────────
             foreach (var s in states.Where(s => s.Character.IsAlive))
             {
@@ -144,7 +109,6 @@ public class BattleSimulator : IBattleSimulator
                 var attackSource = ResolveAttackSource(actorState);
 
                 actorState.Meter.IsActive = true;
-                _statusEffect.TickAll(actorState.Character);
 
                 var meterNow = actorState.Meter.CurrentValue;
                 var isSpell  = attackSource is Spell;
@@ -173,6 +137,19 @@ public class BattleSimulator : IBattleSimulator
                     Message          = $"{actorState.Character.Name} takes their turn  (TM: {meterNow})"
                 });
 
+                // ── DOT TICK: DamageOverTime at start of actor's turn ────────────
+                var dotResult = await ProcessActorDoTAsync(tick, actorState, heroParty, enemyParty, log, Notify);
+                if (dotResult is not null)
+                {
+                    actorState.Meter.IsActive = false;
+                    await Notify(BuildAfterTurnEntry(actorState, tick));
+                    return dotResult;
+                }
+
+                // ── TICK ALL EFFECTS (decrement durations) ────────────────────
+                var expired = _statusEffect.TickAll(actorState.Character);
+                await NotifyExpiredEffectsAsync(tick, actorState.Character, expired, Notify);
+
                 // ── ATTACK RESOLUTION ──────────────────────────────────────────
                 var result = _combat.ResolveAttack(actorState.Character, target, attackSource);
                 await Notify(BuildAttackEntry(tick, actorState.Character.Name, attackSource.Name, isSpell, target.Name, result, attackSource.DamageType));
@@ -190,65 +167,20 @@ public class BattleSimulator : IBattleSimulator
                         await Notify(BuildDamageEntry(tick, target.Name, result.Damage, hpBefore, target.CurrentHitPoints));
 
                     // ── ON-HIT EFFECTS (spell after-effects) ──────────────────
-                    if (attackSource is Spell spell && spell.OnHitEffects.Count > 0)
-                    {
-                        foreach (var template in spell.OnHitEffects)
-                        {
-                            if (Random.Shared.Next(100) >= template.ApplicationChance)
-                                continue;
-
-                            var dmgPerTurn = template.DamagePerTurn;
-                            if (dmgPerTurn <= 0 && template.DoTDamageCount > 0)
-                                for (var i = 0; i < template.DoTDamageCount; i++)
-                                    dmgPerTurn += RollDie(template.DoTDamageDie);
-
-                            var effect = new StatusEffect
-                            {
-                                Name                = template.Name,
-                                Type                = template.Type,
-                                Duration            = template.Duration,
-                                DamagePerTurn       = dmgPerTurn,
-                                AttackPowerModifier = template.AttackPowerModifier,
-                                DefensePowerModifier = template.DefensePowerModifier,
-                                TurnMeterModifier   = template.TurnMeterModifier,
-                                StackRule           = template.StackRule,
-                                Source              = spell.Name
-                            };
-                            _statusEffect.Apply(target, effect);
-
-                            await Notify(new BattleLogEntry
-                            {
-                                Tick             = tick,
-                                ActorName        = target.Name,
-                                EventType        = "EffectApplied",
-                                StatusEffectName = effect.Name,
-                                Message          = $"{target.Name} is afflicted with {effect.Name}!"
-                            });
-                        }
-                    }
+                    if (attackSource is Spell spell)
+                        await ProcessOnHitEffectsAsync(tick, target, spell, Notify);
 
                     if (target.CurrentHitPoints <= 0)
                     {
                         await Notify(BuildDefeatEntry(tick, target));
-
-                        // Check whether the entire opposing party is now defeated.
-                        var opposingParty = actorState.PartyIndex == 0 ? enemyParty : heroParty;
-                        if (opposingParty.IsDefeated)
+                        var targetPartyIndex = actorState.PartyIndex == 0 ? 1 : 0;
+                        var defResult = BuildDefeatResult(tick, targetPartyIndex, target, heroParty, enemyParty, log);
+                        if (defResult is not null)
                         {
                             actorState.Meter.IsActive = false;
                             await Notify(BuildAfterTurnEntry(actorState, tick));
-
-                            var winningParty = actorState.PartyIndex == 0 ? heroParty : enemyParty;
-                            return new BattleResult
-                            {
-                                WinningParty = winningParty,
-                                LosingParty  = opposingParty,
-                                LoserStatus  = target.VitalStatus,
-                                TotalTicks   = tick,
-                                Log          = log
-                            };
+                            return defResult;
                         }
-                        // Party not fully wiped — continue to next actor.
                     }
                 }
 
@@ -457,6 +389,122 @@ public class BattleSimulator : IBattleSimulator
         DieType.D20 => Random.Shared.Next(1, 21),
         _           => 0
     };
+
+    // ── Extracted acting-loop helpers ───────────────────────────────────────
+
+    private async Task<BattleResult?> ProcessActorDoTAsync(
+        int tick, CombatantState actorState,
+        Party heroParty, Party enemyParty,
+        List<BattleLogEntry> log,
+        Func<BattleLogEntry, Task> notify)
+    {
+        foreach (var dotEffect in actorState.Character.ActiveStatusEffects
+            .Where(e => e.Type == StatusEffectType.DamageOverTime && e.DamagePerTurn > 0)
+            .ToList())
+        {
+            var dotName = dotEffect.Name;
+            var dotDmg  = dotEffect.DamagePerTurn;
+            actorState.Character.CurrentHitPoints -= dotDmg;
+
+            await notify(new BattleLogEntry
+            {
+                Tick             = tick,
+                ActorName        = actorState.Character.Name,
+                EventType        = "DoTTick",
+                DamageDealt      = dotDmg,
+                StatusEffectName = dotName,
+                Message          = $"{actorState.Character.Name} suffers {dotDmg} {dotName} damage."
+            });
+
+            if (actorState.Character.CurrentHitPoints <= 0)
+            {
+                await notify(BuildDefeatEntry(tick, actorState.Character));
+                var defResult = BuildDefeatResult(
+                    tick, actorState.PartyIndex, actorState.Character,
+                    heroParty, enemyParty, log);
+                if (defResult is not null) return defResult;
+            }
+        }
+        return null;
+    }
+
+    private async Task ProcessOnHitEffectsAsync(
+        int tick, Character target, Spell spell,
+        Func<BattleLogEntry, Task> notify)
+    {
+        if (spell.OnHitEffects.Count == 0) return;
+
+        foreach (var template in spell.OnHitEffects)
+        {
+            if (Random.Shared.Next(100) >= template.ApplicationChance)
+                continue;
+
+            var dmgPerTurn = template.DamagePerTurn;
+            if (dmgPerTurn <= 0 && template.DoTDamageCount > 0)
+                for (var i = 0; i < template.DoTDamageCount; i++)
+                    dmgPerTurn += RollDie(template.DoTDamageDie);
+
+            var effect = new StatusEffect
+            {
+                Name                 = template.Name,
+                Type                 = template.Type,
+                Duration             = template.Duration,
+                DamagePerTurn        = dmgPerTurn,
+                AttackPowerModifier  = template.AttackPowerModifier,
+                DefensePowerModifier = template.DefensePowerModifier,
+                TurnMeterModifier    = template.TurnMeterModifier,
+                StackRule            = template.StackRule,
+                Source               = spell.Name
+            };
+            _statusEffect.Apply(target, effect);
+
+            await notify(new BattleLogEntry
+            {
+                Tick             = tick,
+                ActorName        = target.Name,
+                EventType        = "EffectApplied",
+                StatusEffectName = effect.Name,
+                Message          = $"{target.Name} is afflicted with {effect.Name}!"
+            });
+        }
+    }
+
+    private static async Task NotifyExpiredEffectsAsync(
+        int tick, Character character,
+        IReadOnlyList<string> expired,
+        Func<BattleLogEntry, Task> notify)
+    {
+        foreach (var name in expired)
+        {
+            await notify(new BattleLogEntry
+            {
+                Tick             = tick,
+                ActorName        = character.Name,
+                EventType        = "EffectExpired",
+                StatusEffectName = name,
+                Message          = $"{name} has worn off {character.Name}."
+            });
+        }
+    }
+
+    private static BattleResult? BuildDefeatResult(
+        int tick, int defeatedPartyIndex,
+        Character defeatedCharacter,
+        Party heroParty, Party enemyParty,
+        List<BattleLogEntry> log)
+    {
+        var losingParty = defeatedPartyIndex == 0 ? heroParty : enemyParty;
+        if (!losingParty.IsDefeated) return null;
+
+        return new BattleResult
+        {
+            WinningParty = defeatedPartyIndex == 0 ? enemyParty : heroParty,
+            LosingParty  = losingParty,
+            LoserStatus  = defeatedCharacter.VitalStatus,
+            TotalTicks   = tick,
+            Log          = log
+        };
+    }
 
     // Tracks per-combatant state during a simulation run.
     private class CombatantState

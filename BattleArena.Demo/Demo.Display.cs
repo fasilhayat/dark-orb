@@ -32,6 +32,22 @@ static partial class Demo
         CWL("  " + new string('=', 65) + "\n", ConsoleColor.Cyan);
     }
 
+    // ── GetClassName ──────────────────────────────────────────────────────────────
+
+    internal static string GetClassName(int classId) => classId switch
+    {
+        1 => "Barbarian",
+        2 => "Knight",
+        3 => "Paladin",
+        4 => "Priest",
+        5 => "Mage",
+        6 => "Bard",
+        7 => "Druid",
+        8 => "Fighter",
+        9 => "Rogue",
+        _ => $"Class {classId}"
+    };
+
     // ── ShowSheet ─────────────────────────────────────────────────────────────────
 
     internal static void ShowSheet(string role, Character ch, IAttackSource? attackSource, int ap, int dp)
@@ -69,7 +85,7 @@ static partial class Demo
         }
 
         Sep();
-        Row2($"{role}: {ch.Name}", $"Level {ch.Level}", ConsoleColor.White);
+        Row2($"{role}: {ch.Name}", $"Level {ch.Level} {GetClassName(ch.ClassId)}", ConsoleColor.White);
         Sep();
         Row($"HP: {ch.MaxHitPoints}   TurnSpeed: {ch.TurnSpeed}   StrikeRating: {ch.StrikeRating}");
         Row($"STR: {ch.Strength} ({Sign((ch.Strength - 10) / 2)}{(ch.Strength - 10) / 2})   DEX: {ch.Dexterity} ({Sign(dexMod)}{dexMod})   INT: {ch.Intelligence} ({Sign((ch.Intelligence - 10) / 2)}{(ch.Intelligence - 10) / 2})");

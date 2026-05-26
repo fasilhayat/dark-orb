@@ -33,17 +33,22 @@ public class StatusEffectService : IStatusEffectService
         }
     }
 
-    public void TickAll(Character target)
+    public IReadOnlyList<string> TickAll(Character target)
     {
+        var expired = new List<string>();
         foreach (var effect in target.ActiveStatusEffects.ToList())
         {
             if (effect.Duration > 0)
             {
                 effect.Duration--;
                 if (effect.Duration == 0)
+                {
+                    expired.Add(effect.Name);
                     target.ActiveStatusEffects.Remove(effect);
+                }
             }
         }
+        return expired;
     }
 
     public int TickDoT(Character target)
@@ -55,9 +60,6 @@ public class StatusEffectService : IStatusEffectService
         {
             target.CurrentHitPoints -= effect.DamagePerTurn;
             total += effect.DamagePerTurn;
-            effect.Duration--;
-            if (effect.Duration <= 0)
-                target.ActiveStatusEffects.Remove(effect);
         }
         return total;
     }

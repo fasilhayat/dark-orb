@@ -6,12 +6,140 @@ using Core.Entities.Enums;
 
 static partial class Demo
 {
-    // ── PlayTurnBased ─────────────────────────────────────────────────────────────
+    // ── Display strategies: shared by turn-based and realtime ────────────
+
+    private delegate void DisplayHandler(BattleLogEntry e, Dictionary<string, CharDisplayState> states);
+
+    private static readonly Dictionary<string, DisplayHandler> _display = new()
+    {
+        ["TurnStart"] = (e, states) =>
+        {
+            var tgtSt = states.GetValueOrDefault(e.TargetName ?? "");
+            var actSt = states.GetValueOrDefault(e.ActorName);
+            var verb = e.IsSpell == true ? "conjures" : "readies";
+            Console.WriteLine();
+            CW("  >> ", ConsoleColor.DarkCyan);
+            CW(e.ActorName, actSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
+            CW($" {verb} ");
+            CW($"[{e.AttackSourceName}]", e.IsSpell == true ? ConsoleColor.Magenta : ConsoleColor.Yellow);
+            CW(" targeting ");
+            CW(e.TargetName ?? "?", tgtSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
+            CWL("!", ConsoleColor.White);
+        },
+        ["Attack"] = (e, _) => PrintAttack(e),
+        ["Damage"] = (e, _) =>
+        {
+            Console.WriteLine();
+            CW("  "); CW(e.ActorName, ConsoleColor.White);
+            CW(" takes "); CW($"{e.DamageDealt}", ConsoleColor.Red);
+            CWL($" damage   HP: {e.TargetHpBefore} -> {Math.Max(0, e.TargetHpAfter ?? 0)}", ConsoleColor.DarkGray);
+        },
+        ["FumblePenalty"] = (e, _) => CWL($"  {e.Message}", ConsoleColor.DarkYellow),
+        ["DoTTick"] = (e, _) =>
+        {
+            Console.WriteLine();
+            CW("  ", ConsoleColor.DarkGray);
+            CW(e.ActorName, CharColor(e.ActorName));
+            CW($" suffers "); CW($"{e.DamageDealt}", ConsoleColor.Red);
+            CWL($" {e.StatusEffectName ?? "DoT"} damage", ConsoleColor.DarkYellow);
+        },
+        ["EffectApplied"] = (e, _) =>
+        {
+            Console.WriteLine();
+            CW("  ", ConsoleColor.DarkGray);
+            CW(e.ActorName, CharColor(e.ActorName));
+            CWL($" is afflicted with {e.StatusEffectName}!", ConsoleColor.DarkYellow);
+        },
+        ["EffectExpired"] = (e, _) =>
+        {
+            Console.WriteLine();
+            CW("  ", ConsoleColor.DarkGray);
+            CW(e.StatusEffectName ?? "", ConsoleColor.Green);
+            CW(" has worn off ");
+            CWL(e.ActorName, CharColor(e.ActorName));
+        },
+        ["SkippedTurn"] = (e, _) =>
+        {
+            Console.WriteLine();
+            CW("  ", ConsoleColor.DarkGray);
+            CW(e.ActorName, CharColor(e.ActorName));
+            CWL($" is {e.Message.Split("is ")[^1]}", ConsoleColor.DarkYellow);
+        },
+        ["TurnEnd"] = (_, _) =>
+        {
+            Console.WriteLine();
+            CWL("  " + new string('-', 77), ConsoleColor.DarkGray);
+        },
+        ["Death"] = (e, _) =>
+        {
+            Console.WriteLine();
+            CWL("  " + new string('*', 65), ConsoleColor.Red);
+            CWL($"  *** {e.Message} ***", ConsoleColor.Red);
+            CWL("  " + new string('*', 65), ConsoleColor.Red);
+        },
+        ["KnockedOut"] = (e, _) =>
+        {
+            Console.WriteLine();
+            CWL("  " + new string('~', 65), ConsoleColor.DarkYellow);
+            CWL($"  ~~~ {e.Message} ~~~", ConsoleColor.DarkYellow);
+            CWL("  " + new string('~', 65), ConsoleColor.DarkYellow);
+        },
+    };
+
+    // ── Realtime state updates (per event type) ─────────────────────────
+
+    private static readonly Dictionary<string, Action<BattleLogEntry, Dictionary<string, CharDisplayState>>> _realtimeUpdate = new()
+    {
+        ["Damage"] = (e, states) =>
+        {
+            if (states.TryGetValue(e.ActorName, out var st))
+                st.Hp = e.TargetHpAfter ?? st.Hp;
+        },
+        ["DoTTick"] = (e, states) =>
+        {
+            if (states.TryGetValue(e.ActorName, out var st))
+                st.Hp = Math.Max(st.Hp - (e.DamageDealt ?? 0), -10);
+        },
+        ["TurnEnd"] = (e, states) =>
+        {
+            if (states.TryGetValue(e.ActorName, out var st))
+            { st.IsActive = false; st.Tm = e.TurnMeterAfter ?? st.Tm; }
+        },
+        ["Death"] = (e, states) =>
+        {
+            if (states.TryGetValue(e.ActorName, out var st))
+            { st.IsAlive = false; st.IsActive = false; }
+        },
+        ["KnockedOut"] = (e, states) =>
+        {
+            if (states.TryGetValue(e.ActorName, out var st))
+            { st.IsAlive = false; st.IsActive = false; }
+        },
+    };
+
+    // ── Realtime display delays (ms after each event) ──────────────────
+
+    private static readonly Dictionary<string, int> _realtimeDelay = new()
+    {
+        ["Attack"] = 500,
+        ["Damage"] = 800,
+        ["TurnStart"] = 200,
+        ["TurnEnd"] = 300,
+        ["DoTTick"] = 400,
+        ["EffectApplied"] = 300,
+        ["EffectExpired"] = 300,
+        ["SkippedTurn"] = 500,
+        ["Death"] = 1500,
+        ["KnockedOut"] = 1500,
+    };
+
+    // ── PlayTurnBased ───────────────────────────────────────────────────
 
     private static void PlayTurnBased()
     {
         var states = BuildDisplayStates();
         var turnEvents = new List<BattleLogEntry>();
+        var pendingMessages = new List<BattleLogEntry>();
         bool inTurn = false;
         int turnCount = 0;
         int turnTick = 0;
@@ -36,81 +164,8 @@ static partial class Demo
             Console.WriteLine();
 
             foreach (var e in turnEvents)
-            {
-                switch (e.EventType)
-                {
-                    case "TurnStart":
-                    {
-                        var verb = e.IsSpell == true ? "conjures" : "readies";
-                        CW("  >> ", ConsoleColor.DarkCyan);
-                        CW(e.ActorName, actSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
-                        CW($" {verb} ");
-                        CW($"[{e.AttackSourceName}]", e.IsSpell == true ? ConsoleColor.Magenta : ConsoleColor.Yellow);
-                        CW(" targeting ");
-                        CW(ts.TargetName ?? "?", tgtSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
-                        CWL("!", ConsoleColor.White);
-                        Console.WriteLine();
-                        break;
-                    }
-                    case "Attack":
-                        PrintAttack(e);
-                        break;
-                    case "Damage":
-                        Console.WriteLine();
-                        CW("  "); CW(e.ActorName, ConsoleColor.White);
-                        CW(" takes "); CW($"{e.DamageDealt}", ConsoleColor.Red);
-                        CWL($" damage   HP: {e.TargetHpBefore} -> {Math.Max(0, e.TargetHpAfter ?? 0)}", ConsoleColor.DarkGray);
-                        break;
-                    case "FumblePenalty":
-                        CWL($"\n  {e.Message}", ConsoleColor.DarkYellow);
-                        break;
-
-                    case "DoTTick":
-                        Console.WriteLine();
-                        CW("  ", ConsoleColor.DarkGray);
-                        CW(e.ActorName, CharColor(e.ActorName));
-                        CW($" suffers "); CW($"{e.DamageDealt}", ConsoleColor.Red);
-                        CWL($" {e.StatusEffectName ?? "DoT"} damage", ConsoleColor.DarkYellow);
-                        Thread.Sleep(400);
-                        break;
-
-                    case "EffectApplied":
-                        Console.WriteLine();
-                        CW("  ", ConsoleColor.DarkGray);
-                        CW(e.ActorName, CharColor(e.ActorName));
-                        CWL($" is afflicted with {e.StatusEffectName}!", ConsoleColor.DarkYellow);
-                        Thread.Sleep(300);
-                        break;
-
-                    case "SkippedTurn":
-                        Console.WriteLine();
-                        CW("  ", ConsoleColor.DarkGray);
-                        CW(e.ActorName, CharColor(e.ActorName));
-                        CWL($" is {e.Message.Split("is ")[^1]}", ConsoleColor.DarkYellow);
-                        Thread.Sleep(500);
-                        break;
-
-                    case "TurnEnd":
-                        if (states.TryGetValue(e.ActorName, out var endSt))
-                        { endSt.IsActive = false; endSt.Tm = e.TurnMeterAfter ?? endSt.Tm; }
-                        Console.WriteLine();
-                        CWL("  " + new string('-', 77), ConsoleColor.DarkGray);
-                        Thread.Sleep(300);
-                        break;
-                    case "Death":
-                        Console.WriteLine();
-                        CWL("  " + new string('*', 65), ConsoleColor.Red);
-                        CWL($"  *** {e.Message} ***", ConsoleColor.Red);
-                        CWL("  " + new string('*', 65), ConsoleColor.Red);
-                        break;
-                    case "KnockedOut":
-                        Console.WriteLine();
-                        CWL("  " + new string('~', 65), ConsoleColor.DarkYellow);
-                        CWL($"  ~~~ {e.Message} ~~~", ConsoleColor.DarkYellow);
-                        CWL("  " + new string('~', 65), ConsoleColor.DarkYellow);
-                        break;
-                }
-            }
+                if (_display.TryGetValue(e.EventType, out var handler))
+                    handler(e, states);
 
             Console.WriteLine();
             CWL("  " + new string('-', 77), ConsoleColor.DarkGray);
@@ -139,6 +194,11 @@ static partial class Demo
                     break;
 
                 case "TurnStart":
+                    if (pendingMessages.Count > 0)
+                    {
+                        turnEvents.InsertRange(0, pendingMessages);
+                        pendingMessages.Clear();
+                    }
                     FlushTurn();
                     inTurn = true;
                     turnCount++;
@@ -174,25 +234,15 @@ static partial class Demo
                 case "DoTTick":
                     if (states.TryGetValue(e.ActorName, out var dotSt))
                         dotSt.Hp = Math.Max(dotSt.Hp - (e.DamageDealt ?? 0), -10);
-                    Console.WriteLine();
-                    CW("  ", ConsoleColor.DarkGray);
-                    CW(e.ActorName, CharColor(e.ActorName));
-                    CW($" suffers "); CW($"{e.DamageDealt}", ConsoleColor.Red);
-                    CWL($" {e.StatusEffectName ?? "DoT"} damage", ConsoleColor.DarkYellow);
+                    if (inTurn) turnEvents.Add(e);
                     break;
 
                 case "EffectApplied":
-                    Console.WriteLine();
-                    CW("  ", ConsoleColor.DarkGray);
-                    CW(e.ActorName, CharColor(e.ActorName));
-                    CWL($" is afflicted with {e.StatusEffectName}!", ConsoleColor.DarkYellow);
+                    if (inTurn) turnEvents.Add(e);
                     break;
 
                 case "SkippedTurn":
-                    Console.WriteLine();
-                    CW("  ", ConsoleColor.DarkGray);
-                    CW(e.ActorName, CharColor(e.ActorName));
-                    CWL($" is {e.Message.Split("is ")[^1]}", ConsoleColor.DarkYellow);
+                    pendingMessages.Add(e);
                     break;
 
                 default:
@@ -201,11 +251,16 @@ static partial class Demo
             }
         }
 
+        if (pendingMessages.Count > 0)
+        {
+            turnEvents.InsertRange(0, pendingMessages);
+            pendingMessages.Clear();
+        }
         FlushTurn();
         ActiveActor = "";
     }
 
-    // ── PlayRealTime ──────────────────────────────────────────────────────────────
+    // ── PlayRealTime ────────────────────────────────────────────────────
 
     private static void PlayRealTime()
     {
@@ -264,83 +319,14 @@ static partial class Demo
 
             foreach (var e in entries)
             {
-                switch (e.EventType)
-                {
-                    case "TurnMeterGain":
-                        break;
+                if (_realtimeUpdate.TryGetValue(e.EventType, out var update))
+                    update(e, states);
 
-                    case "TurnStart":
-                    {
-                        var tgtSt = states.GetValueOrDefault(e.TargetName ?? "");
-                        var verb = e.IsSpell == true ? "conjures" : "readies";
-                        Console.WriteLine();
-                        CW("  >> ", ConsoleColor.DarkCyan);
-                        CW(e.ActorName, actSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
-                        CW($" {verb} ");
-                        CW($"[{e.AttackSourceName}]", e.IsSpell == true ? ConsoleColor.Magenta : ConsoleColor.Yellow);
-                        CW(" targeting ");
-                        CW(e.TargetName ?? "?", tgtSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
-                        CWL("!", ConsoleColor.White);
-                        Thread.Sleep(200);
-                        break;
-                    }
+                if (_display.TryGetValue(e.EventType, out var display))
+                    display(e, states);
 
-                    case "Attack":
-                        Thread.Sleep(500);
-                        PrintAttack(e);
-                        break;
-
-                    case "Damage":
-                    {
-                        Thread.Sleep(200);
-                        if (states.TryGetValue(e.ActorName, out var dmgSt))
-                            dmgSt.Hp = e.TargetHpAfter ?? dmgSt.Hp;
-                        Console.WriteLine();
-                        CW("  "); CW(e.ActorName, ConsoleColor.White);
-                        CW(" takes "); CW($"{e.DamageDealt}", ConsoleColor.Red);
-                        CWL($" damage   HP: {e.TargetHpBefore} -> {Math.Max(0, e.TargetHpAfter ?? 0)}", ConsoleColor.DarkGray);
-                        Thread.Sleep(800);
-                        break;
-                    }
-
-                    case "FumblePenalty":
-                        CWL($"  {e.Message}", ConsoleColor.DarkYellow);
-                        break;
-
-                    case "TurnEnd":
-                        if (states.TryGetValue(e.ActorName, out var endSt))
-                        { endSt.IsActive = false; endSt.Tm = e.TurnMeterAfter ?? endSt.Tm; }
-                        Console.WriteLine();
-                        CWL("  " + new string('-', 77), ConsoleColor.DarkGray);
-                        Thread.Sleep(300);
-                        break;
-
-                    case "Death":
-                    {
-                        if (states.TryGetValue(e.ActorName, out var deathSt))
-                        { deathSt.IsAlive = false; deathSt.IsActive = false; }
-                        Thread.Sleep(500);
-                        Console.WriteLine();
-                        CWL("  " + new string('*', 65), ConsoleColor.Red);
-                        CWL($"  *** {e.Message} ***", ConsoleColor.Red);
-                        CWL("  " + new string('*', 65), ConsoleColor.Red);
-                        Thread.Sleep(1500);
-                        break;
-                    }
-
-                    case "KnockedOut":
-                    {
-                        if (states.TryGetValue(e.ActorName, out var koSt))
-                        { koSt.IsAlive = false; koSt.IsActive = false; }
-                        Thread.Sleep(500);
-                        Console.WriteLine();
-                        CWL("  " + new string('~', 65), ConsoleColor.DarkYellow);
-                        CWL($"  ~~~ {e.Message} ~~~", ConsoleColor.DarkYellow);
-                        CWL("  " + new string('~', 65), ConsoleColor.DarkYellow);
-                        Thread.Sleep(1500);
-                        break;
-                    }
-                }
+                if (_realtimeDelay.TryGetValue(e.EventType, out var delay))
+                    Thread.Sleep(delay);
             }
         }
 
