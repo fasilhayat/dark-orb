@@ -131,7 +131,12 @@ public class BattleSimulator : IBattleSimulator
                 {
                     var hpBefore = target.CurrentHitPoints;
                     target.CurrentHitPoints -= result.Damage;
-                    await Notify(BuildDamageEntry(tick, target.Name, result.Damage, hpBefore, target.CurrentHitPoints));
+
+                    // Only emit a Damage event when damage actually got through.
+                    // A 0-damage hit (fully absorbed by armor mitigation) is already
+                    // communicated by the Attack event's IsHit=true — no separate entry.
+                    if (result.Damage > 0)
+                        await Notify(BuildDamageEntry(tick, target.Name, result.Damage, hpBefore, target.CurrentHitPoints));
 
                     if (target.CurrentHitPoints <= 0)
                     {
