@@ -1,6 +1,6 @@
-using Npgsql;
-
 namespace BattleArena.Infrastructure.Data;
+
+using Npgsql;
 
 public interface IDbContext
 {

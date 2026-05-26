@@ -1,10 +1,10 @@
-using BattleArena.Core.Entities;
-using BattleArena.Core.Entities.Enums;
-using BattleArena.Core.Interfaces;
-using BattleArena.Infrastructure.Data;
-using Npgsql;
-
 namespace BattleArena.Infrastructure.Repositories;
+
+using Core.Entities;
+using Core.Entities.Enums;
+using Core.Interfaces;
+using Infrastructure.Data;
+using Npgsql;
 
 public class ArmorRepository : IArmorRepository
 {

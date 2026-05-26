@@ -1,6 +1,6 @@
-using BattleArena.Core.Entities.Enums;
-
 namespace BattleArena.Application.Interfaces;
+
+using Core.Entities.Enums;
 
 public interface IDiceService
 {

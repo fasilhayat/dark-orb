@@ -1,6 +1,6 @@
-using BattleArena.Core.Entities.Enums;
-
 namespace BattleArena.Core.Entities;
+
+using Core.Entities.Enums;
 
 public class PlayerClass
 {

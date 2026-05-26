@@ -1,10 +1,10 @@
-using BattleArena.Application.Interfaces;
-using BattleArena.Application.Services;
-using BattleArena.Core.Interfaces;
-using BattleArena.Infrastructure.Data;
-using BattleArena.Infrastructure.Repositories;
-
 namespace BattleArena.Api;
+
+using Application.Interfaces;
+using Application.Services;
+using Core.Interfaces;
+using Infrastructure.Data;
+using Infrastructure.Repositories;
 
 public static class AddServices
 {
@@ -15,6 +15,9 @@ public static class AddServices
 
         services.AddScoped<IDbContext>(_ => new DbContext(connectionString));
         services.AddScoped<IDiceService, DiceService>();
+        services.AddScoped<ICombatStatsService, CombatStatsService>();
+        services.AddScoped<ITurnmeterService, TurnmeterService>();
+        services.AddScoped<IStatusEffectService, StatusEffectService>();
         services.AddScoped<ICombatService, CombatService>();
         services.AddScoped<ICharacterService, CharacterService>();
         services.AddScoped<ICharacterRepository, CharacterRepository>();

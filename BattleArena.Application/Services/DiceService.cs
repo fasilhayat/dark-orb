@@ -1,7 +1,7 @@
-using BattleArena.Application.Interfaces;
-using BattleArena.Core.Entities.Enums;
-
 namespace BattleArena.Application.Services;
+
+using Application.Interfaces;
+using Core.Entities.Enums;
 
 public class DiceService : IDiceService
 {

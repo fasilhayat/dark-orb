@@ -1,6 +1,6 @@
-using BattleArena.Core.Entities.Enums;
-
 namespace BattleArena.Core.Entities;
+
+using Core.Entities.Enums;
 
 public class Armor
 {
@@ -14,4 +14,6 @@ public class Armor
     public int StrengthRequirement { get; set; }
     public GearQuality Quality { get; set; } = GearQuality.Common;
     public int ArmorClassBonus { get; set; }
+    public int Mitigation { get; set; }
+    public int TurnMeterPenalty { get; set; }
 }

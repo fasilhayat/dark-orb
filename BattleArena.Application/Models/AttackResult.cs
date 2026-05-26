@@ -1,6 +1,7 @@
-using BattleArena.Core.Entities.Enums;
-
 namespace BattleArena.Application.Models;
+
+using Core.Entities;
+using Core.Entities.Enums;
 
 public class AttackResult
 {
@@ -15,4 +16,8 @@ public class AttackResult
     public int Damage { get; set; }
     public DieType DamageDie { get; set; }
     public string WeaponName { get; set; } = string.Empty;
+    public int AttackPower { get; set; }
+    public int DefensePower { get; set; }
+    public DamageContext? DamageContext { get; set; }
+    public List<StatusEffect> AppliedStatusEffects { get; set; } = new();
 }

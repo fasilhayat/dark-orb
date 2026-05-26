@@ -1,9 +1,9 @@
-using BattleArena.Core.Entities;
-using BattleArena.Core.Interfaces;
-using BattleArena.Infrastructure.Data;
-using Npgsql;
-
 namespace BattleArena.Infrastructure.Repositories;
+
+using Core.Entities;
+using Core.Interfaces;
+using Infrastructure.Data;
+using Npgsql;
 
 public class RaceRepository : IRaceRepository
 {

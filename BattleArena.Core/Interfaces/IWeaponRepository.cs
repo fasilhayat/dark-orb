@@ -1,7 +1,7 @@
-using BattleArena.Core.Entities;
-using BattleArena.Core.Entities.Enums;
-
 namespace BattleArena.Core.Interfaces;
+
+using Core.Entities;
+using Core.Entities.Enums;
 
 public interface IWeaponRepository
 {

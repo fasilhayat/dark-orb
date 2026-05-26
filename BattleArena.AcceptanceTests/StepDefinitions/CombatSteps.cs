@@ -1,10 +1,10 @@
 namespace BattleArena.ReqnrollTests.StepDefinitions;
 
-using BattleArena.Application.Interfaces;
-using BattleArena.Application.Models;
-using BattleArena.Application.Services;
-using BattleArena.Core.Entities;
-using BattleArena.Core.Entities.Enums;
+using Application.Interfaces;
+using Application.Models;
+using Application.Services;
+using Core.Entities;
+using Core.Entities.Enums;
 using NSubstitute;
 using Reqnroll;
 using Xunit;
@@ -23,7 +23,7 @@ public class CombatSteps
     public CombatSteps()
     {
         _dice = Substitute.For<IDiceService>();
-        _combat = new CombatService(_dice);
+        _combat = new CombatService(_dice, new CombatStatsService());
     }
 
     [Given(@"a character with strength (\d+) and strike rating (\d+)")]
@@ -69,7 +69,7 @@ public class CombatSteps
     [When(@"the character attacks a target with armor class (\d+)")]
     public void WhenTheCharacterAttacksATargetWithArmorClass(int armorClass)
     {
-        _attackResult = _combat.ResolveAttack(_character, armorClass, _weapon);
+        _attackResult = _combat.ResolveAttack(_character, CreateDefender(armorClass), _weapon);
     }
 
     [When(@"the character rolls damage for the weapon")]
@@ -131,6 +131,20 @@ public class CombatSteps
     {
         Assert.NotNull(_damageResult);
         Assert.Equal(ParseDieType(dieName), _damageResult.DieType);
+    }
+
+    private static Character CreateDefender(int targetArmorClass)
+    {
+        return new Character
+        {
+            Equipment = new ArmorSlots
+            {
+                Chest = new Armor
+                {
+                    ArmorClass = Math.Max(0, 20 - targetArmorClass)
+                }
+            }
+        };
     }
 
     private static DieType ParseDieType(string name) => name switch

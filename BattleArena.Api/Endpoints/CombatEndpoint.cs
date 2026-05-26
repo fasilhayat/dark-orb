@@ -1,9 +1,9 @@
-using BattleArena.Application.Interfaces;
-using BattleArena.Core.Entities;
-using BattleArena.Core.Entities.Enums;
-using BattleArena.Core.Interfaces;
-
 namespace BattleArena.Api.Endpoints;
+
+using Application.Interfaces;
+using Core.Entities;
+using Core.Entities.Enums;
+using Core.Interfaces;
 
 public static class CombatEndpoint
 {
@@ -46,9 +46,25 @@ public static class CombatEndpoint
                 Strength = 10,
                 StrikeRating = 20
             };
+            var defender = CreateDefender(targetAc);
 
-            var result = combat.ResolveAttack(attacker, targetAc, weapon);
+            var result = combat.ResolveAttack(attacker, defender, weapon);
             return Results.Ok(result);
         });
+    }
+
+    private static Character CreateDefender(int targetAc)
+    {
+        return new Character
+        {
+            Name = "Defender",
+            Equipment = new ArmorSlots
+            {
+                Chest = new Armor
+                {
+                    ArmorClass = Math.Max(0, 20 - targetAc)
+                }
+            }
+        };
     }
 }

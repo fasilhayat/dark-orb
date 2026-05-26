@@ -1,17 +1,19 @@
-using BattleArena.Application.Interfaces;
-using BattleArena.Application.Models;
-using BattleArena.Core.Entities;
-using BattleArena.Core.Entities.Enums;
-
 namespace BattleArena.Application.Services;
+
+using Application.Interfaces;
+using Application.Models;
+using Core.Entities;
+using Core.Entities.Enums;
 
 public class CombatService : ICombatService
 {
     private readonly IDiceService _dice;
+    private readonly ICombatStatsService _combatStats;
 
-    public CombatService(IDiceService dice)
+    public CombatService(IDiceService dice, ICombatStatsService combatStats)
     {
         _dice = dice;
+        _combatStats = combatStats;
     }
 
     public int CalculateAbilityModifier(int score)
@@ -29,12 +31,12 @@ public class CombatService : ICombatService
         };
     }
 
-    public AttackResult ResolveAttack(Character attacker, int targetArmorClass, Weapon weapon)
+    public AttackResult ResolveAttack(Character attacker, Character defender, Weapon weapon)
     {
+        var attackerStats = _combatStats.ComputeAttackerStats(attacker, weapon);
+        var defenderStats = _combatStats.ComputeDefenderStats(defender);
         var hitRoll = _dice.Roll(DieType.D20);
-        var strMod = CalculateAbilityModifier(attacker.Strength);
 
-        // Natural 1 is always a fumble: auto-miss with a -2 AttackPower penalty next turn.
         if (hitRoll == 1)
         {
             return new AttackResult
@@ -45,44 +47,73 @@ public class CombatService : ICombatService
                 AttackPowerPenalty = -2,
                 Damage = 0,
                 DamageDie = weapon.DamageDie,
-                WeaponName = weapon.Name
+                WeaponName = weapon.Name,
+                AttackPower = attackerStats.AttackPower,
+                DefensePower = defenderStats.DefensePower
             };
         }
 
-        // Natural 20 is always a critical hit: auto-hit with damage doubled.
         if (hitRoll == 20)
         {
-            var damageRoll = RollDamage(weapon);
-            var critDamage = (damageRoll.Result + strMod) * 2;
+            var damageContext = ResolveDamage(attacker, defender, weapon, isCritical: true);
             return new AttackResult
             {
                 HitRoll = hitRoll,
                 IsHit = true,
                 IsCriticalHit = true,
-                Damage = Math.Max(0, critDamage),
+                Damage = damageContext.FinalDamage,
                 DamageDie = weapon.DamageDie,
-                WeaponName = weapon.Name
+                WeaponName = weapon.Name,
+                AttackPower = attackerStats.AttackPower,
+                DefensePower = defenderStats.DefensePower,
+                DamageContext = damageContext
             };
         }
 
-        var totalAttack = hitRoll + strMod + weapon.AttackBonus;
-        // An attack hits when the total attack roll meets or exceeds the target's armor class.
-        var isHit = totalAttack >= targetArmorClass;
-
-        var damage = 0;
-        if (isHit)
-        {
-            var damageRoll = RollDamage(weapon);
-            damage = damageRoll.Result + strMod;
-        }
+        var totalAttack = hitRoll + attackerStats.AttackPower;
+        var isHit = totalAttack >= defenderStats.DefensePower;
+        var damageContextOnHit = isHit ? ResolveDamage(attacker, defender, weapon) : null;
 
         return new AttackResult
         {
             HitRoll = hitRoll,
             IsHit = isHit,
-            Damage = Math.Max(0, damage),
+            Damage = damageContextOnHit?.FinalDamage ?? 0,
             DamageDie = weapon.DamageDie,
-            WeaponName = weapon.Name
+            WeaponName = weapon.Name,
+            AttackPower = attackerStats.AttackPower,
+            DefensePower = defenderStats.DefensePower,
+            DamageContext = damageContextOnHit
         };
+    }
+
+    public DamageContext ResolveDamage(Character attacker, Character defender, Weapon weapon, bool isCritical = false)
+    {
+        var attributeModifier = CalculateAbilityModifier(weapon.AttackType == AttackType.Ranged ? attacker.Dexterity : attacker.Strength);
+        var weaponDiceRoll = RollWeaponDamageTotal(weapon);
+        var baseDamage = weaponDiceRoll + attributeModifier + weapon.FlatDamageBonus;
+        var typeMultiplier = defender.Vulnerabilities.Contains(weapon.DamageType) ? 1.5f : 1.0f;
+        var scaledBaseDamage = isCritical ? baseDamage * 2 : baseDamage;
+        var finalDamage = Math.Max(0, (int)(scaledBaseDamage * typeMultiplier) - defender.Equipment.TotalMitigation + weapon.ElementalDamage);
+
+        return new DamageContext
+        {
+            WeaponDiceRoll = weaponDiceRoll,
+            AttributeModifier = attributeModifier,
+            FlatBonuses = weapon.FlatDamageBonus,
+            BaseDamage = baseDamage,
+            TypeMultiplier = typeMultiplier,
+            ArmorMitigation = defender.Equipment.TotalMitigation,
+            ElementalModifiers = weapon.ElementalDamage,
+            FinalDamage = finalDamage
+        };
+    }
+
+    private int RollWeaponDamageTotal(Weapon weapon)
+    {
+        var total = 0;
+        for (var i = 0; i < weapon.DamageCount; i++)
+            total += _dice.Roll(weapon.DamageDie);
+        return total;
     }
 }

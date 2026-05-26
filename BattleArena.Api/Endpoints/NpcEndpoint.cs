@@ -1,6 +1,6 @@
-using BattleArena.Core.Interfaces;
-
 namespace BattleArena.Api.Endpoints;
+
+using Core.Interfaces;
 
 public static class NpcEndpoint
 {

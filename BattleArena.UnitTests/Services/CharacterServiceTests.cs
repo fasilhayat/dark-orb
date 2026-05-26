@@ -1,10 +1,10 @@
-using BattleArena.Application.Interfaces;
-using BattleArena.Application.Services;
-using BattleArena.Core.Entities;
-using BattleArena.Core.Interfaces;
-using NSubstitute;
-
 namespace BattleArena.UnitTests.Services;
+
+using Application.Interfaces;
+using Application.Services;
+using Core.Entities;
+using Core.Interfaces;
+using NSubstitute;
 
 public class CharacterServiceTests
 {

@@ -13,4 +13,6 @@ public class SetBonus
     public int SetId { get; set; }
     public int PiecesRequired { get; set; }
     public string EffectDescription { get; set; } = string.Empty;
+    public int AttackBonus { get; set; }
+    public int DefenseBonus { get; set; }
 }

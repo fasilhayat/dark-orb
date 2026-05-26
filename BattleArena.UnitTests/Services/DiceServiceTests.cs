@@ -1,7 +1,7 @@
-using BattleArena.Application.Services;
-using BattleArena.Core.Entities.Enums;
-
 namespace BattleArena.UnitTests.Services;
+
+using Application.Services;
+using Core.Entities.Enums;
 
 public class DiceServiceTests
 {

@@ -1,6 +1,6 @@
-using BattleArena.Core.Entities.Enums;
-
 namespace BattleArena.Application.Models;
+
+using Core.Entities.Enums;
 
 public class DamageRollResult
 {

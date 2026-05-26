@@ -6,4 +6,6 @@ public class Feat
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public int? RaceId { get; set; }
+    public int AttackBonus { get; set; }
+    public int DefenseBonus { get; set; }
 }

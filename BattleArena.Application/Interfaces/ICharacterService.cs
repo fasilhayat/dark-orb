@@ -1,6 +1,6 @@
-using BattleArena.Core.Entities;
-
 namespace BattleArena.Application.Interfaces;
+
+using Core.Entities;
 
 public interface ICharacterService
 {

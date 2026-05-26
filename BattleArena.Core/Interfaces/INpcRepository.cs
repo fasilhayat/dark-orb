@@ -1,6 +1,6 @@
-using BattleArena.Core.Entities;
-
 namespace BattleArena.Core.Interfaces;
+
+using Core.Entities;
 
 public interface INpcRepository
 {

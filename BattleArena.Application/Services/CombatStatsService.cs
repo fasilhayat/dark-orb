@@ -1,0 +1,90 @@
+namespace BattleArena.Application.Services;
+
+using Application.Interfaces;
+using Application.Models;
+using Core.Entities;
+using Core.Entities.Enums;
+
+public class CombatStatsService : ICombatStatsService
+{
+    public CombatantStats ComputeAttackerStats(Character attacker, Weapon weapon)
+    {
+        var attackEffects = attacker.ActiveStatusEffects.Where(e => e.AttackPowerModifier != 0).ToList();
+        var positiveBuffs = attackEffects.Where(e => e.AttackPowerModifier > 0).ToList();
+        var negativeBuffs = attackEffects.Where(e => e.AttackPowerModifier < 0).Sum(e => e.AttackPowerModifier);
+
+        return new CombatantStats
+        {
+            ClassAccuracyBase = 20 - attacker.StrikeRating,
+            LevelScaling = attacker.Level,
+            AttributeModifier = CalculateAbilityModifier(weapon.AttackType == AttackType.Ranged ? attacker.Dexterity : attacker.Strength),
+            WeaponAttackBonus = weapon.AttackBonus,
+            SkillModifiers = attacker.Feats.Sum(f => f.AttackBonus),
+            BuffModifiers =
+                ApplyBuffStacking(positiveBuffs.Where(e => e.StackRule == StackRule.Stack), e => e.AttackPowerModifier, StackRule.Stack) +
+                ApplyBuffStacking(positiveBuffs.Where(e => e.StackRule == StackRule.HighestWins), e => e.AttackPowerModifier, StackRule.HighestWins) +
+                ApplyBuffStacking(positiveBuffs.Where(e => e.StackRule == StackRule.NoStack), e => e.AttackPowerModifier, StackRule.NoStack) +
+                negativeBuffs,
+            RacialModifiers = attacker.Race?.Feats.Sum(f => f.AttackBonus) ?? 0,
+            ItemSetBonuses = 0
+        };
+    }
+
+    public CombatantStats ComputeDefenderStats(Character defender)
+    {
+        var dexterityModifier = CalculateAbilityModifier(defender.Dexterity);
+        var armorPieces = new[]
+        {
+            defender.Equipment.Head,
+            defender.Equipment.Chest,
+            defender.Equipment.Hands,
+            defender.Equipment.Waist,
+            defender.Equipment.Boots,
+            defender.Equipment.Neck,
+            defender.Equipment.Back
+        }.Where(a => a is not null).ToList();
+
+        if (armorPieces.Count > 0)
+        {
+            var maxDexterityBonus = armorPieces.Sum(a => a!.MaxDexterityBonus);
+            dexterityModifier = Math.Min(dexterityModifier, maxDexterityBonus);
+        }
+
+        var defenseEffects = defender.ActiveStatusEffects.Where(e => e.DefensePowerModifier != 0).ToList();
+        var positiveBuffs = defenseEffects.Where(e => e.Type == StatusEffectType.Buff && e.DefensePowerModifier > 0);
+        var positiveBuffTotal = positiveBuffs
+            .GroupBy(e => e.Source)
+            .Sum(group => ApplyBuffStacking(group, e => e.DefensePowerModifier, StackRule.HighestWins));
+        var negativeDebuffs = defenseEffects.Where(e => e.DefensePowerModifier < 0).Sum(e => e.DefensePowerModifier);
+
+        return new CombatantStats
+        {
+            EffectiveAC = 20 - defender.Equipment.TotalArmorClass,
+            DexterityModifier = dexterityModifier,
+            ShieldBonus = defender.Equipment.Shield?.DefenseBonus ?? 0,
+            DefensiveBuffs = positiveBuffTotal + negativeDebuffs,
+            DefenseRacialModifiers = (defender.Race?.Feats.Sum(f => f.DefenseBonus) ?? 0) + defender.Feats.Sum(f => f.DefenseBonus),
+            DefenseItemSetBonuses = 0
+        };
+    }
+
+    private static int ApplyBuffStacking(IEnumerable<StatusEffect> effects, Func<StatusEffect, int> selector, StackRule rule)
+    {
+        var effectList = effects.ToList();
+        if (effectList.Count == 0)
+            return 0;
+
+        if (effectList.All(e => selector(e) < 0))
+            return effectList.Sum(selector);
+
+        return rule switch
+        {
+            StackRule.Stack => effectList.Sum(selector),
+            StackRule.HighestWins => effectList.Max(selector),
+            StackRule.NoStack => selector(effectList[0]),
+            _ => 0
+        };
+    }
+
+    private static int CalculateAbilityModifier(int score) => (score - 10) / 2;
+}

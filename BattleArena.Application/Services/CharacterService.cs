@@ -1,8 +1,8 @@
-using BattleArena.Application.Interfaces;
-using BattleArena.Core.Entities;
-using BattleArena.Core.Interfaces;
-
 namespace BattleArena.Application.Services;
+
+using Application.Interfaces;
+using Core.Entities;
+using Core.Interfaces;
 
 public class CharacterService : ICharacterService
 {

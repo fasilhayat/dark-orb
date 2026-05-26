@@ -1,5 +1,7 @@
 namespace BattleArena.Core.Entities;
 
+using Core.Entities.Enums;
+
 public class Character
 {
     public int Id { get; set; }
@@ -21,4 +23,6 @@ public class Character
     public ArmorSlots Equipment { get; set; } = new();
     public Race? Race { get; set; }
     public List<Feat> Feats { get; set; } = new();
+    public List<StatusEffect> ActiveStatusEffects { get; set; } = new();
+    public List<DamageType> Vulnerabilities { get; set; } = new();
 }
