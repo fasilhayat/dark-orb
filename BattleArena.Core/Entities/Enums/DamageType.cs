@@ -7,5 +7,6 @@ public enum DamageType
     Slashing,
     Fire,
     Cold,
-    Lightning
+    Lightning,
+    Acid
 }

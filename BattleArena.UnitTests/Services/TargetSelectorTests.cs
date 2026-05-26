@@ -342,12 +342,16 @@ public class TargetSelectorTests
                 Party.Solo(em.Character, em.AttackSource));
     }
 
-    private static BattleSimulator BuildSimulator(ITargetSelector heroSel, ITargetSelector enemySel) =>
-        new(new CombatService(new DiceService(), new CombatStatsService()),
+    private static BattleSimulator BuildSimulator(ITargetSelector heroSel, ITargetSelector enemySel)
+    {
+        var dice = new DiceService();
+        return new(new CombatService(dice, new CombatStatsService()),
             new TurnmeterService(),
             new StatusEffectService(),
+            dice,
             heroSel,
             enemySel);
+    }
 
     /// Configures a mock selector to pass through to the first available target.
     private static void SetupPassThrough(ITargetSelector mock) =>

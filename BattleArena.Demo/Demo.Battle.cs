@@ -64,6 +64,39 @@ static partial class Demo
                     case "FumblePenalty":
                         CWL($"\n  {e.Message}", ConsoleColor.DarkYellow);
                         break;
+
+                    case "DoTTick":
+                        Console.WriteLine();
+                        CW("  ", ConsoleColor.DarkGray);
+                        CW(e.ActorName, CharColor(e.ActorName));
+                        CW($" suffers "); CW($"{e.DamageDealt}", ConsoleColor.Red);
+                        CWL($" {e.StatusEffectName ?? "DoT"} damage", ConsoleColor.DarkYellow);
+                        Thread.Sleep(400);
+                        break;
+
+                    case "EffectApplied":
+                        Console.WriteLine();
+                        CW("  ", ConsoleColor.DarkGray);
+                        CW(e.ActorName, CharColor(e.ActorName));
+                        CWL($" is afflicted with {e.StatusEffectName}!", ConsoleColor.DarkYellow);
+                        Thread.Sleep(300);
+                        break;
+
+                    case "SkippedTurn":
+                        Console.WriteLine();
+                        CW("  ", ConsoleColor.DarkGray);
+                        CW(e.ActorName, CharColor(e.ActorName));
+                        CWL($" is {e.Message.Split("is ")[^1]}", ConsoleColor.DarkYellow);
+                        Thread.Sleep(500);
+                        break;
+
+                    case "TurnEnd":
+                        if (states.TryGetValue(e.ActorName, out var endSt))
+                        { endSt.IsActive = false; endSt.Tm = e.TurnMeterAfter ?? endSt.Tm; }
+                        Console.WriteLine();
+                        CWL("  " + new string('-', 77), ConsoleColor.DarkGray);
+                        Thread.Sleep(300);
+                        break;
                     case "Death":
                         Console.WriteLine();
                         CWL("  " + new string('*', 65), ConsoleColor.Red);
@@ -136,6 +169,30 @@ static partial class Demo
                 case "TurnEnd":
                     if (states.TryGetValue(e.ActorName, out var endSt))
                     { endSt.IsActive = false; endSt.Tm = e.TurnMeterAfter ?? endSt.Tm; }
+                    break;
+
+                case "DoTTick":
+                    if (states.TryGetValue(e.ActorName, out var dotSt))
+                        dotSt.Hp = Math.Max(dotSt.Hp - (e.DamageDealt ?? 0), -10);
+                    Console.WriteLine();
+                    CW("  ", ConsoleColor.DarkGray);
+                    CW(e.ActorName, CharColor(e.ActorName));
+                    CW($" suffers "); CW($"{e.DamageDealt}", ConsoleColor.Red);
+                    CWL($" {e.StatusEffectName ?? "DoT"} damage", ConsoleColor.DarkYellow);
+                    break;
+
+                case "EffectApplied":
+                    Console.WriteLine();
+                    CW("  ", ConsoleColor.DarkGray);
+                    CW(e.ActorName, CharColor(e.ActorName));
+                    CWL($" is afflicted with {e.StatusEffectName}!", ConsoleColor.DarkYellow);
+                    break;
+
+                case "SkippedTurn":
+                    Console.WriteLine();
+                    CW("  ", ConsoleColor.DarkGray);
+                    CW(e.ActorName, CharColor(e.ActorName));
+                    CWL($" is {e.Message.Split("is ")[^1]}", ConsoleColor.DarkYellow);
                     break;
 
                 default:

@@ -30,7 +30,7 @@ public class FullBattleSteps
         var combat = new CombatService(dice, combatStats);
         var turnmeter = new TurnmeterService();
         var statusEffect = new StatusEffectService();
-        _simulator = new BattleSimulator(combat, turnmeter, statusEffect);
+        _simulator = new BattleSimulator(combat, turnmeter, statusEffect, dice);
     }
 
     // ── Character setup ────────────────────────────────────────────────────────

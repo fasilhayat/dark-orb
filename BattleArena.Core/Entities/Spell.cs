@@ -19,4 +19,5 @@ public class Spell : IAttackSource
     public ElementalType ElementalType { get; set; } = ElementalType.None;
     public int ElementalDamage { get; set; }
     public bool UsesIntelligence => true;
+    public List<StatusEffect> OnHitEffects { get; set; } = new();
 }

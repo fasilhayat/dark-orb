@@ -16,4 +16,7 @@ public class StatusEffect
     public int DefensePowerModifier { get; set; }
     public int TurnMeterModifier { get; set; }
     public int DamagePerTurn { get; set; }
+    public int ApplicationChance { get; set; } = 100;
+    public int DoTDamageCount { get; set; }
+    public DieType DoTDamageDie { get; set; }
 }

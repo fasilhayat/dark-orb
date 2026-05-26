@@ -42,4 +42,7 @@ public class BattleLogEntry
 
     // The name of the character being targeted (present on TurnStart and Attack events).
     public string? TargetName { get; set; }
+
+    // Name of a status effect involved in this event (present on DoTTick, EffectApplied events).
+    public string? StatusEffectName { get; set; }
 }

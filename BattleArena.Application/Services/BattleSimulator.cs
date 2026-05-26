@@ -19,6 +19,7 @@ public class BattleSimulator : IBattleSimulator
     private readonly ICombatService       _combat;
     private readonly ITurnmeterService    _turnmeter;
     private readonly IStatusEffectService _statusEffect;
+    private readonly IDiceService         _dice;
     // Separate selectors so hero and enemy parties can use different strategies.
     private readonly ITargetSelector      _heroTargetSelector;
     private readonly ITargetSelector      _enemyTargetSelector;
@@ -27,12 +28,14 @@ public class BattleSimulator : IBattleSimulator
         ICombatService combat,
         ITurnmeterService turnmeter,
         IStatusEffectService statusEffect,
+        IDiceService dice,
         ITargetSelector? heroTargetSelector  = null,
         ITargetSelector? enemyTargetSelector = null)
     {
         _combat              = combat;
         _turnmeter           = turnmeter;
         _statusEffect        = statusEffect;
+        _dice                = dice;
         _heroTargetSelector  = heroTargetSelector  ?? new RandomTargetSelector();
         _enemyTargetSelector = enemyTargetSelector ?? new RandomTargetSelector();
     }
@@ -63,6 +66,41 @@ public class BattleSimulator : IBattleSimulator
         {
             ct.ThrowIfCancellationRequested();
 
+            // ── DOT PHASE: tick DamageOverTime effects on all living combatants ──
+            foreach (var s in states.Where(s => s.Character.IsAlive))
+            {
+                var dotDmg = _statusEffect.TickDoT(s.Character);
+                if (dotDmg > 0)
+                {
+                    var dotName = s.Character.ActiveStatusEffects.FirstOrDefault(
+                        e => e.Type == StatusEffectType.DamageOverTime)?.Name ?? "DoT";
+                    await Notify(new BattleLogEntry
+                    {
+                        Tick             = tick,
+                        ActorName        = s.Character.Name,
+                        EventType        = "DoTTick",
+                        DamageDealt      = dotDmg,
+                        StatusEffectName = dotName,
+                        Message          = $"{s.Character.Name} suffers {dotDmg} {dotName} damage."
+                    });
+
+                    if (s.Character.CurrentHitPoints <= 0)
+                    {
+                        await Notify(BuildDefeatEntry(tick, s.Character));
+                        var opposingParty = s.PartyIndex == 0 ? enemyParty : heroParty;
+                        if (opposingParty.IsDefeated)
+                            return new BattleResult
+                            {
+                                WinningParty = s.PartyIndex == 0 ? heroParty : enemyParty,
+                                LosingParty  = opposingParty,
+                                LoserStatus  = s.Character.VitalStatus,
+                                TotalTicks   = tick,
+                                Log          = log
+                            };
+                    }
+                }
+            }
+
             // ── TICK: advance meters for every living combatant ────────────────
             foreach (var s in states.Where(s => s.Character.IsAlive))
             {
@@ -71,11 +109,24 @@ public class BattleSimulator : IBattleSimulator
                 await Notify(BuildTurnMeterGainEntry(tick, s));
             }
 
-            // ── ACTING ORDER: all ready combatants, highest meter first ────────
+            // ── ACTING ORDER: all ready combatants not CC'd, highest meter first ──
             var acting = states
-                .Where(s => s.Character.IsAlive && s.Meter.IsReady)
+                .Where(s => s.Character.IsAlive && s.Meter.IsReady && !IsCrowdControlled(s.Character))
                 .OrderByDescending(s => s.Meter.CurrentValue)
                 .ToList();
+
+            // Log skipped turns for CC'd characters who are ready but cannot act
+            foreach (var s in states.Where(s =>
+                s.Character.IsAlive && s.Meter.IsReady && IsCrowdControlled(s.Character)))
+            {
+                await Notify(new BattleLogEntry
+                {
+                    Tick      = tick,
+                    ActorName = s.Character.Name,
+                    EventType = "SkippedTurn",
+                    Message   = $"{s.Character.Name} is {GetCrowdControlLabel(s.Character)} and cannot act!"
+                });
+            }
 
             if (acting.Count == 0) continue;
 
@@ -137,6 +188,44 @@ public class BattleSimulator : IBattleSimulator
                     // communicated by the Attack event's IsHit=true — no separate entry.
                     if (result.Damage > 0)
                         await Notify(BuildDamageEntry(tick, target.Name, result.Damage, hpBefore, target.CurrentHitPoints));
+
+                    // ── ON-HIT EFFECTS (spell after-effects) ──────────────────
+                    if (attackSource is Spell spell && spell.OnHitEffects.Count > 0)
+                    {
+                        foreach (var template in spell.OnHitEffects)
+                        {
+                            if (Random.Shared.Next(100) >= template.ApplicationChance)
+                                continue;
+
+                            var dmgPerTurn = template.DamagePerTurn;
+                            if (dmgPerTurn <= 0 && template.DoTDamageCount > 0)
+                                for (var i = 0; i < template.DoTDamageCount; i++)
+                                    dmgPerTurn += RollDie(template.DoTDamageDie);
+
+                            var effect = new StatusEffect
+                            {
+                                Name                = template.Name,
+                                Type                = template.Type,
+                                Duration            = template.Duration,
+                                DamagePerTurn       = dmgPerTurn,
+                                AttackPowerModifier = template.AttackPowerModifier,
+                                DefensePowerModifier = template.DefensePowerModifier,
+                                TurnMeterModifier   = template.TurnMeterModifier,
+                                StackRule           = template.StackRule,
+                                Source              = spell.Name
+                            };
+                            _statusEffect.Apply(target, effect);
+
+                            await Notify(new BattleLogEntry
+                            {
+                                Tick             = tick,
+                                ActorName        = target.Name,
+                                EventType        = "EffectApplied",
+                                StatusEffectName = effect.Name,
+                                Message          = $"{target.Name} is afflicted with {effect.Name}!"
+                            });
+                        }
+                    }
 
                     if (target.CurrentHitPoints <= 0)
                     {
@@ -338,6 +427,35 @@ public class BattleSimulator : IBattleSimulator
         TargetHpBefore = hpBefore,
         TargetHpAfter  = hpAfter,
         Message        = $"{targetName} takes {damage} damage.  HP: {hpBefore} -> {hpAfter}"
+    };
+
+    // ── Status effect helpers ─────────────────────────────────────────────────
+
+    private bool IsCrowdControlled(Character character) =>
+        _statusEffect.HasEffectType(character, StatusEffectType.Stun) ||
+        _statusEffect.HasEffectType(character, StatusEffectType.Root);
+
+    private static string GetCrowdControlLabel(Character character)
+    {
+        var effect = character.ActiveStatusEffects.FirstOrDefault(
+            e => e.Type is StatusEffectType.Stun or StatusEffectType.Root);
+        return effect?.Type switch
+        {
+            StatusEffectType.Stun => "stunned",
+            StatusEffectType.Root => "rooted",
+            _                     => "crowd-controlled"
+        };
+    }
+
+    private int RollDie(DieType die) => die switch
+    {
+        DieType.D4  => Random.Shared.Next(1, 5),
+        DieType.D6  => Random.Shared.Next(1, 7),
+        DieType.D8  => Random.Shared.Next(1, 9),
+        DieType.D10 => Random.Shared.Next(1, 11),
+        DieType.D12 => Random.Shared.Next(1, 13),
+        DieType.D20 => Random.Shared.Next(1, 21),
+        _           => 0
     };
 
     // Tracks per-combatant state during a simulation run.

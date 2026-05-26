@@ -28,7 +28,8 @@ public class LevelingService
         IReadOnlyCollection<BattleLogEntry> log,
         int totalTicks)
     {
-        var baseXp = enemies.Sum(e => e.Level) * XpMultiplier;
+        var enemyList = enemies.ToList();
+        var baseXp = enemyList.Sum(e => e.Level) * XpMultiplier;
         var partyNames = party.Select(c => c.Name).ToHashSet();
 
         var partyCrits = log.Count(e =>
@@ -36,13 +37,14 @@ public class LevelingService
         var partyFumbles = log.Count(e =>
             e.EventType == "Attack" && e.IsFumble == true && partyNames.Contains(e.ActorName));
 
-        var expectedRounds = Math.Max(1, (party.Count() + enemies.Count()) * 2);
+        var expectedRounds = Math.Max(1, (party.Count() + enemyList.Count) * 2);
         var ratio = (double)totalTicks / expectedRounds;
         var roundFactor = 1.0 + Math.Abs(ratio - 1.0) * RoundFactorK;
         roundFactor = Math.Clamp(roundFactor, RoundFactorMin, RoundFactorMax);
 
         var totalXp = (int)(baseXp * roundFactor) + (partyCrits - partyFumbles) * CritBonus;
-        return Math.Max(0, totalXp);
+        var minimumXp = enemyList.Sum(e => e.Level);
+        return Math.Max(minimumXp, totalXp);
     }
 
     // Splits XP among survivors (rounds down). Dead/KO'd members get nothing.

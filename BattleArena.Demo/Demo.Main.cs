@@ -119,10 +119,12 @@ static partial class Demo
             }
         }
 
+        var diceSvc = new DiceService();
         var simulator = new BattleSimulator(
-            new CombatService(new DiceService(), CombatStats),
+            new CombatService(diceSvc, CombatStats),
             new TurnmeterService(),
             new StatusEffectService(),
+            diceSvc,
             heroSelector,
             enemySelector);
 
@@ -282,9 +284,11 @@ static partial class Demo
     private static void AwardBattleXp()
     {
         var svc = new LevelingService();
-        var party = HeroParty.Members.Select(m => m.Character);
-        var enemies = EnemyParty.Members.Select(m => m.Character);
-        var awards = svc.AwardBattleXp(party, enemies, Result.Log, Result.TotalTicks);
+        if (Result.WinningParty is null || Result.LosingParty is null) return;
+
+        var winners = Result.WinningParty.Members.Select(m => m.Character);
+        var losers  = Result.LosingParty.Members.Select(m => m.Character);
+        var awards  = svc.AwardBattleXp(winners, losers, Result.Log, Result.TotalTicks);
 
         Console.WriteLine();
         CWL("  " + new string('=', 62), ConsoleColor.Cyan);
@@ -295,19 +299,16 @@ static partial class Demo
         foreach (var (name, xp) in awards)
         {
             total += xp;
-            var ch = party.FirstOrDefault(c => c.Name == name);
+            var ch = winners.FirstOrDefault(c => c.Name == name);
             if (ch is null) continue;
-            var oldLevel = ch.Level;
-            _ = svc.EffectiveStrikeRating(ch);
-            _ = svc.AccessorySlotCount(ch);
             CW($"  {name,-12}", ConsoleColor.White);
             CW($"+{xp,3} XP  ", ConsoleColor.Green);
             CW($"Level {ch.Level}", ConsoleColor.Cyan);
             Console.WriteLine();
         }
 
-        foreach (var c in party.Where(c => !c.IsAlive))
-            CWL($"  {c.Name,-12}  -    XP  (unconscious/dead)", ConsoleColor.DarkGray);
+        foreach (var c in losers)
+            CWL($"  {c.Name,-12}  -    XP  (defeated)", ConsoleColor.DarkGray);
 
         CWL($"\n  Total XP awarded: {total}", ConsoleColor.Yellow);
         CWL("  " + new string('=', 62) + "\n", ConsoleColor.Cyan);

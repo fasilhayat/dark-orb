@@ -8,5 +8,6 @@ public enum ElementalType
     Lightning,
     Poison,
     Holy,
-    Shadow
+    Shadow,
+    Acid
 }

@@ -184,7 +184,7 @@ public class LevelingServiceTests
     }
 
     [Fact]
-    public void ComputeBattleXp_NegativeXpFromFumbles_ClampsAtZero()
+    public void ComputeBattleXp_NegativeXpFromFumbles_ClampsAtMinimum()
     {
         var party = new[] { MakeChar("Hero", 1) };
         var enemies = new[] { MakeChar("Rat", 1) };
@@ -198,7 +198,7 @@ public class LevelingServiceTests
 
         var xp = _sut.ComputeBattleXp(party, enemies, log, ticks);
 
-        Assert.Equal(0, xp);
+        Assert.Equal(1, xp);
     }
 
     [Fact]

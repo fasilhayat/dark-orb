@@ -46,6 +46,27 @@ public class StatusEffectService : IStatusEffectService
         }
     }
 
+    public int TickDoT(Character target)
+    {
+        var total = 0;
+        foreach (var effect in target.ActiveStatusEffects
+            .Where(e => e.Type == StatusEffectType.DamageOverTime && e.DamagePerTurn > 0)
+            .ToList())
+        {
+            target.CurrentHitPoints -= effect.DamagePerTurn;
+            total += effect.DamagePerTurn;
+            effect.Duration--;
+            if (effect.Duration <= 0)
+                target.ActiveStatusEffects.Remove(effect);
+        }
+        return total;
+    }
+
+    public bool HasEffectType(Character target, StatusEffectType type)
+    {
+        return target.ActiveStatusEffects.Any(e => e.Type == type);
+    }
+
     public void Remove(Character target, string effectName)
     {
         target.ActiveStatusEffects.RemoveAll(e => e.Name == effectName);

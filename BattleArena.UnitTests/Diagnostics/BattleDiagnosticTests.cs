@@ -18,10 +18,14 @@ using Xunit.Abstractions;
 public class BattleDiagnosticTests(ITestOutputHelper out_)
 {
     // ── Service stack (all real, no mocks) ────────────────────────────────────
-    private static BattleSimulator BuildSim() =>
-        new(new CombatService(new DiceService(), new CombatStatsService()),
+    private static BattleSimulator BuildSim()
+    {
+        var dice = new DiceService();
+        return new(new CombatService(dice, new CombatStatsService()),
             new TurnmeterService(),
-            new StatusEffectService());
+            new StatusEffectService(),
+            dice);
+    }
 
     // ── Character factory helpers ─────────────────────────────────────────────
 
