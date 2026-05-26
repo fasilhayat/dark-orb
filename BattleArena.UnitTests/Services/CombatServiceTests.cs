@@ -102,13 +102,74 @@ public class CombatServiceTests
             DamageDie = DieType.D4
         };
 
-        _dice.Roll(DieType.D20).Returns(20);
+        _dice.Roll(DieType.D20).Returns(10);
         _dice.Roll(DieType.D4).Returns(1);
 
         var result = _sut.ResolveAttack(attacker, 5, weapon);
 
         Assert.True(result.IsHit);
         Assert.Equal(0, result.Damage); // 1 + (-2) = -1, clamped to 0
+    }
+
+    [Fact]
+    public void ResolveAttack_NaturalTwenty_IsCriticalHit()
+    {
+        var attacker = new Character { Strength = 10 };
+        var weapon = new Weapon { Name = "Longsword", DamageDie = DieType.D8 };
+
+        _dice.Roll(DieType.D20).Returns(20);
+        _dice.Roll(DieType.D8).Returns(6);
+
+        var result = _sut.ResolveAttack(attacker, 99, weapon);
+
+        Assert.True(result.IsHit);
+        Assert.True(result.IsCriticalHit);
+        Assert.False(result.IsFumble);
+        Assert.Equal(12, result.Damage); // (6 + 0) * 2 = 12
+    }
+
+    [Fact]
+    public void ResolveAttack_NaturalTwenty_CriticalDamageDoubled()
+    {
+        var attacker = new Character { Strength = 14 }; // +2 STR mod
+        var weapon = new Weapon { Name = "Greatsword", DamageDie = DieType.D6 };
+
+        _dice.Roll(DieType.D20).Returns(20);
+        _dice.Roll(DieType.D6).Returns(4);
+
+        var result = _sut.ResolveAttack(attacker, 99, weapon);
+
+        Assert.True(result.IsCriticalHit);
+        Assert.Equal(12, result.Damage); // (4 + 2) * 2 = 12
+    }
+
+    [Fact]
+    public void ResolveAttack_NaturalOne_IsFumble()
+    {
+        var attacker = new Character { Strength = 18 }; // strong, but still fumbles
+        var weapon = new Weapon { Name = "Battleaxe", DamageDie = DieType.D8 };
+
+        _dice.Roll(DieType.D20).Returns(1);
+
+        var result = _sut.ResolveAttack(attacker, 1, weapon);
+
+        Assert.False(result.IsHit);
+        Assert.True(result.IsFumble);
+        Assert.False(result.IsCriticalHit);
+        Assert.Equal(0, result.Damage);
+    }
+
+    [Fact]
+    public void ResolveAttack_NaturalOne_AppliesAttackPowerPenalty()
+    {
+        var attacker = new Character { Strength = 10 };
+        var weapon = new Weapon { Name = "Dagger", DamageDie = DieType.D4 };
+
+        _dice.Roll(DieType.D20).Returns(1);
+
+        var result = _sut.ResolveAttack(attacker, 1, weapon);
+
+        Assert.Equal(-2, result.AttackPowerPenalty);
     }
 
     [Fact]

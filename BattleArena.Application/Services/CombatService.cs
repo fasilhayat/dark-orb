@@ -33,6 +33,38 @@ public class CombatService : ICombatService
     {
         var hitRoll = _dice.Roll(DieType.D20);
         var strMod = CalculateAbilityModifier(attacker.Strength);
+
+        // Natural 1 is always a fumble: auto-miss with a -2 AttackPower penalty next turn.
+        if (hitRoll == 1)
+        {
+            return new AttackResult
+            {
+                HitRoll = hitRoll,
+                IsHit = false,
+                IsFumble = true,
+                AttackPowerPenalty = -2,
+                Damage = 0,
+                DamageDie = weapon.DamageDie,
+                WeaponName = weapon.Name
+            };
+        }
+
+        // Natural 20 is always a critical hit: auto-hit with damage doubled.
+        if (hitRoll == 20)
+        {
+            var damageRoll = RollDamage(weapon);
+            var critDamage = (damageRoll.Result + strMod) * 2;
+            return new AttackResult
+            {
+                HitRoll = hitRoll,
+                IsHit = true,
+                IsCriticalHit = true,
+                Damage = Math.Max(0, critDamage),
+                DamageDie = weapon.DamageDie,
+                WeaponName = weapon.Name
+            };
+        }
+
         var totalAttack = hitRoll + strMod + weapon.AttackBonus;
         // An attack hits when the total attack roll meets or exceeds the target's armor class.
         var isHit = totalAttack >= targetArmorClass;
