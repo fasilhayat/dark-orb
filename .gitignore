@@ -33,3 +33,4 @@ combat-logs/*.json
 
 ## Replay snapshots (user-placed .json files for demo replay; not committed)
 replays/*.json
+/replays/Theron_vs_Gruk_20260527_125053.txt
