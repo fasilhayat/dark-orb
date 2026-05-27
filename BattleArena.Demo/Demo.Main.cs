@@ -45,6 +45,20 @@ static partial class Demo
         PrintHeader();
         Scenario = PickScenario();
 
+        // ── Replay path — all setup and simulation already done by RunReplay() ──
+        if (Scenario == 'W')
+        {
+            if (!RunReplay()) return;
+            var replayMode = PickCombatMode();
+            CWL("\n  Press any key to watch the replay...", ConsoleColor.DarkGray);
+            Console.ReadKey(true);
+            Console.Clear();
+            PrintHeader();
+            if (replayMode == 'T') PlayTurnBased(); else PlayRealTime();
+            PrintSummary();
+            return;
+        }
+
         if (Scenario == 'D')
         {
             RunDuel();

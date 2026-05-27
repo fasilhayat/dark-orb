@@ -1,7 +1,10 @@
 namespace BattleArena.Demo;
 
+using Application.Models;
+using Application.Services;
 using Core.Entities;
 using Core.Entities.Enums;
+using System.IO;
 
 static partial class Demo
 {
@@ -11,13 +14,15 @@ static partial class Demo
     {
         CWL("\n  Choose scenario:", ConsoleColor.Yellow);
         CW("    "); CW("[D]", ConsoleColor.Cyan); CWL("  Duel         -- 1v1, pick two of your characters", ConsoleColor.White);
-        CW("    "); CW("[P]", ConsoleColor.Cyan); CWL("  Party Combat  -- build a hero party vs the Enemy Horde (3 enemies)\n", ConsoleColor.White);
+        CW("    "); CW("[P]", ConsoleColor.Cyan); CWL("  Party Combat  -- build a hero party vs the Enemy Horde (3 enemies)", ConsoleColor.White);
+        CW("    "); CW("[W]", ConsoleColor.Cyan); CWL("  Watch Replay  -- replay a saved combat from the replays/ folder\n", ConsoleColor.White);
         CW("  > ", ConsoleColor.Cyan);
         while (true)
         {
             var k = Console.ReadKey(true).KeyChar;
             if (k is 'D' or 'd') { CWL("Duel", ConsoleColor.Cyan); return 'D'; }
             if (k is 'P' or 'p') { CWL("Party Combat", ConsoleColor.Cyan); return 'P'; }
+            if (k is 'W' or 'w') { CWL("Watch Replay", ConsoleColor.Cyan); return 'W'; }
         }
     }
 
@@ -233,6 +238,60 @@ static partial class Demo
                     selected.Add(hero);
             }
         }
+    }
+
+    // ── RunReplay ─────────────────────────────────────────────────────────────────
+
+    // Returns true if a replay was loaded; false if no files found.
+    internal static bool RunReplay()
+    {
+        var replayDir = FindReplayFolder();
+        if (replayDir is null)
+        {
+            CWL("\n  No replays/ folder found. Place a .json snapshot file there to replay it.\n",
+                ConsoleColor.DarkYellow);
+            return false;
+        }
+
+        // Always pick the most recently written .json — drop oldest files if folder grows
+        var latest = Directory.GetFiles(replayDir, "*.json")
+                               .OrderByDescending(File.GetLastWriteTime)
+                               .FirstOrDefault();
+
+        if (latest is null)
+        {
+            CWL($"\n  No .json files found in {replayDir}", ConsoleColor.DarkYellow);
+            CWL("  Copy a .json file from combat-logs/ into replays/ to replay it.\n", ConsoleColor.DarkGray);
+            return false;
+        }
+
+        Console.WriteLine();
+        CW("  Loading replay: ", ConsoleColor.DarkGray);
+        CWL(Path.GetFileNameWithoutExtension(latest), ConsoleColor.Green);
+
+        var snapshot = CombatReplayer.Deserialize(File.ReadAllText(latest));
+        var (p1, p2) = snapshot.ToParties();
+
+        HeroParty  = p1;
+        EnemyParty = p2;
+
+        var allMembers = HeroParty.Members.Concat(EnemyParty.Members).ToList();
+        MaxHp = allMembers.ToDictionary(m => m.Character.Name, m => m.Character.MaxHitPoints);
+        CurHp = new Dictionary<string, int>(MaxHp);
+
+        CWL($"  Seed: {snapshot.Seed}  |  replaying...\n", ConsoleColor.DarkGray);
+        Result = CombatReplayer.Replay(snapshot);
+        return true;
+    }
+
+    private static string? FindReplayFolder()
+    {
+        var dir = AppContext.BaseDirectory;
+        while (!string.IsNullOrEmpty(dir) && !File.Exists(Path.Combine(dir, "BattleArena.sln")))
+            dir = Path.GetDirectoryName(dir)!;
+        if (string.IsNullOrEmpty(dir)) return null;
+        var path = Path.Combine(dir, "replays");
+        return Directory.Exists(path) ? path : null;
     }
 
     // ── BuildEnemyParty ───────────────────────────────────────────────────────────
