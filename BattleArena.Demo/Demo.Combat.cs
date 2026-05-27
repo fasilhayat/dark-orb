@@ -195,6 +195,7 @@ static partial class Demo
             inTurn = false;
         }
 
+        PreSeedTurnMeters(states);
         DrawCombatScreen(states, 0);
         Console.WriteLine();
         CWL("  Press any key for first action...", ConsoleColor.DarkGray);
@@ -299,6 +300,7 @@ static partial class Demo
             quietStart = quietEnd = -1;
         }
 
+        PreSeedTurnMeters(states);
         DrawCombatScreen(states, 0);
         Thread.Sleep(1200);
 
@@ -356,5 +358,19 @@ static partial class Demo
 
         FlushQuiet();
         ActiveActor = "";
+    }
+
+    // ── PreSeedTurnMeters ───────────────────────────────────────────────
+    // Apply all TurnMeterGain events that occur before the first TurnStart
+    // so the opening screen shows each character's true accumulated TM
+    // rather than every bar starting at zero.
+    private static void PreSeedTurnMeters(Dictionary<string, CharDisplayState> states)
+    {
+        foreach (var e in Result.Log)
+        {
+            if (e.EventType == "TurnStart") break;
+            if (e.EventType == "TurnMeterGain" && states.TryGetValue(e.ActorName, out var st))
+                st.Tm = e.TurnMeterAfter ?? 0;
+        }
     }
 }
