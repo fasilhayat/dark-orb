@@ -18,80 +18,84 @@ static partial class Demo
             var actSt = states.GetValueOrDefault(e.ActorName);
             var verb = e.IsSpell == true ? "conjures" : "readies";
             Console.WriteLine();
-            CW("  >> ", ConsoleColor.DarkCyan);
-            CW(e.ActorName, actSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
-            CW($" {verb} ");
+            CWL("  " + new string('·', 77), ConsoleColor.DarkGray);
+            CW("  ▶ ", ConsoleColor.White);
+            CW(e.ActorName.ToUpper(), actSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
+            CW($"  {verb}  ", ConsoleColor.DarkGray);
             CW($"[{e.AttackSourceName}]", e.IsSpell == true ? ConsoleColor.Magenta : ConsoleColor.Yellow);
-            CW(" targeting ");
-            CW(e.TargetName ?? "?", tgtSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
-            CWL("!", ConsoleColor.White);
+            CW("  →  ", ConsoleColor.DarkGray);
+            CWL(e.TargetName ?? "?", tgtSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
         },
         ["Attack"] = (e, _) => PrintAttack(e),
         ["Damage"] = (e, _) =>
         {
-            Console.WriteLine();
-            CW("  "); CW(e.ActorName, ConsoleColor.White);
-            CW(" takes "); CW($"{e.DamageDealt}", ConsoleColor.Red);
-            CWL($" damage   HP: {e.TargetHpBefore} -> {Math.Max(0, e.TargetHpAfter ?? 0)}", ConsoleColor.DarkGray);
+            CW($"     {e.ActorName}", ConsoleColor.White);
+            CW("  takes  ");
+            CW($"{e.DamageDealt}", ConsoleColor.Red);
+            CW("  damage   ");
+            CW("[", ConsoleColor.DarkGray);
+            CW($"{e.TargetHpBefore}", ConsoleColor.DarkGray);
+            CW(" → ", ConsoleColor.DarkGray);
+            CW($"{Math.Max(0, e.TargetHpAfter ?? 0)}", HpColorInline(e.TargetHpAfter ?? 0, MaxHp.GetValueOrDefault(e.ActorName, 1)));
+            CWL(" HP]", ConsoleColor.DarkGray);
         },
-        ["FumblePenalty"] = (e, _) => CWL($"  {e.Message}", ConsoleColor.DarkYellow),
+        ["FumblePenalty"] = (e, _) =>
+        {
+            CW("  ⚠ ", ConsoleColor.DarkYellow);
+            CWL(e.Message, ConsoleColor.DarkYellow);
+        },
         ["DoTTick"] = (e, _) =>
         {
-            Console.WriteLine();
-            CW("  ", ConsoleColor.DarkGray);
+            CW("  ↓ ", ConsoleColor.DarkYellow);
             CW(e.ActorName, CharColor(e.ActorName));
-            CW($" suffers "); CW($"{e.DamageDealt}", ConsoleColor.Red);
-            CWL($" {e.StatusEffectName ?? "DoT"} damage", ConsoleColor.DarkYellow);
+            CW("  suffers  ");
+            CW($"{e.DamageDealt}", ConsoleColor.Red);
+            CW($"  {e.StatusEffectName ?? "DoT"} damage", ConsoleColor.DarkYellow);
+            Console.WriteLine();
         },
         ["EffectApplied"] = (e, _) =>
         {
-            Console.WriteLine();
-            CW("  ", ConsoleColor.DarkGray);
+            CW("  ★ ", ConsoleColor.DarkYellow);
             CW(e.ActorName, CharColor(e.ActorName));
-            CWL($" is afflicted with {e.StatusEffectName}!", ConsoleColor.DarkYellow);
+            CWL($"  is afflicted with  {e.StatusEffectName}!", ConsoleColor.DarkYellow);
         },
         ["EffectResisted"] = (e, _) =>
         {
-            Console.WriteLine();
-            CW("  ", ConsoleColor.DarkGray);
+            CW("  ✓ ", ConsoleColor.Green);
             CW(e.ActorName, CharColor(e.ActorName));
-            CW(" resists ");
+            CW($"  resists  ");
             CW(e.StatusEffectName ?? "the effect", ConsoleColor.Green);
-            CW($"!  ", ConsoleColor.Green);
-            CWL($"(rolled {e.ResistRoll} vs {e.ResistThreshold} resistance)", ConsoleColor.DarkGray);
+            CWL($"   (rolled {e.ResistRoll} vs {e.ResistThreshold})", ConsoleColor.DarkGray);
         },
         ["EffectExpired"] = (e, _) =>
         {
-            Console.WriteLine();
-            CW("  ", ConsoleColor.DarkGray);
+            CW("  ○ ", ConsoleColor.DarkGray);
             CW(e.StatusEffectName ?? "", ConsoleColor.Green);
-            CW(" has worn off ");
+            CW("  has worn off  ");
             CWL(e.ActorName, CharColor(e.ActorName));
         },
         ["SkippedTurn"] = (e, _) =>
         {
             Console.WriteLine();
-            CW("  ", ConsoleColor.DarkGray);
+            CWL("  " + new string('·', 77), ConsoleColor.DarkGray);
+            CW("  ⊘ ", ConsoleColor.DarkYellow);
             CW(e.ActorName, CharColor(e.ActorName));
-            CWL($" is {e.Message.Split("is ")[^1]}", ConsoleColor.DarkYellow);
+            CW("  ");
+            CWL(e.Message.Split("is ")[^1], ConsoleColor.DarkYellow);
         },
-        ["TurnEnd"] = (_, _) =>
-        {
-            Console.WriteLine();
-            CWL("  " + new string('-', 77), ConsoleColor.DarkGray);
-        },
+        ["TurnEnd"] = (_, _) => { },
         ["Death"] = (e, _) =>
         {
             Console.WriteLine();
             CWL("  " + new string('*', 65), ConsoleColor.Red);
-            CWL($"  *** {e.Message} ***", ConsoleColor.Red);
+            CWL($"  ✝  {e.Message}", ConsoleColor.Red);
             CWL("  " + new string('*', 65), ConsoleColor.Red);
         },
         ["KnockedOut"] = (e, _) =>
         {
             Console.WriteLine();
             CWL("  " + new string('~', 65), ConsoleColor.DarkYellow);
-            CWL($"  ~~~ {e.Message} ~~~", ConsoleColor.DarkYellow);
+            CWL($"  ⊘  {e.Message}", ConsoleColor.DarkYellow);
             CWL("  " + new string('~', 65), ConsoleColor.DarkYellow);
         },
     };

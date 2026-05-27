@@ -109,55 +109,60 @@ static partial class Demo
 
     internal static void PrintAttack(CombatLogEntry e)
     {
-        var total = (e.DieRoll ?? 0) + (e.AttackPower ?? 0);
+        var total  = (e.DieRoll ?? 0) + (e.AttackPower ?? 0);
         var margin = total - (e.DefensePower ?? 0);
-        var src = e.AttackSourceName ?? "Unknown";
+        var src    = e.AttackSourceName ?? "Unknown";
         var srcCol = e.IsSpell ? ConsoleColor.Magenta : ConsoleColor.Yellow;
 
         Console.WriteLine();
         CW("  ", ConsoleColor.White);
         CW(e.ActorName, CharColor(e.ActorName));
-        CW(e.IsSpell ? " casts " : " attacks with ");
-        CW($"[{src}]", srcCol);
-        Console.WriteLine();
-        CWL("  " + new string('-', 45), ConsoleColor.DarkGray);
+        CW(e.IsSpell ? "  casts  " : "  attacks with  ");
+        CWL($"[{src}]", srcCol);
 
-        Console.WriteLine();
-        CW("  Roll  "); CW($"d20 = {e.DieRoll,2}", ConsoleColor.Yellow);
-        CW("   Attack Power "); CW($"{e.AttackPower}", ConsoleColor.Yellow);
-        CW("  =  Total "); CW($"{total,2}", ConsoleColor.White);
-        CW("   vs  Defence "); CW($"{e.DefensePower}", ConsoleColor.Yellow);
-        CW("   |  margin ");
+        // Roll / stats on one compact line
+        CW("     d20="); CW($"{e.DieRoll,2}", ConsoleColor.Yellow);
+        CW("  ATK "); CW($"{e.AttackPower}", ConsoleColor.Yellow);
+        CW("  →  total "); CW($"{total,2}", ConsoleColor.White);
+        CW("   vs  DEF "); CW($"{e.DefensePower}", ConsoleColor.Yellow);
+        CW("   ┃  margin ");
         if (margin >= 0) CWL($"+{margin}", ConsoleColor.Green);
-        else CWL($"{margin}", ConsoleColor.Red);
+        else             CWL($"{margin}", ConsoleColor.Red);
 
-        Console.WriteLine();
+        // Hit verdict + damage on one line
+        Console.Write("     ");
         if (e.IsCritical == true)
-            CWL("  !!! CRITICAL HIT !!!  -- Double damage!", ConsoleColor.Magenta);
+        {
+            CW("⚡ CRITICAL HIT", ConsoleColor.Magenta);
+        }
         else if (e.IsFumble == true)
-            CWL("  ~~~ FUMBLE ~~~  -- Attack Power penalty applied!", ConsoleColor.DarkYellow);
+        {
+            CW("⚠ FUMBLE", ConsoleColor.DarkYellow);
+        }
         else if (e.IsHit == true)
         {
-            var label = margin >= 8 ? "CRUSHING HIT" : margin >= 4 ? "SOLID HIT" : "GLANCING HIT";
-            CWL($"  [ {label} ]", ConsoleColor.Green);
+            var label = margin >= 8 ? "■ CRUSHING HIT" : margin >= 4 ? "■ SOLID HIT" : "■ GLANCING HIT";
+            CW(label, ConsoleColor.Green);
         }
         else
         {
-            var label = margin >= -3 ? "NEAR MISS" : "MISS";
-            CWL($"  [ {label} ]", ConsoleColor.Red);
+            var label = margin >= -3 ? "○ NEAR MISS" : "○ MISS";
+            CW(label, ConsoleColor.Red);
         }
 
         if (e.IsHit == true)
         {
             var dmgIdx = e.Message.IndexOf("Dmg:", StringComparison.Ordinal);
-            if (dmgIdx >= 0) { Console.WriteLine(); CW("  Damage  "); CWL(e.Message[dmgIdx..], ConsoleColor.DarkCyan); }
+            if (dmgIdx >= 0)
+            {
+                CW("   │   ", ConsoleColor.DarkGray);
+                CW(e.Message[dmgIdx..], ConsoleColor.DarkCyan);
+            }
         }
+        Console.WriteLine();
 
         if (!string.IsNullOrEmpty(e.Phrase))
-        {
-            Console.WriteLine();
-            CWL($"  \"{e.Phrase}\"", ConsoleColor.DarkCyan);
-        }
+            CWL($"     \"{e.Phrase}\"", ConsoleColor.DarkCyan);
     }
 
     // ── ShowHp ────────────────────────────────────────────────────────────────────
@@ -193,6 +198,8 @@ static partial class Demo
              : pct > 0.25 ? ConsoleColor.Yellow
              : ConsoleColor.Red;
     }
+
+    internal static ConsoleColor HpColorInline(int current, int max) => HpColor(current, max);
 
     // ── CharColor ─────────────────────────────────────────────────────────────────
 
@@ -363,11 +370,11 @@ static partial class Demo
 
         var tmFilled = Math.Min(BAR_W, (int)(Math.Min(1.0, s.Tm / 100.0) * BAR_W));
         var tmLine = CL(vb, borderFg,
-            new Seg("  TM [", ConsoleColor.DarkGray),
+            new Seg(" TM [", ConsoleColor.DarkGray),
             new Seg(new string('|', tmFilled), ConsoleColor.Cyan),
             new Seg(new string('\u2591', BAR_W - tmFilled), ConsoleColor.DarkGray),
             new Seg("]  ", ConsoleColor.DarkGray),
-            new Seg($" {s.Tm,3}", ConsoleColor.Cyan),
+            new Seg($"  {s.Tm,3}", ConsoleColor.Cyan),
             new Seg("/100", ConsoleColor.DarkGray));
 
         var pct = (double)Math.Max(0, s.Hp) / Math.Max(1, s.MaxHp);
