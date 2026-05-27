@@ -375,12 +375,12 @@ Graveworm's hollow eyes glow with cold blue light. Fragments of his old armor st
 
 ---
 
-## Infernal Commander Zoth
+## Infernal Commander Maleth
 *Demon Knight, Level 18 — Hostile (Boss)*
 
-A demon lord commanding the legions of the Fire Pits. Zoth is a towering figure wreathed in hellfire, his body a mass of molten-iron muscle and jagged black horns. He wields the legendary lance *Stormbringer* and rides a nightmare steed whose hooves leave burning imprints in the stone.
+A demon lord commanding the legions of the Fire Pits. Maleth is a towering figure wreathed in hellfire, his body a mass of molten-iron muscle and jagged black horns. He wields the legendary lance *Stormbringer* and rides a nightmare steed whose hooves leave burning imprints in the stone.
 
-Zoth was once an angel of the Silver Basilica who fell during the First Sundering. He now commands the infernal armies that besiege the mortal realm, and his defeat is the key to breaking the siege of the Burning Plains.
+Maleth was once an angel of the Silver Basilica who fell during the First Sundering. He now commands the infernal armies that besiege the mortal realm, and his defeat is the key to breaking the siege of the Burning Plains.
 
 > **Art prompt:** Massive demon knight in obsidian and brass plate armor wreathed in flame, holding a crackling lightning lance, riding a fiery nightmare steed, dark hellscape background, epic boss encounter, CRPG isometric character art.
 
@@ -422,4 +422,4 @@ Zoth was once an angel of the Silver Basilica who fell during the First Sunderin
 | 13 | Finnick Bramblefoot | Halfling | Rogue | 8 | Scout/Thief | 8 | 20 | 13 | 14 | 11 | 16 | 40 | 12 | 17 |
 | 14 | Korg Stonefist | Orc | Barbarian | 15 | Hostile | 21 | 10 | 18 | 8 | 8 | 8 | 165 | 16 | 14 |
 | 15 | Graveworm | Undead | Fighter | 9 | Hostile | 17 | 10 | 14 | 11 | 8 | 6 | 72 | 16 | 14 |
-| 16 | Infernal Cmdr Zoth | Demon | Knight | 18 | Boss | 22 | 12 | 19 | 15 | 10 | 17 | 180 | 16 | 12 |
+| 16 | Infernal Cmdr Maleth | Demon | Knight | 18 | Boss | 22 | 12 | 19 | 15 | 10 | 17 | 180 | 16 | 12 |
