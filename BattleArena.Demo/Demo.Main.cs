@@ -151,6 +151,7 @@ static partial class Demo
             PlayRealTime();
 
         PrintSummary();
+        DumpCombatLog();
         AwardCombatXp();
     }
 
