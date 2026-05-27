@@ -131,17 +131,18 @@ static partial class Demo
 
     private static readonly Dictionary<string, int> _realtimeDelay = new()
     {
-        ["Attack"] = 500,
-        ["Damage"] = 800,
-        ["TurnStart"] = 200,
-        ["TurnEnd"] = 300,
-        ["DoTTick"] = 400,
-        ["EffectApplied"] = 300,
-        ["EffectResisted"] = 400,
-        ["EffectExpired"] = 300,
-        ["SkippedTurn"] = 500,
-        ["Death"] = 1500,
-        ["KnockedOut"] = 1500,
+        ["TurnStart"]     = 900,   // "readies weapon" — give player time to read who acts next
+        ["Attack"]        = 900,   // roll result + hit/miss verdict
+        ["Damage"]        = 1100,  // HP bar update + damage number
+        ["TurnEnd"]       = 300,
+        ["DoTTick"]       = 700,
+        ["EffectApplied"] = 700,
+        ["EffectResisted"]= 700,
+        ["EffectExpired"] = 500,
+        ["SkippedTurn"]   = 900,
+        ["FumblePenalty"] = 600,
+        ["Death"]         = 1800,
+        ["KnockedOut"]    = 1800,
     };
 
     // ── PlayTurnBased ───────────────────────────────────────────────────
@@ -289,7 +290,7 @@ static partial class Demo
                 Console.ForegroundColor = ConsoleColor.DarkGray;
                 Console.WriteLine($"\n  ... {quietEnd - quietStart + 1} quiet ticks (TM building)");
                 Console.ResetColor();
-                Thread.Sleep(80);
+                Thread.Sleep(300);
             }
             quietStart = quietEnd = -1;
         }
@@ -309,7 +310,10 @@ static partial class Demo
             {
                 if (quietStart < 0) quietStart = tickGroup.Key;
                 quietEnd = tickGroup.Key;
-                Thread.Sleep(40);
+                // Animate TM bars every 3 quiet ticks so the viewer can watch them fill
+                if ((tickGroup.Key - quietStart) % 3 == 0)
+                    DrawCombatScreen(states, tickGroup.Key);
+                Thread.Sleep(80);
                 continue;
             }
 
@@ -327,7 +331,7 @@ static partial class Demo
             }
 
             DrawCombatScreen(states, tickGroup.Key);
-            Thread.Sleep(300);
+            Thread.Sleep(600);
 
             foreach (var e in entries)
             {
@@ -340,6 +344,10 @@ static partial class Demo
                 if (_realtimeDelay.TryGetValue(e.EventType, out var delay))
                     Thread.Sleep(delay);
             }
+
+            // Redraw after all events so the viewer sees the final HP/TM result of this turn
+            DrawCombatScreen(states, tickGroup.Key);
+            Thread.Sleep(500);
         }
 
         FlushQuiet();
