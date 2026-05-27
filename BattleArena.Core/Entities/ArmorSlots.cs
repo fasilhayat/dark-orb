@@ -1,5 +1,7 @@
 namespace BattleArena.Core.Entities;
 
+using Core.Entities.Enums;
+
 public class ArmorSlots
 {
     public Armor? Head { get; set; }
@@ -16,6 +18,9 @@ public class ArmorSlots
     public int TotalArmorClass => SumSlots(armor => armor.ArmorClass, Head, Chest, Hands, Waist, Boots, Neck, Back);
     public int TotalMitigation => SumSlots(armor => armor.Mitigation, Head, Chest, Hands, Waist, Boots, Neck, Back);
     public int TotalTurnMeterPenalty => SumSlots(armor => armor.TurnMeterPenalty, Head, Chest, Hands, Waist, Boots, Neck, Back);
+    public int TotalResistance(ResistanceType type) =>
+        SumSlots(a => a.Resistances.Where(r => r.Type == type).Sum(r => r.Value),
+            Head, Chest, Hands, Waist, Boots, Neck, Back);
 
     private static int SumSlots(Func<Armor, int> selector, params Armor?[] slots)
     {

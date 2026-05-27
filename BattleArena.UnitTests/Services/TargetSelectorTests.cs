@@ -8,11 +8,11 @@ using Core.Entities.Enums;
 using NSubstitute;
 using Xunit;
 
-// Tests for targeting selectors and the BattleSimulator's per-party selector routing.
+// Tests for targeting selectors and the CombatSimulator's per-party selector routing.
 //
 // LowestHpTargetSelector  — picks the living enemy with the lowest current HP.
 // RandomTargetSelector    — picks any living enemy at random.
-// BattleSimulator routing — hero selector fires for party-0 actors,
+// CombatSimulator routing — hero selector fires for party-0 actors,
 //                            enemy selector fires for party-1 actors.
 public class TargetSelectorTests
 {
@@ -125,10 +125,10 @@ public class TargetSelectorTests
             () => sut.SelectTargetAsync(actor, Enumerable.Empty<Character>()));
     }
 
-    // ── BattleSimulator selector routing ──────────────────────────────────────
+    // ── CombatSimulator selector routing ──────────────────────────────────────
 
     [Fact]
-    public async Task BattleSimulator_UsesHeroSelectorWhenHeroActs()
+    public async Task CombatSimulator_UsesHeroSelectorWhenHeroActs()
     {
         var heroSel  = Substitute.For<ITargetSelector>();
         var enemySel = Substitute.For<ITargetSelector>();
@@ -147,7 +147,7 @@ public class TargetSelectorTests
     }
 
     [Fact]
-    public async Task BattleSimulator_UsesEnemySelectorWhenEnemyActs()
+    public async Task CombatSimulator_UsesEnemySelectorWhenEnemyActs()
     {
         var heroSel  = Substitute.For<ITargetSelector>();
         var enemySel = Substitute.For<ITargetSelector>();
@@ -166,7 +166,7 @@ public class TargetSelectorTests
     }
 
     [Fact]
-    public async Task BattleSimulator_HeroSelectorNeverCalledForEnemyActors()
+    public async Task CombatSimulator_HeroSelectorNeverCalledForEnemyActors()
     {
         var heroSel  = Substitute.For<ITargetSelector>();
         var enemySel = Substitute.For<ITargetSelector>();
@@ -185,7 +185,7 @@ public class TargetSelectorTests
     }
 
     [Fact]
-    public async Task BattleSimulator_EnemySelectorNeverCalledForHeroActors()
+    public async Task CombatSimulator_EnemySelectorNeverCalledForHeroActors()
     {
         var heroSel  = Substitute.For<ITargetSelector>();
         var enemySel = Substitute.For<ITargetSelector>();
@@ -206,12 +206,12 @@ public class TargetSelectorTests
     // ── Observer integration ───────────────────────────────────────────────────
 
     [Fact]
-    public async Task BattleSimulator_ObserverReceivesAllEventsInOrder()
+    public async Task CombatSimulator_ObserverReceivesAllEventsInOrder()
     {
         var events = new List<string>();
-        var obs    = Substitute.For<IBattleObserver>();
-        obs.OnEventAsync(Arg.Any<BattleLogEntry>(), Arg.Any<CancellationToken>())
-           .Returns(ci => { events.Add(ci.Arg<BattleLogEntry>().EventType); return Task.CompletedTask; });
+        var obs    = Substitute.For<ICombatObserver>();
+        obs.OnEventAsync(Arg.Any<CombatLogEntry>(), Arg.Any<CancellationToken>())
+           .Returns(ci => { events.Add(ci.Arg<CombatLogEntry>().EventType); return Task.CompletedTask; });
 
         var (heroParty, enemyParty) = BuildDuel("Hero", "Enemy");
         var result = await BuildSimulator(new LowestHpTargetSelector(), new LowestHpTargetSelector())
@@ -222,7 +222,7 @@ public class TargetSelectorTests
     }
 
     [Fact]
-    public async Task BattleSimulator_WithNoObserver_CompletesNormally()
+    public async Task CombatSimulator_WithNoObserver_CompletesNormally()
     {
         // Passing null observer must not throw.
         var (heroParty, enemyParty) = BuildDuel("Hero", "Enemy");
@@ -234,7 +234,7 @@ public class TargetSelectorTests
     }
 
     [Fact]
-    public async Task BattleSimulator_CancellationToken_StopsSimulation()
+    public async Task CombatSimulator_CancellationToken_StopsSimulation()
     {
         using var cts = new CancellationTokenSource();
         cts.Cancel(); // already cancelled before we start
@@ -249,7 +249,7 @@ public class TargetSelectorTests
     // ── LowestHp focus-fire integration ───────────────────────────────────────
 
     [Fact]
-    public async Task LowestHp_InPartyBattle_KillsWeakestEnemyFirst()
+    public async Task LowestHp_InPartyCombat_KillsWeakestEnemyFirst()
     {
         // Two heroes with high attack vs two enemies: one with 1 HP, one with 50 HP.
         // LowestHpTargetSelector must direct all hero attacks onto the 1-HP enemy first.
@@ -279,7 +279,7 @@ public class TargetSelectorTests
     }
 
     [Fact]
-    public async Task LowestHp_InPartyBattle_WinsAgainstRandomTargeting()
+    public async Task LowestHp_InPartyCombat_WinsAgainstRandomTargeting()
     {
         var (h1m, _) = BuildMember("FH1", hp: 30, str: 14, spd: 8);
         var (h2m, _) = BuildMember("FH2", hp: 30, str: 14, spd: 8);
@@ -342,7 +342,7 @@ public class TargetSelectorTests
                 Party.Solo(em.Character, em.AttackSource));
     }
 
-    private static BattleSimulator BuildSimulator(ITargetSelector heroSel, ITargetSelector enemySel)
+    private static CombatSimulator BuildSimulator(ITargetSelector heroSel, ITargetSelector enemySel)
     {
         var dice = new DiceService();
         return new(new CombatService(dice, new CombatStatsService()),

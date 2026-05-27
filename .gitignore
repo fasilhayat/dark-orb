@@ -26,3 +26,11 @@ coveragereport/
 ## Secrets
 api_key.secret
 *.pfx
+
+## Combat logs (generated — replay .json files and human-readable .txt dumps)
+combat-logs/*.txt
+combat-logs/*.json
+
+## Replay snapshots (user-placed .json files for demo replay; not committed)
+replays/*.json
+/replays/*

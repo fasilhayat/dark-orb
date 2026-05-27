@@ -8,7 +8,7 @@ static partial class Demo
 {
     // ── Display strategies: shared by turn-based and realtime ────────────
 
-    private delegate void DisplayHandler(BattleLogEntry e, Dictionary<string, CharDisplayState> states);
+    private delegate void DisplayHandler(CombatLogEntry e, Dictionary<string, CharDisplayState> states);
 
     private static readonly Dictionary<string, DisplayHandler> _display = new()
     {
@@ -18,77 +18,91 @@ static partial class Demo
             var actSt = states.GetValueOrDefault(e.ActorName);
             var verb = e.IsSpell == true ? "conjures" : "readies";
             Console.WriteLine();
-            CW("  >> ", ConsoleColor.DarkCyan);
-            CW(e.ActorName, actSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
-            CW($" {verb} ");
+            CWL("  " + new string('·', 77), ConsoleColor.DarkGray);
+            CW("  ▶ ", ConsoleColor.White);
+            CW(e.ActorName.ToUpper(), actSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
+            CW($"  {verb}  ", ConsoleColor.DarkGray);
             CW($"[{e.AttackSourceName}]", e.IsSpell == true ? ConsoleColor.Magenta : ConsoleColor.Yellow);
-            CW(" targeting ");
-            CW(e.TargetName ?? "?", tgtSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
-            CWL("!", ConsoleColor.White);
+            CW("  →  ", ConsoleColor.DarkGray);
+            CWL(e.TargetName ?? "?", tgtSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
         },
         ["Attack"] = (e, _) => PrintAttack(e),
         ["Damage"] = (e, _) =>
         {
-            Console.WriteLine();
-            CW("  "); CW(e.ActorName, ConsoleColor.White);
-            CW(" takes "); CW($"{e.DamageDealt}", ConsoleColor.Red);
-            CWL($" damage   HP: {e.TargetHpBefore} -> {Math.Max(0, e.TargetHpAfter ?? 0)}", ConsoleColor.DarkGray);
+            CW($"     {e.ActorName}", ConsoleColor.White);
+            CW("  takes  ");
+            CW($"{e.DamageDealt}", ConsoleColor.Red);
+            CW("  damage   ");
+            CW("[", ConsoleColor.DarkGray);
+            CW($"{e.TargetHpBefore}", ConsoleColor.DarkGray);
+            CW(" → ", ConsoleColor.DarkGray);
+            CW($"{Math.Max(0, e.TargetHpAfter ?? 0)}", HpColorInline(e.TargetHpAfter ?? 0, MaxHp!.TryGetValue(e.ActorName, out var mhp) ? mhp : 1));
+            CWL(" HP]", ConsoleColor.DarkGray);
         },
-        ["FumblePenalty"] = (e, _) => CWL($"  {e.Message}", ConsoleColor.DarkYellow),
+        ["FumblePenalty"] = (e, _) =>
+        {
+            CW("  ⚠ ", ConsoleColor.DarkYellow);
+            CWL(e.Message, ConsoleColor.DarkYellow);
+        },
         ["DoTTick"] = (e, _) =>
         {
-            Console.WriteLine();
-            CW("  ", ConsoleColor.DarkGray);
+            CW("  ↓ ", ConsoleColor.DarkYellow);
             CW(e.ActorName, CharColor(e.ActorName));
-            CW($" suffers "); CW($"{e.DamageDealt}", ConsoleColor.Red);
-            CWL($" {e.StatusEffectName ?? "DoT"} damage", ConsoleColor.DarkYellow);
+            CW("  suffers  ");
+            CW($"{e.DamageDealt}", ConsoleColor.Red);
+            CW($"  {e.StatusEffectName ?? "DoT"} damage", ConsoleColor.DarkYellow);
+            Console.WriteLine();
         },
         ["EffectApplied"] = (e, _) =>
         {
-            Console.WriteLine();
-            CW("  ", ConsoleColor.DarkGray);
+            CW("  ★ ", ConsoleColor.DarkYellow);
             CW(e.ActorName, CharColor(e.ActorName));
-            CWL($" is afflicted with {e.StatusEffectName}!", ConsoleColor.DarkYellow);
+            CWL($"  is afflicted with  {e.StatusEffectName}!", ConsoleColor.DarkYellow);
+        },
+        ["EffectResisted"] = (e, _) =>
+        {
+            CW("  ✓ ", ConsoleColor.Green);
+            CW(e.ActorName, CharColor(e.ActorName));
+            CW($"  resists  ");
+            CW(e.StatusEffectName ?? "the effect", ConsoleColor.Green);
+            CWL($"   (rolled {e.ResistRoll} vs {e.ResistThreshold})", ConsoleColor.DarkGray);
         },
         ["EffectExpired"] = (e, _) =>
         {
-            Console.WriteLine();
-            CW("  ", ConsoleColor.DarkGray);
+            CW("  ○ ", ConsoleColor.DarkGray);
             CW(e.StatusEffectName ?? "", ConsoleColor.Green);
-            CW(" has worn off ");
+            CW("  has worn off  ");
             CWL(e.ActorName, CharColor(e.ActorName));
         },
         ["SkippedTurn"] = (e, _) =>
         {
             Console.WriteLine();
-            CW("  ", ConsoleColor.DarkGray);
+            CWL("  " + new string('·', 77), ConsoleColor.DarkGray);
+            CW("  ⊘ ", ConsoleColor.DarkYellow);
             CW(e.ActorName, CharColor(e.ActorName));
-            CWL($" is {e.Message.Split("is ")[^1]}", ConsoleColor.DarkYellow);
+            CW("  ");
+            CWL(e.Message.Split("is ")[^1], ConsoleColor.DarkYellow);
         },
-        ["TurnEnd"] = (_, _) =>
-        {
-            Console.WriteLine();
-            CWL("  " + new string('-', 77), ConsoleColor.DarkGray);
-        },
+        ["TurnEnd"] = (_, _) => { },
         ["Death"] = (e, _) =>
         {
             Console.WriteLine();
             CWL("  " + new string('*', 65), ConsoleColor.Red);
-            CWL($"  *** {e.Message} ***", ConsoleColor.Red);
+            CWL($"  ✝  {e.Message}", ConsoleColor.Red);
             CWL("  " + new string('*', 65), ConsoleColor.Red);
         },
         ["KnockedOut"] = (e, _) =>
         {
             Console.WriteLine();
             CWL("  " + new string('~', 65), ConsoleColor.DarkYellow);
-            CWL($"  ~~~ {e.Message} ~~~", ConsoleColor.DarkYellow);
+            CWL($"  ⊘  {e.Message}", ConsoleColor.DarkYellow);
             CWL("  " + new string('~', 65), ConsoleColor.DarkYellow);
         },
     };
 
     // ── Realtime state updates (per event type) ─────────────────────────
 
-    private static readonly Dictionary<string, Action<BattleLogEntry, Dictionary<string, CharDisplayState>>> _realtimeUpdate = new()
+    private static readonly Dictionary<string, Action<CombatLogEntry, Dictionary<string, CharDisplayState>>> _realtimeUpdate = new()
     {
         ["Damage"] = (e, states) =>
         {
@@ -121,16 +135,18 @@ static partial class Demo
 
     private static readonly Dictionary<string, int> _realtimeDelay = new()
     {
-        ["Attack"] = 500,
-        ["Damage"] = 800,
-        ["TurnStart"] = 200,
-        ["TurnEnd"] = 300,
-        ["DoTTick"] = 400,
-        ["EffectApplied"] = 300,
-        ["EffectExpired"] = 300,
-        ["SkippedTurn"] = 500,
-        ["Death"] = 1500,
-        ["KnockedOut"] = 1500,
+        ["TurnStart"]     = 900,   // "readies weapon" — give player time to read who acts next
+        ["Attack"]        = 900,   // roll result + hit/miss verdict
+        ["Damage"]        = 1100,  // HP bar update + damage number
+        ["TurnEnd"]       = 300,
+        ["DoTTick"]       = 700,
+        ["EffectApplied"] = 700,
+        ["EffectResisted"]= 700,
+        ["EffectExpired"] = 500,
+        ["SkippedTurn"]   = 900,
+        ["FumblePenalty"] = 600,
+        ["Death"]         = 1800,
+        ["KnockedOut"]    = 1800,
     };
 
     // ── PlayTurnBased ───────────────────────────────────────────────────
@@ -138,8 +154,8 @@ static partial class Demo
     private static void PlayTurnBased()
     {
         var states = BuildDisplayStates();
-        var turnEvents = new List<BattleLogEntry>();
-        var pendingMessages = new List<BattleLogEntry>();
+        var turnEvents = new List<CombatLogEntry>();
+        var pendingMessages = new List<CombatLogEntry>();
         bool inTurn = false;
         int turnCount = 0;
         int turnTick = 0;
@@ -153,7 +169,7 @@ static partial class Demo
             var actSt = states.GetValueOrDefault(ts.ActorName);
             var tgtSt = states.GetValueOrDefault(ts.TargetName ?? "");
 
-            DrawBattleScreen(states, turnTick);
+            DrawCombatScreen(states, turnTick);
 
             Console.WriteLine();
             CW($"  Turn {turnCount}  ", ConsoleColor.DarkGray);
@@ -170,7 +186,7 @@ static partial class Demo
             Console.WriteLine();
             CWL("  " + new string('-', 77), ConsoleColor.DarkGray);
             var over = turnEvents.Any(e => e.EventType is "Death" or "KnockedOut");
-            CWL(over ? "  Battle over!  Press any key for results..."
+            CWL(over ? "  Combat over!  Press any key for results..."
                      : "  Press any key for next turn...", ConsoleColor.DarkGray);
             Console.ReadKey(true);
 
@@ -179,7 +195,8 @@ static partial class Demo
             inTurn = false;
         }
 
-        DrawBattleScreen(states, 0);
+        PreSeedTurnMeters(states);
+        DrawCombatScreen(states, 0);
         Console.WriteLine();
         CWL("  Press any key for first action...", ConsoleColor.DarkGray);
         Console.ReadKey(true);
@@ -238,6 +255,7 @@ static partial class Demo
                     break;
 
                 case "EffectApplied":
+                case "EffectResisted":
                     if (inTurn) turnEvents.Add(e);
                     break;
 
@@ -277,12 +295,13 @@ static partial class Demo
                 Console.ForegroundColor = ConsoleColor.DarkGray;
                 Console.WriteLine($"\n  ... {quietEnd - quietStart + 1} quiet ticks (TM building)");
                 Console.ResetColor();
-                Thread.Sleep(80);
+                Thread.Sleep(300);
             }
             quietStart = quietEnd = -1;
         }
 
-        DrawBattleScreen(states, 0);
+        PreSeedTurnMeters(states);
+        DrawCombatScreen(states, 0);
         Thread.Sleep(1200);
 
         foreach (var tickGroup in byTick)
@@ -297,7 +316,10 @@ static partial class Demo
             {
                 if (quietStart < 0) quietStart = tickGroup.Key;
                 quietEnd = tickGroup.Key;
-                Thread.Sleep(40);
+                // Animate TM bars every 3 quiet ticks so the viewer can watch them fill
+                if ((tickGroup.Key - quietStart) % 3 == 0)
+                    DrawCombatScreen(states, tickGroup.Key);
+                Thread.Sleep(80);
                 continue;
             }
 
@@ -314,8 +336,8 @@ static partial class Demo
                 actSt.Weapon = turnStart.AttackSourceName ?? actSt.Weapon;
             }
 
-            DrawBattleScreen(states, tickGroup.Key);
-            Thread.Sleep(300);
+            DrawCombatScreen(states, tickGroup.Key);
+            Thread.Sleep(600);
 
             foreach (var e in entries)
             {
@@ -328,9 +350,27 @@ static partial class Demo
                 if (_realtimeDelay.TryGetValue(e.EventType, out var delay))
                     Thread.Sleep(delay);
             }
+
+            // Redraw after all events so the viewer sees the final HP/TM result of this turn
+            DrawCombatScreen(states, tickGroup.Key);
+            Thread.Sleep(500);
         }
 
         FlushQuiet();
         ActiveActor = "";
+    }
+
+    // ── PreSeedTurnMeters ───────────────────────────────────────────────
+    // Apply all TurnMeterGain events that occur before the first TurnStart
+    // so the opening screen shows each character's true accumulated TM
+    // rather than every bar starting at zero.
+    private static void PreSeedTurnMeters(Dictionary<string, CharDisplayState> states)
+    {
+        foreach (var e in Result.Log)
+        {
+            if (e.EventType == "TurnStart") break;
+            if (e.EventType == "TurnMeterGain" && states.TryGetValue(e.ActorName, out var st))
+                st.Tm = e.TurnMeterAfter ?? 0;
+        }
     }
 }

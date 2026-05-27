@@ -10,7 +10,7 @@ public class TurnmeterState
     public bool IsReady => CurrentValue >= 100;
 
     // True while this character is currently resolving their turn.
-    // Set by BattleSimulator at TurnStart, cleared at TurnEnd.
+    // Set by CombatSimulator at TurnStart, cleared at TurnEnd.
     public bool IsActive { get; set; }
 
     // Kept for compatibility with existing callers.

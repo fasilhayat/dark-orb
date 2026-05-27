@@ -1,6 +1,7 @@
 namespace BattleArena.Application.Services;
 
 using Application.Interfaces;
+using Application.Models;
 using Core.Entities;
 using Core.Entities.Enums;
 
@@ -31,6 +32,23 @@ public class StatusEffectService : IStatusEffectService
                     target.ActiveStatusEffects.Add(effect);
                 break;
         }
+    }
+
+    public EffectApplicationResult TryApply(Character target, StatusEffect effect, int resistance, IDiceService dice)
+    {
+        var chanceRoll = dice.Roll(DieType.D100);
+        if (chanceRoll > effect.ApplicationChance)
+            return new EffectApplicationResult(false, false, chanceRoll, resistance, effect.Name);
+
+        if (resistance > 0)
+        {
+            var resistRoll = dice.Roll(DieType.D100);
+            if (resistRoll <= resistance)
+                return new EffectApplicationResult(false, true, resistRoll, resistance, effect.Name);
+        }
+
+        Apply(target, effect);
+        return new EffectApplicationResult(true, false, chanceRoll, resistance, effect.Name);
     }
 
     public IReadOnlyList<string> TickAll(Character target)

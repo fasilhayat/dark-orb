@@ -1,4 +1,4 @@
-.PHONY: help build build-no-cache up down restart reset logs api-logs db-logs clean test test-coverage build-local demo build-demo
+.PHONY: help build build-no-cache up down restart reset logs api-logs db-logs clean clean-logs test test-coverage build-local demo build-demo sync-instructions
 
 help:
 	@cmd /C "echo Usage:"
@@ -12,11 +12,12 @@ help:
 	@cmd /C "echo 	make api-logs       	- Show logs from the API container"
 	@cmd /C "echo 	make db-logs        	- Show logs from the Database container"
 	@cmd /C "echo 	make clean          	- Remove all containers and delete database files"
+	@cmd /C "echo 	make clean-logs     	- Delete all files in the combat-logs/ folder"
 	@cmd /C "echo 	make test           	- Run unit tests"
 	@cmd /C "echo 	make test-coverage  	- Run unit tests with coverage"
 	@cmd /C "echo 	make build-local    	- Build the .NET solution locally"
 	@cmd /C "echo 	make build-demo     	- Build the demo Docker image"
-	@cmd /C "echo 	make demo           	- Run the interactive combat demo (starts DB+API if needed)"
+	@cmd /C "echo 	make sync-instructions	- Sync AGENTS.md to .github/copilot-instructions.md"
 
 build: publish
 	@echo Building Docker containers...
@@ -58,6 +59,10 @@ clean:
 	powershell -Command "if (Test-Path 'publish') { Remove-Item -Recurse -Force 'publish'; Write-Host 'Removed publish/' } else { Write-Host 'No publish output to remove.' }"
 	@echo Clean complete.
 
+clean-logs:
+	@echo Deleting combat logs...
+	powershell -Command "Get-ChildItem -Path 'combat-logs' -File | Where-Object { $$_.Name -ne '.gitkeep' } | Remove-Item -Force; Write-Host 'combat-logs/ cleared.'"
+
 test:
 	dotnet test BattleArena.sln
 
@@ -74,3 +79,7 @@ build-demo:
 
 demo: up
 	docker compose --profile demo run --rm battle-arena-demo
+
+sync-instructions:
+	@echo Syncing AGENTS.md to .github/copilot-instructions.md...
+	pwsh scripts/sync-instructions.ps1

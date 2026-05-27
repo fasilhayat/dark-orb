@@ -9,7 +9,7 @@ public class LevelingServiceTests
     private readonly LevelingService _sut = new();
 
     [Fact]
-    public void ComputeBattleXp_BaseOnly_ReturnsSumOfEnemyLevelsTimesMultiplier()
+    public void ComputeCombatXp_BaseOnly_ReturnsSumOfEnemyLevelsTimesMultiplier()
     {
         var party = new[] { MakeChar("Hero", 1) };
         var enemies = new[]
@@ -17,16 +17,16 @@ public class LevelingServiceTests
             MakeChar("Goblin", 3),
             MakeChar("Orc", 5),
         };
-        var log = Array.Empty<BattleLogEntry>();
+        var log = Array.Empty<CombatLogEntry>();
         var ticks = ExpectedRounds(party, enemies);
 
-        var xp = _sut.ComputeBattleXp(party, enemies, log, ticks);
+        var xp = _sut.ComputeCombatXp(party, enemies, log, ticks);
 
         Assert.Equal((3 + 5) * 12, xp);
     }
 
     [Fact]
-    public void ComputeBattleXp_WithPartyCrits_AddsBonusPerCrit()
+    public void ComputeCombatXp_WithPartyCrits_AddsBonusPerCrit()
     {
         var party = new[] { MakeChar("Hero", 1) };
         var enemies = new[] { MakeChar("Goblin", 3) };
@@ -38,14 +38,14 @@ public class LevelingServiceTests
         };
         var ticks = ExpectedRounds(party, enemies);
 
-        var xp = _sut.ComputeBattleXp(party, enemies, log, ticks);
+        var xp = _sut.ComputeCombatXp(party, enemies, log, ticks);
         var baseXp = 3 * 12;
 
         Assert.Equal(baseXp + 2 * 8, xp);
     }
 
     [Fact]
-    public void ComputeBattleXp_WithPartyFumbles_SubtractsPenaltyPerFumble()
+    public void ComputeCombatXp_WithPartyFumbles_SubtractsPenaltyPerFumble()
     {
         var party = new[] { MakeChar("Hero", 1) };
         var enemies = new[] { MakeChar("Goblin", 3) };
@@ -57,14 +57,14 @@ public class LevelingServiceTests
         };
         var ticks = ExpectedRounds(party, enemies);
 
-        var xp = _sut.ComputeBattleXp(party, enemies, log, ticks);
+        var xp = _sut.ComputeCombatXp(party, enemies, log, ticks);
         var baseXp = 3 * 12;
 
         Assert.Equal(baseXp - 2 * 8, xp);
     }
 
     [Fact]
-    public void ComputeBattleXp_CritsAndFumblesNetOut()
+    public void ComputeCombatXp_CritsAndFumblesNetOut()
     {
         var party = new[] { MakeChar("Hero", 1) };
         var enemies = new[] { MakeChar("Goblin", 3) };
@@ -75,13 +75,13 @@ public class LevelingServiceTests
         };
         var ticks = ExpectedRounds(party, enemies);
 
-        var xp = _sut.ComputeBattleXp(party, enemies, log, ticks);
+        var xp = _sut.ComputeCombatXp(party, enemies, log, ticks);
 
         Assert.Equal(3 * 12, xp);
     }
 
     [Fact]
-    public void ComputeBattleXp_EnemyCritsDoNotAffectPartyBonus()
+    public void ComputeCombatXp_EnemyCritsDoNotAffectPartyBonus()
     {
         var party = new[] { MakeChar("Hero", 1) };
         var enemies = new[] { MakeChar("Goblin", 3) };
@@ -92,70 +92,70 @@ public class LevelingServiceTests
         };
         var ticks = ExpectedRounds(party, enemies);
 
-        var xp = _sut.ComputeBattleXp(party, enemies, log, ticks);
+        var xp = _sut.ComputeCombatXp(party, enemies, log, ticks);
 
         Assert.Equal(3 * 12 + 8, xp);
     }
 
     [Fact]
-    public void ComputeBattleXp_AtExpectedRounds_FactorIsOne()
+    public void ComputeCombatXp_AtExpectedRounds_FactorIsOne()
     {
         var party = new[] { MakeChar("A", 1), MakeChar("B", 1) };
         var enemies = new[] { MakeChar("E1", 2), MakeChar("E2", 2) };
-        var log = Array.Empty<BattleLogEntry>();
+        var log = Array.Empty<CombatLogEntry>();
         var ticks = ExpectedRounds(party, enemies);
 
-        var xp = _sut.ComputeBattleXp(party, enemies, log, ticks);
+        var xp = _sut.ComputeCombatXp(party, enemies, log, ticks);
 
         Assert.Equal((2 + 2) * 12, xp);
     }
 
     [Fact]
-    public void ComputeBattleXp_DoubleExpectedRounds_GivesThirtyPercentBonus()
+    public void ComputeCombatXp_DoubleExpectedRounds_GivesThirtyPercentBonus()
     {
         var party = new[] { MakeChar("Hero", 1) };
         var enemies = new[] { MakeChar("Goblin", 3) };
-        var log = Array.Empty<BattleLogEntry>();
+        var log = Array.Empty<CombatLogEntry>();
         var expected = ExpectedRounds(party, enemies);
         var ticks = expected * 2;
 
-        var xp = _sut.ComputeBattleXp(party, enemies, log, ticks);
+        var xp = _sut.ComputeCombatXp(party, enemies, log, ticks);
         var baseXp = 3 * 12;
 
         Assert.Equal((int)(baseXp * 1.3), xp);
     }
 
     [Fact]
-    public void ComputeBattleXp_HalfExpectedRounds_GivesFifteenPercentBonus()
+    public void ComputeCombatXp_HalfExpectedRounds_GivesFifteenPercentBonus()
     {
         var party = new[] { MakeChar("Hero", 1) };
         var enemies = new[] { MakeChar("Goblin", 4) };
-        var log = Array.Empty<BattleLogEntry>();
+        var log = Array.Empty<CombatLogEntry>();
         var expected = ExpectedRounds(party, enemies);
         var ticks = Math.Max(1, expected / 2);
 
-        var xp = _sut.ComputeBattleXp(party, enemies, log, ticks);
+        var xp = _sut.ComputeCombatXp(party, enemies, log, ticks);
         var baseXp = 4 * 12;
 
         Assert.Equal((int)(baseXp * 1.15), xp);
     }
 
     [Fact]
-    public void ComputeBattleXp_ExtremeLongFight_ClampsAtMaxFactor()
+    public void ComputeCombatXp_ExtremeLongFight_ClampsAtMaxFactor()
     {
         var party = new[] { MakeChar("Hero", 1) };
         var enemies = new[] { MakeChar("Goblin", 3) };
-        var log = Array.Empty<BattleLogEntry>();
+        var log = Array.Empty<CombatLogEntry>();
         var ticks = 9999;
 
-        var xp = _sut.ComputeBattleXp(party, enemies, log, ticks);
+        var xp = _sut.ComputeCombatXp(party, enemies, log, ticks);
         var baseXp = 3 * 12;
 
         Assert.Equal(baseXp * 2, xp);
     }
 
     [Fact]
-    public void ComputeBattleXp_ZeroEnemyLevels_ReturnsZeroPlusBonuses()
+    public void ComputeCombatXp_ZeroEnemyLevels_ReturnsZeroPlusBonuses()
     {
         var party = new[] { MakeChar("Hero", 1) };
         var enemies = new[] { MakeChar("Rat", 0) };
@@ -165,26 +165,26 @@ public class LevelingServiceTests
         };
         var ticks = ExpectedRounds(party, enemies);
 
-        var xp = _sut.ComputeBattleXp(party, enemies, log, ticks);
+        var xp = _sut.ComputeCombatXp(party, enemies, log, ticks);
 
         Assert.Equal(8, xp);
     }
 
     [Fact]
-    public void ComputeBattleXp_EmptyEnemies_ReturnsZero()
+    public void ComputeCombatXp_EmptyEnemies_ReturnsZero()
     {
         var party = new[] { MakeChar("Hero", 1) };
         var enemies = Array.Empty<Character>();
-        var log = Array.Empty<BattleLogEntry>();
+        var log = Array.Empty<CombatLogEntry>();
         var ticks = 10;
 
-        var xp = _sut.ComputeBattleXp(party, enemies, log, ticks);
+        var xp = _sut.ComputeCombatXp(party, enemies, log, ticks);
 
         Assert.Equal(0, xp);
     }
 
     [Fact]
-    public void ComputeBattleXp_NegativeXpFromFumbles_ClampsAtMinimum()
+    public void ComputeCombatXp_NegativeXpFromFumbles_ClampsAtMinimum()
     {
         var party = new[] { MakeChar("Hero", 1) };
         var enemies = new[] { MakeChar("Rat", 1) };
@@ -196,13 +196,13 @@ public class LevelingServiceTests
         };
         var ticks = ExpectedRounds(party, enemies);
 
-        var xp = _sut.ComputeBattleXp(party, enemies, log, ticks);
+        var xp = _sut.ComputeCombatXp(party, enemies, log, ticks);
 
         Assert.Equal(1, xp);
     }
 
     [Fact]
-    public void AwardBattleXp_SplitsEvenlyAmongSurvivors()
+    public void AwardCombatXp_SplitsEvenlyAmongSurvivors()
     {
         var party = new[]
         {
@@ -210,10 +210,10 @@ public class LevelingServiceTests
             MakeChar("Lyra", 1, hp: 100, alive: true),
         };
         var enemies = new[] { MakeChar("Goblin", 3) };
-        var log = Array.Empty<BattleLogEntry>();
+        var log = Array.Empty<CombatLogEntry>();
         var ticks = ExpectedRounds(party, enemies);
 
-        var awards = _sut.AwardBattleXp(party, enemies, log, ticks);
+        var awards = _sut.AwardCombatXp(party, enemies, log, ticks);
         var baseXp = 3 * 12;
 
         Assert.Equal(2, awards.Count);
@@ -222,7 +222,7 @@ public class LevelingServiceTests
     }
 
     [Fact]
-    public void AwardBattleXp_DeadCharacterReceivesNothing()
+    public void AwardCombatXp_DeadCharacterReceivesNothing()
     {
         var party = new[]
         {
@@ -230,10 +230,10 @@ public class LevelingServiceTests
             MakeChar("Lyra", 1, hp: 0, alive: false),
         };
         var enemies = new[] { MakeChar("Goblin", 3) };
-        var log = Array.Empty<BattleLogEntry>();
+        var log = Array.Empty<CombatLogEntry>();
         var ticks = ExpectedRounds(party.Where(c => c.CurrentHitPoints > 0), enemies);
 
-        var awards = _sut.AwardBattleXp(party, enemies, log, ticks);
+        var awards = _sut.AwardCombatXp(party, enemies, log, ticks);
 
         Assert.Single(awards);
         Assert.True(awards.ContainsKey("Theron"));
@@ -241,44 +241,44 @@ public class LevelingServiceTests
     }
 
     [Fact]
-    public void AwardBattleXp_AllDead_ReturnsEmpty()
+    public void AwardCombatXp_AllDead_ReturnsEmpty()
     {
         var party = new[]
         {
             MakeChar("Theron", 1, hp: 0, alive: false),
         };
         var enemies = new[] { MakeChar("Goblin", 3) };
-        var log = Array.Empty<BattleLogEntry>();
+        var log = Array.Empty<CombatLogEntry>();
 
-        var awards = _sut.AwardBattleXp(party, enemies, log, 10);
+        var awards = _sut.AwardCombatXp(party, enemies, log, 10);
 
         Assert.Empty(awards);
     }
 
     [Fact]
-    public void AwardBattleXp_UpdatesCharacterExperiencePoints()
+    public void AwardCombatXp_UpdatesCharacterExperiencePoints()
     {
         var party = new[] { MakeChar("Theron", 1, hp: 100, alive: true) };
         var enemies = new[] { MakeChar("Goblin", 3) };
-        var log = Array.Empty<BattleLogEntry>();
+        var log = Array.Empty<CombatLogEntry>();
         var ticks = ExpectedRounds(party, enemies);
 
-        _ = _sut.AwardBattleXp(party, enemies, log, ticks);
+        _ = _sut.AwardCombatXp(party, enemies, log, ticks);
         var baseXp = 3 * 12;
 
         Assert.Equal(baseXp, party[0].ExperiencePoints);
     }
 
     [Fact]
-    public void AwardBattleXp_CharacterLevelsUpWhenXpExceedsThreshold()
+    public void AwardCombatXp_CharacterLevelsUpWhenXpExceedsThreshold()
     {
         var party = new[] { MakeChar("Theron", 1, xp: 95, hp: 100, alive: true) };
         var enemies = new[] { MakeChar("Goblin", 5) };
-        var log = Array.Empty<BattleLogEntry>();
+        var log = Array.Empty<CombatLogEntry>();
         var ticks = ExpectedRounds(party, enemies);
         var gain = 5 * 12;
 
-        _ = _sut.AwardBattleXp(party, enemies, log, ticks);
+        _ = _sut.AwardCombatXp(party, enemies, log, ticks);
 
         Assert.Equal(95 + gain, party[0].ExperiencePoints);
         Assert.True(party[0].Level > 1);
@@ -397,7 +397,7 @@ public class LevelingServiceTests
     private static int ExpectedRounds(IEnumerable<Character> party, IEnumerable<Character> enemies) =>
         Math.Max(1, (party.Count() + enemies.Count()) * 2);
 
-    private static BattleLogEntry MakeAttack(string actor, bool crit = false, bool fumble = false) => new()
+    private static CombatLogEntry MakeAttack(string actor, bool crit = false, bool fumble = false) => new()
     {
         Tick = 1,
         ActorName = actor,

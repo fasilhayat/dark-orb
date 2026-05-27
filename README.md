@@ -23,11 +23,11 @@ BattleArena is a homebrew fantasy RPG backend and data model for a Dungeons & Dr
 - `BattleArena.Infrastructure`
   - PostgreSQL data access, repositories, and database context
 - `BattleArena.Demo`
-  - Console-based demo app for running turn-based and realtime battles with narrated playback
+  - Console-based demo app for running turn-based and real-time combats with narrated playback
 - `BattleArena.UnitTests`
-  - Unit tests for application behavior and XP/leveling logic
+  - xUnit unit tests for application behaviour, resistance system, and XP/levelling logic (NSubstitute for mocks)
 - `BattleArena.AcceptanceTests`
-  - Acceptance tests written with Reqnroll
+  - Acceptance tests written with Reqnroll (BDD / Gherkin scenarios)
 
 ### Runtime behavior
 

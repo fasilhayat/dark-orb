@@ -3,6 +3,7 @@ namespace BattleArena.Demo;
 using Application.Interfaces;
 using Application.Models;
 using Application.Services;
+using System.IO;
 using Core.Entities;
 using Core.Entities.Enums;
 
@@ -27,7 +28,7 @@ static partial class Demo
 
     // ── Outer state (shared by playback functions) ────────────────────────────────
     internal static string ActiveActor = "";
-    internal static BattleResult Result = null!;
+    internal static CombatResult Result = null!;
     internal static Dictionary<string, int> MaxHp = new();
     internal static Dictionary<string, int> CurHp = new();
     internal static Party HeroParty = null!;
@@ -44,18 +45,32 @@ static partial class Demo
         PrintHeader();
         Scenario = PickScenario();
 
+        // ── Replay path — all setup and simulation already done by RunReplay() ──
+        if (Scenario == 'W')
+        {
+            if (!RunReplay()) return;
+            var replayMode = PickCombatMode();
+            CWL("\n  Press any key to watch the replay...", ConsoleColor.DarkGray);
+            Console.ReadKey(true);
+            Console.Clear();
+            PrintHeader();
+            if (replayMode == 'T') PlayTurnBased(); else PlayRealTime();
+            PrintSummary();
+            return;
+        }
+
         if (Scenario == 'D')
         {
             RunDuel();
         }
         else
         {
-            RunPartyBattle();
+            RunPartyCombat();
         }
 
-        var mode = PickBattleMode();
+        var mode = PickCombatMode();
 
-        // Targeting mode: only meaningful for Party Battle (1v1 always has one target).
+        // Targeting mode: only meaningful for Party Combat (1v1 always has one target).
         ITargetSelector heroSelector;
         var enemySelector = new LowestHpTargetSelector();
         if (Scenario == 'P')
@@ -78,12 +93,12 @@ static partial class Demo
         MaxHp = allMembers.ToDictionary(m => m.Character.Name, m => m.Character.MaxHitPoints);
         CurHp = new Dictionary<string, int>(MaxHp);
 
-        CWL("\n  Press any key to start the battle...", ConsoleColor.DarkGray);
+        CWL("\n  Press any key to start the combat...", ConsoleColor.DarkGray);
         Console.ReadKey(true);
         Console.Clear();
         PrintHeader();
 
-        // Show combatant stat sheets prior to battle
+        // Show combatant stat sheets prior to combat
         Console.WriteLine();
         if (Scenario == 'D')
         {
@@ -120,7 +135,7 @@ static partial class Demo
         }
 
         var diceSvc = new DiceService();
-        var simulator = new BattleSimulator(
+        var simulator = new CombatSimulator(
             new CombatService(diceSvc, CombatStats),
             new TurnmeterService(),
             new StatusEffectService(),
@@ -136,7 +151,8 @@ static partial class Demo
             PlayRealTime();
 
         PrintSummary();
-        AwardBattleXp();
+        DumpCombatLog();
+        AwardCombatXp();
     }
 
     private static void RunDuel()
@@ -161,7 +177,7 @@ static partial class Demo
         EnemyParty = Party.Solo(fighter2, f2Atk);
     }
 
-    private static void RunPartyBattle()
+    private static void RunPartyCombat()
     {
         var heroes = PickHeroParty();
         EnemyParty = BuildEnemyParty();
@@ -281,14 +297,49 @@ static partial class Demo
         }
     }
 
-    private static void AwardBattleXp()
+    private static void DumpCombatLog()
+    {
+        try
+        {
+            // Walk up from the executable to find the repo root (contains BattleArena.sln)
+            var dir = AppContext.BaseDirectory;
+            while (!string.IsNullOrEmpty(dir) && !File.Exists(Path.Combine(dir, "BattleArena.sln")))
+                dir = Path.GetDirectoryName(dir)!;
+
+            var outputDir = Path.Combine(string.IsNullOrEmpty(dir) ? AppContext.BaseDirectory : dir, "combat-logs");
+            Directory.CreateDirectory(outputDir);
+
+            var winner  = Result.WinningParty?.Name ?? "unknown";
+            var loser   = Result.LosingParty?.Name  ?? "unknown";
+            var label   = $"{winner}_vs_{loser}".Replace(" ", "_");
+            var txtPath = CombatLogWriter.Write(Result, label, outputDir);
+            var jsonPath = Path.ChangeExtension(txtPath, ".json");
+
+            Console.WriteLine();
+            CWL("  " + new string('─', 62), ConsoleColor.DarkGray);
+            CW("  Combat log saved  ", ConsoleColor.DarkGray);
+            CWL(Path.GetFileName(txtPath), ConsoleColor.Green);
+            CW("  Replay data saved ", ConsoleColor.DarkGray);
+            CWL(Path.GetFileName(jsonPath), ConsoleColor.DarkGreen);
+            CW("  Directory: ", ConsoleColor.DarkGray);
+            CWL(outputDir, ConsoleColor.DarkGray);
+            CWL("  " + new string('─', 62), ConsoleColor.DarkGray);
+            Console.WriteLine();
+        }
+        catch (Exception ex)
+        {
+            CWL($"  [warn] Could not write combat log: {ex.Message}", ConsoleColor.DarkYellow);
+        }
+    }
+
+    private static void AwardCombatXp()
     {
         var svc = new LevelingService();
         if (Result.WinningParty is null || Result.LosingParty is null) return;
 
         var winners = Result.WinningParty.Members.Select(m => m.Character);
         var losers  = Result.LosingParty.Members.Select(m => m.Character);
-        var awards  = svc.AwardBattleXp(winners, losers, Result.Log, Result.TotalTicks);
+        var awards  = svc.AwardCombatXp(winners, losers, Result.Log, Result.TotalTicks);
 
         Console.WriteLine();
         CWL("  " + new string('=', 62), ConsoleColor.Cyan);

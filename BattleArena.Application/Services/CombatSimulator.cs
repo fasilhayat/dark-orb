@@ -5,16 +5,16 @@ using Application.Models;
 using Core.Entities;
 using Core.Entities.Enums;
 
-// Drives the turn-based battle loop for any NvN configuration (1v1, 1vN, up to 6vN).
+// Drives the turn-based combat loop for any NvN configuration (1v1, 1vN, up to 6vN).
 //
 //   1. Every tick all living combatants gain turnmeter (TurnSpeed + DEX mod - armor penalty).
 //   2. All combatants whose meter reaches 100 act that tick, highest meter first.
 //   3. Each actor picks a random living enemy via ITargetSelector and resolves an attack.
 //   4. HP can go negative: 0 to -9 = knocked out, -10 or lower = dead.
 //   5. A fumble applies -2 AttackPower for the fumbler's next turn.
-//   6. Battle ends when one party has no living members, or maxTicks is exhausted.
-//   7. Every event is recorded in a BattleLogEntry with full detail.
-public class BattleSimulator : IBattleSimulator
+//   6. Combat ends when one party has no living members, or maxTicks is exhausted.
+//   7. Every event is recorded in a CombatLogEntry with full detail.
+public class CombatSimulator : ICombatSimulator
 {
     private readonly ICombatService       _combat;
     private readonly ITurnmeterService    _turnmeter;
@@ -24,7 +24,7 @@ public class BattleSimulator : IBattleSimulator
     private readonly ITargetSelector      _heroTargetSelector;
     private readonly ITargetSelector      _enemyTargetSelector;
 
-    public BattleSimulator(
+    public CombatSimulator(
         ICombatService combat,
         ITurnmeterService turnmeter,
         IStatusEffectService statusEffect,
@@ -45,17 +45,17 @@ public class BattleSimulator : IBattleSimulator
     // Party-vs-party async entry point — supports 1v1, 1vN, NvN (hero side max 6).
     // Observer receives every event in real time (use for GUI animation).
     // CancellationToken allows forfeiting or time-out from the caller.
-    public async Task<BattleResult> SimulateAsync(
+    public async Task<CombatResult> SimulateAsync(
         Party heroParty, Party enemyParty,
         int maxTicks = 1000,
-        IBattleObserver? observer = null,
+        ICombatObserver? observer = null,
         CancellationToken ct = default)
     {
-        var log    = new List<BattleLogEntry>();
+        var log    = new List<CombatLogEntry>();
         var states = BuildCombatantStates(heroParty, enemyParty);
 
         // Log + notify the observer for every event in one call.
-        async Task Notify(BattleLogEntry entry)
+        async Task Notify(CombatLogEntry entry)
         {
             log.Add(entry);
             if (observer != null)
@@ -84,7 +84,10 @@ public class BattleSimulator : IBattleSimulator
             foreach (var s in states.Where(s =>
                 s.Character.IsAlive && s.Meter.IsReady && IsCrowdControlled(s.Character)))
             {
-                await Notify(new BattleLogEntry
+                var expired = _statusEffect.TickAll(s.Character);
+                await NotifyExpiredEffectsAsync(tick, s.Character, expired, Notify);
+
+                await Notify(new CombatLogEntry
                 {
                     Tick      = tick,
                     ActorName = s.Character.Name,
@@ -123,7 +126,7 @@ public class BattleSimulator : IBattleSimulator
                     enemies.Select(s => s.Character),
                     ct);
 
-                await Notify(new BattleLogEntry
+                await Notify(new CombatLogEntry
                 {
                     Tick             = tick,
                     ActorName        = actorState.Character.Name,
@@ -196,7 +199,7 @@ public class BattleSimulator : IBattleSimulator
                         StackRule           = StackRule.NoStack,
                         Source              = "Fumble"
                     });
-                    await Notify(new BattleLogEntry
+                    await Notify(new CombatLogEntry
                     {
                         Tick      = tick,
                         ActorName = actorState.Character.Name,
@@ -211,15 +214,15 @@ public class BattleSimulator : IBattleSimulator
             }
         }
 
-        return new BattleResult { MaxTicksReached = true, TotalTicks = maxTicks, Log = log };
+        return new CombatResult { MaxTicksReached = true, TotalTicks = maxTicks, Log = log, Seed = _dice.Seed, Party1 = heroParty, Party2 = enemyParty };
     }
 
     // 1v1 async convenience wrapper.
-    public Task<BattleResult> SimulateAsync(
+    public Task<CombatResult> SimulateAsync(
         Character fighter,  IAttackSource? fighterAttack,
         Character opponent, IAttackSource? opponentAttack,
         int maxTicks = 1000,
-        IBattleObserver? observer = null,
+        ICombatObserver? observer = null,
         CancellationToken ct = default) =>
         SimulateAsync(
             Party.Solo(fighter,  fighterAttack),
@@ -228,10 +231,10 @@ public class BattleSimulator : IBattleSimulator
 
     // Sync wrappers — safe for console/test contexts (no sync context).
     // Do not call from a UI thread.
-    public BattleResult Simulate(Party heroParty, Party enemyParty, int maxTicks = 1000) =>
+    public CombatResult Simulate(Party heroParty, Party enemyParty, int maxTicks = 1000) =>
         SimulateAsync(heroParty, enemyParty, maxTicks).GetAwaiter().GetResult();
 
-    public BattleResult Simulate(
+    public CombatResult Simulate(
         Character fighter,  IAttackSource? fighterAttack,
         Character opponent, IAttackSource? opponentAttack,
         int maxTicks = 1000) =>
@@ -250,7 +253,7 @@ public class BattleSimulator : IBattleSimulator
         return states;
     }
 
-    private static IAttackSource ResolveAttackSource(CombatantState state)
+    private IAttackSource ResolveAttackSource(CombatantState state)
     {
         if (state.AttackSource is not null) return state.AttackSource;
 
@@ -259,14 +262,14 @@ public class BattleSimulator : IBattleSimulator
             throw new InvalidOperationException(
                 $"{state.Character.Name} has no weapon or memorized spells.");
 
-        return spells[Random.Shared.Next(spells.Count)];
+        return spells[_dice.RollIndex(spells.Count)];
     }
 
-    private BattleLogEntry BuildAfterTurnEntry(CombatantState state, int tick)
+    private CombatLogEntry BuildAfterTurnEntry(CombatantState state, int tick)
     {
         var before = state.Meter.CurrentValue;
         state.Meter = _turnmeter.AfterTurn(state.Meter);
-        return new BattleLogEntry
+        return new CombatLogEntry
         {
             Tick            = tick,
             ActorName       = state.Character.Name,
@@ -279,10 +282,10 @@ public class BattleSimulator : IBattleSimulator
         };
     }
 
-    private static BattleLogEntry BuildTurnMeterGainEntry(int tick, CombatantState s)
+    private static CombatLogEntry BuildTurnMeterGainEntry(int tick, CombatantState s)
     {
         var before = s.PrevMeter;
-        return new BattleLogEntry
+        return new CombatLogEntry
         {
             Tick            = tick,
             ActorName       = s.Character.Name,
@@ -295,7 +298,7 @@ public class BattleSimulator : IBattleSimulator
         };
     }
 
-    private static BattleLogEntry BuildDefeatEntry(int tick, Character target) => new()
+    private static CombatLogEntry BuildDefeatEntry(int tick, Character target) => new()
     {
         Tick      = tick,
         ActorName = target.Name,
@@ -305,7 +308,7 @@ public class BattleSimulator : IBattleSimulator
             : $"{target.Name} is unconscious! (HP: {target.CurrentHitPoints})"
     };
 
-    private static BattleLogEntry BuildAttackEntry(
+    private static CombatLogEntry BuildAttackEntry(
         int tick, string actorName, string attackSourceName, bool isSpell,
         string targetName, AttackResult result, DamageType damageType = DamageType.Slashing)
     {
@@ -329,7 +332,7 @@ public class BattleSimulator : IBattleSimulator
             result.IsHit || result.IsCriticalHit, result.IsCriticalHit, result.IsFumble);
         var phrase = CombatNarrator.GetPhrase(actorName, targetName, ctx, isSpell, damageType);
 
-        return new BattleLogEntry
+        return new CombatLogEntry
         {
             Tick             = tick,
             ActorName        = actorName,
@@ -349,7 +352,7 @@ public class BattleSimulator : IBattleSimulator
         };
     }
 
-    private static BattleLogEntry BuildDamageEntry(
+    private static CombatLogEntry BuildDamageEntry(
         int tick, string targetName, int damage, int hpBefore, int hpAfter) => new()
     {
         Tick           = tick,
@@ -379,24 +382,15 @@ public class BattleSimulator : IBattleSimulator
         };
     }
 
-    private int RollDie(DieType die) => die switch
-    {
-        DieType.D4  => Random.Shared.Next(1, 5),
-        DieType.D6  => Random.Shared.Next(1, 7),
-        DieType.D8  => Random.Shared.Next(1, 9),
-        DieType.D10 => Random.Shared.Next(1, 11),
-        DieType.D12 => Random.Shared.Next(1, 13),
-        DieType.D20 => Random.Shared.Next(1, 21),
-        _           => 0
-    };
+    private int RollDie(DieType die) => _dice.Roll(die);
 
     // ── Extracted acting-loop helpers ───────────────────────────────────────
 
-    private async Task<BattleResult?> ProcessActorDoTAsync(
+    private async Task<CombatResult?> ProcessActorDoTAsync(
         int tick, CombatantState actorState,
         Party heroParty, Party enemyParty,
-        List<BattleLogEntry> log,
-        Func<BattleLogEntry, Task> notify)
+        List<CombatLogEntry> log,
+        Func<CombatLogEntry, Task> notify)
     {
         foreach (var dotEffect in actorState.Character.ActiveStatusEffects
             .Where(e => e.Type == StatusEffectType.DamageOverTime && e.DamagePerTurn > 0)
@@ -406,7 +400,7 @@ public class BattleSimulator : IBattleSimulator
             var dotDmg  = dotEffect.DamagePerTurn;
             actorState.Character.CurrentHitPoints -= dotDmg;
 
-            await notify(new BattleLogEntry
+            await notify(new CombatLogEntry
             {
                 Tick             = tick,
                 ActorName        = actorState.Character.Name,
@@ -430,15 +424,12 @@ public class BattleSimulator : IBattleSimulator
 
     private async Task ProcessOnHitEffectsAsync(
         int tick, Character target, Spell spell,
-        Func<BattleLogEntry, Task> notify)
+        Func<CombatLogEntry, Task> notify)
     {
         if (spell.OnHitEffects.Count == 0) return;
 
         foreach (var template in spell.OnHitEffects)
         {
-            if (Random.Shared.Next(100) >= template.ApplicationChance)
-                continue;
-
             var dmgPerTurn = template.DamagePerTurn;
             if (dmgPerTurn <= 0 && template.DoTDamageCount > 0)
                 for (var i = 0; i < template.DoTDamageCount; i++)
@@ -448,35 +439,56 @@ public class BattleSimulator : IBattleSimulator
             {
                 Name                 = template.Name,
                 Type                 = template.Type,
+                ResistanceType       = template.ResistanceType,
+                ResistanceBonuses    = template.ResistanceBonuses,
                 Duration             = template.Duration,
                 DamagePerTurn        = dmgPerTurn,
                 AttackPowerModifier  = template.AttackPowerModifier,
                 DefensePowerModifier = template.DefensePowerModifier,
                 TurnMeterModifier    = template.TurnMeterModifier,
                 StackRule            = template.StackRule,
+                ApplicationChance    = template.ApplicationChance,
                 Source               = spell.Name
             };
-            _statusEffect.Apply(target, effect);
 
-            await notify(new BattleLogEntry
+            var resistance = target.ComputeResistance(effect.ResistanceType);
+            var appResult = _statusEffect.TryApply(target, effect, resistance, _dice);
+
+            if (appResult.Applied)
             {
-                Tick             = tick,
-                ActorName        = target.Name,
-                EventType        = "EffectApplied",
-                StatusEffectName = effect.Name,
-                Message          = $"{target.Name} is afflicted with {effect.Name}!"
-            });
+                await notify(new CombatLogEntry
+                {
+                    Tick             = tick,
+                    ActorName        = target.Name,
+                    EventType        = "EffectApplied",
+                    StatusEffectName = effect.Name,
+                    Message          = $"{target.Name} is afflicted with {effect.Name}!"
+                });
+            }
+            else if (appResult.WasResisted)
+            {
+                await notify(new CombatLogEntry
+                {
+                    Tick             = tick,
+                    ActorName        = target.Name,
+                    EventType        = "EffectResisted",
+                    StatusEffectName = effect.Name,
+                    ResistRoll       = appResult.Roll,
+                    ResistThreshold  = appResult.TotalResistance,
+                    Message          = $"{target.Name} resists {effect.Name}! (rolled {appResult.Roll} vs {appResult.TotalResistance} resistance)"
+                });
+            }
         }
     }
 
     private static async Task NotifyExpiredEffectsAsync(
         int tick, Character character,
         IReadOnlyList<string> expired,
-        Func<BattleLogEntry, Task> notify)
+        Func<CombatLogEntry, Task> notify)
     {
         foreach (var name in expired)
         {
-            await notify(new BattleLogEntry
+            await notify(new CombatLogEntry
             {
                 Tick             = tick,
                 ActorName        = character.Name,
@@ -487,22 +499,25 @@ public class BattleSimulator : IBattleSimulator
         }
     }
 
-    private static BattleResult? BuildDefeatResult(
+    private CombatResult? BuildDefeatResult(
         int tick, int defeatedPartyIndex,
         Character defeatedCharacter,
         Party heroParty, Party enemyParty,
-        List<BattleLogEntry> log)
+        List<CombatLogEntry> log)
     {
         var losingParty = defeatedPartyIndex == 0 ? heroParty : enemyParty;
         if (!losingParty.IsDefeated) return null;
 
-        return new BattleResult
+        return new CombatResult
         {
             WinningParty = defeatedPartyIndex == 0 ? enemyParty : heroParty,
             LosingParty  = losingParty,
             LoserStatus  = defeatedCharacter.VitalStatus,
             TotalTicks   = tick,
-            Log          = log
+            Log          = log,
+            Seed         = _dice.Seed,
+            Party1       = heroParty,
+            Party2       = enemyParty
         };
     }
 
