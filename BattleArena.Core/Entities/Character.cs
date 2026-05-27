@@ -43,6 +43,19 @@ public class Character
         IsKnockedOut ? CharacterVitalStatus.KnockedOut :
                        CharacterVitalStatus.Alive;
 
+    private const int _spellTmCostIntFactor = 3;
+    private const int _spellTmCostLevelFactor = 1;
+    private const int _minSpellTmCost = 10;
+
+    public int ComputeSpellTurnMeterCost(Spell spell)
+    {
+        var intMod = (Intelligence - 10) / 2;
+        var reduction = intMod * _spellTmCostIntFactor
+                      + Level * _spellTmCostLevelFactor
+                      + Equipment.TotalTurnMeterCostReduction;
+        return Math.Max(_minSpellTmCost, spell.TurnMeterCost - reduction);
+    }
+
     /// <summary>
     /// Total resistance (0–100) for the given type, summed from all sources:
     ///   1. Racial feats (e.g. Elf/Dwarf "Magic Resistance" = 25)

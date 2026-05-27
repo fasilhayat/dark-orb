@@ -115,6 +115,7 @@ public class CombatSimulator : ICombatSimulator
 
                 var meterNow = actorState.Meter.CurrentValue;
                 var isSpell  = attackSource is Spell;
+                var tmCost   = isSpell ? actorState.Character.ComputeSpellTurnMeterCost((Spell)attackSource) : 100;
 
                 // ── TARGET SELECTION ───────────────────────────────────────────
                 // Selected before TurnStart is logged so TargetName can be stamped.
@@ -145,7 +146,7 @@ public class CombatSimulator : ICombatSimulator
                 if (dotResult is not null)
                 {
                     actorState.Meter.IsActive = false;
-                    await Notify(BuildAfterTurnEntry(actorState, tick));
+                    await Notify(BuildAfterTurnEntry(actorState, tick, tmCost));
                     return dotResult;
                 }
 
@@ -173,6 +174,31 @@ public class CombatSimulator : ICombatSimulator
                     if (attackSource is Spell spell)
                         await ProcessOnHitEffectsAsync(tick, target, spell, Notify);
 
+                    // ── SPELL DISRUPTION ────────────────────────────────────
+                    // Melee hits on a spellcaster have a chance to disrupt their
+                    // spellcasting, reducing turnmeter progress.
+                    if (attackSource.AttackType == AttackType.Melee
+                        && result.IsHit && result.Damage > 0
+                        && target.MemorizedSpells.Count > 0)
+                    {
+                        var targetState = states.First(s => s.Character == target);
+                        if (targetState.Meter.CurrentValue > 0 && _dice.Roll(DieType.D100) <= 20)
+                        {
+                            var tmLoss = Math.Min(25, targetState.Meter.CurrentValue);
+                            var before = targetState.Meter.CurrentValue;
+                            targetState.Meter.CurrentValue -= tmLoss;
+                            await Notify(new CombatLogEntry
+                            {
+                                Tick = tick,
+                                ActorName = target.Name,
+                                EventType = "SpellDisrupted",
+                                TurnMeterBefore = before,
+                                TurnMeterAfter = targetState.Meter.CurrentValue,
+                                Message = $"{target.Name}'s spellcasting is disrupted! TM reduced by {tmLoss}."
+                            });
+                        }
+                    }
+
                     if (target.CurrentHitPoints <= 0)
                     {
                         await Notify(BuildDefeatEntry(tick, target));
@@ -181,7 +207,7 @@ public class CombatSimulator : ICombatSimulator
                         if (defResult is not null)
                         {
                             actorState.Meter.IsActive = false;
-                            await Notify(BuildAfterTurnEntry(actorState, tick));
+                            await Notify(BuildAfterTurnEntry(actorState, tick, tmCost));
                             return defResult;
                         }
                     }
@@ -210,7 +236,7 @@ public class CombatSimulator : ICombatSimulator
 
                 // ── END TURN ───────────────────────────────────────────────────
                 actorState.Meter.IsActive = false;
-                await Notify(BuildAfterTurnEntry(actorState, tick));
+                await Notify(BuildAfterTurnEntry(actorState, tick, tmCost));
             }
         }
 
@@ -265,10 +291,10 @@ public class CombatSimulator : ICombatSimulator
         return spells[_dice.RollIndex(spells.Count)];
     }
 
-    private CombatLogEntry BuildAfterTurnEntry(CombatantState state, int tick)
+    private CombatLogEntry BuildAfterTurnEntry(CombatantState state, int tick, int tmCost = 100)
     {
         var before = state.Meter.CurrentValue;
-        state.Meter = _turnmeter.AfterTurn(state.Meter);
+        state.Meter = _turnmeter.AfterTurn(state.Meter, tmCost);
         return new CombatLogEntry
         {
             Tick            = tick,
@@ -278,7 +304,7 @@ public class CombatSimulator : ICombatSimulator
             TurnMeterAfter  = state.Meter.CurrentValue,
             IsReady         = state.Meter.IsReady,
             IsActive        = false,
-            Message         = $"{state.Character.Name} ends turn.  TM: {before} -> {state.Meter.CurrentValue}"
+            Message         = $"{state.Character.Name} ends turn.  TM: {before} -> {state.Meter.CurrentValue} (cost: {tmCost})"
         };
     }
 

@@ -64,7 +64,7 @@ static partial class Demo
     {
         Name = "Fireball", Description = "A blazing orb of fire",
         School = SpellSchool.Evocation, DamageDie = DieType.D6, DamageCount = 3,
-        DamageType = DamageType.Fire, AttackBonus = 2, SpellLevel = 3,
+        DamageType = DamageType.Fire, AttackBonus = 2, SpellLevel = 3, TurnMeterCost = 90,
         OnHitEffects =
         [
             new StatusEffect { Name = "Burning",   Type = StatusEffectType.DamageOverTime, ResistanceType = ResistanceType.Fire, Duration = 3, DoTDamageCount = 1, DoTDamageDie = DieType.D4, ApplicationChance = 30, StackRule = StackRule.HighestWins }
@@ -74,7 +74,7 @@ static partial class Demo
     {
         Name = "Ice Bolt", Description = "A shard of magical ice",
         School = SpellSchool.Evocation, DamageDie = DieType.D8, DamageCount = 2,
-        DamageType = DamageType.Cold, AttackBonus = 2, SpellLevel = 2,
+        DamageType = DamageType.Cold, AttackBonus = 2, SpellLevel = 2, TurnMeterCost = 80,
         OnHitEffects =
         [
             new StatusEffect { Name = "Freezing",  Type = StatusEffectType.DamageOverTime, ResistanceType = ResistanceType.Cold, Duration = 2, DoTDamageCount = 1, DoTDamageDie = DieType.D6, ApplicationChance = 25, StackRule = StackRule.HighestWins },
@@ -85,7 +85,7 @@ static partial class Demo
     {
         Name = "Lightning Strike", Description = "A bolt of crackling lightning",
         School = SpellSchool.Evocation, DamageDie = DieType.D10, DamageCount = 2,
-        DamageType = DamageType.Lightning, AttackBonus = 3, SpellLevel = 4,
+        DamageType = DamageType.Lightning, AttackBonus = 3, SpellLevel = 4, TurnMeterCost = 100,
         OnHitEffects =
         [
             new StatusEffect { Name = "Shocked",   Type = StatusEffectType.Debuff,         ResistanceType = ResistanceType.Magic, Duration = 2, AttackPowerModifier = -2, ApplicationChance = 20, StackRule = StackRule.HighestWins }
@@ -95,7 +95,7 @@ static partial class Demo
     {
         Name = "Blade Barrier", Description = "A wall of spinning blades that slicks the ground with oil",
         School = SpellSchool.AoE, DamageDie = DieType.D8, DamageCount = 3,
-        DamageType = DamageType.Slashing, AttackBonus = 2, SpellLevel = 3,
+        DamageType = DamageType.Slashing, AttackBonus = 2, SpellLevel = 3, TurnMeterCost = 90,
         OnHitEffects =
         [
             new StatusEffect { Name = "Oil Slick", Type = StatusEffectType.Debuff,         ResistanceType = ResistanceType.Magic, Duration = 3, TurnMeterModifier = -4, ApplicationChance = 40, StackRule = StackRule.HighestWins },
@@ -133,7 +133,7 @@ static partial class Demo
         ClassId = 5, StrikeRating = 13, TurnSpeed = 8, MaxHitPoints = 30, CurrentHitPoints = 30,
         Equipment = new ArmorSlots
         {
-            Chest = new Armor { Name = "Mage Robes", ArmorClass = 14, Mitigation = 0, MaxDexterityBonus = 6 }
+            Chest = new Armor { Name = "Mage Robes", ArmorClass = 14, Mitigation = 0, MaxDexterityBonus = 6, TurnMeterCostReduction = 5 }
         },
         MemorizedSpells = [Fireball, IceBolt, LightningStrike, BladeBarrier]
     };
@@ -155,7 +155,7 @@ static partial class Demo
     {
         Name = "Shadow Bolt", Description = "A bolt of shadow energy",
         School = SpellSchool.Other, DamageDie = DieType.D8, DamageCount = 2,
-        DamageType = DamageType.Cold, AttackBonus = 2, SpellLevel = 2,
+        DamageType = DamageType.Cold, AttackBonus = 2, SpellLevel = 2, TurnMeterCost = 80,
         OnHitEffects =
         [
             new StatusEffect { Name = "Chilled",   Type = StatusEffectType.DamageOverTime, ResistanceType = ResistanceType.Cold, Duration = 2, DoTDamageCount = 1, DoTDamageDie = DieType.D4, ApplicationChance = 20, StackRule = StackRule.HighestWins }
@@ -165,7 +165,7 @@ static partial class Demo
     {
         Name = "Soul Drain", Description = "Saps the life force of a target",
         School = SpellSchool.Other, DamageDie = DieType.D10, DamageCount = 1,
-        DamageType = DamageType.Fire, AttackBonus = 1, SpellLevel = 2,
+        DamageType = DamageType.Fire, AttackBonus = 1, SpellLevel = 2, TurnMeterCost = 80,
         OnHitEffects =
         [
             new StatusEffect { Name = "Burning",   Type = StatusEffectType.DamageOverTime, ResistanceType = ResistanceType.Fire, Duration = 3, DoTDamageCount = 1, DoTDamageDie = DieType.D4, ApplicationChance = 20, StackRule = StackRule.HighestWins }
@@ -175,7 +175,7 @@ static partial class Demo
     {
         Name = "Root", Description = "Anchors the target with grasping vines",
         School = SpellSchool.CC, DamageDie = DieType.D4, DamageCount = 1,
-        DamageType = DamageType.Bludgeoning, AttackBonus = 0, SpellLevel = 2,
+        DamageType = DamageType.Bludgeoning, AttackBonus = 0, SpellLevel = 2, TurnMeterCost = 80,
         OnHitEffects =
         [
             new StatusEffect { Name = "Rooted",    Type = StatusEffectType.Root,            ResistanceType = ResistanceType.Magic, Duration = 2, ApplicationChance = 100, StackRule = StackRule.NoStack },
@@ -213,7 +213,7 @@ static partial class Demo
         ClassId = 5, StrikeRating = 14, TurnSpeed = 9, MaxHitPoints = 25, CurrentHitPoints = 25,
         Equipment = new ArmorSlots
         {
-            Chest = new Armor { Name = "Dark Robes", ArmorClass = 14, Mitigation = 0, MaxDexterityBonus = 6 }
+            Chest = new Armor { Name = "Dark Robes", ArmorClass = 14, Mitigation = 0, MaxDexterityBonus = 6, TurnMeterCostReduction = 5 }
         },
         MemorizedSpells = [ShadowBolt, SoulDrain, Root]
     };

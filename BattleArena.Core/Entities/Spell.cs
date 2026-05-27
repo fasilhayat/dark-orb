@@ -9,6 +9,7 @@ public class Spell : IAttackSource
     public string Description { get; set; } = string.Empty;
     public SpellSchool School { get; set; }
     public int ManaCost { get; set; }
+    public int TurnMeterCost { get; set; } = 100;
     public int SpellLevel { get; set; }
     public int DamageCount { get; set; } = 1;
     public DieType DamageDie { get; set; }

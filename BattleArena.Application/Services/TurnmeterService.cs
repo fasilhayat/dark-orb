@@ -25,13 +25,13 @@ public class TurnmeterService : ITurnmeterService
         };
     }
 
-    public TurnmeterState AfterTurn(TurnmeterState state)
+    public TurnmeterState AfterTurn(TurnmeterState state, int cost = 100)
     {
         return new TurnmeterState
         {
             CharacterId = state.CharacterId,
             CharacterName = state.CharacterName,
-            CurrentValue = state.CurrentValue - 100
+            CurrentValue = Math.Max(0, state.CurrentValue - cost)
         };
     }
 }
