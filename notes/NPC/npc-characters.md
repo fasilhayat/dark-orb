@@ -5,6 +5,8 @@
 ## Old Man Kael — Blind Seer
 *Human Priest, Level 8 — Quest Giver*
 
+<img src="portraits/old-man-kael.png" alt="Old Man Kael" width="150"/>
+
 A wise elderly human priest with long, wild white hair and a patch-like blindfold over milky-white eyes. His face is deeply wrinkled, yet serene, as if he looks inward rather than outward. He wears layered, dusty-blue clerical robes embroidered with faint sun-motifs and carries a gnarled staff wrapped in tiny prayer beads. Soft, warm light glows faintly around his hands, hinting at divination magic.
 
 > **Art prompt:** painterly fantasy, warm ambience, heroic-good.
@@ -27,6 +29,8 @@ A wise elderly human priest with long, wild white hair and a patch-like blindfol
 
 ## Greta Ironhand — Dwarf Smith
 *Dwarf Fighter, Level 12 — Merchant*
+
+<img src="portraits/greta-ironhand.png" alt="Greta Ironhand" width="150"/>
 
 A battle-hardened dwarf woman with a short, muscular build, auburn hair tied in practical braids, and a thick beard with metal rings woven through. Her arms are corded with muscle from years at the forge, and soot and faint burn scars mark her skin. She wears a leather apron over steel-mail armor, an iron-greaved belt, and gauntlets with runes etched into them.
 
@@ -53,6 +57,8 @@ A battle-hardened dwarf woman with a short, muscular build, auburn hair tied in 
 ## Shadowmere — Elf Rogue Leader
 *Elf Rogue, Level 10 — Quest Giver*
 
+<img src="portraits/shadowmere.png" alt="Shadowmere" width="150"/>
+
 A striking female elf rogue with pale silver skin, long dark hair tied in a high warrior-like ponytail, and narrow, piercing eyes that miss nothing. She wears form-fitting layered black and deep-purple leather armor with hidden pockets and subtle Nightblades-style embroidery. Her gloves are fingerless, and she carries a slender dagger at each hip plus a thin-chain garrote.
 
 > **Art prompt:** cinematic fantasy, high-contrast lighting, rogue-thief vibe.
@@ -77,6 +83,8 @@ A striking female elf rogue with pale silver skin, long dark hair tied in a high
 ## Merchant Vex — Kobold Trader
 *Kobold Rogue, Level 6 — Merchant*
 
+<img src="portraits/merchant-vex.png" alt="Merchant Vex" width="150"/>
+
 A petite, grinning kobold trader with bright green scales, a short snout, and oversized curious eyes. She wears a patchwork cloak made of mismatched cloth scraps tied together with twine, and under it a practical vest with many pockets. On her back rests a small, wheeled cart loaded with jumbled trinkets, fake gems, cracked scrolls, and one or two real-looking magical rings.
 
 > **Art prompt:** cartoon-ish fantasy or stylized D&D, bright colors, charming rogue.
@@ -99,6 +107,8 @@ A petite, grinning kobold trader with bright green scales, a short snout, and ov
 
 ## Kaela Vornskald
 *Human Barbarian, Level 10 — Wanderer*
+
+<img src="portraits/kaela-vornskald.png" alt="Kaela Vornskald" width="150"/>
 
 Kaela Vornskald is built like a siege weapon made flesh — dense muscle across shoulders, arms, and core, the kind of physique earned through years of dragging steel through blood, not training halls or ceremony. She does not carry her strength as decoration; it is functional, economical, and always ready to break something that refuses to yield.
 
@@ -125,6 +135,8 @@ Her barbarian armor is light and revealing, enhancing her beauty as she looks li
 ## High Priestess Luna — Moon Temple Leader
 *Human Priest, Level 14 — Quest Giver*
 
+<img src="portraits/high-priestess%20luna.png" alt="High Priestess Luna" width="150"/>
+
 A graceful, mature human woman with long, flowing silver-white hair and gentle blue-grey eyes that seem to reflect moonlight. Her face is serene and composed, with fine age-giving lines that speak of wisdom rather than weariness. She wears ornate white-and-silver priestly robes trimmed with lunar-phase patterns, a crescent-moon pendant, and a diadem shaped like a slim silver crown.
 
 > **Art prompt:** elegant, high-fantasy, soft-light portrait.
@@ -148,6 +160,8 @@ A graceful, mature human woman with long, flowing silver-white hair and gentle b
 
 ## Lysander the Bard — Halfling Lore-Keeper
 *Halfling Bard, Level 7 — Quest Giver*
+
+<img src="portraits/lysander-the-bard.png" alt="Lysander the Bard" width="150"/>
 
 A cheerful halfling bard with curly auburn hair, rosy cheeks, and lively hazel eyes. He wears a quilted colorful vest over a soft-colored shirt, durable trousers, and a wide-brimmed traveler's hat tipped jauntily. A well-worn lute is slung at his side, and his belt is hung with rolled-up maps, songbooks, and small charm pouches.
 
@@ -173,6 +187,8 @@ A cheerful halfling bard with curly auburn hair, rosy cheeks, and lively hazel e
 ## Elder Treant — Ancient Forest Guardian
 *Elf Druid, Level 20 — Quest Giver*
 
+<img src="portraits/elder-treant.png" alt="Elder Treant" width="150"/>
+
 A massive, ancient treant-like elf druid whose body is half-tree and half-human: bark-like skin, branches twisting into hair, and moss-grown robes woven from vines and leaves. His face is weathered, with deep-set eyes that glow faintly green like forest light. His staff is a gnarled branch of a great tree, with tiny glowing leaves and roots that curl around his feet.
 
 > **Art prompt:** epic fantasy, nature-magic, high-detail.
@@ -196,6 +212,8 @@ A massive, ancient treant-like elf druid whose body is half-tree and half-human:
 
 ## Ser Garrick Dawnshield
 *Human Paladin, Level 12 — Holy Vanguard / Protector*
+
+<img src="portraits/ser-garrick-dawnshield.png" alt="Ser Garrick Dawnshield" width="150"/>
 
 Ser Garrick Dawnshield is a towering paladin clad in polished silver plate marked with the sigil of Heaven. Once a knight of the Silver Basilica, Garrick survived the Fall of Black Hollow where an entire battalion was consumed by demonic fire. Since then, he wanders the realm seeking signs of infernal corruption. Though feared for his unwavering zeal, those he protects speak of his kindness toward the weak and merciless fury toward evil.
 
@@ -223,6 +241,8 @@ He carries the massive warhammer *Judicator*, a relic said to glow brighter near
 ## Vaelith Moonveil
 *Elf Fighter / Mage, Level 9 — Arcane Duelist*
 
+<img src="portraits/vaelith-moonveil.png" alt="Vaelith Moonveil" width="150"/>
+
 Vaelith Moonveil combines blade mastery with devastating arcane precision. Born among the High Elves of the Crystal Dominion, she was expelled from the Arcane Conclave after experimenting with forbidden battle magic that fused swordsmanship with destructive spellcasting.
 
 She fights with a slender enchanted longsword while weaving magic through rapid gestures and whispered incantations. Her eyes glow faint blue whenever she channels arcane energy. Vaelith seeks forgotten ruins and lost magical artifacts, believing ancient knowledge should never be chained by fearful scholars.
@@ -247,6 +267,8 @@ She fights with a slender enchanted longsword while weaving magic through rapid 
 
 ## Sister Elira Vane
 *Human Cleric, Level 7 — Healer / Exorcist*
+
+<img src="portraits/sister-elira-vane.png" alt="Sister Elira Vane" width="150"/>
 
 Sister Elira Vane serves the Moon Temple as both healer and spiritual guide. Soft-spoken and calm, she is beloved by the common folk for tending plague victims during the Ash Fever outbreak without fear for her own life.
 
@@ -276,6 +298,8 @@ She carries a silver censer that burns sacred incense during rituals and battle 
 ## Lord Aethor Valeborn
 *Elf Knight, Level 11 — Noble Duelist / Heavy Cavalry Commander*
 
+<img src="portraits/lord-aethor-valeborn.png" alt="Lord Aethor Valeborn" width="150"/>
+
 Lord Aethor Valeborn is an elven knight exiled from his ancestral house after refusing to abandon mortal villages during the War of Ashes. Unlike many elves, Aethor believes honor is measured through sacrifice, not bloodline.
 
 He wields the two-handed greatsword *Winter Oath*, a massive blade forged from pale froststeel. Calm and disciplined in battle, he fights with measured precision instead of reckless aggression. His armor is adorned with faded heraldry from a forgotten elven kingdom swallowed by war centuries ago.
@@ -301,6 +325,8 @@ He wields the two-handed greatsword *Winter Oath*, a massive blade forged from p
 
 ## Finnick "Quickfingers" Bramblefoot
 *Halfling Rogue, Level 8 — Scout / Treasure Hunter*
+
+<img src="portraits/finnick-quickfingers-bramblefoot.png" alt="Finnick Bramblefoot" width="150"/>
 
 Finnick Bramblefoot is a notorious halfling thief known throughout taverns and criminal circles alike. Charming, sarcastic, and impossible to pin down, Finnick has robbed corrupt nobles, escaped three executions, and once stole a jeweled crown during the coronation ceremony itself.
 
@@ -329,6 +355,8 @@ He favors twin daggers hidden beneath his travel cloak and relies on speed, dece
 ## Korg Stonefist
 *Orc Barbarian, Level 15 — Hostile (Wandering Berserker)*
 
+<img src="portraits/korg-stonefist.png" alt="Korg Stonefist" width="150"/>
+
 A wandering orc berserker who challenges all who cross his path. Towering and scarred from a thousand battles, Korg lives by the orcish code of *Ushog* — the eternal struggle. He speaks little and fights with savage joy, laughing as he crushes armor and bone beneath his maul.
 
 He wears cursed plate mail that feeds on his pain, the black iron fused to his body by a shaman's ritual gone wrong. Blood seeps from the armor's joints even when he is unharmed, staining the ground wherever he walks.
@@ -354,6 +382,8 @@ He wears cursed plate mail that feeds on his pain, the black iron fused to his b
 ## Graveworm
 *Undead Fighter, Level 9 — Hostile (Undead Warlord)*
 
+<img src="portraits/graveworm.png" alt="Graveworm" width="150"/>
+
 An undead warlord who commands a legion of skeletons in the Bone Fields. In life, he was a knight of the northern kingdoms who was slain by the very blade he now carries — *Frostbite*. The sword that killed him bound his soul to its icy edge, and he has risen as an undead guardian, doomed to protect the weapon that ended him.
 
 Graveworm's hollow eyes glow with cold blue light. Fragments of his old armor still cling to his rotting form, fused with frost and bone.
@@ -377,6 +407,8 @@ Graveworm's hollow eyes glow with cold blue light. Fragments of his old armor st
 
 ## Infernal Commander Maleth
 *Demon Knight, Level 18 — Hostile (Boss)*
+
+<img src="portraits/infernal-commander-maleth.png" alt="Infernal Commander Maleth" width="150"/>
 
 A demon lord commanding the legions of the Fire Pits. Maleth is a towering figure wreathed in hellfire, his body a mass of molten-iron muscle and jagged black horns. He wields the legendary lance *Stormbringer* and rides a nightmare steed whose hooves leave burning imprints in the stone.
 
