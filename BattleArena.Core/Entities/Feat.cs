@@ -8,4 +8,5 @@ public class Feat
     public int? RaceId { get; set; }
     public int AttackBonus { get; set; }
     public int DefenseBonus { get; set; }
+    public List<ResistanceBonus> Resistances { get; set; } = new();
 }

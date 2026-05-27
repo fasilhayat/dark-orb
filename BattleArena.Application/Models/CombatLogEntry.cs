@@ -1,8 +1,8 @@
 namespace BattleArena.Application.Models;
 
-// A single event recorded during a battle simulation.
+// A single event recorded during a combat simulation.
 // EventType values: TurnMeterGain, TurnStart, Attack, Damage, FumblePenalty, TurnEnd, Death
-public class BattleLogEntry
+public class CombatLogEntry
 {
     public int Tick { get; set; }
     public string ActorName { get; set; } = string.Empty;
@@ -45,4 +45,8 @@ public class BattleLogEntry
 
     // Name of a status effect involved in this event (present on DoTTick, EffectApplied events).
     public string? StatusEffectName { get; set; }
+
+    // Populated on EffectResisted events
+    public int? ResistRoll { get; set; }
+    public int? ResistThreshold { get; set; }
 }

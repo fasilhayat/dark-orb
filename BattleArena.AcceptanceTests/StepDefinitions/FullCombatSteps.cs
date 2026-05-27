@@ -8,21 +8,21 @@ using Core.Entities.Enums;
 using Reqnroll;
 using Xunit;
 
-// Step definitions for FullBattle.feature.
-// These steps use REAL (live) dice — no mocks — so the battle outcome is
+// Step definitions for FullCombat.feature.
+// These steps use REAL (live) dice — no mocks — so the combat outcome is
 // non-deterministic. Assertions cover structural invariants only.
 [Binding]
-public class FullBattleSteps
+public class FullCombatSteps
 {
     // Combatants indexed by name, in insertion order (first = fighter, second = opponent)
     private readonly Dictionary<string, Character> _combatants = new();
     private readonly Dictionary<string, Weapon> _weapons = new();
     private readonly List<string> _order = new();
 
-    private BattleResult _result = null!;
-    private readonly IBattleSimulator _simulator;
+    private CombatResult _combatResult = null!;
+    private readonly ICombatSimulator _combatSimulator;
 
-    public FullBattleSteps()
+    public FullCombatSteps()
     {
         // Wire up real services — no mocking so dice rolls are live.
         var dice = new DiceService();
@@ -30,7 +30,7 @@ public class FullBattleSteps
         var combat = new CombatService(dice, combatStats);
         var turnmeter = new TurnmeterService();
         var statusEffect = new StatusEffectService();
-        _simulator = new BattleSimulator(combat, turnmeter, statusEffect, dice);
+        _combatSimulator = new CombatSimulator(combat, turnmeter, statusEffect, dice);
     }
 
     // ── Character setup ────────────────────────────────────────────────────────
@@ -86,16 +86,16 @@ public class FullBattleSteps
         };
     }
 
-    // ── Battle execution ───────────────────────────────────────────────────────
+    // ── Combat execution ───────────────────────────────────────────────────────
 
-    // Runs the battle with real dice. The result is verified by the Then steps below.
-    [When(@"the battle is simulated with a maximum of (\d+) ticks")]
-    public void WhenTheBattleIsSimulated(int maxTicks)
+    // Runs the combat with real dice. The result is verified by the Then steps below.
+    [When(@"the combat is simulated with a maximum of (\d+) ticks")]
+    public void WhenTheCombatIsSimulated(int maxTicks)
     {
         var fighterName = _order[0];
         var opponentName = _order[1];
 
-        _result = _simulator.Simulate(
+        _combatResult = _combatSimulator.Simulate(
             _combatants[fighterName], _weapons[fighterName],
             _combatants[opponentName], _weapons[opponentName],
             maxTicks);
@@ -103,58 +103,58 @@ public class FullBattleSteps
 
     // ── Assertions ─────────────────────────────────────────────────────────────
 
-    // The battle must reach a conclusive end — not time out.
-    [Then(@"the battle should have ended before the tick limit")]
-    public void ThenTheBattleShouldHaveEndedBeforeTheTickLimit()
+    // The combat must reach a conclusive end — not time out.
+    [Then(@"the combat should have ended before the tick limit")]
+    public void ThenTheCombatShouldHaveEndedBeforeTheTickLimit()
     {
-        Assert.False(_result.MaxTicksReached,
-            $"Battle did not finish within the tick limit. Log:\n{_result.FormatLog()}");
+        Assert.False(_combatResult.MaxTicksReached,
+            $"Combat did not finish within the tick limit. Log:\n{_combatResult.FormatLog()}");
     }
 
     // The winner must still be alive.
     [Then(@"the winning combatant should have hit points above zero")]
     public void ThenTheWinningCombatantShouldHaveHitPointsAboveZero()
     {
-        Assert.NotNull(_result.Winner);
-        Assert.True(_result.Winner.CurrentHitPoints > 0,
-            $"Winner {_result.Winner.Name} has {_result.Winner.CurrentHitPoints} HP — expected > 0.");
+        Assert.NotNull(_combatResult.Winner);
+        Assert.True(_combatResult.Winner.CurrentHitPoints > 0,
+            $"Winner {_combatResult.Winner.Name} has {_combatResult.Winner.CurrentHitPoints} HP — expected > 0.");
     }
 
     // The loser must be at or below zero HP.
     [Then(@"the losing combatant should have zero or fewer hit points")]
     public void ThenTheLosingCombatantShouldHaveZeroOrFewerHitPoints()
     {
-        Assert.NotNull(_result.Loser);
-        Assert.True(_result.Loser.CurrentHitPoints <= 0,
-            $"Loser {_result.Loser.Name} has {_result.Loser.CurrentHitPoints} HP — expected ≤ 0.");
+        Assert.NotNull(_combatResult.Loser);
+        Assert.True(_combatResult.Loser.CurrentHitPoints <= 0,
+            $"Loser {_combatResult.Loser.Name} has {_combatResult.Loser.CurrentHitPoints} HP — expected ≤ 0.");
     }
 
     // Log must contain at least one entry.
-    [Then(@"the battle log should not be empty")]
-    public void ThenTheBattleLogShouldNotBeEmpty()
+    [Then(@"the combat log should not be empty")]
+    public void ThenTheCombatLogShouldNotBeEmpty()
     {
-        Assert.NotEmpty(_result.Log);
+        Assert.NotEmpty(_combatResult.Log);
     }
 
     // Turnmeter gain is recorded every tick for every combatant.
-    [Then(@"the battle log should contain turnmeter gain events")]
-    public void ThenTheBattleLogShouldContainTurnMeterGainEvents()
+    [Then(@"the combat log should contain turnmeter gain events")]
+    public void ThenTheCombatLogShouldContainTurnMeterGainEvents()
     {
-        Assert.Contains(_result.Log, e => e.EventType == "TurnMeterGain");
+        Assert.Contains(_combatResult.Log, e => e.EventType == "TurnMeterGain");
     }
 
-    // At least one attack must have been made during the battle.
-    [Then(@"the battle log should contain at least one attack event")]
-    public void ThenTheBattleLogShouldContainAtLeastOneAttackEvent()
+    // At least one attack must have been made during the combat.
+    [Then(@"the combat log should contain at least one attack event")]
+    public void ThenTheCombatLogShouldContainAtLeastOneAttackEvent()
     {
-        Assert.Contains(_result.Log, e => e.EventType == "Attack");
+        Assert.Contains(_combatResult.Log, e => e.EventType == "Attack");
     }
 
     // At least one attack must have connected and dealt damage.
-    [Then(@"the battle log should contain at least one damage event")]
-    public void ThenTheBattleLogShouldContainAtLeastOneDamageEvent()
+    [Then(@"the combat log should contain at least one damage event")]
+    public void ThenTheCombatLogShouldContainAtLeastOneDamageEvent()
     {
-        Assert.Contains(_result.Log, e => e.EventType == "Damage");
+        Assert.Contains(_combatResult.Log, e => e.EventType == "Damage");
     }
 
     // ── Helpers ────────────────────────────────────────────────────────────────

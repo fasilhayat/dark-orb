@@ -11,13 +11,13 @@ static partial class Demo
     {
         CWL("\n  Choose scenario:", ConsoleColor.Yellow);
         CW("    "); CW("[D]", ConsoleColor.Cyan); CWL("  Duel         -- 1v1, pick two of your characters", ConsoleColor.White);
-        CW("    "); CW("[P]", ConsoleColor.Cyan); CWL("  Party Battle  -- build a hero party vs the Enemy Horde (3 enemies)\n", ConsoleColor.White);
+        CW("    "); CW("[P]", ConsoleColor.Cyan); CWL("  Party Combat  -- build a hero party vs the Enemy Horde (3 enemies)\n", ConsoleColor.White);
         CW("  > ", ConsoleColor.Cyan);
         while (true)
         {
             var k = Console.ReadKey(true).KeyChar;
             if (k is 'D' or 'd') { CWL("Duel", ConsoleColor.Cyan); return 'D'; }
-            if (k is 'P' or 'p') { CWL("Party Battle", ConsoleColor.Cyan); return 'P'; }
+            if (k is 'P' or 'p') { CWL("Party Combat", ConsoleColor.Cyan); return 'P'; }
         }
     }
 
@@ -248,11 +248,11 @@ static partial class Demo
         ]
     };
 
-    // ── PickBattleMode ────────────────────────────────────────────────────────────
+    // ── PickCombatMode ────────────────────────────────────────────────────────────
 
-    private static char PickBattleMode()
+    private static char PickCombatMode()
     {
-        CWL("\n  Choose battle mode:", ConsoleColor.Yellow);
+        CWL("\n  Choose combat mode:", ConsoleColor.Yellow);
         CW("    "); CW("[T]", ConsoleColor.Cyan); CWL("  Turn-based  -- press any key to advance each turn", ConsoleColor.White);
         CW("    "); CW("[R]", ConsoleColor.Cyan); CWL("  Real-time   -- fully automatic tick-by-tick playback\n", ConsoleColor.White);
         CW("  > ", ConsoleColor.Cyan);

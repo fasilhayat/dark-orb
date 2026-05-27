@@ -8,7 +8,7 @@ static partial class Demo
 {
     // ── Display strategies: shared by turn-based and realtime ────────────
 
-    private delegate void DisplayHandler(BattleLogEntry e, Dictionary<string, CharDisplayState> states);
+    private delegate void DisplayHandler(CombatLogEntry e, Dictionary<string, CharDisplayState> states);
 
     private static readonly Dictionary<string, DisplayHandler> _display = new()
     {
@@ -50,6 +50,16 @@ static partial class Demo
             CW(e.ActorName, CharColor(e.ActorName));
             CWL($" is afflicted with {e.StatusEffectName}!", ConsoleColor.DarkYellow);
         },
+        ["EffectResisted"] = (e, _) =>
+        {
+            Console.WriteLine();
+            CW("  ", ConsoleColor.DarkGray);
+            CW(e.ActorName, CharColor(e.ActorName));
+            CW(" resists ");
+            CW(e.StatusEffectName ?? "the effect", ConsoleColor.Green);
+            CW($"!  ", ConsoleColor.Green);
+            CWL($"(rolled {e.ResistRoll} vs {e.ResistThreshold} resistance)", ConsoleColor.DarkGray);
+        },
         ["EffectExpired"] = (e, _) =>
         {
             Console.WriteLine();
@@ -88,7 +98,7 @@ static partial class Demo
 
     // ── Realtime state updates (per event type) ─────────────────────────
 
-    private static readonly Dictionary<string, Action<BattleLogEntry, Dictionary<string, CharDisplayState>>> _realtimeUpdate = new()
+    private static readonly Dictionary<string, Action<CombatLogEntry, Dictionary<string, CharDisplayState>>> _realtimeUpdate = new()
     {
         ["Damage"] = (e, states) =>
         {
@@ -127,6 +137,7 @@ static partial class Demo
         ["TurnEnd"] = 300,
         ["DoTTick"] = 400,
         ["EffectApplied"] = 300,
+        ["EffectResisted"] = 400,
         ["EffectExpired"] = 300,
         ["SkippedTurn"] = 500,
         ["Death"] = 1500,
@@ -138,8 +149,8 @@ static partial class Demo
     private static void PlayTurnBased()
     {
         var states = BuildDisplayStates();
-        var turnEvents = new List<BattleLogEntry>();
-        var pendingMessages = new List<BattleLogEntry>();
+        var turnEvents = new List<CombatLogEntry>();
+        var pendingMessages = new List<CombatLogEntry>();
         bool inTurn = false;
         int turnCount = 0;
         int turnTick = 0;
@@ -153,7 +164,7 @@ static partial class Demo
             var actSt = states.GetValueOrDefault(ts.ActorName);
             var tgtSt = states.GetValueOrDefault(ts.TargetName ?? "");
 
-            DrawBattleScreen(states, turnTick);
+            DrawCombatScreen(states, turnTick);
 
             Console.WriteLine();
             CW($"  Turn {turnCount}  ", ConsoleColor.DarkGray);
@@ -170,7 +181,7 @@ static partial class Demo
             Console.WriteLine();
             CWL("  " + new string('-', 77), ConsoleColor.DarkGray);
             var over = turnEvents.Any(e => e.EventType is "Death" or "KnockedOut");
-            CWL(over ? "  Battle over!  Press any key for results..."
+            CWL(over ? "  Combat over!  Press any key for results..."
                      : "  Press any key for next turn...", ConsoleColor.DarkGray);
             Console.ReadKey(true);
 
@@ -179,7 +190,7 @@ static partial class Demo
             inTurn = false;
         }
 
-        DrawBattleScreen(states, 0);
+        DrawCombatScreen(states, 0);
         Console.WriteLine();
         CWL("  Press any key for first action...", ConsoleColor.DarkGray);
         Console.ReadKey(true);
@@ -238,6 +249,7 @@ static partial class Demo
                     break;
 
                 case "EffectApplied":
+                case "EffectResisted":
                     if (inTurn) turnEvents.Add(e);
                     break;
 
@@ -282,7 +294,7 @@ static partial class Demo
             quietStart = quietEnd = -1;
         }
 
-        DrawBattleScreen(states, 0);
+        DrawCombatScreen(states, 0);
         Thread.Sleep(1200);
 
         foreach (var tickGroup in byTick)
@@ -314,7 +326,7 @@ static partial class Demo
                 actSt.Weapon = turnStart.AttackSourceName ?? actSt.Weapon;
             }
 
-            DrawBattleScreen(states, tickGroup.Key);
+            DrawCombatScreen(states, tickGroup.Key);
             Thread.Sleep(300);
 
             foreach (var e in entries)

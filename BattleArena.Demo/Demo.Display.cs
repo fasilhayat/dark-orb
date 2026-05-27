@@ -4,7 +4,7 @@ using Application.Models;
 using Core.Entities;
 using Core.Entities.Enums;
 
-// Console rendering for battle screens, stat sheets, attack logs and summaries.
+// Console rendering for combat screens, stat sheets, attack logs and summaries.
 static partial class Demo
 {
     // ── CW / CWL ─────────────────────────────────────────────────────────────────
@@ -107,7 +107,7 @@ static partial class Demo
 
     // ── PrintAttack ───────────────────────────────────────────────────────────────
 
-    internal static void PrintAttack(BattleLogEntry e)
+    internal static void PrintAttack(CombatLogEntry e)
     {
         var total = (e.DieRoll ?? 0) + (e.AttackPower ?? 0);
         var margin = total - (e.DefensePower ?? 0);
@@ -211,7 +211,7 @@ static partial class Demo
         if (Result.MaxTicksReached)
         {
             Console.WriteLine();
-            CWL("  BATTLE TIMEOUT — no winner declared.", ConsoleColor.DarkYellow);
+            CWL("  COMBAT TIMEOUT — no winner declared.", ConsoleColor.DarkYellow);
             CWL($"  Total ticks: {Result.TotalTicks}", ConsoleColor.White);
             CWL("\n  " + new string('=', 62), ConsoleColor.Cyan);
             return;
@@ -221,7 +221,7 @@ static partial class Demo
         var lParty = Result.LosingParty!;
 
         Console.WriteLine();
-        CW("  BATTLE COMPLETE  --  ", ConsoleColor.Green);
+        CW("  COMBAT COMPLETE  --  ", ConsoleColor.Green);
         CW(wParty.Name, ConsoleColor.Green);
         CWL("  WINS!", ConsoleColor.Green);
         CWL("  " + new string('=', 62), ConsoleColor.Cyan);
@@ -261,14 +261,14 @@ static partial class Demo
             Result.LoserStatus == CharacterVitalStatus.Dead
                 ? ConsoleColor.Red : ConsoleColor.DarkYellow);
 
-        CWL($"\n  Battle length :  {Result.TotalTicks} ticks", ConsoleColor.White);
+        CWL($"\n  Combat length :  {Result.TotalTicks} ticks", ConsoleColor.White);
         CWL("\n  " + new string('=', 62), ConsoleColor.Cyan);
         Console.WriteLine();
     }
 
-    // ── DrawBattleScreen ──────────────────────────────────────────────────────────
+    // ── DrawCombatScreen ──────────────────────────────────────────────────────────
 
-    internal static void DrawBattleScreen(Dictionary<string, CharDisplayState> states, int tick)
+    internal static void DrawCombatScreen(Dictionary<string, CharDisplayState> states, int tick)
     {
         Console.Clear();
         PrintHeader();

@@ -42,4 +42,29 @@ public class Character
         IsDead       ? CharacterVitalStatus.Dead :
         IsKnockedOut ? CharacterVitalStatus.KnockedOut :
                        CharacterVitalStatus.Alive;
+
+    /// <summary>
+    /// Total resistance (0–100) for the given type, summed from all sources:
+    ///   1. Racial feats (e.g. Elf/Dwarf "Magic Resistance" = 25)
+    ///   2. Equipped armor pieces
+    ///   3. Active protective status effects (spells like Arcane Ward)
+    /// Capped at 95 so there is always at least a 5 % infliction chance.
+    /// </summary>
+    public int ComputeResistance(ResistanceType type)
+    {
+        var total = 0;
+
+        if (Race is not null)
+            foreach (var feat in Race.Feats)
+                foreach (var r in feat.Resistances)
+                    if (r.Type == type) total += r.Value;
+
+        total += Equipment.TotalResistance(type);
+
+        foreach (var effect in ActiveStatusEffects)
+            foreach (var r in effect.ResistanceBonuses)
+                if (r.Type == type) total += r.Value;
+
+        return Math.Clamp(total, 0, 95);
+    }
 }

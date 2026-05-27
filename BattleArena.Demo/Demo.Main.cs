@@ -27,7 +27,7 @@ static partial class Demo
 
     // ── Outer state (shared by playback functions) ────────────────────────────────
     internal static string ActiveActor = "";
-    internal static BattleResult Result = null!;
+    internal static CombatResult Result = null!;
     internal static Dictionary<string, int> MaxHp = new();
     internal static Dictionary<string, int> CurHp = new();
     internal static Party HeroParty = null!;
@@ -50,12 +50,12 @@ static partial class Demo
         }
         else
         {
-            RunPartyBattle();
+            RunPartyCombat();
         }
 
-        var mode = PickBattleMode();
+        var mode = PickCombatMode();
 
-        // Targeting mode: only meaningful for Party Battle (1v1 always has one target).
+        // Targeting mode: only meaningful for Party Combat (1v1 always has one target).
         ITargetSelector heroSelector;
         var enemySelector = new LowestHpTargetSelector();
         if (Scenario == 'P')
@@ -78,12 +78,12 @@ static partial class Demo
         MaxHp = allMembers.ToDictionary(m => m.Character.Name, m => m.Character.MaxHitPoints);
         CurHp = new Dictionary<string, int>(MaxHp);
 
-        CWL("\n  Press any key to start the battle...", ConsoleColor.DarkGray);
+        CWL("\n  Press any key to start the combat...", ConsoleColor.DarkGray);
         Console.ReadKey(true);
         Console.Clear();
         PrintHeader();
 
-        // Show combatant stat sheets prior to battle
+        // Show combatant stat sheets prior to combat
         Console.WriteLine();
         if (Scenario == 'D')
         {
@@ -120,7 +120,7 @@ static partial class Demo
         }
 
         var diceSvc = new DiceService();
-        var simulator = new BattleSimulator(
+        var simulator = new CombatSimulator(
             new CombatService(diceSvc, CombatStats),
             new TurnmeterService(),
             new StatusEffectService(),
@@ -136,7 +136,7 @@ static partial class Demo
             PlayRealTime();
 
         PrintSummary();
-        AwardBattleXp();
+        AwardCombatXp();
     }
 
     private static void RunDuel()
@@ -161,7 +161,7 @@ static partial class Demo
         EnemyParty = Party.Solo(fighter2, f2Atk);
     }
 
-    private static void RunPartyBattle()
+    private static void RunPartyCombat()
     {
         var heroes = PickHeroParty();
         EnemyParty = BuildEnemyParty();
@@ -281,14 +281,14 @@ static partial class Demo
         }
     }
 
-    private static void AwardBattleXp()
+    private static void AwardCombatXp()
     {
         var svc = new LevelingService();
         if (Result.WinningParty is null || Result.LosingParty is null) return;
 
         var winners = Result.WinningParty.Members.Select(m => m.Character);
         var losers  = Result.LosingParty.Members.Select(m => m.Character);
-        var awards  = svc.AwardBattleXp(winners, losers, Result.Log, Result.TotalTicks);
+        var awards  = svc.AwardCombatXp(winners, losers, Result.Log, Result.TotalTicks);
 
         Console.WriteLine();
         CWL("  " + new string('=', 62), ConsoleColor.Cyan);

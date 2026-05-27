@@ -3,7 +3,7 @@ namespace BattleArena.UnitTests.Diagnostics;
 // ─────────────────────────────────────────────────────────────────────────────
 // Live diagnostic runs — NOT mocked. Each test prints the full event log via
 // ITestOutputHelper so you can inspect every action. Run with:
-//   dotnet test --filter "FullyQualifiedName~BattleDiagnosticTests" -v normal
+//   dotnet test --filter "FullyQualifiedName~CombatDiagnosticTests" -v normal
 //
 // Structural assertions are made on top; the printed log is for manual review.
 // ─────────────────────────────────────────────────────────────────────────────
@@ -15,10 +15,10 @@ using Core.Entities.Enums;
 using Xunit;
 using Xunit.Abstractions;
 
-public class BattleDiagnosticTests(ITestOutputHelper out_)
+public class CombatDiagnosticTests(ITestOutputHelper out_)
 {
     // ── Service stack (all real, no mocks) ────────────────────────────────────
-    private static BattleSimulator BuildSim()
+    private static CombatSimulator BuildSim()
     {
         var dice = new DiceService();
         return new(new CombatService(dice, new CombatStatsService()),
@@ -64,11 +64,11 @@ public class BattleDiagnosticTests(ITestOutputHelper out_)
 
     // ── Log printer ───────────────────────────────────────────────────────────
 
-    void PrintLog(BattleResult r)
+    void PrintLog(CombatResult r)
     {
         var bar = new string('─', 80);
         out_.WriteLine(bar);
-        out_.WriteLine($"  BATTLE RESULT: {(r.WinningParty?.Name ?? "TIMEOUT")}  |  Ticks: {r.TotalTicks}  |  MaxTicksReached: {r.MaxTicksReached}");
+        out_.WriteLine($"  COMBAT RESULT: {(r.WinningParty?.Name ?? "TIMEOUT")}  |  Ticks: {r.TotalTicks}  |  MaxTicksReached: {r.MaxTicksReached}");
         out_.WriteLine(bar);
 
         int turnNo = 0;
@@ -263,7 +263,7 @@ public class BattleDiagnosticTests(ITestOutputHelper out_)
 
     // ── Shared structural assertion helpers ───────────────────────────────────
 
-    static void AssertLogIntegrity(BattleResult result)
+    static void AssertLogIntegrity(CombatResult result)
     {
         var lastTurnActor  = "";
         var lastTurnTarget = "";
@@ -281,7 +281,7 @@ public class BattleDiagnosticTests(ITestOutputHelper out_)
                 Assert.Equal(lastTurnActor, e.ActorName);
 
             // Damage events: ActorName = the one who RECEIVED the hit.
-            // DamageDealt > 0 is now guaranteed (0-damage hits are suppressed in BattleSimulator).
+            // DamageDealt > 0 is now guaranteed (0-damage hits are suppressed in CombatSimulator).
             if (e.EventType == "Damage")
             {
                 Assert.True(e.DamageDealt > 0,
@@ -294,7 +294,7 @@ public class BattleDiagnosticTests(ITestOutputHelper out_)
         Assert.NotNull(result.LosingParty);
     }
 
-    static void AssertNoAttacksOnDead(BattleResult result)
+    static void AssertNoAttacksOnDead(CombatResult result)
     {
         var dead = new HashSet<string>();
         foreach (var e in result.Log)

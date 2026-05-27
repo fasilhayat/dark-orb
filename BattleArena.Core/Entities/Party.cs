@@ -1,6 +1,6 @@
 namespace BattleArena.Core.Entities;
 
-// Represents one side in a battle — either the hero party or an enemy group.
+// Represents one side in a combat — either the hero party or an enemy group.
 //
 // Hero party rules:
 //   • Maximum 6 player characters (pets and NPCs are NOT counted here).

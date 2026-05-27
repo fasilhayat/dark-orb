@@ -6,6 +6,47 @@ using Core.Entities.Enums;
 // Character, weapon and spell data definitions used by the demo battles.
 static partial class Demo
 {
+    // ── Racial templates with resistance feats ─────────────────────────────────
+    private static readonly Race OrcRace = new()
+    {
+        Name = "Orc",
+        Feats = []
+    };
+
+    private static readonly Race ElfRace = new()
+    {
+        Name = "Elf",
+        Feats =
+        [
+            new Feat
+            {
+                Name = "Magic Resistance",
+                Description = "Elves have innate advantage on saving throws against magical effects.",
+                Resistances = [new ResistanceBonus(ResistanceType.Magic, 25)]
+            }
+        ]
+    };
+
+    private static readonly Race HumanRace = new()
+    {
+        Name = "Human",
+        Feats = []
+    };
+
+    private static readonly Race DarkMageRace = new()
+    {
+        Name = "Undead",
+        Feats =
+        [
+            new Feat
+            {
+                Name = "Dark Arcana",
+                Description = "A dark mage has studied the arcane arts deeply, providing resistance to magical manipulation.",
+                Resistances = [new ResistanceBonus(ResistanceType.Magic, 20)]
+            }
+        ]
+    };
+
     // ── Hero weapons ──────────────────────────────────────────────────────────────
     private static readonly Weapon Longsword = new()
     {
@@ -26,7 +67,7 @@ static partial class Demo
         DamageType = DamageType.Fire, AttackBonus = 2, SpellLevel = 3,
         OnHitEffects =
         [
-            new StatusEffect { Name = "Burning",   Type = StatusEffectType.DamageOverTime, Duration = 3, DoTDamageCount = 1, DoTDamageDie = DieType.D4, ApplicationChance = 30, StackRule = StackRule.HighestWins }
+            new StatusEffect { Name = "Burning",   Type = StatusEffectType.DamageOverTime, ResistanceType = ResistanceType.Fire, Duration = 3, DoTDamageCount = 1, DoTDamageDie = DieType.D4, ApplicationChance = 30, StackRule = StackRule.HighestWins }
         ]
     };
     private static readonly Spell IceBolt = new()
@@ -36,8 +77,8 @@ static partial class Demo
         DamageType = DamageType.Cold, AttackBonus = 2, SpellLevel = 2,
         OnHitEffects =
         [
-            new StatusEffect { Name = "Freezing",  Type = StatusEffectType.DamageOverTime, Duration = 2, DoTDamageCount = 1, DoTDamageDie = DieType.D6, ApplicationChance = 25, StackRule = StackRule.HighestWins },
-            new StatusEffect { Name = "Slippery",  Type = StatusEffectType.Debuff,         Duration = 2, TurnMeterModifier = -3, ApplicationChance = 30, StackRule = StackRule.HighestWins }
+            new StatusEffect { Name = "Freezing",  Type = StatusEffectType.DamageOverTime, ResistanceType = ResistanceType.Cold, Duration = 2, DoTDamageCount = 1, DoTDamageDie = DieType.D6, ApplicationChance = 25, StackRule = StackRule.HighestWins },
+            new StatusEffect { Name = "Slippery",  Type = StatusEffectType.Debuff,         ResistanceType = ResistanceType.Magic, Duration = 2, TurnMeterModifier = -3, ApplicationChance = 30, StackRule = StackRule.HighestWins }
         ]
     };
     private static readonly Spell LightningStrike = new()
@@ -47,7 +88,7 @@ static partial class Demo
         DamageType = DamageType.Lightning, AttackBonus = 3, SpellLevel = 4,
         OnHitEffects =
         [
-            new StatusEffect { Name = "Shocked",   Type = StatusEffectType.Debuff,         Duration = 2, AttackPowerModifier = -2, ApplicationChance = 20, StackRule = StackRule.HighestWins }
+            new StatusEffect { Name = "Shocked",   Type = StatusEffectType.Debuff,         ResistanceType = ResistanceType.Magic, Duration = 2, AttackPowerModifier = -2, ApplicationChance = 20, StackRule = StackRule.HighestWins }
         ]
     };
     private static readonly Spell BladeBarrier = new()
@@ -57,8 +98,8 @@ static partial class Demo
         DamageType = DamageType.Slashing, AttackBonus = 2, SpellLevel = 3,
         OnHitEffects =
         [
-            new StatusEffect { Name = "Oil Slick", Type = StatusEffectType.Debuff,         Duration = 3, TurnMeterModifier = -4, ApplicationChance = 40, StackRule = StackRule.HighestWins },
-            new StatusEffect { Name = "Thorns",    Type = StatusEffectType.DamageOverTime, Duration = 2, DoTDamageCount = 1, DoTDamageDie = DieType.D4, ApplicationChance = 30, StackRule = StackRule.HighestWins }
+            new StatusEffect { Name = "Oil Slick", Type = StatusEffectType.Debuff,         ResistanceType = ResistanceType.Magic, Duration = 3, TurnMeterModifier = -4, ApplicationChance = 40, StackRule = StackRule.HighestWins },
+            new StatusEffect { Name = "Thorns",    Type = StatusEffectType.DamageOverTime, ResistanceType = ResistanceType.Magic, Duration = 2, DoTDamageCount = 1, DoTDamageDie = DieType.D4, ApplicationChance = 30, StackRule = StackRule.HighestWins }
         ]
     };
 
@@ -66,6 +107,7 @@ static partial class Demo
     private static readonly Character Theron = new()
     {
         Name = "Theron", Level = 5, Strength = 18, Dexterity = 12, Intelligence = 10,
+        Race = HumanRace,
         ClassId = 8, StrikeRating = 14, TurnSpeed = 10, MaxHitPoints = 50, CurrentHitPoints = 50,
         Equipment = new ArmorSlots
         {
@@ -76,6 +118,7 @@ static partial class Demo
     private static readonly Character Gruk = new()
     {
         Name = "Gruk", Level = 3, Strength = 16, Dexterity = 8, Intelligence = 8,
+        Race = OrcRace,
         ClassId = 1, StrikeRating = 16, TurnSpeed = 6, MaxHitPoints = 35, CurrentHitPoints = 35,
         Equipment = new ArmorSlots
         {
@@ -86,6 +129,7 @@ static partial class Demo
     private static readonly Character Lyra = new()
     {
         Name = "Lyra", Level = 5, Strength = 8, Dexterity = 14, Intelligence = 18,
+        Race = ElfRace,
         ClassId = 5, StrikeRating = 13, TurnSpeed = 8, MaxHitPoints = 30, CurrentHitPoints = 30,
         Equipment = new ArmorSlots
         {
@@ -114,7 +158,7 @@ static partial class Demo
         DamageType = DamageType.Cold, AttackBonus = 2, SpellLevel = 2,
         OnHitEffects =
         [
-            new StatusEffect { Name = "Chilled",   Type = StatusEffectType.DamageOverTime, Duration = 2, DoTDamageCount = 1, DoTDamageDie = DieType.D4, ApplicationChance = 20, StackRule = StackRule.HighestWins }
+            new StatusEffect { Name = "Chilled",   Type = StatusEffectType.DamageOverTime, ResistanceType = ResistanceType.Cold, Duration = 2, DoTDamageCount = 1, DoTDamageDie = DieType.D4, ApplicationChance = 20, StackRule = StackRule.HighestWins }
         ]
     };
     private static readonly Spell SoulDrain = new()
@@ -124,7 +168,7 @@ static partial class Demo
         DamageType = DamageType.Fire, AttackBonus = 1, SpellLevel = 2,
         OnHitEffects =
         [
-            new StatusEffect { Name = "Burning",   Type = StatusEffectType.DamageOverTime, Duration = 3, DoTDamageCount = 1, DoTDamageDie = DieType.D4, ApplicationChance = 20, StackRule = StackRule.HighestWins }
+            new StatusEffect { Name = "Burning",   Type = StatusEffectType.DamageOverTime, ResistanceType = ResistanceType.Fire, Duration = 3, DoTDamageCount = 1, DoTDamageDie = DieType.D4, ApplicationChance = 20, StackRule = StackRule.HighestWins }
         ]
     };
     private static readonly Spell Root = new()
@@ -134,8 +178,8 @@ static partial class Demo
         DamageType = DamageType.Bludgeoning, AttackBonus = 0, SpellLevel = 2,
         OnHitEffects =
         [
-            new StatusEffect { Name = "Rooted",    Type = StatusEffectType.Root,            Duration = 2, ApplicationChance = 100, StackRule = StackRule.NoStack },
-            new StatusEffect { Name = "Thorns",    Type = StatusEffectType.DamageOverTime,  Duration = 3, DoTDamageCount = 1, DoTDamageDie = DieType.D4, ApplicationChance = 40, StackRule = StackRule.HighestWins }
+            new StatusEffect { Name = "Rooted",    Type = StatusEffectType.Root,            ResistanceType = ResistanceType.Magic, Duration = 2, ApplicationChance = 100, StackRule = StackRule.NoStack },
+            new StatusEffect { Name = "Thorns",    Type = StatusEffectType.DamageOverTime,  ResistanceType = ResistanceType.Magic, Duration = 3, DoTDamageCount = 1, DoTDamageDie = DieType.D4, ApplicationChance = 40, StackRule = StackRule.HighestWins }
         ]
     };
 
@@ -143,6 +187,7 @@ static partial class Demo
     internal static readonly Character Krag = new()
     {
         Name = "Krag", Level = 4, Strength = 17, Dexterity = 9, Intelligence = 6,
+        Race = OrcRace,
         ClassId = 1, StrikeRating = 15, TurnSpeed = 7, MaxHitPoints = 45, CurrentHitPoints = 45,
         Equipment = new ArmorSlots
         {
@@ -153,6 +198,7 @@ static partial class Demo
     internal static readonly Character Skrix = new()
     {
         Name = "Skrix", Level = 2, Strength = 9, Dexterity = 16, Intelligence = 10,
+        Race = HumanRace,
         ClassId = 9, StrikeRating = 12, TurnSpeed = 12, MaxHitPoints = 20, CurrentHitPoints = 20,
         Equipment = new ArmorSlots
         {
@@ -163,6 +209,7 @@ static partial class Demo
     internal static readonly Character Mordak = new()
     {
         Name = "Mordak", Level = 3, Strength = 7, Dexterity = 12, Intelligence = 16,
+        Race = DarkMageRace,
         ClassId = 5, StrikeRating = 14, TurnSpeed = 9, MaxHitPoints = 25, CurrentHitPoints = 25,
         Equipment = new ArmorSlots
         {

@@ -1,11 +1,13 @@
 namespace BattleArena.Application.Interfaces;
 
+using Application.Models;
 using Core.Entities;
 using Core.Entities.Enums;
 
 public interface IStatusEffectService
 {
     void Apply(Character target, StatusEffect effect);
+    EffectApplicationResult TryApply(Character target, StatusEffect effect, int resistance, IDiceService dice);
     IReadOnlyList<string> TickAll(Character target);
     int TickDoT(Character target);
     bool HasEffectType(Character target, StatusEffectType type);

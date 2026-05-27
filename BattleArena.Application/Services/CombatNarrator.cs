@@ -20,7 +20,7 @@ public static class CombatNarrator
         "{target} staggers — {attacker} has landed a flawless, bone-crushing critical strike!",
         "A perfect opening, exploited ruthlessly: CRITICAL HIT from {attacker}!",
         "{attacker} channels every ounce of fury into one catastrophic critical strike!",
-        "The crowd gasps — {attacker} lands a once-in-a-battle perfect critical blow!"
+        "The crowd gasps — {attacker} lands a once-in-a-combat perfect critical blow!"
     ];
 
     private static readonly string[] FumblePhrases =
