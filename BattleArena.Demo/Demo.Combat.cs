@@ -36,7 +36,7 @@ static partial class Demo
             CW("[", ConsoleColor.DarkGray);
             CW($"{e.TargetHpBefore}", ConsoleColor.DarkGray);
             CW(" → ", ConsoleColor.DarkGray);
-            CW($"{Math.Max(0, e.TargetHpAfter ?? 0)}", HpColorInline(e.TargetHpAfter ?? 0, MaxHp.GetValueOrDefault(e.ActorName, 1)));
+            CW($"{Math.Max(0, e.TargetHpAfter ?? 0)}", HpColorInline(e.TargetHpAfter ?? 0, MaxHp!.TryGetValue(e.ActorName, out var mhp) ? mhp : 1));
             CWL(" HP]", ConsoleColor.DarkGray);
         },
         ["FumblePenalty"] = (e, _) =>
