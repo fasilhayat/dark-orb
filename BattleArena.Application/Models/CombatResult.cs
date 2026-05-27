@@ -11,6 +11,15 @@ public class CombatResult
     public Party? WinningParty { get; set; }
     public Party? LosingParty  { get; set; }
 
+    // Original parties as supplied to CombatSimulator (before any HP changes).
+    // Required for deterministic replay: reconstruct the same parties + Seed → identical run.
+    public Party? Party1 { get; set; }
+    public Party? Party2 { get; set; }
+
+    // Random seed used by DiceService during this run.
+    // Replaying with the same seed + same parties produces the identical combat log.
+    public int Seed { get; set; }
+
     // How the last defeated combatant left the fight.
     public CharacterVitalStatus LoserStatus { get; set; } = CharacterVitalStatus.Alive;
 

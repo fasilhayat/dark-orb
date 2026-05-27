@@ -214,6 +214,7 @@ static partial class Demo
             CWL("  COMBAT TIMEOUT — no winner declared.", ConsoleColor.DarkYellow);
             CWL($"  Total ticks: {Result.TotalTicks}", ConsoleColor.White);
             CWL("\n  " + new string('=', 62), ConsoleColor.Cyan);
+            DumpCombatLog();
             return;
         }
 
@@ -264,6 +265,8 @@ static partial class Demo
         CWL($"\n  Combat length :  {Result.TotalTicks} ticks", ConsoleColor.White);
         CWL("\n  " + new string('=', 62), ConsoleColor.Cyan);
         Console.WriteLine();
+
+        DumpCombatLog();
     }
 
     // ── DrawCombatScreen ──────────────────────────────────────────────────────────

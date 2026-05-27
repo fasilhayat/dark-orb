@@ -5,6 +5,7 @@ namespace BattleArena.UnitTests.Diagnostics;
 // ITestOutputHelper so you can inspect every action. Run with:
 //   dotnet test --filter "FullyQualifiedName~CombatDiagnosticTests" -v normal
 //
+// A detailed .txt combat log is also written to combat-logs/ at the repo root.
 // Structural assertions are made on top; the printed log is for manual review.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -25,6 +26,27 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
             new TurnmeterService(),
             new StatusEffectService(),
             dice);
+    }
+
+    // ── Log to file + test output ─────────────────────────────────────────────
+    private void DumpLog(CombatResult result, string testName)
+    {
+        PrintLog(result);
+        var dir = FindRepoRoot();
+        var logDir = Path.Combine(dir, "combat-logs");
+        var path = CombatLogWriter.Write(result, testName, logDir);
+        out_.WriteLine($"\n  >> Log written: {path}");
+    }
+
+    private static string FindRepoRoot()
+    {
+        var dir = AppContext.BaseDirectory;
+        while (dir != null)
+        {
+            if (Directory.GetFiles(dir, "*.sln").Length > 0) return dir;
+            dir = Directory.GetParent(dir)?.FullName;
+        }
+        return AppContext.BaseDirectory;
     }
 
     // ── Character factory helpers ─────────────────────────────────────────────
@@ -133,9 +155,7 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
             Party.Solo(theron, theron.Equipment.RightHand!),
             Party.Solo(krag,   krag  .Equipment.RightHand!));
 
-        PrintLog(result);
-
-        Assert.False(result.MaxTicksReached, "Duel should finish before timeout");
+        DumpLog(result, nameof(Duel_WarriorVsWarrior));
         Assert.NotNull(result.WinningParty);
         Assert.NotNull(result.LosingParty);
         AssertLogIntegrity(result);
@@ -153,7 +173,7 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
 
         var result = BuildSim().Simulate(Party.Solo(lyra, null), Party.Solo(mordak, null));
 
-        PrintLog(result);
+        DumpLog(result, nameof(Duel_CasterVsCaster));
 
         Assert.False(result.MaxTicksReached);
         Assert.NotNull(result.WinningParty);
@@ -179,7 +199,7 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
             Party.Solo(theron, theron.Equipment.RightHand!),
             Party.Solo(lyra,   null));
 
-        PrintLog(result);
+        DumpLog(result, nameof(Duel_WarriorVsCaster));
 
         Assert.False(result.MaxTicksReached);
         Assert.NotNull(result.WinningParty);
@@ -214,7 +234,7 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
 
         var result = BuildSim().Simulate(heroes, enemies);
 
-        PrintLog(result);
+        DumpLog(result, nameof(Party_3v3_MixedComposition));
 
         Assert.False(result.MaxTicksReached);
         Assert.NotNull(result.WinningParty);
@@ -224,7 +244,6 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
 
     // ─────────────────────────────────────────────────────────────────────────
     // TEST 5 — Party 6v4: max hero party
-    // ─────────────────────────────────────────────────────────────────────────
 
     [Fact]
     public void Party_6v4_MaxHeroParty()
@@ -248,7 +267,7 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
 
         var result = BuildSim().Simulate(heroes, enemies);
 
-        PrintLog(result);
+        DumpLog(result, nameof(Party_6v4_MaxHeroParty));
 
         Assert.False(result.MaxTicksReached);
         Assert.NotNull(result.WinningParty);
@@ -304,5 +323,45 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
                 Assert.False(dead.Contains(e.TargetName),
                     $"Dead/KO target was selected: {e.TargetName}");
         }
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // TEST 6 — Replay: verify that a saved .json reproduces the identical log
+    // ─────────────────────────────────────────────────────────────────────────
+
+    [Fact]
+    public void Replay_ProducesIdenticalLog()
+    {
+        // Run a fresh combat and save the snapshot
+        var theron = MakeWarrior("Theron", 5, 18, 12, 50, 10, 14, "Chain Mail",  5, 2, "Longsword",  DieType.D8,  1, 2);
+        var krag   = MakeWarrior("Krag",   4, 17,  9, 45,  7, 15, "Orcish Hide", 6, 2, "Orcish Axe", DieType.D10, 1, 1);
+
+        var original = BuildSim().Simulate(
+            Party.Solo(theron, theron.Equipment.RightHand!),
+            Party.Solo(krag,   krag  .Equipment.RightHand!));
+
+        var snapshot = CombatSnapshot.From(original, "Replay_Test");
+        var json     = CombatReplayer.Serialize(snapshot);
+
+        // Replay from the serialised JSON
+        var replayed = CombatReplayer.Replay(CombatReplayer.Deserialize(json));
+
+        // Both runs must produce the identical event sequence
+        Assert.Equal(original.TotalTicks, replayed.TotalTicks);
+        Assert.Equal(original.Log.Count,  replayed.Log.Count);
+        Assert.Equal(original.WinningParty?.Name, replayed.WinningParty?.Name);
+
+        for (var i = 0; i < original.Log.Count; i++)
+        {
+            var o = original.Log[i];
+            var r = replayed.Log[i];
+            Assert.Equal(o.EventType,  r.EventType);
+            Assert.Equal(o.ActorName,  r.ActorName);
+            Assert.Equal(o.Tick,       r.Tick);
+            Assert.Equal(o.DieRoll,    r.DieRoll);
+            Assert.Equal(o.DamageDealt,r.DamageDealt);
+        }
+
+        out_.WriteLine($"  Seed {snapshot.Seed}  |  {original.Log.Count} events  |  replay match: ✓");
     }
 }

@@ -5,18 +5,34 @@ using Core.Entities.Enums;
 
 public class DiceService : IDiceService
 {
-    private readonly Random _random = new();
+    private readonly Random _random;
+
+    // Parameterless: generates a random seed so each combat is unique.
+    public DiceService()
+    {
+        Seed    = Random.Shared.Next();
+        _random = new Random(Seed);
+    }
+
+    // Seeded: reproduces an earlier combat exactly when the same seed is used.
+    public DiceService(int seed)
+    {
+        Seed    = seed;
+        _random = new Random(seed);
+    }
+
+    public int Seed { get; }
 
     public int Roll(DieType dieType)
     {
         var sides = dieType switch
         {
-            DieType.D4 => 4,
-            DieType.D6 => 6,
-            DieType.D8 => 8,
-            DieType.D10 => 10,
-            DieType.D12 => 12,
-            DieType.D20 => 20,
+            DieType.D4   => 4,
+            DieType.D6   => 6,
+            DieType.D8   => 8,
+            DieType.D10  => 10,
+            DieType.D12  => 12,
+            DieType.D20  => 20,
             DieType.D100 => 100,
             _ => throw new ArgumentOutOfRangeException(nameof(dieType))
         };
@@ -44,4 +60,6 @@ public class DiceService : IDiceService
         var roll2 = Roll(dieType);
         return Math.Min(roll1, roll2);
     }
+
+    public int RollIndex(int maxExclusive) => _random.Next(maxExclusive);
 }

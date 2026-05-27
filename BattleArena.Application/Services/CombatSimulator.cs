@@ -214,7 +214,7 @@ public class CombatSimulator : ICombatSimulator
             }
         }
 
-        return new CombatResult { MaxTicksReached = true, TotalTicks = maxTicks, Log = log };
+        return new CombatResult { MaxTicksReached = true, TotalTicks = maxTicks, Log = log, Seed = _dice.Seed, Party1 = heroParty, Party2 = enemyParty };
     }
 
     // 1v1 async convenience wrapper.
@@ -253,7 +253,7 @@ public class CombatSimulator : ICombatSimulator
         return states;
     }
 
-    private static IAttackSource ResolveAttackSource(CombatantState state)
+    private IAttackSource ResolveAttackSource(CombatantState state)
     {
         if (state.AttackSource is not null) return state.AttackSource;
 
@@ -262,7 +262,7 @@ public class CombatSimulator : ICombatSimulator
             throw new InvalidOperationException(
                 $"{state.Character.Name} has no weapon or memorized spells.");
 
-        return spells[Random.Shared.Next(spells.Count)];
+        return spells[_dice.RollIndex(spells.Count)];
     }
 
     private CombatLogEntry BuildAfterTurnEntry(CombatantState state, int tick)
@@ -499,7 +499,7 @@ public class CombatSimulator : ICombatSimulator
         }
     }
 
-    private static CombatResult? BuildDefeatResult(
+    private CombatResult? BuildDefeatResult(
         int tick, int defeatedPartyIndex,
         Character defeatedCharacter,
         Party heroParty, Party enemyParty,
@@ -514,7 +514,10 @@ public class CombatSimulator : ICombatSimulator
             LosingParty  = losingParty,
             LoserStatus  = defeatedCharacter.VitalStatus,
             TotalTicks   = tick,
-            Log          = log
+            Log          = log,
+            Seed         = _dice.Seed,
+            Party1       = heroParty,
+            Party2       = enemyParty
         };
     }
 

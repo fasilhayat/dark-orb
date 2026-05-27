@@ -3,6 +3,7 @@ namespace BattleArena.Demo;
 using Application.Interfaces;
 using Application.Models;
 using Application.Services;
+using System.IO;
 using Core.Entities;
 using Core.Entities.Enums;
 
@@ -278,6 +279,41 @@ static partial class Demo
             Console.WriteLine($"unreachable ({ex.Message})");
             Console.WriteLine("  Falling back to local characters.");
             Console.ResetColor();
+        }
+    }
+
+    private static void DumpCombatLog()
+    {
+        try
+        {
+            // Walk up from the executable to find the repo root (contains BattleArena.sln)
+            var dir = AppContext.BaseDirectory;
+            while (!string.IsNullOrEmpty(dir) && !File.Exists(Path.Combine(dir, "BattleArena.sln")))
+                dir = Path.GetDirectoryName(dir)!;
+
+            var outputDir = Path.Combine(string.IsNullOrEmpty(dir) ? AppContext.BaseDirectory : dir, "combat-logs");
+            Directory.CreateDirectory(outputDir);
+
+            var winner  = Result.WinningParty?.Name ?? "unknown";
+            var loser   = Result.LosingParty?.Name  ?? "unknown";
+            var label   = $"{winner}_vs_{loser}".Replace(" ", "_");
+            var txtPath = CombatLogWriter.Write(Result, label, outputDir);
+            var jsonPath = Path.ChangeExtension(txtPath, ".json");
+
+            Console.WriteLine();
+            CWL("  " + new string('─', 62), ConsoleColor.DarkGray);
+            CW("  Combat log saved  ", ConsoleColor.DarkGray);
+            CWL(Path.GetFileName(txtPath), ConsoleColor.Green);
+            CW("  Replay data saved ", ConsoleColor.DarkGray);
+            CWL(Path.GetFileName(jsonPath), ConsoleColor.DarkGreen);
+            CW("  Directory: ", ConsoleColor.DarkGray);
+            CWL(outputDir, ConsoleColor.DarkGray);
+            CWL("  " + new string('─', 62), ConsoleColor.DarkGray);
+            Console.WriteLine();
+        }
+        catch (Exception ex)
+        {
+            CWL($"  [warn] Could not write combat log: {ex.Message}", ConsoleColor.DarkYellow);
         }
     }
 
