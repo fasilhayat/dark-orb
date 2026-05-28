@@ -72,19 +72,23 @@ static partial class Demo
 
         var mode = PickCombatMode();
 
-        // Targeting mode: only meaningful for Party Combat (1v1 always has one target).
-        ITargetSelector heroSelector;
-        var enemySelector = new LowestHpTargetSelector();
-        if (Scenario == 'P')
+        // Targeting mode: skip when combat runs server-side.
+        ITargetSelector heroSelector = null!;
+        ITargetSelector enemySelector = new LowestHpTargetSelector();
+        var useApiCombat = UseApiRoster && ApiClient is not null;
+        if (!useApiCombat)
         {
-            var targeting = PickTargetingMode();
-            heroSelector = targeting == 'M'
-                ? new ManualConsoleTargetSelector()
-                : new LowestHpTargetSelector();
-        }
-        else
-        {
-            heroSelector = new LowestHpTargetSelector();
+            if (Scenario == 'P')
+            {
+                var targeting = PickTargetingMode();
+                heroSelector = targeting == 'M'
+                    ? new ManualConsoleTargetSelector()
+                    : new LowestHpTargetSelector();
+            }
+            else
+            {
+                heroSelector = new LowestHpTargetSelector();
+            }
         }
 
         // Reset + build state dicts
@@ -136,18 +140,24 @@ static partial class Demo
             }
         }
 
-        var diceSvc = UseApiRoster && ApiClient is not null
-            ? new ApiDiceService(ApiClient) as IDiceService
-            : new DiceService();
-        var simulator = new CombatSimulator(
-            new CombatService(diceSvc, CombatStats),
-            new TurnmeterService(),
-            new StatusEffectService(),
-            diceSvc,
-            heroSelector,
-            enemySelector);
+        if (useApiCombat)
+        {
+            Result = ApiClient!.SimulateCombatAsync(HeroParty, EnemyParty, 500)
+                .GetAwaiter().GetResult();
+        }
+        else
+        {
+            var diceSvc = new DiceService();
+            var simulator = new CombatSimulator(
+                new CombatService(diceSvc, CombatStats),
+                new TurnmeterService(),
+                new StatusEffectService(),
+                diceSvc,
+                heroSelector,
+                enemySelector);
 
-        Result = simulator.Simulate(HeroParty, EnemyParty, 500);
+            Result = simulator.Simulate(HeroParty, EnemyParty, 500);
+        }
 
         if (mode == 'T')
             PlayTurnBased();

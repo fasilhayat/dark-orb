@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using BattleArena.Application.Models;
 using BattleArena.Core.Entities;
 using BattleArena.Core.Entities.Enums;
 
@@ -118,4 +119,27 @@ internal sealed class BattleArenaApiClient
 
     internal record DieRollResponse(string Die, int Result);
     internal record DiceRollResponse(string Dice, int Result);
+
+    public async Task<CombatResult> SimulateCombatAsync(
+        Party heroParty, Party enemyParty,
+        int maxTicks = 500,
+        string heroTargetStrategy = "lowestHp",
+        string enemyTargetStrategy = "lowestHp")
+    {
+        LogCall("POST", "/v1/combat/simulate");
+        var req = new CombatSimulateRequest(heroParty, enemyParty, maxTicks, heroTargetStrategy, enemyTargetStrategy);
+        var resp = await _http.PostAsJsonAsync("/v1/combat/simulate", req, _json);
+        resp.EnsureSuccessStatusCode();
+        var result = await resp.Content.ReadFromJsonAsync<CombatResult>(_json);
+        LogResult("POST", "/v1/combat/simulate", $"tick {result?.TotalTicks ?? 0}, log {result?.Log.Count ?? 0} entries");
+        return result ?? new CombatResult();
+    }
 }
+
+public record CombatSimulateRequest(
+    Party HeroParty,
+    Party EnemyParty,
+    int MaxTicks = 500,
+    string HeroTargetStrategy = "random",
+    string EnemyTargetStrategy = "lowestHp"
+);

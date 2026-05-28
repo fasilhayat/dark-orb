@@ -1,6 +1,8 @@
 namespace BattleArena.Api.Endpoints;
 
 using Application.Interfaces;
+using Application.Models;
+using Application.Services;
 using Core.Entities;
 using Core.Entities.Enums;
 using Core.Interfaces;
@@ -51,7 +53,32 @@ public static class CombatEndpoint
             var result = combat.ResolveAttack(attacker, defender, weapon);
             return Results.Ok(result);
         });
+
+        app.MapPost("/v1/combat/simulate", async (CombatSimulateRequest req, HttpContext ctx) =>
+        {
+            var combatService = ctx.RequestServices.GetRequiredService<ICombatService>();
+            var turnmeterService = ctx.RequestServices.GetRequiredService<ITurnmeterService>();
+            var statusEffectService = ctx.RequestServices.GetRequiredService<IStatusEffectService>();
+            var diceService = ctx.RequestServices.GetRequiredService<IDiceService>();
+
+            var heroSelector = CreateSelector(req.HeroTargetStrategy);
+            var enemySelector = CreateSelector(req.EnemyTargetStrategy);
+
+            var simulator = new CombatSimulator(
+                combatService, turnmeterService, statusEffectService, diceService,
+                heroSelector, enemySelector);
+
+            var result = await simulator.SimulateAsync(req.HeroParty, req.EnemyParty, req.MaxTicks);
+            return Results.Ok(result);
+        });
     }
+
+    private static ITargetSelector CreateSelector(string strategy) => strategy.ToLowerInvariant() switch
+    {
+        "random" => new RandomTargetSelector(),
+        "lowesthp" => new LowestHpTargetSelector(),
+        _ => new LowestHpTargetSelector()
+    };
 
     private static Character CreateDefender(int targetAc)
     {
@@ -68,3 +95,11 @@ public static class CombatEndpoint
         };
     }
 }
+
+public record CombatSimulateRequest(
+    Party HeroParty,
+    Party EnemyParty,
+    int MaxTicks = 500,
+    string HeroTargetStrategy = "random",
+    string EnemyTargetStrategy = "lowestHp"
+);

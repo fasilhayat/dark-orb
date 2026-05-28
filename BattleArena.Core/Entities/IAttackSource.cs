@@ -1,7 +1,11 @@
 namespace BattleArena.Core.Entities;
 
 using Core.Entities.Enums;
+using System.Text.Json.Serialization;
 
+[JsonDerivedType(typeof(Weapon), typeDiscriminator: "weapon")]
+[JsonDerivedType(typeof(Spell), typeDiscriminator: "spell")]
+[JsonDerivedType(typeof(UnarmedStrike), typeDiscriminator: "unarmed")]
 public interface IAttackSource
 {
     string Name { get; }
