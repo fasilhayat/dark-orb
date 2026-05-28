@@ -68,9 +68,12 @@ static partial class Demo
             for (var i = 0; i < available.Count; i++)
             {
                 var ch = available[i];
+                var atk = GetAttackSource(ch);
+                var atkName = atk?.Name ?? "unarmed";
                 CW($"    [{i + 1}]  ", ConsoleColor.Cyan);
-                CW($"{ch.Name,-22}", ConsoleColor.White);
-                CWL($"  Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  INT {ch.Intelligence,-3}  HP {ch.MaxHitPoints}", ConsoleColor.DarkGray);
+                CW($"{ch.Name,-20}", ConsoleColor.White);
+                CW($"{atkName,-16}", ConsoleColor.Yellow);
+                CWL($"  Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}", ConsoleColor.DarkGray);
             }
             CW("  > ", ConsoleColor.Cyan);
 
@@ -80,7 +83,7 @@ static partial class Demo
                 var ch = available[idx - 1];
                 CWL(ch.Name, ConsoleColor.Cyan);
                 ch.CurrentHitPoints = ch.MaxHitPoints;
-                AttackMap[ch.Name] = PickWeaponForCharacter(ch);
+                AttackMap[ch.Name] = GetAttackSource(ch);
                 return ch;
             }
         }
@@ -191,16 +194,20 @@ static partial class Demo
             {
                 var ch = ApiRoster[i];
                 var picked = selected.Any(s => s.Name == ch.Name);
+                var atk = GetAttackSource(ch);
+                var atkName = atk?.Name ?? "unarmed";
                 CW($"    [{i + 1}]  ", ConsoleColor.Cyan);
                 if (picked)
                 {
-                    CW($"{ch.Name,-22}", ConsoleColor.Green);
-                    CWL($"  Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  INT {ch.Intelligence,-3}  HP {ch.MaxHitPoints}  [v]", ConsoleColor.Green);
+                    CW($"{ch.Name,-18}", ConsoleColor.Green);
+                    CW($"{atkName,-14}", ConsoleColor.Green);
+                    CWL($"  Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}  [v]", ConsoleColor.Green);
                 }
                 else
                 {
-                    CW($"{ch.Name,-22}", ConsoleColor.White);
-                    CWL($"  Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  INT {ch.Intelligence,-3}  HP {ch.MaxHitPoints}", ConsoleColor.DarkGray);
+                    CW($"{ch.Name,-18}", ConsoleColor.White);
+                    CW($"{atkName,-14}", ConsoleColor.Yellow);
+                    CWL($"  Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}", ConsoleColor.DarkGray);
                 }
             }
 
@@ -216,12 +223,8 @@ static partial class Demo
             var kInfo = Console.ReadKey(true);
             if (kInfo.Key == ConsoleKey.Enter && selected.Count > 0)
             {
-                Console.Clear();
-                PrintHeader();
-                CWL("\n  EQUIP YOUR PARTY\n", ConsoleColor.Yellow);
                 foreach (var hero in selected)
-                    if (!AttackMap.ContainsKey(hero.Name))
-                        AttackMap[hero.Name] = PickWeaponForCharacter(hero);
+                    AttackMap[hero.Name] = GetAttackSource(hero);
                 return selected;
             }
 
@@ -296,16 +299,33 @@ static partial class Demo
 
     // ── BuildEnemyParty ───────────────────────────────────────────────────────────
 
-    private static Party BuildEnemyParty() => new()
+    private static Party BuildEnemyParty()
     {
-        Name = "Enemy Horde",
-        Members =
-        [
-            new PartyMember { Character = Krag, AttackSource = OrcAxe },
-            new PartyMember { Character = Skrix, AttackSource = GoblinDagger },
-            new PartyMember { Character = Mordak, AttackSource = null }
-        ]
-    };
+        if (UseApiRoster)
+        {
+            var enemies = ApiRoster.Where(c => c.Npc == 1).Take(3).ToList();
+            return new Party
+            {
+                Name = "Enemy Horde",
+                Members = enemies.Select(c => new PartyMember
+                {
+                    Character = c,
+                    AttackSource = GetAttackSource(c)
+                }).ToList()
+            };
+        }
+
+        return new Party
+        {
+            Name = "Enemy Horde",
+            Members =
+            [
+                new PartyMember { Character = Krag, AttackSource = OrcAxe },
+                new PartyMember { Character = Skrix, AttackSource = GoblinDagger },
+                new PartyMember { Character = Mordak, AttackSource = null }
+            ]
+        };
+    }
 
     // ── PickCombatMode ────────────────────────────────────────────────────────────
 

@@ -2,6 +2,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using BattleArena.Core.Entities;
+using BattleArena.Core.Entities.Enums;
 
 namespace BattleArena;
 
@@ -24,6 +25,16 @@ internal sealed class BattleArenaApiClient
     public BattleArenaApiClient(string baseUrl, Action<string>? consoleLogger = null, TextWriter? fileLogger = null)
     {
         _consoleLogger = consoleLogger;
+        _fileLogger = fileLogger;
+        _http = new HttpClient
+        {
+            BaseAddress = new Uri(baseUrl.TrimEnd('/')),
+            Timeout     = TimeSpan.FromSeconds(10)
+        };
+    }
+
+    public BattleArenaApiClient(string baseUrl, TextWriter? fileLogger)
+    {
         _fileLogger = fileLogger;
         _http = new HttpClient
         {
@@ -66,4 +77,45 @@ internal sealed class BattleArenaApiClient
         LogResult("GET", "/v1/weapons", $"{list.Count} weapons");
         return list;
     }
+
+    // ── Dice API ───────────────────────────────────────────────────────────
+
+    public async Task<int> RollDieAsync(DieType dieType)
+    {
+        var path = $"/v1/roll/{dieType}";
+        LogCall("GET", path);
+        var dto = await _http.GetFromJsonAsync<DieRollResponse>(path, _json);
+        LogResult("GET", path, $"{dto?.Result}");
+        return dto?.Result ?? 0;
+    }
+
+    public async Task<int> RollDiceAsync(int count, int sides)
+    {
+        var path = $"/v1/roll/{count}d{sides}";
+        LogCall("GET", path);
+        var dto = await _http.GetFromJsonAsync<DiceRollResponse>(path, _json);
+        LogResult("GET", path, $"{dto?.Result}");
+        return dto?.Result ?? 0;
+    }
+
+    public async Task<int> RollWithAdvantageAsync(DieType dieType)
+    {
+        var path = $"/v1/roll/advantage/{dieType}";
+        LogCall("GET", path);
+        var dto = await _http.GetFromJsonAsync<DieRollResponse>(path, _json);
+        LogResult("GET", path, $"{dto?.Result}");
+        return dto?.Result ?? 0;
+    }
+
+    public async Task<int> RollWithDisadvantageAsync(DieType dieType)
+    {
+        var path = $"/v1/roll/disadvantage/{dieType}";
+        LogCall("GET", path);
+        var dto = await _http.GetFromJsonAsync<DieRollResponse>(path, _json);
+        LogResult("GET", path, $"{dto?.Result}");
+        return dto?.Result ?? 0;
+    }
+
+    internal record DieRollResponse(string Die, int Result);
+    internal record DiceRollResponse(string Dice, int Result);
 }

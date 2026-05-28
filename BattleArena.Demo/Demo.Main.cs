@@ -13,6 +13,7 @@ static partial class Demo
     private static readonly CombatStatsService CombatStats = new();
 
     // ── Optional API connection ───────────────────────────────────────────────────
+    private static BattleArenaApiClient? ApiClient;
     private static List<Character> ApiRoster = [];
     private static List<Weapon> ApiWeapons = [];
     private static bool UseApiRoster;
@@ -133,7 +134,9 @@ static partial class Demo
             }
         }
 
-        var diceSvc = new DiceService();
+        var diceSvc = UseApiRoster && ApiClient is not null
+            ? new ApiDiceService(ApiClient) as IDiceService
+            : new DiceService();
         var simulator = new CombatSimulator(
             new CombatService(diceSvc, CombatStats),
             new TurnmeterService(),
@@ -234,6 +237,18 @@ static partial class Demo
             .First();
     }
 
+    internal static IAttackSource? GetAttackSource(Character character)
+    {
+        if (character.Equipment.RightHand is { } weapon)
+            return weapon;
+        if (character.MemorizedSpells.Count > 0)
+            return character.MemorizedSpells
+                .OrderByDescending(s => s.AttackBonus)
+                .ThenByDescending(s => s.DamageCount)
+                .First();
+        return null;
+    }
+
     internal static Dictionary<string, CharDisplayState> BuildDisplayStates()
     {
         var dict = new Dictionary<string, CharDisplayState>();
@@ -289,12 +304,12 @@ static partial class Demo
             Console.ResetColor();
         }
 
-        var api = new BattleArenaApiClient(apiUrl, consoleLogger: ConsoleLog, fileLogger: logWriter);
+        ApiClient = new BattleArenaApiClient(apiUrl, consoleLogger: ConsoleLog, fileLogger: logWriter);
         Console.Write("  Connecting to BattleArena API... ");
         try
         {
-            ApiRoster = api.GetCharactersAsync().GetAwaiter().GetResult();
-            ApiWeapons = api.GetWeaponsAsync().GetAwaiter().GetResult();
+            ApiRoster = ApiClient.GetCharactersAsync().GetAwaiter().GetResult();
+            ApiWeapons = ApiClient.GetWeaponsAsync().GetAwaiter().GetResult();
             UseApiRoster = ApiRoster.Count > 0;
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"OK  ({ApiRoster.Count} characters, {ApiWeapons.Count} weapons loaded)");
