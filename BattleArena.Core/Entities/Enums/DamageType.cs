@@ -5,8 +5,11 @@ public enum DamageType
     Bludgeoning,
     Piercing,
     Slashing,
+    Poison,
     Fire,
-    Cold,
+    Ice,
     Lightning,
+    Shadow,
+    Holy,
     Acid
 }

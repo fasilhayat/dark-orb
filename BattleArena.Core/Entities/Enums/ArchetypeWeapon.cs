@@ -14,5 +14,6 @@ public enum ArchetypeWeapon
     Bow,
     Crossbow,
     Staff,
-    Sling
+    Sling,
+    Wand
 }

@@ -1,6 +1,7 @@
 namespace BattleArena.Infrastructure.Repositories;
 
 using Core.Entities;
+using Core.Entities.Enums;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Npgsql;
@@ -36,10 +37,24 @@ public class RaceRepository : IRaceRepository
 
     public async Task<List<Feat>> GetFeatsByRaceIdAsync(int raceId)
     {
-        return await _context.ExecuteQueryAsync(
+        var feats = await _context.ExecuteQueryAsync(
             "fn_get_feats(p_race_id := @p_race_id)",
             MapFeat,
             new NpgsqlParameter("p_race_id", raceId));
+
+        // Load resistances for each feat
+        foreach (var feat in feats)
+            feat.Resistances = await GetFeatResistancesAsync(feat.Id);
+
+        return feats;
+    }
+
+    public async Task<List<ResistanceBonus>> GetFeatResistancesAsync(int featId)
+    {
+        return await _context.ExecuteQueryAsync(
+            "fn_get_feat_resistances(p_feat_id := @p_feat_id)",
+            MapResistance,
+            new NpgsqlParameter("p_feat_id", featId));
     }
 
     private static Race MapRace(NpgsqlDataReader reader)
@@ -74,4 +89,11 @@ public class RaceRepository : IRaceRepository
         Description = reader["description"] as string ?? string.Empty,
         RaceId = reader["race_id"] as int?
     };
+
+    private static ResistanceBonus MapResistance(NpgsqlDataReader reader)
+    {
+        var type = Enum.TryParse<ResistanceType>((string)reader["resistance_type"], true, out var parsed)
+            ? parsed : ResistanceType.Magic;
+        return new ResistanceBonus(type, (int)reader["resistance_value"]);
+    }
 }

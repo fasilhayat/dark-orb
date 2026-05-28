@@ -276,7 +276,20 @@ static partial class Demo
         var apiUrl = Environment.GetEnvironmentVariable("BATTLE_ARENA_API_URL");
         if (string.IsNullOrWhiteSpace(apiUrl)) return;
 
-        var api = new BattleArenaApiClient(apiUrl);
+        // Open log file in a persistent location (repo root / logs)
+        var logDir = Path.Combine(AppContext.BaseDirectory, "logs");
+        Directory.CreateDirectory(logDir);
+        var logPath = Path.Combine(logDir, "api-calls.log");
+        var logWriter = new StreamWriter(logPath, append: true) { AutoFlush = true };
+
+        void ConsoleLog(string msg)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine(msg);
+            Console.ResetColor();
+        }
+
+        var api = new BattleArenaApiClient(apiUrl, consoleLogger: ConsoleLog, fileLogger: logWriter);
         Console.Write("  Connecting to BattleArena API... ");
         try
         {

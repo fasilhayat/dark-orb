@@ -14,6 +14,12 @@ public class CharacterServiceTests
 
     public CharacterServiceTests()
     {
+        // Default returns for new enrichment methods (empty lists to avoid NRE)
+        _characterRepo.GetCharacterArmorAsync(Arg.Any<int>()).Returns([]);
+        _characterRepo.GetCharacterWeaponsAsync(Arg.Any<int>()).Returns([]);
+        _characterRepo.GetCharacterSpellsAsync(Arg.Any<int>()).Returns([]);
+        _raceRepo.GetByIdAsync(Arg.Any<int>()).Returns((Race?)null);
+
         _sut = new CharacterService(_characterRepo, _raceRepo);
     }
 

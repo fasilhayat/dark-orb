@@ -176,6 +176,13 @@ public class FullCombatSteps
         "Slashing"     => DamageType.Slashing,
         "Piercing"     => DamageType.Piercing,
         "Bludgeoning"  => DamageType.Bludgeoning,
+        "Fire"         => DamageType.Fire,
+        "Ice"          => DamageType.Ice,
+        "Lightning"    => DamageType.Lightning,
+        "Poison"       => DamageType.Poison,
+        "Shadow"       => DamageType.Shadow,
+        "Holy"         => DamageType.Holy,
+        "Acid"         => DamageType.Acid,
         _              => throw new ArgumentOutOfRangeException(nameof(name), $"Unknown damage type: {name}")
     };
 }

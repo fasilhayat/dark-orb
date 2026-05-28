@@ -1,6 +1,7 @@
 namespace BattleArena.Infrastructure.Repositories;
 
 using Core.Entities;
+using Core.Entities.Enums;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Npgsql;
@@ -76,6 +77,30 @@ public class CharacterRepository : ICharacterRepository
             new NpgsqlParameter("p_id", id));
     }
 
+    public async Task<List<Weapon>> GetCharacterWeaponsAsync(int characterId)
+    {
+        return await _context.ExecuteQueryAsync(
+            "fn_get_character_weapons(p_character_id := @p_id)",
+            MapCharacterWeapon,
+            new NpgsqlParameter("p_id", characterId));
+    }
+
+    public async Task<List<(Armor Armor, string SlotName)>> GetCharacterArmorAsync(int characterId)
+    {
+        return await _context.ExecuteQueryAsync(
+            "fn_get_character_armor(p_character_id := @p_id)",
+            MapCharacterArmor,
+            new NpgsqlParameter("p_id", characterId));
+    }
+
+    public async Task<List<Spell>> GetCharacterSpellsAsync(int characterId)
+    {
+        return await _context.ExecuteQueryAsync(
+            "fn_get_character_spells(p_character_id := @p_id)",
+            MapCharacterSpell,
+            new NpgsqlParameter("p_id", characterId));
+    }
+
     private static Character MapCharacter(NpgsqlDataReader reader) => new()
     {
         Id = (int)reader["id"],
@@ -98,4 +123,75 @@ public class CharacterRepository : ICharacterRepository
         Biography = reader["biography"] as string ?? string.Empty,
         ExperiencePoints = reader["experience_points"] as int? ?? 0
     };
+
+    private static Weapon MapCharacterWeapon(NpgsqlDataReader reader)
+    {
+        _ = reader["slot_name"]; // consume slot column but map weapon from remaining columns
+        return new Weapon
+        {
+            Id = (int)reader["id"],
+            Name = (string)reader["name"],
+            Description = reader["description"] as string ?? string.Empty,
+            Archetype = Enum.Parse<ArchetypeWeapon>((string)reader["weapon_type"]),
+            DamageDie = Enum.Parse<DieType>((string)reader["damage_die"]),
+            DamageType = Enum.Parse<DamageType>((string)reader["damage_type"]),
+            AttackType = Enum.Parse<AttackType>((string)reader["attack_type"]),
+            DamageCount = reader["damage_count"] as int? ?? 1,
+            Hands = reader["hands"] as int? ?? 1,
+            Quality = Enum.Parse<GearQuality>((string)reader["quality"]),
+            AttackBonus = reader["attack_bonus"] as int? ?? 0
+        };
+    }
+
+    private static (Armor, string) MapCharacterArmor(NpgsqlDataReader reader)
+    {
+        var slotName = (string)reader["slot_name"];
+        var armor = new Armor
+        {
+            Id = (int)reader["id"],
+            Name = (string)reader["name"],
+            Description = reader["description"] as string ?? string.Empty,
+            ArmorClass = (int)reader["armor_class"],
+            Category = reader["category"] as string ?? string.Empty,
+            MaxDexterityBonus = reader["max_dexterity_bonus"] as int? ?? 0,
+            StealthDisadvantage = reader["stealth_disadvantage"] as bool? ?? false,
+            StrengthRequirement = reader["strength_requirement"] as int? ?? 0,
+            Quality = Enum.Parse<GearQuality>((string)reader["quality"]),
+            ArmorClassBonus = reader["armor_class_bonus"] as int? ?? 0,
+            Mitigation = reader["mitigation"] as int? ?? 0,
+            TurnMeterPenalty = reader["turn_meter_penalty"] as int? ?? 0,
+            TurnMeterCostReduction = reader["turn_meter_cost_reduction"] as int? ?? 0
+        };
+        return (armor, slotName);
+    }
+
+    private static Spell MapCharacterSpell(NpgsqlDataReader reader)
+    {
+        var schoolStr = (string)reader["school"];
+        var school = schoolStr switch
+        {
+            "AoE" => SpellSchool.AoE,
+            "CC" => SpellSchool.CC,
+            _ => SpellSchool.Other
+        };
+
+        return new Spell
+        {
+            Id = (int)reader["id"],
+            Name = (string)reader["name"],
+            Description = reader["description"] as string ?? string.Empty,
+            School = school,
+            ManaCost = (int)reader["mana_cost"],
+            TurnMeterCost = reader["turn_meter_cost"] as int? ?? 100,
+            SpellLevel = reader["spell_level"] as int? ?? 1,
+            DamageCount = reader["damage_count"] as int? ?? 1,
+            AttackBonus = reader["attack_bonus"] as int? ?? 0,
+            FlatDamageBonus = reader["flat_damage_bonus"] as int? ?? 0,
+            DamageDie = reader["damage_die"] is string dieStr ? Enum.Parse<DieType>(dieStr) : DieType.D4,
+            DamageType = reader["damage_type"] is string dtStr ? Enum.Parse<DamageType>(dtStr) : DamageType.Bludgeoning,
+            AttackType = reader["attack_type"] is string atStr ? Enum.Parse<AttackType>(atStr) : AttackType.Spell,
+            ElementalType = reader["elemental_type"] is string etStr && Enum.TryParse<ElementalType>(etStr, true, out var et) ? et : ElementalType.None,
+            ElementalDamage = reader["elemental_damage"] as int? ?? 0
+        };
+    }
 }

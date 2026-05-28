@@ -40,6 +40,9 @@ public class ArmorRepository : IArmorRepository
         StealthDisadvantage = reader["stealth_disadvantage"] as bool? ?? false,
         StrengthRequirement = reader["strength_requirement"] as int? ?? 0,
         Quality = Enum.Parse<GearQuality>((string)reader["quality"]),
-        ArmorClassBonus = reader["armor_class_bonus"] as int? ?? 0
+        ArmorClassBonus = reader["armor_class_bonus"] as int? ?? 0,
+        Mitigation = reader["mitigation"] as int? ?? 0,
+        TurnMeterPenalty = reader["turn_meter_penalty"] as int? ?? 0,
+        TurnMeterCostReduction = reader["turn_meter_cost_reduction"] as int? ?? 0
     };
 }

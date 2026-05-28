@@ -206,6 +206,25 @@ FROM (VALUES
 JOIN arena_data.race r ON r.name = s.race_name;
 
 -- ============================================================
+-- FEAT RESISTANCE JUNCTION TABLE
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS arena_data.feat_resistance (
+    id SERIAL PRIMARY KEY,
+    feat_id INTEGER NOT NULL REFERENCES arena_data.race_special_ability(id) ON DELETE CASCADE,
+    resistance_type VARCHAR(50) NOT NULL,
+    resistance_value INTEGER NOT NULL DEFAULT 0
+);
+
+-- Seed: Feat Resistances
+INSERT INTO arena_data.feat_resistance (feat_id, resistance_type, resistance_value)
+SELECT rsa.id, 'Magic', 25
+FROM arena_data.race_special_ability rsa
+JOIN arena_data.race r ON r.id = rsa.race_id
+WHERE r.name IN ('Elf', 'Dwarf', 'Kobold', 'Ogre') AND rsa.name = 'Magic Resistance'
+AND NOT EXISTS (SELECT 1 FROM arena_data.feat_resistance fr WHERE fr.feat_id = rsa.id);
+
+-- ============================================================
 -- CLASSES
 -- ============================================================
 
@@ -572,6 +591,42 @@ UPDATE arena_data.armor SET armor_class_bonus = 2 WHERE name = 'Titan Plate';
 UPDATE arena_data.armor SET armor_class_bonus = 1 WHERE name IN ('Dragon Scale Mail', 'Shadow Cloak');
 UPDATE arena_data.armor SET armor_class_bonus = 1 WHERE name IN ('Knight''s Honor', 'Mithril Chain');
 
+-- Add new columns to armor table (must match C# Armor entity)
+ALTER TABLE arena_data.armor ADD COLUMN IF NOT EXISTS mitigation INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE arena_data.armor ADD COLUMN IF NOT EXISTS turn_meter_penalty INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE arena_data.armor ADD COLUMN IF NOT EXISTS turn_meter_cost_reduction INTEGER NOT NULL DEFAULT 0;
+
+-- Set mitigation values for armor
+UPDATE arena_data.armor SET mitigation = 1 WHERE name IN ('Padded Armor', 'Leather Armor', 'Studded Leather');
+UPDATE arena_data.armor SET mitigation = 2 WHERE name IN ('Hide Armor', 'Chain Shirt', 'Scale Mail', 'Breastplate');
+UPDATE arena_data.armor SET mitigation = 3 WHERE name IN ('Half Plate', 'Ring Mail', 'Chain Mail');
+UPDATE arena_data.armor SET mitigation = 4 WHERE name IN ('Splint Armor');
+UPDATE arena_data.armor SET mitigation = 5 WHERE name IN ('Plate Armor');
+UPDATE arena_data.armor SET mitigation = 0 WHERE name = 'Shield';
+-- Quality armor
+UPDATE arena_data.armor SET mitigation = 2 WHERE name IN ('Mithril Chain');
+UPDATE arena_data.armor SET mitigation = 4 WHERE name IN ('Knight''s Honor');
+UPDATE arena_data.armor SET mitigation = 6 WHERE name IN ('Titan Plate');
+UPDATE arena_data.armor SET mitigation = 3 WHERE name IN ('Dragon Scale Mail');
+UPDATE arena_data.armor SET mitigation = 5 WHERE name IN ('Phoenix Carapace', 'Battlesworn Plate');
+UPDATE arena_data.armor SET mitigation = 4 WHERE name IN ('Aegis of the Fallen King');
+UPDATE arena_data.armor SET mitigation = 0 WHERE name IN ('Shroud of the Whispering Wind');
+
+-- Set turn_meter_penalty for armor (heavier armor slows TM gain)
+UPDATE arena_data.armor SET turn_meter_penalty = 0 WHERE armor_category_id = (SELECT id FROM arena_data.armor_category WHERE name = 'Light');
+UPDATE arena_data.armor SET turn_meter_penalty = -2 WHERE name IN ('Scale Mail', 'Half Plate');
+UPDATE arena_data.armor SET turn_meter_penalty = -3 WHERE name IN ('Ring Mail');
+UPDATE arena_data.armor SET turn_meter_penalty = -5 WHERE name IN ('Chain Mail', 'Splint Armor');
+UPDATE arena_data.armor SET turn_meter_penalty = -8 WHERE name IN ('Plate Armor');
+UPDATE arena_data.armor SET turn_meter_penalty = -2 WHERE name IN ('Shield');
+-- Quality armor overrides
+UPDATE arena_data.armor SET turn_meter_penalty = -5 WHERE name IN ('Knight''s Honor', 'Battlesworn Plate');
+UPDATE arena_data.armor SET turn_meter_penalty = -10 WHERE name IN ('Titan Plate', 'Aegis of the Fallen King');
+UPDATE arena_data.armor SET turn_meter_penalty = -2 WHERE name IN ('Dragon Scale Mail');
+
+-- Set turn_meter_cost_reduction (robe-type armor for spellcasters)
+UPDATE arena_data.armor SET turn_meter_cost_reduction = 5 WHERE name IN ('Leather Armor');
+
 -- ============================================================
 -- CURSED ARMOR
 -- ============================================================
@@ -651,6 +706,20 @@ UPDATE arena_data.armor SET set_id = (SELECT id FROM arena_data.item_set WHERE n
 UPDATE arena_data.armor SET set_id = (SELECT id FROM arena_data.item_set WHERE name = 'Dragonborn Legacy') WHERE name IN ('Dragon Scale Mail');
 UPDATE arena_data.weapon SET set_id = (SELECT id FROM arena_data.item_set WHERE name = 'Shadow Stalker') WHERE name IN ('Shadow Sting');
 UPDATE arena_data.weapon SET set_id = (SELECT id FROM arena_data.item_set WHERE name = 'Dragonborn Legacy') WHERE name IN ('Dragon''s Fury');
+
+-- Armor resistance junction table (created here so seed data can use it)
+CREATE TABLE IF NOT EXISTS arena_data.armor_resistance (
+    id SERIAL PRIMARY KEY,
+    armor_id INTEGER NOT NULL REFERENCES arena_data.armor(id) ON DELETE CASCADE,
+    resistance_type VARCHAR(50) NOT NULL,
+    resistance_value INTEGER NOT NULL DEFAULT 0
+);
+
+-- Seed: Armor Resistances
+INSERT INTO arena_data.armor_resistance (armor_id, resistance_type, resistance_value)
+SELECT a.id, 'Fire', 10
+FROM arena_data.armor a WHERE a.name = 'Dragon Scale Mail'
+AND NOT EXISTS (SELECT 1 FROM arena_data.armor_resistance ar WHERE ar.armor_id = a.id AND ar.resistance_type = 'Fire');
 
 -- ============================================================
 -- ACCESSORIES (Rings, Amulets, Girdles)
@@ -787,42 +856,61 @@ CREATE TABLE IF NOT EXISTS arena_data.spell (
     school_id INTEGER NOT NULL REFERENCES arena_data.spell_school(id),
     damage_die_id INTEGER REFERENCES arena_data.die_type(id),
     damage_type_id INTEGER REFERENCES arena_data.damage_type(id),
+    attack_type_id INTEGER REFERENCES arena_data.attack_type(id),
     name VARCHAR(100) NOT NULL UNIQUE,
     mana_cost INTEGER NOT NULL DEFAULT 5,
+    turn_meter_cost INTEGER NOT NULL DEFAULT 100,
+    spell_level INTEGER NOT NULL DEFAULT 1,
+    damage_count INTEGER NOT NULL DEFAULT 1,
+    attack_bonus INTEGER NOT NULL DEFAULT 0,
+    flat_damage_bonus INTEGER NOT NULL DEFAULT 0,
+    elemental_type VARCHAR(50) DEFAULT 'None',
+    elemental_damage INTEGER NOT NULL DEFAULT 0,
     description TEXT DEFAULT ''
 );
 
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, mana_cost)
-SELECT src.name, src.description, s.id, d.id, dt.id, src.mana
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT src.name, src.description, s.id, d.id, dt.id, at.id, src.mana, src.tm, src.lvl, src.dmg_cnt, src.atk_bonus, src.flat_dmg, src.elem, src.elem_dmg
 FROM (VALUES
-    ('Blade Barrier',    'A wall of spinning blades.',                 'AoE', 'D8',  'Slashing',    10),
-    ('Ice Storm',        'Hail and ice pummel the area.',              'AoE', 'D8',  'Ice',         8),
-    ('Fire Storm',       'A conflagration engulfs the area.',          'AoE', 'D10', 'Fire',        12),
-    ('Acid Rain',        'Corrosive rain burns all in the area.',      'AoE', 'D6',  'Acid',        9),
-    ('Lava Hail',        'Molten rock rains from the sky.',            'AoE', 'D12', 'Fire',        15),
-    ('Lightning Strike', 'A bolt of lightning strikes from above.',    'AoE', 'D10', 'Lightning',   10),
-    ('Sand Storm',       'Blinding sand scours the battlefield.',      'AoE', 'D6',  'Bludgeoning', 7),
-    ('Blizzard',         'Freezing winds and snow pelt the area.',     'AoE', 'D8',  'Ice',         10),
-    ('Blinding Flash',   'A brilliant flash blinds all who see it.',   'AoE', NULL,  NULL,          6),
-    ('Earthquake',       'The ground shakes violently.',               'AoE', 'D12', 'Bludgeoning', 14),
-    ('Insect Swarm',     'A cloud of biting insects descends.',        'AoE', 'D4',  'Piercing',    7),
-    ('Fog of Despair',   'A choking fog that saps morale.',            'AoE', NULL,  NULL,          8),
-    ('Stun',             'A concussive force that stuns the target.',  'CC',  NULL,  NULL,          5),
-    ('Sleep',            'Puts the target into a magical slumber.',    'CC',  NULL,  NULL,          6),
-    ('Charm Enemy',      'Bends an enemy to your will.',               'CC',  NULL,  NULL,          8),
-    ('Fear',             'Instills overwhelming terror.',              'CC',  NULL,  NULL,          7),
-    ('Taunt',            'Forces an enemy to attack you.',             'CC',  NULL,  NULL,          4),
-    ('Freeze',           'Encases the target in ice.',                 'CC',  NULL,  NULL,          7),
-    ('Confuse',          'Makes the target act erratically.',          'CC',  NULL,  NULL,          6),
-    ('Provoke',          'Enrages the target, reducing its defenses.', 'CC',  NULL,  NULL,          5),
-    ('Sacrifice',        'Sacrifice own HP to empower an ally.',       'CC',  NULL,  NULL,          0),
-    ('Blind',            'Robs the target of sight.',                  'CC',  NULL,  NULL,          5),
-    ('Root',             'Anchors the target to the ground.',          'CC',  NULL,  NULL,          5),
-    ('Summon Creature',  'Calls a creature to fight for you.',         'Other', NULL, NULL,         12)
-) AS src(name, description, school_name, die_name, dmg_name, mana)
+    ('Blade Barrier',    'A wall of spinning blades.',                 'AoE', 'D8',  'Slashing',    'Spell', 10, 90,  3, 3, 2, 0, 'None', 0),
+    ('Ice Storm',        'Hail and ice pummel the area.',              'AoE', 'D8',  'Ice',         'Spell', 8,  85,  3, 3, 2, 0, 'None', 0),
+    ('Fire Storm',       'A conflagration engulfs the area.',          'AoE', 'D10', 'Fire',        'Spell', 12, 95,  4, 4, 2, 0, 'None', 0),
+    ('Acid Rain',        'Corrosive rain burns all in the area.',      'AoE', 'D6',  'Acid',        'Spell', 9,  80,  3, 3, 1, 0, 'None', 0),
+    ('Lava Hail',        'Molten rock rains from the sky.',            'AoE', 'D12', 'Fire',        'Spell', 15, 100, 5, 4, 3, 0, 'None', 0),
+    ('Lightning Strike', 'A bolt of lightning strikes from above.',    'AoE', 'D10', 'Lightning',   'Spell', 10, 90,  4, 3, 3, 0, 'None', 0),
+    ('Sand Storm',       'Blinding sand scours the battlefield.',      'AoE', 'D6',  'Bludgeoning', 'Spell', 7,  75,  2, 2, 1, 0, 'None', 0),
+    ('Blizzard',         'Freezing winds and snow pelt the area.',     'AoE', 'D8',  'Ice',         'Spell', 10, 85,  4, 3, 2, 0, 'None', 0),
+    ('Blinding Flash',   'A brilliant flash blinds all who see it.',   'AoE', NULL,  NULL,          'Spell', 6,  70,  2, 1, 0, 0, 'None', 0),
+    ('Earthquake',       'The ground shakes violently.',               'AoE', 'D12', 'Bludgeoning', 'Spell', 14, 95,  5, 4, 2, 0, 'None', 0),
+    ('Insect Swarm',     'A cloud of biting insects descends.',        'AoE', 'D4',  'Piercing',    'Spell', 7,  75,  2, 2, 1, 0, 'None', 0),
+    ('Fog of Despair',   'A choking fog that saps morale.',            'AoE', NULL,  NULL,          'Spell', 8,  70,  2, 1, 0, 0, 'None', 0),
+    ('Stun',             'A concussive force that stuns the target.',  'CC',  NULL,  NULL,          'Spell', 5,  65,  2, 1, 0, 0, 'None', 0),
+    ('Sleep',            'Puts the target into a magical slumber.',    'CC',  NULL,  NULL,          'Spell', 6,  60,  1, 1, 0, 0, 'None', 0),
+    ('Charm Enemy',      'Bends an enemy to your will.',               'CC',  NULL,  NULL,          'Spell', 8,  75,  3, 1, 0, 0, 'None', 0),
+    ('Fear',             'Instills overwhelming terror.',              'CC',  NULL,  NULL,          'Spell', 7,  70,  2, 1, 0, 0, 'None', 0),
+    ('Taunt',            'Forces an enemy to attack you.',             'CC',  NULL,  NULL,          'Spell', 4,  55,  1, 1, 0, 0, 'None', 0),
+    ('Freeze',           'Encases the target in ice.',                 'CC',  NULL,  NULL,          'Spell', 7,  75,  3, 1, 0, 0, 'None', 0),
+    ('Confuse',          'Makes the target act erratically.',          'CC',  NULL,  NULL,          'Spell', 6,  70,  2, 1, 0, 0, 'None', 0),
+    ('Provoke',          'Enrages the target, reducing its defenses.', 'CC',  NULL,  NULL,          'Spell', 5,  60,  1, 1, 0, 0, 'None', 0),
+    ('Sacrifice',        'Sacrifice own HP to empower an ally.',       'CC',  NULL,  NULL,          'Spell', 0,  50,  2, 1, 0, 0, 'None', 0),
+    ('Blind',            'Robs the target of sight.',                  'CC',  NULL,  NULL,          'Spell', 5,  65,  2, 1, 0, 0, 'None', 0),
+    ('Root',             'Anchors the target to the ground.',          'CC',  NULL,  NULL,          'Spell', 5,  65,  2, 1, 0, 0, 'None', 0),
+    ('Summon Creature',  'Calls a creature to fight for you.',         'Other', NULL, NULL,         'Spell', 12, 85,  4, 1, 0, 0, 'None', 0)
+) AS src(name, description, school_name, die_name, dmg_name, atk_name, mana, tm, lvl, dmg_cnt, atk_bonus, flat_dmg, elem, elem_dmg)
 JOIN arena_data.spell_school s ON s.name = src.school_name
 LEFT JOIN arena_data.die_type d ON d.name = src.die_name
-LEFT JOIN arena_data.damage_type dt ON dt.name = src.dmg_name;
+LEFT JOIN arena_data.damage_type dt ON dt.name = src.dmg_name
+LEFT JOIN arena_data.attack_type at ON at.name = src.atk_name;
+
+-- Additional spells (not in the main seed, needed by character builds)
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Fireball', 'A blazing orb of fire that explodes on impact.', ss.id, d.id, dt.id, at.id, 8, 90, 3, 3, 2, 0, 'None', 0
+FROM arena_data.spell_school ss
+CROSS JOIN arena_data.die_type d
+CROSS JOIN arena_data.damage_type dt
+CROSS JOIN arena_data.attack_type at
+WHERE ss.name = 'Other' AND d.name = 'D6' AND dt.name = 'Fire' AND at.name = 'Spell'
+AND NOT EXISTS (SELECT 1 FROM arena_data.spell WHERE name = 'Fireball');
 
 -- ============================================================
 -- CHARACTERS TABLE
@@ -865,6 +953,13 @@ CREATE TABLE IF NOT EXISTS arena_data.character_inventory (
     item_type VARCHAR(10) NOT NULL,
     item_id INTEGER NOT NULL,
     quantity INTEGER NOT NULL DEFAULT 1
+);
+
+CREATE TABLE IF NOT EXISTS arena_data.character_spell (
+    id SERIAL PRIMARY KEY,
+    character_id INTEGER NOT NULL REFERENCES arena_data.character(id) ON DELETE CASCADE,
+    spell_id INTEGER NOT NULL REFERENCES arena_data.spell(id) ON DELETE CASCADE,
+    UNIQUE (character_id, spell_id)
 );
 
 -- ============================================================
@@ -1009,6 +1104,130 @@ UPDATE arena_data.character SET biography = 'An undead knight cursed to guard th
 UPDATE arena_data.character SET biography = 'A kobold with an unhealthy obsession with fire and explosions. Sizzle sells "perfectly safe" fireworks and alchemical mixtures from a stall that has burned down four times. He insists the fires were not his fault.' WHERE name = 'Sizzle';
 
 UPDATE arena_data.character SET biography = 'A forest guardian who protects the ancient groves of the Singing Woods. She trades rare herbs, seeds, and components to those who prove they respect nature. She has not spoken a word in three years — she claims the trees speak enough for her.' WHERE name = 'Ivy Thornwood';
+
+-- ============================================================
+-- SEED: CHARACTER EQUIPMENT
+-- ============================================================
+
+-- Weapon assignments
+WITH weapon_map (char_name, slot_name, item_name) AS (VALUES
+    ('Bruenor Battlehammer', 'RightHand', 'Long Sword'),
+    ('Tanis Half-Elven',     'RightHand', 'Short Sword'),
+    ('Karg Bloodfang',       'RightHand', 'Battle Axe'),
+    ('Sir Aldric Vane',      'RightHand', 'Long Sword'),
+    ('Mira Brightholm',      'RightHand', 'Mace'),
+    ('Brorn Ironarm',        'RightHand', 'Maul'),
+    ('Sylas Moonshadow',     'RightHand', 'Short Sword'),
+    ('Captain Aldric',       'RightHand', 'Long Sword'),
+    ('Sister Marigold',      'RightHand', 'Mace'),
+    ('Rorik the Wanderer',   'RightHand', 'Battle Axe'),
+    ('Grommash Ironhide',    'RightHand', 'Great Sword'),
+    ('Finn Swift',           'RightHand', 'Dagger'),
+    ('Sizzle',               'RightHand', 'Dagger'),
+    ('Ivy Thornwood',        'RightHand', 'Quarter Staff')
+)
+INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+SELECT c.id, es.id, 'weapon', w.id
+FROM weapon_map m
+JOIN arena_data.character c ON c.name = m.char_name
+JOIN arena_data.equipment_slot es ON es.name = m.slot_name
+JOIN arena_data.weapon w ON w.name = m.item_name
+WHERE NOT EXISTS (
+    SELECT 1 FROM arena_data.character_equipment ce
+    WHERE ce.character_id = c.id AND ce.slot_id = es.id
+);
+
+-- Chest armor assignments
+WITH armor_map (char_name, slot_name, item_name) AS (VALUES
+    ('Bruenor Battlehammer', 'Chest', 'Chain Mail'),
+    ('Tanis Half-Elven',     'Chest', 'Studded Leather'),
+    ('Karg Bloodfang',       'Chest', 'Hide Armor'),
+    ('Elara Swiftwind',      'Chest', 'Leather Armor'),
+    ('Sir Aldric Vane',      'Chest', 'Plate Armor'),
+    ('Mira Brightholm',      'Chest', 'Chain Shirt'),
+    ('Brorn Ironarm',        'Chest', 'Hide Armor'),
+    ('Sylas Moonshadow',     'Chest', 'Studded Leather'),
+    ('Captain Aldric',       'Chest', 'Chain Mail'),
+    ('Sister Marigold',      'Chest', 'Chain Shirt'),
+    ('Rorik the Wanderer',   'Chest', 'Hide Armor'),
+    ('Selene Nightwhisper',  'Chest', 'Leather Armor'),
+    ('Grommash Ironhide',    'Chest', 'Splint Armor'),
+    ('Finn Swift',           'Chest', 'Leather Armor'),
+    ('The Collector',        'Chest', 'Leather Armor'),
+    ('Morgath the Pale',     'Chest', 'Plate Armor'),
+    ('Sizzle',               'Chest', 'Leather Armor'),
+    ('Ivy Thornwood',        'Chest', 'Leather Armor')
+)
+INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+SELECT c.id, es.id, 'armor', a.id
+FROM armor_map m
+JOIN arena_data.character c ON c.name = m.char_name
+JOIN arena_data.equipment_slot es ON es.name = m.slot_name
+JOIN arena_data.armor a ON a.name = m.item_name
+WHERE NOT EXISTS (
+    SELECT 1 FROM arena_data.character_equipment ce
+    WHERE ce.character_id = c.id AND ce.slot_id = es.id
+);
+
+-- Shield assignments (left hand)
+WITH shield_map (char_name, slot_name, item_name) AS (VALUES
+    ('Bruenor Battlehammer', 'LeftHand', 'Shield'),
+    ('Sir Aldric Vane',      'LeftHand', 'Shield')
+)
+INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+SELECT c.id, es.id, 'armor', a.id
+FROM shield_map m
+JOIN arena_data.character c ON c.name = m.char_name
+JOIN arena_data.equipment_slot es ON es.name = m.slot_name
+JOIN arena_data.armor a ON a.name = m.item_name
+WHERE NOT EXISTS (
+    SELECT 1 FROM arena_data.character_equipment ce
+    WHERE ce.character_id = c.id AND ce.slot_id = es.id
+);
+
+-- ============================================================
+-- SEED: CHARACTER SPELLS
+-- ============================================================
+
+-- Elara Swiftwind (Elf Mage)
+INSERT INTO arena_data.character_spell (character_id, spell_id)
+SELECT c.id, s.id
+FROM arena_data.character c, arena_data.spell s
+WHERE c.name = 'Elara Swiftwind'
+  AND s.name IN ('Blade Barrier', 'Ice Storm', 'Lightning Strike', 'Fireball')
+  AND NOT EXISTS (SELECT 1 FROM arena_data.character_spell cs WHERE cs.character_id = c.id AND cs.spell_id = s.id);
+
+-- Selene Nightwhisper (Elf Mage NPC)
+INSERT INTO arena_data.character_spell (character_id, spell_id)
+SELECT c.id, s.id
+FROM arena_data.character c, arena_data.spell s
+WHERE c.name = 'Selene Nightwhisper'
+  AND s.name IN ('Fireball', 'Ice Storm', 'Lightning Strike')
+  AND NOT EXISTS (SELECT 1 FROM arena_data.character_spell cs WHERE cs.character_id = c.id AND cs.spell_id = s.id);
+
+-- The Collector (Human Mage NPC)
+INSERT INTO arena_data.character_spell (character_id, spell_id)
+SELECT c.id, s.id
+FROM arena_data.character c, arena_data.spell s
+WHERE c.name = 'The Collector'
+  AND s.name IN ('Blade Barrier', 'Ice Storm', 'Fire Storm', 'Acid Rain', 'Lightning Strike', 'Earthquake', 'Blizzard')
+  AND NOT EXISTS (SELECT 1 FROM arena_data.character_spell cs WHERE cs.character_id = c.id AND cs.spell_id = s.id);
+
+-- Sizzle (Kobold Mage NPC)
+INSERT INTO arena_data.character_spell (character_id, spell_id)
+SELECT c.id, s.id
+FROM arena_data.character c, arena_data.spell s
+WHERE c.name = 'Sizzle'
+  AND s.name IN ('Fire Storm', 'Lava Hail')
+  AND NOT EXISTS (SELECT 1 FROM arena_data.character_spell cs WHERE cs.character_id = c.id AND cs.spell_id = s.id);
+
+-- Ivy Thornwood (Elf Druid NPC)
+INSERT INTO arena_data.character_spell (character_id, spell_id)
+SELECT c.id, s.id
+FROM arena_data.character c, arena_data.spell s
+WHERE c.name = 'Ivy Thornwood'
+  AND s.name IN ('Insect Swarm', 'Root', 'Blinding Flash')
+  AND NOT EXISTS (SELECT 1 FROM arena_data.character_spell cs WHERE cs.character_id = c.id AND cs.spell_id = s.id);
 
 -- ============================================================
 -- SEED: ADDITIONAL WEAPONS
@@ -1405,7 +1624,8 @@ RETURNS TABLE(
     armor_class INTEGER, category VARCHAR,
     max_dexterity_bonus INTEGER, stealth_disadvantage BOOLEAN,
     strength_requirement INTEGER,
-    quality VARCHAR, armor_class_bonus INTEGER
+    quality VARCHAR, armor_class_bonus INTEGER,
+    mitigation INTEGER, turn_meter_penalty INTEGER, turn_meter_cost_reduction INTEGER
 ) AS $$
 BEGIN
     RETURN QUERY
@@ -1413,7 +1633,8 @@ BEGIN
            a.armor_class, ac.name::VARCHAR AS category,
            a.max_dexterity_bonus, a.stealth_disadvantage, a.strength_requirement,
            gq.name::VARCHAR AS quality,
-           a.armor_class_bonus
+           a.armor_class_bonus,
+           a.mitigation, a.turn_meter_penalty, a.turn_meter_cost_reduction
     FROM arena_data.armor a
     JOIN arena_data.armor_category ac ON ac.id = a.armor_category_id
     JOIN arena_data.gear_quality gq ON gq.id = a.gear_quality_id
@@ -1426,16 +1647,153 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION arena_data.fn_get_spells(
     p_school VARCHAR(50) DEFAULT NULL
 )
-RETURNS TABLE(id INTEGER, name VARCHAR, description TEXT, school VARCHAR, mana_cost INTEGER) AS $$
+RETURNS TABLE(
+    id INTEGER, name VARCHAR, description TEXT, school VARCHAR,
+    mana_cost INTEGER, turn_meter_cost INTEGER, spell_level INTEGER,
+    damage_count INTEGER, attack_bonus INTEGER, flat_damage_bonus INTEGER,
+    elemental_type VARCHAR, elemental_damage INTEGER,
+    damage_die VARCHAR, damage_type VARCHAR, attack_type VARCHAR
+) AS $$
 BEGIN
     RETURN QUERY
-    SELECT s.id, s.name::VARCHAR, s.description::TEXT, ss.name::VARCHAR AS school, s.mana_cost
+    SELECT s.id, s.name::VARCHAR, s.description::TEXT, ss.name::VARCHAR AS school,
+           s.mana_cost, s.turn_meter_cost, s.spell_level,
+           s.damage_count, s.attack_bonus, s.flat_damage_bonus,
+           s.elemental_type, s.elemental_damage,
+           d.name::VARCHAR AS damage_die,
+           dt.name::VARCHAR AS damage_type,
+           at.name::VARCHAR AS attack_type
     FROM arena_data.spell s
     JOIN arena_data.spell_school ss ON ss.id = s.school_id
+    LEFT JOIN arena_data.die_type d ON d.id = s.damage_die_id
+    LEFT JOIN arena_data.damage_type dt ON dt.id = s.damage_type_id
+    LEFT JOIN arena_data.attack_type at ON at.id = s.attack_type_id
     WHERE (p_school IS NULL OR ss.name = p_school)
     ORDER BY s.name;
 END;
 $$ LANGUAGE plpgsql;
+
+-- ============================================================
+-- CHARACTER EQUIPMENT FUNCTIONS
+-- ============================================================
+
+CREATE OR REPLACE FUNCTION arena_data.fn_get_character_weapons(p_character_id INTEGER)
+RETURNS TABLE(
+    slot_name VARCHAR,
+    id INTEGER, name VARCHAR, description TEXT,
+    weapon_type VARCHAR, damage_die VARCHAR, damage_type VARCHAR,
+    attack_type VARCHAR, damage_count INTEGER, hands INTEGER,
+    quality VARCHAR, attack_bonus INTEGER
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT es.name::VARCHAR AS slot_name,
+           w.id, w.name::VARCHAR, w.description::TEXT,
+           wt.name::VARCHAR AS weapon_type,
+           d.name::VARCHAR AS damage_die,
+           dt.name::VARCHAR AS damage_type,
+           at.name::VARCHAR AS attack_type,
+           w.damage_count, w.hands,
+           gq.name::VARCHAR AS quality,
+           w.attack_bonus
+    FROM arena_data.character_equipment ce
+    JOIN arena_data.equipment_slot es ON es.id = ce.slot_id
+    JOIN arena_data.weapon w ON w.id = ce.item_id AND ce.item_type = 'weapon'
+    JOIN arena_data.weapon_type wt ON wt.id = w.weapon_type_id
+    JOIN arena_data.die_type d ON d.id = w.damage_die_id
+    JOIN arena_data.damage_type dt ON dt.id = w.damage_type_id
+    JOIN arena_data.attack_type at ON at.id = w.attack_type_id
+    JOIN arena_data.gear_quality gq ON gq.id = w.gear_quality_id
+    WHERE ce.character_id = p_character_id
+    ORDER BY es.name;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION arena_data.fn_get_character_armor(p_character_id INTEGER)
+RETURNS TABLE(
+    slot_name VARCHAR,
+    id INTEGER, name VARCHAR, description TEXT,
+    armor_class INTEGER, category VARCHAR,
+    max_dexterity_bonus INTEGER, stealth_disadvantage BOOLEAN,
+    strength_requirement INTEGER, quality VARCHAR, armor_class_bonus INTEGER,
+    mitigation INTEGER, turn_meter_penalty INTEGER, turn_meter_cost_reduction INTEGER
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT es.name::VARCHAR AS slot_name,
+           a.id, a.name::VARCHAR, a.description::TEXT,
+           a.armor_class, ac.name::VARCHAR AS category,
+           a.max_dexterity_bonus, a.stealth_disadvantage, a.strength_requirement,
+           gq.name::VARCHAR AS quality,
+           a.armor_class_bonus,
+           a.mitigation, a.turn_meter_penalty, a.turn_meter_cost_reduction
+    FROM arena_data.character_equipment ce
+    JOIN arena_data.equipment_slot es ON es.id = ce.slot_id
+    JOIN arena_data.armor a ON a.id = ce.item_id AND ce.item_type = 'armor'
+    JOIN arena_data.armor_category ac ON ac.id = a.armor_category_id
+    JOIN arena_data.gear_quality gq ON gq.id = a.gear_quality_id
+    WHERE ce.character_id = p_character_id
+    ORDER BY es.name;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION arena_data.fn_get_character_spells(p_character_id INTEGER)
+RETURNS TABLE(
+    id INTEGER, name VARCHAR, description TEXT, school VARCHAR,
+    mana_cost INTEGER, turn_meter_cost INTEGER, spell_level INTEGER,
+    damage_count INTEGER, attack_bonus INTEGER, flat_damage_bonus INTEGER,
+    elemental_type VARCHAR, elemental_damage INTEGER,
+    damage_die VARCHAR, damage_type VARCHAR, attack_type VARCHAR
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT s.id, s.name::VARCHAR, s.description::TEXT, ss.name::VARCHAR AS school,
+           s.mana_cost, s.turn_meter_cost, s.spell_level,
+           s.damage_count, s.attack_bonus, s.flat_damage_bonus,
+           s.elemental_type, s.elemental_damage,
+           d.name::VARCHAR AS damage_die,
+           dt.name::VARCHAR AS damage_type,
+           at.name::VARCHAR AS attack_type
+    FROM arena_data.character_spell cs
+    JOIN arena_data.spell s ON s.id = cs.spell_id
+    JOIN arena_data.spell_school ss ON ss.id = s.school_id
+    LEFT JOIN arena_data.die_type d ON d.id = s.damage_die_id
+    LEFT JOIN arena_data.damage_type dt ON dt.id = s.damage_type_id
+    LEFT JOIN arena_data.attack_type at ON at.id = s.attack_type_id
+    WHERE cs.character_id = p_character_id
+    ORDER BY s.name;
+END;
+$$ LANGUAGE plpgsql;
+
+-- ============================================================
+-- RESISTANCE FUNCTIONS
+-- ============================================================
+
+CREATE OR REPLACE FUNCTION arena_data.fn_get_armor_resistances(p_armor_id INTEGER DEFAULT NULL)
+RETURNS TABLE(id INTEGER, armor_id INTEGER, resistance_type VARCHAR, resistance_value INTEGER) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT ar.id, ar.armor_id, ar.resistance_type, ar.resistance_value
+    FROM arena_data.armor_resistance ar
+    WHERE (p_armor_id IS NULL OR ar.armor_id = p_armor_id)
+    ORDER BY ar.resistance_type;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION arena_data.fn_get_feat_resistances(p_feat_id INTEGER DEFAULT NULL)
+RETURNS TABLE(id INTEGER, feat_id INTEGER, resistance_type VARCHAR, resistance_value INTEGER) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT fr.id, fr.feat_id, fr.resistance_type, fr.resistance_value
+    FROM arena_data.feat_resistance fr
+    WHERE (p_feat_id IS NULL OR fr.feat_id = p_feat_id)
+    ORDER BY fr.resistance_type;
+END;
+$$ LANGUAGE plpgsql;
+
+-- ============================================================
+-- DEITIES
+-- ============================================================
 
 CREATE OR REPLACE FUNCTION arena_data.fn_get_deities(
     p_alignment VARCHAR(50) DEFAULT NULL
@@ -1624,7 +1982,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- ============================================================
--- ITEM SET FUNCTIONS
+-- ITEM SETS
 -- ============================================================
 
 CREATE OR REPLACE FUNCTION arena_data.fn_get_item_sets()

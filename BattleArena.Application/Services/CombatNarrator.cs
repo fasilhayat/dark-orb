@@ -167,8 +167,8 @@ public static class CombatNarrator
         {
             var element = damageType switch
             {
-                DamageType.Fire     => "fire",
-                DamageType.Cold     => "ice",
+                DamageType.Fire      => "fire",
+                DamageType.Ice       => "ice",
                 DamageType.Lightning => "lightning",
                 _                   => "arcane"
             };

@@ -74,7 +74,7 @@ static partial class Demo
     {
         Name = "Ice Bolt", Description = "A shard of magical ice",
         School = SpellSchool.Evocation, DamageDie = DieType.D8, DamageCount = 2,
-        DamageType = DamageType.Cold, AttackBonus = 2, SpellLevel = 2, TurnMeterCost = 80,
+        DamageType = DamageType.Ice, AttackBonus = 2, SpellLevel = 2, TurnMeterCost = 80,
         OnHitEffects =
         [
             new StatusEffect { Name = "Freezing",  Type = StatusEffectType.DamageOverTime, ResistanceType = ResistanceType.Cold, Duration = 2, DoTDamageCount = 1, DoTDamageDie = DieType.D6, ApplicationChance = 25, StackRule = StackRule.HighestWins },
@@ -155,7 +155,7 @@ static partial class Demo
     {
         Name = "Shadow Bolt", Description = "A bolt of shadow energy",
         School = SpellSchool.Other, DamageDie = DieType.D8, DamageCount = 2,
-        DamageType = DamageType.Cold, AttackBonus = 2, SpellLevel = 2, TurnMeterCost = 80,
+        DamageType = DamageType.Ice, AttackBonus = 2, SpellLevel = 2, TurnMeterCost = 80,
         OnHitEffects =
         [
             new StatusEffect { Name = "Chilled",   Type = StatusEffectType.DamageOverTime, ResistanceType = ResistanceType.Cold, Duration = 2, DoTDamageCount = 1, DoTDamageDie = DieType.D4, ApplicationChance = 20, StackRule = StackRule.HighestWins }
