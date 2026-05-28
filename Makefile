@@ -16,9 +16,9 @@ help:
 	@cmd /C "echo 	make test           	- Run unit tests"
 	@cmd /C "echo 	make test-coverage  	- Run unit tests with coverage"
 	@cmd /C "echo 	make build-local    	- Build the .NET solution locally"
-@cmd /C "echo 	make build-demo     	- Build the demo Docker image"
-@cmd /C "echo 	make demo           	- Build images and run the console demo"
-@cmd /C "echo 	make sync-instructions	- Sync AGENTS.md to .github/copilot-instructions.md"
+	@cmd /C "echo 	make build-demo     	- Build the demo Docker image"
+	@cmd /C "echo 	make demo           	- Build images and run the console demo"
+	@cmd /C "echo 	make sync-instructions	- Sync AGENTS.md to .github/copilot-instructions.md"
 
 build: publish
 	@echo Building Docker containers...
