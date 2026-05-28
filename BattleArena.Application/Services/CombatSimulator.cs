@@ -55,8 +55,11 @@ public class CombatSimulator : ICombatSimulator
         var states = BuildCombatantStates(heroParty, enemyParty);
 
         // Log + notify the observer for every event in one call.
+        // Automatically stamps the currently-acting character so consumers
+        // never need to track it themselves.
         async Task Notify(CombatLogEntry entry)
         {
+            entry.ActiveActorName = states.FirstOrDefault(s => s.Meter.IsActive)?.Character.Name;
             log.Add(entry);
             if (observer != null)
                 await observer.OnEventAsync(entry, ct);

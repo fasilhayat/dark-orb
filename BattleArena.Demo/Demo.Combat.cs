@@ -47,7 +47,7 @@ static partial class Demo
         ["DoTTick"] = (e, _) =>
         {
             CW("  ↓ ", ConsoleColor.DarkYellow);
-            CW(e.ActorName, CharColor(e.ActorName));
+            CW(e.ActorName, CharColor(e.ActorName, e.ActiveActorName));
             CW("  suffers  ");
             CW($"{e.DamageDealt}", ConsoleColor.Red);
             CW($"  {e.StatusEffectName ?? "DoT"} damage", ConsoleColor.DarkYellow);
@@ -56,13 +56,13 @@ static partial class Demo
         ["EffectApplied"] = (e, _) =>
         {
             CW("  ★ ", ConsoleColor.DarkYellow);
-            CW(e.ActorName, CharColor(e.ActorName));
+            CW(e.ActorName, CharColor(e.ActorName, e.ActiveActorName));
             CWL($"  is afflicted with  {e.StatusEffectName}!", ConsoleColor.DarkYellow);
         },
         ["EffectResisted"] = (e, _) =>
         {
             CW("  ✓ ", ConsoleColor.Green);
-            CW(e.ActorName, CharColor(e.ActorName));
+            CW(e.ActorName, CharColor(e.ActorName, e.ActiveActorName));
             CW($"  resists  ");
             CW(e.StatusEffectName ?? "the effect", ConsoleColor.Green);
             CWL($"   (rolled {e.ResistRoll} vs {e.ResistThreshold})", ConsoleColor.DarkGray);
@@ -72,14 +72,14 @@ static partial class Demo
             CW("  ○ ", ConsoleColor.DarkGray);
             CW(e.StatusEffectName ?? "", ConsoleColor.Green);
             CW("  has worn off  ");
-            CWL(e.ActorName, CharColor(e.ActorName));
+            CWL(e.ActorName, CharColor(e.ActorName, e.ActiveActorName));
         },
         ["SkippedTurn"] = (e, _) =>
         {
             Console.WriteLine();
             CWL("  " + new string('·', 77), ConsoleColor.DarkGray);
             CW("  ⊘ ", ConsoleColor.DarkYellow);
-            CW(e.ActorName, CharColor(e.ActorName));
+            CW(e.ActorName, CharColor(e.ActorName, e.ActiveActorName));
             CW("  ");
             CWL(e.Message.Split("is ")[^1], ConsoleColor.DarkYellow);
         },
@@ -117,17 +117,17 @@ static partial class Demo
         ["TurnEnd"] = (e, states) =>
         {
             if (states.TryGetValue(e.ActorName, out var st))
-            { st.IsActive = false; st.Tm = e.TurnMeterAfter ?? st.Tm; }
+                st.Tm = e.TurnMeterAfter ?? st.Tm;
         },
         ["Death"] = (e, states) =>
         {
             if (states.TryGetValue(e.ActorName, out var st))
-            { st.IsAlive = false; st.IsActive = false; }
+                st.IsAlive = false;
         },
         ["KnockedOut"] = (e, states) =>
         {
             if (states.TryGetValue(e.ActorName, out var st))
-            { st.IsAlive = false; st.IsActive = false; }
+                st.IsAlive = false;
         },
     };
 
@@ -169,13 +169,14 @@ static partial class Demo
             var actSt = states.GetValueOrDefault(ts.ActorName);
             var tgtSt = states.GetValueOrDefault(ts.TargetName ?? "");
 
-            DrawCombatScreen(states, turnTick);
+            var activeActorName = ts.ActiveActorName;
+            DrawCombatScreen(states, turnTick, activeActorName);
 
             Console.WriteLine();
             CW($"  Turn {turnCount}  ", ConsoleColor.DarkGray);
             CW("|  ", ConsoleColor.DarkGray);
             CW(ts.ActorName.ToUpper(), actSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
-            CW("  -?  ", ConsoleColor.DarkGray);
+            CW("  →  ", ConsoleColor.DarkGray);
             CWL(ts.TargetName?.ToUpper() ?? "?", tgtSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
             Console.WriteLine();
 
@@ -190,7 +191,6 @@ static partial class Demo
                      : "  Press any key for next turn...", ConsoleColor.DarkGray);
             Console.ReadKey(true);
 
-            if (states.TryGetValue(actorName, out var actorDisp)) actorDisp.IsActive = false;
             turnEvents.Clear();
             inTurn = false;
         }
@@ -221,12 +221,8 @@ static partial class Demo
                     turnCount++;
                     turnTick = e.Tick;
                     actorName = e.ActorName;
-                    ActiveActor = e.ActorName;
                     if (states.TryGetValue(e.ActorName, out var actSt2))
-                    {
-                        actSt2.IsActive = true;
                         actSt2.Weapon = e.AttackSourceName ?? "";
-                    }
                     turnEvents.Add(e);
                     break;
 
@@ -239,13 +235,13 @@ static partial class Demo
                 case "Death":
                 case "KnockedOut":
                     if (states.TryGetValue(e.ActorName, out var defSt))
-                    { defSt.IsAlive = false; defSt.IsActive = false; }
+                        defSt.IsAlive = false;
                     if (inTurn) turnEvents.Add(e);
                     break;
 
                 case "TurnEnd":
                     if (states.TryGetValue(e.ActorName, out var endSt))
-                    { endSt.IsActive = false; endSt.Tm = e.TurnMeterAfter ?? endSt.Tm; }
+                        endSt.Tm = e.TurnMeterAfter ?? endSt.Tm;
                     break;
 
                 case "DoTTick":
@@ -275,7 +271,6 @@ static partial class Demo
             pendingMessages.Clear();
         }
         FlushTurn();
-        ActiveActor = "";
     }
 
     // ── PlayRealTime ────────────────────────────────────────────────────
@@ -327,16 +322,12 @@ static partial class Demo
 
             var turnStart = entries.First(e => e.EventType == "TurnStart");
             var attacker = turnStart.ActorName;
-            ActiveActor = attacker;
 
-            foreach (var st in states.Values) st.IsActive = false;
             if (states.TryGetValue(attacker, out var actSt))
-            {
-                actSt.IsActive = true;
                 actSt.Weapon = turnStart.AttackSourceName ?? actSt.Weapon;
-            }
 
-            DrawCombatScreen(states, tickGroup.Key);
+            var activeActorName = turnStart.ActiveActorName;
+            DrawCombatScreen(states, tickGroup.Key, activeActorName);
             Thread.Sleep(600);
 
             foreach (var e in entries)
@@ -357,7 +348,6 @@ static partial class Demo
         }
 
         FlushQuiet();
-        ActiveActor = "";
     }
 
     // ── PreSeedTurnMeters ───────────────────────────────────────────────

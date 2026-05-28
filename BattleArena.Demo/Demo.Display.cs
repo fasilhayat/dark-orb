@@ -203,9 +203,9 @@ static partial class Demo
 
     // ── CharColor ─────────────────────────────────────────────────────────────────
 
-    internal static ConsoleColor CharColor(string name) =>
-        ActiveActor == "" ? ConsoleColor.White :
-        name == ActiveActor ? ConsoleColor.Green :
+    internal static ConsoleColor CharColor(string name, string? activeActorName = null) =>
+        activeActorName is null or "" ? ConsoleColor.White :
+        name == activeActorName ? ConsoleColor.Green :
         ConsoleColor.DarkGray;
 
     // ── PrintSummary ──────────────────────────────────────────────────────────────
@@ -275,7 +275,7 @@ static partial class Demo
 
     // ── DrawCombatScreen ──────────────────────────────────────────────────────────
 
-    internal static void DrawCombatScreen(Dictionary<string, CharDisplayState> states, int tick)
+    internal static void DrawCombatScreen(Dictionary<string, CharDisplayState> states, int tick, string? activeActorName = null)
     {
         Console.Clear();
         PrintHeader();
@@ -300,8 +300,8 @@ static partial class Demo
 
         for (var i = 0; i < maxCount; i++)
         {
-            var left = i < heroes.Count ? BuildCharBlock(heroes[i]) : empty;
-            var right = i < enemies.Count ? BuildCharBlock(enemies[i]) : empty;
+            var left = i < heroes.Count ? BuildCharBlock(heroes[i], activeActorName) : empty;
+            var right = i < enemies.Count ? BuildCharBlock(enemies[i], activeActorName) : empty;
             PrintBlockPair(left, right);
             if (i < maxCount - 1) Console.WriteLine();
         }
@@ -321,9 +321,9 @@ static partial class Demo
         return [blank, blank, blank, blank, blank];
     }
 
-    private static List<List<Seg>> BuildCharBlock(CharDisplayState s)
+    private static List<List<Seg>> BuildCharBlock(CharDisplayState s, string? activeActorName = null)
     {
-        var active = s.IsActive;
+        var active = string.Equals(s.Name, activeActorName, StringComparison.Ordinal);
         var dead = !s.IsAlive;
 
         var borderFg = active ? ConsoleColor.White
@@ -434,7 +434,6 @@ internal class CharDisplayState
     public required bool IsHero { get; init; }
     public int Hp { get; set; }
     public int Tm { get; set; }
-    public bool IsActive { get; set; }
     public bool IsAlive { get; set; } = true;
     public string Weapon { get; set; } = "";
 }

@@ -27,7 +27,6 @@ static partial class Demo
     private static Dictionary<string, IAttackSource?> AttackMap = [];
 
     // ── Outer state (shared by playback functions) ────────────────────────────────
-    internal static string ActiveActor = "";
     internal static CombatResult Result = null!;
     internal static Dictionary<string, int> MaxHp = new();
     internal static Dictionary<string, int> CurHp = new();

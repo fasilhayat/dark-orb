@@ -49,4 +49,8 @@ public class CombatLogEntry
     // Populated on EffectResisted events
     public int? ResistRoll { get; set; }
     public int? ResistThreshold { get; set; }
+
+    // The character currently taking their turn (null between turns).
+    // Set by the simulator on every entry so consumers never have to track it.
+    public string? ActiveActorName { get; set; }
 }
