@@ -142,7 +142,11 @@ static partial class Demo
 
         if (useApiCombat)
         {
-            Result = ApiClient!.SimulateCombatAsync(HeroParty, EnemyParty, 500)
+            var heroIds = HeroParty.Members.Select(m => m.Character.Id).ToList();
+            var enemyIds = EnemyParty.Members.Select(m => m.Character.Id).ToList();
+            Result = ApiClient!.SimulateCombatAsync(
+                    HeroParty.Name, heroIds,
+                    EnemyParty.Name, enemyIds, 500)
                 .GetAwaiter().GetResult();
         }
         else

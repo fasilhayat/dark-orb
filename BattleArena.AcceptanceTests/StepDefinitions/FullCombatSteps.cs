@@ -157,6 +157,33 @@ public class FullCombatSteps
         Assert.Contains(_combatResult.Log, e => e.EventType == "Damage");
     }
 
+    // Combat result must carry a non-empty GUID used for traceability.
+    [Then(@"the combat result should have a combat identifier")]
+    public void ThenTheCombatResultShouldHaveACombatIdentifier()
+    {
+        Assert.NotEqual(Guid.Empty, _combatResult.CombatId);
+    }
+
+    // Each simulation run produces a unique combat identifier.
+    [Then(@"the combat identifier should be unique per simulation")]
+    public void ThenTheCombatIdentifierShouldBeUniquePerSimulation()
+    {
+        // Run a second simulation with the same combatants
+        var fighterName = _order[0];
+        var opponentName = _order[1];
+
+        // Reset HP for a fresh fight
+        _combatants[fighterName].CurrentHitPoints = _combatants[fighterName].MaxHitPoints;
+        _combatants[opponentName].CurrentHitPoints = _combatants[opponentName].MaxHitPoints;
+
+        var secondResult = _combatSimulator.Simulate(
+            _combatants[fighterName], _weapons[fighterName],
+            _combatants[opponentName], _weapons[opponentName],
+            500);
+
+        Assert.NotEqual(_combatResult.CombatId, secondResult.CombatId);
+    }
+
     // ── Helpers ────────────────────────────────────────────────────────────────
 
     private static DieType ParseDieType(int sides) => sides switch

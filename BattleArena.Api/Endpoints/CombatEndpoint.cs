@@ -54,12 +54,19 @@ public static class CombatEndpoint
             return Results.Ok(result);
         });
 
-        app.MapPost("/v1/combat/simulate", async (CombatSimulateRequest req, HttpContext ctx) =>
+        app.MapPost("/v1/combat/simulate", async (CombatSimulateByMembersRequest req, HttpContext ctx) =>
         {
             var combatService = ctx.RequestServices.GetRequiredService<ICombatService>();
             var turnmeterService = ctx.RequestServices.GetRequiredService<ITurnmeterService>();
             var statusEffectService = ctx.RequestServices.GetRequiredService<IStatusEffectService>();
             var diceService = ctx.RequestServices.GetRequiredService<IDiceService>();
+            var characterService = ctx.RequestServices.GetRequiredService<ICharacterService>();
+
+            var heroMembers = await BuildPartyMembers(req.HeroPartyMemberIds, characterService);
+            var enemyMembers = await BuildPartyMembers(req.EnemyPartyMemberIds, characterService);
+
+            var heroParty = Party.HeroParty(req.HeroPartyName, heroMembers);
+            var enemyParty = new Party { Name = req.EnemyPartyName, Members = enemyMembers.ToList() };
 
             var heroSelector = CreateSelector(req.HeroTargetStrategy);
             var enemySelector = CreateSelector(req.EnemyTargetStrategy);
@@ -68,10 +75,30 @@ public static class CombatEndpoint
                 combatService, turnmeterService, statusEffectService, diceService,
                 heroSelector, enemySelector);
 
-            var result = await simulator.SimulateAsync(req.HeroParty, req.EnemyParty, req.MaxTicks);
+            var result = await simulator.SimulateAsync(heroParty, enemyParty, req.MaxTicks);
             return Results.Ok(result);
         });
     }
+
+    private static async Task<IEnumerable<PartyMember>> BuildPartyMembers(
+        List<int> characterIds, ICharacterService characterService)
+    {
+        var members = new List<PartyMember>();
+        foreach (var id in characterIds)
+        {
+            var character = await characterService.GetCharacterAsync(id);
+            if (character is null) continue;
+            members.Add(new PartyMember
+            {
+                Character = character,
+                AttackSource = ResolveAttackSource(character)
+            });
+        }
+        return members;
+    }
+
+    private static IAttackSource ResolveAttackSource(Character character) =>
+        CharacterAttackResolver.Resolve(character);
 
     private static ITargetSelector CreateSelector(string strategy) => strategy.ToLowerInvariant() switch
     {
@@ -96,10 +123,12 @@ public static class CombatEndpoint
     }
 }
 
-public record CombatSimulateRequest(
-    Party HeroParty,
-    Party EnemyParty,
+public record CombatSimulateByMembersRequest(
+    string HeroPartyName,
+    List<int> HeroPartyMemberIds,
+    string EnemyPartyName,
+    List<int> EnemyPartyMemberIds,
     int MaxTicks = 500,
-    string HeroTargetStrategy = "random",
+    string HeroTargetStrategy = "lowestHp",
     string EnemyTargetStrategy = "lowestHp"
 );

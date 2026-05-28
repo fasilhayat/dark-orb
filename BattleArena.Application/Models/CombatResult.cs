@@ -27,6 +27,9 @@ public class CombatResult
     public List<CombatLogEntry> Log { get; set; } = new();
     public bool MaxTicksReached { get; set; }
 
+    // Server-assigned combat ID for traceability and future polling/spectating.
+    public Guid CombatId { get; set; } = Guid.NewGuid();
+
     // Convenience accessors for 1v1 results (single-member parties).
     public Character? Winner => WinningParty?.Members.FirstOrDefault()?.Character;
     public Character? Loser  => LosingParty?.Members.FirstOrDefault()?.Character;

@@ -64,7 +64,22 @@ Feature: Full Combat — End-to-End Combat Simulation
         And the losing combatant should have zero or fewer hit points
 
         # Log completeness — every event type must appear at least once.
-        And the combat log should not be empty
+        Then the combat log should not be empty
         And the combat log should contain turnmeter gain events
         And the combat log should contain at least one attack event
         And the combat log should contain at least one damage event
+
+    # ── Combat identifier ───────────────────────────────────────────────────────
+    #
+    # Every combat result must carry a unique server-assigned GUID used for
+    # traceability and future polling/spectating scenarios.
+    Scenario: Combat result includes a unique server-assigned combat identifier
+        Given a Fighter named "Theron" with level 5, strength 18, dexterity 12, strike rating 14, turn speed 10, and 50 hit points
+        And "Theron" wields a "Longsword" dealing 1d8 Slashing damage with attack bonus 2
+        And "Theron" wears "Chain Mail" with armor class 5 and mitigation 2
+        And an Orc named "Gruk" with level 3, strength 16, dexterity 8, strike rating 16, turn speed 6, and 35 hit points
+        And "Gruk" wields a "Battle Axe" dealing 1d8 Slashing damage with attack bonus 1
+        And "Gruk" wears "Leather Armor" with armor class 7 and mitigation 1
+        When the combat is simulated with a maximum of 500 ticks
+        Then the combat result should have a combat identifier
+        And the combat identifier should be unique per simulation
