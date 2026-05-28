@@ -52,7 +52,7 @@ api-logs:
 db-logs:
 	docker compose logs -f battle-arena-db
 
-clean:
+clean: clean-logs
 	@echo Stopping containers and removing database files...
 	docker compose down -v
 	@echo Removing database files...
