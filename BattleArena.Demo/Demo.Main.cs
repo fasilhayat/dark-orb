@@ -144,10 +144,18 @@ static partial class Demo
         {
             var heroIds = HeroParty.Members.Select(m => m.Character.Id).ToList();
             var enemyIds = EnemyParty.Members.Select(m => m.Character.Id).ToList();
+            var apiLabel = $"POST /v1/combat/simulate  ({HeroParty.Name} vs {EnemyParty.Name})";
             Result = ApiClient!.SimulateCombatAsync(
                     HeroParty.Name, heroIds,
                     EnemyParty.Name, enemyIds, 500)
                 .GetAwaiter().GetResult();
+            Result.Log.Insert(0, new CombatLogEntry
+            {
+                Tick = -1,
+                EventType = "ApiCall",
+                ActorName = "API",
+                Message = $"[{DateTime.Now:HH:mm:ss}] {apiLabel}  →  tick {Result.TotalTicks}, {Result.Log.Count - 1} combat entries"
+            });
         }
         else
         {

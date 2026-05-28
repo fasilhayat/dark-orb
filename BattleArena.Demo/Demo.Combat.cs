@@ -259,6 +259,9 @@ static partial class Demo
                     pendingMessages.Add(e);
                     break;
 
+                case "ApiCall":
+                    break; // present in combat log text but not displayed during replay
+
                 default:
                     if (inTurn) turnEvents.Add(e);
                     break;
