@@ -287,11 +287,10 @@ public class CombatSimulator : ICombatSimulator
         if (state.AttackSource is not null) return state.AttackSource;
 
         var spells = state.Character.MemorizedSpells;
-        if (spells.Count == 0)
-            throw new InvalidOperationException(
-                $"{state.Character.Name} has no weapon or memorized spells.");
+        if (spells.Count > 0)
+            return spells[_dice.RollIndex(spells.Count)];
 
-        return spells[_dice.RollIndex(spells.Count)];
+        return UnarmedStrike.Default;
     }
 
     private CombatLogEntry BuildAfterTurnEntry(CombatantState state, int tick, int tmCost = 100)

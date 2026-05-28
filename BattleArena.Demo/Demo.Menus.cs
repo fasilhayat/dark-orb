@@ -69,10 +69,9 @@ static partial class Demo
             {
                 var ch = available[i];
                 var atk = GetAttackSource(ch);
-                var atkName = atk?.Name ?? "unarmed";
                 CW($"    [{i + 1}]  ", ConsoleColor.Cyan);
                 CW($"{ch.Name,-20}", ConsoleColor.White);
-                CW($"{atkName,-16}", ConsoleColor.Yellow);
+                CW($"{atk.Name,-16}", ConsoleColor.Yellow);
                 CWL($"  Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}", ConsoleColor.DarkGray);
             }
             CW("  > ", ConsoleColor.Cyan);
@@ -195,18 +194,17 @@ static partial class Demo
                 var ch = ApiRoster[i];
                 var picked = selected.Any(s => s.Name == ch.Name);
                 var atk = GetAttackSource(ch);
-                var atkName = atk?.Name ?? "unarmed";
                 CW($"    [{i + 1}]  ", ConsoleColor.Cyan);
                 if (picked)
                 {
                     CW($"{ch.Name,-18}", ConsoleColor.Green);
-                    CW($"{atkName,-14}", ConsoleColor.Green);
+                    CW($"{atk.Name,-14}", ConsoleColor.Green);
                     CWL($"  Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}  [v]", ConsoleColor.Green);
                 }
                 else
                 {
                     CW($"{ch.Name,-18}", ConsoleColor.White);
-                    CW($"{atkName,-14}", ConsoleColor.Yellow);
+                    CW($"{atk.Name,-14}", ConsoleColor.Yellow);
                     CWL($"  Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}", ConsoleColor.DarkGray);
                 }
             }

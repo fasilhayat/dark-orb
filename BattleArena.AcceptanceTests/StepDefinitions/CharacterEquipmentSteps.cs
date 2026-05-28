@@ -96,6 +96,32 @@ public class CharacterEquipmentSteps
 
     // ── Assertions ─────────────────────────────────────────────────────────────
 
+    [Then(@"the character's unarmed strike should be named ""([^""]+)""")]
+    public void ThenUnarmedStrikeShouldBeNamed(string expectedName)
+    {
+        Assert.Equal(expectedName, UnarmedStrike.Default.Name);
+    }
+
+    [Then(@"the unarmed strike should deal (\d+)d(\d+) (\w+) damage")]
+    public void ThenUnarmedStrikeShouldDealDamage(int dieCount, int dieSides, string damageTypeName)
+    {
+        Assert.Equal(dieCount, UnarmedStrike.Default.DamageCount);
+        Assert.Equal(ParseDieType(dieSides), UnarmedStrike.Default.DamageDie);
+        Assert.Equal(ParseDamageType(damageTypeName), UnarmedStrike.Default.DamageType);
+    }
+
+    [Then(@"the unarmed strike should be a melee attack")]
+    public void ThenUnarmedStrikeShouldBeMelee()
+    {
+        Assert.Equal(AttackType.Melee, UnarmedStrike.Default.AttackType);
+    }
+
+    [Then(@"the unarmed strike should have (\d+) attack bonus")]
+    public void ThenUnarmedStrikeShouldHaveAttackBonus(int expected)
+    {
+        Assert.Equal(expected, UnarmedStrike.Default.AttackBonus);
+    }
+
     [Then(@"the character's total armor class should be (\d+)")]
     public void ThenTotalArmorClassShouldBe(int expected)
     {

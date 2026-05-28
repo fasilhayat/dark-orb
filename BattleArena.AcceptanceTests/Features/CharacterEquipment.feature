@@ -54,6 +54,15 @@ Feature: Character Combat Readiness
         Then the character's shield defense bonus should be 2
 
     @equipment
+    # A character with no weapon or spells defaults to the unarmed strike (Fists).
+    Scenario: Unarmed character fights with fists as fallback
+        Given a character with strength 14 and dexterity 10
+        Then the character's unarmed strike should be named "Fists"
+        And the unarmed strike should deal 1d4 Bludgeoning damage
+        And the unarmed strike should be a melee attack
+        And the unarmed strike should have 0 attack bonus
+
+    @equipment
     # Fully geared character with armor, weapon, and shield across all relevant slots.
     Scenario: Fully equipped character is combat-ready
         Given a character with strength 18 and dexterity 14

@@ -6,6 +6,7 @@ using Application.Services;
 using System.IO;
 using Core.Entities;
 using Core.Entities.Enums;
+using Microsoft.Extensions.Configuration;
 
 static partial class Demo
 {
@@ -40,6 +41,7 @@ static partial class Demo
     internal static void Run()
     {
         ConnectApi();
+        PickDataSource();
         InitializeData();
 
         PrintHeader();
@@ -231,13 +233,15 @@ static partial class Demo
     internal static IAttackSource GetSheetAttackSource(Character character, IAttackSource? attackSource)
     {
         if (attackSource is not null) return attackSource;
-        return character.MemorizedSpells
-            .OrderByDescending(s => s.AttackBonus)
-            .ThenByDescending(s => s.DamageCount)
-            .First();
+        if (character.MemorizedSpells.Count > 0)
+            return character.MemorizedSpells
+                .OrderByDescending(s => s.AttackBonus)
+                .ThenByDescending(s => s.DamageCount)
+                .First();
+        return UnarmedStrike.Default;
     }
 
-    internal static IAttackSource? GetAttackSource(Character character)
+    internal static IAttackSource GetAttackSource(Character character)
     {
         if (character.Equipment.RightHand is { } weapon)
             return weapon;
@@ -246,7 +250,7 @@ static partial class Demo
                 .OrderByDescending(s => s.AttackBonus)
                 .ThenByDescending(s => s.DamageCount)
                 .First();
-        return null;
+        return UnarmedStrike.Default;
     }
 
     internal static Dictionary<string, CharDisplayState> BuildDisplayStates()
@@ -289,10 +293,33 @@ static partial class Demo
     private static void ConnectApi()
     {
         var apiUrl = Environment.GetEnvironmentVariable("BATTLE_ARENA_API_URL");
-        if (string.IsNullOrWhiteSpace(apiUrl)) return;
 
-        // Open log file in a persistent location (repo root / logs)
-        var logDir = Path.Combine(AppContext.BaseDirectory, "logs");
+        if (string.IsNullOrWhiteSpace(apiUrl))
+        {
+            var config = new ConfigurationBuilder()
+                .SetBasePath(AppContext.BaseDirectory)
+                .AddJsonFile("appsettings.json", optional: true)
+                .Build();
+            apiUrl = config.GetSection("BattleArenaApi")["Url"];
+        }
+
+        if (string.IsNullOrWhiteSpace(apiUrl))
+        {
+            Console.Write("  Enter BattleArena API URL (or press Enter for local data): ");
+            var input = Console.ReadLine()?.Trim();
+            if (!string.IsNullOrWhiteSpace(input))
+                apiUrl = input;
+        }
+
+        if (string.IsNullOrWhiteSpace(apiUrl))
+            return;
+
+        // Open log file at repo root / logs
+        var repoDir = AppContext.BaseDirectory;
+        while (!string.IsNullOrEmpty(repoDir) && !File.Exists(Path.Combine(repoDir, "BattleArena.sln")))
+            repoDir = Path.GetDirectoryName(repoDir)!;
+
+        var logDir = Path.Combine(string.IsNullOrEmpty(repoDir) ? AppContext.BaseDirectory : repoDir, "logs");
         Directory.CreateDirectory(logDir);
         var logPath = Path.Combine(logDir, "api-calls.log");
         var logWriter = new StreamWriter(logPath, append: true) { AutoFlush = true };
@@ -310,7 +337,6 @@ static partial class Demo
         {
             ApiRoster = ApiClient.GetCharactersAsync().GetAwaiter().GetResult();
             ApiWeapons = ApiClient.GetWeaponsAsync().GetAwaiter().GetResult();
-            UseApiRoster = ApiRoster.Count > 0;
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"OK  ({ApiRoster.Count} characters, {ApiWeapons.Count} weapons loaded)");
             Console.ResetColor();
@@ -319,8 +345,40 @@ static partial class Demo
         {
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine($"unreachable ({ex.Message})");
-            Console.WriteLine("  Falling back to local characters.");
             Console.ResetColor();
+        }
+    }
+
+    private static void PickDataSource()
+    {
+        if (ApiRoster.Count == 0)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("  Using local hardcoded characters.");
+            Console.ResetColor();
+            return;
+        }
+
+        while (true)
+        {
+            Console.WriteLine();
+            CWL("  Character source:", ConsoleColor.Yellow);
+            CW("    "); CW("[A]", ConsoleColor.Cyan); CWL("  API characters  — loaded from BattleArena API", ConsoleColor.White);
+            CW("    "); CW("[L]", ConsoleColor.Cyan); CWL("  Local characters  — hardcoded demo data\n", ConsoleColor.White);
+            CW("  > ", ConsoleColor.Cyan);
+            var k = Console.ReadKey(true).KeyChar;
+            if (k is 'A' or 'a')
+            {
+                UseApiRoster = true;
+                CWL("API characters", ConsoleColor.Cyan);
+                return;
+            }
+            if (k is 'L' or 'l')
+            {
+                UseApiRoster = false;
+                CWL("Local characters", ConsoleColor.Cyan);
+                return;
+            }
         }
     }
 
