@@ -60,7 +60,7 @@ static partial class Demo
 
     private static Character PickFighterFromRoster(string label, string? excludedName)
     {
-        var available = ApiRoster.Where(c => c.Name != excludedName).ToList();
+        var available = ApiRoster.Where(c => c.Name != excludedName && c.Npc == 0).ToList();
         while (true)
         {
             Console.WriteLine();
@@ -69,22 +69,23 @@ static partial class Demo
             {
                 var ch = available[i];
                 var atk = GetAttackSource(ch);
-                CW($"    [{i + 1}]  ", ConsoleColor.Cyan);
+                CW($"    [{i + 1,2}]  ", ConsoleColor.Cyan);
                 CW($"{ch.Name,-20}", ConsoleColor.White);
                 CW($"{atk.Name,-16}", ConsoleColor.Yellow);
                 CWL($"  Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}", ConsoleColor.DarkGray);
             }
             CW("  > ", ConsoleColor.Cyan);
 
-            var key = Console.ReadKey(true).KeyChar;
-            if (int.TryParse(key.ToString(), out var idx) && idx >= 1 && idx <= available.Count)
+            var input = Console.ReadLine()?.Trim();
+            if (int.TryParse(input, out var idx) && idx >= 1 && idx <= available.Count)
             {
                 var ch = available[idx - 1];
-                CWL(ch.Name, ConsoleColor.Cyan);
+                CWL($"  → {ch.Name}", ConsoleColor.Cyan);
                 ch.CurrentHitPoints = ch.MaxHitPoints;
                 AttackMap[ch.Name] = GetAttackSource(ch);
                 return ch;
             }
+            CWL("  Invalid selection — try again.", ConsoleColor.DarkYellow);
         }
     }
 
@@ -181,6 +182,7 @@ static partial class Demo
 
     private static List<Character> PickHeroPartyFromRoster()
     {
+        var roster = ApiRoster.Where(c => c.Npc == 0).ToList();
         var selected = new List<Character>();
         while (true)
         {
@@ -189,17 +191,17 @@ static partial class Demo
             CWL($"\n  BUILD YOUR HERO PARTY  (max {Party.HeroPartyMaxSize})", ConsoleColor.Yellow);
             Console.WriteLine();
 
-            for (var i = 0; i < ApiRoster.Count; i++)
+            for (var i = 0; i < roster.Count; i++)
             {
-                var ch = ApiRoster[i];
+                var ch = roster[i];
                 var picked = selected.Any(s => s.Name == ch.Name);
                 var atk = GetAttackSource(ch);
-                CW($"    [{i + 1}]  ", ConsoleColor.Cyan);
+                CW($"    [{i + 1,2}]  ", ConsoleColor.Cyan);
                 if (picked)
                 {
                     CW($"{ch.Name,-18}", ConsoleColor.Green);
                     CW($"{atk.Name,-14}", ConsoleColor.Green);
-                    CWL($"  Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}  [v]", ConsoleColor.Green);
+                    CWL($"  Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}  [✓]", ConsoleColor.Green);
                 }
                 else
                 {
@@ -215,20 +217,21 @@ static partial class Demo
                 CW("  Party : ", ConsoleColor.DarkGray);
                 CWL(string.Join(", ", selected.Select(c => c.Name)), ConsoleColor.Green);
             }
-            CWL("  Press number to toggle | [Enter] to confirm (need at least 1)\n", ConsoleColor.DarkGray);
+            CWL("  Enter a number to toggle | press Enter with no number to confirm (need ≥ 1)\n", ConsoleColor.DarkGray);
             CW("  > ", ConsoleColor.Cyan);
 
-            var kInfo = Console.ReadKey(true);
-            if (kInfo.Key == ConsoleKey.Enter && selected.Count > 0)
+            var input = Console.ReadLine()?.Trim();
+
+            if (string.IsNullOrEmpty(input) && selected.Count > 0)
             {
                 foreach (var hero in selected)
                     AttackMap[hero.Name] = GetAttackSource(hero);
                 return selected;
             }
 
-            if (int.TryParse(kInfo.KeyChar.ToString(), out var idx) && idx >= 1 && idx <= ApiRoster.Count)
+            if (int.TryParse(input, out var idx) && idx >= 1 && idx <= roster.Count)
             {
-                var hero = ApiRoster[idx - 1];
+                var hero = roster[idx - 1];
                 var existing = selected.FindIndex(c => c.Name == hero.Name);
                 if (existing >= 0)
                 {
@@ -237,6 +240,8 @@ static partial class Demo
                 }
                 else if (selected.Count < Party.HeroPartyMaxSize)
                     selected.Add(hero);
+                else
+                    CWL($"  Party is full (max {Party.HeroPartyMaxSize}). Remove someone first.", ConsoleColor.DarkYellow);
             }
         }
     }

@@ -15,9 +15,13 @@ static partial class Demo
 
     // ── Optional API connection ───────────────────────────────────────────────────
     private static BattleArenaApiClient? ApiClient;
+    private static ApiDiceService? _apiDiceService;
     private static List<Character> ApiRoster = [];
     private static List<Weapon> ApiWeapons = [];
     private static bool UseApiRoster;
+
+    // API dice-call journal — written to combat log + displayed before playback.
+    internal static List<CombatLogEntry> ApiCallLog { get; } = new();
 
     // ── Block layout constants ────────────────────────────────────────────────────
     internal const int BLOCK_W   = 35;
@@ -72,23 +76,19 @@ static partial class Demo
 
         var mode = PickCombatMode();
 
-        // Targeting mode: skip when combat runs server-side.
-        ITargetSelector heroSelector = null!;
+        // Targeting mode selection.
+        ITargetSelector heroSelector;
         ITargetSelector enemySelector = new LowestHpTargetSelector();
-        var useApiCombat = UseApiRoster && ApiClient is not null;
-        if (!useApiCombat)
+        if (Scenario == 'P')
         {
-            if (Scenario == 'P')
-            {
-                var targeting = PickTargetingMode();
-                heroSelector = targeting == 'M'
-                    ? new ManualConsoleTargetSelector()
-                    : new LowestHpTargetSelector();
-            }
-            else
-            {
-                heroSelector = new LowestHpTargetSelector();
-            }
+            var targeting = PickTargetingMode();
+            heroSelector = targeting == 'M'
+                ? new ManualConsoleTargetSelector()
+                : new LowestHpTargetSelector();
+        }
+        else
+        {
+            heroSelector = new LowestHpTargetSelector();
         }
 
         // Reset + build state dicts
@@ -140,35 +140,39 @@ static partial class Demo
             }
         }
 
-        if (useApiCombat)
+        // Combat always runs client-side.  When the API is reachable, dice rolls
+        // are delegated to the API's /v1/roll/* endpoints via ApiDiceService;
+        // otherwise a local seeded DiceService is used.
+        _apiDiceService = null;
+        ApiCallLog.Clear();
+
+        IDiceService diceSvc;
+        if (ApiClient is not null)
         {
-            var heroIds = HeroParty.Members.Select(m => m.Character.Id).ToList();
-            var enemyIds = EnemyParty.Members.Select(m => m.Character.Id).ToList();
-            var apiLabel = $"POST /v1/combat/simulate  ({HeroParty.Name} vs {EnemyParty.Name})";
-            Result = ApiClient!.SimulateCombatAsync(
-                    HeroParty.Name, heroIds,
-                    EnemyParty.Name, enemyIds, 500)
-                .GetAwaiter().GetResult();
-            Result.Log.Insert(0, new CombatLogEntry
-            {
-                Tick = -1,
-                EventType = "ApiCall",
-                ActorName = "API",
-                Message = $"[{DateTime.Now:HH:mm:ss}] {apiLabel}  →  tick {Result.TotalTicks}, {Result.Log.Count - 1} combat entries"
-            });
+            _apiDiceService = new ApiDiceService(ApiClient);
+            diceSvc = _apiDiceService;
         }
         else
         {
-            var diceSvc = new DiceService();
-            var simulator = new CombatSimulator(
-                new CombatService(diceSvc, CombatStats),
-                new TurnmeterService(),
-                new StatusEffectService(),
-                diceSvc,
-                heroSelector,
-                enemySelector);
+            diceSvc = new DiceService();
+        }
 
-            Result = simulator.Simulate(HeroParty, EnemyParty, 500);
+        var simulator = new CombatSimulator(
+            new CombatService(diceSvc, CombatStats),
+            new TurnmeterService(),
+            new StatusEffectService(),
+            diceSvc,
+            heroSelector,
+            enemySelector);
+
+        Result = simulator.Simulate(HeroParty, EnemyParty, 500);
+
+        // Collect dice-roll journal: append entries to combat log so the
+        // text file includes them, and expose via ApiCallLog for the display.
+        if (_apiDiceService?.DiceLog.Count > 0)
+        {
+            ApiCallLog.AddRange(_apiDiceService.DiceLog);
+            Result.Log.AddRange(_apiDiceService.DiceLog);
         }
 
         if (mode == 'T')

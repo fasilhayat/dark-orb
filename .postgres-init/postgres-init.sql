@@ -2038,13 +2038,15 @@ CREATE OR REPLACE FUNCTION arena_data.fn_get_npcs(
     p_merchant BOOLEAN DEFAULT NULL,
     p_hostile BOOLEAN DEFAULT NULL
 )
-RETURNS TABLE(id INTEGER, name VARCHAR, race VARCHAR, class VARCHAR, level INTEGER,
+RETURNS TABLE(id INTEGER, name VARCHAR, race_id INTEGER, class_id INTEGER,
+    race VARCHAR, class VARCHAR, level INTEGER,
     strength INTEGER, dexterity INTEGER, stamina INTEGER,
     intelligence INTEGER, wisdom INTEGER, charisma INTEGER,
     is_merchant BOOLEAN, is_quest_giver BOOLEAN, is_hostile BOOLEAN, biography TEXT) AS $$
 BEGIN
     RETURN QUERY
-    SELECT n.id, n.name::VARCHAR, r.name::VARCHAR AS race, c.name::VARCHAR AS class,
+    SELECT n.id, n.name::VARCHAR, n.race_id, n.class_id,
+           r.name::VARCHAR AS race, c.name::VARCHAR AS class,
            n.level, n.strength, n.dexterity, n.stamina,
            n.intelligence, n.wisdom, n.charisma,
            n.is_merchant, n.is_quest_giver, n.is_hostile, n.biography::TEXT

@@ -84,6 +84,10 @@ static partial class Demo
             CWL(e.Message.Split("is ")[^1], ConsoleColor.DarkYellow);
         },
         ["TurnEnd"] = (_, _) => { },
+        ["ApiCall"] = (e, _) =>
+        {
+            CWL($"  ⚡ {e.Message}", ConsoleColor.DarkGray);
+        },
         ["Death"] = (e, _) =>
         {
             Console.WriteLine();
@@ -196,6 +200,24 @@ static partial class Demo
         }
 
         PreSeedTurnMeters(states);
+
+        // Show API dice-call journal before combat playback begins (if any).
+        if (ApiCallLog.Count > 0)
+        {
+            Console.Clear();
+            PrintHeader();
+            Console.WriteLine();
+            CWL($"  ── API Dice Journal  ({ApiCallLog.Count} roll{(ApiCallLog.Count == 1 ? "" : "s")}) ─────────────────────────────", ConsoleColor.DarkGray);
+            const int maxShow = 30;
+            foreach (var entry in ApiCallLog.Take(maxShow))
+                CWL($"  ⚡ {entry.Message}", ConsoleColor.DarkGray);
+            if (ApiCallLog.Count > maxShow)
+                CWL($"  ⚡ … and {ApiCallLog.Count - maxShow} more (see combat-logs/ text file)", ConsoleColor.DarkGray);
+            Console.WriteLine();
+            CWL("  Press any key to start combat playback...", ConsoleColor.DarkGray);
+            Console.ReadKey(true);
+        }
+
         DrawCombatScreen(states, 0);
         Console.WriteLine();
         CWL("  Press any key for first action...", ConsoleColor.DarkGray);
@@ -260,7 +282,8 @@ static partial class Demo
                     break;
 
                 case "ApiCall":
-                    break; // present in combat log text but not displayed during replay
+                    if (inTurn) turnEvents.Add(e);
+                    break; // ApiCall events in the log are from appended dice journal; display if in a turn
 
                 default:
                     if (inTurn) turnEvents.Add(e);
@@ -299,10 +322,27 @@ static partial class Demo
         }
 
         PreSeedTurnMeters(states);
+
+        // Show API dice-call journal before realtime playback begins (if any).
+        if (ApiCallLog.Count > 0)
+        {
+            Console.Clear();
+            PrintHeader();
+            Console.WriteLine();
+            CWL($"  ── API Dice Journal  ({ApiCallLog.Count} roll{(ApiCallLog.Count == 1 ? "" : "s")}) ─────────────────────────────", ConsoleColor.DarkGray);
+            const int maxShow = 30;
+            foreach (var entry in ApiCallLog.Take(maxShow))
+                CWL($"  ⚡ {entry.Message}", ConsoleColor.DarkGray);
+            if (ApiCallLog.Count > maxShow)
+                CWL($"  ⚡ … and {ApiCallLog.Count - maxShow} more (see combat-logs/ text file)", ConsoleColor.DarkGray);
+            Console.WriteLine();
+            Thread.Sleep(2000);
+        }
+
         DrawCombatScreen(states, 0);
         Thread.Sleep(1200);
 
-        foreach (var tickGroup in byTick)
+        foreach (var tickGroup in byTick.Where(g => g.Key >= 1))
         {
             var entries = tickGroup.ToList();
             var hasAction = entries.Any(e => e.EventType == "TurnStart");
