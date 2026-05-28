@@ -4,7 +4,7 @@ help:
 	@cmd /C "echo Usage:"
 	@cmd /C "echo 	make build          	- Build the Docker containers"
 	@cmd /C "echo 	make build-no-cache 	- Build the Docker containers without cache"
-	@cmd /C "echo 	make up             	- Start the containers"
+	@cmd /C "echo 	make up             	- Build images and start the containers"
 	@cmd /C "echo 	make down           	- Stop the containers (preserves database files)"
 	@cmd /C "echo 	make restart        	- Restart the containers"
 	@cmd /C "echo 	make reset          	- Rebuild and restart containers (preserves database files)"
@@ -16,8 +16,9 @@ help:
 	@cmd /C "echo 	make test           	- Run unit tests"
 	@cmd /C "echo 	make test-coverage  	- Run unit tests with coverage"
 	@cmd /C "echo 	make build-local    	- Build the .NET solution locally"
-	@cmd /C "echo 	make build-demo     	- Build the demo Docker image"
-	@cmd /C "echo 	make sync-instructions	- Sync AGENTS.md to .github/copilot-instructions.md"
+@cmd /C "echo 	make build-demo     	- Build the demo Docker image"
+@cmd /C "echo 	make demo           	- Build images and run the console demo"
+@cmd /C "echo 	make sync-instructions	- Sync AGENTS.md to .github/copilot-instructions.md"
 
 build: publish
 	@echo Building Docker containers...
@@ -28,8 +29,8 @@ build-no-cache: publish
 	docker compose build --no-cache
 
 up: publish
-	@echo Starting the containers...
-	docker compose up -d
+	@echo Building images and starting containers...
+	docker compose up -d --build
 
 down:
 	@echo Stopping the containers...
@@ -77,7 +78,7 @@ publish:
 build-demo:
 	docker compose build battle-arena-demo
 
-demo: up
+demo: up build-demo
 	docker compose --profile demo run --rm battle-arena-demo
 
 sync-instructions:
