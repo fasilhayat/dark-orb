@@ -34,3 +34,4 @@ combat-logs/*.json
 ## Replay snapshots (user-placed .json files for demo replay; not committed)
 replays/*.json
 /replays/*
+/logs/api-calls.log
