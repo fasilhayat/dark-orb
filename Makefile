@@ -1,4 +1,4 @@
-.PHONY: help build build-no-cache up down restart reset logs api-logs db-logs clean clean-logs test test-coverage build-local demo-local build-demo sync-instructions up-local up-dev up-test up-preprod up-prod down-local down-dev down-test down-preprod down-prod
+.PHONY: help build build-no-cache up down restart reset logs api-logs db-logs clean clean-logs test test-coverage build-local demo-local demo-dev demo-test build-demo sync-instructions up-local up-dev up-test up-preprod up-prod down-local down-dev down-test down-preprod down-prod
 
 -include .env
 export ENV
@@ -14,12 +14,14 @@ help:
 	@echo.
 	@cmd /C "echo  QUICK START"
 	@cmd /C "echo    make up-local          Start DB+API only (ports exposed). Run demo with: make demo-local"
-	@cmd /C "echo    make up-dev            Start DB+API and launch demo interactively (dev, ports exposed)"
-	@cmd /C "echo    make up-test           Start DB+API and launch demo interactively (test, no host ports)"
+	@cmd /C "echo    make up-dev            Start DB+API + demo (dev, ports exposed)"
+	@cmd /C "echo    make up-test           Start DB+API + demo (test, no host ports)"
 	@cmd /C "echo    make up-preprod        Start DB+API only, no host ports"
 	@cmd /C "echo    make up-prod           Start DB+API only, no host ports"
 	@echo.
 	@cmd /C "echo    make demo-local        Run demo on host (DOTNET_ENVIRONMENT=LocalDev -> localhost:8585)"
+	@cmd /C "echo    make demo-dev          Relaunch demo container only (dev, DB+API must already be running)"
+	@cmd /C "echo    make demo-test         Relaunch demo container only (test, DB+API must already be running)"
 	@echo.
 	@cmd /C "echo    make down-local        Stop local environment"
 	@cmd /C "echo    make down-dev          Stop dev environment"
@@ -60,9 +62,17 @@ up-dev: publish publish-demo
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml --profile demo run --rm --build battle-arena-demo
 
+demo-dev: publish-demo
+	@echo Launching demo (dev)...
+	docker compose -f docker-compose.yml -f docker-compose.dev.yml --profile demo run --rm --build battle-arena-demo
+
 up-test: publish publish-demo
 	@echo Starting test stack (DB + API) then launching demo...
 	docker compose -f docker-compose.yml -f docker-compose.test.yml up -d --build
+	docker compose -f docker-compose.yml -f docker-compose.test.yml --profile demo run --rm --build battle-arena-demo
+
+demo-test: publish-demo
+	@echo Launching demo (test)...
 	docker compose -f docker-compose.yml -f docker-compose.test.yml --profile demo run --rm --build battle-arena-demo
 
 up-preprod: publish
