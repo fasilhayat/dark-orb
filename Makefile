@@ -135,20 +135,20 @@ db-logs:
 
 clean: clean-logs
 	@echo Stopping all environments and removing all volumes...
-	-docker compose -f docker-compose.yml -p dark-orb- down -v
-	-docker compose -f docker-compose.yml -f docker-compose.localdev.yml -p dark-orb-localdev down -v
-	-docker compose -f docker-compose.yml -f docker-compose.dev.yml -p dark-orb-dev down -v
-	-docker compose -f docker-compose.yml -f docker-compose.test.yml -p dark-orb-test down -v
-	-docker compose -f docker-compose.yml -f docker-compose.preprod.yml -p dark-orb-preprod down -v
-	-docker compose -f docker-compose.yml -f docker-compose.prod.yml -p dark-orb-prod down -v
-	powershell -Command "if (Test-Path 'publish') { Remove-Item -Recurse -Force 'publish'; Write-Host 'Removed publish/' } else { Write-Host 'No publish output to remove.' }"
-	powershell -Command "if (Test-Path 'publish-demo') { Remove-Item -Recurse -Force 'publish-demo'; Write-Host 'Removed publish-demo/' } else { Write-Host 'No publish-demo output to remove.' }"
-	powershell -Command "if (Test-Path 'logs') { Get-ChildItem -Path 'logs' -File | Where-Object { $$_.Name -ne '.gitkeep' } | Remove-Item -Force; Write-Host 'logs/ cleared.' }"
+	-@docker compose -f docker-compose.yml -p dark-orb- down -v > /dev/null 2>&1
+	-@docker compose -f docker-compose.yml -f docker-compose.localdev.yml -p dark-orb-localdev down -v > /dev/null 2>&1
+	-@docker compose -f docker-compose.yml -f docker-compose.dev.yml -p dark-orb-dev down -v > /dev/null 2>&1
+	-@docker compose -f docker-compose.yml -f docker-compose.test.yml -p dark-orb-test down -v > /dev/null 2>&1
+	-@docker compose -f docker-compose.yml -f docker-compose.preprod.yml -p dark-orb-preprod down -v > /dev/null 2>&1
+	-@docker compose -f docker-compose.yml -f docker-compose.prod.yml -p dark-orb-prod down -v > /dev/null 2>&1
+	@powershell -Command "if (Test-Path 'publish') { Remove-Item -Recurse -Force 'publish'; Write-Host 'Removed publish/' } else { Write-Host 'No publish output to remove.' }"
+	@powershell -Command "if (Test-Path 'publish-demo') { Remove-Item -Recurse -Force 'publish-demo'; Write-Host 'Removed publish-demo/' } else { Write-Host 'No publish-demo output to remove.' }"
+	@powershell -Command "if (Test-Path 'logs') { Get-ChildItem -Path 'logs' -File | Where-Object { $$_.Name -ne '.gitkeep' } | Remove-Item -Force; Write-Host 'logs/ cleared.' }"
 	@echo Clean complete.
 
 clean-logs:
 	@echo Deleting combat logs...
-	powershell -Command "Get-ChildItem -Path 'combat-logs' -File | Where-Object { $$_.Name -ne '.gitkeep' } | Remove-Item -Force; Write-Host 'combat-logs/ cleared.'"
+	@powershell -Command "Get-ChildItem -Path 'combat-logs' -File | Where-Object { $$_.Name -ne '.gitkeep' } | Remove-Item -Force; Write-Host 'combat-logs/ cleared.'"
 
 test:
 	dotnet test BattleArena.sln
