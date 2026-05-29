@@ -233,6 +233,7 @@ static partial class Demo
     internal static void ResetCombatant(Character character)
     {
         character.CurrentHitPoints = character.MaxHitPoints;
+        character.CurrentMana = character.MaxMana;
         character.ActiveStatusEffects.Clear();
     }
 
@@ -281,7 +282,9 @@ static partial class Demo
                 MaxHp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
                 Hp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
                 IsHero = true,
-                Weapon = m.AttackSource?.Name ?? ""
+                Weapon = m.AttackSource?.Name ?? "",
+                MaxMana = m.Character.MaxMana,
+                Mana = m.Character.CurrentMana
             };
         foreach (var m in EnemyParty.Members)
             dict[m.Character.Name] = new CharDisplayState
@@ -290,7 +293,9 @@ static partial class Demo
                 MaxHp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
                 Hp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
                 IsHero = false,
-                Weapon = m.AttackSource?.Name ?? ""
+                Weapon = m.AttackSource?.Name ?? "",
+                MaxMana = m.Character.MaxMana,
+                Mana = m.Character.CurrentMana
             };
         return dict;
     }

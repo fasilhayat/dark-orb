@@ -58,21 +58,21 @@ up-local: publish
 	@echo Starting local stack (DB + API)...
 	docker compose -f docker-compose.yml -f docker-compose.localdev.yml up -d --build
 
-up-dev: publish publish-demo
+up-dev: publish
 	@echo Starting dev stack (DB + API) then launching demo...
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
-	docker compose -f docker-compose.yml -f docker-compose.dev.yml --profile demo run --rm --build battle-arena-demo
+	docker compose -f docker-compose.yml -f docker-compose.dev.yml --profile demo run --rm battle-arena-demo
 
-demo-dev: publish-demo
+demo-dev:
 	@echo Launching demo (dev)...
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml --profile demo run --rm --build battle-arena-demo
 
-up-test: publish publish-demo
+up-test: publish
 	@echo Starting test stack (DB + API) then launching demo...
 	docker compose -f docker-compose.yml -f docker-compose.test.yml up -d --build
-	docker compose -f docker-compose.yml -f docker-compose.test.yml --profile demo run --rm --build battle-arena-demo
+	docker compose -f docker-compose.yml -f docker-compose.test.yml --profile demo run --rm battle-arena-demo
 
-demo-test: publish-demo
+demo-test:
 	@echo Launching demo (test)...
 	docker compose -f docker-compose.yml -f docker-compose.test.yml --profile demo run --rm --build battle-arena-demo
 

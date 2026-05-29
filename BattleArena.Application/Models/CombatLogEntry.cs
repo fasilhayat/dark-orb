@@ -50,6 +50,13 @@ public class CombatLogEntry
     public int? ResistRoll { get; set; }
     public int? ResistThreshold { get; set; }
 
+    // Populated on ManaRegen events
+    public int? ManaRegen { get; set; }
+    // Populated on ManaDeduct events
+    public int? ManaCost { get; set; }
+    // Snapshot after mana change on ManaRegen / ManaDeduct events
+    public int? ManaAfter { get; set; }
+
     // The character currently taking their turn (null between turns).
     // Set by the simulator on every entry so consumers never have to track it.
     public string? ActiveActorName { get; set; }

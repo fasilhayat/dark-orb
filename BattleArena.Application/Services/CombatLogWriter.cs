@@ -201,6 +201,41 @@ public static class CombatLogWriter
                     sb.AppendLine($"  [{e.Tick,5}]  API  {e.Message}");
                     lastTick = e.Tick;
                     break;
+
+                case "SpellQueued":
+                    sb.AppendLine($"  [{e.Tick,5}]  QUEUE  {e.Message}");
+                    lastTick = e.Tick;
+                    break;
+
+                case "SpellCharging":
+                    sb.AppendLine($"  [{e.Tick,5}]  CHARGE  {e.Message}");
+                    lastTick = e.Tick;
+                    break;
+
+                case "SpellLost":
+                    sb.AppendLine($"  [{e.Tick,5}]  LOST  {e.Message}");
+                    lastTick = e.Tick;
+                    break;
+
+                case "ConcentrationPass":
+                    sb.AppendLine($"  [{e.Tick,5}]  CONC  {e.Message}");
+                    lastTick = e.Tick;
+                    break;
+
+                case "ManaRegen":
+                    sb.AppendLine($"  [{e.Tick,5}]  MANA  {e.Message}");
+                    lastTick = e.Tick;
+                    break;
+
+                case "InsufficientMana":
+                    sb.AppendLine($"  [{e.Tick,5}]  NOMANA  {e.Message}");
+                    lastTick = e.Tick;
+                    break;
+
+                case "ManaDeduct":
+                    sb.AppendLine($"  [{e.Tick,5}]  MANACOST  {e.Message}");
+                    lastTick = e.Tick;
+                    break;
             }
         }
 

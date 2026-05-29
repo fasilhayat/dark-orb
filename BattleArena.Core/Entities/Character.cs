@@ -20,6 +20,8 @@ public class Character
     public int CurrentHitPoints { get; set; }
     public int StrikeRating { get; set; }
     public int TurnSpeed { get; set; }
+    public int MaxMana { get; set; }
+    public int CurrentMana { get; set; }
     public short Npc { get; set; }
     public string Biography { get; set; } = string.Empty;
     public int ExperiencePoints { get; set; }
@@ -42,6 +44,29 @@ public class Character
         IsDead       ? CharacterVitalStatus.Dead :
         IsKnockedOut ? CharacterVitalStatus.KnockedOut :
                        CharacterVitalStatus.Alive;
+
+    public int ManaRegenPerTick => Math.Max(1, ((Intelligence - 10) / 2) + Level / 2);
+
+    public bool CanEquip(ArchetypeWeapon archetype) => ClassId switch
+    {
+        1 => archetype is ArchetypeWeapon.Sword or ArchetypeWeapon.Axe,         // Barbarian
+        2 => archetype is ArchetypeWeapon.Sword or ArchetypeWeapon.Hammer        // Knight
+                or ArchetypeWeapon.Lance or ArchetypeWeapon.Axe,
+        3 => archetype is ArchetypeWeapon.Sword or ArchetypeWeapon.Hammer        // Paladin
+                or ArchetypeWeapon.Lance or ArchetypeWeapon.Mace,
+        4 => archetype is ArchetypeWeapon.Mace or ArchetypeWeapon.Hammer         // Priest
+                or ArchetypeWeapon.Staff,
+        5 => archetype is ArchetypeWeapon.Dagger or ArchetypeWeapon.Staff        // Mage
+                or ArchetypeWeapon.Wand,
+        6 => archetype is ArchetypeWeapon.Dagger or ArchetypeWeapon.ShortSword   // Bard
+                or ArchetypeWeapon.Sword,
+        7 => archetype is ArchetypeWeapon.Staff or ArchetypeWeapon.Dagger        // Druid
+                or ArchetypeWeapon.Sling,
+        8 => true,                                                               // Fighter
+        9 => archetype is ArchetypeWeapon.Dagger or ArchetypeWeapon.ShortSword   // Rogue
+                or ArchetypeWeapon.Sword,
+        _ => true
+    };
 
     private const int _spellTmCostIntFactor = 3;
     private const int _spellTmCostLevelFactor = 1;

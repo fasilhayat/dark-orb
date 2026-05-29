@@ -106,6 +106,21 @@ static partial class Demo
             CW("     ⚡ ", ConsoleColor.DarkCyan);
             CWL(e.Message, ConsoleColor.DarkCyan);
         },
+        ["ManaRegen"] = (e, _) =>
+        {
+            CW("  ♪ ", ConsoleColor.Magenta);
+            CW(e.ActorName, CharColor(e.ActorName, e.ActiveActorName));
+            CW($"  regen  ");
+            CWL($" +{e.ManaRegen} mana", ConsoleColor.Magenta);
+        },
+        ["ManaDeduct"] = (e, _) =>
+        {
+            CW("  ◆ ", ConsoleColor.Magenta);
+            CW(e.ActorName, CharColor(e.ActorName, e.ActiveActorName));
+            CW($"  casts  ");
+            CW(e.AttackSourceName ?? "unknown", ConsoleColor.Magenta);
+            CWL($"  (-{e.ManaCost} mana)", ConsoleColor.DarkMagenta);
+        },
     };
 
     // ── Realtime state updates (per event type) ─────────────────────────
@@ -136,6 +151,16 @@ static partial class Demo
         {
             if (states.TryGetValue(e.ActorName, out var st))
                 st.IsAlive = false;
+        },
+        ["ManaDeduct"] = (e, states) =>
+        {
+            if (states.TryGetValue(e.ActorName, out var st) && e.ManaAfter.HasValue)
+                st.Mana = e.ManaAfter.Value;
+        },
+        ["ManaRegen"] = (e, states) =>
+        {
+            if (states.TryGetValue(e.ActorName, out var st) && e.ManaAfter.HasValue)
+                st.Mana = e.ManaAfter.Value;
         },
     };
 

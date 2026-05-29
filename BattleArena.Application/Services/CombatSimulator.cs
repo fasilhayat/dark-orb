@@ -78,6 +78,29 @@ public class CombatSimulator : ICombatSimulator
                 await Notify(BuildTurnMeterGainEntry(tick, s));
             }
 
+            // ── MANA REGEN (only characters with MaxMana > 0) ──────────────────
+            foreach (var s in states.Where(s => s.Character.IsAlive && s.Character.MaxMana > 0))
+            {
+                var regen = s.Character.ManaRegenPerTick;
+                s.Character.CurrentMana = Math.Min(s.Character.MaxMana, s.Character.CurrentMana + regen);
+                await Notify(new CombatLogEntry
+                {
+                    Tick      = tick,
+                    ActorName = s.Character.Name,
+                    EventType = "ManaRegen",
+                    ManaRegen = regen,
+                    ManaAfter = s.Character.CurrentMana,
+                    Message   = $"{s.Character.Name} regens {regen} mana  ({s.Character.CurrentMana - regen} -> {s.Character.CurrentMana})"
+                });
+            }
+
+            // ── ADVANCE QUEUED SPELLS (reduce remaining by this tick's gain) ──
+            foreach (var s in states.Where(s => s.QueuedSpell is not null && s.Character.IsAlive))
+            {
+                var gain = _turnmeter.ComputeGainPerTick(s.Character);
+                s.QueuedSpell!.RemainingCost -= gain;
+            }
+
             // ── ACTING ORDER: all ready combatants not CC'd, highest meter first ──
             var acting = states
                 .Where(s => s.Character.IsAlive && s.Meter.IsReady && !IsCrowdControlled(s.Character))
@@ -90,6 +113,19 @@ public class CombatSimulator : ICombatSimulator
             {
                 var expired = _statusEffect.TickAll(s.Character);
                 await NotifyExpiredEffectsAsync(tick, s.Character, expired, Notify);
+
+                if (s.QueuedSpell is not null)
+                {
+                    await Notify(new CombatLogEntry
+                    {
+                        Tick      = tick,
+                        ActorName = s.Character.Name,
+                        EventType = "SpellLost",
+                        AttackSourceName = s.QueuedSpell.Spell.Name,
+                        Message   = $"{s.Character.Name} loses concentration on {s.QueuedSpell.Spell.Name} — crowd controlled!"
+                    });
+                    s.QueuedSpell = null;
+                }
 
                 await Notify(new CombatLogEntry
                 {
@@ -106,43 +142,152 @@ public class CombatSimulator : ICombatSimulator
             {
                 if (!actorState.Character.IsAlive) continue; // killed earlier this tick
 
-                var enemies = states
-                    .Where(s => s.PartyIndex != actorState.PartyIndex && s.Character.IsAlive)
-                    .ToList();
+                // ── QUEUED SPELL HANDLING ──────────────────────────────────────
+                IAttackSource attackSource;
+                Character target;
+                bool isSpell;
+                int tmCost;
 
-                if (enemies.Count == 0) break; // party already wiped this tick
+                if (actorState.QueuedSpell is not null)
+                {
+                    if (actorState.QueuedSpell.RemainingCost > 0)
+                    {
+                        // Still charging — skip the turn
+                        await Notify(new CombatLogEntry
+                        {
+                            Tick      = tick,
+                            ActorName = actorState.Character.Name,
+                            EventType = "SpellCharging",
+                            Message   = $"{actorState.Character.Name} is charging {actorState.QueuedSpell.Spell.Name}  (need {actorState.QueuedSpell.RemainingCost} more TM)"
+                        });
+                        continue;
+                    }
 
-                // ── RESOLVE ATTACK SOURCE ──────────────────────────────────────
-                var attackSource = ResolveAttackSource(actorState);
+                    // Queued spell is ready — fire it
+                    var qs = actorState.QueuedSpell;
+                    actorState.QueuedSpell = null;
+                    attackSource  = qs.Spell;
+                    target        = qs.Target;
+                    isSpell       = true;
+                    tmCost        = 100;
+
+                    // ── MANA DEDUCTION (queued cast) ──────────────────────────
+                    if (qs.Spell.ManaCost > 0)
+                    {
+                        var before = actorState.Character.CurrentMana;
+                        actorState.Character.CurrentMana = Math.Max(0, before - qs.Spell.ManaCost);
+                        await Notify(new CombatLogEntry
+                        {
+                            Tick             = tick,
+                            ActorName        = actorState.Character.Name,
+                            EventType        = "ManaDeduct",
+                            ManaCost         = qs.Spell.ManaCost,
+                            ManaAfter        = actorState.Character.CurrentMana,
+                            AttackSourceName = qs.Spell.Name,
+                            Message          = $"{actorState.Character.Name} spends {qs.Spell.ManaCost} mana to cast {qs.Spell.Name}. ({before} -> {actorState.Character.CurrentMana})"
+                        });
+                    }
+                }
+                else
+                {
+                    var enemies = states
+                        .Where(s => s.PartyIndex != actorState.PartyIndex && s.Character.IsAlive)
+                        .ToList();
+
+                    if (enemies.Count == 0) break;
+
+                    // ── RESOLVE ATTACK SOURCE ──────────────────────────────────
+                    attackSource = ResolveAttackSource(actorState);
+
+                    var meterNow = actorState.Meter.CurrentValue;
+                    isSpell  = attackSource is Spell;
+                    tmCost   = isSpell ? actorState.Character.ComputeSpellTurnMeterCost((Spell)attackSource) : 100;
+
+                    if (!isSpell && actorState.Character.MemorizedSpells.Count > 0)
+                    {
+                        await Notify(new CombatLogEntry
+                        {
+                            Tick      = tick,
+                            ActorName = actorState.Character.Name,
+                            EventType = "InsufficientMana",
+                            Message   = $"{actorState.Character.Name} lacks mana for spells — resorting to unarmed strike!"
+                        });
+                    }
+
+                    // ── QUEUE CHECK — ready to cast but TM < cost → queue ──────
+                    if (isSpell && meterNow < tmCost)
+                    {
+                        // Select target before queuing
+                        var qEnemies = states
+                            .Where(s => s.PartyIndex != actorState.PartyIndex && s.Character.IsAlive)
+                            .ToList();
+                        var qSelector = actorState.PartyIndex == 0 ? _heroTargetSelector : _enemyTargetSelector;
+                        var qTarget   = await qSelector.SelectTargetAsync(
+                            actorState.Character,
+                            qEnemies.Select(s => s.Character),
+                            ct);
+
+                        var spell = (Spell)attackSource;
+                        actorState.QueuedSpell = new QueuedSpellInfo(spell, qTarget, tmCost - meterNow);
+
+                        await Notify(new CombatLogEntry
+                        {
+                            Tick             = tick,
+                            ActorName        = actorState.Character.Name,
+                            EventType        = "SpellQueued",
+                            AttackSourceName = spell.Name,
+                            TargetName       = qTarget.Name,
+                            TurnMeterBefore  = meterNow,
+                            IsSpell          = true,
+                            Message          = $"{actorState.Character.Name} begins charging {spell.Name} on {qTarget.Name}  (need {tmCost - meterNow} more TM)"
+                        });
+                        continue;
+                    }
+
+                    // ── TARGET SELECTION ───────────────────────────────────────
+                    var selector = actorState.PartyIndex == 0 ? _heroTargetSelector : _enemyTargetSelector;
+                    target = await selector.SelectTargetAsync(
+                        actorState.Character,
+                        enemies.Select(s => s.Character),
+                        ct);
+
+                    // ── MANA DEDUCTION (direct cast) ─────────────────────────
+                    if (isSpell)
+                    {
+                        var spell = (Spell)attackSource;
+                        if (spell.ManaCost > 0)
+                        {
+                            var before = actorState.Character.CurrentMana;
+                            actorState.Character.CurrentMana = Math.Max(0, before - spell.ManaCost);
+                            await Notify(new CombatLogEntry
+                            {
+                                Tick             = tick,
+                                ActorName        = actorState.Character.Name,
+                                EventType        = "ManaDeduct",
+                                ManaCost         = spell.ManaCost,
+                                ManaAfter        = actorState.Character.CurrentMana,
+                                AttackSourceName = spell.Name,
+                                Message          = $"{actorState.Character.Name} spends {spell.ManaCost} mana to cast {spell.Name}. ({before} -> {actorState.Character.CurrentMana})"
+                            });
+                        }
+                    }
+                }
 
                 actorState.Meter.IsActive = true;
-
-                var meterNow = actorState.Meter.CurrentValue;
-                var isSpell  = attackSource is Spell;
-                var tmCost   = isSpell ? actorState.Character.ComputeSpellTurnMeterCost((Spell)attackSource) : 100;
-
-                // ── TARGET SELECTION ───────────────────────────────────────────
-                // Selected before TurnStart is logged so TargetName can be stamped.
-                // Heroes (partyIndex 0) use the hero selector; enemies use the enemy selector.
-                // GUI implementations await player input here; AI returns immediately.
-                var selector = actorState.PartyIndex == 0 ? _heroTargetSelector : _enemyTargetSelector;
-                var target   = await selector.SelectTargetAsync(
-                    actorState.Character,
-                    enemies.Select(s => s.Character),
-                    ct);
+                var turnMeterNow = actorState.Meter.CurrentValue;
 
                 await Notify(new CombatLogEntry
                 {
                     Tick             = tick,
                     ActorName        = actorState.Character.Name,
                     EventType        = "TurnStart",
-                    TurnMeterBefore  = meterNow,
+                    TurnMeterBefore  = turnMeterNow,
                     IsReady          = true,
                     IsActive         = true,
                     AttackSourceName = attackSource.Name,
                     IsSpell          = isSpell,
                     TargetName       = target.Name,
-                    Message          = $"{actorState.Character.Name} takes their turn  (TM: {meterNow})"
+                    Message          = $"{actorState.Character.Name} takes their turn  (TM: {turnMeterNow})"
                 });
 
                 // ── DOT TICK: DamageOverTime at start of actor's turn ────────────
@@ -203,6 +348,40 @@ public class CombatSimulator : ICombatSimulator
                         }
                     }
 
+                    // ── CONCENTRATION CHECK (target has queued spell) ─────────
+                    if (result.IsHit && result.Damage > 0)
+                    {
+                        var concState = states.FirstOrDefault(s => s.Character == target);
+                        if (concState?.QueuedSpell is not null)
+                        {
+                            var dc = Math.Max(10, result.Damage / 2);
+                            var roll = _dice.Roll(DieType.D20) + concState.Character.Level;
+                            if (roll < dc)
+                            {
+                                await Notify(new CombatLogEntry
+                                {
+                                    Tick = tick,
+                                    ActorName = target.Name,
+                                    EventType = "SpellLost",
+                                    AttackSourceName = concState.QueuedSpell.Spell.Name,
+                                    Message = $"{target.Name} loses concentration on {concState.QueuedSpell.Spell.Name}! (rolled {roll} vs DC {dc})"
+                                });
+                                concState.QueuedSpell = null;
+                            }
+                            else
+                            {
+                                await Notify(new CombatLogEntry
+                                {
+                                    Tick = tick,
+                                    ActorName = target.Name,
+                                    EventType = "ConcentrationPass",
+                                    AttackSourceName = concState.QueuedSpell.Spell.Name,
+                                    Message = $"{target.Name} maintains concentration on {concState.QueuedSpell.Spell.Name}. (rolled {roll} vs DC {dc})"
+                                });
+                            }
+                        }
+                    }
+
                     if (target.CurrentHitPoints <= 0)
                     {
                         await Notify(BuildDefeatEntry(tick, target));
@@ -211,6 +390,9 @@ public class CombatSimulator : ICombatSimulator
                         if (defResult is not null)
                         {
                             actorState.Meter.IsActive = false;
+                            var deadState = states.FirstOrDefault(s => s.Character == target);
+                            if (deadState?.QueuedSpell is not null)
+                                deadState.QueuedSpell = null;
                             await Notify(BuildAfterTurnEntry(actorState, tick, tmCost));
                             return defResult;
                         }
@@ -289,7 +471,12 @@ public class CombatSimulator : ICombatSimulator
 
         var spells = state.Character.MemorizedSpells;
         if (spells.Count > 0)
-            return spells[_dice.RollIndex(spells.Count)];
+        {
+            var spell = spells[_dice.RollIndex(spells.Count)];
+            if (spell.ManaCost > 0 && state.Character.CurrentMana < spell.ManaCost)
+                return UnarmedStrike.Default;
+            return spell;
+        }
 
         return UnarmedStrike.Default;
     }
@@ -550,14 +737,30 @@ public class CombatSimulator : ICombatSimulator
         };
     }
 
+    // Tracks a spell being charged over multiple ticks.
+    private class QueuedSpellInfo
+    {
+        public Spell     Spell         { get; }
+        public Character Target        { get; set; }
+        public int       RemainingCost { get; set; }
+
+        public QueuedSpellInfo(Spell spell, Character target, int remainingCost)
+        {
+            Spell         = spell;
+            Target        = target;
+            RemainingCost = remainingCost;
+        }
+    }
+
     // Tracks per-combatant state during a simulation run.
     private class CombatantState
     {
-        public Character      Character    { get; }
-        public IAttackSource? AttackSource { get; }
-        public int            PartyIndex   { get; }   // 0 = hero party, 1 = enemy party
-        public TurnmeterState Meter        { get; set; }
-        public int            PrevMeter    { get; set; }  // value before this tick's gain
+        public Character         Character    { get; }
+        public IAttackSource?    AttackSource { get; }
+        public int               PartyIndex   { get; }   // 0 = hero party, 1 = enemy party
+        public TurnmeterState    Meter        { get; set; }
+        public int               PrevMeter    { get; set; }  // value before this tick's gain
+        public QueuedSpellInfo?  QueuedSpell  { get; set; }
 
         public CombatantState(Character character, IAttackSource? attackSource, int partyIndex)
         {

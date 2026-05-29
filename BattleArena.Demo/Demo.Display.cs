@@ -393,6 +393,17 @@ static partial class Demo
             new Seg($"  {s.Tm,3}", ConsoleColor.Cyan),
             new Seg("/100", ConsoleColor.Gray));
 
+        var manaPct = s.MaxMana > 0 ? (double)Math.Max(0, s.Mana) / s.MaxMana : 0.0;
+        var manaFilled = s.MaxMana > 0 ? Math.Max(1, (int)(manaPct * BAR_W)) : 0;
+        var manaLine = CL(vb, borderFg,
+            new Seg(" MP [", ConsoleColor.Gray),
+            new Seg(new string('\u2588', manaFilled), ConsoleColor.Magenta),
+            new Seg(new string('\u2591', BAR_W - manaFilled), ConsoleColor.Gray),
+            new Seg("]  ", ConsoleColor.Gray),
+            new Seg($"{Math.Max(0, s.Mana),3}", ConsoleColor.Magenta),
+            new Seg(" / ", ConsoleColor.Gray),
+            new Seg($"{s.MaxMana,-3}", ConsoleColor.Gray));
+
         var pct = (double)Math.Max(0, s.Hp) / Math.Max(1, s.MaxHp);
         var hpFilled = s.Hp > 0 ? Math.Max(1, (int)(pct * BAR_W)) : 0;
         var hpFg = HpColor(s.Hp, s.MaxHp);
@@ -405,7 +416,7 @@ static partial class Demo
             new Seg(" / ", ConsoleColor.Gray),
             new Seg($"{s.MaxHp,-3}", ConsoleColor.Gray));
 
-        return [top, nameLine, tmLine, hpLine, bot];
+        return [top, nameLine, tmLine, manaLine, hpLine, bot];
     }
 
     private static List<Seg> CL(char vb, ConsoleColor borderFg, params Seg[] segs)
@@ -450,6 +461,8 @@ internal class CharDisplayState
     public required bool IsHero { get; init; }
     public int Hp { get; set; }
     public int Tm { get; set; }
+    public int MaxMana { get; set; }
+    public int Mana { get; set; }
     public bool IsAlive { get; set; } = true;
     public string Weapon { get; set; } = "";
 }
