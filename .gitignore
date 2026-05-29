@@ -26,6 +26,7 @@ coveragereport/
 ## Secrets
 api_key.secret
 *.pfx
+.env
 
 ## Combat logs (generated — replay .json files and human-readable .txt dumps)
 combat-logs/*.txt

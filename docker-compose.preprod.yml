@@ -1,0 +1,7 @@
+# PreProduction overlay — DB + API only, no host ports exposed.
+# Start: make up ENV=preprod
+
+services:
+  battle-arena-api:
+    environment:
+      ASPNETCORE_ENVIRONMENT: PreProduction

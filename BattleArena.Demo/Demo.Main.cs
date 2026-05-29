@@ -310,9 +310,14 @@ static partial class Demo
 
         if (string.IsNullOrWhiteSpace(apiUrl))
         {
+            var env = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")
+                   ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
+                   ?? "Production";
+
             var config = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: true)
+                .AddJsonFile($"appsettings.{env}.json", optional: true)
                 .Build();
             apiUrl = config.GetSection("BattleArenaApi")["Url"];
         }

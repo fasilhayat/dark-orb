@@ -418,29 +418,63 @@ erDiagram
 
 ## Running the solution locally
 
-### Option 1: Docker Compose
+### Environments
+
+| ENV | DB | API | Demo | Ports exposed |
+|-----|----|-----|------|---------------|
+| `localdev` | Docker | Docker | host (`make demo-local`) | 5432, 8585 |
+| `dev` | Docker | Docker | Docker (`make demo`) | 5432, 8585 |
+| `test` | Docker | Docker | Docker (`make demo`) | — |
+| `preprod` | Docker | Docker | — | — |
+| `prod` | Docker | Docker | — | — (default) |
+
+### Setup
+
+Copy `.env.example` to `.env` and set your environment:
 
 ```bash
-docker compose up --build
+cp .env.example .env
+# Edit .env: set ENV=localdev (or dev, test, preprod, prod)
 ```
 
-The API will be available at:
+The `.env` file is not committed to source control.
 
-- `http://localhost:8585`
-- `http://localhost:8585/swagger`
+### Option 1: Docker Compose (recommended)
 
-The database will expose PostgreSQL on port `5432`.
+```bash
+# Start DB + API (uses ENV from .env, defaults to prod if no .env)
+make up
+
+# Start DB + API for a specific environment without .env
+make up ENV=localdev
+
+# Run the demo in Docker (dev/test environments)
+make demo
+
+# Run the demo locally (localdev environment)
+make demo-local
+
+# Stop containers
+make down
+
+# Stop and remove volumes (wipes DB data for the current ENV)
+make clean
+```
+
+Each environment uses an isolated Docker project name (`battle-arena-<ENV>`) and a separate named volume, so multiple environments can coexist without data bleed.
 
 ### Option 2: Local .NET run
 
-1. Ensure PostgreSQL is running and the `arena_data` schema is initialized.
+1. Ensure PostgreSQL is running and `arena_data` schema is initialized.
 2. Update the connection string in `BattleArena.Api/appsettings.Development.json` if needed.
 3. Restore and run:
 
 ```bash
- dotnet restore BattleArena.sln
- dotnet run --project BattleArena.Api/BattleArena.Api.csproj
+dotnet restore BattleArena.sln
+dotnet run --project BattleArena.Api/BattleArena.Api.csproj
 ```
+
+The API will be available at `http://localhost:8585` (and `http://localhost:8585/swagger`).
 
 ## API surface
 
@@ -463,8 +497,9 @@ Run unit and acceptance tests from the solution root:
 ## Current configuration notes
 
 - `BattleArena.Api/AddServices.cs` reads `ConnectionStrings:ArenaDatabase`.
-- `BattleArena.Api/appsettings.Development.json` and `appsettings.json` currently define `ArenaDatabase`.
-- `docker-compose.yml` sets `ConnectionStrings__battle-arenaDatabase`, which is a different key. If you rely on Docker Compose for the API, verify the configuration mapping matches the application’s expected connection string key.
+- Docker Compose overlays inject `ConnectionStrings__ArenaDatabase` via environment variable, which overrides `appsettings.json`. The appsettings files serve as fallbacks for local `dotnet run` scenarios.
+- Each environment uses a separate Docker Compose project (`battle-arena-<ENV>`) and named volume, ensuring data isolation between environments.
+- The base `docker-compose.yml` exposes no host ports and defaults to `ASPNETCORE_ENVIRONMENT: Production`. Environment overlays (`docker-compose.<env>.yml`) set the appropriate environment and expose ports where needed.
 
 ## References
 

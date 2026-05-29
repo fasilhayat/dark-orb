@@ -1,0 +1,13 @@
+# LocalDev overlay — DB + API in Docker, ports exposed on host.
+# Demo runs locally: make demo-local
+
+services:
+  battle-arena-db:
+    ports:
+      - '5432:5432'
+
+  battle-arena-api:
+    ports:
+      - '8585:8585'
+    environment:
+      ASPNETCORE_ENVIRONMENT: LocalDev

@@ -1,0 +1,27 @@
+# Test overlay — DB + API + Demo in Docker, no host port exposure.
+# Start: make up ENV=test
+# Run demo: make demo ENV=test
+
+services:
+  battle-arena-api:
+    environment:
+      ASPNETCORE_ENVIRONMENT: Test
+
+  battle-arena-demo:
+    build:
+      context: .
+      dockerfile: BattleArena.Demo/Dockerfile
+    stdin_open: true
+    tty: true
+    profiles:
+      - demo
+    networks:
+      - app-network
+    depends_on:
+      battle-arena-db:
+        condition: service_healthy
+      battle-arena-api:
+        condition: service_started
+    environment:
+      BATTLE_ARENA_API_URL: "http://battle-arena-api:8585"
+      DOTNET_ENVIRONMENT: Test

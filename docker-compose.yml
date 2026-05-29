@@ -1,21 +1,25 @@
+# Base compose file — deployment-safe defaults (no host ports, no demo service).
+# Always combine with an environment overlay: docker-compose.<env>.yml
+# Use the Makefile targets (make up, make demo) rather than invoking docker compose directly.
+
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  pgdata:
 
 services:
   battle-arena-db:
     build:
       context: .
       dockerfile: postgres/Dockerfile
-    container_name: battle-arena-db
     hostname: battle-arena-db
     restart: unless-stopped
-    ports:
-      - '5432:5432'
     networks:
       - app-network
     volumes:
-      - ./.containers/postgres:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
       - ./.postgres-init:/docker-entrypoint-initdb.d
     environment:
       POSTGRES_USER: postgres
@@ -34,34 +38,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: battle-arena-api
+    hostname: battle-arena-api
     restart: unless-stopped
-    ports:
-      - '8585:8585'
     networks:
       - app-network
     depends_on:
       battle-arena-db:
         condition: service_healthy
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_ENVIRONMENT: Production
       ConnectionStrings__ArenaDatabase: "Host=battle-arena-db;Port=5432;Database=battle-arena_data;Username=postgres;Password=postgres"
-
-  battle-arena-demo:
-    build:
-      context: .
-      dockerfile: BattleArena.Demo/Dockerfile
-    container_name: battle-arena-demo
-    stdin_open: true
-    tty: true
-    profiles:
-      - demo
-    networks:
-      - app-network
-    depends_on:
-      battle-arena-db:
-        condition: service_healthy
-      battle-arena-api:
-        condition: service_started
-    environment:
-      BATTLE_ARENA_API_URL: "http://battle-arena-api:8585"
