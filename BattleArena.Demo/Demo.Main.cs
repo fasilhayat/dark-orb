@@ -338,14 +338,7 @@ static partial class Demo
         var logPath = Path.Combine(logDir, "api-calls.log");
         var logWriter = new StreamWriter(logPath, append: true) { AutoFlush = true };
 
-        void ConsoleLog(string msg)
-        {
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.WriteLine(msg);
-            Console.ResetColor();
-        }
-
-        ApiClient = new BattleArenaApiClient(apiUrl, consoleLogger: ConsoleLog, fileLogger: logWriter);
+        ApiClient = new BattleArenaApiClient(apiUrl, fileLogger: logWriter);
         Console.Write("  Connecting to BattleArena API... ");
         try
         {
