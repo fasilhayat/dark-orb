@@ -1,5 +1,5 @@
 # Production overlay — DB + API only, no host ports exposed.
-# Start: make up ENV=prod  (or make up with no .env file)
+# Start: make up-prod  (or make up with no .env file)
 
 services:
   battle-arena-api:

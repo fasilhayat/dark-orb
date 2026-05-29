@@ -55,12 +55,12 @@ up-local: publish
 	@echo Starting local stack (DB + API)...
 	docker compose -f docker-compose.yml -f docker-compose.localdev.yml up -d --build
 
-up-dev: publish
+up-dev: publish publish-demo
 	@echo Starting dev stack (DB + API) then launching demo...
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml --profile demo run --rm --build battle-arena-demo
 
-up-test: publish
+up-test: publish publish-demo
 	@echo Starting test stack (DB + API) then launching demo...
 	docker compose -f docker-compose.yml -f docker-compose.test.yml up -d --build
 	docker compose -f docker-compose.yml -f docker-compose.test.yml --profile demo run --rm --build battle-arena-demo
@@ -130,6 +130,7 @@ clean: clean-logs
 	-docker compose -f docker-compose.yml -f docker-compose.preprod.yml -p dark-orb-preprod down -v
 	-docker compose -f docker-compose.yml -f docker-compose.prod.yml -p dark-orb-prod down -v
 	powershell -Command "if (Test-Path 'publish') { Remove-Item -Recurse -Force 'publish'; Write-Host 'Removed publish/' } else { Write-Host 'No publish output to remove.' }"
+	powershell -Command "if (Test-Path 'publish-demo') { Remove-Item -Recurse -Force 'publish-demo'; Write-Host 'Removed publish-demo/' } else { Write-Host 'No publish-demo output to remove.' }"
 	@echo Clean complete.
 
 clean-logs:
@@ -146,6 +147,9 @@ build-local: publish
 
 publish:
 	dotnet publish BattleArena.Api/BattleArena.Api.csproj -c Release -o ./publish
+
+publish-demo:
+	dotnet publish BattleArena.Demo/BattleArena.Demo.csproj -c Release -o ./publish-demo
 
 build-demo:
 	$(COMPOSE) build battle-arena-demo
