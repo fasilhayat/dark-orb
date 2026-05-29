@@ -374,7 +374,7 @@ static partial class Demo
     private static List<List<Seg>> BuildEmptyBlock()
     {
         var blank = new List<Seg> { new Seg(new string(' ', BLOCK_W), ConsoleColor.Black) };
-        return [blank, blank, blank, blank, blank];
+        return [blank, blank, blank, blank, blank, blank];
     }
 
     private static List<List<Seg>> BuildCharBlock(CharDisplayState s, string? activeActorName = null)
@@ -408,6 +408,7 @@ static partial class Demo
                 CL(vb, borderFg, new Seg(namePart, ConsoleColor.Gray), new Seg(status, ConsoleColor.DarkRed)),
                 CL(vb, borderFg, new Seg(empty, ConsoleColor.Gray)),
                 CL(vb, borderFg, new Seg(empty, ConsoleColor.Gray)),
+                CL(vb, borderFg, new Seg(empty, ConsoleColor.Gray)),
                 bot
             ];
         }
@@ -436,14 +437,21 @@ static partial class Demo
 
         var manaPct = s.MaxMana > 0 ? (double)Math.Max(0, s.Mana) / s.MaxMana : 0.0;
         var manaFilled = s.MaxMana > 0 ? Math.Max(1, (int)(manaPct * BAR_W)) : 0;
-        var manaLine = CL(vb, borderFg,
-            new Seg(" MP [", ConsoleColor.Gray),
-            new Seg(new string('\u2588', manaFilled), ConsoleColor.Magenta),
-            new Seg(new string('\u2591', BAR_W - manaFilled), ConsoleColor.Gray),
-            new Seg("]  ", ConsoleColor.Gray),
-            new Seg($"{Math.Max(0, s.Mana),3}", ConsoleColor.Magenta),
-            new Seg(" / ", ConsoleColor.Gray),
-            new Seg($"{s.MaxMana,-3}", ConsoleColor.Gray));
+        var manaFg = s.MaxMana > 0 ? ConsoleColor.Gray : ConsoleColor.DarkGray;
+        var manaLine = s.MaxMana > 0
+            ? CL(vb, borderFg,
+                new Seg(" MP [", ConsoleColor.Gray),
+                new Seg(new string('\u2588', manaFilled), ConsoleColor.Magenta),
+                new Seg(new string('\u2591', BAR_W - manaFilled), ConsoleColor.Gray),
+                new Seg("]  ", ConsoleColor.Gray),
+                new Seg($"{Math.Max(0, s.Mana),3}", ConsoleColor.Magenta),
+                new Seg(" / ", ConsoleColor.Gray),
+                new Seg($"{s.MaxMana,-3}", ConsoleColor.Gray))
+            : CL(vb, borderFg,
+                new Seg(" MP [", ConsoleColor.DarkGray),
+                new Seg(new string('\u2591', BAR_W), ConsoleColor.DarkGray),
+                new Seg("]   ", ConsoleColor.DarkGray),
+                new Seg("  --  -- ", ConsoleColor.DarkGray));
 
         var pct = (double)Math.Max(0, s.Hp) / Math.Max(1, s.MaxHp);
         var hpFilled = s.Hp > 0 ? Math.Max(1, (int)(pct * BAR_W)) : 0;

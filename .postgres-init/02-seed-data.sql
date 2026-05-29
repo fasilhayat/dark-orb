@@ -1,67 +1,8 @@
 -- ============================================================
--- BattleArena - PostgreSQL Initialization Script
--- World: Homebrew AD&D-inspired fantasy
--- Schema: arena_data
--- Naming: snake_case tables/columns, fn_ functions, sp_ procs, p_ params
+-- BattleArena - PostgreSQL World and Reference Seed Data
+-- Contains lookup/reference data, world content, items, NPC records,
+-- spells, and other non-character seed data.
 -- ============================================================
-
-CREATE SCHEMA IF NOT EXISTS arena_data;
-
--- ============================================================
--- REFERENCE TABLES
--- ============================================================
-
-CREATE TABLE IF NOT EXISTS arena_data.die_type (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(10) NOT NULL UNIQUE,
-    sides INTEGER NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS arena_data.damage_type (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE
-);
-
-CREATE TABLE IF NOT EXISTS arena_data.attack_type (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE
-);
-
-CREATE TABLE IF NOT EXISTS arena_data.armor_category (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE
-);
-
-CREATE TABLE IF NOT EXISTS arena_data.affinity (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE
-);
-
-CREATE TABLE IF NOT EXISTS arena_data.gear_quality (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE,
-    sort_order INTEGER NOT NULL DEFAULT 5
-);
-
-CREATE TABLE IF NOT EXISTS arena_data.gear_slot (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE
-);
-
-CREATE TABLE IF NOT EXISTS arena_data.deity_alignment (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE
-);
-
-CREATE TABLE IF NOT EXISTS arena_data.spell_school (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE
-);
-
-CREATE TABLE IF NOT EXISTS arena_data.equipment_slot (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE
-);
 
 -- ============================================================
 -- SEED: REFERENCE DATA
@@ -71,39 +12,48 @@ INSERT INTO arena_data.die_type (name, sides) VALUES
     ('D4', 4), ('D6', 6), ('D8', 8), ('D10', 10), ('D12', 12), ('D20', 20), ('D100', 100)
 ON CONFLICT (name) DO NOTHING;
 
+
 INSERT INTO arena_data.damage_type (name) VALUES
     ('Bludgeoning'), ('Piercing'), ('Slashing'), ('Poison'), ('Fire'),
     ('Ice'), ('Lightning'), ('Shadow'), ('Holy'), ('Acid')
 ON CONFLICT (name) DO NOTHING;
 
+
 INSERT INTO arena_data.attack_type (name) VALUES
     ('Melee'), ('Ranged'), ('Spell')
 ON CONFLICT (name) DO NOTHING;
+
 
 INSERT INTO arena_data.armor_category (name) VALUES
     ('Light'), ('Medium'), ('Heavy'), ('Shield')
 ON CONFLICT (name) DO NOTHING;
 
+
 INSERT INTO arena_data.affinity (name) VALUES
     ('Spiritual'), ('Magical'), ('Forceful'), ('Chaos')
 ON CONFLICT (name) DO NOTHING;
 
+
 INSERT INTO arena_data.gear_quality (name, sort_order) VALUES
     ('Legendary', 1), ('Epic', 2), ('Rare', 3), ('Uncommon', 4), ('Common', 5)
 ON CONFLICT (name) DO NOTHING;
+
 
 INSERT INTO arena_data.gear_slot (name) VALUES
     ('Helmet'), ('Chest'), ('Gauntlets'), ('Belt'), ('Ornament'),
     ('Foot'), ('RingLeft'), ('RingRight'), ('Amulet'), ('Banner'), ('Back')
 ON CONFLICT (name) DO NOTHING;
 
+
 INSERT INTO arena_data.deity_alignment (name) VALUES
     ('Light'), ('Dark')
 ON CONFLICT (name) DO NOTHING;
 
+
 INSERT INTO arena_data.spell_school (name) VALUES
-    ('AoE'), ('CC'), ('Other')
+    ('AoE'), ('CC'), ('Other'), ('Evocation'), ('Conjuration')
 ON CONFLICT (name) DO NOTHING;
+
 
 INSERT INTO arena_data.equipment_slot (name) VALUES
     ('Head'), ('Chest'), ('Hands'), ('Waist'), ('Foot'),
@@ -111,36 +61,6 @@ INSERT INTO arena_data.equipment_slot (name) VALUES
     ('Ring1'), ('Ring2'), ('Ornament')
 ON CONFLICT (name) DO NOTHING;
 
--- ============================================================
--- RACES
--- ============================================================
-
-CREATE TABLE IF NOT EXISTS arena_data.race (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE,
-    strength_bonus INTEGER NOT NULL DEFAULT 0,
-    dexterity_bonus INTEGER NOT NULL DEFAULT 0,
-    stamina_bonus INTEGER NOT NULL DEFAULT 0,
-    intelligence_bonus INTEGER NOT NULL DEFAULT 0,
-    wisdom_bonus INTEGER NOT NULL DEFAULT 0,
-    charisma_bonus INTEGER NOT NULL DEFAULT 0,
-    description TEXT DEFAULT '',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
-CREATE TABLE IF NOT EXISTS arena_data.subrace (
-    id SERIAL PRIMARY KEY,
-    race_id INTEGER NOT NULL REFERENCES arena_data.race(id) ON DELETE CASCADE,
-    name VARCHAR(50) NOT NULL,
-    description TEXT DEFAULT ''
-);
-
-CREATE TABLE IF NOT EXISTS arena_data.race_special_ability (
-    id SERIAL PRIMARY KEY,
-    race_id INTEGER NOT NULL REFERENCES arena_data.race(id) ON DELETE CASCADE,
-    name VARCHAR(100) NOT NULL,
-    description TEXT DEFAULT ''
-);
 
 -- ============================================================
 -- SEED: RACES
@@ -157,6 +77,7 @@ INSERT INTO arena_data.race (name, description, strength_bonus, dexterity_bonus,
     ('Orc',      'The Chosen of the War God, orcs were created to fight. Their muscles bulge with unnatural strength, and their bones knit faster than any other race. Orc society is built around the concept of ''Ushog'' — the eternal struggle that gives life meaning. They value strength above all else and respect only those who can defeat them in battle. Despite their savage reputation, orcish honor is absolute; an orc who gives their word will die before breaking it.', 3, 0, 1, 0, 0, 0),
     ('Ogre',     'Titans reduced by ages of separation from their divine ancestors, ogres are the largest of the mortal races. Standing twelve feet tall and built of solid muscle and thick bone, they are living battering rams. Mountain Ogres possess residual magic resistance from their giant bloodline, Hill Ogres throw boulders with deadly accuracy, Desert Ogres endure the harshest climates, and Forest Ogres can regenerate wounds at an alarming rate.', 3, 0, 2, 0, 0, 0),
     ('Halfling', 'The smallest of the civilized races, halflings possess a spirit that belies their stature. They believe in the power of luck, good food, and a warm hearth, yet they are among the bravest souls in battle. Halflings feel fear but refuse to show it, using their natural agility and sharp tongues to mock and taunt enemies into reckless charges. Forest Halflings move through woodland without a trace, while Hill Halflings are renowned for their hospitality and uncanny good fortune.', 0, 2, 1, 0, 1, 1);
+
 
 -- Subraces
 INSERT INTO arena_data.subrace (race_id, name, description)
@@ -184,6 +105,7 @@ FROM (VALUES
 ) AS s(race_name, name, descr)
 JOIN arena_data.race r ON r.name = s.race_name;
 
+
 -- Race Special Abilities (SP)
 INSERT INTO arena_data.race_special_ability (race_id, name, description)
 SELECT r.id, s.name, s.descr
@@ -205,16 +127,6 @@ FROM (VALUES
 ) AS s(race_name, name, descr)
 JOIN arena_data.race r ON r.name = s.race_name;
 
--- ============================================================
--- FEAT RESISTANCE JUNCTION TABLE
--- ============================================================
-
-CREATE TABLE IF NOT EXISTS arena_data.feat_resistance (
-    id SERIAL PRIMARY KEY,
-    feat_id INTEGER NOT NULL REFERENCES arena_data.race_special_ability(id) ON DELETE CASCADE,
-    resistance_type VARCHAR(50) NOT NULL,
-    resistance_value INTEGER NOT NULL DEFAULT 0
-);
 
 -- Seed: Feat Resistances
 INSERT INTO arena_data.feat_resistance (feat_id, resistance_type, resistance_value)
@@ -224,23 +136,6 @@ JOIN arena_data.race r ON r.id = rsa.race_id
 WHERE r.name IN ('Elf', 'Dwarf', 'Kobold', 'Ogre') AND rsa.name = 'Magic Resistance'
 AND NOT EXISTS (SELECT 1 FROM arena_data.feat_resistance fr WHERE fr.feat_id = rsa.id);
 
--- ============================================================
--- CLASSES
--- ============================================================
-
-CREATE TABLE IF NOT EXISTS arena_data.class (
-    id SERIAL PRIMARY KEY,
-    hit_die_id INTEGER NOT NULL REFERENCES arena_data.die_type(id),
-    name VARCHAR(50) NOT NULL UNIQUE,
-    base_strike_rating INTEGER NOT NULL DEFAULT 20,
-    description TEXT DEFAULT ''
-);
-
-CREATE TABLE IF NOT EXISTS arena_data.class_race (
-    class_id INTEGER NOT NULL REFERENCES arena_data.class(id) ON DELETE CASCADE,
-    race_id INTEGER NOT NULL REFERENCES arena_data.race(id) ON DELETE CASCADE,
-    PRIMARY KEY (class_id, race_id)
-);
 
 -- ============================================================
 -- SEED: CLASSES
@@ -261,6 +156,7 @@ INSERT INTO arena_data.class (name, description, hit_die_id, base_strike_rating)
 ) AS src(name, description, die_name, strike_rating)
 JOIN arena_data.die_type d ON d.name = src.die_name;
 
+
 -- Class-race restrictions
 INSERT INTO arena_data.class_race (class_id, race_id)
 SELECT c.id, r.id
@@ -280,17 +176,6 @@ FROM (VALUES
 JOIN arena_data.class c ON c.name = src.class_name
 JOIN arena_data.race r ON r.name = src.race_name;
 
--- ============================================================
--- DEITIES
--- ============================================================
-
-CREATE TABLE IF NOT EXISTS arena_data.deity (
-    id SERIAL PRIMARY KEY,
-    alignment_id INTEGER NOT NULL REFERENCES arena_data.deity_alignment(id),
-    name VARCHAR(50) NOT NULL UNIQUE,
-    description TEXT DEFAULT '',
-    domain VARCHAR(100) DEFAULT ''
-);
 
 INSERT INTO arena_data.deity (name, alignment_id, description, domain)
 SELECT src.name, a.id, src.description, src.domain
@@ -306,30 +191,6 @@ FROM (VALUES
 ) AS src(name, alignment_name, description, domain)
 JOIN arena_data.deity_alignment a ON a.name = src.alignment_name;
 
--- ============================================================
--- PETS
--- ============================================================
-
-CREATE TABLE IF NOT EXISTS arena_data.pet (
-    id SERIAL PRIMARY KEY,
-    damage_die_id INTEGER REFERENCES arena_data.die_type(id),
-    name VARCHAR(50) NOT NULL UNIQUE,
-    armor_class INTEGER NOT NULL DEFAULT 10,
-    hit_points INTEGER NOT NULL DEFAULT 10,
-    description TEXT DEFAULT ''
-);
-
-CREATE TABLE IF NOT EXISTS arena_data.pet_class_restriction (
-    pet_id INTEGER NOT NULL REFERENCES arena_data.pet(id) ON DELETE CASCADE,
-    class_id INTEGER NOT NULL REFERENCES arena_data.class(id) ON DELETE CASCADE,
-    PRIMARY KEY (pet_id, class_id)
-);
-
-CREATE TABLE IF NOT EXISTS arena_data.pet_race_restriction (
-    pet_id INTEGER NOT NULL REFERENCES arena_data.pet(id) ON DELETE CASCADE,
-    race_id INTEGER NOT NULL REFERENCES arena_data.race(id) ON DELETE CASCADE,
-    PRIMARY KEY (pet_id, race_id)
-);
 
 INSERT INTO arena_data.pet (name, description, damage_die_id, armor_class, hit_points)
 SELECT src.name, src.description, d.id, src.ac, src.hp
@@ -345,6 +206,7 @@ FROM (VALUES
     ('Spider',  'A venomous arachnid that ensnares prey.',   'D6',  12, 12)
 ) AS src(name, description, die_name, ac, hp)
 JOIN arena_data.die_type d ON d.name = src.die_name;
+
 
 -- Pet class restrictions
 INSERT INTO arena_data.pet_class_restriction (pet_id, class_id)
@@ -363,6 +225,7 @@ FROM (VALUES
 JOIN arena_data.pet p ON p.name = src.pet_name
 JOIN arena_data.class c ON c.name = src.class_name;
 
+
 -- Pet race restrictions (Undead get bats/spiders; Dragon only for Elf/Human)
 INSERT INTO arena_data.pet_race_restriction (pet_id, race_id)
 SELECT p.id, r.id
@@ -375,15 +238,6 @@ FROM (VALUES
 JOIN arena_data.pet p ON p.name = src.pet_name
 JOIN arena_data.race r ON r.name = src.race_name;
 
--- ============================================================
--- WEAPONS TABLE
--- ============================================================
-
-CREATE TABLE IF NOT EXISTS arena_data.weapon_type (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE,
-    description TEXT DEFAULT ''
-);
 
 INSERT INTO arena_data.weapon_type (name, description) VALUES
     ('Hammer',     'One-handed or two-handed crushing weapon.'),
@@ -401,23 +255,63 @@ INSERT INTO arena_data.weapon_type (name, description) VALUES
     ('Spear',      'A versatile polearm for thrusting or throwing.')
 ON CONFLICT (name) DO NOTHING;
 
-CREATE TABLE IF NOT EXISTS arena_data.weapon (
-    id SERIAL PRIMARY KEY,
-    weapon_type_id INTEGER NOT NULL REFERENCES arena_data.weapon_type(id),
-    damage_die_id INTEGER NOT NULL REFERENCES arena_data.die_type(id),
-    damage_type_id INTEGER NOT NULL REFERENCES arena_data.damage_type(id),
-    attack_type_id INTEGER NOT NULL REFERENCES arena_data.attack_type(id),
-    gear_quality_id INTEGER NOT NULL DEFAULT 5 REFERENCES arena_data.gear_quality(id),
-    set_id INTEGER DEFAULT NULL,
-    name VARCHAR(100) NOT NULL,
-    damage_count INTEGER NOT NULL DEFAULT 1,
-    hands INTEGER NOT NULL DEFAULT 1,
-    attack_bonus INTEGER NOT NULL DEFAULT 0,
-    cursed BOOLEAN NOT NULL DEFAULT FALSE,
-    description TEXT DEFAULT '',
-    curse_effect TEXT DEFAULT '',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+
+-- ============================================================
+-- CLASS-ITEM RESTRICTIONS
+-- Mirrors ArchetypeWeaponExtensions in BattleArena.Core.
+-- Class IDs (insertion order): Barbarian=1, Knight=2, Paladin=3, Priest=4,
+--   Mage=5, Bard=6, Druid=7, Fighter=8, Rogue=9
+-- ============================================================
+
+INSERT INTO arena_data.class_item_restriction (class_id, weapon_type_id)
+SELECT c.id, wt.id
+FROM (VALUES
+    -- Dagger: all classes (Priests carry it as a ritual implement)
+    ('Barbarian','Dagger'), ('Knight','Dagger'), ('Paladin','Dagger'), ('Priest','Dagger'),
+    ('Mage','Dagger'),      ('Bard','Dagger'),   ('Druid','Dagger'),   ('Fighter','Dagger'),
+    ('Rogue','Dagger'),
+    -- ShortSword: warriors, bard, rogue
+    ('Barbarian','ShortSword'), ('Knight','ShortSword'), ('Paladin','ShortSword'),
+    ('Bard','ShortSword'),      ('Fighter','ShortSword'), ('Rogue','ShortSword'),
+    -- Sword: warriors, bard, druid, rogue
+    ('Barbarian','Sword'), ('Knight','Sword'), ('Paladin','Sword'),
+    ('Bard','Sword'),      ('Druid','Sword'),  ('Fighter','Sword'), ('Rogue','Sword'),
+    -- Axe: warriors only
+    ('Barbarian','Axe'), ('Knight','Axe'), ('Paladin','Axe'), ('Fighter','Axe'),
+    -- Mace: warriors + divine casters
+    ('Barbarian','Mace'), ('Knight','Mace'), ('Paladin','Mace'),
+    ('Priest','Mace'),    ('Druid','Mace'),  ('Fighter','Mace'),
+    -- Hammer: same as Mace
+    ('Barbarian','Hammer'), ('Knight','Hammer'), ('Paladin','Hammer'),
+    ('Priest','Hammer'),    ('Druid','Hammer'),  ('Fighter','Hammer'),
+    -- MorningStar: warriors + Priest (not Druid)
+    ('Barbarian','MorningStar'), ('Knight','MorningStar'), ('Paladin','MorningStar'),
+    ('Priest','MorningStar'),    ('Fighter','MorningStar'),
+    -- Lance: mounted warriors only
+    ('Barbarian','Lance'), ('Knight','Lance'), ('Paladin','Lance'), ('Fighter','Lance'),
+    -- Spear: warriors, bard, druid
+    ('Barbarian','Spear'), ('Knight','Spear'), ('Paladin','Spear'),
+    ('Bard','Spear'),      ('Druid','Spear'),  ('Fighter','Spear'),
+    -- Staff: all classes (universal)
+    ('Barbarian','Staff'), ('Knight','Staff'), ('Paladin','Staff'), ('Priest','Staff'),
+    ('Mage','Staff'),      ('Bard','Staff'),   ('Druid','Staff'),   ('Fighter','Staff'),
+    ('Rogue','Staff'),
+    -- Wand: mage only
+    ('Mage','Wand'),
+    -- Bow: warriors, bard, rogue
+    ('Barbarian','Bow'), ('Knight','Bow'), ('Paladin','Bow'),
+    ('Bard','Bow'),      ('Fighter','Bow'), ('Rogue','Bow'),
+    -- Crossbow: same as Bow
+    ('Barbarian','Crossbow'), ('Knight','Crossbow'), ('Paladin','Crossbow'),
+    ('Bard','Crossbow'),      ('Fighter','Crossbow'), ('Rogue','Crossbow'),
+    -- Sling: all except Mage
+    ('Barbarian','Sling'), ('Knight','Sling'), ('Paladin','Sling'), ('Priest','Sling'),
+    ('Bard','Sling'),      ('Druid','Sling'),  ('Fighter','Sling'), ('Rogue','Sling')
+) AS src(class_name, wt_name)
+JOIN arena_data.class       c  ON c.name  = src.class_name
+JOIN arena_data.weapon_type wt ON wt.name = src.wt_name
+ON CONFLICT (class_id, weapon_type_id) DO NOTHING;
+
 
 INSERT INTO arena_data.weapon (name, description, weapon_type_id, damage_die_id, damage_type_id, attack_type_id, damage_count, hands, gear_quality_id)
 SELECT src.name, src.description, wt.id, d.id, dt.id, at.id, src.dmg_count, src.hands, gq.id
@@ -467,10 +361,14 @@ JOIN arena_data.damage_type dt ON dt.name = src.dmg_name
 JOIN arena_data.attack_type at ON at.name = src.atk_name
 JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
 
+
 -- Set attack bonuses
 UPDATE arena_data.weapon SET attack_bonus = 3 WHERE name = 'Soul Reaver';
+
 UPDATE arena_data.weapon SET attack_bonus = 2 WHERE name IN ('Stormbringer', 'Dragon''s Fury', 'Shadow Sting', 'Frostbite', 'Sun''s Wrath');
+
 UPDATE arena_data.weapon SET attack_bonus = 1 WHERE name IN ('Bone Crusher', 'Wind Cutter', 'Viper Fang');
+
 
 -- ============================================================
 -- CURSED WEAPONS
@@ -493,6 +391,7 @@ JOIN arena_data.die_type d ON d.name = src.die_name
 JOIN arena_data.damage_type dt ON dt.name = src.dmg_name
 JOIN arena_data.attack_type at ON at.name = src.atk_name
 JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
+
 
 -- ============================================================
 -- RARE / HEIRLOOM WEAPONS
@@ -520,26 +419,6 @@ JOIN arena_data.damage_type dt ON dt.name = src.dmg_name
 JOIN arena_data.attack_type at ON at.name = src.atk_name
 JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
 
--- ============================================================
--- ARMOR
--- ============================================================
-
-CREATE TABLE IF NOT EXISTS arena_data.armor (
-    id SERIAL PRIMARY KEY,
-    armor_category_id INTEGER NOT NULL REFERENCES arena_data.armor_category(id),
-    gear_quality_id INTEGER NOT NULL DEFAULT 5 REFERENCES arena_data.gear_quality(id),
-    set_id INTEGER DEFAULT NULL,
-    name VARCHAR(100) NOT NULL,
-    armor_class INTEGER NOT NULL,
-    max_dexterity_bonus INTEGER NOT NULL DEFAULT 0,
-    stealth_disadvantage BOOLEAN NOT NULL DEFAULT FALSE,
-    strength_requirement INTEGER NOT NULL DEFAULT 0,
-    armor_class_bonus INTEGER NOT NULL DEFAULT 0,
-    cursed BOOLEAN NOT NULL DEFAULT FALSE,
-    description TEXT DEFAULT '',
-    curse_effect TEXT DEFAULT '',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
 
 INSERT INTO arena_data.armor (name, description, armor_class, armor_category_id, max_dexterity_bonus, stealth_disadvantage, strength_requirement, gear_quality_id)
 SELECT src.name, src.description, src.ac, acat.id, src.max_dex, src.stealth, src.str_req, gq.id
@@ -586,46 +465,68 @@ FROM (VALUES
 JOIN arena_data.armor_category acat ON acat.name = src.category_name
 JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
 
+
 -- Set armor_class_bonus for quality items
 UPDATE arena_data.armor SET armor_class_bonus = 2 WHERE name = 'Titan Plate';
+
 UPDATE arena_data.armor SET armor_class_bonus = 1 WHERE name IN ('Dragon Scale Mail', 'Shadow Cloak');
+
 UPDATE arena_data.armor SET armor_class_bonus = 1 WHERE name IN ('Knight''s Honor', 'Mithril Chain');
 
--- Add new columns to armor table (must match C# Armor entity)
-ALTER TABLE arena_data.armor ADD COLUMN IF NOT EXISTS mitigation INTEGER NOT NULL DEFAULT 0;
-ALTER TABLE arena_data.armor ADD COLUMN IF NOT EXISTS turn_meter_penalty INTEGER NOT NULL DEFAULT 0;
-ALTER TABLE arena_data.armor ADD COLUMN IF NOT EXISTS turn_meter_cost_reduction INTEGER NOT NULL DEFAULT 0;
 
 -- Set mitigation values for armor
 UPDATE arena_data.armor SET mitigation = 1 WHERE name IN ('Padded Armor', 'Leather Armor', 'Studded Leather');
+
 UPDATE arena_data.armor SET mitigation = 2 WHERE name IN ('Hide Armor', 'Chain Shirt', 'Scale Mail', 'Breastplate');
+
 UPDATE arena_data.armor SET mitigation = 3 WHERE name IN ('Half Plate', 'Ring Mail', 'Chain Mail');
+
 UPDATE arena_data.armor SET mitigation = 4 WHERE name IN ('Splint Armor');
+
 UPDATE arena_data.armor SET mitigation = 5 WHERE name IN ('Plate Armor');
+
 UPDATE arena_data.armor SET mitigation = 0 WHERE name = 'Shield';
+
 -- Quality armor
 UPDATE arena_data.armor SET mitigation = 2 WHERE name IN ('Mithril Chain');
+
 UPDATE arena_data.armor SET mitigation = 4 WHERE name IN ('Knight''s Honor');
+
 UPDATE arena_data.armor SET mitigation = 6 WHERE name IN ('Titan Plate');
+
 UPDATE arena_data.armor SET mitigation = 3 WHERE name IN ('Dragon Scale Mail');
+
 UPDATE arena_data.armor SET mitigation = 5 WHERE name IN ('Phoenix Carapace', 'Battlesworn Plate');
+
 UPDATE arena_data.armor SET mitigation = 4 WHERE name IN ('Aegis of the Fallen King');
+
 UPDATE arena_data.armor SET mitigation = 0 WHERE name IN ('Shroud of the Whispering Wind');
+
 
 -- Set turn_meter_penalty for armor (heavier armor slows TM gain)
 UPDATE arena_data.armor SET turn_meter_penalty = 0 WHERE armor_category_id = (SELECT id FROM arena_data.armor_category WHERE name = 'Light');
+
 UPDATE arena_data.armor SET turn_meter_penalty = -2 WHERE name IN ('Scale Mail', 'Half Plate');
+
 UPDATE arena_data.armor SET turn_meter_penalty = -3 WHERE name IN ('Ring Mail');
+
 UPDATE arena_data.armor SET turn_meter_penalty = -5 WHERE name IN ('Chain Mail', 'Splint Armor');
+
 UPDATE arena_data.armor SET turn_meter_penalty = -8 WHERE name IN ('Plate Armor');
+
 UPDATE arena_data.armor SET turn_meter_penalty = -2 WHERE name IN ('Shield');
+
 -- Quality armor overrides
 UPDATE arena_data.armor SET turn_meter_penalty = -5 WHERE name IN ('Knight''s Honor', 'Battlesworn Plate');
+
 UPDATE arena_data.armor SET turn_meter_penalty = -10 WHERE name IN ('Titan Plate', 'Aegis of the Fallen King');
+
 UPDATE arena_data.armor SET turn_meter_penalty = -2 WHERE name IN ('Dragon Scale Mail');
+
 
 -- Set turn_meter_cost_reduction (robe-type armor for spellcasters)
 UPDATE arena_data.armor SET turn_meter_cost_reduction = 5 WHERE name IN ('Leather Armor');
+
 
 -- ============================================================
 -- CURSED ARMOR
@@ -644,6 +545,7 @@ FROM (VALUES
 JOIN arena_data.armor_category acat ON acat.name = src.category_name
 JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
 
+
 -- ============================================================
 -- RARE / HEIRLOOM ARMOR
 -- ============================================================
@@ -661,23 +563,6 @@ FROM (VALUES
 JOIN arena_data.armor_category acat ON acat.name = src.category_name
 JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
 
--- Set item set associations (Deity alignments already seeded above)
--- Iron Sentinel: Watchman's Shield, Knight's Honor, Mariner's Plate
--- Shadow Stalker: Shadow Cloak, Shadow Sting, Leather Armor
--- Dragonborn Legacy: Dragon Scale Mail, Dragon's Fury
-
-CREATE TABLE IF NOT EXISTS arena_data.item_set (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL UNIQUE,
-    description TEXT DEFAULT ''
-);
-
-CREATE TABLE IF NOT EXISTS arena_data.set_bonus (
-    id SERIAL PRIMARY KEY,
-    set_id INTEGER NOT NULL REFERENCES arena_data.item_set(id) ON DELETE CASCADE,
-    pieces_required INTEGER NOT NULL CHECK (pieces_required >= 2),
-    effect_description TEXT NOT NULL DEFAULT ''
-);
 
 -- Seed: Item Sets
 INSERT INTO arena_data.item_set (name, description) VALUES
@@ -685,6 +570,7 @@ INSERT INTO arena_data.item_set (name, description) VALUES
     ('Shadow Stalker', 'Dark leather and chain worn by the Nightblades of the undercity. Enhances speed and stealth.'),
     ('Dragonborn Legacy', 'Armor and weapons crafted from the remains of the Great Wyrm Igneel. Provides fire resistance and fury.')
 ON CONFLICT (name) DO NOTHING;
+
 
 -- Set bonuses
 INSERT INTO arena_data.set_bonus (set_id, pieces_required, effect_description)
@@ -700,20 +586,18 @@ FROM (VALUES
 ) AS src(set_name, pieces, effect)
 JOIN arena_data.item_set s ON s.name = src.set_name;
 
+
 -- Link weapons & armor to item sets
 UPDATE arena_data.armor SET set_id = (SELECT id FROM arena_data.item_set WHERE name = 'Iron Sentinel') WHERE name IN ('Knight''s Honor', 'Mariner''s Plate');
+
 UPDATE arena_data.armor SET set_id = (SELECT id FROM arena_data.item_set WHERE name = 'Shadow Stalker') WHERE name IN ('Shadow Cloak', 'Leather Armor');
+
 UPDATE arena_data.armor SET set_id = (SELECT id FROM arena_data.item_set WHERE name = 'Dragonborn Legacy') WHERE name IN ('Dragon Scale Mail');
+
 UPDATE arena_data.weapon SET set_id = (SELECT id FROM arena_data.item_set WHERE name = 'Shadow Stalker') WHERE name IN ('Shadow Sting');
+
 UPDATE arena_data.weapon SET set_id = (SELECT id FROM arena_data.item_set WHERE name = 'Dragonborn Legacy') WHERE name IN ('Dragon''s Fury');
 
--- Armor resistance junction table (created here so seed data can use it)
-CREATE TABLE IF NOT EXISTS arena_data.armor_resistance (
-    id SERIAL PRIMARY KEY,
-    armor_id INTEGER NOT NULL REFERENCES arena_data.armor(id) ON DELETE CASCADE,
-    resistance_type VARCHAR(50) NOT NULL,
-    resistance_value INTEGER NOT NULL DEFAULT 0
-);
 
 -- Seed: Armor Resistances
 INSERT INTO arena_data.armor_resistance (armor_id, resistance_type, resistance_value)
@@ -721,31 +605,11 @@ SELECT a.id, 'Fire', 10
 FROM arena_data.armor a WHERE a.name = 'Dragon Scale Mail'
 AND NOT EXISTS (SELECT 1 FROM arena_data.armor_resistance ar WHERE ar.armor_id = a.id AND ar.resistance_type = 'Fire');
 
--- ============================================================
--- ACCESSORIES (Rings, Amulets, Girdles)
--- Normalised: one reference table for type, one data table for all entries.
--- ============================================================
-
-CREATE TABLE IF NOT EXISTS arena_data.accessory_type (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE
-);
 
 INSERT INTO arena_data.accessory_type (name) VALUES
     ('Ring'), ('Amulet'), ('Girdle')
 ON CONFLICT (name) DO NOTHING;
 
-CREATE TABLE IF NOT EXISTS arena_data.accessory (
-    id SERIAL PRIMARY KEY,
-    accessory_type_id INTEGER NOT NULL REFERENCES arena_data.accessory_type(id),
-    gear_quality_id   INTEGER NOT NULL DEFAULT 5 REFERENCES arena_data.gear_quality(id),
-    name              VARCHAR(100) NOT NULL UNIQUE,
-    effect_type       VARCHAR(50)  NOT NULL DEFAULT 'none',
-    effect_value      INTEGER      NOT NULL DEFAULT 0,
-    cursed            BOOLEAN      NOT NULL DEFAULT FALSE,
-    description       TEXT DEFAULT '',
-    curse_effect      TEXT DEFAULT ''
-);
 
 INSERT INTO arena_data.accessory (name, description, accessory_type_id, gear_quality_id, effect_type, effect_value, cursed, curse_effect)
 SELECT src.name, src.description, atype.id, gq.id, src.effect, src.value, src.cursed, src.curse
@@ -774,460 +638,297 @@ FROM (VALUES
 JOIN arena_data.accessory_type atype ON atype.name = src.type_name
 JOIN arena_data.gear_quality    gq    ON gq.name    = src.quality_name;
 
--- ============================================================
--- NPC CHARACTERS
--- ============================================================
-
-CREATE TABLE IF NOT EXISTS arena_data.npc (
-    id SERIAL PRIMARY KEY,
-    race_id INTEGER NOT NULL REFERENCES arena_data.race(id),
-    class_id INTEGER NOT NULL REFERENCES arena_data.class(id),
-    name VARCHAR(100) NOT NULL,
-    level INTEGER NOT NULL DEFAULT 1,
-    strength INTEGER NOT NULL DEFAULT 10,
-    dexterity INTEGER NOT NULL DEFAULT 10,
-    stamina INTEGER NOT NULL DEFAULT 10,
-    intelligence INTEGER NOT NULL DEFAULT 10,
-    wisdom INTEGER NOT NULL DEFAULT 10,
-    charisma INTEGER NOT NULL DEFAULT 10,
-    is_merchant BOOLEAN NOT NULL DEFAULT FALSE,
-    is_quest_giver BOOLEAN NOT NULL DEFAULT FALSE,
-    is_hostile BOOLEAN NOT NULL DEFAULT FALSE,
-    biography TEXT DEFAULT '',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
 
 INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
 SELECT 'Old Man Kael',    r.id, c.id, 8, 8, 10, 12, 16, 18, 14, FALSE, TRUE, FALSE,
        'A blind seer who speaks in riddles. He knows the location of the Sun''s Wrath and will trade the knowledge for a vial of dragon''s blood.'
 FROM arena_data.race r, arena_data.class c WHERE r.name = 'Human' AND c.name = 'Priest';
 
+
 INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
 SELECT 'Greta Ironhand',  r.id, c.id, 12, 16, 12, 18, 10, 12, 10, TRUE, FALSE, FALSE,
        'A dwarf smith who forged weapons for three kings. She keeps the Soul Reaver hidden beneath her forge, waiting for a worthy champion. She buys and sells all weapons and armor.'
 FROM arena_data.race r, arena_data.class c WHERE r.name = 'Dwarf' AND c.name = 'Fighter';
+
 
 INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
 SELECT 'Shadowmere',      r.id, c.id, 10, 14, 20, 12, 14, 16, 18, FALSE, TRUE, FALSE,
        'The leader of the Nightblades guild. She offers membership to those who prove their worth by retrieving the Shadow Sting from the Crypt of Whispers.'
 FROM arena_data.race r, arena_data.class c WHERE r.name = 'Elf' AND c.name = 'Rogue';
 
+
 INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
 SELECT 'Korg Stonefist',  r.id, c.id, 15, 20, 8, 20, 6, 8, 7, FALSE, FALSE, TRUE,
        'A wandering orc berserker who challenges all who cross his path. Wields a massive maul and wears cursed plate that feeds on his pain.'
 FROM arena_data.race r, arena_data.class c WHERE r.name = 'Orc' AND c.name = 'Barbarian';
+
 
 INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
 SELECT 'Merchant Vex',    r.id, c.id, 6, 10, 14, 10, 16, 12, 16, TRUE, FALSE, FALSE,
        'A kobold trader with a cart full of "authentic" artifacts. Most are fakes, but occasionally she comes across a real treasure. She sells rings, amulets, and girdles.'
 FROM arena_data.race r, arena_data.class c WHERE r.name = 'Kobold' AND c.name = 'Rogue';
 
+
 INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
 SELECT 'High Priestess Luna', r.id, c.id, 14, 10, 12, 14, 16, 20, 18, FALSE, TRUE, FALSE,
        'The head of the Moon temple. She bestows the Amulet of the Archon upon those who complete the pilgrimage to the Moonlit Peak.'
 FROM arena_data.race r, arena_data.class c WHERE r.name = 'Human' AND c.name = 'Priest';
+
 
 INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
 SELECT 'Graveworm',       r.id, c.id, 9, 14, 14, 16, 10, 10, 6, FALSE, FALSE, TRUE,
        'An undead warlord who commands a legion of skeletons in the Bone Fields. He carries Frostbite, the blade that killed him centuries ago.'
 FROM arena_data.race r, arena_data.class c WHERE r.name = 'Undead' AND c.name = 'Fighter';
 
+
 INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
 SELECT 'Lysander the Bard', r.id, c.id, 7, 10, 14, 12, 14, 12, 20, FALSE, TRUE, FALSE,
        'A halfling bard who knows every legend, song, and secret in the realm. He can reveal the location of any legendary item for a price.'
 FROM arena_data.race r, arena_data.class c WHERE r.name = 'Halfling' AND c.name = 'Bard';
+
 
 INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
 SELECT 'Infernal Commander Zoth', r.id, c.id, 18, 22, 14, 20, 16, 14, 16, FALSE, FALSE, TRUE,
        'A demon lord commanding the legions of the Fire Pits. He wields the Stormbringer lance and rides a nightmare steed. The final boss of the Burning Plains.'
 FROM arena_data.race r, arena_data.class c WHERE r.name = 'Demon' AND c.name = 'Knight';
 
+
 INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
 SELECT 'Elder Treant',    r.id, c.id, 20, 20, 8, 22, 14, 20, 14, FALSE, TRUE, FALSE,
        'An ancient treant awakened by the druids of the Deepwood. He grants the Dragon Scale Mail to those who prove they can protect the forest.'
 FROM arena_data.race r, arena_data.class c WHERE r.name = 'Elf' AND c.name = 'Druid';
 
--- ============================================================
--- SPELLS
--- ============================================================
-
-CREATE TABLE IF NOT EXISTS arena_data.spell (
-    id SERIAL PRIMARY KEY,
-    school_id INTEGER NOT NULL REFERENCES arena_data.spell_school(id),
-    damage_die_id INTEGER REFERENCES arena_data.die_type(id),
-    damage_type_id INTEGER REFERENCES arena_data.damage_type(id),
-    attack_type_id INTEGER REFERENCES arena_data.attack_type(id),
-    name VARCHAR(100) NOT NULL UNIQUE,
-    mana_cost INTEGER NOT NULL DEFAULT 5,
-    turn_meter_cost INTEGER NOT NULL DEFAULT 100,
-    spell_level INTEGER NOT NULL DEFAULT 1,
-    damage_count INTEGER NOT NULL DEFAULT 1,
-    attack_bonus INTEGER NOT NULL DEFAULT 0,
-    flat_damage_bonus INTEGER NOT NULL DEFAULT 0,
-    elemental_type VARCHAR(50) DEFAULT 'None',
-    elemental_damage INTEGER NOT NULL DEFAULT 0,
-    description TEXT DEFAULT ''
-);
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT src.name, src.description, s.id, d.id, dt.id, at.id, src.mana, src.tm, src.lvl, src.dmg_cnt, src.atk_bonus, src.flat_dmg, src.elem, src.elem_dmg
-FROM (VALUES
-    ('Blade Barrier',    'A wall of spinning blades.',                 'AoE', 'D8',  'Slashing',    'Spell', 10, 90,  3, 3, 2, 0, 'None', 0),
-    ('Ice Storm',        'Hail and ice pummel the area.',              'AoE', 'D8',  'Ice',         'Spell', 8,  85,  3, 3, 2, 0, 'None', 0),
-    ('Fire Storm',       'A conflagration engulfs the area.',          'AoE', 'D10', 'Fire',        'Spell', 12, 95,  4, 4, 2, 0, 'None', 0),
-    ('Acid Rain',        'Corrosive rain burns all in the area.',      'AoE', 'D6',  'Acid',        'Spell', 9,  80,  3, 3, 1, 0, 'None', 0),
-    ('Lava Hail',        'Molten rock rains from the sky.',            'AoE', 'D12', 'Fire',        'Spell', 15, 100, 5, 4, 3, 0, 'None', 0),
-    ('Lightning Strike', 'A bolt of lightning strikes from above.',    'AoE', 'D10', 'Lightning',   'Spell', 10, 90,  4, 3, 3, 0, 'None', 0),
-    ('Sand Storm',       'Blinding sand scours the battlefield.',      'AoE', 'D6',  'Bludgeoning', 'Spell', 7,  75,  2, 2, 1, 0, 'None', 0),
-    ('Blizzard',         'Freezing winds and snow pelt the area.',     'AoE', 'D8',  'Ice',         'Spell', 10, 85,  4, 3, 2, 0, 'None', 0),
-    ('Blinding Flash',   'A brilliant flash blinds all who see it.',   'AoE', NULL,  NULL,          'Spell', 6,  70,  2, 1, 0, 0, 'None', 0),
-    ('Earthquake',       'The ground shakes violently.',               'AoE', 'D12', 'Bludgeoning', 'Spell', 14, 95,  5, 4, 2, 0, 'None', 0),
-    ('Insect Swarm',     'A cloud of biting insects descends.',        'AoE', 'D4',  'Piercing',    'Spell', 7,  75,  2, 2, 1, 0, 'None', 0),
-    ('Fog of Despair',   'A choking fog that saps morale.',            'AoE', NULL,  NULL,          'Spell', 8,  70,  2, 1, 0, 0, 'None', 0),
-    ('Stun',             'A concussive force that stuns the target.',  'CC',  NULL,  NULL,          'Spell', 5,  65,  2, 1, 0, 0, 'None', 0),
-    ('Sleep',            'Puts the target into a magical slumber.',    'CC',  NULL,  NULL,          'Spell', 6,  60,  1, 1, 0, 0, 'None', 0),
-    ('Charm Enemy',      'Bends an enemy to your will.',               'CC',  NULL,  NULL,          'Spell', 8,  75,  3, 1, 0, 0, 'None', 0),
-    ('Fear',             'Instills overwhelming terror.',              'CC',  NULL,  NULL,          'Spell', 7,  70,  2, 1, 0, 0, 'None', 0),
-    ('Taunt',            'Forces an enemy to attack you.',             'CC',  NULL,  NULL,          'Spell', 4,  55,  1, 1, 0, 0, 'None', 0),
-    ('Freeze',           'Encases the target in ice.',                 'CC',  NULL,  NULL,          'Spell', 7,  75,  3, 1, 0, 0, 'None', 0),
-    ('Confuse',          'Makes the target act erratically.',          'CC',  NULL,  NULL,          'Spell', 6,  70,  2, 1, 0, 0, 'None', 0),
-    ('Provoke',          'Enrages the target, reducing its defenses.', 'CC',  NULL,  NULL,          'Spell', 5,  60,  1, 1, 0, 0, 'None', 0),
-    ('Sacrifice',        'Sacrifice own HP to empower an ally.',       'CC',  NULL,  NULL,          'Spell', 0,  50,  2, 1, 0, 0, 'None', 0),
-    ('Blind',            'Robs the target of sight.',                  'CC',  NULL,  NULL,          'Spell', 5,  65,  2, 1, 0, 0, 'None', 0),
-    ('Root',             'Anchors the target to the ground.',          'CC',  NULL,  NULL,          'Spell', 5,  65,  2, 1, 0, 0, 'None', 0),
-    ('Summon Creature',  'Calls a creature to fight for you.',         'Other', NULL, NULL,         'Spell', 12, 85,  4, 1, 0, 0, 'None', 0)
-) AS src(name, description, school_name, die_name, dmg_name, atk_name, mana, tm, lvl, dmg_cnt, atk_bonus, flat_dmg, elem, elem_dmg)
-JOIN arena_data.spell_school s ON s.name = src.school_name
-LEFT JOIN arena_data.die_type d ON d.name = src.die_name
-LEFT JOIN arena_data.damage_type dt ON dt.name = src.dmg_name
-LEFT JOIN arena_data.attack_type at ON at.name = src.atk_name;
+SELECT 'Blade Barrier', 'A wall of spinning blades.', ss.id, d.id, dt.id, at.id, 10, 90, 3, 3, 2, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
+WHERE ss.name = 'AoE' AND d.name = 'D8' AND dt.name = 'Slashing' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
 
--- Additional spells (not in the main seed, needed by character builds)
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Ice Storm', 'Hail and ice pummel the area.', ss.id, d.id, dt.id, at.id, 8, 85, 3, 3, 2, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
+WHERE ss.name = 'AoE' AND d.name = 'D8' AND dt.name = 'Ice' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Fire Storm', 'A conflagration engulfs the area.', ss.id, d.id, dt.id, at.id, 12, 95, 4, 4, 2, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
+WHERE ss.name = 'AoE' AND d.name = 'D10' AND dt.name = 'Fire' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Acid Rain', 'Corrosive rain burns all in the area.', ss.id, d.id, dt.id, at.id, 9, 80, 3, 3, 1, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
+WHERE ss.name = 'AoE' AND d.name = 'D6' AND dt.name = 'Acid' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Lava Hail', 'Molten rock rains from the sky.', ss.id, d.id, dt.id, at.id, 15, 100, 5, 4, 3, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
+WHERE ss.name = 'AoE' AND d.name = 'D12' AND dt.name = 'Fire' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Lightning Strike', 'A bolt of lightning strikes from above.', ss.id, d.id, dt.id, at.id, 10, 90, 4, 3, 3, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
+WHERE ss.name = 'AoE' AND d.name = 'D10' AND dt.name = 'Lightning' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Sand Storm', 'Blinding sand scours the battlefield.', ss.id, d.id, dt.id, at.id, 7, 75, 2, 2, 1, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
+WHERE ss.name = 'AoE' AND d.name = 'D6' AND dt.name = 'Bludgeoning' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Blizzard', 'Freezing winds and snow pelt the area.', ss.id, d.id, dt.id, at.id, 10, 85, 4, 3, 2, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
+WHERE ss.name = 'AoE' AND d.name = 'D8' AND dt.name = 'Ice' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Earthquake', 'The ground shakes violently.', ss.id, d.id, dt.id, at.id, 14, 95, 5, 4, 2, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
+WHERE ss.name = 'AoE' AND d.name = 'D12' AND dt.name = 'Bludgeoning' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Insect Swarm', 'A cloud of biting insects descends.', ss.id, d.id, dt.id, at.id, 7, 75, 2, 2, 1, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
+WHERE ss.name = 'AoE' AND d.name = 'D4' AND dt.name = 'Piercing' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Blinding Flash', 'A brilliant flash blinds all who see it.', ss.id, NULL, NULL, at.id, 6, 70, 2, 1, 0, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.attack_type at
+WHERE ss.name = 'AoE' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Fog of Despair', 'A choking fog that saps morale.', ss.id, NULL, NULL, at.id, 8, 70, 2, 1, 0, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.attack_type at
+WHERE ss.name = 'AoE' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Stun', 'A concussive force that stuns the target.', ss.id, NULL, NULL, at.id, 5, 65, 2, 1, 0, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.attack_type at
+WHERE ss.name = 'CC' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Sleep', 'Puts the target into a magical slumber.', ss.id, NULL, NULL, at.id, 6, 60, 1, 1, 0, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.attack_type at
+WHERE ss.name = 'CC' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Charm Enemy', 'Bends an enemy to your will.', ss.id, NULL, NULL, at.id, 8, 75, 3, 1, 0, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.attack_type at
+WHERE ss.name = 'CC' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Fear', 'Instills overwhelming terror.', ss.id, NULL, NULL, at.id, 7, 70, 2, 1, 0, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.attack_type at
+WHERE ss.name = 'CC' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Taunt', 'Forces an enemy to attack you.', ss.id, NULL, NULL, at.id, 4, 55, 1, 1, 0, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.attack_type at
+WHERE ss.name = 'CC' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Freeze', 'Encases the target in ice.', ss.id, NULL, NULL, at.id, 7, 75, 3, 1, 0, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.attack_type at
+WHERE ss.name = 'CC' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Confuse', 'Makes the target act erratically.', ss.id, NULL, NULL, at.id, 6, 70, 2, 1, 0, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.attack_type at
+WHERE ss.name = 'CC' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Provoke', 'Enrages the target, reducing its defenses.', ss.id, NULL, NULL, at.id, 5, 60, 1, 1, 0, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.attack_type at
+WHERE ss.name = 'CC' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Sacrifice', 'Sacrifice own HP to empower an ally.', ss.id, NULL, NULL, at.id, 0, 50, 2, 1, 0, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.attack_type at
+WHERE ss.name = 'CC' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Blind', 'Robs the target of sight.', ss.id, NULL, NULL, at.id, 5, 65, 2, 1, 0, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.attack_type at
+WHERE ss.name = 'CC' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Root', 'Anchors the target to the ground.', ss.id, NULL, NULL, at.id, 5, 65, 2, 1, 0, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.attack_type at
+WHERE ss.name = 'CC' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Entangle', 'Calls roots from the ground to hold enemies in place.', ss.id, NULL, NULL, at.id, 5, 70, 2, 1, 0, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.attack_type at
+WHERE ss.name = 'CC' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Curse', 'Lays a dark curse on the target, weakening their resolve.', ss.id, NULL, NULL, at.id, 6, 70, 2, 1, 0, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.attack_type at
+WHERE ss.name = 'CC' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Summon Creature', 'Calls a creature to fight for you.', ss.id, NULL, NULL, at.id, 12, 85, 4, 1, 0, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.attack_type at
+WHERE ss.name = 'Other' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Summon: Spirit Wolf', 'Summons a spirit wolf to protect and fight alongside its master.', ss.id, NULL, NULL, at.id, 12, 100, 4, 1, 0, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.attack_type at
+WHERE ss.name = 'Conjuration' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
 SELECT 'Fireball', 'A blazing orb of fire that explodes on impact.', ss.id, d.id, dt.id, at.id, 8, 90, 3, 3, 2, 0, 'None', 0
-FROM arena_data.spell_school ss
-CROSS JOIN arena_data.die_type d
-CROSS JOIN arena_data.damage_type dt
-CROSS JOIN arena_data.attack_type at
-WHERE ss.name = 'Other' AND d.name = 'D6' AND dt.name = 'Fire' AND at.name = 'Spell'
-AND NOT EXISTS (SELECT 1 FROM arena_data.spell WHERE name = 'Fireball');
+FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
+WHERE ss.name = 'Evocation' AND d.name = 'D6' AND dt.name = 'Fire' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
 
--- ============================================================
--- CHARACTERS TABLE
--- ============================================================
 
-CREATE TABLE IF NOT EXISTS arena_data.character (
-    id SERIAL PRIMARY KEY,
-    race_id INTEGER NOT NULL REFERENCES arena_data.race(id),
-    class_id INTEGER NOT NULL REFERENCES arena_data.class(id),
-    name VARCHAR(100) NOT NULL,
-    level INTEGER NOT NULL DEFAULT 1,
-    strength INTEGER NOT NULL DEFAULT 10,
-    dexterity INTEGER NOT NULL DEFAULT 10,
-    stamina INTEGER NOT NULL DEFAULT 10,
-    intelligence INTEGER NOT NULL DEFAULT 10,
-    wisdom INTEGER NOT NULL DEFAULT 10,
-    charisma INTEGER NOT NULL DEFAULT 10,
-    strength_percentile INTEGER DEFAULT 0,
-    max_hit_points INTEGER NOT NULL DEFAULT 10,
-    current_hit_points INTEGER NOT NULL DEFAULT 10,
-    experience_points INTEGER NOT NULL DEFAULT 0,
-    strike_rating INTEGER NOT NULL DEFAULT 20,
-    turn_speed INTEGER NOT NULL DEFAULT 10,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Ice Bolt', 'A shard of enchanted ice that pierces and slows.', ss.id, d.id, dt.id, at.id, 6, 80, 2, 2, 2, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
+WHERE ss.name = 'Evocation' AND d.name = 'D8' AND dt.name = 'Ice' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
 
-CREATE TABLE IF NOT EXISTS arena_data.character_equipment (
-    id SERIAL PRIMARY KEY,
-    character_id INTEGER NOT NULL REFERENCES arena_data.character(id) ON DELETE CASCADE,
-    slot_id INTEGER NOT NULL REFERENCES arena_data.equipment_slot(id),
-    item_type VARCHAR(10) NOT NULL,
-    item_id INTEGER NOT NULL,
-    UNIQUE (character_id, slot_id)
-);
 
-CREATE TABLE IF NOT EXISTS arena_data.character_inventory (
-    id SERIAL PRIMARY KEY,
-    character_id INTEGER NOT NULL REFERENCES arena_data.character(id) ON DELETE CASCADE,
-    item_type VARCHAR(10) NOT NULL,
-    item_id INTEGER NOT NULL,
-    quantity INTEGER NOT NULL DEFAULT 1
-);
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Shadow Bolt', 'A bolt of shadow energy that drains vitality.', ss.id, d.id, dt.id, at.id, 5, 70, 2, 2, 1, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
+WHERE ss.name = 'Evocation' AND d.name = 'D6' AND dt.name = 'Shadow' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
 
-CREATE TABLE IF NOT EXISTS arena_data.character_spell (
-    id SERIAL PRIMARY KEY,
-    character_id INTEGER NOT NULL REFERENCES arena_data.character(id) ON DELETE CASCADE,
-    spell_id INTEGER NOT NULL REFERENCES arena_data.spell(id) ON DELETE CASCADE,
-    UNIQUE (character_id, spell_id)
-);
 
--- ============================================================
--- SEED: SAMPLE CHARACTERS
--- ============================================================
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Smite', 'A powerful holy strike channelled through the caster.', ss.id, d.id, dt.id, at.id, 8, 85, 3, 2, 3, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
+WHERE ss.name = 'Evocation' AND d.name = 'D8' AND dt.name = 'Holy' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
 
-INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, strength_percentile, max_hit_points, current_hit_points, strike_rating, turn_speed)
-SELECT 'Bruenor Battlehammer', r.id, c.id, 5, 18, 12, 18, 9, 13, 11, 76, 55, 55, 14, 12
-FROM arena_data.race r, arena_data.class c
-WHERE r.name = 'Dwarf' AND c.name = 'Fighter';
 
-INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed)
-SELECT 'Tanis Half-Elven', r.id, c.id, 5, 14, 16, 12, 14, 14, 16, 38, 38, 14, 18
-FROM arena_data.race r, arena_data.class c
-WHERE r.name = 'Elf' AND c.name = 'Rogue';
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Moonfire', 'Sacred moonlight burns unholy enemies and heals allies.', ss.id, d.id, dt.id, at.id, 6, 75, 2, 2, 2, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
+WHERE ss.name = 'Evocation' AND d.name = 'D6' AND dt.name = 'Holy' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
 
-INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, strength_percentile, max_hit_points, current_hit_points, strike_rating, turn_speed)
-SELECT 'Karg Bloodfang', r.id, c.id, 6, 18, 10, 16, 7, 8, 9, 99, 72, 72, 13, 14
-FROM arena_data.race r, arena_data.class c
-WHERE r.name = 'Orc' AND c.name = 'Barbarian';
 
--- Additional playable characters for full 6-hero party demos
-INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed)
-SELECT 'Elara Swiftwind', r.id, c.id, 5, 8, 14, 10, 18, 16, 14, 28, 28, 13, 10
-FROM arena_data.race r, arena_data.class c
-WHERE r.name = 'Elf' AND c.name = 'Mage'
-AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Elara Swiftwind');
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Soul Drain', 'Drains the life force of an enemy to restore the caster.', ss.id, d.id, dt.id, at.id, 7, 80, 3, 2, 1, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
+WHERE ss.name = 'Evocation' AND d.name = 'D6' AND dt.name = 'Shadow' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
 
-INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed)
-SELECT 'Sir Aldric Vane', r.id, c.id, 6, 17, 10, 18, 11, 13, 14, 62, 62, 14, 8
-FROM arena_data.race r, arena_data.class c
-WHERE r.name = 'Human' AND c.name = 'Knight'
-AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Sir Aldric Vane');
-
-INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed)
-SELECT 'Mira Brightholm', r.id, c.id, 4, 10, 14, 12, 15, 17, 16, 34, 34, 14, 12
-FROM arena_data.race r, arena_data.class c
-WHERE r.name = 'Human' AND c.name = 'Priest'
-AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Mira Brightholm');
-
--- ============================================================
--- NPC FLAG + BIOGRAPHY ON CHARACTER TABLE
--- ============================================================
-
-ALTER TABLE arena_data.character ADD COLUMN IF NOT EXISTS npc SMALLINT NOT NULL DEFAULT 0 CHECK (npc IN (0, 1));
-ALTER TABLE arena_data.character ADD COLUMN IF NOT EXISTS biography TEXT DEFAULT '';
-
--- ============================================================
--- SEED: ADDITIONAL CHARACTERS (both heroes and NPCs)
--- ============================================================
-
-INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Brorn Ironarm', r.id, c.id, 6, 18, 10, 18, 8, 10, 9, 68, 68, 13, 10, 0
-FROM arena_data.race r, arena_data.class c
-WHERE r.name = 'Dwarf' AND c.name = 'Barbarian'
-AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Brorn Ironarm');
-
-INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Sylas Moonshadow', r.id, c.id, 5, 10, 16, 10, 17, 14, 15, 30, 30, 14, 16, 0
-FROM arena_data.race r, arena_data.class c
-WHERE r.name = 'Elf' AND c.name = 'Rogue'
-AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Sylas Moonshadow');
-
-INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Captain Aldric', r.id, c.id, 7, 16, 12, 15, 10, 12, 13, 58, 58, 13, 10, 1
-FROM arena_data.race r, arena_data.class c
-WHERE r.name = 'Human' AND c.name = 'Fighter'
-AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Captain Aldric');
-
-INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Sister Marigold', r.id, c.id, 9, 10, 10, 12, 14, 18, 16, 48, 48, 14, 10, 1
-FROM arena_data.race r, arena_data.class c
-WHERE r.name = 'Human' AND c.name = 'Priest'
-AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Sister Marigold');
-
-INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Rorik the Wanderer', r.id, c.id, 8, 18, 10, 18, 8, 10, 9, 90, 90, 13, 10, 1
-FROM arena_data.race r, arena_data.class c
-WHERE r.name = 'Dwarf' AND c.name = 'Barbarian'
-AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Rorik the Wanderer');
-
-INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Selene Nightwhisper', r.id, c.id, 10, 8, 14, 10, 18, 14, 16, 32, 32, 14, 14, 1
-FROM arena_data.race r, arena_data.class c
-WHERE r.name = 'Elf' AND c.name = 'Mage'
-AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Selene Nightwhisper');
-
-INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Grommash Ironhide', r.id, c.id, 12, 20, 10, 18, 7, 8, 10, 112, 112, 13, 10, 1
-FROM arena_data.race r, arena_data.class c
-WHERE r.name = 'Orc' AND c.name = 'Fighter'
-AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Grommash Ironhide');
-
-INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Finn Swift', r.id, c.id, 6, 8, 18, 10, 12, 10, 16, 28, 28, 14, 18, 1
-FROM arena_data.race r, arena_data.class c
-WHERE r.name = 'Halfling' AND c.name = 'Rogue'
-AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Finn Swift');
-
-INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'The Collector', r.id, c.id, 15, 10, 12, 10, 20, 16, 14, 42, 42, 15, 12, 1
-FROM arena_data.race r, arena_data.class c
-WHERE r.name = 'Human' AND c.name = 'Mage'
-AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'The Collector');
-
-INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Morgath the Pale', r.id, c.id, 14, 18, 8, 16, 10, 12, 8, 126, 126, 14, 8, 1
-FROM arena_data.race r, arena_data.class c
-WHERE r.name = 'Undead' AND c.name = 'Knight'
-AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Morgath the Pale');
-
-INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Sizzle', r.id, c.id, 5, 6, 14, 8, 16, 10, 12, 18, 18, 15, 14, 1
-FROM arena_data.race r, arena_data.class c
-WHERE r.name = 'Kobold' AND c.name = 'Mage'
-AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Sizzle');
-
-INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Ivy Thornwood', r.id, c.id, 8, 10, 14, 12, 16, 18, 14, 52, 52, 14, 14, 1
-FROM arena_data.race r, arena_data.class c
-WHERE r.name = 'Elf' AND c.name = 'Druid'
-AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Ivy Thornwood');
-
--- NPC biographies
-
-UPDATE arena_data.character SET biography = 'A retired captain of the City Watch who now runs a small weapons shop in the market district. He lost his left eye to a goblin arrow during the Goblin Wars and claims it gave him better judgment of character.' WHERE name = 'Captain Aldric';
-
-UPDATE arena_data.character SET biography = 'A soft-spoken priestess of the Temple of Light who has healed everything from battlefield wounds to broken hearts. She never turns away the sick or poor, and the temple gardens she tends are the most beautiful in the city.' WHERE name = 'Sister Marigold';
-
-UPDATE arena_data.character SET biography = 'A dwarf who has outlived three clans and drank every tavern dry from the Iron Mountains to the coast. He wanders the realm seeking worthy drinking partners and fights worth remembering. Despite his gruff exterior, he has saved more than one village from bandits.' WHERE name = 'Rorik the Wanderer';
-
-UPDATE arena_data.character SET biography = 'A half-elf enchantress who runs an apothecary and curio shop. Her true specialty lies in identifying magical items and brokering deals between those who have them and those who seek them. She speaks four languages and is never caught off guard.' WHERE name = 'Selene Nightwhisper';
-
-UPDATE arena_data.character SET biography = 'An orc of few words and many kills. He wanders the realm seeking worthy opponents to test his steel against. Despite his fearsome reputation, he has a strict code of honor and has been known to spare foes who yield with dignity.' WHERE name = 'Grommash Ironhide';
-
-UPDATE arena_data.character SET biography = 'A halfling with an infectious grin and a talent for being where he should not be. He runs an information network that spans every tavern and market stall in the city. For a few gold coins, Finn can tell you anything about anyone.' WHERE name = 'Finn Swift';
-
-UPDATE arena_data.character SET biography = 'A mysterious figure cloaked in grey who appears at auctions, estate sales, and archaeological digs across the realm. The Collector buys rare and unusual items — never sells. His vault is rumoured to contain artifacts from the Age of Gods.' WHERE name = 'The Collector';
-
-UPDATE arena_data.character SET biography = 'An undead knight cursed to guard the Tomb of the First King for eternity. He was once a valiant paladin who broke his oath and was sentenced to unending vigilance. He speaks in a hollow whisper and his sword has never rusted.' WHERE name = 'Morgath the Pale';
-
-UPDATE arena_data.character SET biography = 'A kobold with an unhealthy obsession with fire and explosions. Sizzle sells "perfectly safe" fireworks and alchemical mixtures from a stall that has burned down four times. He insists the fires were not his fault.' WHERE name = 'Sizzle';
-
-UPDATE arena_data.character SET biography = 'A forest guardian who protects the ancient groves of the Singing Woods. She trades rare herbs, seeds, and components to those who prove they respect nature. She has not spoken a word in three years — she claims the trees speak enough for her.' WHERE name = 'Ivy Thornwood';
-
--- ============================================================
--- SEED: CHARACTER EQUIPMENT
--- ============================================================
-
--- Weapon assignments
-WITH weapon_map (char_name, slot_name, item_name) AS (VALUES
-    ('Bruenor Battlehammer', 'RightHand', 'Long Sword'),
-    ('Tanis Half-Elven',     'RightHand', 'Short Sword'),
-    ('Karg Bloodfang',       'RightHand', 'Battle Axe'),
-    ('Sir Aldric Vane',      'RightHand', 'Long Sword'),
-    ('Mira Brightholm',      'RightHand', 'Mace'),
-    ('Brorn Ironarm',        'RightHand', 'Maul'),
-    ('Sylas Moonshadow',     'RightHand', 'Short Sword'),
-    ('Captain Aldric',       'RightHand', 'Long Sword'),
-    ('Sister Marigold',      'RightHand', 'Mace'),
-    ('Rorik the Wanderer',   'RightHand', 'Battle Axe'),
-    ('Grommash Ironhide',    'RightHand', 'Great Sword'),
-    ('Finn Swift',           'RightHand', 'Dagger'),
-    ('Sizzle',               'RightHand', 'Dagger'),
-    ('Ivy Thornwood',        'RightHand', 'Quarter Staff')
-)
-INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
-SELECT c.id, es.id, 'weapon', w.id
-FROM weapon_map m
-JOIN arena_data.character c ON c.name = m.char_name
-JOIN arena_data.equipment_slot es ON es.name = m.slot_name
-JOIN arena_data.weapon w ON w.name = m.item_name
-WHERE NOT EXISTS (
-    SELECT 1 FROM arena_data.character_equipment ce
-    WHERE ce.character_id = c.id AND ce.slot_id = es.id
-);
-
--- Chest armor assignments
-WITH armor_map (char_name, slot_name, item_name) AS (VALUES
-    ('Bruenor Battlehammer', 'Chest', 'Chain Mail'),
-    ('Tanis Half-Elven',     'Chest', 'Studded Leather'),
-    ('Karg Bloodfang',       'Chest', 'Hide Armor'),
-    ('Elara Swiftwind',      'Chest', 'Leather Armor'),
-    ('Sir Aldric Vane',      'Chest', 'Plate Armor'),
-    ('Mira Brightholm',      'Chest', 'Chain Shirt'),
-    ('Brorn Ironarm',        'Chest', 'Hide Armor'),
-    ('Sylas Moonshadow',     'Chest', 'Studded Leather'),
-    ('Captain Aldric',       'Chest', 'Chain Mail'),
-    ('Sister Marigold',      'Chest', 'Chain Shirt'),
-    ('Rorik the Wanderer',   'Chest', 'Hide Armor'),
-    ('Selene Nightwhisper',  'Chest', 'Leather Armor'),
-    ('Grommash Ironhide',    'Chest', 'Splint Armor'),
-    ('Finn Swift',           'Chest', 'Leather Armor'),
-    ('The Collector',        'Chest', 'Leather Armor'),
-    ('Morgath the Pale',     'Chest', 'Plate Armor'),
-    ('Sizzle',               'Chest', 'Leather Armor'),
-    ('Ivy Thornwood',        'Chest', 'Leather Armor')
-)
-INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
-SELECT c.id, es.id, 'armor', a.id
-FROM armor_map m
-JOIN arena_data.character c ON c.name = m.char_name
-JOIN arena_data.equipment_slot es ON es.name = m.slot_name
-JOIN arena_data.armor a ON a.name = m.item_name
-WHERE NOT EXISTS (
-    SELECT 1 FROM arena_data.character_equipment ce
-    WHERE ce.character_id = c.id AND ce.slot_id = es.id
-);
-
--- Shield assignments (left hand)
-WITH shield_map (char_name, slot_name, item_name) AS (VALUES
-    ('Bruenor Battlehammer', 'LeftHand', 'Shield'),
-    ('Sir Aldric Vane',      'LeftHand', 'Shield')
-)
-INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
-SELECT c.id, es.id, 'armor', a.id
-FROM shield_map m
-JOIN arena_data.character c ON c.name = m.char_name
-JOIN arena_data.equipment_slot es ON es.name = m.slot_name
-JOIN arena_data.armor a ON a.name = m.item_name
-WHERE NOT EXISTS (
-    SELECT 1 FROM arena_data.character_equipment ce
-    WHERE ce.character_id = c.id AND ce.slot_id = es.id
-);
-
--- ============================================================
--- SEED: CHARACTER SPELLS
--- ============================================================
-
--- Elara Swiftwind (Elf Mage)
-INSERT INTO arena_data.character_spell (character_id, spell_id)
-SELECT c.id, s.id
-FROM arena_data.character c, arena_data.spell s
-WHERE c.name = 'Elara Swiftwind'
-  AND s.name IN ('Blade Barrier', 'Ice Storm', 'Lightning Strike', 'Fireball')
-  AND NOT EXISTS (SELECT 1 FROM arena_data.character_spell cs WHERE cs.character_id = c.id AND cs.spell_id = s.id);
-
--- Selene Nightwhisper (Elf Mage NPC)
-INSERT INTO arena_data.character_spell (character_id, spell_id)
-SELECT c.id, s.id
-FROM arena_data.character c, arena_data.spell s
-WHERE c.name = 'Selene Nightwhisper'
-  AND s.name IN ('Fireball', 'Ice Storm', 'Lightning Strike')
-  AND NOT EXISTS (SELECT 1 FROM arena_data.character_spell cs WHERE cs.character_id = c.id AND cs.spell_id = s.id);
-
--- The Collector (Human Mage NPC)
-INSERT INTO arena_data.character_spell (character_id, spell_id)
-SELECT c.id, s.id
-FROM arena_data.character c, arena_data.spell s
-WHERE c.name = 'The Collector'
-  AND s.name IN ('Blade Barrier', 'Ice Storm', 'Fire Storm', 'Acid Rain', 'Lightning Strike', 'Earthquake', 'Blizzard')
-  AND NOT EXISTS (SELECT 1 FROM arena_data.character_spell cs WHERE cs.character_id = c.id AND cs.spell_id = s.id);
-
--- Sizzle (Kobold Mage NPC)
-INSERT INTO arena_data.character_spell (character_id, spell_id)
-SELECT c.id, s.id
-FROM arena_data.character c, arena_data.spell s
-WHERE c.name = 'Sizzle'
-  AND s.name IN ('Fire Storm', 'Lava Hail')
-  AND NOT EXISTS (SELECT 1 FROM arena_data.character_spell cs WHERE cs.character_id = c.id AND cs.spell_id = s.id);
-
--- Ivy Thornwood (Elf Druid NPC)
-INSERT INTO arena_data.character_spell (character_id, spell_id)
-SELECT c.id, s.id
-FROM arena_data.character c, arena_data.spell s
-WHERE c.name = 'Ivy Thornwood'
-  AND s.name IN ('Insect Swarm', 'Root', 'Blinding Flash')
-  AND NOT EXISTS (SELECT 1 FROM arena_data.character_spell cs WHERE cs.character_id = c.id AND cs.spell_id = s.id);
 
 -- ============================================================
 -- SEED: ADDITIONAL WEAPONS
@@ -1254,6 +955,7 @@ JOIN arena_data.damage_type dt ON dt.name = src.dmg_name
 JOIN arena_data.attack_type at ON at.name = src.atk_name
 JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
 
+
 -- Epic weapons
 
 INSERT INTO arena_data.weapon (name, description, weapon_type_id, damage_die_id, damage_type_id, attack_type_id, damage_count, hands, gear_quality_id, attack_bonus)
@@ -1274,6 +976,7 @@ JOIN arena_data.die_type d ON d.name = src.die_name
 JOIN arena_data.damage_type dt ON dt.name = src.dmg_name
 JOIN arena_data.attack_type at ON at.name = src.atk_name
 JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
+
 
 -- Rare weapons
 
@@ -1296,6 +999,7 @@ JOIN arena_data.damage_type dt ON dt.name = src.dmg_name
 JOIN arena_data.attack_type at ON at.name = src.atk_name
 JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
 
+
 -- Uncommon weapons
 
 INSERT INTO arena_data.weapon (name, description, weapon_type_id, damage_die_id, damage_type_id, attack_type_id, damage_count, hands, gear_quality_id, attack_bonus)
@@ -1316,6 +1020,7 @@ JOIN arena_data.die_type d ON d.name = src.die_name
 JOIN arena_data.damage_type dt ON dt.name = src.dmg_name
 JOIN arena_data.attack_type at ON at.name = src.atk_name
 JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
+
 
 -- Common weapons
 
@@ -1338,6 +1043,7 @@ JOIN arena_data.damage_type dt ON dt.name = src.dmg_name
 JOIN arena_data.attack_type at ON at.name = src.atk_name
 JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
 
+
 -- ============================================================
 -- SEED: ADDITIONAL ARMOR
 -- ============================================================
@@ -1357,6 +1063,7 @@ FROM (VALUES
 JOIN arena_data.armor_category acat ON acat.name = src.category_name
 JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
 
+
 -- Epic armor
 
 INSERT INTO arena_data.armor (name, description, armor_class, armor_category_id, max_dexterity_bonus, stealth_disadvantage, strength_requirement, gear_quality_id, armor_class_bonus)
@@ -1374,6 +1081,7 @@ FROM (VALUES
 ) AS src(name, description, ac, category_name, max_dex, stealth, str_req, quality_name, ac_bonus)
 JOIN arena_data.armor_category acat ON acat.name = src.category_name
 JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
+
 
 -- Rare armor
 
@@ -1393,6 +1101,7 @@ FROM (VALUES
 JOIN arena_data.armor_category acat ON acat.name = src.category_name
 JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
 
+
 -- Uncommon armor
 
 INSERT INTO arena_data.armor (name, description, armor_class, armor_category_id, max_dexterity_bonus, stealth_disadvantage, strength_requirement, gear_quality_id, armor_class_bonus)
@@ -1411,6 +1120,7 @@ FROM (VALUES
 JOIN arena_data.armor_category acat ON acat.name = src.category_name
 JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
 
+
 -- Common armor
 
 INSERT INTO arena_data.armor (name, description, armor_class, armor_category_id, max_dexterity_bonus, stealth_disadvantage, strength_requirement, gear_quality_id)
@@ -1428,6 +1138,7 @@ FROM (VALUES
 ) AS src(name, description, ac, category_name, max_dex, stealth, str_req, quality_name)
 JOIN arena_data.armor_category acat ON acat.name = src.category_name
 JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
+
 
 -- ============================================================
 -- SEED: ADDITIONAL ACCESSORIES
@@ -1448,6 +1159,7 @@ FROM (VALUES
 JOIN arena_data.accessory_type atype ON atype.name = src.type_name
 JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
 
+
 -- Epic accessories
 
 INSERT INTO arena_data.accessory (name, description, accessory_type_id, gear_quality_id, effect_type, effect_value, cursed, curse_effect)
@@ -1462,6 +1174,7 @@ FROM (VALUES
 ) AS src(name, description, type_name, quality_name, effect, value, cursed, curse)
 JOIN arena_data.accessory_type atype ON atype.name = src.type_name
 JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
+
 
 -- Rare accessories
 
@@ -1484,6 +1197,7 @@ FROM (VALUES
 JOIN arena_data.accessory_type atype ON atype.name = src.type_name
 JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
 
+
 -- Uncommon accessories
 
 INSERT INTO arena_data.accessory (name, description, accessory_type_id, gear_quality_id, effect_type, effect_value, cursed, curse_effect)
@@ -1501,6 +1215,7 @@ FROM (VALUES
 ) AS src(name, description, type_name, quality_name, effect, value, cursed, curse)
 JOIN arena_data.accessory_type atype ON atype.name = src.type_name
 JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
+
 
 -- Common accessories
 
@@ -1520,559 +1235,3 @@ FROM (VALUES
 JOIN arena_data.accessory_type atype ON atype.name = src.type_name
 JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
 
--- ============================================================
--- FUNCTIONS
--- ============================================================
-
-CREATE OR REPLACE FUNCTION arena_data.fn_get_races(
-    p_id INTEGER DEFAULT NULL
-)
-RETURNS TABLE(
-    id INTEGER, name VARCHAR, description TEXT,
-    strength_bonus INTEGER, dexterity_bonus INTEGER,
-    stamina_bonus INTEGER, intelligence_bonus INTEGER,
-    wisdom_bonus INTEGER, charisma_bonus INTEGER
-) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT r.id, r.name::VARCHAR, r.description::TEXT,
-           r.strength_bonus, r.dexterity_bonus, r.stamina_bonus,
-           r.intelligence_bonus, r.wisdom_bonus, r.charisma_bonus
-    FROM arena_data.race r
-    WHERE (p_id IS NULL OR r.id = p_id)
-    ORDER BY r.name;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION arena_data.fn_get_subraces(
-    p_race_id INTEGER DEFAULT NULL
-)
-RETURNS TABLE(id INTEGER, race_id INTEGER, name VARCHAR, description TEXT) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT s.id, s.race_id, s.name::VARCHAR, s.description::TEXT
-    FROM arena_data.subrace s
-    WHERE (p_race_id IS NULL OR s.race_id = p_race_id)
-    ORDER BY s.name;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION arena_data.fn_get_race_abilities(
-    p_race_id INTEGER DEFAULT NULL
-)
-RETURNS TABLE(id INTEGER, race_id INTEGER, name VARCHAR, description TEXT) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT sa.id, sa.race_id, sa.name::VARCHAR, sa.description::TEXT
-    FROM arena_data.race_special_ability sa
-    WHERE (p_race_id IS NULL OR sa.race_id = p_race_id)
-    ORDER BY sa.name;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION arena_data.fn_get_classes()
-RETURNS TABLE(id INTEGER, name VARCHAR, description TEXT, hit_die VARCHAR, base_strike_rating INTEGER) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT c.id, c.name::VARCHAR, c.description::TEXT, d.name::VARCHAR AS hit_die, c.base_strike_rating
-    FROM arena_data.class c
-    JOIN arena_data.die_type d ON d.id = c.hit_die_id
-    ORDER BY c.name;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION arena_data.fn_get_weapons(
-    p_id INTEGER DEFAULT NULL,
-    p_type VARCHAR(50) DEFAULT NULL,
-    p_quality VARCHAR(50) DEFAULT NULL
-)
-RETURNS TABLE(
-    id INTEGER, name VARCHAR, description TEXT,
-    weapon_type VARCHAR, damage_die VARCHAR, damage_type VARCHAR,
-    attack_type VARCHAR, damage_count INTEGER, hands INTEGER,
-    quality VARCHAR, attack_bonus INTEGER
-) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT w.id, w.name::VARCHAR, w.description::TEXT,
-           wt.name::VARCHAR AS weapon_type,
-           d.name::VARCHAR AS damage_die,
-           dt.name::VARCHAR AS damage_type,
-           at.name::VARCHAR AS attack_type,
-           w.damage_count, w.hands,
-           gq.name::VARCHAR AS quality,
-           w.attack_bonus
-    FROM arena_data.weapon w
-    JOIN arena_data.weapon_type wt ON wt.id = w.weapon_type_id
-    JOIN arena_data.die_type d ON d.id = w.damage_die_id
-    JOIN arena_data.damage_type dt ON dt.id = w.damage_type_id
-    JOIN arena_data.attack_type at ON at.id = w.attack_type_id
-    JOIN arena_data.gear_quality gq ON gq.id = w.gear_quality_id
-    WHERE (p_id IS NULL OR w.id = p_id)
-      AND (p_type IS NULL OR wt.name = p_type)
-      AND (p_quality IS NULL OR gq.name = p_quality)
-    ORDER BY gq.sort_order, w.name;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION arena_data.fn_get_armor(
-    p_id INTEGER DEFAULT NULL,
-    p_quality VARCHAR(50) DEFAULT NULL
-)
-RETURNS TABLE(
-    id INTEGER, name VARCHAR, description TEXT,
-    armor_class INTEGER, category VARCHAR,
-    max_dexterity_bonus INTEGER, stealth_disadvantage BOOLEAN,
-    strength_requirement INTEGER,
-    quality VARCHAR, armor_class_bonus INTEGER,
-    mitigation INTEGER, turn_meter_penalty INTEGER, turn_meter_cost_reduction INTEGER
-) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT a.id, a.name::VARCHAR, a.description::TEXT,
-           a.armor_class, ac.name::VARCHAR AS category,
-           a.max_dexterity_bonus, a.stealth_disadvantage, a.strength_requirement,
-           gq.name::VARCHAR AS quality,
-           a.armor_class_bonus,
-           a.mitigation, a.turn_meter_penalty, a.turn_meter_cost_reduction
-    FROM arena_data.armor a
-    JOIN arena_data.armor_category ac ON ac.id = a.armor_category_id
-    JOIN arena_data.gear_quality gq ON gq.id = a.gear_quality_id
-    WHERE (p_id IS NULL OR a.id = p_id)
-      AND (p_quality IS NULL OR gq.name = p_quality)
-    ORDER BY gq.sort_order, a.name;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION arena_data.fn_get_spells(
-    p_school VARCHAR(50) DEFAULT NULL
-)
-RETURNS TABLE(
-    id INTEGER, name VARCHAR, description TEXT, school VARCHAR,
-    mana_cost INTEGER, turn_meter_cost INTEGER, spell_level INTEGER,
-    damage_count INTEGER, attack_bonus INTEGER, flat_damage_bonus INTEGER,
-    elemental_type VARCHAR, elemental_damage INTEGER,
-    damage_die VARCHAR, damage_type VARCHAR, attack_type VARCHAR
-) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT s.id, s.name::VARCHAR, s.description::TEXT, ss.name::VARCHAR AS school,
-           s.mana_cost, s.turn_meter_cost, s.spell_level,
-           s.damage_count, s.attack_bonus, s.flat_damage_bonus,
-           s.elemental_type, s.elemental_damage,
-           d.name::VARCHAR AS damage_die,
-           dt.name::VARCHAR AS damage_type,
-           at.name::VARCHAR AS attack_type
-    FROM arena_data.spell s
-    JOIN arena_data.spell_school ss ON ss.id = s.school_id
-    LEFT JOIN arena_data.die_type d ON d.id = s.damage_die_id
-    LEFT JOIN arena_data.damage_type dt ON dt.id = s.damage_type_id
-    LEFT JOIN arena_data.attack_type at ON at.id = s.attack_type_id
-    WHERE (p_school IS NULL OR ss.name = p_school)
-    ORDER BY s.name;
-END;
-$$ LANGUAGE plpgsql;
-
--- ============================================================
--- CHARACTER EQUIPMENT FUNCTIONS
--- ============================================================
-
-CREATE OR REPLACE FUNCTION arena_data.fn_get_character_weapons(p_character_id INTEGER)
-RETURNS TABLE(
-    slot_name VARCHAR,
-    id INTEGER, name VARCHAR, description TEXT,
-    weapon_type VARCHAR, damage_die VARCHAR, damage_type VARCHAR,
-    attack_type VARCHAR, damage_count INTEGER, hands INTEGER,
-    quality VARCHAR, attack_bonus INTEGER
-) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT es.name::VARCHAR AS slot_name,
-           w.id, w.name::VARCHAR, w.description::TEXT,
-           wt.name::VARCHAR AS weapon_type,
-           d.name::VARCHAR AS damage_die,
-           dt.name::VARCHAR AS damage_type,
-           at.name::VARCHAR AS attack_type,
-           w.damage_count, w.hands,
-           gq.name::VARCHAR AS quality,
-           w.attack_bonus
-    FROM arena_data.character_equipment ce
-    JOIN arena_data.equipment_slot es ON es.id = ce.slot_id
-    JOIN arena_data.weapon w ON w.id = ce.item_id AND ce.item_type = 'weapon'
-    JOIN arena_data.weapon_type wt ON wt.id = w.weapon_type_id
-    JOIN arena_data.die_type d ON d.id = w.damage_die_id
-    JOIN arena_data.damage_type dt ON dt.id = w.damage_type_id
-    JOIN arena_data.attack_type at ON at.id = w.attack_type_id
-    JOIN arena_data.gear_quality gq ON gq.id = w.gear_quality_id
-    WHERE ce.character_id = p_character_id
-    ORDER BY es.name;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION arena_data.fn_get_character_armor(p_character_id INTEGER)
-RETURNS TABLE(
-    slot_name VARCHAR,
-    id INTEGER, name VARCHAR, description TEXT,
-    armor_class INTEGER, category VARCHAR,
-    max_dexterity_bonus INTEGER, stealth_disadvantage BOOLEAN,
-    strength_requirement INTEGER, quality VARCHAR, armor_class_bonus INTEGER,
-    mitigation INTEGER, turn_meter_penalty INTEGER, turn_meter_cost_reduction INTEGER
-) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT es.name::VARCHAR AS slot_name,
-           a.id, a.name::VARCHAR, a.description::TEXT,
-           a.armor_class, ac.name::VARCHAR AS category,
-           a.max_dexterity_bonus, a.stealth_disadvantage, a.strength_requirement,
-           gq.name::VARCHAR AS quality,
-           a.armor_class_bonus,
-           a.mitigation, a.turn_meter_penalty, a.turn_meter_cost_reduction
-    FROM arena_data.character_equipment ce
-    JOIN arena_data.equipment_slot es ON es.id = ce.slot_id
-    JOIN arena_data.armor a ON a.id = ce.item_id AND ce.item_type = 'armor'
-    JOIN arena_data.armor_category ac ON ac.id = a.armor_category_id
-    JOIN arena_data.gear_quality gq ON gq.id = a.gear_quality_id
-    WHERE ce.character_id = p_character_id
-    ORDER BY es.name;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION arena_data.fn_get_character_spells(p_character_id INTEGER)
-RETURNS TABLE(
-    id INTEGER, name VARCHAR, description TEXT, school VARCHAR,
-    mana_cost INTEGER, turn_meter_cost INTEGER, spell_level INTEGER,
-    damage_count INTEGER, attack_bonus INTEGER, flat_damage_bonus INTEGER,
-    elemental_type VARCHAR, elemental_damage INTEGER,
-    damage_die VARCHAR, damage_type VARCHAR, attack_type VARCHAR
-) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT s.id, s.name::VARCHAR, s.description::TEXT, ss.name::VARCHAR AS school,
-           s.mana_cost, s.turn_meter_cost, s.spell_level,
-           s.damage_count, s.attack_bonus, s.flat_damage_bonus,
-           s.elemental_type, s.elemental_damage,
-           d.name::VARCHAR AS damage_die,
-           dt.name::VARCHAR AS damage_type,
-           at.name::VARCHAR AS attack_type
-    FROM arena_data.character_spell cs
-    JOIN arena_data.spell s ON s.id = cs.spell_id
-    JOIN arena_data.spell_school ss ON ss.id = s.school_id
-    LEFT JOIN arena_data.die_type d ON d.id = s.damage_die_id
-    LEFT JOIN arena_data.damage_type dt ON dt.id = s.damage_type_id
-    LEFT JOIN arena_data.attack_type at ON at.id = s.attack_type_id
-    WHERE cs.character_id = p_character_id
-    ORDER BY s.name;
-END;
-$$ LANGUAGE plpgsql;
-
--- ============================================================
--- RESISTANCE FUNCTIONS
--- ============================================================
-
-CREATE OR REPLACE FUNCTION arena_data.fn_get_armor_resistances(p_armor_id INTEGER DEFAULT NULL)
-RETURNS TABLE(id INTEGER, armor_id INTEGER, resistance_type VARCHAR, resistance_value INTEGER) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT ar.id, ar.armor_id, ar.resistance_type, ar.resistance_value
-    FROM arena_data.armor_resistance ar
-    WHERE (p_armor_id IS NULL OR ar.armor_id = p_armor_id)
-    ORDER BY ar.resistance_type;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION arena_data.fn_get_feat_resistances(p_feat_id INTEGER DEFAULT NULL)
-RETURNS TABLE(id INTEGER, feat_id INTEGER, resistance_type VARCHAR, resistance_value INTEGER) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT fr.id, fr.feat_id, fr.resistance_type, fr.resistance_value
-    FROM arena_data.feat_resistance fr
-    WHERE (p_feat_id IS NULL OR fr.feat_id = p_feat_id)
-    ORDER BY fr.resistance_type;
-END;
-$$ LANGUAGE plpgsql;
-
--- ============================================================
--- DEITIES
--- ============================================================
-
-CREATE OR REPLACE FUNCTION arena_data.fn_get_deities(
-    p_alignment VARCHAR(50) DEFAULT NULL
-)
-RETURNS TABLE(id INTEGER, name VARCHAR, alignment VARCHAR, description TEXT, domain VARCHAR) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT d.id, d.name::VARCHAR, da.name::VARCHAR AS alignment,
-           d.description::TEXT, d.domain::VARCHAR
-    FROM arena_data.deity d
-    JOIN arena_data.deity_alignment da ON da.id = d.alignment_id
-    WHERE (p_alignment IS NULL OR da.name = p_alignment)
-    ORDER BY d.name;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION arena_data.fn_get_pets(
-    p_class_id INTEGER DEFAULT NULL,
-    p_race_id INTEGER DEFAULT NULL
-)
-RETURNS TABLE(id INTEGER, name VARCHAR, description TEXT, damage_die VARCHAR, armor_class INTEGER, hit_points INTEGER) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT DISTINCT p.id, p.name::VARCHAR, p.description::TEXT,
-           d.name::VARCHAR AS damage_die, p.armor_class, p.hit_points
-    FROM arena_data.pet p
-    JOIN arena_data.die_type d ON d.id = p.damage_die_id
-    LEFT JOIN arena_data.pet_class_restriction pcr ON pcr.pet_id = p.id
-    LEFT JOIN arena_data.pet_race_restriction prr ON prr.pet_id = p.id
-    WHERE (p_class_id IS NULL OR pcr.class_id = p_class_id)
-      AND (p_race_id IS NULL OR prr.race_id = p_race_id)
-    ORDER BY p.name;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION arena_data.fn_get_characters()
-RETURNS TABLE(
-    id INTEGER, name VARCHAR, level INTEGER, race_id INTEGER, class_id INTEGER,
-    strength INTEGER, dexterity INTEGER, stamina INTEGER,
-    intelligence INTEGER, wisdom INTEGER, charisma INTEGER,
-    strength_percentile INTEGER, max_hit_points INTEGER, current_hit_points INTEGER,
-    strike_rating INTEGER, turn_speed INTEGER,
-    npc SMALLINT, biography TEXT,
-    experience_points INTEGER
-) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT c.id, c.name::VARCHAR, c.level, c.race_id, c.class_id,
-           c.strength, c.dexterity, c.stamina,
-           c.intelligence, c.wisdom, c.charisma,
-           c.strength_percentile, c.max_hit_points, c.current_hit_points,
-           c.strike_rating, c.turn_speed,
-           c.npc, c.biography::TEXT,
-           c.experience_points
-    FROM arena_data.character c
-    ORDER BY c.name;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION arena_data.fn_get_character(p_id INTEGER)
-RETURNS TABLE(
-    id INTEGER, name VARCHAR, level INTEGER, race_id INTEGER, class_id INTEGER,
-    strength INTEGER, dexterity INTEGER, stamina INTEGER,
-    intelligence INTEGER, wisdom INTEGER, charisma INTEGER,
-    strength_percentile INTEGER, max_hit_points INTEGER, current_hit_points INTEGER,
-    strike_rating INTEGER, turn_speed INTEGER,
-    npc SMALLINT, biography TEXT,
-    experience_points INTEGER
-) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT c.id, c.name::VARCHAR, c.level, c.race_id, c.class_id,
-           c.strength, c.dexterity, c.stamina,
-           c.intelligence, c.wisdom, c.charisma,
-           c.strength_percentile, c.max_hit_points, c.current_hit_points,
-           c.strike_rating, c.turn_speed,
-           c.npc, c.biography::TEXT,
-           c.experience_points
-    FROM arena_data.character c
-    WHERE c.id = p_id;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION arena_data.fn_create_character(
-    p_name VARCHAR,
-    p_race_id INTEGER,
-    p_class_id INTEGER,
-    p_strength INTEGER,
-    p_dexterity INTEGER,
-    p_stamina INTEGER,
-    p_intelligence INTEGER,
-    p_wisdom INTEGER,
-    p_charisma INTEGER,
-    p_strength_percentile INTEGER DEFAULT 0,
-    p_max_hit_points INTEGER DEFAULT 10,
-    p_npc SMALLINT DEFAULT 0,
-    p_biography TEXT DEFAULT '',
-    p_experience_points INTEGER DEFAULT 0
-)
-RETURNS INTEGER AS $$
-DECLARE
-    v_id INTEGER;
-    v_strike_rating INTEGER;
-BEGIN
-    SELECT base_strike_rating INTO v_strike_rating FROM arena_data.class WHERE id = p_class_id;
-
-    INSERT INTO arena_data.character (
-        name, race_id, class_id, level,
-        strength, dexterity, stamina, intelligence, wisdom, charisma,
-        strength_percentile, max_hit_points, current_hit_points, strike_rating,
-        npc, biography, experience_points
-    ) VALUES (
-        p_name, p_race_id, p_class_id, 1,
-        p_strength, p_dexterity, p_stamina, p_intelligence, p_wisdom, p_charisma,
-        p_strength_percentile, p_max_hit_points, p_max_hit_points, v_strike_rating,
-        p_npc, p_biography, p_experience_points
-    ) RETURNING id INTO v_id;
-
-    RETURN v_id;
-END;
-$$ LANGUAGE plpgsql;
-
--- ============================================================
--- STORED PROCEDURES
--- ============================================================
-
-CREATE OR REPLACE PROCEDURE arena_data.sp_update_character(
-    p_id INTEGER,
-    p_name VARCHAR,
-    p_level INTEGER,
-    p_strength INTEGER,
-    p_dexterity INTEGER,
-    p_stamina INTEGER,
-    p_intelligence INTEGER,
-    p_wisdom INTEGER,
-    p_charisma INTEGER,
-    p_strength_percentile INTEGER DEFAULT 0,
-    p_current_hit_points INTEGER DEFAULT 10,
-    p_npc SMALLINT DEFAULT NULL,
-    p_biography TEXT DEFAULT NULL,
-    p_experience_points INTEGER DEFAULT NULL
-)
-AS $$
-BEGIN
-    UPDATE arena_data.character
-    SET name = p_name,
-        level = p_level,
-        strength = p_strength,
-        dexterity = p_dexterity,
-        stamina = p_stamina,
-        intelligence = p_intelligence,
-        wisdom = p_wisdom,
-        charisma = p_charisma,
-        strength_percentile = p_strength_percentile,
-        current_hit_points = p_current_hit_points,
-        npc = COALESCE(p_npc, npc),
-        biography = COALESCE(p_biography, biography),
-        experience_points = COALESCE(p_experience_points, experience_points),
-        updated_at = NOW()
-    WHERE id = p_id;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE PROCEDURE arena_data.sp_delete_character(p_id INTEGER)
-AS $$
-BEGIN
-    DELETE FROM arena_data.character WHERE id = p_id;
-END;
-$$ LANGUAGE plpgsql;
-
--- ============================================================
--- FEAT FUNCTIONS
--- ============================================================
-
-CREATE OR REPLACE FUNCTION arena_data.fn_get_feats(p_race_id INTEGER DEFAULT NULL)
-RETURNS TABLE(
-    id INTEGER, race_id INTEGER, name VARCHAR, description TEXT
-) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT rsa.id, rsa.race_id, rsa.name::VARCHAR, rsa.description::TEXT
-    FROM arena_data.race_special_ability rsa
-    WHERE (p_race_id IS NULL OR rsa.race_id = p_race_id)
-    ORDER BY rsa.name;
-END;
-$$ LANGUAGE plpgsql;
-
--- ============================================================
--- ITEM SETS
--- ============================================================
-
-CREATE OR REPLACE FUNCTION arena_data.fn_get_item_sets()
-RETURNS TABLE(id INTEGER, name VARCHAR, description TEXT) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT s.id, s.name::VARCHAR, s.description::TEXT
-    FROM arena_data.item_set s
-    ORDER BY s.name;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION arena_data.fn_get_set_bonuses(p_set_id INTEGER DEFAULT NULL)
-RETURNS TABLE(id INTEGER, set_id INTEGER, pieces_required INTEGER, effect_description TEXT) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT sb.id, sb.set_id, sb.pieces_required, sb.effect_description::TEXT
-    FROM arena_data.set_bonus sb
-    WHERE (p_set_id IS NULL OR sb.set_id = p_set_id)
-    ORDER BY sb.pieces_required;
-END;
-$$ LANGUAGE plpgsql;
-
--- ============================================================
--- ACCESSORY FUNCTIONS
--- ============================================================
-
-CREATE OR REPLACE FUNCTION arena_data.fn_get_accessories(
-    p_type VARCHAR(50) DEFAULT NULL
-)
-RETURNS TABLE(
-    id INTEGER, name VARCHAR, description TEXT,
-    accessory_type VARCHAR, quality VARCHAR,
-    effect_type VARCHAR, effect_value INTEGER,
-    cursed BOOLEAN, curse_effect TEXT
-) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT a.id, a.name::VARCHAR, a.description::TEXT,
-           atype.name::VARCHAR AS accessory_type,
-           gq.name::VARCHAR    AS quality,
-           a.effect_type, a.effect_value,
-           a.cursed, a.curse_effect::TEXT
-    FROM arena_data.accessory a
-    JOIN arena_data.accessory_type atype ON atype.id = a.accessory_type_id
-    JOIN arena_data.gear_quality   gq    ON gq.id    = a.gear_quality_id
-    WHERE (p_type IS NULL OR atype.name = p_type)
-    ORDER BY atype.name, gq.sort_order, a.name;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION arena_data.fn_get_npcs(
-    p_merchant BOOLEAN DEFAULT NULL,
-    p_hostile BOOLEAN DEFAULT NULL
-)
-RETURNS TABLE(id INTEGER, name VARCHAR, race_id INTEGER, class_id INTEGER,
-    race VARCHAR, class VARCHAR, level INTEGER,
-    strength INTEGER, dexterity INTEGER, stamina INTEGER,
-    intelligence INTEGER, wisdom INTEGER, charisma INTEGER,
-    is_merchant BOOLEAN, is_quest_giver BOOLEAN, is_hostile BOOLEAN, biography TEXT) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT n.id, n.name::VARCHAR, n.race_id, n.class_id,
-           r.name::VARCHAR AS race, c.name::VARCHAR AS class,
-           n.level, n.strength, n.dexterity, n.stamina,
-           n.intelligence, n.wisdom, n.charisma,
-           n.is_merchant, n.is_quest_giver, n.is_hostile, n.biography::TEXT
-    FROM arena_data.npc n
-    JOIN arena_data.race r ON r.id = n.race_id
-    JOIN arena_data.class c ON c.id = n.class_id
-    WHERE (p_merchant IS NULL OR n.is_merchant = p_merchant)
-      AND (p_hostile IS NULL OR n.is_hostile = p_hostile)
-    ORDER BY n.name;
-END;
-$$ LANGUAGE plpgsql;
-
--- ============================================================
--- pg_cron SETUP
--- pg_cron is configured via cron.database_name=battle-arena_data,
--- so all jobs run directly in this database — no dblink needed.
--- ============================================================
-
-CREATE EXTENSION IF NOT EXISTS pg_cron;
-
--- Vacuum arena tables weekly (Sunday at 2am)
-SELECT cron.schedule('vacuum_weapon',    '0 2 * * 0', 'VACUUM ANALYZE arena_data.weapon');
-SELECT cron.schedule('vacuum_armor',     '0 2 * * 0', 'VACUUM ANALYZE arena_data.armor');
-SELECT cron.schedule('vacuum_race',      '0 2 * * 0', 'VACUUM ANALYZE arena_data.race');
-SELECT cron.schedule('vacuum_character', '0 2 * * 0', 'VACUUM ANALYZE arena_data.character');
-
--- Clean old cron logs daily (1am)
-SELECT cron.schedule('clean_cron_logs', '0 1 * * *',
-    $$DELETE FROM cron.job_run_details WHERE end_time < NOW() - INTERVAL '5 days'$$);

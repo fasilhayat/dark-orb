@@ -40,6 +40,7 @@ static partial class Demo
         ["Damage"] = (e, _) =>
         {
             var cfg = DisplayConfig;
+            if (cfg is null) return;
             var mhp = MaxHp!.TryGetValue(e.ActorName, out var m) ? m : 1;
             CW($"     {e.ActorName}", ConsoleColor.White);
             CW("  takes  ");

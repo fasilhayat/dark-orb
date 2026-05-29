@@ -19,9 +19,9 @@ public static class ArchetypeWeaponExtensions
     private static readonly Dictionary<ArchetypeWeapon, HashSet<int>> _allowedClasses = new()
     {
         // ── Bladed / finesse ─────────────────────────────────────────────────
-        // Daggers are the universal side-arm; every class can carry one.
-        // Exception: strict Priests (ClassId 4) avoid edged weapons.
-        [ArchetypeWeapon.Dagger]     = [1, 2, 3, 5, 6, 7, 8, 9],
+        // Daggers are the universal side-arm; every class can carry one,
+        // including Priests who treat it as a ritual implement / ceremonial blade.
+        [ArchetypeWeapon.Dagger]     = [1, 2, 3, 4, 5, 6, 7, 8, 9],
 
         // Short swords: warriors and rogues only.
         [ArchetypeWeapon.ShortSword] = [1, 2, 3, 6, 8, 9],

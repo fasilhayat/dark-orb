@@ -184,9 +184,23 @@ public class CombatSimulator : ICombatSimulator
                     var qs = actorState.QueuedSpell;
                     actorState.QueuedSpell = null;
                     attackSource  = qs.Spell;
-                    target        = qs.Target;
                     isSpell       = true;
                     tmCost        = 100;
+
+                    // Retarget if original target is no longer alive
+                    if (!qs.Target.IsAlive)
+                    {
+                        var liveEnemies = states
+                            .Where(s => s.PartyIndex != actorState.PartyIndex && s.Character.IsAlive)
+                            .ToList();
+                        if (liveEnemies.Count == 0) break;
+                        var reSelector = actorState.PartyIndex == 0 ? _heroTargetSelector : _enemyTargetSelector;
+                        target = await reSelector.SelectTargetAsync(actorState.Character, liveEnemies.Select(s => s.Character), ct);
+                    }
+                    else
+                    {
+                        target = qs.Target;
+                    }
 
                     // ── MANA DEDUCTION (queued cast) ──────────────────────────
                     if (qs.Spell.ManaCost > 0)

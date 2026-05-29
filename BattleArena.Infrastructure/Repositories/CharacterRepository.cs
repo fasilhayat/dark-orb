@@ -32,7 +32,7 @@ public class CharacterRepository : ICharacterRepository
     public async Task<int> CreateAsync(Character character)
     {
         var result = await _context.ExecuteScalarAsync<int>(
-            "fn_create_character(@p_name, @p_race_id, @p_class_id, @p_strength, @p_dexterity, @p_stamina, @p_intelligence, @p_wisdom, @p_charisma, @p_strength_percentile, @p_max_hit_points, @p_npc, @p_biography, @p_experience_points)",
+            "fn_create_character(@p_name, @p_race_id, @p_class_id, @p_strength, @p_dexterity, @p_stamina, @p_intelligence, @p_wisdom, @p_charisma, @p_strength_percentile, @p_max_hit_points, @p_npc, @p_biography, @p_experience_points, @p_max_mana)",
             new NpgsqlParameter("p_name", character.Name),
             new NpgsqlParameter("p_race_id", character.RaceId),
             new NpgsqlParameter("p_class_id", character.ClassId),
@@ -46,14 +46,15 @@ public class CharacterRepository : ICharacterRepository
             new NpgsqlParameter("p_max_hit_points", character.MaxHitPoints),
             new NpgsqlParameter("p_npc", character.Npc),
             new NpgsqlParameter("p_biography", character.Biography),
-            new NpgsqlParameter("p_experience_points", character.ExperiencePoints));
+            new NpgsqlParameter("p_experience_points", character.ExperiencePoints),
+            new NpgsqlParameter("p_max_mana", character.MaxMana));
         return result;
     }
 
     public async Task UpdateAsync(Character character)
     {
         await _context.ExecuteProcedureAsync(
-            "sp_update_character(@p_id, @p_name, @p_level, @p_strength, @p_dexterity, @p_stamina, @p_intelligence, @p_wisdom, @p_charisma, @p_strength_percentile, @p_current_hit_points, @p_npc, @p_biography, @p_experience_points)",
+            "sp_update_character(@p_id, @p_name, @p_level, @p_strength, @p_dexterity, @p_stamina, @p_intelligence, @p_wisdom, @p_charisma, @p_strength_percentile, @p_current_hit_points, @p_npc, @p_biography, @p_experience_points, @p_max_mana)",
             new NpgsqlParameter("p_id", character.Id),
             new NpgsqlParameter("p_name", character.Name),
             new NpgsqlParameter("p_level", character.Level),
@@ -67,7 +68,8 @@ public class CharacterRepository : ICharacterRepository
             new NpgsqlParameter("p_current_hit_points", character.CurrentHitPoints),
             new NpgsqlParameter("p_npc", character.Npc),
             new NpgsqlParameter("p_biography", character.Biography),
-            new NpgsqlParameter("p_experience_points", character.ExperiencePoints));
+            new NpgsqlParameter("p_experience_points", character.ExperiencePoints),
+            new NpgsqlParameter("p_max_mana", character.MaxMana));
     }
 
     public async Task DeleteAsync(int id)
@@ -121,7 +123,9 @@ public class CharacterRepository : ICharacterRepository
         StrengthPercentile = reader["strength_percentile"] as int? ?? 0,
         Npc = reader["npc"] as short? ?? 0,
         Biography = reader["biography"] as string ?? string.Empty,
-        ExperiencePoints = reader["experience_points"] as int? ?? 0
+        ExperiencePoints = reader["experience_points"] as int? ?? 0,
+        MaxMana = reader["max_mana"] as int? ?? 0,
+        CurrentMana = reader["max_mana"] as int? ?? 0
     };
 
     private static Weapon MapCharacterWeapon(NpgsqlDataReader reader)
@@ -173,6 +177,7 @@ public class CharacterRepository : ICharacterRepository
             "AoE" => SpellSchool.AoE,
             "CC" => SpellSchool.CC,
             "Conjuration" => SpellSchool.Conjuration,
+            "Evocation" => SpellSchool.Evocation,
             _ => SpellSchool.Other
         };
 

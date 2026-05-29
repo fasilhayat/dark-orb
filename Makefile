@@ -58,23 +58,25 @@ up-local: publish
 	@echo Starting local stack (DB + API)...
 	docker compose -f docker-compose.yml -f docker-compose.localdev.yml up -d --build
 
-up-dev: publish
+up-dev: publish publish-demo
 	@echo Starting dev stack (DB + API) then launching demo...
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml --profile demo run --rm battle-arena-demo
 
-demo-dev:
+demo-dev: publish-demo
 	@echo Launching demo (dev)...
-	docker compose -f docker-compose.yml -f docker-compose.dev.yml --profile demo run --rm --build battle-arena-demo
+	docker compose -f docker-compose.yml -f docker-compose.dev.yml build battle-arena-demo
+	docker compose -f docker-compose.yml -f docker-compose.dev.yml --profile demo run --rm battle-arena-demo
 
-up-test: publish
+up-test: publish publish-demo
 	@echo Starting test stack (DB + API) then launching demo...
 	docker compose -f docker-compose.yml -f docker-compose.test.yml up -d --build
 	docker compose -f docker-compose.yml -f docker-compose.test.yml --profile demo run --rm battle-arena-demo
 
-demo-test:
+demo-test: publish-demo
 	@echo Launching demo (test)...
-	docker compose -f docker-compose.yml -f docker-compose.test.yml --profile demo run --rm --build battle-arena-demo
+	docker compose -f docker-compose.yml -f docker-compose.test.yml build battle-arena-demo
+	docker compose -f docker-compose.yml -f docker-compose.test.yml --profile demo run --rm battle-arena-demo
 
 up-preprod: publish
 	@echo Starting preprod stack (DB + API)...
@@ -135,12 +137,11 @@ db-logs:
 
 clean: clean-logs
 	@echo Stopping all environments and removing all volumes...
-	-@docker compose -f docker-compose.yml -p dark-orb- down -v > /dev/null 2>&1
-	-@docker compose -f docker-compose.yml -f docker-compose.localdev.yml -p dark-orb-localdev down -v > /dev/null 2>&1
-	-@docker compose -f docker-compose.yml -f docker-compose.dev.yml -p dark-orb-dev down -v > /dev/null 2>&1
-	-@docker compose -f docker-compose.yml -f docker-compose.test.yml -p dark-orb-test down -v > /dev/null 2>&1
-	-@docker compose -f docker-compose.yml -f docker-compose.preprod.yml -p dark-orb-preprod down -v > /dev/null 2>&1
-	-@docker compose -f docker-compose.yml -f docker-compose.prod.yml -p dark-orb-prod down -v > /dev/null 2>&1
+	@powershell -Command "docker stop dark-orb-localdev-battle-arena-db-1 dark-orb-localdev-battle-arena-api-1 2>$$null; docker rm -f dark-orb-localdev-battle-arena-db-1 dark-orb-localdev-battle-arena-api-1 2>$$null; docker compose -f docker-compose.yml -f docker-compose.localdev.yml -p dark-orb-localdev down -v 2>$$null; docker volume rm dark-orb-localdev_pgdata 2>$$null; exit 0"
+	@powershell -Command "docker stop dark-orb-dev-battle-arena-db-1 dark-orb-dev-battle-arena-api-1 2>$$null; docker rm -f dark-orb-dev-battle-arena-db-1 dark-orb-dev-battle-arena-api-1 2>$$null; docker compose -f docker-compose.yml -f docker-compose.dev.yml -p dark-orb-dev down -v 2>$$null; docker volume rm dark-orb-dev_pgdata 2>$$null; exit 0"
+	@powershell -Command "docker stop dark-orb-test-battle-arena-db-1 dark-orb-test-battle-arena-api-1 2>$$null; docker rm -f dark-orb-test-battle-arena-db-1 dark-orb-test-battle-arena-api-1 2>$$null; docker compose -f docker-compose.yml -f docker-compose.test.yml -p dark-orb-test down -v 2>$$null; docker volume rm dark-orb-test_pgdata 2>$$null; exit 0"
+	@powershell -Command "docker stop dark-orb-preprod-battle-arena-db-1 dark-orb-preprod-battle-arena-api-1 2>$$null; docker rm -f dark-orb-preprod-battle-arena-db-1 dark-orb-preprod-battle-arena-api-1 2>$$null; docker compose -f docker-compose.yml -f docker-compose.preprod.yml -p dark-orb-preprod down -v 2>$$null; docker volume rm dark-orb-preprod_pgdata 2>$$null; exit 0"
+	@powershell -Command "docker stop dark-orb-prod-battle-arena-db-1 dark-orb-prod-battle-arena-api-1 2>$$null; docker rm -f dark-orb-prod-battle-arena-db-1 dark-orb-prod-battle-arena-api-1 2>$$null; docker compose -f docker-compose.yml -f docker-compose.prod.yml -p dark-orb-prod down -v 2>$$null; docker volume rm dark-orb-prod_pgdata 2>$$null; exit 0"
 	@powershell -Command "if (Test-Path 'publish') { Remove-Item -Recurse -Force 'publish'; Write-Host 'Removed publish/' } else { Write-Host 'No publish output to remove.' }"
 	@powershell -Command "if (Test-Path 'publish-demo') { Remove-Item -Recurse -Force 'publish-demo'; Write-Host 'Removed publish-demo/' } else { Write-Host 'No publish-demo output to remove.' }"
 	@powershell -Command "if (Test-Path 'logs') { Get-ChildItem -Path 'logs' -File | Where-Object { $$_.Name -ne '.gitkeep' } | Remove-Item -Force; Write-Host 'logs/ cleared.' }"
