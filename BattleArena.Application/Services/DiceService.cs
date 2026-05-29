@@ -23,6 +23,10 @@ public class DiceService : IDiceService
 
     public int Seed { get; }
 
+    // Not used by the local DiceService (no external logging needed).
+    // Present for interface compatibility with ApiDiceService.
+    public int CurrentTick { get; set; }
+
     public int Roll(DieType dieType)
     {
         var sides = dieType switch

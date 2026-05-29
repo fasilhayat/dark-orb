@@ -27,6 +27,10 @@ public class CombatResult
     public List<CombatLogEntry> Log { get; set; } = new();
     public bool MaxTicksReached { get; set; }
 
+    // Raw API dice-roll HTTP calls made during the simulation (populated only when
+    // the demo uses ApiDiceService). Each entry records the endpoint and result.
+    public List<CombatLogEntry>? DiceLog { get; set; }
+
     // Server-assigned combat ID for traceability and future polling/spectating.
     public Guid CombatId { get; set; } = Guid.NewGuid();
 

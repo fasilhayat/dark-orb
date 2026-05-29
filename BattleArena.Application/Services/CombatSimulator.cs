@@ -68,6 +68,7 @@ public class CombatSimulator : ICombatSimulator
         for (var tick = 1; tick <= maxTicks; tick++)
         {
             ct.ThrowIfCancellationRequested();
+            _dice.CurrentTick = tick;
 
             // ── TICK: advance meters for every living combatant ────────────────
             foreach (var s in states.Where(s => s.Character.IsAlive))

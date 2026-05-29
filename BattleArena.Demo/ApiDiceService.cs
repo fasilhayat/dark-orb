@@ -17,6 +17,9 @@ internal sealed class ApiDiceService : IDiceService
 
     public int Seed => 0; // server generates the randomness
 
+    // Set by CombatSimulator each tick so entries are stamped with the correct tick.
+    public int CurrentTick { get; set; }
+
     /// <summary>All dice calls made during the simulation, in order.</summary>
     public List<CombatLogEntry> DiceLog { get; } = new();
 
@@ -24,7 +27,7 @@ internal sealed class ApiDiceService : IDiceService
     {
         DiceLog.Add(new CombatLogEntry
         {
-            Tick      = 0,
+            Tick      = CurrentTick,
             EventType = "ApiCall",
             ActorName = "API",
             Message   = $"[{DateTime.Now:HH:mm:ss}]  GET {endpoint}  →  {result}"

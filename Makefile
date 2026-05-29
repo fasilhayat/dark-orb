@@ -5,6 +5,7 @@ export ENV
 export COMPOSE_PROJECT_NAME
 
 ENV                  ?= prod
+ENV                  := $(or $(ENV),prod)
 COMPOSE_PROJECT_NAME  = dark-orb-$(ENV)
 COMPOSE               = docker compose -f docker-compose.yml -f docker-compose.$(ENV).yml
 
@@ -134,6 +135,7 @@ db-logs:
 
 clean: clean-logs
 	@echo Stopping all environments and removing all volumes...
+	-docker compose -f docker-compose.yml -p dark-orb- down -v
 	-docker compose -f docker-compose.yml -f docker-compose.localdev.yml -p dark-orb-localdev down -v
 	-docker compose -f docker-compose.yml -f docker-compose.dev.yml -p dark-orb-dev down -v
 	-docker compose -f docker-compose.yml -f docker-compose.test.yml -p dark-orb-test down -v
@@ -141,6 +143,7 @@ clean: clean-logs
 	-docker compose -f docker-compose.yml -f docker-compose.prod.yml -p dark-orb-prod down -v
 	powershell -Command "if (Test-Path 'publish') { Remove-Item -Recurse -Force 'publish'; Write-Host 'Removed publish/' } else { Write-Host 'No publish output to remove.' }"
 	powershell -Command "if (Test-Path 'publish-demo') { Remove-Item -Recurse -Force 'publish-demo'; Write-Host 'Removed publish-demo/' } else { Write-Host 'No publish-demo output to remove.' }"
+	powershell -Command "if (Test-Path 'logs') { Get-ChildItem -Path 'logs' -File | Where-Object { $$_.Name -ne '.gitkeep' } | Remove-Item -Force; Write-Host 'logs/ cleared.' }"
 	@echo Clean complete.
 
 clean-logs:

@@ -101,6 +101,11 @@ static partial class Demo
             CWL($"  ⊘  {e.Message}", ConsoleColor.DarkYellow);
             CWL("  " + new string('~', 65), ConsoleColor.DarkYellow);
         },
+        ["ApiCall"] = (e, _) =>
+        {
+            CW("     ⚡ ", ConsoleColor.DarkCyan);
+            CWL(e.Message, ConsoleColor.DarkCyan);
+        },
     };
 
     // ── Realtime state updates (per event type) ─────────────────────────
@@ -257,6 +262,10 @@ static partial class Demo
                 case "EffectApplied":
                 case "EffectResisted":
                     if (inTurn) turnEvents.Add(e);
+                    break;
+
+                case "ApiCall":
+                    turnEvents.Add(e);
                     break;
 
                 case "SkippedTurn":

@@ -59,6 +59,7 @@ static partial class Demo
             PrintHeader();
             if (replayMode == 'T') PlayTurnBased(); else PlayRealTime();
             PrintSummary();
+            DumpCombatLog();
             return;
         }
 
@@ -162,6 +163,9 @@ static partial class Demo
             enemySelector);
 
         Result = simulator.Simulate(HeroParty, EnemyParty, 500);
+        var diceLog = _apiDiceService?.DiceLog;
+        Result.DiceLog = diceLog?.ToList();
+        MergeDiceLog(Result.Log, diceLog);
 
         if (mode == 'T')
             PlayTurnBased();
@@ -402,6 +406,27 @@ static partial class Demo
                 return;
             }
         }
+    }
+
+    private static void MergeDiceLog(List<CombatLogEntry> log, List<CombatLogEntry>? diceLog)
+    {
+        if (diceLog is not { Count: > 0 }) return;
+
+        int d = 0;
+        var merged = new List<CombatLogEntry>(log.Count + diceLog.Count);
+
+        foreach (var evt in log)
+        {
+            while (d < diceLog.Count && diceLog[d].Tick <= evt.Tick)
+                merged.Add(diceLog[d++]);
+            merged.Add(evt);
+        }
+
+        while (d < diceLog.Count)
+            merged.Add(diceLog[d++]);
+
+        log.Clear();
+        log.AddRange(merged);
     }
 
     private static void DumpCombatLog()

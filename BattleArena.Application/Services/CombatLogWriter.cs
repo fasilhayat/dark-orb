@@ -196,6 +196,11 @@ public static class CombatLogWriter
                     sb.AppendLine($"  [{e.Tick,5}]  *** KNOCKOUT : {e.Message}");
                     lastTick = e.Tick;
                     break;
+
+                case "ApiCall":
+                    sb.AppendLine($"  [{e.Tick,5}]  API  {e.Message}");
+                    lastTick = e.Tick;
+                    break;
             }
         }
 
@@ -274,6 +279,20 @@ public static class CombatLogWriter
                 var app = g.Count(e => e.EventType == "EffectApplied");
                 var res = g.Count(e => e.EventType == "EffectResisted");
                 sb.AppendLine($"    {g.Key,-18} applied {app,3}  resisted {res,3}");
+            }
+            sb.AppendLine();
+        }
+
+        // ── API dice calls ──────────────────────────────────────────────
+        if (result.DiceLog?.Count > 0)
+        {
+            sb.AppendLine();
+            sb.AppendLine("  API DICE ROLLS");
+            sb.AppendLine(thin);
+            foreach (var d in result.DiceLog)
+            {
+                if (d.EventType == "ApiCall")
+                    sb.AppendLine($"  {d.Message}");
             }
             sb.AppendLine();
         }
