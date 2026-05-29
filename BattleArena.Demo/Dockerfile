@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/runtime:8.0-alpine
+FROM mcr.microsoft.com/dotnet/runtime:8.0
 WORKDIR /app
 
 # The publish output is built on the host via `dotnet publish` before Docker runs.
