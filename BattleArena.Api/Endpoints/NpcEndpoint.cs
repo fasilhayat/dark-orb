@@ -6,9 +6,9 @@ public static class NpcEndpoint
 {
     public static void MapNpcEndpoints(this WebApplication app)
     {
-        app.MapGet("/v1/npcs", async (bool? merchant, bool? hostile, INpcRepository npcRepository) =>
+        app.MapGet("/v1/npcs", async (INpcRepository npcRepository) =>
         {
-            var npcs = await npcRepository.GetAllAsync(merchant, hostile);
+            var npcs = await npcRepository.GetAllAsync();
             return Results.Ok(npcs);
         });
     }

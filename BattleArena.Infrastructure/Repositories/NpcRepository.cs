@@ -14,15 +14,9 @@ public class NpcRepository : INpcRepository
         _context = context;
     }
 
-    public async Task<List<Npc>> GetAllAsync(bool? merchant = null, bool? hostile = null)
+    public async Task<List<Npc>> GetAllAsync()
     {
-        var parameters = new List<NpgsqlParameter>();
-        if (merchant.HasValue)
-            parameters.Add(new NpgsqlParameter("p_merchant", merchant.Value));
-        if (hostile.HasValue)
-            parameters.Add(new NpgsqlParameter("p_hostile", hostile.Value));
-
-        return await _context.ExecuteQueryAsync("fn_get_npcs", MapNpc, parameters.ToArray());
+        return await _context.ExecuteQueryAsync("fn_get_npcs", MapNpc);
     }
 
     private static Npc MapNpc(NpgsqlDataReader reader) => new()

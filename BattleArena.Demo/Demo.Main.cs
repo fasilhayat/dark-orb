@@ -20,8 +20,6 @@ static partial class Demo
     private static List<Weapon> ApiWeapons = [];
     private static bool UseApiRoster;
 
-    // API dice-call journal — written to combat log + displayed before playback.
-    internal static List<CombatLogEntry> ApiCallLog { get; } = new();
 
     // ── Block layout constants ────────────────────────────────────────────────────
     internal const int BLOCK_W   = 35;
@@ -144,7 +142,6 @@ static partial class Demo
         // are delegated to the API's /v1/roll/* endpoints via ApiDiceService;
         // otherwise a local seeded DiceService is used.
         _apiDiceService = null;
-        ApiCallLog.Clear();
 
         IDiceService diceSvc;
         if (ApiClient is not null)
@@ -166,14 +163,6 @@ static partial class Demo
             enemySelector);
 
         Result = simulator.Simulate(HeroParty, EnemyParty, 500);
-
-        // Collect dice-roll journal: append entries to combat log so the
-        // text file includes them, and expose via ApiCallLog for the display.
-        if (_apiDiceService?.DiceLog.Count > 0)
-        {
-            ApiCallLog.AddRange(_apiDiceService.DiceLog);
-            Result.Log.AddRange(_apiDiceService.DiceLog);
-        }
 
         if (mode == 'T')
             PlayTurnBased();

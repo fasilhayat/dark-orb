@@ -180,10 +180,6 @@ public static class CombatLogWriter
                     lastTick = e.Tick;
                     break;
 
-                case "ApiCall":
-                    sb.AppendLine($"  {"",5}  ⚡ API  {e.Message}");
-                    break;
-
                 case "TurnEnd":
                     // Mark the end of a turn visually
                     sb.AppendLine($"                    TM after turn: {e.ActorName} → {e.TurnMeterAfter}");
