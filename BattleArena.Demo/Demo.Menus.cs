@@ -60,26 +60,37 @@ static partial class Demo
 
     private static Character PickFighterFromRoster(string label, string? excludedName)
     {
-        var available = ApiRoster.Where(c => c.Name != excludedName && c.Npc == 0).ToList();
         while (true)
         {
             Console.WriteLine();
             CWL($"  Pick {label}:", ConsoleColor.Yellow);
-            for (var i = 0; i < available.Count; i++)
+            for (var i = 0; i < ApiRoster.Count && i < 26; i++)
             {
-                var ch = available[i];
+                var ch = ApiRoster[i];
+                if (ch.Npc != 0) continue;
+                var key = (char)('A' + i);
+                var taken = ch.Name == excludedName;
                 var atk = GetAttackSource(ch);
-                CW($"    [{i + 1,2}]  ", ConsoleColor.Cyan);
-                CW($"{ch.Name,-20}", ConsoleColor.White);
-                CW($"{atk.Name,-16}", ConsoleColor.Yellow);
-                CWL($"  {GetClassName(ch.ClassId),-10} Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}", ConsoleColor.DarkGray);
+                CW($"    [{key}]  ", ConsoleColor.Cyan);
+                CW($"{ch.Name,-20}", taken ? ConsoleColor.DarkGray : ConsoleColor.White);
+                CW($"{atk.Name,-16}", taken ? ConsoleColor.DarkGray : ConsoleColor.Yellow);
+                if (taken)
+                    CWL($"  (already selected)", ConsoleColor.DarkGray);
+                else
+                    CWL($"  {GetClassName(ch.ClassId),-10} Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}", ConsoleColor.DarkGray);
             }
             CW("  > ", ConsoleColor.Cyan);
 
-            var input = Console.ReadLine()?.Trim();
-            if (int.TryParse(input, out var idx) && idx >= 1 && idx <= available.Count)
+            var pick = char.ToUpperInvariant(Console.ReadKey(true).KeyChar);
+            var idx = pick - 'A';
+            if (idx >= 0 && idx < ApiRoster.Count)
             {
-                var ch = available[idx - 1];
+                var ch = ApiRoster[idx];
+                if (ch.Name == excludedName || ch.Npc != 0)
+                {
+                    CWL($"  {ch.Name} is not available. Pick another.", ConsoleColor.DarkYellow);
+                    continue;
+                }
                 CWL($"  → {ch.Name}", ConsoleColor.Cyan);
                 ch.CurrentHitPoints = ch.MaxHitPoints;
                 AttackMap[ch.Name] = GetAttackSource(ch);
@@ -191,12 +202,13 @@ static partial class Demo
             CWL($"\n  BUILD YOUR HERO PARTY  (max {Party.HeroPartyMaxSize})", ConsoleColor.Yellow);
             Console.WriteLine();
 
-            for (var i = 0; i < roster.Count; i++)
+            for (var i = 0; i < roster.Count && i < 26; i++)
             {
+                var key = (char)('A' + i);
                 var ch = roster[i];
                 var picked = selected.Any(s => s.Name == ch.Name);
                 var atk = GetAttackSource(ch);
-                CW($"    [{i + 1,2}]  ", ConsoleColor.Cyan);
+                CW($"    [{key}]  ", ConsoleColor.Cyan);
                 if (picked)
                 {
                     CW($"{ch.Name,-18}", ConsoleColor.Green);
@@ -217,21 +229,22 @@ static partial class Demo
                 CW("  Party : ", ConsoleColor.DarkGray);
                 CWL(string.Join(", ", selected.Select(c => c.Name)), ConsoleColor.Green);
             }
-            CWL("  Enter a number to toggle | press Enter with no number to confirm (need ≥ 1)\n", ConsoleColor.DarkGray);
+            CWL("  Press a letter key to toggle | [Enter] to confirm (need ≥ 1)\n", ConsoleColor.DarkGray);
             CW("  > ", ConsoleColor.Cyan);
 
-            var input = Console.ReadLine()?.Trim();
-
-            if (string.IsNullOrEmpty(input) && selected.Count > 0)
+            var kInfo = Console.ReadKey(true);
+            if (kInfo.Key == ConsoleKey.Enter && selected.Count > 0)
             {
                 foreach (var hero in selected)
                     AttackMap[hero.Name] = GetAttackSource(hero);
                 return selected;
             }
 
-            if (int.TryParse(input, out var idx) && idx >= 1 && idx <= roster.Count)
+            var pick = char.ToUpperInvariant(kInfo.KeyChar);
+            var idx = pick - 'A';
+            if (idx >= 0 && idx < roster.Count)
             {
-                var hero = roster[idx - 1];
+                var hero = roster[idx];
                 var existing = selected.FindIndex(c => c.Name == hero.Name);
                 if (existing >= 0)
                 {

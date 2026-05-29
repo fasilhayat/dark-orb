@@ -20,7 +20,6 @@ static partial class Demo
     private static List<Weapon> ApiWeapons = [];
     private static bool UseApiRoster;
 
-
     // ── Block layout constants ────────────────────────────────────────────────────
     internal const int BLOCK_W   = 35;
     internal const int CONTENT_W = 31;

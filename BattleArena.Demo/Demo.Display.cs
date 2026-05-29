@@ -121,7 +121,11 @@ static partial class Demo
         CWL($"[{src}]", srcCol);
 
         // Roll / stats on one compact line
-        CW("     d20="); CW($"{e.DieRoll,2}", ConsoleColor.DarkGray);
+        if (ApiClient is not null)
+            CW("     ⚡ d20=", ConsoleColor.DarkGray);
+        else
+            CW("     d20=", ConsoleColor.DarkGray);
+        CW($"{e.DieRoll,2}", ConsoleColor.DarkGray);
         CW("  ATK "); CW($"{e.AttackPower}", ConsoleColor.Yellow);
         CW("  →  total "); CW($"{total,2}", ConsoleColor.White);
         CW("   vs  DEF "); CW($"{e.DefensePower}", ConsoleColor.Yellow);

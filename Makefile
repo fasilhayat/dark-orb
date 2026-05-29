@@ -28,9 +28,9 @@ build-no-cache: publish
 	@echo Building Docker containers without cache...
 	docker compose build --no-cache
 
-up: 
+up: publish
 	@echo Building images and starting containers...
-	docker compose up -d
+	docker compose up -d --build
 
 down:
 	@echo Stopping the containers...
@@ -78,7 +78,8 @@ publish:
 build-demo:
 	docker compose build battle-arena-demo
 
-demo: up build-demo
+demo: publish build-demo
+	docker compose --profile demo up -d --build
 	docker compose --profile demo run --rm battle-arena-demo
 
 sync-instructions:

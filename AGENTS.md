@@ -242,3 +242,16 @@ The demo (`BattleArena.Demo`) is split into:
 - The `battle-arena-demo` service uses `profiles: [demo]` — it does not start with a plain `docker compose up`.
 - Use `make demo` or `docker compose --profile demo run --rm battle-arena-demo` to launch the demo.
 - Do not run docker commands without the user's explicit instruction.
+
+---
+
+## 12. Project skills (opencode.jsonc)
+
+Two project-scoped skills are registered in `opencode.jsonc`:
+
+| Skill | File | When to load |
+|-------|------|-------------|
+| `makefile-orchestration` | `.opencode/skills/makefile-orchestration.md` | Docker builds, demo runs, test execution, container management |
+| `combat-mechanics` | `.opencode/skills/combat-mechanics.md` | Combat system changes (attack, damage, TM, effects, resistance, logging) |
+
+Load them explicitly via the skill tool. The combat-mechanics skill contains a `self-update-trigger` for automatic refresh when combat code changes.

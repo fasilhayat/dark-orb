@@ -344,8 +344,8 @@ static partial class Demo
                     Thread.Sleep(delay);
             }
 
-            // Redraw after all events so the viewer sees the final HP/TM result of this turn
-            DrawCombatScreen(states, tickGroup.Key);
+            // Events stay visible — the next tick's DrawCombatScreen will
+            // refresh the HP/TM bars when a new action begins.
             Thread.Sleep(500);
         }
 

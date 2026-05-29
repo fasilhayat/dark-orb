@@ -1,0 +1,15 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "skills": [
+    {
+      "name": "makefile-orchestration",
+      "description": "Use when orchestrating Docker builds, running the demo, running tests, or managing containers via the Makefile.",
+      "location": ".opencode/skills/makefile-orchestration.md"
+    },
+    {
+      "name": "combat-mechanics",
+      "description": "Use when implementing or modifying combat mechanics — attack resolution, damage formula, turn meter, status effects, resistance, dice rolls, or combat logging. Also use when writing combat-related tests.",
+      "location": ".opencode/skills/combat-mechanics.md"
+    }
+  ]
+}
