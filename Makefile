@@ -30,7 +30,7 @@ build-no-cache: publish
 
 up: 
 	@echo Building images and starting containers...
-	docker compose up -d --build
+	docker compose up -d
 
 down:
 	@echo Stopping the containers...
