@@ -274,6 +274,161 @@ public class DemoGuiContractSteps
         Assert.Equal(expectedLabel, actual);
     }
 
+    // ── Spellcaster setup ──────────────────────────────────────────────────────
+
+    [Given(@"a spellcaster and a fighter are set up for GUI contract testing")]
+    public void GivenSpellcasterAndFighter()
+    {
+        var fireball = new Spell
+        {
+            Name          = "Fireball",
+            School        = SpellSchool.Evocation,
+            DamageDie     = DieType.D6,
+            DamageCount   = 3,
+            DamageType    = DamageType.Fire,
+            AttackBonus   = 2,
+            SpellLevel    = 3,
+            TurnMeterCost = 90,
+            ManaCost      = 30
+        };
+        _fighter1 = new Character
+        {
+            Name             = "Lyra",
+            Level            = 5,
+            Strength         = 8,
+            Dexterity        = 14,
+            Intelligence     = 18,
+            StrikeRating     = 13,
+            TurnSpeed        = 10,
+            MaxHitPoints     = 30,
+            CurrentHitPoints = 30,
+            MaxMana          = 165,
+            CurrentMana      = 165,
+            MemorizedSpells  = [fireball]
+        };
+
+        _fighter2 = new Character
+        {
+            Name             = "Gorak",
+            Level            = 4,
+            Strength         = 14,
+            Dexterity        = 10,
+            StrikeRating     = 5,
+            TurnSpeed        = 9,
+            MaxHitPoints     = 45,
+            CurrentHitPoints = 45
+        };
+        _fighter2.Equipment.RightHand = new Weapon
+        {
+            Name        = "Battleaxe",
+            DamageDie   = DieType.D10,
+            DamageCount = 1,
+            DamageType  = DamageType.Slashing,
+            AttackType  = AttackType.Melee,
+            AttackBonus = 1
+        };
+    }
+
+    // ── Spellcaster combat simulation ──────────────────────────────────────────
+
+    [When(@"a spellcaster GUI contract combat is simulated with (\d+) ticks")]
+    public void WhenSpellcasterGuiContractCombatIsSimulated(int maxTicks)
+    {
+        var dice      = new DiceService(seed: 77);
+        var stats     = new CombatStatsService();
+        var combat    = new CombatService(dice, stats);
+        var turnmeter = new TurnmeterService();
+        var effect    = new StatusEffectService();
+        var simulator = new CombatSimulator(combat, turnmeter, effect, dice);
+
+        // AttackSource = null for caster → simulator picks spells via ResolveAttackSource
+        var heroParty = new Party
+        {
+            Name    = "Heroes",
+            Members = [new PartyMember { Character = _fighter1, AttackSource = null }]
+        };
+        var enemyParty = new Party
+        {
+            Name    = "Enemies",
+            Members = [new PartyMember { Character = _fighter2, AttackSource = _fighter2.Equipment.RightHand }]
+        };
+
+        _combatResult = simulator.Simulate(heroParty, enemyParty, maxTicks);
+    }
+
+    // ── Round bar assertions ───────────────────────────────────────────────────
+
+    [Then(@"the round bar contract fields are populated in the combat log")]
+    public void ThenRoundBarFieldsArePopulated()
+    {
+        if (_contract.Screens.RoundBar?.Enabled == false) return;
+
+        var roundStarts = _combatResult.Log.Where(e => e.EventType == "RoundStart").ToList();
+        Assert.NotEmpty(roundStarts);
+
+        foreach (var e in roundStarts)
+        {
+            Assert.True(e.RoundNumber is > 0,
+                $"roundBar.RoundNumber must be > 0 on RoundStart (tick {e.Tick})");
+            Assert.True(e.Tick > 0,
+                $"roundBar.CurrentTick must be > 0 on RoundStart (tick {e.Tick})");
+
+            // tick-in-round formula: ((Tick-1) % 10) + 1 must be in range 1–10
+            var tickInRound = (e.Tick - 1) % 10 + 1;
+            Assert.InRange(tickInRound, 1, 10);
+        }
+
+        // RoundEnd events must also carry RoundNumber
+        var roundEnds = _combatResult.Log.Where(e => e.EventType == "RoundEnd").ToList();
+        Assert.NotEmpty(roundEnds);
+        Assert.All(roundEnds, e => Assert.True(e.RoundNumber is > 0,
+            $"roundBar.RoundNumber must be > 0 on RoundEnd (tick {e.Tick})"));
+    }
+
+    // ── Mana event assertions ──────────────────────────────────────────────────
+
+    [Then(@"the mana event contract fields are populated in the combat log")]
+    public void ThenManaEventFieldsArePopulated()
+    {
+        if (_contract.Screens.ManaEvent?.Enabled == false) return;
+
+        var deducts = _combatResult.Log.Where(e => e.EventType == "ManaDeduct").ToList();
+        Assert.NotEmpty(deducts);
+
+        foreach (var e in deducts)
+        {
+            Assert.False(string.IsNullOrEmpty(e.ActorName), "manaEvent.ActorName must not be empty on ManaDeduct");
+            Assert.True(e.ManaCost is > 0,    $"manaEvent.ManaCost must be > 0 on ManaDeduct (tick {e.Tick})");
+            Assert.True(e.ManaAfter.HasValue,  $"manaEvent.ManaAfter must be set on ManaDeduct (tick {e.Tick})");
+        }
+
+        var regens = _combatResult.Log.Where(e => e.EventType == "ManaRegen").ToList();
+        Assert.NotEmpty(regens);
+
+        foreach (var e in regens)
+        {
+            Assert.False(string.IsNullOrEmpty(e.ActorName), "manaEvent.ActorName must not be empty on ManaRegen");
+            Assert.True(e.ManaRegen.HasValue,  $"manaEvent.ManaRegen must be set on ManaRegen events (tick {e.Tick})");
+            Assert.True(e.ManaAfter.HasValue,  $"manaEvent.ManaAfter must be set on ManaRegen events (tick {e.Tick})");
+        }
+    }
+
+    // ── Spellcaster card assertions ────────────────────────────────────────────
+
+    [Then(@"the spellcaster card spell list fields are satisfied")]
+    public void ThenSpellcasterCardSpellListFieldsSatisfied()
+    {
+        // Verify the contract field SpellListRow is satisfiable: the character exposes MemorizedSpells
+        Assert.NotEmpty(_fighter1.MemorizedSpells);
+        Assert.All(_fighter1.MemorizedSpells, spell =>
+            Assert.False(string.IsNullOrWhiteSpace(spell.Name),
+                "characterCard.SpellListRow: every memorized spell must have a Name"));
+
+        // The fighter has no spells — card row must be blank (empty list, not null)
+        Assert.NotNull(_fighter2.MemorizedSpells);
+        Assert.Empty(_fighter2.MemorizedSpells);
+    }
+
     // ── Helpers ────────────────────────────────────────────────────────────────
 
     private static HashSet<string> RequiredFields(GuiDisplayScreen screen) =>
@@ -291,11 +446,13 @@ internal sealed record GuiDisplayContract(
     [property: JsonPropertyName("screens")]     GuiDisplayScreens Screens);
 
 internal sealed record GuiDisplayScreens(
-    [property: JsonPropertyName("characterCard")] GuiDisplayScreen CharacterCard,
-    [property: JsonPropertyName("attackEvent")]   GuiDisplayScreen AttackEvent,
-    [property: JsonPropertyName("damageEvent")]   GuiDisplayScreen DamageEvent,
-    [property: JsonPropertyName("combatSummary")] GuiDisplayScreen CombatSummary,
-    [property: JsonPropertyName("hitLabels")]     GuiHitLabels     HitLabels);
+    [property: JsonPropertyName("characterCard")] GuiDisplayScreen  CharacterCard,
+    [property: JsonPropertyName("roundBar")]      GuiDisplayScreen? RoundBar,
+    [property: JsonPropertyName("attackEvent")]   GuiDisplayScreen  AttackEvent,
+    [property: JsonPropertyName("manaEvent")]     GuiDisplayScreen? ManaEvent,
+    [property: JsonPropertyName("damageEvent")]   GuiDisplayScreen  DamageEvent,
+    [property: JsonPropertyName("combatSummary")] GuiDisplayScreen  CombatSummary,
+    [property: JsonPropertyName("hitLabels")]     GuiHitLabels      HitLabels);
 
 internal sealed record GuiDisplayScreen(
     [property: JsonPropertyName("enabled")]        bool?                 Enabled,

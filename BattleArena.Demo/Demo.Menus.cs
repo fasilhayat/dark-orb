@@ -70,10 +70,10 @@ static partial class Demo
                 if (ch.Npc != 0) continue;
                 var key = (char)('A' + i);
                 var taken = ch.Name == excludedName;
-                var atk = GetAttackSource(ch);
+                var atkDisplay = GetAttackDisplayName(ch);
                 CW($"    [{key}]  ", ConsoleColor.Cyan);
                 CW($"{ch.Name,-20}", taken ? ConsoleColor.Gray : ConsoleColor.White);
-                CW($"{atk.Name,-16}", taken ? ConsoleColor.Gray : ConsoleColor.Yellow);
+                CW($"{atkDisplay,-16}", taken ? ConsoleColor.Gray : ConsoleColor.Yellow);
                 if (taken)
                     CWL($"  (already selected)", ConsoleColor.Gray);
                 else
@@ -207,18 +207,18 @@ static partial class Demo
                 var key = (char)('A' + i);
                 var ch = roster[i];
                 var picked = selected.Any(s => s.Name == ch.Name);
-                var atk = GetAttackSource(ch);
+                var atkDisplay = GetAttackDisplayName(ch);
                 CW($"    [{key}]  ", ConsoleColor.Cyan);
                 if (picked)
                 {
                     CW($"{ch.Name,-18}", ConsoleColor.Green);
-                    CW($"{atk.Name,-14}", ConsoleColor.Green);
+                    CW($"{atkDisplay,-14}", ConsoleColor.Green);
                     CWL($"  {GetClassName(ch.ClassId),-10} Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}  [✓]", ConsoleColor.Green);
                 }
                 else
                 {
                     CW($"{ch.Name,-18}", ConsoleColor.White);
-                    CW($"{atk.Name,-14}", ConsoleColor.Yellow);
+                    CW($"{atkDisplay,-14}", ConsoleColor.Yellow);
                     CWL($"  {GetClassName(ch.ClassId),-10} Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}", ConsoleColor.Gray);
                 }
             }

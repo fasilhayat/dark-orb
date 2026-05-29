@@ -265,16 +265,25 @@ static partial class Demo
         return UnarmedStrike.Default;
     }
 
-    internal static IAttackSource GetAttackSource(Character character)
+    // Returns null for spellcasters so the simulator picks the best spell each turn.
+    // The equipped weapon is still shown on the card via Character.Equipment.RightHand.
+    internal static IAttackSource? GetAttackSource(Character character)
     {
-        if (character.Equipment.RightHand is { } weapon)
-            return weapon;
+        if (character.MemorizedSpells.Count > 0) return null;
+        if (character.Equipment.RightHand is { } weapon) return weapon;
+        return UnarmedStrike.Default;
+    }
+
+    // For display purposes only — shows the best attack name in the picker list.
+    internal static string GetAttackDisplayName(Character character)
+    {
         if (character.MemorizedSpells.Count > 0)
             return character.MemorizedSpells
                 .OrderByDescending(s => s.AttackBonus)
                 .ThenByDescending(s => s.DamageCount)
-                .First();
-        return UnarmedStrike.Default;
+                .First().Name;
+        if (character.Equipment.RightHand is { } weapon) return weapon.Name;
+        return "Unarmed";
     }
 
     internal static Dictionary<string, CharDisplayState> BuildDisplayStates()

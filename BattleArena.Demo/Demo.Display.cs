@@ -321,12 +321,35 @@ static partial class Demo
         Console.WriteLine();
     }
 
+    // ── DrawRoundBar ──────────────────────────────────────────────────────────────
+
+    private static void DrawRoundBar(int tick)
+    {
+        const int RoundLength = 10;
+        const int BarWidth    = 55;
+
+        int roundNumber  = (tick - 1) / RoundLength + 1;
+        int tickInRound  = (tick - 1) % RoundLength + 1;
+        int filled       = (int)Math.Round((double)tickInRound / RoundLength * BarWidth);
+
+        Console.Write("  ");
+        CW($"ROUND {roundNumber,-2}  ", ConsoleColor.Cyan);
+        CW("[", ConsoleColor.DarkCyan);
+        CW(new string('\u2588', filled), ConsoleColor.Blue);
+        CW(new string('\u2591', BarWidth - filled), ConsoleColor.DarkBlue);
+        CW("]", ConsoleColor.DarkCyan);
+        CW($"  {tickInRound}", ConsoleColor.White);
+        CW(" / ", ConsoleColor.DarkGray);
+        CWL($"{RoundLength} ticks", ConsoleColor.Gray);
+    }
+
     // ── DrawCombatScreen ──────────────────────────────────────────────────────────
 
     internal static void DrawCombatScreen(Dictionary<string, CharDisplayState> states, int tick, string? activeActorName = null)
     {
         Console.Clear();
         PrintHeader();
+        DrawRoundBar(tick);
 
         var heroNames = HeroParty.Members.Select(m => m.Character.Name).ToHashSet(StringComparer.Ordinal);
         var enemyNames = EnemyParty.Members.Select(m => m.Character.Name).ToHashSet(StringComparer.Ordinal);

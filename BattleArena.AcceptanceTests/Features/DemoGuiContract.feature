@@ -71,3 +71,23 @@ Feature: Demo GUI Data Contract
             |     50 |   100 | CRUSHING HIT  |
             |      1 |    10 | SOLID HIT     |
             |      3 |    10 | CRUSHING HIT  |
+
+    # ── Round bar ────────────────────────────────────────────────────────────────
+
+    Scenario: Round bar contract fields are populated in round boundary events
+        Given two standard fighters are set up for GUI contract testing
+        When a GUI contract combat is simulated with 300 ticks
+        Then the round bar contract fields are populated in the combat log
+
+    # ── Mana events ──────────────────────────────────────────────────────────────
+
+    Scenario: Mana event fields are populated when a spellcaster fights
+        Given a spellcaster and a fighter are set up for GUI contract testing
+        When a spellcaster GUI contract combat is simulated with 300 ticks
+        Then the mana event contract fields are populated in the combat log
+
+    # ── Spellcaster card ─────────────────────────────────────────────────────────
+
+    Scenario: Spellcaster character card exposes the spell list for the GUI
+        Given a spellcaster and a fighter are set up for GUI contract testing
+        Then the spellcaster card spell list fields are satisfied

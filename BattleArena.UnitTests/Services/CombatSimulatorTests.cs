@@ -181,3 +181,123 @@ public class CombatSimulatorTests
         }
     }
 }
+
+// ── Spellcaster combat tests ───────────────────────────────────────────────────
+
+public class CombatSimulatorSpellcasterTests
+{
+    // ── helpers ───────────────────────────────────────────────────────────────
+
+    private static (IDiceService Dice, CombatSimulator Simulator) CreateSimulator()
+    {
+        var dice = Substitute.For<IDiceService>();
+        dice.Seed.Returns(99);
+        dice.RollIndex(Arg.Any<int>()).Returns(0);
+        dice.Roll(DieType.D20).Returns(15);   // hits most defenses
+        dice.Roll(DieType.D4).Returns(2);
+        dice.Roll(DieType.D6).Returns(3);
+        dice.Roll(DieType.D8).Returns(4);
+        dice.Roll(DieType.D10).Returns(5);
+        dice.Roll(DieType.D100).Returns(100); // no resistance triggers
+
+        return (dice, new CombatSimulator(
+            new CombatService(dice, new CombatStatsService()),
+            new TurnmeterService(),
+            new StatusEffectService(),
+            dice));
+    }
+
+    private static Character CreateSpellcaster(string name, Spell spell, int manaCost = 0) => new()
+    {
+        Name             = name,
+        ClassId          = 5,
+        Level            = 5,
+        Strength         = 8,
+        Dexterity        = 14,
+        Intelligence     = 18,
+        StrikeRating     = 13,
+        TurnSpeed        = 100,
+        MaxHitPoints     = 30,
+        CurrentHitPoints = 30,
+        MaxMana          = 300,
+        CurrentMana      = 300,
+        MemorizedSpells  = [MakeSpell(spell.Name, manaCost)]
+    };
+
+    private static Character CreateToughTarget(string name) => new()
+    {
+        Name             = name,
+        ClassId          = 8,
+        Level            = 1,
+        Strength         = 10,
+        Dexterity        = 10,
+        Intelligence     = 10,
+        StrikeRating     = 14,
+        TurnSpeed        = 1,
+        MaxHitPoints     = 300,
+        CurrentHitPoints = 300
+    };
+
+    private static Spell MakeSpell(string name, int manaCost = 0) => new()
+    {
+        Name          = name,
+        School        = SpellSchool.Evocation,
+        DamageDie     = DieType.D8,
+        DamageCount   = 2,
+        DamageType    = DamageType.Fire,
+        AttackBonus   = 2,
+        SpellLevel    = 2,
+        TurnMeterCost = 80,
+        ManaCost      = manaCost
+    };
+
+    // ── tests ─────────────────────────────────────────────────────────────────
+
+    [Fact]
+    public void Simulate_SpellcasterWithNullAttackSource_CastsMemorizedSpells()
+    {
+        var (_, simulator) = CreateSimulator();
+        var caster = CreateSpellcaster("Lyra", MakeSpell("Fireball"));
+
+        // Party.Solo leaves AttackSource = null → ResolveAttackSource picks spells
+        var result = simulator.Simulate(Party.Solo(caster), Party.Solo(CreateToughTarget("Dummy")), 30);
+
+        Assert.Contains(result.Log,
+            e => e.EventType == "Attack" && e.ActorName == "Lyra" && e.AttackSourceName == "Fireball");
+    }
+
+    [Fact]
+    public void Simulate_SpellcasterCastingSpells_EmitsManaDeductEvents()
+    {
+        var (_, simulator) = CreateSimulator();
+        var caster = CreateSpellcaster("Mira", MakeSpell("Smite"), manaCost: 20);
+
+        var result = simulator.Simulate(Party.Solo(caster), Party.Solo(CreateToughTarget("Dummy")), 30);
+
+        var deducts = result.Log.Where(e => e.EventType == "ManaDeduct" && e.ActorName == "Mira").ToList();
+        Assert.NotEmpty(deducts);
+        Assert.All(deducts, e =>
+        {
+            Assert.False(string.IsNullOrEmpty(e.ActorName));
+            Assert.True(e.ManaCost is > 0,    $"ManaCost must be > 0 on ManaDeduct (tick {e.Tick})");
+            Assert.True(e.ManaAfter.HasValue,  $"ManaAfter must be set on ManaDeduct (tick {e.Tick})");
+        });
+    }
+
+    [Fact]
+    public void Simulate_SpellcasterWithNullAttackSource_DoesNotUseUnarmedWhileManaAvailable()
+    {
+        var (_, simulator) = CreateSimulator();
+        var caster = CreateSpellcaster("Lyra", MakeSpell("Fireball"), manaCost: 5);
+
+        var result = simulator.Simulate(Party.Solo(caster), Party.Solo(CreateToughTarget("Dummy")), 20);
+
+        var unarmedAttacks = result.Log
+            .Where(e => e.EventType == "Attack" && e.ActorName == "Lyra"
+                     && (e.AttackSourceName == "Unarmed" || e.AttackSourceName == UnarmedStrike.Default.Name))
+            .ToList();
+
+        // With 300 mana and manaCost 5, caster can cast 60 times — no fallback to unarmed in 20 ticks
+        Assert.Empty(unarmedAttacks);
+    }
+}
