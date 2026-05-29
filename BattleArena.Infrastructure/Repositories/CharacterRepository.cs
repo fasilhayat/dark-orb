@@ -172,6 +172,7 @@ public class CharacterRepository : ICharacterRepository
         {
             "AoE" => SpellSchool.AoE,
             "CC" => SpellSchool.CC,
+            "Conjuration" => SpellSchool.Conjuration,
             _ => SpellSchool.Other
         };
 

@@ -13,6 +13,9 @@ static partial class Demo
     // ── Services ──────────────────────────────────────────────────────────────────
     private static readonly CombatStatsService CombatStats = new();
 
+    // ── GUI display configuration (loaded from gui-display-contract.json) ─────────
+    internal static GuiDisplayConfig DisplayConfig { get; private set; } = GuiDisplayConfig.Default;
+
     // ── Optional API connection ───────────────────────────────────────────────────
     private static BattleArenaApiClient? ApiClient;
     private static ApiDiceService? _apiDiceService;
@@ -41,6 +44,7 @@ static partial class Demo
 
     internal static void Run()
     {
+        DisplayConfig = GuiDisplayConfig.Load();
         ConnectApi();
         PickDataSource();
         InitializeData();
@@ -247,6 +251,7 @@ static partial class Demo
         ResetCombatant(Krag);
         ResetCombatant(Skrix);
         ResetCombatant(Mordak);
+        ResetCombatant(Zarath);
     }
 
     internal static IAttackSource GetSheetAttackSource(Character character, IAttackSource? attackSource)
@@ -298,6 +303,41 @@ static partial class Demo
                 Mana = m.Character.CurrentMana
             };
         return dict;
+    }
+
+    internal static void EnsureSummonedPetDisplayState(Dictionary<string, CharDisplayState> states, CombatLogEntry entry)
+    {
+        if (string.IsNullOrWhiteSpace(entry.SummonedPetName) || states.ContainsKey(entry.SummonedPetName))
+            return;
+
+        var pet = FindSummonedPet(entry.SummonedPetName);
+        var isHero = states.TryGetValue(entry.ActorName, out var summonerState)
+            ? summonerState.IsHero
+            : HeroParty.Members.Any(m => m.Character.Name == entry.ActorName);
+        var maxHp = pet?.MaxHitPoints ?? 1;
+        var weaponName = pet is null ? string.Empty : $"{pet.Name}'s Attack";
+
+        MaxHp[entry.SummonedPetName] = maxHp;
+        CurHp[entry.SummonedPetName] = maxHp;
+        states[entry.SummonedPetName] = new CharDisplayState
+        {
+            Name = entry.SummonedPetName,
+            MaxHp = maxHp,
+            Hp = maxHp,
+            IsHero = isHero,
+            Weapon = weaponName,
+            MaxMana = 0,
+            Mana = 0
+        };
+    }
+
+    private static Pet? FindSummonedPet(string petName)
+    {
+        var roster = AllHeroes.Values.Concat([Krag, Skrix, Mordak, Zarath]);
+        return roster
+            .SelectMany(character => character.MemorizedSpells)
+            .Select(spell => spell.SummonedPet)
+            .FirstOrDefault(pet => pet is not null && string.Equals(pet.Name, petName, StringComparison.OrdinalIgnoreCase));
     }
 
     internal static string Sign(int n) => n >= 0 ? "+" : "";

@@ -15,6 +15,7 @@ public class StatusEffect
     public int AttackPowerModifier { get; set; }
     public int DefensePowerModifier { get; set; }
     public int TurnMeterModifier { get; set; }
+    public int ManaRegenModifier { get; set; }
     public int DamagePerTurn { get; set; }
     public int ApplicationChance { get; set; } = 100;
     public ResistanceType ResistanceType { get; set; } = ResistanceType.Magic;

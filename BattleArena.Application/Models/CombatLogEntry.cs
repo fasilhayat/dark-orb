@@ -60,4 +60,6 @@ public class CombatLogEntry
     // The character currently taking their turn (null between turns).
     // Set by the simulator on every entry so consumers never have to track it.
     public string? ActiveActorName { get; set; }
+    public int? RoundNumber { get; set; }
+    public string? SummonedPetName { get; set; }
 }

@@ -12,6 +12,16 @@ static partial class Demo
 
     private static readonly Dictionary<string, DisplayHandler> _display = new()
     {
+        ["RoundStart"] = (e, _) =>
+        {
+            Console.WriteLine();
+            CWL($"  ══════════════════ ROUND {e.RoundNumber} ══════════════════", ConsoleColor.Yellow);
+        },
+        ["RoundEnd"] = (e, _) =>
+        {
+            CWL($"  ── end of round {e.RoundNumber} ──────────────────────────", ConsoleColor.Gray);
+            Console.WriteLine();
+        },
         ["TurnStart"] = (e, states) =>
         {
             var tgtSt = states.GetValueOrDefault(e.TargetName ?? "");
@@ -29,18 +39,34 @@ static partial class Demo
         ["Attack"] = (e, _) => PrintAttack(e),
         ["Damage"] = (e, _) =>
         {
+            var cfg = DisplayConfig;
             var mhp = MaxHp!.TryGetValue(e.ActorName, out var m) ? m : 1;
             CW($"     {e.ActorName}", ConsoleColor.White);
             CW("  takes  ");
-            CW($"{e.DamageDealt}", ConsoleColor.Red);
+            if (cfg.IsFieldEnabled("damageEvent", "DamageDealt"))
+                CW($"{e.DamageDealt}", ConsoleColor.Red);
             CW("  damage   ");
-            CW("[", ConsoleColor.Gray);
-            CW($"{e.TargetHpBefore}", ConsoleColor.Gray);
-            CW(" → ", ConsoleColor.Gray);
-            CW($"{Math.Max(0, e.TargetHpAfter ?? 0)}", HpColorInline(e.TargetHpAfter ?? 0, mhp));
-            CW("/", ConsoleColor.Gray);
-            CW($"{mhp}", ConsoleColor.Gray);
-            CWL(" HP]", ConsoleColor.Gray);
+            if (cfg.IsFieldEnabled("damageEvent", "TargetHpBefore") ||
+                cfg.IsFieldEnabled("damageEvent", "TargetHpAfter"))
+            {
+                CW("[", ConsoleColor.Gray);
+                if (cfg.IsFieldEnabled("damageEvent", "TargetHpBefore"))
+                {
+                    CW($"{e.TargetHpBefore}", ConsoleColor.Gray);
+                    CW(" → ", ConsoleColor.Gray);
+                }
+                if (cfg.IsFieldEnabled("damageEvent", "TargetHpAfter"))
+                {
+                    CW($"{Math.Max(0, e.TargetHpAfter ?? 0)}", HpColorInline(e.TargetHpAfter ?? 0, mhp));
+                    CW("/", ConsoleColor.Gray);
+                    CW($"{mhp}", ConsoleColor.Gray);
+                }
+                CWL(" HP]", ConsoleColor.Gray);
+            }
+            else
+            {
+                Console.WriteLine();
+            }
         },
         ["FumblePenalty"] = (e, _) =>
         {
@@ -76,6 +102,17 @@ static partial class Demo
             CW(e.StatusEffectName ?? "", ConsoleColor.Green);
             CW("  has worn off  ");
             CWL(e.ActorName, CharColor(e.ActorName, e.ActiveActorName));
+        },
+        ["PetSummoned"] = (e, _) =>
+        {
+            CW("  ✦ ", ConsoleColor.Magenta);
+            CW(e.SummonedPetName ?? "Unknown pet", ConsoleColor.White);
+            CWL(" has been summoned!", ConsoleColor.Magenta);
+        },
+        ["PetExpired"] = (e, _) =>
+        {
+            CW("  ✦ ", ConsoleColor.Gray);
+            CWL($"{e.SummonedPetName} fades away...", ConsoleColor.Gray);
         },
         ["SkippedTurn"] = (e, _) =>
         {
@@ -162,6 +199,15 @@ static partial class Demo
             if (states.TryGetValue(e.ActorName, out var st) && e.ManaAfter.HasValue)
                 st.Mana = e.ManaAfter.Value;
         },
+        ["PetSummoned"] = (e, states) => EnsureSummonedPetDisplayState(states, e),
+        ["PetExpired"] = (e, states) =>
+        {
+            if (!string.IsNullOrWhiteSpace(e.SummonedPetName) && states.TryGetValue(e.SummonedPetName, out var st))
+            {
+                st.Hp = 0;
+                st.IsAlive = false;
+            }
+        },
     };
 
     // ── Realtime display delays (ms after each event) ──────────────────
@@ -176,6 +222,10 @@ static partial class Demo
         ["EffectApplied"] = 700,
         ["EffectResisted"]= 700,
         ["EffectExpired"] = 500,
+        ["PetSummoned"]   = 700,
+        ["PetExpired"]    = 700,
+        ["RoundStart"]    = 700,
+        ["RoundEnd"]      = 500,
         ["SkippedTurn"]   = 900,
         ["FumblePenalty"] = 600,
         ["Death"]         = 1800,
@@ -287,6 +337,23 @@ static partial class Demo
                 case "EffectApplied":
                 case "EffectResisted":
                     if (inTurn) turnEvents.Add(e);
+                    break;
+
+                case "RoundStart":
+                case "RoundEnd":
+                case "PetSummoned":
+                case "PetExpired":
+                    if (e.EventType == "PetSummoned")
+                        EnsureSummonedPetDisplayState(states, e);
+                    else if (e.EventType == "PetExpired" && !string.IsNullOrWhiteSpace(e.SummonedPetName)
+                        && states.TryGetValue(e.SummonedPetName, out var summonedPet))
+                    {
+                        summonedPet.Hp = 0;
+                        summonedPet.IsAlive = false;
+                    }
+
+                    if (inTurn) turnEvents.Add(e);
+                    else pendingMessages.Add(e);
                     break;
 
                 case "ApiCall":

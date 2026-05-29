@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="gui-display-contract.json" />
+    <Content Include="gui-display-contract.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="appsettings.json" />
     <None Remove="appsettings.LocalDev.json" />
     <None Remove="appsettings.Development.json" />

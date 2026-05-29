@@ -110,6 +110,7 @@ static partial class Demo
 
     internal static void PrintAttack(CombatLogEntry e)
     {
+        var cfg = DisplayConfig;
         var total  = (e.DieRoll ?? 0) + (e.AttackPower ?? 0);
         var margin = total - (e.DefensePower ?? 0);
         var src    = e.AttackSourceName ?? "Unknown";
@@ -121,61 +122,82 @@ static partial class Demo
         CW(e.IsSpell ? "  casts  " : "  attacks with  ");
         CWL($"[{src}]", srcCol);
 
-        // Roll / stats on one compact line
-        if (ApiClient is not null)
-            CW("     ⚡ d20=", ConsoleColor.DarkCyan);
-        else
-            CW("     d20=", ConsoleColor.Gray);
-        CW($"{e.DieRoll,2}", ConsoleColor.Cyan);
-        CW("  ATK "); CW($"{e.AttackPower}", ConsoleColor.Yellow);
-        CW("  →  total "); CW($"{total,2}", ConsoleColor.White);
-        CW("   vs  DEF "); CW($"{e.DefensePower}", ConsoleColor.Yellow);
-        CW("   ┃  margin ");
-        if (margin >= 0) CWL($"+{margin}", ConsoleColor.Green);
-        else             CWL($"{margin}", ConsoleColor.Red);
+        if (cfg.IsFieldEnabled("attackEvent", "DieRoll") ||
+            cfg.IsFieldEnabled("attackEvent", "AttackPower") ||
+            cfg.IsFieldEnabled("attackEvent", "DefensePower"))
+        {
+            if (ApiClient is not null)
+                CW("     ⚡ d20=", ConsoleColor.DarkCyan);
+            else
+                CW("     d20=", ConsoleColor.Gray);
 
-        // Hit verdict + damage on one line
-        Console.Write("     ");
-        if (e.IsCritical == true)
-        {
-            CW("⚡ CRITICAL HIT", ConsoleColor.Magenta);
-        }
-        else if (e.IsFumble == true)
-        {
-            CW("⚠ FUMBLE", ConsoleColor.DarkYellow);
-        }
-        else if (e.IsHit == true)
-        {
-            var damage   = e.DamageDealt ?? 0;
-            var defMaxHp = MaxHp.GetValueOrDefault(e.TargetName ?? "", Math.Max(1, damage));
-            var rawLabel = CombatHitLabelService.GetLabel(damage, defMaxHp);
+            if (cfg.IsFieldEnabled("attackEvent", "DieRoll"))
+                CW($"{e.DieRoll,2}", ConsoleColor.Cyan);
 
-            (string label, ConsoleColor color) hit = rawLabel switch
+            if (cfg.IsFieldEnabled("attackEvent", "AttackPower"))
             {
-                "CRUSHING HIT" => ("■ CRUSHING HIT", ConsoleColor.Magenta),
-                "HEAVY HIT"    => ("■ HEAVY HIT",    ConsoleColor.Yellow),
-                "SOLID HIT"    => ("■ SOLID HIT",    ConsoleColor.Green),
-                "GLANCING HIT" => ("▪ GLANCING HIT", ConsoleColor.White),
-                _              => ("▫ GRAZE",        ConsoleColor.Gray),
-            };
-            CW(hit.label, hit.color);
-        }
-        else
-        {
-            var label = margin >= -3 ? "○ NEAR MISS" : "○ MISS";
-            CW(label, ConsoleColor.Red);
-        }
-
-        if (e.IsHit == true)
-        {
-            var dmgIdx = e.Message.IndexOf("Dmg:", StringComparison.Ordinal);
-            if (dmgIdx >= 0)
-            {
-                CW("   │   ", ConsoleColor.Gray);
-                CW(e.Message[dmgIdx..], ConsoleColor.DarkCyan);
+                CW("  ATK ");
+                CW($"{e.AttackPower}", ConsoleColor.Yellow);
             }
+
+            CW("  →  total ");
+            CW($"{total,2}", ConsoleColor.White);
+
+            if (cfg.IsFieldEnabled("attackEvent", "DefensePower"))
+            {
+                CW("   vs  DEF ");
+                CW($"{e.DefensePower}", ConsoleColor.Yellow);
+            }
+
+            CW("   ┃  margin ");
+            if (margin >= 0) CWL($"+{margin}", ConsoleColor.Green);
+            else             CWL($"{margin}", ConsoleColor.Red);
         }
-        Console.WriteLine();
+
+        if (cfg.IsFieldEnabled("attackEvent", "IsHit"))
+        {
+            Console.Write("     ");
+            if (cfg.IsFieldEnabled("attackEvent", "IsCritical") && e.IsCritical == true)
+            {
+                CW("⚡ CRITICAL HIT", ConsoleColor.Magenta);
+            }
+            else if (cfg.IsFieldEnabled("attackEvent", "IsFumble") && e.IsFumble == true)
+            {
+                CW("⚠ FUMBLE", ConsoleColor.DarkYellow);
+            }
+            else if (e.IsHit == true)
+            {
+                var damage = e.DamageDealt ?? 0;
+                var defMaxHp = MaxHp.GetValueOrDefault(e.TargetName ?? "", Math.Max(1, damage));
+                var rawLabel = CombatHitLabelService.GetLabel(damage, defMaxHp);
+
+                (string label, ConsoleColor color) hit = rawLabel switch
+                {
+                    "CRUSHING HIT" => ("■ CRUSHING HIT", ConsoleColor.Magenta),
+                    "HEAVY HIT" => ("■ HEAVY HIT", ConsoleColor.Yellow),
+                    "SOLID HIT" => ("■ SOLID HIT", ConsoleColor.Green),
+                    "GLANCING HIT" => ("▪ GLANCING HIT", ConsoleColor.White),
+                    _ => ("▫ GRAZE", ConsoleColor.Gray),
+                };
+                CW(hit.label, hit.color);
+
+                if (cfg.IsFieldEnabled("attackEvent", "DamageDealt"))
+                {
+                    var dmgIdx = e.Message.IndexOf("Dmg:", StringComparison.Ordinal);
+                    if (dmgIdx >= 0)
+                    {
+                        CW("   │   ", ConsoleColor.Gray);
+                        CW(e.Message[dmgIdx..], ConsoleColor.DarkCyan);
+                    }
+                }
+            }
+            else
+            {
+                var label = margin >= -3 ? "○ NEAR MISS" : "○ MISS";
+                CW(label, ConsoleColor.Red);
+            }
+            Console.WriteLine();
+        }
 
         if (!string.IsNullOrEmpty(e.Phrase))
             CWL($"     \"{e.Phrase}\"", ConsoleColor.DarkCyan);
@@ -244,9 +266,12 @@ static partial class Demo
         var lParty = Result.LosingParty!;
 
         Console.WriteLine();
-        CW("  COMBAT COMPLETE  --  ", ConsoleColor.Green);
-        CW(wParty.Name, ConsoleColor.Green);
-        CWL("  WINS!", ConsoleColor.Green);
+        if (DisplayConfig.IsFieldEnabled("combatSummary", "WinnerName"))
+        {
+            CW("  COMBAT COMPLETE  --  ", ConsoleColor.Green);
+            CW(wParty.Name, ConsoleColor.Green);
+            CWL("  WINS!", ConsoleColor.Green);
+        }
         CWL("  " + new string('=', 62), ConsoleColor.Cyan);
 
         var attacks = Result.Log.Where(e => e.EventType == "Attack").ToList();
@@ -278,13 +303,20 @@ static partial class Demo
         foreach (var m in lParty.Members)
             ShowHp(m.Character.Name, m.Character.CurrentHitPoints, MaxHp.GetValueOrDefault(m.Character.Name, 1));
 
-        var loserTag = Result.LoserStatus == CharacterVitalStatus.Dead
-            ? "SLAIN" : "unconscious";
-        CWL($"\n  {lParty.Name} is {loserTag}!",
-            Result.LoserStatus == CharacterVitalStatus.Dead
-                ? ConsoleColor.Red : ConsoleColor.DarkYellow);
+        if (DisplayConfig.IsFieldEnabled("combatSummary", "LoserStatus") ||
+            DisplayConfig.IsFieldEnabled("combatSummary", "LoserName"))
+        {
+            var loserName = DisplayConfig.IsFieldEnabled("combatSummary", "LoserName") ? lParty.Name : "The losing party";
+            var loserTag = Result.LoserStatus == CharacterVitalStatus.Dead ? "SLAIN" : "unconscious";
+            CWL($"\n  {loserName} is {loserTag}!",
+                Result.LoserStatus == CharacterVitalStatus.Dead
+                    ? ConsoleColor.Red : ConsoleColor.DarkYellow);
+        }
 
-        CWL($"\n  Combat length :  {Result.TotalTicks} ticks", ConsoleColor.White);
+        if (DisplayConfig.IsFieldEnabled("combatSummary", "CombatId"))
+            CWL($"  Combat ID     :  {Result.CombatId}", ConsoleColor.Gray);
+        if (DisplayConfig.IsFieldEnabled("combatSummary", "TotalTicks"))
+            CWL($"\n  Combat length :  {Result.TotalTicks} ticks", ConsoleColor.White);
         CWL("\n  " + new string('=', 62), ConsoleColor.Cyan);
         Console.WriteLine();
     }
@@ -296,8 +328,16 @@ static partial class Demo
         Console.Clear();
         PrintHeader();
 
-        var heroes = HeroParty.Members.Select(m => states[m.Character.Name]).ToList();
-        var enemies = EnemyParty.Members.Select(m => states[m.Character.Name]).ToList();
+        var heroNames = HeroParty.Members.Select(m => m.Character.Name).ToHashSet(StringComparer.Ordinal);
+        var enemyNames = EnemyParty.Members.Select(m => m.Character.Name).ToHashSet(StringComparer.Ordinal);
+        var heroes = HeroParty.Members
+            .Select(m => states[m.Character.Name])
+            .Concat(states.Values.Where(s => s.IsHero && !heroNames.Contains(s.Name)).OrderBy(s => s.Name))
+            .ToList();
+        var enemies = EnemyParty.Members
+            .Select(m => states[m.Character.Name])
+            .Concat(states.Values.Where(s => !s.IsHero && !enemyNames.Contains(s.Name)).OrderBy(s => s.Name))
+            .ToList();
 
         bool isDuel = Scenario == 'D';
         var leftLabel = isDuel ? "── CHARACTER 1 ──" : "── HEROES ──────";
@@ -376,7 +416,8 @@ static partial class Demo
         var indicFg = active ? ConsoleColor.White : s.IsHero ? ConsoleColor.Cyan : ConsoleColor.Red;
         var nameStr = (s.Name.Length > 10 ? s.Name.ToUpper()[..10] : s.Name.ToUpper()).PadRight(10);
         var weapTrunc = s.Weapon.Length > 14 ? s.Weapon[..14] : s.Weapon.PadRight(14);
-        var weapStr = $"[{weapTrunc}]";
+        var weapStr = DisplayConfig.IsFieldEnabled("characterCard", "CurrentWeapon")
+            ? $"[{weapTrunc}]" : new string(' ', weapTrunc.Length + 2);
 
         var nameLine = CL(vb, borderFg,
             new Seg(indicator, indicFg),
@@ -407,6 +448,8 @@ static partial class Demo
         var pct = (double)Math.Max(0, s.Hp) / Math.Max(1, s.MaxHp);
         var hpFilled = s.Hp > 0 ? Math.Max(1, (int)(pct * BAR_W)) : 0;
         var hpFg = HpColor(s.Hp, s.MaxHp);
+        var maxHpSuffix = DisplayConfig.IsFieldEnabled("characterCard", "MaxHp")
+            ? $"{s.MaxHp,-3}" : "   ";
         var hpLine = CL(vb, borderFg,
             new Seg(" HP [", ConsoleColor.Gray),
             new Seg(new string('\u2588', hpFilled), hpFg),
@@ -414,9 +457,16 @@ static partial class Demo
             new Seg("]  ", ConsoleColor.Gray),
             new Seg($"{Math.Max(0, s.Hp),3}", hpFg),
             new Seg(" / ", ConsoleColor.Gray),
-            new Seg($"{s.MaxHp,-3}", ConsoleColor.Gray));
+            new Seg(maxHpSuffix, ConsoleColor.Gray));
 
-        return [top, nameLine, tmLine, manaLine, hpLine, bot];
+        var lines = new List<List<Seg>> { top, nameLine };
+        if (DisplayConfig.IsFieldEnabled("characterCard", "TurnMeter")) lines.Add(tmLine);
+        lines.Add(manaLine);
+        if (DisplayConfig.IsFieldEnabled("characterCard", "CurrentHp") ||
+            DisplayConfig.IsFieldEnabled("characterCard", "MaxHp"))
+            lines.Add(hpLine);
+        lines.Add(bot);
+        return lines;
     }
 
     private static List<Seg> CL(char vb, ConsoleColor borderFg, params Seg[] segs)

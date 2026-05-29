@@ -201,7 +201,7 @@ static partial class Demo
             Chest = new Armor { Name = "Druidic Robes", ArmorClass = 14, Mitigation = 0, MaxDexterityBonus = 6 },
             RightHand = ArcaneStaff
         },
-        MemorizedSpells = [Moonfire, Entangle]
+        MemorizedSpells = [Moonfire, Entangle, SummonSpiritWolf]
     };
 
     // ── Enemy weapons ─────────────────────────────────────────────────────────────
@@ -259,6 +259,38 @@ static partial class Demo
         [
             new StatusEffect { Name = "Weakened", Type = StatusEffectType.Debuff, ResistanceType = ResistanceType.Magic, Duration = 3, AttackPowerModifier = -2, DefensePowerModifier = -2, ApplicationChance = 70, StackRule = StackRule.HighestWins }
         ]
+    };
+
+    // ── Summoned companions ──────────────────────────────────────────────────────
+    private static readonly Pet SpiritWolf = new()
+    {
+        Name = "Spirit Wolf",
+        Description = "A spectral wolf bound to protect its summoner",
+        MaxHitPoints = 20,
+        ArmorClass = 12,
+        TurnSpeed = 10,
+        Strength = 14,
+        StrikeRating = 14,
+        AttackBonus = 2,
+        DamageCount = 1,
+        DamageDie = DieType.D6,
+        DamageType = DamageType.Slashing,
+        SummonDurationRounds = 3
+    };
+
+    private static readonly Spell SummonSpiritWolf = new()
+    {
+        Name = "Summon: Spirit Wolf",
+        Description = "Calls a spectral wolf to defend the caster",
+        School = SpellSchool.Conjuration,
+        DamageDie = DieType.D4,
+        DamageCount = 0,
+        DamageType = DamageType.Bludgeoning,
+        AttackBonus = 0,
+        SpellLevel = 3,
+        TurnMeterCost = 90,
+        ManaCost = 35,
+        SummonedPet = SpiritWolf
     };
 
     // ── Enemy characters ──────────────────────────────────────────────────────────
@@ -325,7 +357,7 @@ static partial class Demo
             [Gruk.Name] = BattleAxe,
             [Lyra.Name] = null,
             [Sera.Name] = CeremonialMace,
-            [Elara.Name] = ArcaneStaff,
+            [Elara.Name] = null,
             [Krag.Name] = OrcAxe,
             [Skrix.Name] = GoblinDagger,
             [Mordak.Name] = null,

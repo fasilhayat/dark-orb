@@ -19,6 +19,8 @@ public class ArmorSlots
     public int TotalMitigation => SumSlots(armor => armor.Mitigation, Head, Chest, Hands, Waist, Boots, Neck, Back);
     public int TotalTurnMeterPenalty => SumSlots(armor => armor.TurnMeterPenalty, Head, Chest, Hands, Waist, Boots, Neck, Back);
     public int TotalTurnMeterCostReduction => SumSlots(armor => armor.TurnMeterCostReduction, Head, Chest, Hands, Waist, Boots, Neck, Back);
+    public int TotalManaRegenBonus => SumSlots(armor => armor.ManaRegenBonus, Head, Chest, Hands, Waist, Boots, Neck, Back);
+    public int TotalMaxManaBonus => SumSlots(armor => armor.MaxManaBonus, Head, Chest, Hands, Waist, Boots, Neck, Back);
     public int TotalResistance(ResistanceType type) =>
         SumSlots(a => a.Resistances.Where(r => r.Type == type).Sum(r => r.Value),
             Head, Chest, Hands, Waist, Boots, Neck, Back);

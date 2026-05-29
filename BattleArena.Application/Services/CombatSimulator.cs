@@ -51,8 +51,12 @@ public class CombatSimulator : ICombatSimulator
         ICombatObserver? observer = null,
         CancellationToken ct = default)
     {
-        var log    = new List<CombatLogEntry>();
-        var states = BuildCombatantStates(heroParty, enemyParty);
+        const int RoundLength = 10;
+
+        var log            = new List<CombatLogEntry>();
+        var states         = BuildCombatantStates(heroParty, enemyParty);
+        var currentRound   = 0;
+        var lastAttackerOf = new Dictionary<Character, Character>();
 
         // Log + notify the observer for every event in one call.
         // Automatically stamps the currently-acting character so consumers
@@ -70,6 +74,18 @@ public class CombatSimulator : ICombatSimulator
             ct.ThrowIfCancellationRequested();
             _dice.CurrentTick = tick;
 
+            if ((tick - 1) % RoundLength == 0)
+            {
+                currentRound++;
+                await Notify(new CombatLogEntry
+                {
+                    Tick = tick,
+                    EventType = "RoundStart",
+                    RoundNumber = currentRound,
+                    Message = $"══ Round {currentRound} begins ══"
+                });
+            }
+
             // ── TICK: advance meters for every living combatant ────────────────
             foreach (var s in states.Where(s => s.Character.IsAlive))
             {
@@ -81,8 +97,9 @@ public class CombatSimulator : ICombatSimulator
             // ── MANA REGEN (only characters with MaxMana > 0) ──────────────────
             foreach (var s in states.Where(s => s.Character.IsAlive && s.Character.MaxMana > 0))
             {
-                var regen = s.Character.ManaRegenPerTick;
-                s.Character.CurrentMana = Math.Min(s.Character.MaxMana, s.Character.CurrentMana + regen);
+                var regen     = s.Character.ManaRegenPerTick;
+                var manaBefore = s.Character.CurrentMana;
+                s.Character.CurrentMana = Math.Min(s.Character.EffectiveMaxMana, manaBefore + regen);
                 await Notify(new CombatLogEntry
                 {
                     Tick      = tick,
@@ -90,7 +107,7 @@ public class CombatSimulator : ICombatSimulator
                     EventType = "ManaRegen",
                     ManaRegen = regen,
                     ManaAfter = s.Character.CurrentMana,
-                    Message   = $"{s.Character.Name} regens {regen} mana  ({s.Character.CurrentMana - regen} -> {s.Character.CurrentMana})"
+                    Message   = $"{s.Character.Name} regens {regen} mana  ({manaBefore} -> {s.Character.CurrentMana})"
                 });
             }
 
@@ -136,9 +153,9 @@ public class CombatSimulator : ICombatSimulator
                 });
             }
 
-            if (acting.Count == 0) continue;
-
-            foreach (var actorState in acting)
+            if (acting.Count > 0)
+            {
+                foreach (var actorState in acting)
             {
                 if (!actorState.Character.IsAlive) continue; // killed earlier this tick
 
@@ -245,11 +262,32 @@ public class CombatSimulator : ICombatSimulator
                     }
 
                     // ── TARGET SELECTION ───────────────────────────────────────
-                    var selector = actorState.PartyIndex == 0 ? _heroTargetSelector : _enemyTargetSelector;
-                    target = await selector.SelectTargetAsync(
-                        actorState.Character,
-                        enemies.Select(s => s.Character),
-                        ct);
+                    if (actorState.IsSummoned && actorState.SummonedBy is { } master)
+                    {
+                        if (enemies.Count == 0) break;
+
+                        if (lastAttackerOf.TryGetValue(master, out var lastAttacker)
+                            && lastAttacker.IsAlive
+                            && enemies.Any(e => e.Character == lastAttacker))
+                        {
+                            target = lastAttacker;
+                        }
+                        else
+                        {
+                            // last attacker dead or unknown — pick the most wounded enemy
+                            target = enemies
+                                .OrderBy(e => e.Character.CurrentHitPoints)
+                                .First().Character;
+                        }
+                    }
+                    else
+                    {
+                        var selector = actorState.PartyIndex == 0 ? _heroTargetSelector : _enemyTargetSelector;
+                        target = await selector.SelectTargetAsync(
+                            actorState.Character,
+                            enemies.Select(s => s.Character),
+                            ct);
+                    }
 
                     // ── MANA DEDUCTION (direct cast) ─────────────────────────
                     if (isSpell)
@@ -290,6 +328,63 @@ public class CombatSimulator : ICombatSimulator
                     Message          = $"{actorState.Character.Name} takes their turn  (TM: {turnMeterNow})"
                 });
 
+                if (isSpell && attackSource is Spell castSpell && castSpell.SummonedPet is { } petTemplate)
+                {
+                    var petChar = new Character
+                    {
+                        Name = petTemplate.Name,
+                        MaxHitPoints = petTemplate.MaxHitPoints,
+                        CurrentHitPoints = petTemplate.MaxHitPoints,
+                        StrikeRating = petTemplate.StrikeRating,
+                        TurnSpeed = petTemplate.TurnSpeed,
+                        Strength = petTemplate.Strength,
+                        Level = 1,
+                        ClassId = 8,
+                        Equipment = new ArmorSlots
+                        {
+                            Chest = new Armor
+                            {
+                                Name = $"{petTemplate.Name} Hide",
+                                ArmorClass = petTemplate.ArmorClass,
+                                MaxDexterityBonus = 6
+                            }
+                        }
+                    };
+                    var petWeapon = new Weapon
+                    {
+                        Name = $"{petTemplate.Name}'s Attack",
+                        DamageDie = petTemplate.DamageDie,
+                        DamageCount = petTemplate.DamageCount,
+                        AttackBonus = petTemplate.AttackBonus,
+                        DamageType = petTemplate.DamageType,
+                        AttackType = AttackType.Melee,
+                    };
+                    var expiryRound = petTemplate.SummonDurationRounds > 0
+                        ? currentRound + petTemplate.SummonDurationRounds
+                        : 0;
+                    var petState = new CombatantState(petChar, petWeapon, actorState.PartyIndex)
+                    {
+                        SummonedBy = actorState.Character,
+                        SummonExpiryRound = expiryRound,
+                    };
+                    states.Add(petState);
+
+                    await Notify(new CombatLogEntry
+                    {
+                        Tick = tick,
+                        ActorName = actorState.Character.Name,
+                        EventType = "PetSummoned",
+                        SummonedPetName = petTemplate.Name,
+                        RoundNumber = currentRound,
+                        Message = $"{actorState.Character.Name} summons {petTemplate.Name}!" +
+                                  (expiryRound > 0 ? $"  (lasts until end of round {expiryRound})" : "  (until slain)")
+                    });
+
+                    actorState.Meter.IsActive = false;
+                    await Notify(BuildAfterTurnEntry(actorState, tick, tmCost));
+                    continue;
+                }
+
                 // ── DOT TICK: DamageOverTime at start of actor's turn ────────────
                 var dotResult = await ProcessActorDoTAsync(tick, actorState, heroParty, enemyParty, log, Notify);
                 if (dotResult is not null)
@@ -312,6 +407,7 @@ public class CombatSimulator : ICombatSimulator
                 {
                     var hpBefore = target.CurrentHitPoints;
                     target.CurrentHitPoints -= result.Damage;
+                    lastAttackerOf[target] = actorState.Character;
 
                     // Only emit a Damage event when damage actually got through.
                     // A 0-damage hit (fully absorbed by armor mitigation) is already
@@ -423,6 +519,20 @@ public class CombatSimulator : ICombatSimulator
                 // ── END TURN ───────────────────────────────────────────────────
                 actorState.Meter.IsActive = false;
                 await Notify(BuildAfterTurnEntry(actorState, tick, tmCost));
+                }
+            }
+
+            if (tick % RoundLength == 0)
+            {
+                await ExpireSummonedPetsAsync(tick, currentRound, states, Notify);
+
+                await Notify(new CombatLogEntry
+                {
+                    Tick = tick,
+                    EventType = "RoundEnd",
+                    RoundNumber = currentRound,
+                    Message = $"── Round {currentRound} ends ──"
+                });
             }
         }
 
@@ -715,6 +825,31 @@ public class CombatSimulator : ICombatSimulator
         }
     }
 
+    private static async Task ExpireSummonedPetsAsync(
+        int tick,
+        int currentRound,
+        List<CombatantState> states,
+        Func<CombatLogEntry, Task> notify)
+    {
+        foreach (var s in states.Where(s =>
+            s.IsSummoned &&
+            s.Character.IsAlive &&
+            s.SummonExpiryRound > 0 &&
+            s.SummonExpiryRound <= currentRound).ToList())
+        {
+            s.Character.CurrentHitPoints = -999;
+            await notify(new CombatLogEntry
+            {
+                Tick = tick,
+                EventType = "PetExpired",
+                ActorName = s.Character.Name,
+                SummonedPetName = s.Character.Name,
+                RoundNumber = currentRound,
+                Message = $"{s.Character.Name} fades away as the summoning ends."
+            });
+        }
+    }
+
     private CombatResult? BuildDefeatResult(
         int tick, int defeatedPartyIndex,
         Character defeatedCharacter,
@@ -755,12 +890,15 @@ public class CombatSimulator : ICombatSimulator
     // Tracks per-combatant state during a simulation run.
     private class CombatantState
     {
-        public Character         Character    { get; }
-        public IAttackSource?    AttackSource { get; }
-        public int               PartyIndex   { get; }   // 0 = hero party, 1 = enemy party
-        public TurnmeterState    Meter        { get; set; }
-        public int               PrevMeter    { get; set; }  // value before this tick's gain
-        public QueuedSpellInfo?  QueuedSpell  { get; set; }
+        public Character         Character         { get; }
+        public IAttackSource?    AttackSource      { get; }
+        public int               PartyIndex        { get; }   // 0 = hero party, 1 = enemy party
+        public TurnmeterState    Meter             { get; set; }
+        public int               PrevMeter         { get; set; }  // value before this tick's gain
+        public QueuedSpellInfo?  QueuedSpell       { get; set; }
+        public Character?        SummonedBy        { get; set; }
+        public int               SummonExpiryRound { get; set; }
+        public bool              IsSummoned        => SummonedBy is not null;
 
         public CombatantState(Character character, IAttackSource? attackSource, int partyIndex)
         {

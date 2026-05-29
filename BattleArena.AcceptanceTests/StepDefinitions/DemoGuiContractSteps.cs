@@ -31,6 +31,20 @@ public class DemoGuiContractSteps
     public void GivenContractIsLoaded(string filename)
     {
         var path = Path.Combine(AppContext.BaseDirectory, filename);
+
+        // When running via 'dotnet test BattleArena.sln' the file isn't copied here;
+        // walk up from the output dir to find the Demo project source folder.
+        if (!File.Exists(path))
+        {
+            var dir = AppContext.BaseDirectory;
+            while (dir is not null)
+            {
+                var candidate = Path.Combine(dir, "BattleArena.Demo", filename);
+                if (File.Exists(candidate)) { path = candidate; break; }
+                dir = Path.GetDirectoryName(dir);
+            }
+        }
+
         Assert.True(File.Exists(path), $"GUI display contract not found at: {path}");
         _contract = JsonSerializer.Deserialize<GuiDisplayContract>(File.ReadAllText(path), JsonOptions)!;
         Assert.NotNull(_contract);
@@ -112,6 +126,9 @@ public class DemoGuiContractSteps
     [Then(@"the character card contract fields are satisfied for each combatant")]
     public void ThenCharacterCardFieldsAreSatisfied()
     {
+        if (_contract.Screens.CharacterCard.Enabled == false)
+            return;
+
         var required = RequiredFields(_contract.Screens.CharacterCard);
 
         foreach (var character in new[] { _fighter1, _fighter2 })
@@ -157,6 +174,9 @@ public class DemoGuiContractSteps
     [Then(@"all attack event contract fields are populated in the combat log")]
     public void ThenAttackEventFieldsArePopulated()
     {
+        if (_contract.Screens.AttackEvent.Enabled == false)
+            return;
+
         var required     = RequiredFields(_contract.Screens.AttackEvent);
         var attackEvents = _combatResult.Log.Where(e => e.EventType == "Attack").ToList();
         Assert.NotEmpty(attackEvents);
@@ -192,6 +212,9 @@ public class DemoGuiContractSteps
     [Then(@"all damage event contract fields are populated in the combat log")]
     public void ThenDamageEventFieldsArePopulated()
     {
+        if (_contract.Screens.DamageEvent.Enabled == false)
+            return;
+
         var required      = RequiredFields(_contract.Screens.DamageEvent);
         var damageEvents  = _combatResult.Log.Where(e => e.EventType == "Damage").ToList();
         Assert.NotEmpty(damageEvents);
@@ -214,6 +237,9 @@ public class DemoGuiContractSteps
     [Then(@"the combat summary contract fields are all populated")]
     public void ThenCombatSummaryFieldsArePopulated()
     {
+        if (_contract.Screens.CombatSummary.Enabled == false)
+            return;
+
         var required = RequiredFields(_contract.Screens.CombatSummary);
 
         if (required.Contains("CombatId"))
@@ -251,7 +277,10 @@ public class DemoGuiContractSteps
     // ── Helpers ────────────────────────────────────────────────────────────────
 
     private static HashSet<string> RequiredFields(GuiDisplayScreen screen) =>
-        screen.RequiredFields.Select(f => f.Field).ToHashSet();
+        screen.RequiredFields
+            .Where(f => f.Enabled != false)
+            .Select(f => f.Field)
+            .ToHashSet();
 }
 
 // ── Contract deserialization types ─────────────────────────────────────────────
@@ -269,10 +298,12 @@ internal sealed record GuiDisplayScreens(
     [property: JsonPropertyName("hitLabels")]     GuiHitLabels     HitLabels);
 
 internal sealed record GuiDisplayScreen(
+    [property: JsonPropertyName("enabled")]        bool?                 Enabled,
     [property: JsonPropertyName("description")]    string                Description,
     [property: JsonPropertyName("requiredFields")] List<GuiDisplayField> RequiredFields);
 
 internal sealed record GuiDisplayField(
+    [property: JsonPropertyName("enabled")]     bool?  Enabled,
     [property: JsonPropertyName("field")]       string Field,
     [property: JsonPropertyName("source")]      string Source,
     [property: JsonPropertyName("description")] string Description);

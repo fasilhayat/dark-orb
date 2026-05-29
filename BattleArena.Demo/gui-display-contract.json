@@ -1,0 +1,65 @@
+{
+  "version": "1.0",
+  "description": "Defines which data fields the BattleArena combat GUI must display. Placement and exact phrasing are left to the GUI implementation — only field presence and correctness matter. Set 'enabled' to false on any screen or field to suppress it from the console output.",
+  "screens": {
+    "characterCard": {
+      "enabled": true,
+      "description": "Character status block shown throughout combat for each combatant",
+      "requiredFields": [
+        { "enabled": true,  "field": "Name",          "source": "Character.Name",                    "description": "Character display name" },
+        { "enabled": true,  "field": "CurrentHp",     "source": "Character.CurrentHitPoints",        "description": "Current hit points (can be negative after KO)" },
+        { "enabled": true,  "field": "MaxHp",         "source": "Character.MaxHitPoints",            "description": "Maximum hit points — must be > 0" },
+        { "enabled": true,  "field": "TurnMeter",     "source": "CombatLogEntry.TurnMeterAfter",     "description": "Turn meter value (0–100), tracked via TurnMeterGain / TurnEnd events" },
+        { "enabled": true,  "field": "CurrentWeapon", "source": "CombatLogEntry.AttackSourceName",   "description": "Active weapon or spell name, available on TurnStart events" },
+        { "enabled": true,  "field": "IsAlive",       "source": "Character.CurrentHitPoints > 0",    "description": "Alive/dead flag derivable from CurrentHitPoints" }
+      ]
+    },
+    "attackEvent": {
+      "enabled": true,
+      "description": "Displayed each time a character makes an attack (CombatLogEntry with EventType = Attack)",
+      "requiredFields": [
+        { "enabled": true,  "field": "ActorName",        "source": "CombatLogEntry.ActorName",        "description": "Name of the attacking character" },
+        { "enabled": true,  "field": "TargetName",       "source": "CombatLogEntry.TargetName",       "description": "Name of the defending character" },
+        { "enabled": true,  "field": "AttackSourceName", "source": "CombatLogEntry.AttackSourceName", "description": "Weapon or spell used for the attack" },
+        { "enabled": true,  "field": "DieRoll",          "source": "CombatLogEntry.DieRoll",          "description": "d20 roll result" },
+        { "enabled": true,  "field": "AttackPower",      "source": "CombatLogEntry.AttackPower",      "description": "Attacker's total combat power" },
+        { "enabled": true,  "field": "DefensePower",     "source": "CombatLogEntry.DefensePower",     "description": "Defender's total defense power" },
+        { "enabled": true,  "field": "IsHit",            "source": "CombatLogEntry.IsHit",            "description": "Whether the attack connected" },
+        { "enabled": true,  "field": "IsCritical",       "source": "CombatLogEntry.IsCritical",       "description": "Critical hit flag" },
+        { "enabled": true,  "field": "IsFumble",         "source": "CombatLogEntry.IsFumble",         "description": "Fumble flag" },
+        { "enabled": true,  "field": "DamageDealt",      "source": "CombatLogEntry.DamageDealt",      "description": "Damage dealt — required to be > 0 on a hit, null/absent on a miss" }
+      ]
+    },
+    "damageEvent": {
+      "enabled": true,
+      "description": "Displayed when a character takes HP damage (CombatLogEntry with EventType = Damage)",
+      "requiredFields": [
+        { "enabled": true,  "field": "ActorName",      "source": "CombatLogEntry.ActorName",      "description": "Name of the character taking damage" },
+        { "enabled": true,  "field": "DamageDealt",    "source": "CombatLogEntry.DamageDealt",    "description": "HP lost in this event" },
+        { "enabled": true,  "field": "TargetHpBefore", "source": "CombatLogEntry.TargetHpBefore", "description": "HP before taking damage" },
+        { "enabled": true,  "field": "TargetHpAfter",  "source": "CombatLogEntry.TargetHpAfter",  "description": "HP after taking damage" }
+      ]
+    },
+    "combatSummary": {
+      "enabled": true,
+      "description": "End-of-combat results screen",
+      "requiredFields": [
+        { "enabled": true,  "field": "CombatId",    "source": "CombatResult.CombatId",              "description": "Unique GUID identifying this combat run" },
+        { "enabled": true,  "field": "TotalTicks",  "source": "CombatResult.TotalTicks",            "description": "Total ticks the combat lasted" },
+        { "enabled": true,  "field": "WinnerName",  "source": "CombatResult.WinningParty.Name",     "description": "Winning party name" },
+        { "enabled": true,  "field": "LoserName",   "source": "CombatResult.LosingParty.Name",      "description": "Losing party name" },
+        { "enabled": true,  "field": "LoserStatus", "source": "CombatResult.LoserStatus",           "description": "Dead (HP ≤ -10) or KnockedOut (HP 0 to -9)" }
+      ]
+    },
+    "hitLabels": {
+      "description": "Graded hit severity labels shown in attack events. Label is computed by CombatHitLabelService.GetLabel(damage, targetMaxHp) as damage / targetMaxHp percentage.",
+      "requiredLabels": [
+        { "label": "GRAZE",        "condition": "damage < 3% of target max HP"   },
+        { "label": "GLANCING HIT", "condition": "damage 3–8% of target max HP"   },
+        { "label": "SOLID HIT",    "condition": "damage 8–15% of target max HP"  },
+        { "label": "HEAVY HIT",    "condition": "damage 15–25% of target max HP" },
+        { "label": "CRUSHING HIT", "condition": "damage ≥ 25% of target max HP"  }
+      ]
+    }
+  }
+}

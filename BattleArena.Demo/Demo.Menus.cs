@@ -107,7 +107,7 @@ static partial class Demo
         if (!UseApiRoster || ApiWeapons.Count == 0) return null;
 
         var weapons = ApiWeapons
-            .Where(w => w.AttackType != AttackType.Ranged)
+            .Where(w => w.AttackType != AttackType.Ranged && ch.CanEquip(w.Archetype))
             .OrderBy(w => w.Quality)
             .ThenBy(w => w.Name)
             .ToList();
@@ -336,9 +336,10 @@ static partial class Demo
             Name = "Enemy Horde",
             Members =
             [
-                new PartyMember { Character = Krag, AttackSource = OrcAxe },
-                new PartyMember { Character = Skrix, AttackSource = GoblinDagger },
-                new PartyMember { Character = Mordak, AttackSource = null }
+                new PartyMember { Character = Krag,   AttackSource = OrcAxe },
+                new PartyMember { Character = Skrix,  AttackSource = GoblinDagger },
+                new PartyMember { Character = Mordak, AttackSource = null },
+                new PartyMember { Character = Zarath, AttackSource = null }
             ]
         };
     }

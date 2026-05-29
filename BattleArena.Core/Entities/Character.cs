@@ -45,28 +45,21 @@ public class Character
         IsKnockedOut ? CharacterVitalStatus.KnockedOut :
                        CharacterVitalStatus.Alive;
 
-    public int ManaRegenPerTick => Math.Max(1, ((Intelligence - 10) / 2) + Level / 2);
+    public int ManaRegenPerTick =>
+        Math.Max(1,
+            (Intelligence - 10) / 2
+            + Level / 2
+            + Equipment.TotalManaRegenBonus
+            + ActiveStatusEffects.Sum(e => e.ManaRegenModifier));
 
-    public bool CanEquip(ArchetypeWeapon archetype) => ClassId switch
-    {
-        1 => archetype is ArchetypeWeapon.Sword or ArchetypeWeapon.Axe,         // Barbarian
-        2 => archetype is ArchetypeWeapon.Sword or ArchetypeWeapon.Hammer        // Knight
-                or ArchetypeWeapon.Lance or ArchetypeWeapon.Axe,
-        3 => archetype is ArchetypeWeapon.Sword or ArchetypeWeapon.Hammer        // Paladin
-                or ArchetypeWeapon.Lance or ArchetypeWeapon.Mace,
-        4 => archetype is ArchetypeWeapon.Mace or ArchetypeWeapon.Hammer         // Priest
-                or ArchetypeWeapon.Staff,
-        5 => archetype is ArchetypeWeapon.Dagger or ArchetypeWeapon.Staff        // Mage
-                or ArchetypeWeapon.Wand,
-        6 => archetype is ArchetypeWeapon.Dagger or ArchetypeWeapon.ShortSword   // Bard
-                or ArchetypeWeapon.Sword,
-        7 => archetype is ArchetypeWeapon.Staff or ArchetypeWeapon.Dagger        // Druid
-                or ArchetypeWeapon.Sling,
-        8 => true,                                                               // Fighter
-        9 => archetype is ArchetypeWeapon.Dagger or ArchetypeWeapon.ShortSword   // Rogue
-                or ArchetypeWeapon.Sword,
-        _ => true
-    };
+    // MaxMana including any gear bonuses (e.g. arcane robes, mana-crystal amulet).
+    public int EffectiveMaxMana => MaxMana + Equipment.TotalMaxManaBonus;
+
+    /// <summary>Returns true if this character's class may wield the given weapon archetype (AD&amp;D 2e rules).</summary>
+    public bool CanEquip(ArchetypeWeapon archetype) => archetype.IsUsableByClass(ClassId);
+
+    /// <summary>Returns true if this character's class may wield the given weapon (inherits from its archetype).</summary>
+    public bool CanEquip(Weapon weapon) => CanEquip(weapon.Archetype);
 
     private const int _spellTmCostIntFactor = 3;
     private const int _spellTmCostLevelFactor = 1;

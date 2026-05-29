@@ -17,5 +17,7 @@ public class Armor
     public int Mitigation { get; set; }
     public int TurnMeterPenalty { get; set; }
     public int TurnMeterCostReduction { get; set; }
+    public int ManaRegenBonus { get; set; }
+    public int MaxManaBonus { get; set; }
     public List<ResistanceBonus> Resistances { get; set; } = new();
 }
