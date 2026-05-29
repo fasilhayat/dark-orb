@@ -40,7 +40,7 @@ static partial class Demo
             CW("[G]", ConsoleColor.Cyan); CW(" Gruk   ");
             CW("[L]", ConsoleColor.Cyan); CW(" Lyra", ConsoleColor.White);
             if (!string.IsNullOrEmpty(excludedName))
-                CW($"   (cannot pick {excludedName})", ConsoleColor.DarkGray);
+                CW($"   (cannot pick {excludedName})", ConsoleColor.Gray);
             Console.WriteLine();
             CW("  > ", ConsoleColor.Cyan);
 
@@ -72,12 +72,12 @@ static partial class Demo
                 var taken = ch.Name == excludedName;
                 var atk = GetAttackSource(ch);
                 CW($"    [{key}]  ", ConsoleColor.Cyan);
-                CW($"{ch.Name,-20}", taken ? ConsoleColor.DarkGray : ConsoleColor.White);
-                CW($"{atk.Name,-16}", taken ? ConsoleColor.DarkGray : ConsoleColor.Yellow);
+                CW($"{ch.Name,-20}", taken ? ConsoleColor.Gray : ConsoleColor.White);
+                CW($"{atk.Name,-16}", taken ? ConsoleColor.Gray : ConsoleColor.Yellow);
                 if (taken)
-                    CWL($"  (already selected)", ConsoleColor.DarkGray);
+                    CWL($"  (already selected)", ConsoleColor.Gray);
                 else
-                    CWL($"  {GetClassName(ch.ClassId),-10} Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}", ConsoleColor.DarkGray);
+                    CWL($"  {GetClassName(ch.ClassId),-10} Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}", ConsoleColor.Gray);
             }
             CW("  > ", ConsoleColor.Cyan);
 
@@ -128,9 +128,9 @@ static partial class Demo
                     GearQuality.Legendary => ConsoleColor.Yellow,
                     GearQuality.Epic => ConsoleColor.Magenta,
                     GearQuality.Rare => ConsoleColor.Cyan,
-                    _ => ConsoleColor.DarkGray
+                    _ => ConsoleColor.Gray
                 };
-                CW($"  {w.DamageCount}d{(int)w.DamageDie}  {w.DamageType,-12}  +{w.AttackBonus} ATK", ConsoleColor.DarkGray);
+                CW($"  {w.DamageCount}d{(int)w.DamageDie}  {w.DamageType,-12}  +{w.AttackBonus} ATK", ConsoleColor.Gray);
                 CWL($"  [{w.Quality}]", qualColor);
             }
             CW("  Enter number: ", ConsoleColor.Cyan);
@@ -170,10 +170,10 @@ static partial class Demo
             Console.WriteLine();
             if (selected.Count > 0)
             {
-                CW("  Party : ", ConsoleColor.DarkGray);
+                CW("  Party : ", ConsoleColor.Gray);
                 CWL(string.Join(", ", selected.Select(c => c.Name)), ConsoleColor.Green);
             }
-            CWL("  Press a key to toggle a hero | [Enter] to confirm (need at least 1)\n", ConsoleColor.DarkGray);
+            CWL("  Press a key to toggle a hero | [Enter] to confirm (need at least 1)\n", ConsoleColor.Gray);
             CW("  > ", ConsoleColor.Cyan);
 
             var kInfo = Console.ReadKey(true);
@@ -219,17 +219,17 @@ static partial class Demo
                 {
                     CW($"{ch.Name,-18}", ConsoleColor.White);
                     CW($"{atk.Name,-14}", ConsoleColor.Yellow);
-                    CWL($"  {GetClassName(ch.ClassId),-10} Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}", ConsoleColor.DarkGray);
+                    CWL($"  {GetClassName(ch.ClassId),-10} Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}", ConsoleColor.Gray);
                 }
             }
 
             Console.WriteLine();
             if (selected.Count > 0)
             {
-                CW("  Party : ", ConsoleColor.DarkGray);
+                CW("  Party : ", ConsoleColor.Gray);
                 CWL(string.Join(", ", selected.Select(c => c.Name)), ConsoleColor.Green);
             }
-            CWL("  Press a letter key to toggle | [Enter] to confirm (need ≥ 1)\n", ConsoleColor.DarkGray);
+            CWL("  Press a letter key to toggle | [Enter] to confirm (need ≥ 1)\n", ConsoleColor.Gray);
             CW("  > ", ConsoleColor.Cyan);
 
             var kInfo = Console.ReadKey(true);
@@ -280,12 +280,12 @@ static partial class Demo
         if (latest is null)
         {
             CWL($"\n  No .json files found in {replayDir}", ConsoleColor.DarkYellow);
-            CWL("  Copy a .json file from combat-logs/ into replays/ to replay it.\n", ConsoleColor.DarkGray);
+            CWL("  Copy a .json file from combat-logs/ into replays/ to replay it.\n", ConsoleColor.Gray);
             return false;
         }
 
         Console.WriteLine();
-        CW("  Loading replay: ", ConsoleColor.DarkGray);
+        CW("  Loading replay: ", ConsoleColor.Gray);
         CWL(Path.GetFileNameWithoutExtension(latest), ConsoleColor.Green);
 
         var snapshot = CombatReplayer.Deserialize(File.ReadAllText(latest));
@@ -298,7 +298,7 @@ static partial class Demo
         MaxHp = allMembers.ToDictionary(m => m.Character.Name, m => m.Character.MaxHitPoints);
         CurHp = new Dictionary<string, int>(MaxHp);
 
-        CWL($"  Seed: {snapshot.Seed}  |  replaying...\n", ConsoleColor.DarkGray);
+        CWL($"  Seed: {snapshot.Seed}  |  replaying...\n", ConsoleColor.Gray);
         Result = CombatReplayer.Replay(snapshot);
         return true;
     }

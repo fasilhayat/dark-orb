@@ -1,6 +1,7 @@
 namespace BattleArena.Demo;
 
 using Application.Models;
+using Application.Services;
 using Core.Entities;
 using Core.Entities.Enums;
 
@@ -122,10 +123,10 @@ static partial class Demo
 
         // Roll / stats on one compact line
         if (ApiClient is not null)
-            CW("     ⚡ d20=", ConsoleColor.DarkGray);
+            CW("     ⚡ d20=", ConsoleColor.DarkCyan);
         else
-            CW("     d20=", ConsoleColor.DarkGray);
-        CW($"{e.DieRoll,2}", ConsoleColor.DarkGray);
+            CW("     d20=", ConsoleColor.Gray);
+        CW($"{e.DieRoll,2}", ConsoleColor.Cyan);
         CW("  ATK "); CW($"{e.AttackPower}", ConsoleColor.Yellow);
         CW("  →  total "); CW($"{total,2}", ConsoleColor.White);
         CW("   vs  DEF "); CW($"{e.DefensePower}", ConsoleColor.Yellow);
@@ -145,8 +146,19 @@ static partial class Demo
         }
         else if (e.IsHit == true)
         {
-            var label = margin >= 8 ? "■ CRUSHING HIT" : margin >= 4 ? "■ SOLID HIT" : "■ GLANCING HIT";
-            CW(label, ConsoleColor.Green);
+            var damage   = e.DamageDealt ?? 0;
+            var defMaxHp = MaxHp.GetValueOrDefault(e.TargetName ?? "", Math.Max(1, damage));
+            var rawLabel = CombatHitLabelService.GetLabel(damage, defMaxHp);
+
+            (string label, ConsoleColor color) hit = rawLabel switch
+            {
+                "CRUSHING HIT" => ("■ CRUSHING HIT", ConsoleColor.Magenta),
+                "HEAVY HIT"    => ("■ HEAVY HIT",    ConsoleColor.Yellow),
+                "SOLID HIT"    => ("■ SOLID HIT",    ConsoleColor.Green),
+                "GLANCING HIT" => ("▪ GLANCING HIT", ConsoleColor.White),
+                _              => ("▫ GRAZE",        ConsoleColor.Gray),
+            };
+            CW(hit.label, hit.color);
         }
         else
         {
@@ -159,7 +171,7 @@ static partial class Demo
             var dmgIdx = e.Message.IndexOf("Dmg:", StringComparison.Ordinal);
             if (dmgIdx >= 0)
             {
-                CW("   │   ", ConsoleColor.DarkGray);
+                CW("   │   ", ConsoleColor.Gray);
                 CW(e.Message[dmgIdx..], ConsoleColor.DarkCyan);
             }
         }
@@ -182,14 +194,14 @@ static partial class Demo
         Console.Write("  HP [");
         Console.ForegroundColor = barCol;
         Console.Write(new string('\u2588', filled));
-        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.ForegroundColor = ConsoleColor.Gray;
         Console.Write(new string('\u2591', w - filled));
         Console.ResetColor();
         var hpDisplay = current < 0 ? current.ToString() : Math.Max(0, current).ToString();
         Console.Write("]  ");
         if (current < 0) CW($"{current,3}", ConsoleColor.Red);
         else CW($"{Math.Max(0, current),3}", barCol);
-        CWL($" / {max,3}", ConsoleColor.DarkGray);
+        CWL($" / {max,3}", ConsoleColor.Gray);
     }
 
     // ── HpColor ───────────────────────────────────────────────────────────────────
@@ -210,7 +222,7 @@ static partial class Demo
     internal static ConsoleColor CharColor(string name, string? activeActorName = null) =>
         activeActorName is null or "" ? ConsoleColor.White :
         name == activeActorName ? ConsoleColor.Green :
-        ConsoleColor.DarkGray;
+        ConsoleColor.Gray;
 
     // ── PrintSummary ──────────────────────────────────────────────────────────────
 
@@ -253,9 +265,9 @@ static partial class Demo
         {
             var dmg = attacks.Where(e => e.ActorName == m.Character.Name && e.IsHit == true).Sum(e => e.DamageDealt ?? 0);
             var isWinner = wParty.Members.Any(wm => wm.Character.Name == m.Character.Name);
-            CW("    "); CW($"{m.Character.Name,-12}", isWinner ? ConsoleColor.Green : ConsoleColor.DarkGray);
+            CW("    "); CW($"{m.Character.Name,-12}", isWinner ? ConsoleColor.Green : ConsoleColor.Gray);
             CW($"  {dmg,3} dmg", ConsoleColor.Yellow);
-            CWL(isWinner ? "  [winner side]" : "  [loser side]", isWinner ? ConsoleColor.Green : ConsoleColor.DarkGray);
+            CWL(isWinner ? "  [winner side]" : "  [loser side]", isWinner ? ConsoleColor.Green : ConsoleColor.Gray);
         }
 
         CWL("\n  Final HP:", ConsoleColor.White);
@@ -293,9 +305,9 @@ static partial class Demo
 
         Console.WriteLine();
         Console.Write("  ");
-        CW($"Tick {tick,-4}  ", ConsoleColor.DarkGray);
+        CW($"Tick {tick,-4}  ", ConsoleColor.Gray);
         CW(leftLabel, isDuel ? ConsoleColor.White : ConsoleColor.Blue);
-        CW("─────────── vs ───────────", ConsoleColor.DarkGray);
+        CW("─────────── vs ───────────", ConsoleColor.Gray);
         CWL(rightLabel, isDuel ? ConsoleColor.White : ConsoleColor.DarkMagenta);
         Console.WriteLine();
 
@@ -311,7 +323,7 @@ static partial class Demo
         }
 
         Console.WriteLine();
-        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.ForegroundColor = ConsoleColor.Gray;
         Console.Write("  " + new string('─', 77));
         Console.ResetColor();
         Console.WriteLine();
@@ -331,7 +343,7 @@ static partial class Demo
         var dead = !s.IsAlive;
 
         var borderFg = active ? ConsoleColor.White
-                     : dead ? ConsoleColor.DarkGray
+                     : dead ? ConsoleColor.Gray
                      : s.IsHero ? ConsoleColor.Blue
                      : ConsoleColor.DarkMagenta;
 
@@ -353,9 +365,9 @@ static partial class Demo
             return
             [
                 top,
-                CL(vb, borderFg, new Seg(namePart, ConsoleColor.DarkGray), new Seg(status, ConsoleColor.DarkRed)),
-                CL(vb, borderFg, new Seg(empty, ConsoleColor.DarkGray)),
-                CL(vb, borderFg, new Seg(empty, ConsoleColor.DarkGray)),
+                CL(vb, borderFg, new Seg(namePart, ConsoleColor.Gray), new Seg(status, ConsoleColor.DarkRed)),
+                CL(vb, borderFg, new Seg(empty, ConsoleColor.Gray)),
+                CL(vb, borderFg, new Seg(empty, ConsoleColor.Gray)),
                 bot
             ];
         }
@@ -369,29 +381,29 @@ static partial class Demo
         var nameLine = CL(vb, borderFg,
             new Seg(indicator, indicFg),
             new Seg(nameStr, active ? ConsoleColor.White : ConsoleColor.White),
-            new Seg("   ", ConsoleColor.DarkGray),
+            new Seg("   ", ConsoleColor.Gray),
             new Seg(weapStr, active ? ConsoleColor.Yellow : ConsoleColor.Gray));
 
         var tmFilled = Math.Min(BAR_W, (int)(Math.Min(1.0, s.Tm / 100.0) * BAR_W));
         var tmLine = CL(vb, borderFg,
-            new Seg(" TM [", ConsoleColor.DarkGray),
+            new Seg(" TM [", ConsoleColor.Gray),
             new Seg(new string('|', tmFilled), ConsoleColor.Cyan),
-            new Seg(new string('\u2591', BAR_W - tmFilled), ConsoleColor.DarkGray),
-            new Seg("]  ", ConsoleColor.DarkGray),
+            new Seg(new string('\u2591', BAR_W - tmFilled), ConsoleColor.Gray),
+            new Seg("]  ", ConsoleColor.Gray),
             new Seg($"  {s.Tm,3}", ConsoleColor.Cyan),
-            new Seg("/100", ConsoleColor.DarkGray));
+            new Seg("/100", ConsoleColor.Gray));
 
         var pct = (double)Math.Max(0, s.Hp) / Math.Max(1, s.MaxHp);
         var hpFilled = s.Hp > 0 ? Math.Max(1, (int)(pct * BAR_W)) : 0;
         var hpFg = HpColor(s.Hp, s.MaxHp);
         var hpLine = CL(vb, borderFg,
-            new Seg(" HP [", ConsoleColor.DarkGray),
+            new Seg(" HP [", ConsoleColor.Gray),
             new Seg(new string('\u2588', hpFilled), hpFg),
-            new Seg(new string('\u2591', BAR_W - hpFilled), ConsoleColor.DarkGray),
-            new Seg("]  ", ConsoleColor.DarkGray),
+            new Seg(new string('\u2591', BAR_W - hpFilled), ConsoleColor.Gray),
+            new Seg("]  ", ConsoleColor.Gray),
             new Seg($"{Math.Max(0, s.Hp),3}", hpFg),
-            new Seg(" / ", ConsoleColor.DarkGray),
-            new Seg($"{s.MaxHp,-3}", ConsoleColor.DarkGray));
+            new Seg(" / ", ConsoleColor.Gray),
+            new Seg($"{s.MaxHp,-3}", ConsoleColor.Gray));
 
         return [top, nameLine, tmLine, hpLine, bot];
     }
@@ -417,7 +429,7 @@ static partial class Demo
             Console.Write("  ");
             foreach (var seg in l) { Console.ForegroundColor = seg.Fg; Console.Write(seg.Text); }
             Console.ResetColor();
-            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write("  \u2551  ");
             Console.ResetColor();
             foreach (var seg in r) { Console.ForegroundColor = seg.Fg; Console.Write(seg.Text); }

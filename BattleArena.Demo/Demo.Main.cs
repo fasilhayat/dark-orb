@@ -53,7 +53,7 @@ static partial class Demo
         {
             if (!RunReplay()) return;
             var replayMode = PickCombatMode();
-            CWL("\n  Press any key to watch the replay...", ConsoleColor.DarkGray);
+            CWL("\n  Press any key to watch the replay...", ConsoleColor.Gray);
             Console.ReadKey(true);
             Console.Clear();
             PrintHeader();
@@ -96,7 +96,7 @@ static partial class Demo
         MaxHp = allMembers.ToDictionary(m => m.Character.Name, m => m.Character.MaxHitPoints);
         CurHp = new Dictionary<string, int>(MaxHp);
 
-        CWL("\n  Press any key to start the combat...", ConsoleColor.DarkGray);
+        CWL("\n  Press any key to start the combat...", ConsoleColor.Gray);
         Console.ReadKey(true);
         Console.Clear();
         PrintHeader();
@@ -112,7 +112,7 @@ static partial class Demo
             ShowSheet("FIGHTER 1", f1.Character, f1Atk,
                 CombatStats.ComputeAttackerStats(f1.Character, GetSheetAttackSource(f1.Character, f1Atk)).AttackPower,
                 CombatStats.ComputeDefenderStats(f1.Character).DefensePower);
-            CWL("\n                           --- VS ---\n", ConsoleColor.DarkGray);
+            CWL("\n                           --- VS ---\n", ConsoleColor.Gray);
             ShowSheet("FIGHTER 2", f2.Character, f2Atk,
                 CombatStats.ComputeAttackerStats(f2.Character, GetSheetAttackSource(f2.Character, f2Atk)).AttackPower,
                 CombatStats.ComputeDefenderStats(f2.Character).DefensePower);
@@ -188,7 +188,7 @@ static partial class Demo
 
         Console.WriteLine();
         ShowSheet("FIGHTER 1", fighter1, f1Atk, f1Ap, f1Dp);
-        CWL("\n                           --- VS ---\n", ConsoleColor.DarkGray);
+        CWL("\n                           --- VS ---\n", ConsoleColor.Gray);
         ShowSheet("FIGHTER 2", fighter2, f2Atk, f2Ap, f2Dp);
 
         HeroParty = Party.Solo(fighter1, f1Atk);
@@ -344,7 +344,16 @@ static partial class Demo
         var logPath = Path.Combine(logDir, "api-calls.log");
         var logWriter = new StreamWriter(logPath, append: true) { AutoFlush = true };
 
-        ApiClient = new BattleArenaApiClient(apiUrl, apiKey: apiKey, fileLogger: logWriter);
+        ApiClient = new BattleArenaApiClient(
+            apiUrl,
+            apiKey: apiKey,
+            consoleLogger: msg =>
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.WriteLine(msg);
+                Console.ResetColor();
+            },
+            fileLogger: logWriter);
         Console.Write("  Connecting to BattleArena API... ");
         try
         {
@@ -414,14 +423,14 @@ static partial class Demo
             var jsonPath = Path.ChangeExtension(txtPath, ".json");
 
             Console.WriteLine();
-            CWL("  " + new string('─', 62), ConsoleColor.DarkGray);
-            CW("  Combat log saved  ", ConsoleColor.DarkGray);
+            CWL("  " + new string('─', 62), ConsoleColor.Gray);
+            CW("  Combat log saved  ", ConsoleColor.Gray);
             CWL(Path.GetFileName(txtPath), ConsoleColor.Green);
-            CW("  Replay data saved ", ConsoleColor.DarkGray);
+            CW("  Replay data saved ", ConsoleColor.Gray);
             CWL(Path.GetFileName(jsonPath), ConsoleColor.DarkGreen);
-            CW("  Directory: ", ConsoleColor.DarkGray);
-            CWL(outputDir, ConsoleColor.DarkGray);
-            CWL("  " + new string('─', 62), ConsoleColor.DarkGray);
+            CW("  Directory: ", ConsoleColor.Gray);
+            CWL(outputDir, ConsoleColor.Gray);
+            CWL("  " + new string('─', 62), ConsoleColor.Gray);
             Console.WriteLine();
         }
         catch (Exception ex)
@@ -457,7 +466,7 @@ static partial class Demo
         }
 
         foreach (var c in losers)
-            CWL($"  {c.Name,-12}  -    XP  (defeated)", ConsoleColor.DarkGray);
+            CWL($"  {c.Name,-12}  -    XP  (defeated)", ConsoleColor.Gray);
 
         CWL($"\n  Total XP awarded: {total}", ConsoleColor.Yellow);
         CWL("  " + new string('=', 62) + "\n", ConsoleColor.Cyan);

@@ -18,26 +18,29 @@ static partial class Demo
             var actSt = states.GetValueOrDefault(e.ActorName);
             var verb = e.IsSpell == true ? "conjures" : "readies";
             Console.WriteLine();
-            CWL("  " + new string('·', 77), ConsoleColor.DarkGray);
+            CWL("  " + new string('·', 77), ConsoleColor.Gray);
             CW("  ▶ ", ConsoleColor.White);
             CW(e.ActorName.ToUpper(), actSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
-            CW($"  {verb}  ", ConsoleColor.DarkGray);
+            CW($"  {verb}  ", ConsoleColor.Gray);
             CW($"[{e.AttackSourceName}]", e.IsSpell == true ? ConsoleColor.Magenta : ConsoleColor.Yellow);
-            CW("  →  ", ConsoleColor.DarkGray);
+            CW("  →  ", ConsoleColor.Gray);
             CWL(e.TargetName ?? "?", tgtSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
         },
         ["Attack"] = (e, _) => PrintAttack(e),
         ["Damage"] = (e, _) =>
         {
+            var mhp = MaxHp!.TryGetValue(e.ActorName, out var m) ? m : 1;
             CW($"     {e.ActorName}", ConsoleColor.White);
             CW("  takes  ");
             CW($"{e.DamageDealt}", ConsoleColor.Red);
             CW("  damage   ");
-            CW("[", ConsoleColor.DarkGray);
-            CW($"{e.TargetHpBefore}", ConsoleColor.DarkGray);
-            CW(" → ", ConsoleColor.DarkGray);
-            CW($"{Math.Max(0, e.TargetHpAfter ?? 0)}", HpColorInline(e.TargetHpAfter ?? 0, MaxHp!.TryGetValue(e.ActorName, out var mhp) ? mhp : 1));
-            CWL(" HP]", ConsoleColor.DarkGray);
+            CW("[", ConsoleColor.Gray);
+            CW($"{e.TargetHpBefore}", ConsoleColor.Gray);
+            CW(" → ", ConsoleColor.Gray);
+            CW($"{Math.Max(0, e.TargetHpAfter ?? 0)}", HpColorInline(e.TargetHpAfter ?? 0, mhp));
+            CW("/", ConsoleColor.Gray);
+            CW($"{mhp}", ConsoleColor.Gray);
+            CWL(" HP]", ConsoleColor.Gray);
         },
         ["FumblePenalty"] = (e, _) =>
         {
@@ -65,11 +68,11 @@ static partial class Demo
             CW(e.ActorName, CharColor(e.ActorName, e.ActiveActorName));
             CW($"  resists  ");
             CW(e.StatusEffectName ?? "the effect", ConsoleColor.Green);
-            CWL($"   (rolled {e.ResistRoll} vs {e.ResistThreshold})", ConsoleColor.DarkGray);
+            CWL($"   (rolled {e.ResistRoll} vs {e.ResistThreshold})", ConsoleColor.Gray);
         },
         ["EffectExpired"] = (e, _) =>
         {
-            CW("  ○ ", ConsoleColor.DarkGray);
+            CW("  ○ ", ConsoleColor.Gray);
             CW(e.StatusEffectName ?? "", ConsoleColor.Green);
             CW("  has worn off  ");
             CWL(e.ActorName, CharColor(e.ActorName, e.ActiveActorName));
@@ -77,7 +80,7 @@ static partial class Demo
         ["SkippedTurn"] = (e, _) =>
         {
             Console.WriteLine();
-            CWL("  " + new string('·', 77), ConsoleColor.DarkGray);
+            CWL("  " + new string('·', 77), ConsoleColor.Gray);
             CW("  ⊘ ", ConsoleColor.DarkYellow);
             CW(e.ActorName, CharColor(e.ActorName, e.ActiveActorName));
             CW("  ");
@@ -173,10 +176,10 @@ static partial class Demo
             DrawCombatScreen(states, turnTick, activeActorName);
 
             Console.WriteLine();
-            CW($"  Turn {turnCount}  ", ConsoleColor.DarkGray);
-            CW("|  ", ConsoleColor.DarkGray);
+            CW($"  Turn {turnCount}  ", ConsoleColor.Gray);
+            CW("|  ", ConsoleColor.Gray);
             CW(ts.ActorName.ToUpper(), actSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
-            CW("  →  ", ConsoleColor.DarkGray);
+            CW("  →  ", ConsoleColor.Gray);
             CWL(ts.TargetName?.ToUpper() ?? "?", tgtSt?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
             Console.WriteLine();
 
@@ -185,10 +188,10 @@ static partial class Demo
                     handler(e, states);
 
             Console.WriteLine();
-            CWL("  " + new string('-', 77), ConsoleColor.DarkGray);
+            CWL("  " + new string('-', 77), ConsoleColor.Gray);
             var over = turnEvents.Any(e => e.EventType is "Death" or "KnockedOut");
             CWL(over ? "  Combat over!  Press any key for results..."
-                     : "  Press any key for next turn...", ConsoleColor.DarkGray);
+                     : "  Press any key for next turn...", ConsoleColor.Gray);
             Console.ReadKey(true);
 
             turnEvents.Clear();
@@ -199,7 +202,7 @@ static partial class Demo
 
         DrawCombatScreen(states, 0);
         Console.WriteLine();
-        CWL("  Press any key for first action...", ConsoleColor.DarkGray);
+        CWL("  Press any key for first action...", ConsoleColor.Gray);
         Console.ReadKey(true);
 
         foreach (var e in Result.Log)
@@ -288,7 +291,7 @@ static partial class Demo
             if (quietStart < 0) return;
             if (quietEnd > quietStart + 1)
             {
-                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine($"\n  ... {quietEnd - quietStart + 1} quiet ticks (TM building)");
                 Console.ResetColor();
                 Thread.Sleep(300);

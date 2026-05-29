@@ -38,7 +38,7 @@ class ManualConsoleTargetSelector : ITargetSelector
             Console.Write("  HP [");
             Console.ForegroundColor = pct > 0.5 ? ConsoleColor.Green : pct > 0.25 ? ConsoleColor.Yellow : ConsoleColor.Red;
             Console.Write(filled);
-            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write(empty);
             Console.ResetColor();
             Console.WriteLine($"]  {Math.Max(0, t.CurrentHitPoints),3} / {t.MaxHitPoints,3}");
