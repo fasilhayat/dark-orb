@@ -1,4 +1,4 @@
-.PHONY: help build build-no-cache up down restart reset logs api-logs db-logs clean clean-logs test test-coverage build-local demo demo-local build-demo sync-instructions
+.PHONY: help build build-no-cache up down restart reset logs api-logs db-logs clean clean-logs test test-coverage build-local demo-local build-demo sync-instructions up-local up-dev up-test up-preprod up-prod down-local down-dev down-test down-preprod down-prod
 
 -include .env
 export ENV
@@ -12,47 +12,83 @@ help:
 	@cmd /C "echo  BattleArena -- available make targets"
 	@cmd /C "echo  ======================================="
 	@echo.
-	@cmd /C "echo  ENVIRONMENT SETUP"
-	@cmd /C "echo    Copy .env.example to .env and set ENV before running any target."
-	@cmd /C "echo    Or pass ENV on the command line:  make up ENV=dev"
+	@cmd /C "echo  QUICK START"
+	@cmd /C "echo    make up-local          Start DB+API only (ports exposed). Run demo with: make demo-local"
+	@cmd /C "echo    make up-dev            Start DB+API and launch demo interactively (dev, ports exposed)"
+	@cmd /C "echo    make up-test           Start DB+API and launch demo interactively (test, no host ports)"
+	@cmd /C "echo    make up-preprod        Start DB+API only, no host ports"
+	@cmd /C "echo    make up-prod           Start DB+API only, no host ports"
 	@echo.
-	@cmd /C "echo    ENV=localdev  DB+API in Docker (ports 5432/8585 exposed). Demo runs on host."
-	@cmd /C "echo    ENV=dev       DB+API+Demo in Docker (ports exposed). Use make demo to run demo."
-	@cmd /C "echo    ENV=test      DB+API+Demo in Docker (no host ports). Use make demo to run demo."
-	@cmd /C "echo    ENV=preprod   DB+API in Docker only, no host ports."
-	@cmd /C "echo    ENV=prod      DB+API in Docker only, no host ports.  [default when no .env]"
+	@cmd /C "echo    make demo-local        Run demo on host (DOTNET_ENVIRONMENT=LocalDev -> localhost:8585)"
 	@echo.
-	@cmd /C "echo  CONTAINERS"
-	@cmd /C "echo    make build             Publish API, then build all Docker images for current ENV"
-	@cmd /C "echo    make build-no-cache    Same as build but forces a full image rebuild (no layer cache)"
-	@cmd /C "echo    make up                Publish API, build images, and start DB+API in the background"
-	@cmd /C "echo    make down              Stop and remove containers (volumes and DB data are preserved)"
-	@cmd /C "echo    make restart           down then up -- pick up config changes without data loss"
-	@cmd /C "echo    make reset             down, republish, rebuild, and start fresh (data preserved)"
-	@cmd /C "echo    make clean             Stop containers AND delete all volumes/data for current ENV"
+	@cmd /C "echo    make down-local        Stop local environment"
+	@cmd /C "echo    make down-dev          Stop dev environment"
+	@cmd /C "echo    make down-test         Stop test environment"
+	@cmd /C "echo    make down-preprod      Stop preprod environment"
+	@cmd /C "echo    make down-prod         Stop prod environment"
 	@echo.
-	@cmd /C "echo  DEMO"
-	@cmd /C "echo    make demo              Build demo image and run it interactively in Docker"
-	@cmd /C "echo                           Requires ENV=dev or ENV=test (demo not in other envs)"
-	@cmd /C "echo                           Also starts DB+API if not already running (via make up)"
-	@cmd /C "echo    make demo-local        Run the demo directly on the host (no Docker for the demo)"
-	@cmd /C "echo                           Sets DOTNET_ENVIRONMENT=LocalDev, connects to localhost:8585"
-	@cmd /C "echo                           Requires DB+API already running: make up ENV=localdev"
-	@cmd /C "echo    make build-demo        Build only the demo Docker image (no run)"
-	@echo.
-	@cmd /C "echo  LOGS"
-	@cmd /C "echo    make logs              Stream logs from all running containers (Ctrl+C to stop)"
-	@cmd /C "echo    make api-logs          Stream logs from the API container only"
-	@cmd /C "echo    make db-logs           Stream logs from the database container only"
-	@cmd /C "echo    make clean-logs        Delete generated combat log files from combat-logs/"
+	@cmd /C "echo  GENERIC TARGETS  (read ENV from .env or pass ENV=localdev^|dev^|test^|preprod^|prod)"
+	@cmd /C "echo    make up                Build images and start DB+API  (e.g. make up ENV=dev)"
+	@cmd /C "echo    make down              Stop containers               (e.g. make down ENV=dev)"
+	@cmd /C "echo    make restart           down then up"
+	@cmd /C "echo    make reset             down, republish, rebuild, start fresh"
+	@cmd /C "echo    make clean             Stop ALL environments and wipe all volumes + publish output"
+	@cmd /C "echo    make build             Build Docker images for current ENV"
+	@cmd /C "echo    make build-no-cache    Build Docker images without layer cache"
+	@cmd /C "echo    make build-demo        Build only the demo Docker image"
+	@cmd /C "echo    make logs              Stream logs from all containers"
+	@cmd /C "echo    make api-logs          Stream API container logs"
+	@cmd /C "echo    make db-logs           Stream database container logs"
+	@cmd /C "echo    make clean-logs        Delete generated combat-logs/ files"
 	@echo.
 	@cmd /C "echo  BUILD ^& TEST"
 	@cmd /C "echo    make build-local       Publish the API locally (output to ./publish)"
-	@cmd /C "echo    make test              Run all unit and acceptance tests with dotnet test"
-	@cmd /C "echo    make test-coverage     Run tests and collect code coverage (opencover format)"
+	@cmd /C "echo    make test              Run all unit and acceptance tests"
+	@cmd /C "echo    make test-coverage     Run tests with code coverage (opencover format)"
 	@echo.
 	@cmd /C "echo  OTHER"
 	@cmd /C "echo    make sync-instructions Copy AGENTS.md to .github/copilot-instructions.md"
+
+# --- Named environment targets -------------------------------------------
+
+up-local: publish
+	@echo Starting local stack (DB + API)...
+	docker compose -f docker-compose.yml -f docker-compose.localdev.yml up -d --build
+
+up-dev: publish
+	@echo Starting dev stack (DB + API) then launching demo...
+	docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+	docker compose -f docker-compose.yml -f docker-compose.dev.yml --profile demo run --rm --build battle-arena-demo
+
+up-test: publish
+	@echo Starting test stack (DB + API) then launching demo...
+	docker compose -f docker-compose.yml -f docker-compose.test.yml up -d --build
+	docker compose -f docker-compose.yml -f docker-compose.test.yml --profile demo run --rm --build battle-arena-demo
+
+up-preprod: publish
+	@echo Starting preprod stack (DB + API)...
+	docker compose -f docker-compose.yml -f docker-compose.preprod.yml up -d --build
+
+up-prod: publish
+	@echo Starting production stack (DB + API)...
+	docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+
+down-local:
+	docker compose -f docker-compose.yml -f docker-compose.localdev.yml down
+
+down-dev:
+	docker compose -f docker-compose.yml -f docker-compose.dev.yml down
+
+down-test:
+	docker compose -f docker-compose.yml -f docker-compose.test.yml down
+
+down-preprod:
+	docker compose -f docker-compose.yml -f docker-compose.preprod.yml down
+
+down-prod:
+	docker compose -f docker-compose.yml -f docker-compose.prod.yml down
+
+# --- Generic targets (read ENV from .env or ENV= override) ---------------
 
 build: publish
 	@echo Building Docker containers (ENV=$(ENV))...
@@ -87,8 +123,12 @@ db-logs:
 	$(COMPOSE) logs -f battle-arena-db
 
 clean: clean-logs
-	@echo Stopping containers and removing volumes (ENV=$(ENV))...
-	$(COMPOSE) down -v
+	@echo Stopping all environments and removing all volumes...
+	-docker compose -f docker-compose.yml -f docker-compose.localdev.yml -p battle-arena-localdev down -v
+	-docker compose -f docker-compose.yml -f docker-compose.dev.yml -p battle-arena-dev down -v
+	-docker compose -f docker-compose.yml -f docker-compose.test.yml -p battle-arena-test down -v
+	-docker compose -f docker-compose.yml -f docker-compose.preprod.yml -p battle-arena-preprod down -v
+	-docker compose -f docker-compose.yml -f docker-compose.prod.yml -p battle-arena-prod down -v
 	powershell -Command "if (Test-Path 'publish') { Remove-Item -Recurse -Force 'publish'; Write-Host 'Removed publish/' } else { Write-Host 'No publish output to remove.' }"
 	@echo Clean complete.
 
@@ -109,10 +149,6 @@ publish:
 
 build-demo:
 	$(COMPOSE) build battle-arena-demo
-
-demo: up
-	@echo Starting BattleArena Demo container (ENV=$(ENV))...
-	$(COMPOSE) --profile demo run --rm --build battle-arena-demo
 
 demo-local:
 	@echo Starting BattleArena Demo locally (DOTNET_ENVIRONMENT=LocalDev)...

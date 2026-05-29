@@ -10,6 +10,8 @@ public static class AddServices
 {
     public static void AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.Configure<ApiKeyOptions>(configuration.GetSection("ApiKeys"));
+
         var connectionString = configuration.GetConnectionString("ArenaDatabase")
             ?? "Host=battle-arena-db;Port=5432;Database=battle-arena_data;Username=postgres;Password=postgres";
 

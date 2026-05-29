@@ -23,5 +23,6 @@ services:
       battle-arena-api:
         condition: service_started
     environment:
-      BATTLE_ARENA_API_URL: "http://battle-arena-api:8585"
       DOTNET_ENVIRONMENT: Test
+      BattleArenaApi__Url: "http://battle-arena-api:8585"
+      BattleArenaApi__ApiKey: "BA-DEV-2024-SECRET"

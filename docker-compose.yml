@@ -48,3 +48,4 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ConnectionStrings__ArenaDatabase: "Host=battle-arena-db;Port=5432;Database=battle-arena_data;Username=postgres;Password=postgres"
+      ApiKeys__BattleArena: "BA-DEV-2024-SECRET"

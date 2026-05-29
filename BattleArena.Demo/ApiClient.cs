@@ -23,7 +23,7 @@ internal sealed class BattleArenaApiClient
     private readonly Action<string>? _consoleLogger;
     private readonly TextWriter? _fileLogger;
 
-    public BattleArenaApiClient(string baseUrl, Action<string>? consoleLogger = null, TextWriter? fileLogger = null)
+    public BattleArenaApiClient(string baseUrl, string? apiKey = null, Action<string>? consoleLogger = null, TextWriter? fileLogger = null)
     {
         _consoleLogger = consoleLogger;
         _fileLogger = fileLogger;
@@ -32,16 +32,13 @@ internal sealed class BattleArenaApiClient
             BaseAddress = new Uri(baseUrl.TrimEnd('/')),
             Timeout     = TimeSpan.FromSeconds(10)
         };
+        if (!string.IsNullOrWhiteSpace(apiKey))
+            _http.DefaultRequestHeaders.Add("X-Api-Key", apiKey);
     }
 
     public BattleArenaApiClient(string baseUrl, TextWriter? fileLogger)
+        : this(baseUrl, apiKey: null, fileLogger: fileLogger)
     {
-        _fileLogger = fileLogger;
-        _http = new HttpClient
-        {
-            BaseAddress = new Uri(baseUrl.TrimEnd('/')),
-            Timeout     = TimeSpan.FromSeconds(10)
-        };
     }
 
     private void LogCall(string method, string path)

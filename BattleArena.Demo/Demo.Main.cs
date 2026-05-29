@@ -306,21 +306,22 @@ static partial class Demo
 
     private static void ConnectApi()
     {
-        var apiUrl = Environment.GetEnvironmentVariable("BATTLE_ARENA_API_URL");
+        var env = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")
+               ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
+               ?? "Production";
 
-        if (string.IsNullOrWhiteSpace(apiUrl))
-        {
-            var env = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")
-                   ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
-                   ?? "Production";
+        var config = new ConfigurationBuilder()
+            .SetBasePath(AppContext.BaseDirectory)
+            .AddJsonFile("appsettings.json", optional: true)
+            .AddJsonFile($"appsettings.{env}.json", optional: true)
+            .AddEnvironmentVariables()
+            .Build();
 
-            var config = new ConfigurationBuilder()
-                .SetBasePath(AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: true)
-                .AddJsonFile($"appsettings.{env}.json", optional: true)
-                .Build();
-            apiUrl = config.GetSection("BattleArenaApi")["Url"];
-        }
+        var apiOptions = config.GetSection("BattleArenaApi").Get<BattleArenaApiOptions>()
+                      ?? new BattleArenaApiOptions();
+
+        var apiUrl = apiOptions.Url;
+        var apiKey = apiOptions.ApiKey;
 
         if (string.IsNullOrWhiteSpace(apiUrl))
         {
@@ -343,7 +344,7 @@ static partial class Demo
         var logPath = Path.Combine(logDir, "api-calls.log");
         var logWriter = new StreamWriter(logPath, append: true) { AutoFlush = true };
 
-        ApiClient = new BattleArenaApiClient(apiUrl, fileLogger: logWriter);
+        ApiClient = new BattleArenaApiClient(apiUrl, apiKey: apiKey, fileLogger: logWriter);
         Console.Write("  Connecting to BattleArena API... ");
         try
         {

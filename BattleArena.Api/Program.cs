@@ -2,6 +2,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using BattleArena.Api;
 using BattleArena.Api.Endpoints;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +26,25 @@ app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "BattleArena API v1");
+});
+
+var apiKeyOptions = app.Services.GetRequiredService<IOptions<ApiKeyOptions>>().Value;
+
+app.Use(async (context, next) =>
+{
+    if (!context.Request.Path.StartsWithSegments("/swagger"))
+    {
+        if (!string.IsNullOrEmpty(apiKeyOptions.BattleArena))
+        {
+            if (!context.Request.Headers.TryGetValue("X-Api-Key", out var key) || key != apiKeyOptions.BattleArena)
+            {
+                context.Response.StatusCode = 401;
+                await context.Response.WriteAsync("Unauthorized: missing or invalid X-Api-Key header.");
+                return;
+            }
+        }
+    }
+    await next(context);
 });
 
 app.MapCombatEndpoints();
