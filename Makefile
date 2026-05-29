@@ -28,7 +28,7 @@ build-no-cache: publish
 	@echo Building Docker containers without cache...
 	docker compose build --no-cache
 
-up: publish
+up: 
 	@echo Building images and starting containers...
 	docker compose up -d --build
 
