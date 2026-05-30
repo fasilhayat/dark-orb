@@ -71,7 +71,8 @@ static partial class Demo
         }
 
         Sep();
-        Row2($"{role}: {ch.Name}", $"Level {ch.Level} {ch.ClassName}", ConsoleColor.White);
+        var sexDisplay = ch.Sex switch { "F" => "Female", "M" => "Male", _ => "None" };
+        Row2($"{role}: {ch.Name}", $"{sexDisplay} · Level {ch.Level} {ch.ClassName}", ConsoleColor.White);
         Sep();
         Row($"HP: {ch.MaxHitPoints}   TurnSpeed: {ch.TurnSpeed}   StrikeRating: {ch.StrikeRating}");
         Row($"STR: {ch.Strength} ({Sign((ch.Strength - 10) / 2)}{(ch.Strength - 10) / 2})   DEX: {ch.Dexterity} ({Sign(dexMod)}{dexMod})   INT: {ch.Intelligence} ({Sign((ch.Intelligence - 10) / 2)}{(ch.Intelligence - 10) / 2})");
