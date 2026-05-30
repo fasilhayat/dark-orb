@@ -81,7 +81,7 @@ public class CombatStatsServiceTests
         Assert.Equal(3, result.ShieldBonus);
         Assert.Equal(3, result.DefensiveBuffs);
         Assert.Equal(3, result.DefenseRacialModifiers);
-        Assert.Equal(0, result.LevelDefenseBonus);
-        Assert.Equal(24, result.DefensePower);
+        Assert.Equal(1, result.LevelDefenseBonus);
+        Assert.Equal(25, result.DefensePower);
     }
 }

@@ -11,5 +11,6 @@ public enum DamageType
     Lightning,
     Shadow,
     Holy,
-    Acid
+    Acid,
+    Psychic
 }

@@ -62,7 +62,7 @@ public class CombatServiceTests
         Assert.True(result.IsHit);
         Assert.Equal(12, result.HitRoll);
         Assert.Equal(4, result.AttackPower);
-        Assert.Equal(10, result.DefensePower);
+        Assert.Equal(11, result.DefensePower);
         Assert.Equal(9, result.Damage);
     }
 

@@ -364,4 +364,59 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
 
         out_.WriteLine($"  Seed {snapshot.Seed}  |  {original.Log.Count} events  |  replay match: ✓");
     }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // TEST 7 — Level advantage: L9 warrior beats L4 warrior consistently
+    // ─────────────────────────────────────────────────────────────────────────
+
+    [Fact]
+    public void Duel_HighLevelBeatsLowLevel_Consistently()
+    {
+        var high = MakeWarrior("Marigold", 9, 18, 12, 80, 10, 14, "Chain Mail",  5, 2, "Longsword", DieType.D8, 1, 2);
+        var low  = MakeWarrior("Mira",     4, 17,  9, 45,  7, 16, "Leather Armor", 7, 1, "Dagger",    DieType.D4, 1, 0);
+
+        const int Trials = 20;
+        var highWins = 0;
+
+        // Clone characters each trial so HP carries over correctly
+        static Character Clone(Character src) => new()
+        {
+            Name = src.Name, Level = src.Level, Strength = src.Strength,
+            Dexterity = src.Dexterity, Intelligence = src.Intelligence,
+            StrikeRating = src.StrikeRating, TurnSpeed = src.TurnSpeed,
+            MaxHitPoints = src.MaxHitPoints, CurrentHitPoints = src.MaxHitPoints,
+            Equipment = new ArmorSlots
+            {
+                Chest = new Armor { Name = src.Equipment.Chest?.Name ?? "", ArmorClass = src.Equipment.Chest?.ArmorClass ?? 0, Mitigation = src.Equipment.Chest?.Mitigation ?? 0, MaxDexterityBonus = src.Equipment.Chest?.MaxDexterityBonus ?? 6 },
+                RightHand = new Weapon { Name = src.Equipment.RightHand?.Name ?? "Fists", DamageDie = src.Equipment.RightHand?.DamageDie ?? DieType.D4, DamageCount = src.Equipment.RightHand?.DamageCount ?? 1, DamageType = src.Equipment.RightHand?.DamageType ?? DamageType.Bludgeoning, AttackType = AttackType.Melee, AttackBonus = src.Equipment.RightHand?.AttackBonus ?? 0 }
+            }
+        };
+
+        for (var i = 0; i < Trials; i++)
+        {
+            var h = Clone(high);
+            var l = Clone(low);
+            var result = BuildSim().Simulate(Party.Solo(h, h.Equipment.RightHand!), Party.Solo(l, l.Equipment.RightHand!));
+            var winner   = result.WinningParty?.Members.First().Character.Name;
+            var tickSpan = result.TotalTicks;
+
+            DumpLog(result, $"{nameof(Duel_HighLevelBeatsLowLevel_Consistently)}_trial{i}");
+
+            Assert.NotNull(winner);
+            Assert.NotNull(result.LosingParty);
+            AssertLogIntegrity(result);
+
+            if (winner == "Marigold")
+                highWins++;
+
+            out_.WriteLine($"  Trial {i + 1,2}: {winner} wins in {tickSpan} ticks");
+        }
+
+        out_.WriteLine($"  ── Result: High-level won {highWins}/{Trials}");
+
+        // Level 9 has Level*2 = +18 damage, LevelDefenseBonus = +9 defense.
+        // Level 4 has Level*2 = +8  damage, LevelDefenseBonus = +4 defense.
+        // The L4 can still get lucky (crit streak), but the L9 should dominate.
+        Assert.True(highWins >= 16, $"High-level should win ≥ 16/20 (won {highWins})");
+    }
 }

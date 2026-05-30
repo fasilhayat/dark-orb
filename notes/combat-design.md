@@ -51,7 +51,7 @@ ArmorClass
 + DefensiveBuffs
 + RacialModifiers
 + ItemSetBonuses
-+ LevelDefenseBonus (= Level / 2, rounding down)
++ LevelDefenseBonus (= Level)
 
 ---
 
@@ -82,6 +82,12 @@ FinalDamage = (int)(BaseDamage × TypeMultiplier) - ArmorMitigation + ElementalD
 Level scaling ensures higher-level characters hit harder, making level a meaningful
 combat advantage beyond hit points. Without this, a Level 1 and Level 20 with the
 same weapon would deal identical damage.
+
+Level also contributes to defense: LevelDefenseBonus = Level. This means a
+higher-level character is harder to hit, especially against lower-level attackers.
+A Level 9 gets +9 defense while a Level 4 attacker only gets +4 attack from
+LevelScaling, creating a net +5 defensive advantage. Combined with the +10 extra
+damage (Level × 2), the higher-level character dominates consistently.
 
 Critical hits double BaseDamage before the type multiplier and mitigation.
 
