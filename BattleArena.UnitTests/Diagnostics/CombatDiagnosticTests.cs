@@ -400,7 +400,7 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
             var winner   = result.WinningParty?.Members.First().Character.Name;
             var tickSpan = result.TotalTicks;
 
-            DumpLog(result, $"{nameof(Duel_HighLevelBeatsLowLevel_Consistently)}_trial{i}");
+            if (i == 0) DumpLog(result, nameof(Duel_HighLevelBeatsLowLevel_Consistently));
 
             Assert.NotNull(winner);
             Assert.NotNull(result.LosingParty);

@@ -173,6 +173,8 @@ WITH weapon_map (char_name, slot_name, item_name) AS (VALUES
     ('Rorik the Wanderer',   'RightHand', 'Battle Axe'),
     ('Grommash Ironhide',    'RightHand', 'Great Sword'),
     ('Finn Swift',           'RightHand', 'Dagger'),
+    ('The Collector',        'RightHand', 'Wand'),
+    ('Morgath the Pale',     'RightHand', 'Long Sword'),
     ('Sizzle',               'RightHand', 'Dagger'),
     ('Ivy Thornwood',        'RightHand', 'Quarter Staff')
 )
