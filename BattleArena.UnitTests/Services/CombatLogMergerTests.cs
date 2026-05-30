@@ -29,8 +29,9 @@ public class CombatLogMergerTests
     }
 
     [Fact]
-    public void Merge_ApiCallAppearsAfterLastMainEventAtSameTick()
+    public void Merge_ApiCallAppearsBeforeAttack()
     {
+        // Dice rolls happen first; Attack shows the computed outcome.
         var log = new List<CombatLogEntry>
         {
             E(5, "TurnStart"),
@@ -41,9 +42,45 @@ public class CombatLogMergerTests
 
         var merged = CombatLogMerger.Merge(log, diceLog);
 
-        Assert.Equal(4, merged.Count);
-        Assert.Equal("Damage", merged[2].EventType);
-        Assert.Equal("ApiCall", merged[3].EventType);
+        var types = merged.Select(e => e.EventType).ToList();
+        Assert.Equal(["TurnStart", "ApiCall", "Attack", "Damage"], types);
+    }
+
+    [Fact]
+    public void Merge_ApiCallAppearsBeforeKnockedOut()
+    {
+        // When no Attack in tick, dice should still precede the terminal outcome.
+        var log = new List<CombatLogEntry>
+        {
+            E(7, "TurnStart"),
+            E(7, "Attack"),
+            E(7, "Damage"),
+            E(7, "KnockedOut")
+        };
+        var diceLog = new List<CombatLogEntry> { E(7, "ApiCall") };
+
+        var merged = CombatLogMerger.Merge(log, diceLog);
+
+        var types = merged.Select(e => e.EventType).ToList();
+        // Dice inserted before Attack (highest priority), so before everything except TurnStart
+        Assert.Equal(["TurnStart", "ApiCall", "Attack", "Damage", "KnockedOut"], types);
+    }
+
+    [Fact]
+    public void Merge_ApiCallAppearsBeforeDeath()
+    {
+        var log = new List<CombatLogEntry>
+        {
+            E(9, "Attack"),
+            E(9, "Damage"),
+            E(9, "Death")
+        };
+        var diceLog = new List<CombatLogEntry> { E(9, "ApiCall") };
+
+        var merged = CombatLogMerger.Merge(log, diceLog);
+
+        var types = merged.Select(e => e.EventType).ToList();
+        Assert.Equal(["ApiCall", "Attack", "Damage", "Death"], types);
     }
 
     [Fact]
@@ -60,19 +97,19 @@ public class CombatLogMergerTests
         var merged = CombatLogMerger.Merge(log, diceLog);
 
         var apiIdx = merged.FindIndex(e => e.EventType == "ApiCall");
-        var attackIdx = merged.FindIndex(e => e.EventType == "Attack");
-        Assert.True(apiIdx > attackIdx, "ApiCall must appear after Attack");
+        var turnStartIdx = merged.FindIndex(e => e.EventType == "TurnStart");
+        Assert.True(apiIdx > turnStartIdx, "ApiCall must appear after TurnStart");
     }
 
     [Fact]
-    public void Merge_MultipleTicksEachGetTheirDiceAfterLastEvent()
+    public void Merge_MultipleTicksEachGetTheirDiceBeforeAttack()
     {
         var log = new List<CombatLogEntry>
         {
             E(1, "TurnStart"),
             E(1, "Attack"),
             E(2, "TurnStart"),
-            E(2, "Damage")
+            E(2, "Damage")  // no Attack in tick 2 → dice appended at end
         };
         var diceLog = new List<CombatLogEntry>
         {
@@ -82,15 +119,20 @@ public class CombatLogMergerTests
 
         var merged = CombatLogMerger.Merge(log, diceLog);
 
-        Assert.Equal(6, merged.Count);
-        Assert.Equal("Attack", merged[1].EventType);
-        Assert.Equal("D1", merged[2].ActorName);
-        Assert.Equal("Damage", merged[4].EventType);
-        Assert.Equal("D2", merged[5].ActorName);
+        var types = merged.Select(e => e.EventType).ToList();
+        var actors = merged.Select(e => e.ActorName).ToList();
+        // Tick 1: dice before Attack
+        Assert.Equal("TurnStart", types[0]);
+        Assert.Equal("D1", actors[1]);
+        Assert.Equal("Attack", types[2]);
+        // Tick 2: no Attack → dice after last event
+        Assert.Equal("TurnStart", types[3]);
+        Assert.Equal("Damage", types[4]);
+        Assert.Equal("D2", actors[5]);
     }
 
     [Fact]
-    public void Merge_MultipleDiceAtSameTick_AllAppendedAfterMainEvents()
+    public void Merge_MultipleDiceAtSameTick_AllInsertedBeforeAttack()
     {
         var log = new List<CombatLogEntry> { E(7, "Attack") };
         var diceLog = new List<CombatLogEntry>
@@ -103,8 +145,8 @@ public class CombatLogMergerTests
         var merged = CombatLogMerger.Merge(log, diceLog);
 
         Assert.Equal(4, merged.Count);
-        Assert.Equal("Attack", merged[0].EventType);
-        Assert.All(merged.Skip(1), e => Assert.Equal("ApiCall", e.EventType));
+        Assert.All(merged.Take(3), e => Assert.Equal("ApiCall", e.EventType));
+        Assert.Equal("Attack", merged[3].EventType);
     }
 
     [Fact]
@@ -135,6 +177,7 @@ public class CombatLogMergerTests
         var merged = CombatLogMerger.Merge(log, diceLog);
 
         var types = merged.Select(e => e.EventType).ToList();
-        Assert.Equal(["RoundStart", "TurnStart", "Attack", "Damage", "TurnEnd", "ApiCall"], types);
+        // Dice inserted before Attack (the first priority event in the tick)
+        Assert.Equal(["RoundStart", "TurnStart", "ApiCall", "Attack", "Damage", "TurnEnd"], types);
     }
 }

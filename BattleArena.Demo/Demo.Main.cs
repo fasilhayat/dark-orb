@@ -302,6 +302,8 @@ static partial class Demo
                 MaxHp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
                 Hp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
                 IsHero = true,
+                Level = m.Character.Level,
+                ClassId = m.Character.ClassId,
                 Weapon = m.AttackSource?.Name ?? "",
                 MaxMana = m.Character.MaxMana,
                 Mana = m.Character.CurrentMana
@@ -313,6 +315,8 @@ static partial class Demo
                 MaxHp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
                 Hp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
                 IsHero = false,
+                Level = m.Character.Level,
+                ClassId = m.Character.ClassId,
                 Weapon = m.AttackSource?.Name ?? "",
                 MaxMana = m.Character.MaxMana,
                 Mana = m.Character.CurrentMana
@@ -404,23 +408,44 @@ static partial class Demo
         var initClient = new BattleArenaApiClient(
             apiUrl,
             apiKey: apiKey,
-            consoleLogger: msg => Console.WriteLine($"  {msg}"),
+            consoleLogger: msg => { Console.ForegroundColor = ConsoleColor.Gray; Console.WriteLine(msg); Console.ResetColor(); },
             fileLogger: logWriter);
-        Console.WriteLine("  Connecting to BattleArena API...");
+
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine("  ── BattleArena API ─────────────────────────────────────");
+        Console.ResetColor();
+        Console.Write("  Connecting to BattleArena API at ");
+        Console.ForegroundColor = ConsoleColor.Gray;
+        Console.WriteLine(apiUrl);
+        Console.ResetColor();
+
         try
         {
-            ApiRoster = initClient.GetCharactersAsync().GetAwaiter().GetResult();
-            ApiWeapons = initClient.GetWeaponsAsync().GetAwaiter().GetResult();
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"  Connection established  ({ApiRoster.Count} characters, {ApiWeapons.Count} weapons loaded)");
+            Console.WriteLine("  Connection established.");
+            Console.ResetColor();
+
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine("  Retrieving characters and gear...");
+            Console.ResetColor();
+            ApiRoster  = initClient.GetCharactersAsync().GetAwaiter().GetResult();
+            ApiWeapons = initClient.GetWeaponsAsync().GetAwaiter().GetResult();
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"  Retrieval complete  ─  {ApiRoster.Count} characters, {ApiWeapons.Count} weapons loaded.");
             Console.ResetColor();
         }
         catch (Exception ex)
         {
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine($"  unreachable ({ex.Message})");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"  Unreachable ({ex.Message})");
             Console.ResetColor();
         }
+
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine("  ────────────────────────────────────────────────────────");
+        Console.ResetColor();
+        Console.WriteLine();
 
         ApiClient = new BattleArenaApiClient(
             apiUrl,
@@ -433,7 +458,7 @@ static partial class Demo
     {
         if (ApiRoster.Count == 0)
         {
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("  Using local hardcoded characters.");
             Console.ResetColor();
             return;
@@ -485,7 +510,7 @@ static partial class Demo
             CW("  Combat log saved  ", ConsoleColor.Gray);
             CWL(Path.GetFileName(txtPath), ConsoleColor.Green);
             CW("  Replay data saved ", ConsoleColor.Gray);
-            CWL(Path.GetFileName(jsonPath), ConsoleColor.DarkGreen);
+            CWL(Path.GetFileName(jsonPath), ConsoleColor.Green);
             CW("  Directory: ", ConsoleColor.Gray);
             CWL(outputDir, ConsoleColor.Gray);
             CWL("  " + new string('─', 62), ConsoleColor.Gray);
@@ -503,7 +528,7 @@ static partial class Demo
         }
         catch (Exception ex)
         {
-            CWL($"  [warn] Could not write combat log: {ex.Message}", ConsoleColor.DarkYellow);
+            CWL($"  [warn] Could not write combat log: {ex.Message}", ConsoleColor.Yellow);
         }
     }
 

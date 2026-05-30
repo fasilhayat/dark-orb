@@ -163,25 +163,25 @@ internal sealed class ConsoleCombatPresenter : ICombatPresenter
 
     private static void HandleFumblePenalty(CombatLogEntry entry, CombatDisplayState _)
     {
-        Demo.CW("  ⚠ ", ConsoleColor.DarkYellow);
-        Demo.CWL(entry.Message, ConsoleColor.DarkYellow);
+        Demo.CW("  ⚠ ", ConsoleColor.Yellow);
+        Demo.CWL(entry.Message, ConsoleColor.Yellow);
     }
 
     private static void HandleDoTTick(CombatLogEntry entry, CombatDisplayState _)
     {
-        Demo.CW("  ↓ ", ConsoleColor.DarkYellow);
+        Demo.CW("  ↓ ", ConsoleColor.Yellow);
         Demo.CW(entry.ActorName, Demo.CharColor(entry.ActorName, entry.ActiveActorName));
         Demo.CW("  suffers  ");
         Demo.CW($"{entry.DamageDealt}", ConsoleColor.Red);
-        Demo.CW($"  {entry.StatusEffectName ?? "DoT"} damage", ConsoleColor.DarkYellow);
+        Demo.CW($"  {entry.StatusEffectName ?? "DoT"} damage", ConsoleColor.Yellow);
         Console.WriteLine();
     }
 
     private static void HandleEffectApplied(CombatLogEntry entry, CombatDisplayState _)
     {
-        Demo.CW("  ★ ", ConsoleColor.DarkYellow);
+        Demo.CW("  ★ ", ConsoleColor.Yellow);
         Demo.CW(entry.ActorName, Demo.CharColor(entry.ActorName, entry.ActiveActorName));
-        Demo.CWL($"  is afflicted with  {entry.StatusEffectName}!", ConsoleColor.DarkYellow);
+        Demo.CWL($"  is afflicted with  {entry.StatusEffectName}!", ConsoleColor.Yellow);
     }
 
     private static void HandleEffectResisted(CombatLogEntry entry, CombatDisplayState _)
@@ -218,10 +218,10 @@ internal sealed class ConsoleCombatPresenter : ICombatPresenter
     {
         Console.WriteLine();
         Demo.CWL("  " + new string('·', 77), ConsoleColor.Gray);
-        Demo.CW("  ⊘ ", ConsoleColor.DarkYellow);
+        Demo.CW("  ⊘ ", ConsoleColor.Yellow);
         Demo.CW(entry.ActorName, Demo.CharColor(entry.ActorName, entry.ActiveActorName));
         Demo.CW("  ");
-        Demo.CWL(entry.Message.Split("is ")[^1], ConsoleColor.DarkYellow);
+        Demo.CWL(entry.Message.Split("is ")[^1], ConsoleColor.Yellow);
     }
 
     private static void HandleTurnEnd(CombatLogEntry _, CombatDisplayState _1)
@@ -239,15 +239,15 @@ internal sealed class ConsoleCombatPresenter : ICombatPresenter
     private static void HandleKnockedOut(CombatLogEntry entry, CombatDisplayState _)
     {
         Console.WriteLine();
-        Demo.CWL("  " + new string('~', 65), ConsoleColor.DarkYellow);
-        Demo.CWL($"  ⊘  {entry.Message}", ConsoleColor.DarkYellow);
-        Demo.CWL("  " + new string('~', 65), ConsoleColor.DarkYellow);
+        Demo.CWL("  " + new string('~', 65), ConsoleColor.Yellow);
+        Demo.CWL($"  ⊘  {entry.Message}", ConsoleColor.Yellow);
+        Demo.CWL("  " + new string('~', 65), ConsoleColor.Yellow);
     }
 
     private static void HandleApiCall(CombatLogEntry entry, CombatDisplayState _)
     {
-        Demo.CW("     ⚡ ", ConsoleColor.DarkCyan);
-        Demo.CWL(entry.Message, ConsoleColor.DarkCyan);
+        Demo.CW("     ⚡ ", ConsoleColor.Cyan);
+        Demo.CWL(entry.Message, ConsoleColor.Cyan);
     }
 
     private static void HandleManaRegen(CombatLogEntry entry, CombatDisplayState _)
@@ -264,7 +264,7 @@ internal sealed class ConsoleCombatPresenter : ICombatPresenter
         Demo.CW(entry.ActorName, Demo.CharColor(entry.ActorName, entry.ActiveActorName));
         Demo.CW("  casts  ");
         Demo.CW(entry.AttackSourceName ?? "unknown", ConsoleColor.Magenta);
-        Demo.CWL($"  (-{entry.ManaCost} mana)", ConsoleColor.DarkMagenta);
+        Demo.CWL($"  (-{entry.ManaCost} mana)", ConsoleColor.Magenta);
     }
 
     private Dictionary<string, Action<CombatLogEntry, CombatDisplayState>> BuildHandlers() => new()

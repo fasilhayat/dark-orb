@@ -18,7 +18,7 @@ class ManualConsoleTargetSelector : ITargetSelector
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine($"  MANUAL TARGET  --  {actor.Name} is ready to act!");
         Console.ResetColor();
-        Console.ForegroundColor = ConsoleColor.DarkCyan;
+        Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine("  " + new string('-', 50));
         Console.ResetColor();
         Console.WriteLine();

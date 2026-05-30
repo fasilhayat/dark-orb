@@ -1,5 +1,5 @@
 {
-  "version": "1.2",
+  "version": "1.3",
   "description": "Defines which data fields the BattleArena combat GUI must display. Placement and exact phrasing are left to the GUI implementation — only field presence and correctness matter. Set 'enabled' to false on any screen or field to suppress it from the console output.",
   "screens": {
     "characterCard": {
@@ -7,6 +7,8 @@
       "description": "Character status block shown throughout combat for each combatant. All cards MUST be the same height regardless of class or alive/dead status — non-spellcasters render a dimmed placeholder MP row and an empty spell row so all cards remain aligned.",
       "requiredFields": [
         { "enabled": true,  "field": "Name",             "source": "Character.Name",                         "description": "Character display name" },
+        { "enabled": true,  "field": "Level",            "source": "Character.Level",                        "description": "Character level (1–20). Displayed as 'Lvl N  ClassName' beneath the name line in the card." },
+        { "enabled": true,  "field": "Class",            "source": "Character.ClassId",                      "description": "Character class derived from ClassId (1=Barbarian, 2=Knight, 3=Paladin, 4=Priest, 5=Mage, 6=Bard, 7=Druid, 8=Fighter, 9=Rogue). Rendered as text next to Level." },
         { "enabled": true,  "field": "CurrentHp",        "source": "Character.CurrentHitPoints",             "description": "Current hit points (can be negative after KO)" },
         { "enabled": true,  "field": "MaxHp",            "source": "Character.MaxHitPoints",                 "description": "Maximum hit points — must be > 0" },
         { "enabled": true,  "field": "CurrentMana",      "source": "Character.CurrentMana",                  "description": "Current mana points — shown for ALL characters. Non-casters render a dimmed '-- / --' placeholder so card height stays uniform." },

@@ -1,4 +1,4 @@
-.PHONY: help up-local up-dev up-test up-preprod up-prod down clean clean-logs redo-local demo-local test test-coverage build-local sync-instructions publish publish-demo
+.PHONY: help up-local up-dev run-dev up-test up-preprod up-prod down clean clean-logs redo-local demo-local test test-coverage build-local sync-instructions publish publish-demo
 
 help:
 	@cmd /C "echo  BattleArena -- available make targets"
@@ -9,6 +9,7 @@ help:
 	@cmd /C "echo                          make demo-local"
 	@cmd /C "echo    make up-dev         Build demo in Release mode, start DB + API + demo in Docker"
 	@cmd /C "echo                          (interactive demo container)"
+	@cmd /C "echo    make run-dev        Re-run demo container only (DB + API must already be up)"
 	@cmd /C "echo    make up-test        Build demo in Release mode, start DB + API + demo in Docker"
 	@cmd /C "echo                          (no host ports)"
 	@cmd /C "echo    make up-preprod     Start DB + API only (no host ports)"
@@ -35,7 +36,12 @@ up-local: publish
 
 up-dev: publish publish-demo
 	@echo Building demo in Release mode and starting everything in Docker...
-	docker compose -p dark-orb-dev -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+	docker compose -p dark-orb-dev -f docker-compose.yml -f docker-compose.dev.yml --profile demo build --no-cache battle-arena-api battle-arena-demo
+	docker compose -p dark-orb-dev -f docker-compose.yml -f docker-compose.dev.yml up -d
+	docker compose -p dark-orb-dev -f docker-compose.yml -f docker-compose.dev.yml --profile demo run --rm battle-arena-demo
+
+run-dev:
+	@echo Re-running demo container (DB + API must already be up via make up-dev)...
 	docker compose -p dark-orb-dev -f docker-compose.yml -f docker-compose.dev.yml --profile demo run --rm battle-arena-demo
 
 up-test: publish publish-demo

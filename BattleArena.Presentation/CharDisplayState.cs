@@ -5,6 +5,8 @@ public class CharDisplayState
     public required string Name { get; init; }
     public required int MaxHp { get; init; }
     public required bool IsHero { get; init; }
+    public int Level { get; init; }
+    public int ClassId { get; init; }
     public int Hp { get; set; }
     public int Tm { get; set; }
     public int MaxMana { get; set; }

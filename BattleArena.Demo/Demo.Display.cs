@@ -128,7 +128,7 @@ static partial class Demo
             cfg.IsFieldEnabled("attackEvent", "DefensePower"))
         {
             if (ApiClient is not null)
-                CW("     ⚡ d20=", ConsoleColor.DarkCyan);
+                CW("     ⚡ d20=", ConsoleColor.Cyan);
             else
                 CW("     d20=", ConsoleColor.Gray);
 
@@ -164,7 +164,7 @@ static partial class Demo
             }
             else if (cfg.IsFieldEnabled("attackEvent", "IsFumble") && e.IsFumble == true)
             {
-                CW("⚠ FUMBLE", ConsoleColor.DarkYellow);
+                CW("⚠ FUMBLE", ConsoleColor.Yellow);
             }
             else if (e.IsHit == true)
             {
@@ -188,7 +188,7 @@ static partial class Demo
                     if (dmgIdx >= 0)
                     {
                         CW("   │   ", ConsoleColor.Gray);
-                        CW(e.Message[dmgIdx..], ConsoleColor.DarkCyan);
+                        CW(e.Message[dmgIdx..], ConsoleColor.Cyan);
                     }
                 }
             }
@@ -201,7 +201,7 @@ static partial class Demo
         }
 
         if (!string.IsNullOrEmpty(e.Phrase))
-            CWL($"     \"{e.Phrase}\"", ConsoleColor.DarkCyan);
+            CWL($"     \"{e.Phrase}\"", ConsoleColor.Cyan);
     }
 
     // ── ShowHp ────────────────────────────────────────────────────────────────────
@@ -257,7 +257,7 @@ static partial class Demo
         if (Result.MaxTicksReached)
         {
             Console.WriteLine();
-            CWL("  COMBAT TIMEOUT — no winner declared.", ConsoleColor.DarkYellow);
+            CWL("  COMBAT TIMEOUT — no winner declared.", ConsoleColor.Yellow);
             CWL($"  Total ticks: {Result.TotalTicks}", ConsoleColor.White);
             CWL("\n  " + new string('=', 62), ConsoleColor.Cyan);
             return;
@@ -284,7 +284,7 @@ static partial class Demo
         CWL($"\n  Total actions :  {attacks.Count}", ConsoleColor.White);
         CW("  Results       :  "); CW($"{hits} hits", ConsoleColor.Green);
         CW($" / {misses} misses"); CW($" / {crits} crits", ConsoleColor.Magenta);
-        CWL($" / {fumbles} fumbles", ConsoleColor.DarkYellow);
+        CWL($" / {fumbles} fumbles", ConsoleColor.Yellow);
 
         CWL("\n  Damage dealt:", ConsoleColor.White);
         foreach (var m in wParty.Members.Concat(lParty.Members))
@@ -311,7 +311,7 @@ static partial class Demo
             var loserTag = Result.LoserStatus == CharacterVitalStatus.Dead ? "SLAIN" : "unconscious";
             CWL($"\n  {loserName} is {loserTag}!",
                 Result.LoserStatus == CharacterVitalStatus.Dead
-                    ? ConsoleColor.Red : ConsoleColor.DarkYellow);
+                    ? ConsoleColor.Red : ConsoleColor.Yellow);
         }
 
         if (DisplayConfig.IsFieldEnabled("combatSummary", "CombatId"))
@@ -335,12 +335,12 @@ static partial class Demo
 
         Console.Write("  ");
         CW($"ROUND {roundNumber,-2}  ", ConsoleColor.Yellow);
-        CW("[", ConsoleColor.DarkYellow);
-        CW(new string('\u2588', filled), ConsoleColor.DarkYellow);
-        CW(new string('\u2591', BarWidth - filled), ConsoleColor.DarkGray);
-        CW("]", ConsoleColor.DarkYellow);
+        CW("[", ConsoleColor.Yellow);
+        CW(new string('\u2588', filled), ConsoleColor.Yellow);
+        CW(new string('\u2591', BarWidth - filled), ConsoleColor.Gray);
+        CW("]", ConsoleColor.Yellow);
         CW($"  {tickInRound}", ConsoleColor.White);
-        CW(" / ", ConsoleColor.DarkGray);
+        CW(" / ", ConsoleColor.Gray);
         CWL($"{RoundLength} ticks", ConsoleColor.Gray);
 
         // Pacing indicator
@@ -381,7 +381,7 @@ static partial class Demo
         CW($"Tick {tick,-4}  ", ConsoleColor.Gray);
         CW(leftLabel, isDuel ? ConsoleColor.White : ConsoleColor.Blue);
         CW("─────────── vs ───────────", ConsoleColor.Gray);
-        CWL(rightLabel, isDuel ? ConsoleColor.White : ConsoleColor.DarkMagenta);
+        CWL(rightLabel, isDuel ? ConsoleColor.White : ConsoleColor.Magenta);
         Console.WriteLine();
 
         var empty = BuildEmptyBlock();
@@ -418,7 +418,7 @@ static partial class Demo
         var borderFg = active ? ConsoleColor.White
                      : dead ? ConsoleColor.Gray
                      : s.IsHero ? ConsoleColor.Blue
-                     : ConsoleColor.DarkMagenta;
+                     : ConsoleColor.Magenta;
 
         char h = active ? '═' : '─';
         char tl = active ? '╔' : '┌';
@@ -438,7 +438,7 @@ static partial class Demo
             return
             [
                 top,
-                CL(vb, borderFg, new Seg(namePart, ConsoleColor.Gray), new Seg(status, ConsoleColor.DarkRed)),
+                CL(vb, borderFg, new Seg(namePart, ConsoleColor.Gray), new Seg(status, ConsoleColor.Red)),
                 CL(vb, borderFg, new Seg(empty, ConsoleColor.Gray)),
                 CL(vb, borderFg, new Seg(empty, ConsoleColor.Gray)),
                 CL(vb, borderFg, new Seg(empty, ConsoleColor.Gray)),
@@ -458,6 +458,12 @@ static partial class Demo
             new Seg(nameStr, active ? ConsoleColor.White : ConsoleColor.White),
             new Seg("   ", ConsoleColor.Gray),
             new Seg(weapStr, active ? ConsoleColor.Yellow : ConsoleColor.Gray));
+
+        var levelLabel = $"Lvl {s.Level}";
+        var className = GetClassName(s.ClassId);
+        var classStr = $"{levelLabel}  {className}".PadRight(CONTENT_W);
+        var classLine = CL(vb, borderFg,
+            new Seg(classStr, ConsoleColor.Gray));
 
         var tmFilled = Math.Min(BAR_W, (int)(Math.Min(1.0, s.Tm / 100.0) * BAR_W));
         var tmLine = CL(vb, borderFg,
@@ -494,7 +500,7 @@ static partial class Demo
             new Seg(" / ", ConsoleColor.Gray),
             new Seg(maxHpSuffix, ConsoleColor.Gray));
 
-        var lines = new List<List<Seg>> { top, nameLine };
+        var lines = new List<List<Seg>> { top, nameLine, classLine };
         if (DisplayConfig.IsFieldEnabled("characterCard", "TurnMeter")) lines.Add(tmLine);
         lines.Add(manaLine);
         if (DisplayConfig.IsFieldEnabled("characterCard", "CurrentHp") ||

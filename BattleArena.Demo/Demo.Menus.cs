@@ -15,7 +15,7 @@ static partial class Demo
         CWL("\n  Choose scenario:", ConsoleColor.Yellow);
         CW("    "); CW("[D]", ConsoleColor.Cyan); CWL("  Duel         -- 1v1, pick two of your characters", ConsoleColor.White);
         CW("    "); CW("[P]", ConsoleColor.Cyan); CWL("  Party Combat  -- build a hero party vs the Enemy Horde (3 enemies)", ConsoleColor.White);
-        CW("    "); CW("[W]", ConsoleColor.Cyan); CWL("  Watch Replay  -- replay a saved combat from the replays/ folder\n", ConsoleColor.White);
+        CW("    "); CW("[W]", ConsoleColor.Cyan); CWL("  Watch Replay  -- replay a saved combat from the combat-logs/replay/ folder\n", ConsoleColor.White);
         CW("  > ", ConsoleColor.Cyan);
         while (true)
         {
@@ -48,7 +48,7 @@ static partial class Demo
             if (!AllHeroes.TryGetValue(pick, out var selected)) continue;
             if (selected.Name == excludedName)
             {
-                CWL($"  {selected.Name} is already selected. Choose another fighter.\n", ConsoleColor.DarkYellow);
+                CWL($"  {selected.Name} is already selected. Choose another fighter.\n", ConsoleColor.Yellow);
                 continue;
             }
             CWL(selected.Name, ConsoleColor.Cyan);
@@ -87,7 +87,7 @@ static partial class Demo
                 var ch = ApiRoster[idx];
                 if (ch.Name == excludedName)
                 {
-                    CWL($"  {ch.Name} is already selected. Pick another.", ConsoleColor.DarkYellow);
+                    CWL($"  {ch.Name} is already selected. Pick another.", ConsoleColor.Yellow);
                     continue;
                 }
                 CWL($"  → {ch.Name}", ConsoleColor.Cyan);
@@ -95,7 +95,7 @@ static partial class Demo
                 AttackMap[ch.Name] = GetAttackSource(ch);
                 return ch;
             }
-            CWL("  Invalid selection — try again.", ConsoleColor.DarkYellow);
+            CWL("  Invalid selection — try again.", ConsoleColor.Yellow);
         }
     }
 
@@ -141,7 +141,7 @@ static partial class Demo
                 CWL($"  -> {ch.Name} equips {chosen.Name}", ConsoleColor.Green);
                 return chosen;
             }
-            CWL("  Invalid selection - try again.", ConsoleColor.DarkYellow);
+            CWL("  Invalid selection - try again.", ConsoleColor.Yellow);
         }
     }
 
@@ -259,7 +259,7 @@ static partial class Demo
                 else if (selected.Count < Party.HeroPartyMaxSize)
                     selected.Add(hero);
                 else
-                    CWL($"  Party is full (max {Party.HeroPartyMaxSize}). Remove someone first.", ConsoleColor.DarkYellow);
+                    CWL($"  Party is full (max {Party.HeroPartyMaxSize}). Remove someone first.", ConsoleColor.Yellow);
             }
         }
     }
@@ -272,8 +272,8 @@ static partial class Demo
         var replayDir = FindReplayFolder();
         if (replayDir is null)
         {
-            CWL("\n  No replays/ folder found. Place a .json snapshot file there to replay it.\n",
-                ConsoleColor.DarkYellow);
+            CWL("\n  No combat-logs/replay/ folder found. Run a combat first to generate replay files.\n",
+                ConsoleColor.Yellow);
             return false;
         }
 
@@ -284,8 +284,8 @@ static partial class Demo
 
         if (latest is null)
         {
-            CWL($"\n  No .json files found in {replayDir}", ConsoleColor.DarkYellow);
-            CWL("  Copy a .json file from combat-logs/ into replays/ to replay it.\n", ConsoleColor.Gray);
+            CWL($"\n  No .json files found in {replayDir}", ConsoleColor.Yellow);
+            CWL("  Run a combat to generate replay files in combat-logs/replay/.\n", ConsoleColor.Gray);
             return false;
         }
 
@@ -314,7 +314,7 @@ static partial class Demo
         while (!string.IsNullOrEmpty(dir) && !File.Exists(Path.Combine(dir, "BattleArena.sln")))
             dir = Path.GetDirectoryName(dir)!;
         if (string.IsNullOrEmpty(dir)) return null;
-        var path = Path.Combine(dir, "replays");
+        var path = Path.Combine(dir, "combat-logs", "replay");
         return Directory.Exists(path) ? path : null;
     }
 
