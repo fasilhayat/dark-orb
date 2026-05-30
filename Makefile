@@ -82,9 +82,11 @@ test-coverage:
 build-local: publish
 
 publish:
+	pwsh -NoProfile -Command "if (Test-Path 'publish') { Remove-Item -Recurse -Force 'publish' }"
 	dotnet publish BattleArena.Api/BattleArena.Api.csproj -c Release -o ./publish
 
 publish-demo:
+	pwsh -NoProfile -Command "if (Test-Path 'publish-demo') { Remove-Item -Recurse -Force 'publish-demo' }"
 	dotnet publish BattleArena.Demo/BattleArena.Demo.csproj -c Release -o ./publish-demo
 
 sync-instructions:

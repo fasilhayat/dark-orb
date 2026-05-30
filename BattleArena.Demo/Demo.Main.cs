@@ -399,26 +399,34 @@ static partial class Demo
         var logPath = Path.Combine(logDir, "api-calls.log");
         var logWriter = new StreamWriter(logPath, append: true) { AutoFlush = true };
 
-        ApiClient = new BattleArenaApiClient(
+        // Use console logger during initial connection so the user can see the API calls being made.
+        // After connecting, store a silent client (no console logger) for use during simulation.
+        var initClient = new BattleArenaApiClient(
             apiUrl,
             apiKey: apiKey,
-            consoleLogger: null,
+            consoleLogger: msg => Console.WriteLine($"  {msg}"),
             fileLogger: logWriter);
-        Console.Write("  Connecting to BattleArena API... ");
+        Console.WriteLine("  Connecting to BattleArena API...");
         try
         {
-            ApiRoster = ApiClient.GetCharactersAsync().GetAwaiter().GetResult();
-            ApiWeapons = ApiClient.GetWeaponsAsync().GetAwaiter().GetResult();
+            ApiRoster = initClient.GetCharactersAsync().GetAwaiter().GetResult();
+            ApiWeapons = initClient.GetWeaponsAsync().GetAwaiter().GetResult();
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"OK  ({ApiRoster.Count} characters, {ApiWeapons.Count} weapons loaded)");
+            Console.WriteLine($"  Connection established  ({ApiRoster.Count} characters, {ApiWeapons.Count} weapons loaded)");
             Console.ResetColor();
         }
         catch (Exception ex)
         {
             Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine($"unreachable ({ex.Message})");
+            Console.WriteLine($"  unreachable ({ex.Message})");
             Console.ResetColor();
         }
+
+        ApiClient = new BattleArenaApiClient(
+            apiUrl,
+            apiKey: apiKey,
+            consoleLogger: null,
+            fileLogger: logWriter);
     }
 
     private static void PickDataSource()
