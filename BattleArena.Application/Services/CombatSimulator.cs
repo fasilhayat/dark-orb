@@ -663,7 +663,7 @@ public class CombatSimulator : ICombatSimulator
         if (result.IsHit && result.DamageContext is { } dc)
         {
             var critTag = result.IsCriticalHit ? " [x2 CRIT]" : "";
-            msg += $" | Dmg: roll({dc.WeaponDiceRoll}) + attr({dc.AttributeModifier}) + flat({dc.FlatBonuses})" +
+            msg += $" | Dmg: roll({dc.WeaponDiceRoll}) + attr({dc.AttributeModifier}) + flat({dc.FlatBonuses}) + lvl({dc.LevelScaling})" +
                    $" = {dc.BaseDamage}{critTag} x{dc.TypeMultiplier:0.0} - mit({dc.ArmorMitigation}) + elem({dc.ElementalModifiers}) = {dc.FinalDamage}";
         }
 
