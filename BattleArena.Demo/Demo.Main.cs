@@ -58,6 +58,7 @@ static partial class Demo
         {
             if (!RunReplay()) return;
             var replayMode = PickCombatMode();
+            PacingMultiplier = PickPacing();
             CWL("\n  Press any key to watch the replay...", ConsoleColor.Gray);
             Console.ReadKey(true);
             Console.Clear();
@@ -93,6 +94,8 @@ static partial class Demo
         {
             heroSelector = new LowestHpTargetSelector();
         }
+
+        PacingMultiplier = PickPacing();
 
         // Reset + build state dicts
         foreach (var m in HeroParty.Members)  ResetCombatant(m.Character);

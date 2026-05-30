@@ -6,6 +6,12 @@ using Core.Entities.Enums;
 
 static partial class Demo
 {
+    // Pacing multiplier — scales all display delays.  1.0 = normal speed.
+    // Increase (e.g. 2.0) for slower, more deliberate playback.
+    // Decrease (e.g. 0.5) for faster playback.
+    private static double PacingMultiplier { get; set; } = 1.0;
+    private static void Paced(int ms) => Paced((int)(ms * PacingMultiplier));
+
     // ── Display strategies: shared by turn-based and realtime ────────────
 
     private delegate void DisplayHandler(CombatLogEntry e, Dictionary<string, CharDisplayState> states);
@@ -265,8 +271,12 @@ static partial class Demo
             Console.WriteLine();
 
             foreach (var e in turnEvents)
+            {
                 if (_display.TryGetValue(e.EventType, out var handler))
                     handler(e, states);
+                if (_realtimeDelay.TryGetValue(e.EventType, out var delay))
+                    Paced(delay);
+            }
 
             Console.WriteLine();
             CWL("  " + new string('-', 77), ConsoleColor.Gray);
@@ -403,7 +413,7 @@ static partial class Demo
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine($"\n  ... {quietEnd - quietStart + 1} quiet ticks (TM building)");
                 Console.ResetColor();
-                Thread.Sleep(300);
+                Paced(300);
             }
             quietStart = quietEnd = -1;
         }
@@ -411,7 +421,7 @@ static partial class Demo
         PreSeedTurnMeters(states);
 
         DrawCombatScreen(states, 0);
-        Thread.Sleep(1200);
+        Paced(1500);
 
         foreach (var tickGroup in byTick.Where(g => g.Key >= 1))
         {
@@ -425,10 +435,10 @@ static partial class Demo
             {
                 if (quietStart < 0) quietStart = tickGroup.Key;
                 quietEnd = tickGroup.Key;
-                // Animate TM bars every 3 quiet ticks so the viewer can watch them fill
-                if ((tickGroup.Key - quietStart) % 3 == 0)
+                // Animate TM bars every 2 quiet ticks so the viewer can watch them fill
+                if ((tickGroup.Key - quietStart) % 2 == 0)
                     DrawCombatScreen(states, tickGroup.Key);
-                Thread.Sleep(80);
+                Paced(150);
                 continue;
             }
 
@@ -442,7 +452,7 @@ static partial class Demo
 
             var activeActorName = turnStart.ActiveActorName;
             DrawCombatScreen(states, tickGroup.Key, activeActorName);
-            Thread.Sleep(600);
+            Paced(600);
 
             foreach (var e in entries)
             {
@@ -453,12 +463,12 @@ static partial class Demo
                     display(e, states);
 
                 if (_realtimeDelay.TryGetValue(e.EventType, out var delay))
-                    Thread.Sleep(delay);
+                    Paced(delay);
             }
 
             // Events stay visible — the next tick's DrawCombatScreen will
             // refresh the HP/TM bars when a new action begins.
-            Thread.Sleep(500);
+            Paced(500);
         }
 
         FlushQuiet();

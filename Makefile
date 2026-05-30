@@ -1,4 +1,4 @@
-.PHONY: help up-local up-dev up-test up-preprod up-prod down clean clean-logs demo-local test test-coverage build-local sync-instructions publish publish-demo
+.PHONY: help up-local up-dev up-test up-preprod up-prod down clean clean-logs redo-local demo-local test test-coverage build-local sync-instructions publish publish-demo
 
 help:
 	@cmd /C "echo  BattleArena -- available make targets"
@@ -61,6 +61,13 @@ clean: clean-logs
 clean-logs:
 	@echo Deleting combat logs...
 	@powershell -Command "Get-ChildItem -Path 'combat-logs' -File | Where-Object { $$_.Name -ne '.gitkeep' } | Remove-Item -Force; Write-Host 'combat-logs/ cleared.'"
+
+redo-local:
+	@echo Clean + build + up-local + demo...
+	dotnet clean BattleArena.sln
+	dotnet build BattleArena.sln
+	$(MAKE) up-local
+	dotnet run --project BattleArena.Demo/BattleArena.Demo.csproj
 
 demo-local:
 	@echo Starting BattleArena Demo locally (DOTNET_ENVIRONMENT=LocalDev)...

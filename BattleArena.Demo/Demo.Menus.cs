@@ -358,6 +358,22 @@ static partial class Demo
         }
     }
 
+    private static double PickPacing()
+    {
+        CWL("\n  Choose pacing:", ConsoleColor.Yellow);
+        CW("    "); CW("[N]", ConsoleColor.Cyan); CWL("  Normal      (1.0x)", ConsoleColor.White);
+        CW("    "); CW("[F]", ConsoleColor.Cyan); CWL("  Fast        (2.0x — all delays halved)", ConsoleColor.White);
+        CW("    "); CW("[S]", ConsoleColor.Cyan); CWL("  Slow        (0.5x — all delays doubled)\n", ConsoleColor.White);
+        CW("  > ", ConsoleColor.Cyan);
+        while (true)
+        {
+            var k = Console.ReadKey(true).KeyChar;
+            if (k is 'N' or 'n') { CWL("Normal", ConsoleColor.Cyan); return 1.0; }
+            if (k is 'F' or 'f') { CWL("Fast", ConsoleColor.Cyan); return 0.5; }
+            if (k is 'S' or 's') { CWL("Slow", ConsoleColor.Cyan); return 2.0; }
+        }
+    }
+
     // ── PickTargetingMode ─────────────────────────────────────────────────────────
 
     private static char PickTargetingMode()
