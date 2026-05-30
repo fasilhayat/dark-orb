@@ -76,7 +76,7 @@ static partial class Demo
                 if (taken)
                     CWL($"  (already selected)", ConsoleColor.Gray);
                 else
-                    CWL($"  {GetClassName(ch.ClassId),-10} Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}", ConsoleColor.Gray);
+                    CWL($"  {ch.ClassName,-10} Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}", ConsoleColor.Gray);
             }
             CW("  > ", ConsoleColor.Cyan);
 
@@ -163,8 +163,8 @@ static partial class Demo
             {
                 var picked = selected.Any(s => s.Name == ch.Name);
                 CW($"    [{key}] ", ConsoleColor.Cyan);
-                if (picked) CWL($"{ch.Name,-12}  {GetClassName(ch.ClassId),-10}  [SELECTED]", ConsoleColor.Green);
-                else CWL($"{ch.Name,-12}  {GetClassName(ch.ClassId)}", ConsoleColor.White);
+                if (picked) CWL($"{ch.Name,-12}  {ch.ClassName,-10}  [SELECTED]", ConsoleColor.Green);
+                else CWL($"{ch.Name,-12}  {ch.ClassName}", ConsoleColor.White);
             }
             Console.WriteLine();
             if (selected.Count > 0)
@@ -218,13 +218,13 @@ static partial class Demo
                 {
                     CW($"{ch.Name,-18}", ConsoleColor.Green);
                     CW($"{atkDisplay,-14}", ConsoleColor.Green);
-                    CWL($"  {GetClassName(ch.ClassId),-10} Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}  [✓]", ConsoleColor.Green);
+                    CWL($"  {ch.ClassName,-10} Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}  [✓]", ConsoleColor.Green);
                 }
                 else
                 {
                     CW($"{ch.Name,-18}", ConsoleColor.White);
                     CW($"{atkDisplay,-14}", ConsoleColor.Yellow);
-                    CWL($"  {GetClassName(ch.ClassId),-10} Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}", ConsoleColor.Gray);
+                    CWL($"  {ch.ClassName,-10} Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}", ConsoleColor.Gray);
                 }
             }
 

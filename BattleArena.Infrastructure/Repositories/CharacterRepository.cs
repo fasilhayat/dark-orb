@@ -112,6 +112,8 @@ public class CharacterRepository : ICharacterRepository
             Level = (int)reader["level"],
             RaceId = (int)reader["race_id"],
             ClassId = (int)reader["class_id"],
+            ClassName = reader["class_name"] as string ?? string.Empty,
+            Sex = reader["sex"] as string ?? "Unknown",
             Strength = (int)reader["strength"],
             Dexterity = (int)reader["dexterity"],
             Stamina = (int)reader["stamina"],

@@ -9,6 +9,8 @@ public class Character
     public int Level { get; set; } = 1;
     public int RaceId { get; set; }
     public int ClassId { get; set; }
+    public string ClassName { get; set; } = string.Empty;
+    public string Sex { get; set; } = "Unknown";
     public int Strength { get; set; } = 10;
     public int StrengthPercentile { get; set; }
     public int Dexterity { get; set; } = 10;

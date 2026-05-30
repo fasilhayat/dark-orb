@@ -303,7 +303,8 @@ static partial class Demo
                 Hp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
                 IsHero = true,
                 Level = m.Character.Level,
-                ClassId = m.Character.ClassId,
+                ClassName = m.Character.ClassName,
+                Sex = m.Character.Sex,
                 Weapon = m.AttackSource?.Name ?? "",
                 MaxMana = m.Character.MaxMana,
                 Mana = m.Character.CurrentMana
@@ -316,7 +317,8 @@ static partial class Demo
                 Hp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
                 IsHero = false,
                 Level = m.Character.Level,
-                ClassId = m.Character.ClassId,
+                ClassName = m.Character.ClassName,
+                Sex = m.Character.Sex,
                 Weapon = m.AttackSource?.Name ?? "",
                 MaxMana = m.Character.MaxMana,
                 Mana = m.Character.CurrentMana

@@ -182,7 +182,7 @@ static partial class Demo
     {
         Name = "Theron", Level = 5, Strength = 18, Dexterity = 12, Intelligence = 10,
         Race = HumanRace,
-        ClassId = 8, StrikeRating = 14, TurnSpeed = 10, MaxHitPoints = 50, CurrentHitPoints = 50,
+        ClassId = 8, ClassName = "Fighter", Sex = "M", StrikeRating = 14, TurnSpeed = 10, MaxHitPoints = 50, CurrentHitPoints = 50,
         Equipment = new ArmorSlots
         {
             Chest = new Armor { Name = "Chain Mail", ArmorClass = 5, Mitigation = 2, MaxDexterityBonus = 6 },
@@ -193,7 +193,7 @@ static partial class Demo
     {
         Name = "Gruk", Level = 3, Strength = 16, Dexterity = 8, Intelligence = 8,
         Race = OrcRace,
-        ClassId = 1, StrikeRating = 16, TurnSpeed = 6, MaxHitPoints = 35, CurrentHitPoints = 35,
+        ClassId = 1, ClassName = "Barbarian", Sex = "M", StrikeRating = 16, TurnSpeed = 6, MaxHitPoints = 35, CurrentHitPoints = 35,
         Equipment = new ArmorSlots
         {
             Chest = new Armor { Name = "Leather Armor", ArmorClass = 7, Mitigation = 1, MaxDexterityBonus = 6 },
@@ -204,7 +204,7 @@ static partial class Demo
     {
         Name = "Lyra", Level = 5, Strength = 8, Dexterity = 14, Intelligence = 18,
         Race = ElfRace,
-        ClassId = 5, StrikeRating = 13, TurnSpeed = 8, MaxHitPoints = 30, CurrentHitPoints = 30, MaxMana = 165, CurrentMana = 165,
+        ClassId = 5, ClassName = "Mage", Sex = "F", StrikeRating = 13, TurnSpeed = 8, MaxHitPoints = 30, CurrentHitPoints = 30, MaxMana = 165, CurrentMana = 165,
         Equipment = new ArmorSlots
         {
             Chest = new Armor { Name = "Mage Robes", ArmorClass = 14, Mitigation = 0, MaxDexterityBonus = 6, TurnMeterCostReduction = 5 }
@@ -215,7 +215,7 @@ static partial class Demo
     {
         Name = "Sera", Level = 4, Strength = 12, Dexterity = 10, Intelligence = 16,
         Race = HumanRace,
-        ClassId = 4, StrikeRating = 14, TurnSpeed = 8, MaxHitPoints = 35, CurrentHitPoints = 35, MaxMana = 130, CurrentMana = 130,
+        ClassId = 4, ClassName = "Priest", Sex = "F", StrikeRating = 14, TurnSpeed = 8, MaxHitPoints = 35, CurrentHitPoints = 35, MaxMana = 130, CurrentMana = 130,
         Equipment = new ArmorSlots
         {
             Chest = new Armor { Name = "Scaled Vestments", ArmorClass = 12, Mitigation = 1, MaxDexterityBonus = 6 },
@@ -227,7 +227,7 @@ static partial class Demo
     {
         Name = "Elara", Level = 4, Strength = 8, Dexterity = 14, Intelligence = 17,
         Race = ElfRace,
-        ClassId = 7, StrikeRating = 14, TurnSpeed = 9, MaxHitPoints = 28, CurrentHitPoints = 28, MaxMana = 140, CurrentMana = 140,
+        ClassId = 7, ClassName = "Druid", Sex = "F", StrikeRating = 14, TurnSpeed = 9, MaxHitPoints = 28, CurrentHitPoints = 28, MaxMana = 140, CurrentMana = 140,
         Equipment = new ArmorSlots
         {
             Chest = new Armor { Name = "Druidic Robes", ArmorClass = 14, Mitigation = 0, MaxDexterityBonus = 6 },
@@ -298,7 +298,7 @@ static partial class Demo
     {
         Name = "Krag", Level = 4, Strength = 17, Dexterity = 9, Intelligence = 6,
         Race = OrcRace,
-        ClassId = 1, StrikeRating = 15, TurnSpeed = 7, MaxHitPoints = 45, CurrentHitPoints = 45,
+        ClassId = 1, ClassName = "Barbarian", Sex = "M", StrikeRating = 15, TurnSpeed = 7, MaxHitPoints = 45, CurrentHitPoints = 45,
         Equipment = new ArmorSlots
         {
             Chest = new Armor { Name = "Orcish Hide", ArmorClass = 6, Mitigation = 2, MaxDexterityBonus = 4 },
@@ -309,7 +309,7 @@ static partial class Demo
     {
         Name = "Skrix", Level = 2, Strength = 9, Dexterity = 16, Intelligence = 10,
         Race = HumanRace,
-        ClassId = 9, StrikeRating = 12, TurnSpeed = 12, MaxHitPoints = 20, CurrentHitPoints = 20,
+        ClassId = 9, ClassName = "Rogue", Sex = "M", StrikeRating = 12, TurnSpeed = 12, MaxHitPoints = 20, CurrentHitPoints = 20,
         Equipment = new ArmorSlots
         {
             Chest = new Armor { Name = "Worn Leather", ArmorClass = 8, Mitigation = 0, MaxDexterityBonus = 6 },
@@ -320,7 +320,7 @@ static partial class Demo
     {
         Name = "Mordak", Level = 3, Strength = 7, Dexterity = 12, Intelligence = 16,
         Race = DarkMageRace,
-        ClassId = 5, StrikeRating = 14, TurnSpeed = 9, MaxHitPoints = 25, CurrentHitPoints = 25, MaxMana = 100, CurrentMana = 100,
+        ClassId = 5, ClassName = "Mage", Sex = "M", StrikeRating = 14, TurnSpeed = 9, MaxHitPoints = 25, CurrentHitPoints = 25, MaxMana = 100, CurrentMana = 100,
         Equipment = new ArmorSlots
         {
             Chest = new Armor { Name = "Dark Robes", ArmorClass = 14, Mitigation = 0, MaxDexterityBonus = 6, TurnMeterCostReduction = 5 }
@@ -331,7 +331,7 @@ static partial class Demo
     {
         Name = "Zarath", Level = 5, Strength = 6, Dexterity = 12, Intelligence = 18,
         Race = DarkMageRace,
-        ClassId = 5, StrikeRating = 15, TurnSpeed = 8, MaxHitPoints = 28, CurrentHitPoints = 28, MaxMana = 170, CurrentMana = 170,
+        ClassId = 5, ClassName = "Mage", Sex = "M", StrikeRating = 15, TurnSpeed = 8, MaxHitPoints = 28, CurrentHitPoints = 28, MaxMana = 170, CurrentMana = 170,
         Equipment = new ArmorSlots
         {
             Chest = new Armor { Name = "Shadowweave Robes", ArmorClass = 14, Mitigation = 0, MaxDexterityBonus = 6, TurnMeterCostReduction = 5 }

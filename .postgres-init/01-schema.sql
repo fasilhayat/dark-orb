@@ -382,6 +382,7 @@ CREATE TABLE IF NOT EXISTS arena_data.character (
     experience_points INTEGER NOT NULL DEFAULT 0,
     strike_rating INTEGER NOT NULL DEFAULT 20,
     turn_speed INTEGER NOT NULL DEFAULT 10,
+    sex VARCHAR(1) NOT NULL DEFAULT 'X',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -779,24 +780,25 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION arena_data.fn_get_characters()
 RETURNS TABLE(
-    id INTEGER, name VARCHAR, level INTEGER, race_id INTEGER, class_id INTEGER,
+    id INTEGER, name VARCHAR, level INTEGER, race_id INTEGER, class_id INTEGER, class_name VARCHAR,
     strength INTEGER, dexterity INTEGER, stamina INTEGER,
     intelligence INTEGER, wisdom INTEGER, charisma INTEGER,
     strength_percentile INTEGER, max_hit_points INTEGER, current_hit_points INTEGER,
     strike_rating INTEGER, turn_speed INTEGER,
     npc SMALLINT, biography TEXT,
-    experience_points INTEGER, max_mana INTEGER
+    experience_points INTEGER, max_mana INTEGER, sex VARCHAR
 ) AS $$
 BEGIN
     RETURN QUERY
-    SELECT c.id, c.name::VARCHAR, c.level, c.race_id, c.class_id,
+    SELECT c.id, c.name::VARCHAR, c.level, c.race_id, c.class_id, cl.name::VARCHAR,
            c.strength, c.dexterity, c.stamina,
            c.intelligence, c.wisdom, c.charisma,
            c.strength_percentile, c.max_hit_points, c.current_hit_points,
            c.strike_rating, c.turn_speed,
            c.npc, c.biography::TEXT,
-           c.experience_points, c.max_mana
+           c.experience_points, c.max_mana, c.sex::VARCHAR
     FROM arena_data.character c
+    JOIN arena_data.class cl ON cl.id = c.class_id
     ORDER BY c.name;
 END;
 $$ LANGUAGE plpgsql;
@@ -804,24 +806,25 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION arena_data.fn_get_character(p_id INTEGER)
 RETURNS TABLE(
-    id INTEGER, name VARCHAR, level INTEGER, race_id INTEGER, class_id INTEGER,
+    id INTEGER, name VARCHAR, level INTEGER, race_id INTEGER, class_id INTEGER, class_name VARCHAR,
     strength INTEGER, dexterity INTEGER, stamina INTEGER,
     intelligence INTEGER, wisdom INTEGER, charisma INTEGER,
     strength_percentile INTEGER, max_hit_points INTEGER, current_hit_points INTEGER,
     strike_rating INTEGER, turn_speed INTEGER,
     npc SMALLINT, biography TEXT,
-    experience_points INTEGER, max_mana INTEGER
+    experience_points INTEGER, max_mana INTEGER, sex VARCHAR
 ) AS $$
 BEGIN
     RETURN QUERY
-    SELECT c.id, c.name::VARCHAR, c.level, c.race_id, c.class_id,
+    SELECT c.id, c.name::VARCHAR, c.level, c.race_id, c.class_id, cl.name::VARCHAR,
            c.strength, c.dexterity, c.stamina,
            c.intelligence, c.wisdom, c.charisma,
            c.strength_percentile, c.max_hit_points, c.current_hit_points,
            c.strike_rating, c.turn_speed,
            c.npc, c.biography::TEXT,
-           c.experience_points, c.max_mana
+           c.experience_points, c.max_mana, c.sex::VARCHAR
     FROM arena_data.character c
+    JOIN arena_data.class cl ON cl.id = c.class_id
     WHERE c.id = p_id;
 END;
 $$ LANGUAGE plpgsql;
