@@ -51,6 +51,7 @@ ArmorClass
 + DefensiveBuffs
 + RacialModifiers
 + ItemSetBonuses
++ LevelDefenseBonus (= Level / 2, rounding down)
 
 ---
 
@@ -71,7 +72,22 @@ DefensePower uses EffectiveAC + modifiers
 
 ---
 
-## 7. Turnmeter System
+## 7. Damage Formula
+
+BaseDamage = WeaponDiceRoll + AttributeModifier + FlatDamageBonus + Level × 2
+
+FinalDamage = (int)(BaseDamage × TypeMultiplier) - ArmorMitigation + ElementalDamage
+(Min 0)
+
+Level scaling ensures higher-level characters hit harder, making level a meaningful
+combat advantage beyond hit points. Without this, a Level 1 and Level 20 with the
+same weapon would deal identical damage.
+
+Critical hits double BaseDamage before the type multiplier and mitigation.
+
+---
+
+## 8. Turnmeter System
 
 TurnMeter range: 0–100
 

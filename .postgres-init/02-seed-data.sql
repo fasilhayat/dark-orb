@@ -15,7 +15,7 @@ ON CONFLICT (name) DO NOTHING;
 
 INSERT INTO arena_data.damage_type (name) VALUES
     ('Bludgeoning'), ('Piercing'), ('Slashing'), ('Poison'), ('Fire'),
-    ('Ice'), ('Lightning'), ('Shadow'), ('Holy'), ('Acid')
+    ('Ice'), ('Lightning'), ('Shadow'), ('Holy'), ('Acid'), ('Psychic')
 ON CONFLICT (name) DO NOTHING;
 
 
@@ -791,9 +791,9 @@ ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Sleep', 'Puts the target into a magical slumber.', ss.id, NULL, NULL, at.id, 6, 60, 1, 1, 0, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.attack_type at
-WHERE ss.name = 'CC' AND at.name = 'Spell'
+SELECT 'Sleep', 'Puts the target into a magical slumber.', ss.id, dd.id, dt.id, at.id, 6, 60, 1, 1, 0, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.die_type dd, arena_data.damage_type dt, arena_data.attack_type at
+WHERE ss.name = 'CC' AND dd.name = 'D4' AND dt.name = 'Psychic' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 

@@ -67,7 +67,6 @@ static partial class Demo
             for (var i = 0; i < ApiRoster.Count && i < 26; i++)
             {
                 var ch = ApiRoster[i];
-                if (ch.Npc != 0) continue;
                 var key = (char)('A' + i);
                 var taken = ch.Name == excludedName;
                 var atkDisplay = GetAttackDisplayName(ch);
@@ -86,9 +85,9 @@ static partial class Demo
             if (idx >= 0 && idx < ApiRoster.Count)
             {
                 var ch = ApiRoster[idx];
-                if (ch.Name == excludedName || ch.Npc != 0)
+                if (ch.Name == excludedName)
                 {
-                    CWL($"  {ch.Name} is not available. Pick another.", ConsoleColor.DarkYellow);
+                    CWL($"  {ch.Name} is already selected. Pick another.", ConsoleColor.DarkYellow);
                     continue;
                 }
                 CWL($"  → {ch.Name}", ConsoleColor.Cyan);
@@ -193,7 +192,6 @@ static partial class Demo
 
     private static List<Character> PickHeroPartyFromRoster()
     {
-        var roster = ApiRoster.Where(c => c.Npc == 0).ToList();
         var selected = new List<Character>();
         while (true)
         {
@@ -202,10 +200,10 @@ static partial class Demo
             CWL($"\n  BUILD YOUR HERO PARTY  (max {Party.HeroPartyMaxSize})", ConsoleColor.Yellow);
             Console.WriteLine();
 
-            for (var i = 0; i < roster.Count && i < 26; i++)
+            for (var i = 0; i < ApiRoster.Count && i < 26; i++)
             {
                 var key = (char)('A' + i);
-                var ch = roster[i];
+                var ch = ApiRoster[i];
                 var picked = selected.Any(s => s.Name == ch.Name);
                 var atkDisplay = GetAttackDisplayName(ch);
                 CW($"    [{key}]  ", ConsoleColor.Cyan);
@@ -242,9 +240,9 @@ static partial class Demo
 
             var pick = char.ToUpperInvariant(kInfo.KeyChar);
             var idx = pick - 'A';
-            if (idx >= 0 && idx < roster.Count)
+            if (idx >= 0 && idx < ApiRoster.Count)
             {
-                var hero = roster[idx];
+                var hero = ApiRoster[idx];
                 var existing = selected.FindIndex(c => c.Name == hero.Name);
                 if (existing >= 0)
                 {

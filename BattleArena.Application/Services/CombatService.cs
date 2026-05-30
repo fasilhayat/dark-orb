@@ -94,7 +94,7 @@ public class CombatService : ICombatService
             : source.AttackType == AttackType.Ranged ? attacker.Dexterity : attacker.Strength;
         var attributeModifier = CalculateAbilityModifier(abilityScore);
         var weaponDiceRoll = RollAttackDamageTotal(source);
-        var baseDamage = weaponDiceRoll + attributeModifier + source.FlatDamageBonus;
+        var baseDamage = weaponDiceRoll + attributeModifier + source.FlatDamageBonus + attacker.Level * 2;
         var typeMultiplier = defender.Vulnerabilities.Contains(source.DamageType) ? 1.5f : 1.0f;
         var scaledBaseDamage = isCritical ? baseDamage * 2 : baseDamage;
         var finalDamage = Math.Max(0, (int)(scaledBaseDamage * typeMultiplier) - defender.Equipment.TotalMitigation + source.ElementalDamage);

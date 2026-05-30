@@ -333,11 +333,11 @@ static partial class Demo
         int filled       = (int)Math.Round((double)tickInRound / RoundLength * BarWidth);
 
         Console.Write("  ");
-        CW($"ROUND {roundNumber,-2}  ", ConsoleColor.Cyan);
-        CW("[", ConsoleColor.DarkCyan);
-        CW(new string('\u2588', filled), ConsoleColor.Blue);
-        CW(new string('\u2591', BarWidth - filled), ConsoleColor.DarkBlue);
-        CW("]", ConsoleColor.DarkCyan);
+        CW($"ROUND {roundNumber,-2}  ", ConsoleColor.Yellow);
+        CW("[", ConsoleColor.DarkYellow);
+        CW(new string('\u2588', filled), ConsoleColor.DarkYellow);
+        CW(new string('\u2591', BarWidth - filled), ConsoleColor.DarkGray);
+        CW("]", ConsoleColor.DarkYellow);
         CW($"  {tickInRound}", ConsoleColor.White);
         CW(" / ", ConsoleColor.DarkGray);
         CWL($"{RoundLength} ticks", ConsoleColor.Gray);
@@ -458,23 +458,17 @@ static partial class Demo
             new Seg($"  {s.Tm,3}", ConsoleColor.Cyan),
             new Seg("/100", ConsoleColor.Gray));
 
-        var manaPct = s.MaxMana > 0 ? (double)Math.Max(0, s.Mana) / s.MaxMana : 0.0;
-        var manaFilled = s.MaxMana > 0 ? Math.Max(1, (int)(manaPct * BAR_W)) : 0;
-        var manaFg = s.MaxMana > 0 ? ConsoleColor.Gray : ConsoleColor.DarkGray;
         var manaLine = s.MaxMana > 0
             ? CL(vb, borderFg,
                 new Seg(" MP [", ConsoleColor.Gray),
-                new Seg(new string('\u2588', manaFilled), ConsoleColor.Magenta),
-                new Seg(new string('\u2591', BAR_W - manaFilled), ConsoleColor.Gray),
+                new Seg(new string('\u2588', Math.Max(1, (int)((double)Math.Max(0, s.Mana) / s.MaxMana * BAR_W))), ConsoleColor.Magenta),
+                new Seg(new string('\u2591', BAR_W - Math.Max(1, (int)((double)Math.Max(0, s.Mana) / s.MaxMana * BAR_W))), ConsoleColor.Gray),
                 new Seg("]  ", ConsoleColor.Gray),
                 new Seg($"{Math.Max(0, s.Mana),3}", ConsoleColor.Magenta),
                 new Seg(" / ", ConsoleColor.Gray),
                 new Seg($"{s.MaxMana,-3}", ConsoleColor.Gray))
             : CL(vb, borderFg,
-                new Seg(" MP [", ConsoleColor.DarkGray),
-                new Seg(new string('\u2591', BAR_W), ConsoleColor.DarkGray),
-                new Seg("]   ", ConsoleColor.DarkGray),
-                new Seg("  --  -- ", ConsoleColor.DarkGray));
+                new Seg(new string(' ', CONTENT_W), ConsoleColor.Black));
 
         var pct = (double)Math.Max(0, s.Hp) / Math.Max(1, s.MaxHp);
         var hpFilled = s.Hp > 0 ? Math.Max(1, (int)(pct * BAR_W)) : 0;

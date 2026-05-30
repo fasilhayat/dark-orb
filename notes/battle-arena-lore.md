@@ -457,19 +457,19 @@ A lower **StrikeRating** is better. Knights, Paladins, and Fighters are the most
 
 ### CC Spells
 
-| Spell | Description | Mana |
-|-------|-------------|:----:|
-| Stun | A concussive force that stuns the target. | 5 |
-| Sleep | Puts the target into a magical slumber. | 6 |
-| Charm Enemy | Bends an enemy to your will. | 8 |
-| Fear | Instills overwhelming terror. | 7 |
-| Taunt | Forces an enemy to attack you. | 4 |
-| Freeze | Encases the target in ice. | 7 |
-| Confuse | Makes the target act erratically. | 6 |
-| Provoke | Enrages the target, reducing its defenses. | 5 |
-| Sacrifice | Sacrifice own HP to empower an ally. | 0 |
-| Blind | Robs the target of sight. | 5 |
-| Root | Anchors the target to the ground. | 5 |
+| Spell | Description | Damage | Mana |
+|-------|-------------|--------|:----:|
+| Stun | A concussive force that stuns the target. | — | 5 |
+| Sleep | Puts the target into a magical slumber. | 1D4 Psychic | 6 |
+| Charm Enemy | Bends an enemy to your will. | — | 8 |
+| Fear | Instills overwhelming terror. | — | 7 |
+| Taunt | Forces an enemy to attack you. | — | 4 |
+| Freeze | Encases the target in ice. | — | 7 |
+| Confuse | Makes the target act erratically. | — | 6 |
+| Provoke | Enrages the target, reducing its defenses. | — | 5 |
+| Sacrifice | Sacrifice own HP to empower an ally. | — | 0 |
+| Blind | Robs the target of sight. | — | 5 |
+| Root | Anchors the target to the ground. | — | 5 |
 
 ### Other Spells
 

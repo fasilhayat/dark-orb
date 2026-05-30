@@ -18,5 +18,6 @@ public class CombatantStats
     public int DefensiveBuffs { get; set; }
     public int DefenseRacialModifiers { get; set; }
     public int DefenseItemSetBonuses { get; set; }
-    public int DefensePower => EffectiveAC + DexterityModifier + ShieldBonus + DefensiveBuffs + DefenseRacialModifiers + DefenseItemSetBonuses;
+    public int LevelDefenseBonus { get; set; }
+    public int DefensePower => EffectiveAC + DexterityModifier + ShieldBonus + DefensiveBuffs + DefenseRacialModifiers + DefenseItemSetBonuses + LevelDefenseBonus;
 }

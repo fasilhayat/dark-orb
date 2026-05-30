@@ -5,32 +5,39 @@ description: Use when orchestrating Docker builds, running the demo, running tes
 
 # Makefile Orchestration
 
+## Environments
+
+| Mode | DB | API | Demo | Ports exposed |
+|------|----|-----|------|---------------|
+| `up-local` | Docker | Docker | host (`make demo-local`) | 5432, 8585 |
+| `up-dev` | Docker | Docker | Docker (interactive) | 5432, 8585 |
+| `up-test` | Docker | Docker | Docker (interactive) | — |
+| `up-preprod` | Docker | Docker | — | — |
+| `up-prod` | Docker | Docker | — | — |
+
 ## Quick reference
 
 | Goal | Command |
 |------|---------|
-| Launch the demo (builds + runs) | `make demo` |
-| Start API + DB in background | `make up` |
-| Stop containers (preserves DB) | `make down` |
-| Rebuild + restart everything | `make reset` |
-| Full clean rebuild (nukes DB too) | `make clean` then `make up` |
+| Start DB + API (demo on host) | `make up-local` |
+| Start DB + API + demo (ports exposed) | `make up-dev` |
+| Start DB + API + demo (no ports) | `make up-test` |
+| Start DB + API (no demo, no ports) | `make up-preprod` / `make up-prod` |
+| Run demo locally against up-local | `make demo-local` |
+| Stop all containers | `make down` |
+| Nuke everything (volumes + publish output) | `make clean` |
 | Run tests | `make test` |
-| Build images without running | `make build` |
-| Force no-cache build | `make build-no-cache` |
-| Build demo image only | `make build-demo` |
-| View container logs | `make logs`, `make api-logs`, `make db-logs` |
 | Clear combat log files | `make clean-logs` |
 
 ## How it works
 
-All build commands (`up`, `build`, `build-no-cache`, `demo`, `reset`) depend on `make publish` which runs `dotnet publish` to produce fresh binaries under `publish/`. Docker then detects content changes via file checksums and only rebuilds the affected layers.
-
-- `up` runs `docker compose up -d --build` — always rebuilds before starting
-- `demo` runs `publish` → builds demo image → starts API + DB → runs demo container
-- `reset` is `down` → `publish` → `docker compose up -d --build`
+- `up-local` runs `publish` to build the API, then starts DB + API containers.
+- `up-dev` / `up-test` run `publish` + `publish-demo`, then start DB + API containers and launch the demo interactively.
+- `up-preprod` / `up-prod` run only `publish` and start DB + API (no demo).
+- `up-local` exposes ports on the host for the demo to connect via `make demo-local`.
 
 ## Docker caching
 
-Docker `COPY` layers use content checksums (not timestamps). Any change to a `.cs` file changes the checksum, which invalidates the cache for that layer and everything that follows. No manual `--no-cache` is needed for normal code changes.
+Docker `COPY` layers use content checksums (not timestamps). Any change to a `.cs` file changes the checksum, which invalidates the cache for that layer and everything that follows.
 
-Use `make build-no-cache` only when you suspect the Docker layer cache is corrupted or stale in an unexpected way.
+For a full clean rebuild, use `make clean` then `make up-local` (or `make up-dev`).

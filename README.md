@@ -420,48 +420,47 @@ erDiagram
 
 ### Environments
 
-| ENV | DB | API | Demo | Ports exposed |
-|-----|----|-----|------|---------------|
-| `localdev` | Docker | Docker | host (`make demo-local`) | 5432, 8585 |
-| `dev` | Docker | Docker | Docker (`make demo`) | 5432, 8585 |
-| `test` | Docker | Docker | Docker (`make demo`) | — |
-| `preprod` | Docker | Docker | — | — |
-| `prod` | Docker | Docker | — | — (default) |
+| Mode | DB | API | Demo | Ports exposed |
+|------|----|-----|------|---------------|
+| `up-local` | Docker | Docker | host (`make demo-local`) | 5432, 8585 |
+| `up-dev` | Docker | Docker | Docker (interactive) | 5432, 8585 |
+| `up-test` | Docker | Docker | Docker (interactive) | — |
+| `up-preprod` | Docker | Docker | — | — |
+| `up-prod` | Docker | Docker | — | — |
 
 ### Setup
 
-Copy `.env.example` to `.env` and set your environment:
+Copy `.env.example` to `.env`:
 
 ```bash
 cp .env.example .env
-# Edit .env: set ENV=localdev (or dev, test, preprod, prod)
 ```
-
-The `.env` file is not committed to source control.
 
 ### Option 1: Docker Compose (recommended)
 
 ```bash
-# Start DB + API (uses ENV from .env, defaults to prod if no .env)
-make up
+# Start DB + API only (demo runs on host, ports exposed)
+make up-local
 
-# Start DB + API for a specific environment without .env
-make up ENV=localdev
+# Start DB + API + demo in Docker (all containers, interactive)
+make up-dev
 
-# Run the demo in Docker (dev/test environments)
-make demo
+# Same as dev but no host ports
+make up-test
 
-# Run the demo locally (localdev environment)
+# DB + API only, no demo (pre-production / production)
+make up-preprod
+make up-prod
+
+# Run the demo locally (against up-local)
 make demo-local
 
 # Stop containers
 make down
 
-# Stop and remove volumes (wipes DB data for the current ENV)
+# Stop and remove volumes (wipes DB data)
 make clean
 ```
-
-Each environment uses an isolated Docker project name (`battle-arena-<ENV>`) and a separate named volume, so multiple environments can coexist without data bleed.
 
 ### Option 2: Local .NET run
 

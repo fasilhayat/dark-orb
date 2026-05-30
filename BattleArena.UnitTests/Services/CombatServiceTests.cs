@@ -63,7 +63,7 @@ public class CombatServiceTests
         Assert.Equal(12, result.HitRoll);
         Assert.Equal(4, result.AttackPower);
         Assert.Equal(10, result.DefensePower);
-        Assert.Equal(7, result.Damage);
+        Assert.Equal(9, result.Damage);
     }
 
     [Fact]
@@ -111,10 +111,10 @@ public class CombatServiceTests
         var result = _sut.ResolveAttack(attacker, defender, weapon);
 
         Assert.True(result.IsHit);
-        Assert.Equal(0, result.Damage);
+        Assert.Equal(1, result.Damage);
         Assert.NotNull(result.DamageContext);
-        Assert.Equal(-1, result.DamageContext!.BaseDamage);
-        Assert.Equal(0, result.DamageContext.FinalDamage);
+        Assert.Equal(1, result.DamageContext!.BaseDamage);
+        Assert.Equal(1, result.DamageContext.FinalDamage);
     }
 
     [Fact]
@@ -132,7 +132,7 @@ public class CombatServiceTests
         Assert.True(result.IsHit);
         Assert.True(result.IsCriticalHit);
         Assert.False(result.IsFumble);
-        Assert.Equal(12, result.Damage);
+        Assert.Equal(16, result.Damage);
     }
 
     [Fact]
@@ -148,7 +148,7 @@ public class CombatServiceTests
         var result = _sut.ResolveAttack(attacker, defender, weapon);
 
         Assert.True(result.IsCriticalHit);
-        Assert.Equal(12, result.Damage);
+        Assert.Equal(16, result.Damage);
     }
 
     [Fact]
@@ -230,11 +230,11 @@ public class CombatServiceTests
         Assert.Equal(5, result.WeaponDiceRoll);
         Assert.Equal(2, result.AttributeModifier);
         Assert.Equal(1, result.FlatBonuses);
-        Assert.Equal(8, result.BaseDamage);
+        Assert.Equal(10, result.BaseDamage);
         Assert.Equal(1.5f, result.TypeMultiplier);
         Assert.Equal(2, result.ArmorMitigation);
         Assert.Equal(3, result.ElementalModifiers);
-        Assert.Equal(13, result.FinalDamage);
+        Assert.Equal(16, result.FinalDamage);
     }
 
     [Fact]

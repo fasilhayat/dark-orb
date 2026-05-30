@@ -335,6 +335,13 @@ static partial class Demo
                     if (inTurn) turnEvents.Add(e);
                     break;
 
+                case "ManaDeduct":
+                case "ManaRegen":
+                    if (states.TryGetValue(e.ActorName, out var manaSt) && e.ManaAfter.HasValue)
+                        manaSt.Mana = e.ManaAfter.Value;
+                    if (inTurn) turnEvents.Add(e);
+                    break;
+
                 case "EffectApplied":
                 case "EffectResisted":
                     if (inTurn) turnEvents.Add(e);

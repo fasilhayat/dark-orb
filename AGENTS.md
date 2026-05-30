@@ -240,7 +240,8 @@ The demo (`BattleArena.Demo`) is split into:
 ## 11. Docker rules
 
 - The `battle-arena-demo` service uses `profiles: [demo]` — it does not start with a plain `docker compose up`.
-- Use `make demo` or `docker compose --profile demo run --rm battle-arena-demo` to launch the demo.
+- Use `make up-dev` to build and run everything (DB + API + demo) in Docker.
+- Use `make up-local` to start only DB + API (demo runs on host via `make demo-local`).
 - Do not run docker commands without the user's explicit instruction.
 
 ---

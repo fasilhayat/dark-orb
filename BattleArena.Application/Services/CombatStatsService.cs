@@ -67,7 +67,8 @@ public class CombatStatsService : ICombatStatsService
             ShieldBonus = defender.Equipment.Shield?.DefenseBonus ?? 0,
             DefensiveBuffs = positiveBuffTotal + negativeDebuffs,
             DefenseRacialModifiers = (defender.Race?.Feats.Sum(f => f.DefenseBonus) ?? 0) + defender.Feats.Sum(f => f.DefenseBonus),
-            DefenseItemSetBonuses = 0
+            DefenseItemSetBonuses = 0,
+            LevelDefenseBonus = defender.Level / 2
         };
     }
 

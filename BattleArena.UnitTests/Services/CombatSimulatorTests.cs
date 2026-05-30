@@ -33,7 +33,7 @@ public class CombatSimulatorTests
             new FixedTargetSelector(new Dictionary<string, string> { ["Elara"] = "Training Dummy" }),
             new FixedTargetSelector(new Dictionary<string, string> { ["Training Dummy"] = "Elara" }));
         var summoner = CreateSummoner(CreateSummonSpell(durationRounds: 1));
-        var enemy = CreateCharacter("Training Dummy", maxHitPoints: 200, turnSpeed: 1);
+        var enemy = CreateCharacter("Training Dummy", maxHitPoints: 500, turnSpeed: 1);
 
         var result = simulator.Simulate(Party.Solo(summoner), Party.Solo(enemy), 20);
 

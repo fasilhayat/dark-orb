@@ -382,14 +382,6 @@ static partial class Demo
         var apiKey = apiOptions.ApiKey;
 
         if (string.IsNullOrWhiteSpace(apiUrl))
-        {
-            Console.Write("  Enter BattleArena API URL (or press Enter for local data): ");
-            var input = Console.ReadLine()?.Trim();
-            if (!string.IsNullOrWhiteSpace(input))
-                apiUrl = input;
-        }
-
-        if (string.IsNullOrWhiteSpace(apiUrl))
             return;
 
         // Open log file at repo root / logs

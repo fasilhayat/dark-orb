@@ -36,14 +36,14 @@ Feature: Combat — Core Attack Resolution
 
     @attack
     # AttackPower = 4 (background). Roll 12 + 4 = 16 >= DefensePower 5 (EffectiveAC=20-15=5). Hit.
-    # Damage = d8(5) + STR mod(2) = 7.
+    # Damage = d8(5) + STR mod(2) + Level*2(2) = 9.
     Scenario: Successful melee attack hits and deals damage with strength bonus
         Given the D20 roll is 12
         And the damage die roll is 5
         When the character attacks a target with armor class 5
         Then the attack should hit
         And the hit roll should be 12
-        And the damage should be 7
+        And the damage should be 9
         And the weapon used should be "Longsword"
 
     @attack
@@ -58,32 +58,32 @@ Feature: Combat — Core Attack Resolution
 
     @attack
     # A natural 20 is a critical hit — it auto-hits and doubles base damage.
-    # STR 6 gives a -2 modifier. d4(1) + (-2) = -1, doubled = -2, clamped to 0.
-    # This confirms that even a critical hit cannot produce negative damage.
+    # STR 6 gives -2 mod. d4(1) + (-2) + Level*2(2) = 1. Crit: 1 * 2 = 2.
+    # Level*2 ensures damage floor is positive even with negative STR mod.
     Scenario: Damage cannot go below zero even with a negative strength modifier
         Given a character with strength 6 and strike rating 19
         And the D20 roll is 20
         And the damage die roll is 1
         When the character attacks a target with armor class 5
         Then the attack should hit
-        And the damage should be 0
+        And the damage should be 2
 
     @attack
     # Lower StrikeRating means higher ClassAccuracyBase (20 - StrikeRating).
     # StrikeRating 15 → ClassAccuracyBase 5. AttackPower = 5 + 1 + 3 + 0 = 9.
-    # Roll 8 + 9 = 17 >= DefensePower 5. Hit. Damage = d6(6) + 3 = 9.
+    # Roll 8 + 9 = 17 >= DefensePower 5. Hit. Damage = d6(6) + 3 + Level*2(2) = 11.
     Scenario: Lower strike rating makes attacks more likely to hit
         Given a character with strength 16 and strike rating 15
         And the D20 roll is 8
         And the damage die roll is 6
         When the character attacks a target with armor class 5
         Then the attack should hit
-        And the damage should be 9
+        And the damage should be 11
 
     @attack
     # Weapon attack bonus is added directly to AttackPower.
     # AttackPower = (20-19) + 1 + 0 + 3 = 5. Roll 10 + 5 = 15 >= 5. Hit.
-    # Damage = d12(7) + STR mod(0) = 7.
+    # Damage = d12(7) + STR mod(0) + Level*2(2) = 9.
     Scenario: Weapon attack bonus improves hit chance
         Given a character with strength 10 and strike rating 19
         And a weapon named "Soul Reaver" with D12 damage die and +3 attack bonus
@@ -91,7 +91,7 @@ Feature: Combat — Core Attack Resolution
         And the damage die roll is 7
         When the character attacks a target with armor class 5
         Then the attack should hit
-        And the damage should be 7
+        And the damage should be 9
 
     @attack
     # High armor class produces a high DefensePower (EffectiveAC = 20 - 5 = 15).

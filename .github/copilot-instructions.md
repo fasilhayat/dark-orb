@@ -159,6 +159,8 @@ When adding or changing the resistance system:
 | `KnockedOut` | HP in range -9 to 0 |
 
 - **Never add game logic to `BattleArena.Demo`**. The demo may read game state and render it; it must not compute combat outcomes.
+- **API combat endpoint**: `POST /v1/combat/simulate` accepts `{ heroParty, enemyParty, maxTicks, heroTargetStrategy, enemyTargetStrategy }` and returns a `CombatResult`. The demo calls this endpoint when `UseApiRoster && ApiClient is not null` — the entire simulation runs server-side.
+- **IAttackSource** must use `[JsonDerivedType]` for polymorphic serialization (`weapon`, `spell`, `unarmed` discriminators) — required by the combat simulate endpoint.
 
 ---
 
@@ -237,5 +239,19 @@ The demo (`BattleArena.Demo`) is split into:
 ## 11. Docker rules
 
 - The `battle-arena-demo` service uses `profiles: [demo]` — it does not start with a plain `docker compose up`.
-- Use `make demo` or `docker compose --profile demo run --rm battle-arena-demo` to launch the demo.
+- Use `make up-dev` to build and run everything (DB + API + demo) in Docker.
+- Use `make up-local` to start only DB + API (demo runs on host via `make demo-local`).
 - Do not run docker commands without the user's explicit instruction.
+
+---
+
+## 12. Project skills (opencode.jsonc)
+
+Two project-scoped skills are registered in `opencode.jsonc`:
+
+| Skill | File | When to load |
+|-------|------|-------------|
+| `makefile-orchestration` | `.opencode/skills/makefile-orchestration.md` | Docker builds, demo runs, test execution, container management |
+| `combat-mechanics` | `.opencode/skills/combat-mechanics.md` | Combat system changes (attack, damage, TM, effects, resistance, logging) |
+
+Load them explicitly via the skill tool. The combat-mechanics skill contains a `self-update-trigger` for automatic refresh when combat code changes.
