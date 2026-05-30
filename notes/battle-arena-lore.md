@@ -542,9 +542,73 @@ Classes are grouped into three archetypes that determine their progression:
 
 | Archetype | Classes | Description |
 |:---------:|---------|-------------|
-| **Martial** | Barbarian, Fighter, Knight, Paladin | Dedicated combatants; strike rating improves fastest (every 2 levels). Fewer accessory slots — they rely on their weapons and armor. |
-| **Caster** | Mage, Priest, Druid | Magic-wielders; strike rating improves slowly (every 4 levels). They attune to magical accessories faster and unlock more slots. |
-| **Hybrid** | Rogue, Bard | Mixed combatants; strike rating improves moderately (every 3 levels). Moderate accessory slot progression. |
+| **Martial** | Barbarian, Fighter, Knight, Paladin | Dedicated combatants; strike rating improves fastest (every 2 levels). Fewer accessory slots — they rely on their weapons and armor. Higher turnmeter level bonus (+Level/3). |
+| **Caster** | Mage, Priest, Druid | Magic-wielders; strike rating improves slowly (every 4 levels). They attune to magical accessories faster and unlock more slots. Lower turnmeter level bonus (+Level/5). |
+| **Hybrid** | Rogue, Bard | Mixed combatants; strike rating improves moderately (every 3 levels). Moderate accessory slot progression. Moderate turnmeter level bonus (+Level/4). |
+
+### Hit Points & Hit Dice
+
+Each class uses a specific **Hit Die** that determines how many HP a character gains per level.
+
+| Class | Hit Die | Hit Die Sides | Avg per level |
+|-------|:-------:|:-------------:|:-------------:|
+| Barbarian | D12 | 12 | 6.5 |
+| Knight | D10 | 10 | 5.5 |
+| Paladin | D10 | 10 | 5.5 |
+| Priest | D8 | 8 | 4.5 |
+| Mage | D4 | 4 | 2.5 |
+| Bard | D6 | 6 | 3.5 |
+| Druid | D8 | 8 | 4.5 |
+| Fighter | D10 | 10 | 5.5 |
+| Rogue | D6 | 6 | 3.5 |
+
+#### Level 1 HP
+
+At Level 1, a character receives the **maximum** value of their hit die plus their Stamina modifier:
+
+```
+Level 1 HP = max(HitDie) + StaminaModifier
+```
+
+Where `StaminaModifier = (Stamina - 10) / 2`.
+
+#### HP per level
+
+On each subsequent level-up, the character **rolls** their hit die and adds their Stamina modifier:
+
+```
+HP Gain = Roll(HitDie) + StaminaModifier (minimum 1)
+```
+
+This gain is added to **both** MaxHitPoints and CurrentHitPoints.
+
+Stamina (Constitution) is the primary defensive stat — a Fighter with 18 Stamina (+4 modifier) gains an average of 9.5 HP per level, compared to a Mage with 10 Stamina (+0) gaining only 2.5.
+
+#### HP Examples
+
+| Character | Class | Level | Stamina | Hit Die | Expected HP |
+|-----------|-------|:-----:|:-------:|:-------:|:-----------:|
+| Priest (avg) | D8 | 1 | 12 | D8 | 9 |
+| Priest (avg) | D8 | 4 | 12 | D8 | 25 |
+| Priest (avg) | D8 | 9 | 12 | D8 | 53 |
+| Fighter (tough) | D10 | 5 | 18 | D10 | 52 |
+| Mage (frail) | D4 | 10 | 10 | D4 | 26 |
+| Barbarian (sturdy) | D12 | 8 | 18 | D12 | 82 |
+
+A Level 9 Priest (D8, Stamina 12) with 53 HP is frail compared to a Level 5 Fighter (D10, Stamina 18) with 52 HP — the Fighter has more HP at half the level, correctly reflecting the class and stamina differences.
+
+### Stamina Modifier Table
+
+| Stamina | Modifier |
+|:-------:|:--------:|
+| 3 | –3 |
+| 4–5 | –2 |
+| 6–8 | –1 |
+| 9–12 | +0 |
+| 13–15 | +1 |
+| 16–17 | +2 |
+| 18–19 | +3 |
+| 20 | +4 |
 
 ### Strike Rating (SR) Progression
 
@@ -568,6 +632,20 @@ A lower Strike Rating is better. The table below shows the cumulative reduction 
 **Example:** A Level 10 Fighter (base SR 18) → effective SR = 18 – 4 = **14**.  
 A Level 10 Mage (base SR 20) → effective SR = 20 – 2 = **18**.
 
+### Turnmeter Level Bonus
+
+Level provides a small bonus to turnmeter gain per tick, scaled by archetype:
+
+| Archetype | TM Bonus |
+|:---------:|:--------:|
+| Martial | +Level/3 |
+| Hybrid | +Level/4 |
+| Caster | +Level/5 |
+
+This ensures higher-level characters act slightly more often, but Dexterity and TurnSpeed remain the primary axes for action frequency.
+
+**Example:** A Level 9 Priest (Caster) gets +9/5 = +1 TM/tick, while a Level 4 Priest gets +4/5 = +0 TM/tick. The level gap provides a minor action frequency advantage.
+
 ### Accessory Slot Unlocks
 
 Accessory slots determine how many rings, amulets, and girdles a character can equip simultaneously.
@@ -588,6 +666,27 @@ Accessory slots determine how many rings, amulets, and girdles a character can e
 | 12 | 4 | 5 | 6 |
 
 Casters attune to magical items more readily and unlock accessory slots earlier and in greater number. Martials gain fewer slots but compensate with superior weapon training and armor proficiency.
+
+### Spell Memorization
+
+The number of spells a caster can memorize depends on their Intelligence and equipped items:
+
+```
+Base Slots = 2 + (Intelligence - 10) / 2   (minimum 1)
+Total Slots = Base Slots + equipment bonuses
+```
+
+| Intelligence | INT Mod | Base Slots |
+|:-----------:|:-------:|:----------:|
+| 3 | –3 | 1 |
+| 6–8 | –1 | 1 |
+| 9–12 | +0 | 2 |
+| 13–15 | +1 | 3 |
+| 16–17 | +2 | 4 |
+| 18–19 | +3 | 5 |
+| 20 | +4 | 6 |
+
+Equipment bonuses (e.g., Mage Robes, Arcane Circlets, Amulets of Wisdom) can add additional spell slots.
 
 ### XP from Battles
 

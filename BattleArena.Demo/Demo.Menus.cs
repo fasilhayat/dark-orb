@@ -76,7 +76,7 @@ static partial class Demo
                 if (taken)
                     CWL($"  (already selected)", ConsoleColor.Gray);
                 else
-                    CWL($"  {GetClassName(ch.ClassId),-10} Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.EffectiveMaxHitPoints}", ConsoleColor.Gray);
+                    CWL($"  {GetClassName(ch.ClassId),-10} Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}", ConsoleColor.Gray);
             }
             CW("  > ", ConsoleColor.Cyan);
 
@@ -91,7 +91,7 @@ static partial class Demo
                     continue;
                 }
                 CWL($"  → {ch.Name}", ConsoleColor.Cyan);
-                ch.CurrentHitPoints = ch.EffectiveMaxHitPoints;
+                ch.CurrentHitPoints = ch.MaxHitPoints;
                 AttackMap[ch.Name] = GetAttackSource(ch);
                 return ch;
             }
@@ -211,13 +211,13 @@ static partial class Demo
                 {
                     CW($"{ch.Name,-18}", ConsoleColor.Green);
                     CW($"{atkDisplay,-14}", ConsoleColor.Green);
-                    CWL($"  {GetClassName(ch.ClassId),-10} Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.EffectiveMaxHitPoints}  [✓]", ConsoleColor.Green);
+                    CWL($"  {GetClassName(ch.ClassId),-10} Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}  [✓]", ConsoleColor.Green);
                 }
                 else
                 {
                     CW($"{ch.Name,-18}", ConsoleColor.White);
                     CW($"{atkDisplay,-14}", ConsoleColor.Yellow);
-                    CWL($"  {GetClassName(ch.ClassId),-10} Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.EffectiveMaxHitPoints}", ConsoleColor.Gray);
+                    CWL($"  {GetClassName(ch.ClassId),-10} Lv{ch.Level}  STR {ch.Strength,-3}  DEX {ch.Dexterity,-3}  HP {ch.MaxHitPoints}", ConsoleColor.Gray);
                 }
             }
 
@@ -293,7 +293,7 @@ static partial class Demo
         EnemyParty = p2;
 
         var allMembers = HeroParty.Members.Concat(EnemyParty.Members).ToList();
-        MaxHp = allMembers.ToDictionary(m => m.Character.Name, m => m.Character.EffectiveMaxHitPoints);
+        MaxHp = allMembers.ToDictionary(m => m.Character.Name, m => m.Character.MaxHitPoints);
         CurHp = new Dictionary<string, int>(MaxHp);
 
         CWL($"  Seed: {snapshot.Seed}  |  replaying...\n", ConsoleColor.Gray);

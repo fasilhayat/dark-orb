@@ -1,3 +1,5 @@
+using BattleArena.Core.Entities.Enums;
+
 namespace BattleArena.Application.Models;
 
 public static class LevelProgression
@@ -84,4 +86,46 @@ public static class LevelProgression
                 return i + 1;
         return 1;
     }
+
+    /// <summary>Hit die sides for each class (indexed by ClassId 1-9).</summary>
+    public static int HitDieSides(int classId) => classId switch
+    {
+        1 => 12,  // Barbarian
+        2 => 10,  // Knight
+        3 => 10,  // Paladin
+        4 => 8,   // Priest
+        5 => 4,   // Mage
+        6 => 6,   // Bard
+        7 => 8,   // Druid
+        8 => 10,  // Fighter
+        9 => 6,   // Rogue
+        _ => 8
+    };
+
+    /// <summary>Turnmeter bonus from level, scaled by archetype.</summary>
+    public static int TurnMeterLevelBonus(int level, ClassArchetype archetype) => archetype switch
+    {
+        ClassArchetype.Martial => level / 3,
+        ClassArchetype.Hybrid  => level / 4,
+        ClassArchetype.Caster  => level / 5,
+        _ => 0
+    };
+
+    /// <summary>Spell memorization slots based on Intelligence + equipment bonus.</summary>
+    public static int SpellMemorizationSlots(int intelligence, int equipmentBonus = 0)
+    {
+        var mod = (intelligence - 10) / 2;
+        return Math.Max(1, 2 + mod + equipmentBonus);
+    }
+
+    /// <summary>Converts hit die sides to DieType for rolling on level-up.</summary>
+    public static DieType HitDieToDieType(int sides) => sides switch
+    {
+        4 => DieType.D4,
+        6 => DieType.D6,
+        8 => DieType.D8,
+        10 => DieType.D10,
+        12 => DieType.D12,
+        _ => DieType.D8
+    };
 }

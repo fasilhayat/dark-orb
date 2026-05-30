@@ -129,7 +129,7 @@ public class CharacterRepository : ICharacterRepository
             MaxMana = reader["max_mana"] as int? ?? 0,
             CurrentMana = reader["max_mana"] as int? ?? 0
         };
-        c.CurrentHitPoints = c.EffectiveMaxHitPoints;
+        c.CurrentHitPoints = c.MaxHitPoints;
         return c;
     }
 

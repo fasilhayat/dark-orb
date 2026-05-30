@@ -1,12 +1,22 @@
 namespace BattleArena.UnitTests.Services;
 
+using Application.Interfaces;
 using Application.Models;
 using Application.Services;
 using Core.Entities;
+using Core.Entities.Enums;
+using NSubstitute;
 
 public class LevelingServiceTests
 {
-    private readonly LevelingService _sut = new();
+    private readonly IDiceService _dice = Substitute.For<IDiceService>();
+    private readonly LevelingService _sut;
+
+    public LevelingServiceTests()
+    {
+        _dice.Roll(Arg.Any<DieType>()).Returns(5);
+        _sut = new LevelingService(_dice);
+    }
 
     [Fact]
     public void ComputeCombatXp_BaseOnly_ReturnsSumOfEnemyLevelsTimesMultiplier()

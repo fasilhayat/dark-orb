@@ -18,8 +18,6 @@ public class Character
     public int Charisma { get; set; } = 10;
     public int MaxHitPoints { get; set; }
     public int CurrentHitPoints { get; set; }
-    public int HitPointsPerLevel { get; set; } = 6;
-    public int EffectiveMaxHitPoints => MaxHitPoints + Math.Max(0, Level - 1) * HitPointsPerLevel;
     public int StrikeRating { get; set; }
     public int TurnSpeed { get; set; }
     public int MaxMana { get; set; }
@@ -56,6 +54,16 @@ public class Character
 
     // MaxMana including any gear bonuses (e.g. arcane robes, mana-crystal amulet).
     public int EffectiveMaxMana => MaxMana + Equipment.TotalMaxManaBonus;
+
+    /// <summary>Maximum number of spells this character can memorize, based on Intelligence and equipment.</summary>
+    public int SpellMemorizationSlots
+    {
+        get
+        {
+            var mod = (Intelligence - 10) / 2;
+            return Math.Max(1, 2 + mod + Equipment.TotalSpellSlotsBonus);
+        }
+    }
 
     /// <summary>Returns true if this character's class may wield the given weapon archetype (AD&amp;D 2e rules).</summary>
     public bool CanEquip(ArchetypeWeapon archetype) => archetype.IsUsableByClass(ClassId);

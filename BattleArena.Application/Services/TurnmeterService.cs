@@ -11,7 +11,9 @@ public class TurnmeterService : ITurnmeterService
         var dexMod = (character.Dexterity - 10) / 2;
         var armorPenalty = character.Equipment.TotalTurnMeterPenalty;
         var buffMod = character.ActiveStatusEffects.Sum(e => e.TurnMeterModifier);
-        return Math.Max(1, character.TurnSpeed + dexMod + buffMod - armorPenalty);
+        var archetype = LevelProgression.Archetype(character.ClassId);
+        var levelBonus = LevelProgression.TurnMeterLevelBonus(character.Level, archetype);
+        return Math.Max(1, character.TurnSpeed + dexMod + levelBonus + buffMod - armorPenalty);
     }
 
     public TurnmeterState Tick(Character character, TurnmeterState currentState)

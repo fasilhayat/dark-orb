@@ -149,6 +149,13 @@ public static class CombatLogWriter
                     sb.AppendLine($"           Attack   d20={e.DieRoll,2}  +AP {e.AttackPower,3}  vs DP {e.DefensePower,3}  total={total,3}  → {hit}{crit}{fumb}");
                     if (!string.IsNullOrEmpty(e.Phrase))
                         sb.AppendLine($"                    \"{e.Phrase}\"");
+                    // Show damage formula inline (embedded in Message after "| Dmg: ")
+                    if (e.IsHit == true && !string.IsNullOrEmpty(e.Message))
+                    {
+                        var dmgIdx = e.Message.IndexOf(" | Dmg: ", StringComparison.Ordinal);
+                        if (dmgIdx >= 0)
+                            sb.AppendLine($"           Damage   {e.Message[(dmgIdx + 8)..]}");
+                    }
                     break;
 
                 case "Damage":
@@ -198,7 +205,7 @@ public static class CombatLogWriter
                     break;
 
                 case "ApiCall":
-                    sb.AppendLine($"  [{e.Tick,5}]  API  {e.Message}");
+                    sb.AppendLine($"  [{e.Tick,5}]  DICE  {e.Message}");
                     lastTick = e.Tick;
                     break;
 
@@ -314,20 +321,6 @@ public static class CombatLogWriter
                 var app = g.Count(e => e.EventType == "EffectApplied");
                 var res = g.Count(e => e.EventType == "EffectResisted");
                 sb.AppendLine($"    {g.Key,-18} applied {app,3}  resisted {res,3}");
-            }
-            sb.AppendLine();
-        }
-
-        // ── API dice calls ──────────────────────────────────────────────
-        if (result.DiceLog?.Count > 0)
-        {
-            sb.AppendLine();
-            sb.AppendLine("  API DICE ROLLS");
-            sb.AppendLine(thin);
-            foreach (var d in result.DiceLog)
-            {
-                if (d.EventType == "ApiCall")
-                    sb.AppendLine($"  {d.Message}");
             }
             sb.AppendLine();
         }

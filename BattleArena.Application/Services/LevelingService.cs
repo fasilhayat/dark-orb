@@ -1,6 +1,7 @@
 namespace BattleArena.Application.Services;
 
 using Core.Entities;
+using Interfaces;
 using Models;
 
 // XP rewards and level-up logic for combats.
@@ -13,6 +14,13 @@ using Models;
 // Level thresholds, strike rating bonuses, and accessory slot unlocks are defined in LevelProgression.
 public class LevelingService
 {
+    private readonly IDiceService _dice;
+
+    public LevelingService(IDiceService dice)
+    {
+        _dice = dice;
+    }
+
     private const int XpMultiplier = 12;
     private const int CritBonus = 8;
     private const int FumblePenalty = 8;
@@ -67,7 +75,17 @@ public class LevelingService
             c.ExperiencePoints += share;
             c.Level = LevelProgression.LevelFromXp(c.ExperiencePoints);
             if (c.Level > oldLevel)
-                c.CurrentHitPoints += c.HitPointsPerLevel * (c.Level - oldLevel);
+            {
+                var staminaMod = (c.Stamina - 10) / 2;
+                var hitDieSides = LevelProgression.HitDieSides(c.ClassId);
+                for (var lvl = oldLevel; lvl < c.Level; lvl++)
+                {
+                    var rolled = _dice.Roll(LevelProgression.HitDieToDieType(hitDieSides));
+                    var gain = Math.Max(1, rolled + staminaMod);
+                    c.MaxHitPoints += gain;
+                    c.CurrentHitPoints += gain;
+                }
+            }
             result[c.Name] = share;
         }
         return result;

@@ -19,5 +19,6 @@ public class Armor
     public int TurnMeterCostReduction { get; set; }
     public int ManaRegenBonus { get; set; }
     public int MaxManaBonus { get; set; }
+    public int SpellSlotsBonus { get; set; }
     public List<ResistanceBonus> Resistances { get; set; } = new();
 }

@@ -19,6 +19,7 @@ static partial class Demo
     // ── Optional API connection ───────────────────────────────────────────────────
     private static BattleArenaApiClient? ApiClient;
     private static ApiDiceService? _apiDiceService;
+    private static IDiceService? _diceService;
     private static List<Character> ApiRoster = [];
     private static List<Weapon> ApiWeapons = [];
     private static bool UseApiRoster;
@@ -98,7 +99,7 @@ static partial class Demo
         foreach (var m in EnemyParty.Members) ResetCombatant(m.Character);
 
         var allMembers = HeroParty.Members.Concat(EnemyParty.Members).ToList();
-        MaxHp = allMembers.ToDictionary(m => m.Character.Name, m => m.Character.EffectiveMaxHitPoints);
+        MaxHp = allMembers.ToDictionary(m => m.Character.Name, m => m.Character.MaxHitPoints);
         CurHp = new Dictionary<string, int>(MaxHp);
 
         CWL("\n  Press any key to start the combat...", ConsoleColor.Gray);
@@ -157,6 +158,7 @@ static partial class Demo
         {
             diceSvc = new DiceService();
         }
+        _diceService = diceSvc;
 
         var simulator = new CombatSimulator(
             new CombatService(diceSvc, CombatStats),
@@ -236,7 +238,7 @@ static partial class Demo
 
     internal static void ResetCombatant(Character character)
     {
-        character.CurrentHitPoints = character.EffectiveMaxHitPoints;
+        character.CurrentHitPoints = character.MaxHitPoints;
         character.CurrentMana = character.MaxMana;
         character.ActiveStatusEffects.Clear();
     }
@@ -293,8 +295,8 @@ static partial class Demo
             dict[m.Character.Name] = new CharDisplayState
             {
                 Name = m.Character.Name,
-                MaxHp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.EffectiveMaxHitPoints),
-                Hp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.EffectiveMaxHitPoints),
+                MaxHp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
+                Hp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
                 IsHero = true,
                 Weapon = m.AttackSource?.Name ?? "",
                 MaxMana = m.Character.MaxMana,
@@ -304,8 +306,8 @@ static partial class Demo
             dict[m.Character.Name] = new CharDisplayState
             {
                 Name = m.Character.Name,
-                MaxHp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.EffectiveMaxHitPoints),
-                Hp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.EffectiveMaxHitPoints),
+                MaxHp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
+                Hp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
                 IsHero = false,
                 Weapon = m.AttackSource?.Name ?? "",
                 MaxMana = m.Character.MaxMana,
@@ -512,7 +514,7 @@ static partial class Demo
 
     private static void AwardCombatXp()
     {
-        var svc = new LevelingService();
+        var svc = new LevelingService(_diceService ?? new DiceService());
         if (Result.WinningParty is null || Result.LosingParty is null) return;
 
         var winners = Result.WinningParty.Members.Select(m => m.Character);

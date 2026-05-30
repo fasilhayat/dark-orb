@@ -9,40 +9,40 @@
 -- ============================================================
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, strength_percentile, max_hit_points, current_hit_points, strike_rating, turn_speed)
-SELECT 'Bruenor Battlehammer', r.id, c.id, 5, 18, 12, 18, 9, 13, 11, 76, 55, 55, 14, 12
+SELECT 'Bruenor Battlehammer', r.id, c.id, 5, 18, 12, 18, 9, 13, 11, 76, 52, 52, 14, 12
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Dwarf' AND c.name = 'Fighter';
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed)
-SELECT 'Tanis Half-Elven', r.id, c.id, 5, 14, 16, 12, 14, 14, 16, 38, 38, 14, 18
+SELECT 'Tanis Half-Elven', r.id, c.id, 5, 14, 16, 12, 14, 14, 16, 25, 25, 14, 18
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Elf' AND c.name = 'Rogue';
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, strength_percentile, max_hit_points, current_hit_points, strike_rating, turn_speed)
-SELECT 'Karg Bloodfang', r.id, c.id, 6, 18, 10, 16, 7, 8, 9, 99, 72, 72, 13, 14
+SELECT 'Karg Bloodfang', r.id, c.id, 6, 18, 10, 16, 7, 8, 9, 99, 62, 62, 13, 14
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Orc' AND c.name = 'Barbarian';
 
 
 -- Additional playable characters for full 6-hero party demos
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed)
-SELECT 'Elara Swiftwind', r.id, c.id, 5, 8, 14, 10, 18, 16, 14, 28, 28, 13, 10
+SELECT 'Elara Swiftwind', r.id, c.id, 5, 8, 14, 10, 18, 16, 14, 14, 14, 13, 10
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Elf' AND c.name = 'Mage'
 AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Elara Swiftwind');
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed)
-SELECT 'Sir Aldric Vane', r.id, c.id, 6, 17, 10, 18, 11, 13, 14, 62, 62, 14, 8
+SELECT 'Sir Aldric Vane', r.id, c.id, 6, 17, 10, 18, 11, 13, 14, 61, 61, 14, 8
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Human' AND c.name = 'Knight'
 AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Sir Aldric Vane');
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed)
-SELECT 'Mira Brightholm', r.id, c.id, 4, 10, 14, 12, 15, 17, 16, 34, 34, 14, 12
+SELECT 'Mira Brightholm', r.id, c.id, 4, 10, 14, 12, 15, 17, 16, 25, 25, 14, 12
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Human' AND c.name = 'Priest'
 AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Mira Brightholm');
@@ -53,84 +53,84 @@ AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Mira Brightholm
 -- ============================================================
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Brorn Ironarm', r.id, c.id, 6, 18, 10, 18, 8, 10, 9, 68, 68, 13, 10, 0
+SELECT 'Brorn Ironarm', r.id, c.id, 6, 18, 10, 18, 8, 10, 9, 63, 63, 13, 10, 0
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Dwarf' AND c.name = 'Barbarian'
 AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Brorn Ironarm');
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Sylas Moonshadow', r.id, c.id, 5, 10, 16, 10, 17, 14, 15, 30, 30, 14, 16, 0
+SELECT 'Sylas Moonshadow', r.id, c.id, 5, 10, 16, 10, 17, 14, 15, 20, 20, 14, 16, 0
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Elf' AND c.name = 'Rogue'
 AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Sylas Moonshadow');
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Captain Aldric', r.id, c.id, 7, 16, 12, 15, 10, 12, 13, 58, 58, 13, 10, 1
+SELECT 'Captain Aldric', r.id, c.id, 7, 16, 12, 15, 10, 12, 13, 57, 57, 13, 10, 1
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Human' AND c.name = 'Fighter'
 AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Captain Aldric');
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Sister Marigold', r.id, c.id, 9, 10, 10, 12, 14, 18, 16, 48, 48, 14, 10, 1
+SELECT 'Sister Marigold', r.id, c.id, 9, 10, 10, 12, 14, 18, 16, 53, 53, 14, 10, 1
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Human' AND c.name = 'Priest'
 AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Sister Marigold');
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Rorik the Wanderer', r.id, c.id, 8, 18, 10, 18, 8, 10, 9, 90, 90, 13, 10, 1
+SELECT 'Rorik the Wanderer', r.id, c.id, 8, 18, 10, 18, 8, 10, 9, 82, 82, 13, 10, 1
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Dwarf' AND c.name = 'Barbarian'
 AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Rorik the Wanderer');
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Selene Nightwhisper', r.id, c.id, 10, 8, 14, 10, 18, 14, 16, 32, 32, 14, 14, 1
+SELECT 'Selene Nightwhisper', r.id, c.id, 10, 8, 14, 10, 18, 14, 16, 26, 26, 14, 14, 1
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Elf' AND c.name = 'Mage'
 AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Selene Nightwhisper');
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Grommash Ironhide', r.id, c.id, 12, 20, 10, 18, 7, 8, 10, 112, 112, 13, 10, 1
+SELECT 'Grommash Ironhide', r.id, c.id, 12, 20, 10, 18, 7, 8, 10, 118, 118, 13, 10, 1
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Orc' AND c.name = 'Fighter'
 AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Grommash Ironhide');
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Finn Swift', r.id, c.id, 6, 8, 18, 10, 12, 10, 16, 28, 28, 14, 18, 1
+SELECT 'Finn Swift', r.id, c.id, 6, 8, 18, 10, 12, 10, 16, 23, 23, 14, 18, 1
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Halfling' AND c.name = 'Rogue'
 AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Finn Swift');
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'The Collector', r.id, c.id, 15, 10, 12, 10, 20, 16, 14, 42, 42, 15, 12, 1
+SELECT 'The Collector', r.id, c.id, 15, 10, 12, 10, 20, 16, 14, 39, 39, 15, 12, 1
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Human' AND c.name = 'Mage'
 AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'The Collector');
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Morgath the Pale', r.id, c.id, 14, 18, 8, 16, 10, 12, 8, 126, 126, 14, 8, 1
+SELECT 'Morgath the Pale', r.id, c.id, 14, 18, 8, 16, 10, 12, 8, 123, 123, 14, 8, 1
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Undead' AND c.name = 'Knight'
 AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Morgath the Pale');
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Sizzle', r.id, c.id, 5, 6, 14, 8, 16, 10, 12, 18, 18, 15, 14, 1
+SELECT 'Sizzle', r.id, c.id, 5, 6, 14, 8, 16, 10, 12, 9, 9, 15, 14, 1
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Kobold' AND c.name = 'Mage'
 AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Sizzle');
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Ivy Thornwood', r.id, c.id, 8, 10, 14, 12, 16, 18, 14, 52, 52, 14, 14, 1
+SELECT 'Ivy Thornwood', r.id, c.id, 8, 10, 14, 12, 16, 18, 14, 47, 47, 14, 14, 1
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Elf' AND c.name = 'Druid'
 AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Ivy Thornwood');
