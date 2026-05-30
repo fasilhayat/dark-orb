@@ -66,7 +66,7 @@ redo-local:
 	@echo Clean + build + up-local + demo...
 	dotnet clean BattleArena.sln
 	dotnet build BattleArena.sln
-	$(MAKE) up-local
+	@$(MAKE) up-local
 	dotnet run --project BattleArena.Demo/BattleArena.Demo.csproj
 
 demo-local:
