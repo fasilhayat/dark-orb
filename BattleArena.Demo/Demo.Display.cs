@@ -341,6 +341,15 @@ static partial class Demo
         CW($"  {tickInRound}", ConsoleColor.White);
         CW(" / ", ConsoleColor.DarkGray);
         CWL($"{RoundLength} ticks", ConsoleColor.Gray);
+
+        // Pacing indicator
+        var pacingLabel = PacingMultiplier switch
+        {
+            <= 0.6 => "Fast (2.0x)",
+            >= 1.8 => "Slow (0.5x)",
+            _      => "Normal (1.0x)"
+        };
+        CWL($"  Pacing: {pacingLabel}", ConsoleColor.Gray);
     }
 
     // ── DrawCombatScreen ──────────────────────────────────────────────────────────

@@ -10,7 +10,7 @@ static partial class Demo
     // Increase (e.g. 2.0) for slower, more deliberate playback.
     // Decrease (e.g. 0.5) for faster playback.
     private static double PacingMultiplier { get; set; } = 1.0;
-    private static void Paced(int ms) => Paced((int)(ms * PacingMultiplier));
+    private static void Paced(int ms) => Thread.Sleep((int)(ms * PacingMultiplier));
 
     // ── Display strategies: shared by turn-based and realtime ────────────
 
