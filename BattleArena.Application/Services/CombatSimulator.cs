@@ -746,6 +746,7 @@ public class CombatSimulator : ICombatSimulator
                 ActorName        = actorState.Character.Name,
                 EventType        = "DoTTick",
                 DamageDealt      = dotDmg,
+                TargetHpAfter    = actorState.Character.CurrentHitPoints,
                 StatusEffectName = dotName,
                 Message          = $"{actorState.Character.Name} suffers {dotDmg} {dotName} damage."
             });

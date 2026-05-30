@@ -54,21 +54,36 @@ public static class CombatEndpoint
             return Results.Ok(result);
         });
 
-        app.MapPost("/v1/combat/simulate", async (CombatSimulateByMembersRequest req, HttpContext ctx) =>
+        app.MapPost("/v1/combat/simulate", async (
+            CombatSimulateByMembersRequest req,
+            ICombatService combatService,
+            ITurnmeterService turnmeterService,
+            IStatusEffectService statusEffectService,
+            IDiceService diceService,
+            ICharacterService characterService) =>
         {
-            var combatService = ctx.RequestServices.GetRequiredService<ICombatService>();
-            var turnmeterService = ctx.RequestServices.GetRequiredService<ITurnmeterService>();
-            var statusEffectService = ctx.RequestServices.GetRequiredService<IStatusEffectService>();
-            var diceService = ctx.RequestServices.GetRequiredService<IDiceService>();
-            var characterService = ctx.RequestServices.GetRequiredService<ICharacterService>();
+            if (req.MaxTicks is < 1 or > 10_000)
+                return Results.BadRequest("MaxTicks must be between 1 and 10000.");
 
-            var heroMembers = await BuildPartyMembers(req.HeroPartyMemberIds, characterService);
+            if (req.HeroPartyMemberIds is not { Count: > 0 })
+                return Results.BadRequest("HeroPartyMemberIds must contain at least one character ID.");
+
+            if (req.EnemyPartyMemberIds is not { Count: > 0 })
+                return Results.BadRequest("EnemyPartyMemberIds must contain at least one character ID.");
+
+            var heroMembers  = await BuildPartyMembers(req.HeroPartyMemberIds,  characterService);
             var enemyMembers = await BuildPartyMembers(req.EnemyPartyMemberIds, characterService);
 
-            var heroParty = Party.HeroParty(req.HeroPartyName, heroMembers);
-            var enemyParty = new Party { Name = req.EnemyPartyName, Members = enemyMembers.ToList() };
+            if (heroMembers.Count == 0)
+                return Results.BadRequest("None of the HeroPartyMemberIds matched a known character.");
 
-            var heroSelector = CreateSelector(req.HeroTargetStrategy);
+            if (enemyMembers.Count == 0)
+                return Results.BadRequest("None of the EnemyPartyMemberIds matched a known character.");
+
+            var heroParty  = Party.HeroParty(req.HeroPartyName, heroMembers);
+            var enemyParty = new Party { Name = req.EnemyPartyName, Members = enemyMembers };
+
+            var heroSelector  = CreateSelector(req.HeroTargetStrategy);
             var enemySelector = CreateSelector(req.EnemyTargetStrategy);
 
             var simulator = new CombatSimulator(
@@ -80,7 +95,7 @@ public static class CombatEndpoint
         });
     }
 
-    private static async Task<IEnumerable<PartyMember>> BuildPartyMembers(
+    private static async Task<List<PartyMember>> BuildPartyMembers(
         List<int> characterIds, ICharacterService characterService)
     {
         var members = new List<PartyMember>();
@@ -90,7 +105,7 @@ public static class CombatEndpoint
             if (character is null) continue;
             members.Add(new PartyMember
             {
-                Character = character,
+                Character    = character,
                 AttackSource = ResolveAttackSource(character)
             });
         }

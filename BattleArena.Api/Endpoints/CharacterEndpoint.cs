@@ -22,6 +22,7 @@ public static class CharacterEndpoint
         app.MapPost("/v1/character", async (Character character, ICharacterService characterService) =>
         {
             var id = await characterService.CreateCharacterAsync(character);
+            character.Id = id;
             return Results.Created($"/v1/character/{id}", character);
         });
 

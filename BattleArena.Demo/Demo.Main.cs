@@ -3,6 +3,7 @@ namespace BattleArena.Demo;
 using Application.Interfaces;
 using Application.Models;
 using Application.Services;
+using BattleArena.Presentation;
 using System.IO;
 using Core.Entities;
 using Core.Entities.Enums;
@@ -45,7 +46,7 @@ static partial class Demo
 
     internal static void Run()
     {
-        DisplayConfig = GuiDisplayConfig.Load();
+        DisplayConfig = GuiDisplayConfig.Load(logger: message => Console.Error.WriteLine(message));
         ConnectApi();
         PickDataSource();
         InitializeData();
@@ -174,7 +175,7 @@ static partial class Demo
         Result = simulator.Simulate(HeroParty, EnemyParty, 500);
         var diceLog = _apiDiceService?.DiceLog;
         Result.DiceLog = diceLog?.ToList();
-        MergeDiceLog(Result.Log, diceLog);
+        Result.Log = CombatLogMerger.Merge(Result.Log, diceLog);
 
         if (mode == 'T')
             PlayTurnBased();
@@ -291,11 +292,11 @@ static partial class Demo
         return "Unarmed";
     }
 
-    internal static Dictionary<string, CharDisplayState> BuildDisplayStates()
+    internal static CombatDisplayState BuildDisplayStates()
     {
-        var dict = new Dictionary<string, CharDisplayState>();
+        var characters = new List<CharDisplayState>();
         foreach (var m in HeroParty.Members)
-            dict[m.Character.Name] = new CharDisplayState
+            characters.Add(new CharDisplayState
             {
                 Name = m.Character.Name,
                 MaxHp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
@@ -304,9 +305,9 @@ static partial class Demo
                 Weapon = m.AttackSource?.Name ?? "",
                 MaxMana = m.Character.MaxMana,
                 Mana = m.Character.CurrentMana
-            };
+            });
         foreach (var m in EnemyParty.Members)
-            dict[m.Character.Name] = new CharDisplayState
+            characters.Add(new CharDisplayState
             {
                 Name = m.Character.Name,
                 MaxHp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
@@ -315,34 +316,33 @@ static partial class Demo
                 Weapon = m.AttackSource?.Name ?? "",
                 MaxMana = m.Character.MaxMana,
                 Mana = m.Character.CurrentMana
-            };
-        return dict;
+            });
+
+        var layout = CombatLayout.From(
+            HeroParty.Members.Select(m => m.Character.Name),
+            EnemyParty.Members.Select(m => m.Character.Name),
+            Scenario == 'D');
+
+        return new CombatDisplayState(characters, layout);
     }
 
-    internal static void EnsureSummonedPetDisplayState(Dictionary<string, CharDisplayState> states, CombatLogEntry entry)
+    internal static void EnsureSummonedPetDisplayState(CombatLogEntry entry, CombatDisplayState state)
     {
-        if (string.IsNullOrWhiteSpace(entry.SummonedPetName) || states.ContainsKey(entry.SummonedPetName))
+        if (string.IsNullOrWhiteSpace(entry.SummonedPetName) || state.TryGet(entry.SummonedPetName) is not null)
             return;
 
         var pet = FindSummonedPet(entry.SummonedPetName);
-        var isHero = states.TryGetValue(entry.ActorName, out var summonerState)
-            ? summonerState.IsHero
-            : HeroParty.Members.Any(m => m.Character.Name == entry.ActorName);
+        var summonerState = state.TryGet(entry.ActorName);
+        var isHero = summonerState?.IsHero
+            ?? HeroParty.Members.Any(m => m.Character.Name == entry.ActorName);
         var maxHp = pet?.MaxHitPoints ?? 1;
         var weaponName = pet is null ? string.Empty : $"{pet.Name}'s Attack";
 
         MaxHp[entry.SummonedPetName] = maxHp;
         CurHp[entry.SummonedPetName] = maxHp;
-        states[entry.SummonedPetName] = new CharDisplayState
-        {
-            Name = entry.SummonedPetName,
-            MaxHp = maxHp,
-            Hp = maxHp,
-            IsHero = isHero,
-            Weapon = weaponName,
-            MaxMana = 0,
-            Mana = 0
-        };
+        state.EnsurePet(entry.SummonedPetName, maxHp, isHero);
+        if (state.TryGet(entry.SummonedPetName) is { } petState)
+            petState.Weapon = weaponName;
     }
 
     private static Pet? FindSummonedPet(string petName)
@@ -402,12 +402,7 @@ static partial class Demo
         ApiClient = new BattleArenaApiClient(
             apiUrl,
             apiKey: apiKey,
-            consoleLogger: msg =>
-            {
-                Console.ForegroundColor = ConsoleColor.DarkCyan;
-                Console.WriteLine(msg);
-                Console.ResetColor();
-            },
+            consoleLogger: null,
             fileLogger: logWriter);
         Console.Write("  Connecting to BattleArena API... ");
         try
@@ -459,27 +454,6 @@ static partial class Demo
         }
     }
 
-    private static void MergeDiceLog(List<CombatLogEntry> log, List<CombatLogEntry>? diceLog)
-    {
-        if (diceLog is not { Count: > 0 }) return;
-
-        int d = 0;
-        var merged = new List<CombatLogEntry>(log.Count + diceLog.Count);
-
-        foreach (var evt in log)
-        {
-            while (d < diceLog.Count && diceLog[d].Tick <= evt.Tick)
-                merged.Add(diceLog[d++]);
-            merged.Add(evt);
-        }
-
-        while (d < diceLog.Count)
-            merged.Add(diceLog[d++]);
-
-        log.Clear();
-        log.AddRange(merged);
-    }
-
     private static void DumpCombatLog()
     {
         try
@@ -508,6 +482,16 @@ static partial class Demo
             CWL(outputDir, ConsoleColor.Gray);
             CWL("  " + new string('─', 62), ConsoleColor.Gray);
             Console.WriteLine();
+
+            try
+            {
+                var dirInfo = new DirectoryInfo(Path.GetDirectoryName(jsonPath)!);
+                CombatLogPruner.Prune(dirInfo);
+            }
+            catch
+            {
+                // Best-effort cleanup — don't fail the save if pruning fails
+            }
         }
         catch (Exception ex)
         {

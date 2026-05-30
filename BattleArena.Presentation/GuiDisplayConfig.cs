@@ -1,9 +1,9 @@
-namespace BattleArena.Demo;
+namespace BattleArena.Presentation;
 
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-internal sealed class GuiDisplayConfig
+public sealed class GuiDisplayConfig
 {
     private static readonly JsonSerializerOptions _opts =
         new() { PropertyNameCaseInsensitive = true };
@@ -46,12 +46,12 @@ internal sealed class GuiDisplayConfig
 
     public static GuiDisplayConfig Default { get; } = new();
 
-    public static GuiDisplayConfig Load(string? path = null)
+    public static GuiDisplayConfig Load(string? path = null, Action<string>? logger = null)
     {
         path ??= Path.Combine(AppContext.BaseDirectory, "gui-display-contract.json");
         if (!File.Exists(path))
         {
-            Console.Error.WriteLine($"[GuiDisplayConfig] Not found: {path} — using defaults.");
+            logger?.Invoke($"[GuiDisplayConfig] Not found: {path} — using defaults.");
             return Default;
         }
 
@@ -63,7 +63,7 @@ internal sealed class GuiDisplayConfig
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[GuiDisplayConfig] Parse error: {ex.Message} — using defaults.");
+            logger?.Invoke($"[GuiDisplayConfig] Parse error: {ex.Message} — using defaults.");
             return Default;
         }
     }

@@ -192,6 +192,13 @@ static partial class Demo
 
     private static List<Character> PickHeroPartyFromRoster()
     {
+        var heroCandidates = ApiRoster.Where(c => c.Npc == 0).ToList();
+        if (heroCandidates.Count == 0)
+        {
+            Console.WriteLine("  No hero characters available in the roster.");
+            return [];
+        }
+
         var selected = new List<Character>();
         while (true)
         {
@@ -200,10 +207,10 @@ static partial class Demo
             CWL($"\n  BUILD YOUR HERO PARTY  (max {Party.HeroPartyMaxSize})", ConsoleColor.Yellow);
             Console.WriteLine();
 
-            for (var i = 0; i < ApiRoster.Count && i < 26; i++)
+            for (var i = 0; i < heroCandidates.Count && i < 26; i++)
             {
                 var key = (char)('A' + i);
-                var ch = ApiRoster[i];
+                var ch = heroCandidates[i];
                 var picked = selected.Any(s => s.Name == ch.Name);
                 var atkDisplay = GetAttackDisplayName(ch);
                 CW($"    [{key}]  ", ConsoleColor.Cyan);
@@ -240,9 +247,9 @@ static partial class Demo
 
             var pick = char.ToUpperInvariant(kInfo.KeyChar);
             var idx = pick - 'A';
-            if (idx >= 0 && idx < ApiRoster.Count)
+            if (idx >= 0 && idx < heroCandidates.Count)
             {
-                var hero = ApiRoster[idx];
+                var hero = heroCandidates[idx];
                 var existing = selected.FindIndex(c => c.Name == hero.Name);
                 if (existing >= 0)
                 {

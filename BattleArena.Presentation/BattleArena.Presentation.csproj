@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>BattleArena.Presentation</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BattleArena.Application\BattleArena.Application.csproj" />
+    <ProjectReference Include="..\BattleArena.Core\BattleArena.Core.csproj" />
+  </ItemGroup>
+</Project>

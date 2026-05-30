@@ -2,6 +2,7 @@ namespace BattleArena.Demo;
 
 using Application.Models;
 using Application.Services;
+using BattleArena.Presentation;
 using Core.Entities;
 using Core.Entities.Enums;
 
@@ -354,24 +355,24 @@ static partial class Demo
 
     // ── DrawCombatScreen ──────────────────────────────────────────────────────────
 
-    internal static void DrawCombatScreen(Dictionary<string, CharDisplayState> states, int tick, string? activeActorName = null)
+    internal static void DrawCombatScreen(CombatDisplayState state, int tick, string? activeActorName = null)
     {
         Console.Clear();
         PrintHeader();
         DrawRoundBar(tick);
 
-        var heroNames = HeroParty.Members.Select(m => m.Character.Name).ToHashSet(StringComparer.Ordinal);
-        var enemyNames = EnemyParty.Members.Select(m => m.Character.Name).ToHashSet(StringComparer.Ordinal);
-        var heroes = HeroParty.Members
-            .Select(m => states[m.Character.Name])
-            .Concat(states.Values.Where(s => s.IsHero && !heroNames.Contains(s.Name)).OrderBy(s => s.Name))
+        var heroNames = state.Layout.HeroNames.ToHashSet(StringComparer.Ordinal);
+        var enemyNames = state.Layout.EnemyNames.ToHashSet(StringComparer.Ordinal);
+        var heroes = state.Layout.HeroNames
+            .Select(name => state.All[name])
+            .Concat(state.All.Values.Where(s => s.IsHero && !heroNames.Contains(s.Name)).OrderBy(s => s.Name))
             .ToList();
-        var enemies = EnemyParty.Members
-            .Select(m => states[m.Character.Name])
-            .Concat(states.Values.Where(s => !s.IsHero && !enemyNames.Contains(s.Name)).OrderBy(s => s.Name))
+        var enemies = state.Layout.EnemyNames
+            .Select(name => state.All[name])
+            .Concat(state.All.Values.Where(s => !s.IsHero && !enemyNames.Contains(s.Name)).OrderBy(s => s.Name))
             .ToList();
 
-        bool isDuel = Scenario == 'D';
+        bool isDuel = state.Layout.IsDuel;
         var leftLabel = isDuel ? "── CHARACTER 1 ──" : "── HEROES ──────";
         var rightLabel = isDuel ? "── CHARACTER 2 ──" : "── ENEMIES ──────";
 
@@ -534,19 +535,6 @@ static partial class Demo
     }
 }
 
-// ── Seg / CharDisplayState ────────────────────────────────────────────────────
+// ── Seg ────────────────────────────────────────────────────────────────────────
 
 internal record Seg(string Text, ConsoleColor Fg = ConsoleColor.Gray);
-
-internal class CharDisplayState
-{
-    public required string Name { get; init; }
-    public required int MaxHp { get; init; }
-    public required bool IsHero { get; init; }
-    public int Hp { get; set; }
-    public int Tm { get; set; }
-    public int MaxMana { get; set; }
-    public int Mana { get; set; }
-    public bool IsAlive { get; set; } = true;
-    public string Weapon { get; set; } = "";
-}

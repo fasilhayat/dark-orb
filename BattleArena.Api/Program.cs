@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using BattleArena.Api;
@@ -22,11 +24,21 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 
 var app = builder.Build();
 
-app.UseSwagger();
-app.UseSwaggerUI(options =>
+app.UseExceptionHandler(errApp => errApp.Run(async ctx =>
 {
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "BattleArena API v1");
-});
+    ctx.Response.StatusCode  = 500;
+    ctx.Response.ContentType = "application/json";
+    await ctx.Response.WriteAsync("{\"error\":\"An unexpected error occurred.\"}");
+}));
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "BattleArena API v1");
+    });
+}
 
 var apiKeyOptions = app.Services.GetRequiredService<IOptions<ApiKeyOptions>>().Value;
 
@@ -36,7 +48,10 @@ app.Use(async (context, next) =>
     {
         if (!string.IsNullOrEmpty(apiKeyOptions.BattleArena))
         {
-            if (!context.Request.Headers.TryGetValue("X-Api-Key", out var key) || key != apiKeyOptions.BattleArena)
+            context.Request.Headers.TryGetValue("X-Api-Key", out var key);
+            var provided = Encoding.UTF8.GetBytes((string?)key ?? string.Empty);
+            var expected = Encoding.UTF8.GetBytes(apiKeyOptions.BattleArena);
+            if (!CryptographicOperations.FixedTimeEquals(provided, expected))
             {
                 context.Response.StatusCode = 401;
                 await context.Response.WriteAsync("Unauthorized: missing or invalid X-Api-Key header.");
