@@ -53,7 +53,7 @@ AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Mira Brightholm
 -- ============================================================
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Brorn Ironarm', r.id, c.id, 6, 18, 10, 18, 8, 10, 9, 63, 63, 13, 10, 0
+SELECT 'Brorn Ironarm', r.id, c.id, 6, 18, 10, 18, 8, 10, 9, 68, 68, 13, 10, 0
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Dwarf' AND c.name = 'Barbarian'
 AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Brorn Ironarm');
@@ -81,7 +81,7 @@ AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Sister Marigold
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Rorik the Wanderer', r.id, c.id, 8, 18, 10, 18, 8, 10, 9, 82, 82, 13, 10, 1
+SELECT 'Rorik the Wanderer', r.id, c.id, 8, 18, 10, 18, 8, 10, 9, 89, 89, 13, 10, 1
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Dwarf' AND c.name = 'Barbarian'
 AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Rorik the Wanderer');
@@ -123,7 +123,7 @@ AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Morgath the Pal
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc)
-SELECT 'Sizzle', r.id, c.id, 5, 6, 14, 8, 16, 10, 12, 9, 9, 15, 14, 1
+SELECT 'Sizzle', r.id, c.id, 5, 6, 14, 12, 16, 10, 12, 19, 19, 15, 14, 1
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Kobold' AND c.name = 'Mage'
 AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Sizzle');
