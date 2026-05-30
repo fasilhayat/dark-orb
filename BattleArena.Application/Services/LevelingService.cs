@@ -63,8 +63,11 @@ public class LevelingService
         var result = new Dictionary<string, int>();
         foreach (var c in survivors)
         {
+            var oldLevel = c.Level;
             c.ExperiencePoints += share;
             c.Level = LevelProgression.LevelFromXp(c.ExperiencePoints);
+            if (c.Level > oldLevel)
+                c.CurrentHitPoints += c.HitPointsPerLevel * (c.Level - oldLevel);
             result[c.Name] = share;
         }
         return result;

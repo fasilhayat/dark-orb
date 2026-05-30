@@ -98,7 +98,7 @@ static partial class Demo
         foreach (var m in EnemyParty.Members) ResetCombatant(m.Character);
 
         var allMembers = HeroParty.Members.Concat(EnemyParty.Members).ToList();
-        MaxHp = allMembers.ToDictionary(m => m.Character.Name, m => m.Character.MaxHitPoints);
+        MaxHp = allMembers.ToDictionary(m => m.Character.Name, m => m.Character.EffectiveMaxHitPoints);
         CurHp = new Dictionary<string, int>(MaxHp);
 
         CWL("\n  Press any key to start the combat...", ConsoleColor.Gray);
@@ -236,7 +236,7 @@ static partial class Demo
 
     internal static void ResetCombatant(Character character)
     {
-        character.CurrentHitPoints = character.MaxHitPoints;
+        character.CurrentHitPoints = character.EffectiveMaxHitPoints;
         character.CurrentMana = character.MaxMana;
         character.ActiveStatusEffects.Clear();
     }
@@ -293,8 +293,8 @@ static partial class Demo
             dict[m.Character.Name] = new CharDisplayState
             {
                 Name = m.Character.Name,
-                MaxHp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
-                Hp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
+                MaxHp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.EffectiveMaxHitPoints),
+                Hp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.EffectiveMaxHitPoints),
                 IsHero = true,
                 Weapon = m.AttackSource?.Name ?? "",
                 MaxMana = m.Character.MaxMana,
@@ -304,8 +304,8 @@ static partial class Demo
             dict[m.Character.Name] = new CharDisplayState
             {
                 Name = m.Character.Name,
-                MaxHp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
-                Hp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
+                MaxHp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.EffectiveMaxHitPoints),
+                Hp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.EffectiveMaxHitPoints),
                 IsHero = false,
                 Weapon = m.AttackSource?.Name ?? "",
                 MaxMana = m.Character.MaxMana,

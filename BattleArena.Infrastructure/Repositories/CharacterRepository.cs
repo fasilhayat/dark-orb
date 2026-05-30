@@ -103,30 +103,35 @@ public class CharacterRepository : ICharacterRepository
             new NpgsqlParameter("p_id", characterId));
     }
 
-    private static Character MapCharacter(NpgsqlDataReader reader) => new()
+    private static Character MapCharacter(NpgsqlDataReader reader)
     {
-        Id = (int)reader["id"],
-        Name = (string)reader["name"],
-        Level = (int)reader["level"],
-        RaceId = (int)reader["race_id"],
-        ClassId = (int)reader["class_id"],
-        Strength = (int)reader["strength"],
-        Dexterity = (int)reader["dexterity"],
-        Stamina = (int)reader["stamina"],
-        Intelligence = (int)reader["intelligence"],
-        Wisdom = (int)reader["wisdom"],
-        Charisma = (int)reader["charisma"],
-        MaxHitPoints = (int)reader["max_hit_points"],
-        CurrentHitPoints = (int)reader["current_hit_points"],
-        StrikeRating = reader["strike_rating"] as int? ?? 20,
-        TurnSpeed = reader["turn_speed"] as int? ?? 0,
-        StrengthPercentile = reader["strength_percentile"] as int? ?? 0,
-        Npc = reader["npc"] as short? ?? 0,
-        Biography = reader["biography"] as string ?? string.Empty,
-        ExperiencePoints = reader["experience_points"] as int? ?? 0,
-        MaxMana = reader["max_mana"] as int? ?? 0,
-        CurrentMana = reader["max_mana"] as int? ?? 0
-    };
+        var c = new Character
+        {
+            Id = (int)reader["id"],
+            Name = (string)reader["name"],
+            Level = (int)reader["level"],
+            RaceId = (int)reader["race_id"],
+            ClassId = (int)reader["class_id"],
+            Strength = (int)reader["strength"],
+            Dexterity = (int)reader["dexterity"],
+            Stamina = (int)reader["stamina"],
+            Intelligence = (int)reader["intelligence"],
+            Wisdom = (int)reader["wisdom"],
+            Charisma = (int)reader["charisma"],
+            MaxHitPoints = (int)reader["max_hit_points"],
+            CurrentHitPoints = (int)reader["current_hit_points"],
+            StrikeRating = reader["strike_rating"] as int? ?? 20,
+            TurnSpeed = reader["turn_speed"] as int? ?? 0,
+            StrengthPercentile = reader["strength_percentile"] as int? ?? 0,
+            Npc = reader["npc"] as short? ?? 0,
+            Biography = reader["biography"] as string ?? string.Empty,
+            ExperiencePoints = reader["experience_points"] as int? ?? 0,
+            MaxMana = reader["max_mana"] as int? ?? 0,
+            CurrentMana = reader["max_mana"] as int? ?? 0
+        };
+        c.CurrentHitPoints = c.EffectiveMaxHitPoints;
+        return c;
+    }
 
     private static Weapon MapCharacterWeapon(NpgsqlDataReader reader)
     {

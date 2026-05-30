@@ -18,6 +18,8 @@ public class Character
     public int Charisma { get; set; } = 10;
     public int MaxHitPoints { get; set; }
     public int CurrentHitPoints { get; set; }
+    public int HitPointsPerLevel { get; set; } = 6;
+    public int EffectiveMaxHitPoints => MaxHitPoints + Math.Max(0, Level - 1) * HitPointsPerLevel;
     public int StrikeRating { get; set; }
     public int TurnSpeed { get; set; }
     public int MaxMana { get; set; }
