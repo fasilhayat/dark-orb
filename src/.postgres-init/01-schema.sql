@@ -93,9 +93,12 @@ CREATE TABLE IF NOT EXISTS arena_data.race (
     wisdom_bonus INTEGER NOT NULL DEFAULT 0,
     charisma_bonus INTEGER NOT NULL DEFAULT 0,
     description TEXT DEFAULT '',
+    is_playable BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+
+ALTER TABLE arena_data.race ADD COLUMN IF NOT EXISTS is_playable BOOLEAN NOT NULL DEFAULT TRUE;
 
 CREATE TABLE IF NOT EXISTS arena_data.subrace (
     id SERIAL PRIMARY KEY,
@@ -466,13 +469,15 @@ RETURNS TABLE(
     id INTEGER, name VARCHAR, description TEXT,
     strength_bonus INTEGER, dexterity_bonus INTEGER,
     stamina_bonus INTEGER, intelligence_bonus INTEGER,
-    wisdom_bonus INTEGER, charisma_bonus INTEGER
+    wisdom_bonus INTEGER, charisma_bonus INTEGER,
+    is_playable BOOLEAN
 ) AS $$
 BEGIN
     RETURN QUERY
     SELECT r.id, r.name::VARCHAR, r.description::TEXT,
            r.strength_bonus, r.dexterity_bonus, r.stamina_bonus,
-           r.intelligence_bonus, r.wisdom_bonus, r.charisma_bonus
+           r.intelligence_bonus, r.wisdom_bonus, r.charisma_bonus,
+           r.is_playable
     FROM arena_data.race r
     WHERE (p_id IS NULL OR r.id = p_id)
     ORDER BY r.name;
@@ -1023,6 +1028,59 @@ BEGIN
     WHERE (p_merchant IS NULL OR n.is_merchant = p_merchant)
       AND (p_hostile IS NULL OR n.is_hostile = p_hostile)
     ORDER BY n.name;
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- ============================================================
+-- BESTIARY (Monster / Creature Stat Blocks)
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS arena_data.bestiary (
+    id SERIAL PRIMARY KEY,
+    category VARCHAR(50) NOT NULL,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    level INTEGER NOT NULL,
+    strength_bonus INTEGER NOT NULL DEFAULT 0,
+    dexterity_bonus INTEGER NOT NULL DEFAULT 0,
+    stamina_bonus INTEGER NOT NULL DEFAULT 0,
+    intelligence_bonus INTEGER NOT NULL DEFAULT 0,
+    wisdom_bonus INTEGER NOT NULL DEFAULT 0,
+    charisma_bonus INTEGER NOT NULL DEFAULT 0,
+    max_hit_points INTEGER NOT NULL,
+    armor_class INTEGER NOT NULL,
+    attack_description TEXT DEFAULT '',
+    special_abilities TEXT DEFAULT '',
+    description TEXT DEFAULT '',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+
+CREATE OR REPLACE FUNCTION arena_data.fn_get_bestiary(
+    p_category VARCHAR(50) DEFAULT NULL,
+    p_level INTEGER DEFAULT NULL
+)
+RETURNS TABLE(
+    id INTEGER, category VARCHAR, name VARCHAR,
+    level INTEGER,
+    strength_bonus INTEGER, dexterity_bonus INTEGER,
+    stamina_bonus INTEGER, intelligence_bonus INTEGER,
+    wisdom_bonus INTEGER, charisma_bonus INTEGER,
+    max_hit_points INTEGER, armor_class INTEGER,
+    attack_description TEXT, special_abilities TEXT, description TEXT
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT b.id, b.category::VARCHAR, b.name::VARCHAR,
+           b.level,
+           b.strength_bonus, b.dexterity_bonus, b.stamina_bonus,
+           b.intelligence_bonus, b.wisdom_bonus, b.charisma_bonus,
+           b.max_hit_points, b.armor_class,
+           b.attack_description::TEXT, b.special_abilities::TEXT, b.description::TEXT
+    FROM arena_data.bestiary b
+    WHERE (p_category IS NULL OR b.category = p_category)
+      AND (p_level IS NULL OR b.level = p_level)
+    ORDER BY b.level, b.name;
 END;
 $$ LANGUAGE plpgsql;
 

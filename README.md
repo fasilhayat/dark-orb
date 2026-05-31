@@ -34,7 +34,7 @@ BattleArena is a homebrew fantasy RPG backend and data model for a Dungeons & Dr
 ### Runtime behavior
 
 - The API starts on port `8585` in Docker and exposes Swagger at `/swagger`.
-- The database is initialized from `.postgres-init/postgres-init.sql` when the container is first created (includes character XP, NPC flag, and biography fields).
+- The database is initialized from `src/.postgres-init/` (01-schema.sql, 02-seed-data.sql, 03-characters.sql) when the container is first created (includes character XP, NPC flag, and biography fields).
 - The API uses PostgreSQL via `BattleArena.Infrastructure` and registers repositories and services through `BattleArena.Api/AddServices.cs`.
 - The `BattleArena.Demo` console app provides turn-based and realtime battle playback, with post-battle XP calculations based on enemy difficulty, crits, fumbles, and battle duration.
 
@@ -62,7 +62,7 @@ The world lore is documented in [design/battle-arena-lore.md](design/battle-aren
 
 ## Database model
 
-The PostgreSQL initialization script lives in `.postgres-init/postgres-init.sql` and creates the `arena_data` schema.
+The PostgreSQL initialization scripts live in `src/.postgres-init/` and create the `arena_data` schema.
 
 ### Reference tables
 
@@ -97,6 +97,7 @@ The PostgreSQL initialization script lives in `.postgres-init/postgres-init.sql`
 - `accessory`
 - `npc`
 - `spell`
+- `bestiary`
 - `character`
 - `character_equipment`
 - `character_inventory`
@@ -117,7 +118,7 @@ The script also creates reusable database functions for retrieving races, subrac
 
 ## ER diagram
 
-The following Mermaid ER diagram reflects the core relationships defined in `.postgres-init/postgres-init.sql`.
+The following Mermaid ER diagram reflects the core relationships defined in `src/.postgres-init/01-schema.sql`.
 
 ```mermaid
 erDiagram
@@ -505,6 +506,6 @@ Run unit and acceptance tests from the solution root:
 ## References
 
 - Lore source: [design/battle-arena-lore.md](design/battle-arena-lore.md)
-- Database initialization: `.postgres-init/postgres-init.sql`
+- Database initialization: `src/.postgres-init/`
 - Docker configuration: `docker-compose.yml`
 - API entry point: `BattleArena.Api/Program.cs`

@@ -79,6 +79,10 @@ INSERT INTO arena_data.race (name, description, strength_bonus, dexterity_bonus,
     ('Halfling', 'The smallest of the civilized races, halflings possess a spirit that belies their stature. They believe in the power of luck, good food, and a warm hearth, yet they are among the bravest souls in battle. Halflings feel fear but refuse to show it, using their natural agility and sharp tongues to mock and taunt enemies into reckless charges. Forest Halflings move through woodland without a trace, while Hill Halflings are renowned for their hospitality and uncanny good fortune.', 0, 2, 1, 0, 1, 1);
 
 
+-- Non-playable races (Undead, Demon)
+UPDATE arena_data.race SET is_playable = FALSE WHERE name IN ('Undead', 'Demon');
+
+
 -- Subraces
 INSERT INTO arena_data.subrace (race_id, name, description)
 SELECT r.id, s.name, s.descr

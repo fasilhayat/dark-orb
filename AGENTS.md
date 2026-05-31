@@ -178,7 +178,7 @@ Update **`README.md`** when any of the following changes:
 | New Docker service | `## Running the solution locally → Option 1` |
 | Test count or framework changes | `## Testing` |
 
-The Mermaid ER diagram must stay in sync with `.postgres-init/postgres-init.sql`.
+The Mermaid ER diagram must stay in sync with `src/.postgres-init/01-schema.sql`.
 If you add a table to the SQL file you must add the entity and its relationships to the diagram.
 
 ---

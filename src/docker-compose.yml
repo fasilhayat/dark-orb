@@ -20,7 +20,7 @@ services:
       - app-network
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ../.postgres-init:/docker-entrypoint-initdb.d
+      - ./.postgres-init:/docker-entrypoint-initdb.d
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
