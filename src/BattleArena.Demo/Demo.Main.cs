@@ -420,7 +420,7 @@ static partial class Demo
         Console.WriteLine("  ── BattleArena API ─────────────────────────────────────");
         Console.ResetColor();
         Console.Write("  Connecting to BattleArena API at ");
-        Console.ForegroundColor = ConsoleColor.Gray;
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
         Console.WriteLine(apiUrl);
         Console.ResetColor();
 
@@ -430,13 +430,13 @@ static partial class Demo
             Console.WriteLine("  Connection established.");
             Console.ResetColor();
 
-            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine("  Retrieving characters and gear...");
             Console.ResetColor();
             ApiRoster  = initClient.GetCharactersAsync().GetAwaiter().GetResult();
             ApiWeapons = initClient.GetWeaponsAsync().GetAwaiter().GetResult();
 
-            Console.ForegroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine($"  Retrieval complete  ─  {ApiRoster.Count} characters, {ApiWeapons.Count} weapons loaded.");
             Console.ResetColor();
         }

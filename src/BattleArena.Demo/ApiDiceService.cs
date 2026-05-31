@@ -1,8 +1,8 @@
-using BattleArena.Application.Interfaces;
-using BattleArena.Application.Models;
-using BattleArena.Core.Entities.Enums;
-
 namespace BattleArena;
+
+using Application.Interfaces;
+using Application.Models;
+using Core.Entities.Enums;
 
 /// <summary>
 /// IDiceService implementation that routes every roll through the BattleArena REST API.

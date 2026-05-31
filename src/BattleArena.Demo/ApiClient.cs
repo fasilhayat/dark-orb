@@ -1,11 +1,11 @@
+namespace BattleArena;
+
+using Application.Models;
+using Core.Entities;
+using Core.Entities.Enums;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using BattleArena.Application.Models;
-using BattleArena.Core.Entities;
-using BattleArena.Core.Entities.Enums;
-
-namespace BattleArena;
 
 /// <summary>
 /// Thin HTTP client for the BattleArena REST API.

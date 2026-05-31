@@ -1,6 +1,5 @@
 namespace BattleArena.Demo;
 
-using Application.Models;
 using Application.Services;
 using Core.Entities;
 using Core.Entities.Enums;
