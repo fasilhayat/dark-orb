@@ -438,18 +438,55 @@ static partial class Demo
 
         if (dead)
         {
-            var status = s.Hp <= -10 ? "[ SLAIN  ]" : "[UNCONSC ]";
-            var namePart = $"  \u2715 {s.Name.ToUpper()}".PadRight(CONTENT_W - status.Length);
-            var empty = new string(' ', CONTENT_W);
-            return
-            [
-                top,
-                CL(vb, borderFg, new Seg(namePart, ConsoleColor.Gray), new Seg(status, ConsoleColor.Red)),
-                CL(vb, borderFg, new Seg(empty, ConsoleColor.Gray)),
-                CL(vb, borderFg, new Seg(empty, ConsoleColor.Gray)),
-                CL(vb, borderFg, new Seg(empty, ConsoleColor.Gray)),
-                bot
-            ];
+            var dSlain = s.Hp <= -10;
+            var dStatus = dSlain ? "[ SLAIN  ]" : "[UNCONSC ]";
+
+            var dNameLine = CL(vb, borderFg,
+                new Seg(" ✕", ConsoleColor.Gray),
+                new Seg(s.Name.ToUpper().PadRight(W_NAME), ConsoleColor.Gray),
+                new Seg(new string(' ', W_GAP), ConsoleColor.Gray),
+                new Seg(dStatus.PadRight(W_WEAPON + 2), ConsoleColor.Red));
+
+            var dSexLabel = s.Sex switch { "F" => "Female", "M" => "Male", _ => "None" };
+            var dInfoStr = $"{dSexLabel,-W_SEX}  ·  Lvl {s.Level,2}  {s.Race,-W_RACE}  ·  {s.ClassName,-W_CLASS}";
+            var dClassLine = CL(vb, borderFg, new Seg(dInfoStr, ConsoleColor.Gray));
+
+            var dTmLine = CL(vb, borderFg,
+                new Seg(" TM [", ConsoleColor.Gray),
+                new Seg(new string('\u2591', BAR_W), ConsoleColor.Gray),
+                new Seg("]  ", ConsoleColor.Gray),
+                new Seg("  0", ConsoleColor.Gray),
+                new Seg(" / ", ConsoleColor.Gray),
+                new Seg("100", ConsoleColor.Gray));
+
+            var dManaLine = s.MaxMana > 0
+                ? CL(vb, borderFg,
+                    new Seg(" MP [", ConsoleColor.Gray),
+                    new Seg(new string('\u2591', BAR_W), ConsoleColor.Gray),
+                    new Seg("]  ", ConsoleColor.Gray),
+                    new Seg("  0", ConsoleColor.Gray),
+                    new Seg(" / ", ConsoleColor.Gray),
+                    new Seg($"{s.MaxMana,-3}", ConsoleColor.Gray))
+                : CL(vb, borderFg, new Seg(new string(' ', CONTENT_W), ConsoleColor.Black));
+
+            var dMaxHpLabel = DisplayConfig.IsFieldEnabled("characterCard", "MaxHp")
+                ? $"{s.MaxHp,-3}" : "   ";
+            var dHpLine = CL(vb, borderFg,
+                new Seg(" HP [", ConsoleColor.Gray),
+                new Seg(new string('\u2591', BAR_W), ConsoleColor.Gray),
+                new Seg("]  ", ConsoleColor.Gray),
+                new Seg("  0", ConsoleColor.Gray),
+                new Seg(" / ", ConsoleColor.Gray),
+                new Seg(dMaxHpLabel, ConsoleColor.Gray));
+
+            var dLines = new List<List<Seg>> { top, dNameLine, dClassLine };
+            if (DisplayConfig.IsFieldEnabled("characterCard", "TurnMeter")) dLines.Add(dTmLine);
+            dLines.Add(dManaLine);
+            if (DisplayConfig.IsFieldEnabled("characterCard", "CurrentHp") ||
+                DisplayConfig.IsFieldEnabled("characterCard", "MaxHp"))
+                dLines.Add(dHpLine);
+            dLines.Add(bot);
+            return dLines;
         }
 
         // ── Name row ───────────────────────────────────────────────────────────
