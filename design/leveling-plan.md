@@ -91,7 +91,7 @@ Every level-up grants:
 
 | Lvl | Features |
 |:---:|----------|
-| 1 | **Heavy Armor Proficiency** — no movement penalty in heavy armor.<br>**Shield Bash** — bonus-action bash (1D4 + Str mod bludgeoning; on hit, target is pushed 5 ft.). |
+| 1 | **Heavy Armor Proficiency** — no movement penalty in heavy armor.<br>**Shield Bash** — bonus-action bash (1D4 + Str mod bludgeoning; on hit, target is pushed 5 ft.).<br>**Pet Companion** — gain a **Wolf** or **Falcon** pet (see Pet Unlock §6). |
 | 2 | **Mounted Combat** — when mounted, mount gains +2 AC and shares half the damage you take.<br>**Charging Strike** — after moving 10+ ft. in a straight line, next melee attack deals +1D8 extra damage. |
 | 3 | **Commanding Presence** — allies within 15 ft. gain +1 to hit while you are conscious. |
 | 4 | **Improved Shield Bash** — shield bash now deals 1D6 and stuns for 1 round on a critical. |
@@ -102,7 +102,7 @@ Every level-up grants:
 | 9 | **Unbreakable Will** — once per rest, if you would be stunned or charmed, ignore that effect. |
 | 10 | **Improved Mount** — mount gains an additional attack when you take the Attack action. |
 | 11 | **Battlefield Commander** — as a bonus action, grant one ally an immediate attack. |
-| 12 | **Iron Bulwark** — reduce all incoming damage by 3 while wearing heavy armor and a shield. Allies behind you gain half-cover (+2 AC). |
+| 12 | **Iron Bulwark** — reduce all incoming damage by 3 while wearing heavy armor and a shield. Allies behind you gain half-cover (+2 AC).<br>**Dragon Bond** (Human/Elf only) — unlock Dragon pet (see §6). |
 
 ---
 
@@ -110,7 +110,7 @@ Every level-up grants:
 
 | Lvl | Features |
 |:---:|----------|
-| 1 | **Divine Sense** — detect celestials, fiends, and undead within 60 ft. (number of uses = 1 + Cha mod / rest).<br>**Lay on Hands** — pool of 5 × level HP to heal allies (can also cure one disease/poison per 5 points spent). |
+| 1 | **Divine Sense** — detect celestials, fiends, and undead within 60 ft. (number of uses = 1 + Cha mod / rest).<br>**Lay on Hands** — pool of 5 × level HP to heal allies (can also cure one disease/poison per 5 points spent).<br>**Pet Companion** — gain a **Wolf** or **Falcon** pet (see Pet Unlock §6). |
 | 2 | **Divine Smite** — spend a spell slot to add 1D8 + 1D8 per spell level (max +5D8) to a melee hit.<br>**Spellcasting** — L1 spells. Access to half-caster spell progression (see §3.2). |
 | 3 | **Divine Health** — immune to disease.<br>**Sacred Oath** — choose Oath of Devotion, Oath of Vengeance, or Oath of the Ancients. |
 | 4 | **L2 spells**.<br>**Ability Score Improvement** — +1 to any ability (max 20). |
@@ -121,7 +121,7 @@ Every level-up grants:
 | 9 | **L4 spells**. |
 | 10 | **Aura of Courage** — you and allies within 10 ft. are immune to fear. |
 | 11 | **Improved Divine Smite** — all melee hits deal an extra 1D8 radiant damage. |
-| 12 | **L5 spells**.<br>**Holy Champion** — once per rest, transform for 1 minute: gain flying speed 30 ft., aura radius doubles, and smite dice max at no cost. |
+| 12 | **L5 spells**.<br>**Holy Champion** — once per rest, transform for 1 minute: gain flying speed 30 ft., aura radius doubles, and smite dice max at no cost.<br>**Dragon Bond** (Human/Elf only) — unlock Dragon pet (see §6). |
 
 ---
 
@@ -178,7 +178,7 @@ Every level-up grants:
 | 9 | **L5 spells**. |
 | 10 | **Arcane Recovery** (3/rest). |
 | 11 | **L6 spells**. |
-| 12 | **Archmage** — choose one L1 and one L2 spell; you may cast each at its base level for 0 Mana once per rest. Arcane Recovery restores all spent Mana (instead of half). |
+| 12 | **Archmage** — choose one L1 and one L2 spell; you may cast each at its base level for 0 Mana once per rest. Arcane Recovery restores all spent Mana (instead of half).<br>**Dragon Bond** (Human/Elf only) — unlock Dragon pet (see §6). |
 
 ---
 
@@ -197,7 +197,7 @@ Every level-up grants:
 | 9 | **L5 spells**. |
 | 10 | **Turn Undead** (3/rest). |
 | 11 | **L6 spells**. |
-| 12 | **High Priest** — your Turn Undead now destroys undead of CR 2 or lower on a failed save. Divine Intervention cooldown reduces to 3 days. |
+| 12 | **High Priest** — your Turn Undead now destroys undead of CR 2 or lower on a failed save. Divine Intervention cooldown reduces to 3 days.<br>**Dragon Bond** (Human/Elf only) — unlock Dragon pet (see §6). Dwarf/Gladefolk Priests instead gain Two-Pet ability (see §6b). |
 
 ---
 
@@ -387,13 +387,15 @@ Each race unlocks new abilities as the character gains experience. Racial benefi
 | 9 | **Greater Magic Resistance** — resistance increases to 35%. |
 | 12 | **Giant's Strength** — Strength score increases by +2 (max 22). You may wield a two-handed weapon in one hand. |
 
-### Halfling
+### Gladefolk
+
+*Fully grown Gladefolk stand no taller than a human child of thirteen or fourteen, with slender builds and deceptively youthful features that persist well into middle age. Their cultural emphasis on wit, luck, and warm camaraderie makes them natural survivors.*
 
 | Lvl | Benefit |
 |:---:|---------|
 | 1 | **Taunt** — force an enemy to attack you (see Status Effects). **Fear Immunity** — immune to the Frightened condition. **Lucky** — once per rest, reroll a natural 1 on an attack, save, or ability check. |
 | 3 | **Naturally Stealthy** — you can attempt to hide behind a creature one size larger than you. |
-| 5 | **Halfling Nimbleness** — +10 ft. move speed; you may move through spaces of larger creatures. |
+| 5 | **Gladefolk Nimbleness** — +10 ft. move speed; you may move through spaces of larger creatures. |
 | 7 | **Brave** — advantage on saves vs. fear (overlaps with immunity for complete protection vs. magical fear). |
 | 9 | **Keen Senses** — proficiency in Perception. |
 | 12 | **Greater Luck** — Lucky improves: you may reroll any D20 roll (not just natural 1s) once per rest. Additionally, you may grant your Lucky re-roll to an ally. |
@@ -402,19 +404,70 @@ Each race unlocks new abilities as the character gains experience. Racial benefi
 
 ## 6. Pet Unlock Summary
 
-Reference: see §4 Pets in `battle-arena-lore.md` for full pet stats.
+Reference: see §4 in `battle-arena-lore.md` for full pet stats and special abilities.
+
+### Pet Special Abilities
+
+Every pet has a unique **Special Ability** that activates in combat (see `battle-arena-lore.md §4` for the full table). Abilities range from Pack Hunter (Wolf) to Venom (Spider) and are tied to the pet, not the master's class.
+
+### Dragon — Extraordinary Pet
+
+The **Dragon** is the rarest and most powerful pet. It is gated by both class and race:
+
+| Requirement | Detail |
+|-------------|--------|
+| **Classes** | Paladin, Knight, Mage, Priest |
+| **Races** | Human, Elf |
+| **Level** | L12 |
+
+All Dragons share **Fire Breath** (1D10 fire AoE, 1/rest). Additionally, a Dragon's special ability depends on its master's class:
+
+| Master Class | Dragon Ability | Effect |
+|:------------:|----------------|--------|
+| **Paladin / Knight** | Dragon Fear | Enemies within 15 ft. make a Wisdom save or become Frightened for 2 rounds. 1/rest. |
+| **Mage** | Fireball | Single-target 2D10 fire damage, save for half. 1/rest. |
+| **Priest** | Diamond Scales | Permanent +2 AC, +10 Max HP, damage reduction 2. |
+
+> **Important:** Non-Human/Elf characters cannot bond with a Dragon even if their class qualifies. See §6b below for the Dwarf/Gladefolk Priest alternative.
+
+### Standard Pet Unlock Levels
 
 | Class | Pets Available | Unlock Level |
 |-------|----------------|:------------:|
 | **Barbarian** | Wolf, Hound, Boar | L4 |
 | **Druid** | Wolf, Falcon, Eagle, Boar | L1 (Wolf or Falcon), L5 (Eagle, Boar) |
-| **Paladin** | Wolf, Falcon, Eagle, Hound, Dragon | L1 (Wolf or Falcon), L5 (Eagle, Hound), L12 (Dragon*) |
-| **Fighter** | Wolf, Falcon, Eagle, Hound, Boar, Dragon | L1, L5 (additional choice) |
+| **Fighter** | Wolf, Falcon, Eagle, Hound, Boar | L1, L5 (additional choice) |
+| **Knight** | Wolf, Falcon, Eagle, Hound | L1 (Wolf or Falcon), L5 (Eagle, Hound) |
+| **Paladin** | Wolf, Falcon, Eagle, Hound | L1 (Wolf or Falcon), L5 (Eagle, Hound) |
 | **Rogue** | Panther | L4 |
 
-*\* Dragon pet is restricted to Elf or Human Paladins per lore §4.*
+### Dragon Unlock by Class
 
-### Pet Leveling
+| Class | Dragon Unlock | Notes |
+|-------|:-------------:|-------|
+| **Paladin** | L12 | Human or Elf only |
+| **Knight** | L12 | Human or Elf only |
+| **Mage** | L12 | Human or Elf only |
+| **Priest** | L12 | Human or Elf only |
+
+### 6b. Dwarf & Gladefolk Priest — Two-Pet Exception
+
+Dwarf and Gladefolk Priests cannot bond with a Dragon (Human/Elf only). Instead, they gain the **Two-Pet** ability at L12:
+
+- May have **up to two active pets** simultaneously.
+- Choose from: Wolf, Falcon, Eagle, Hound, Bat, Spider.
+- Both pets must be **different types** (no duplicate pets).
+- Each pet acts independently on the turnmeter.
+- Pet leveling bonuses are **split equally**: each pet receives half the HP bonus per tier.
+
+| Character Level | Per-Pet Bonus (Two-Pet Priest) |
+|:---------------:|--------------------------------|
+| 1–4 | Base stats |
+| 5–8 | +5 Max HP, +1 damage die |
+| 9–11 | +5 Max HP (total +10), +1 AC |
+| 12 | +3 to all saves, +1 AC |
+
+### Pet Leveling (Single-Pet)
 
 When a character levels up, their pet also improves:
 
@@ -443,4 +496,4 @@ When a character gains a level, the player should:
 
 ---
 
-*Last updated: May 2026 — 9 classes, 8 races, 12-level progression with class features, racial unlocks, spell progression, and pets.*
+*Last updated: May 2026 — 9 classes, 8 races, 12-level progression with class features, racial unlocks, spell progression, pets with special abilities, class-bound Dragon pet, and two-pet exception for Dwarf/Gladefolk Priests.*

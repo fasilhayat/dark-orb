@@ -158,12 +158,12 @@ A graceful, mature human woman with long, flowing silver-white hair and gentle b
 
 ---
 
-## Lysander the Bard — Halfling Lore-Keeper
-*Halfling Bard, Level 7 — Quest Giver*
+## Lysander the Bard — Gladefolk Lore-Keeper
+*Gladefolk Bard, Level 7 — Quest Giver*
 
 <img src="portraits/lysander-the-bard.png" alt="Lysander the Bard" width="150"/>
 
-A cheerful halfling bard with curly auburn hair, rosy cheeks, and lively hazel eyes. He wears a quilted colorful vest over a soft-colored shirt, durable trousers, and a wide-brimmed traveler's hat tipped jauntily. A well-worn lute is slung at his side, and his belt is hung with rolled-up maps, songbooks, and small charm pouches.
+A cheerful Gladefolk bard with curly auburn hair, rosy cheeks, and lively hazel eyes. Like all Gladefolk, he looks no older than a human teenager despite being a seasoned adventurer — a trait that makes nobles underestimate him until he's picked their pockets and their secrets. He wears a quilted colorful vest over a soft-colored shirt, durable trousers, and a wide-brimmed traveler's hat tipped jauntily. A well-worn lute is slung at his side, and his belt is hung with rolled-up maps, songbooks, and small charm pouches.
 
 > **Art prompt:** whimsical fantasy, warm tavern lighting.
 
@@ -324,17 +324,17 @@ He wields the two-handed greatsword *Winter Oath*, a massive blade forged from p
 ---
 
 ## Finnick "Quickfingers" Bramblefoot
-*Halfling Rogue, Level 8 — Scout / Treasure Hunter*
+*Gladefolk Rogue, Level 8 — Scout / Treasure Hunter*
 
 <img src="portraits/finnick-quickfingers-bramblefoot.png" alt="Finnick Bramblefoot" width="150"/>
 
-Finnick Bramblefoot is a notorious halfling thief known throughout taverns and criminal circles alike. Charming, sarcastic, and impossible to pin down, Finnick has robbed corrupt nobles, escaped three executions, and once stole a jeweled crown during the coronation ceremony itself.
+Finnick Bramblefoot is a notorious Gladefolk thief known throughout taverns and criminal circles alike. His youthful Gladefolk appearance — he could pass for a human errand boy of fourteen — lets him slip through places no full-grown burglar could. Charming, sarcastic, and impossible to pin down, Finnick has robbed corrupt nobles, escaped three executions, and once stole a jeweled crown during the coronation ceremony itself.
 
 Though many dismiss him as a petty criminal, Finnick possesses a surprisingly strong moral code. He despises tyrants and often donates stolen gold to struggling villages anonymously.
 
 He favors twin daggers hidden beneath his travel cloak and relies on speed, deception, and dirty tricks over direct confrontation.
 
-> **Art prompt:** A male halfling rogue with messy brown hair and sly green eyes, wearing dark leather armor and hooded travel cloak, holding twin daggers, smirking confidently in a shadowy medieval alley, dark fantasy CRPG style, realistic detailed character concept art, isometric RPG perspective.
+> **Art prompt:** A male Gladefolk rogue with messy brown hair and sly green eyes, wearing dark leather armor and hooded travel cloak, holding twin daggers, smirking confidently in a shadowy medieval alley, dark fantasy CRPG style, realistic detailed character concept art, isometric RPG perspective.
 
 **Attributes**
 
@@ -445,13 +445,13 @@ Maleth was once an angel of the Silver Basilica who fell during the First Sunder
 | 4 | Merchant Vex | Kobold | Rogue | 6 | Merchant | 8 | 17 | 10 | 14 | 10 | 14 | 24 | 11 | 18 |
 | 5 | Kaela Vornskald | Human | Barbarian | 10 | Wanderer | 19 | 15 | 17 | 9 | 11 | 13 | 100 | 12 | 15 |
 | 6 | High Priestess Luna | Human | Priest | 14 | Quest Giver | 9 | 11 | 13 | 15 | 19 | 17 | 84 | 11 | 16 |
-| 7 | Lysander the Bard | Halfling | Bard | 7 | Quest Giver | 8 | 18 | 13 | 14 | 11 | 18 | 35 | 12 | 17 |
+| 7 | Lysander the Bard | Gladefolk | Bard | 7 | Quest Giver | 8 | 18 | 13 | 14 | 11 | 18 | 35 | 12 | 17 |
 | 8 | Elder Treant | Elf | Druid | 20 | Quest Giver | 14 | 12 | 16 | 16 | 20 | 15 | 160 | 13 | 15 |
 | 9 | Ser Garrick Dawnshield | Human | Paladin | 12 | Vanguard | 18 | 11 | 15 | 11 | 13 | 17 | 96 | 16 | 13 |
 | 10 | Vaelith Moonveil | Elf | Ftr/Mage | 9 | Arcane Duelist | 14 | 18 | 10 | 19 | 10 | 13 | 45 | 14 | 15 |
 | 11 | Sister Elira Vane | Human | Cleric | 7 | Healer | 11 | 13 | 15 | 13 | 18 | 15 | 49 | 11 | 17 |
 | 12 | Lord Aethor Valeborn | Elf | Knight | 11 | Duelist | 16 | 16 | 14 | 14 | 10 | 15 | 88 | 16 | 13 |
-| 13 | Finnick Bramblefoot | Halfling | Rogue | 8 | Scout/Thief | 8 | 20 | 13 | 14 | 11 | 16 | 40 | 12 | 17 |
+| 13 | Finnick Bramblefoot | Gladefolk | Rogue | 8 | Scout/Thief | 8 | 20 | 13 | 14 | 11 | 16 | 40 | 12 | 17 |
 | 14 | Korg Stonefist | Orc | Barbarian | 15 | Hostile | 21 | 10 | 18 | 8 | 8 | 8 | 165 | 16 | 14 |
 | 15 | Graveworm | Undead | Fighter | 9 | Hostile | 17 | 10 | 14 | 11 | 8 | 6 | 72 | 16 | 14 |
 | 16 | Infernal Cmdr Maleth | Demon | Knight | 18 | Boss | 22 | 12 | 19 | 15 | 10 | 17 | 180 | 16 | 12 |
