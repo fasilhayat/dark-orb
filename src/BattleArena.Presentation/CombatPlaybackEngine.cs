@@ -39,9 +39,6 @@ public static class CombatPlaybackEngine
                     presenter.Wait(delay);
             }
 
-            var combatOver = turnEvents.Any(e => e.EventType is "Death" or "KnockedOut");
-            presenter.WaitForNextTurn(combatOver);
-
             turnEvents.Clear();
             inTurn = false;
         }

@@ -35,6 +35,7 @@ combat-logs/*.json
 combat-logs/test-results/
 combat-logs/replay/
 src/combat-logs/
+src/logs/**
 
 ## Replay snapshots (user-placed .json files for demo replay; not committed)
 replays/*.json
@@ -44,3 +45,4 @@ src/logs/api-calls.log
 src/logs/api-calls.log
 src/BattleArena.UnitTests/TestResults/FAMH_B32JZOVHSNEV6AO_2026-05-31_12_47_47_net8.0.trx
 src/BattleArena.UnitTests/TestResults/**
+src/logs/api-calls.log
