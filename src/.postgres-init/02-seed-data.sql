@@ -510,22 +510,20 @@ UPDATE arena_data.armor SET mitigation = 0 WHERE name IN ('Shroud of the Whisper
 -- Set turn_meter_penalty for armor (heavier armor slows TM gain)
 UPDATE arena_data.armor SET turn_meter_penalty = 0 WHERE armor_category_id = (SELECT id FROM arena_data.armor_category WHERE name = 'Light');
 
-UPDATE arena_data.armor SET turn_meter_penalty = -2 WHERE name IN ('Scale Mail', 'Half Plate');
+UPDATE arena_data.armor SET turn_meter_penalty = 1 WHERE name IN ('Scale Mail', 'Half Plate', 'Ring Mail');
 
-UPDATE arena_data.armor SET turn_meter_penalty = -3 WHERE name IN ('Ring Mail');
+UPDATE arena_data.armor SET turn_meter_penalty = 2 WHERE name IN ('Chain Mail', 'Splint Armor');
 
-UPDATE arena_data.armor SET turn_meter_penalty = -5 WHERE name IN ('Chain Mail', 'Splint Armor');
+UPDATE arena_data.armor SET turn_meter_penalty = 3 WHERE name IN ('Plate Armor');
 
-UPDATE arena_data.armor SET turn_meter_penalty = -8 WHERE name IN ('Plate Armor');
-
-UPDATE arena_data.armor SET turn_meter_penalty = -2 WHERE name IN ('Shield');
+UPDATE arena_data.armor SET turn_meter_penalty = 1 WHERE name IN ('Shield');
 
 -- Quality armor overrides
-UPDATE arena_data.armor SET turn_meter_penalty = -5 WHERE name IN ('Knight''s Honor', 'Battlesworn Plate');
+UPDATE arena_data.armor SET turn_meter_penalty = 2 WHERE name IN ('Knight''s Honor', 'Battlesworn Plate');
 
-UPDATE arena_data.armor SET turn_meter_penalty = -10 WHERE name IN ('Titan Plate', 'Aegis of the Fallen King');
+UPDATE arena_data.armor SET turn_meter_penalty = 4 WHERE name IN ('Titan Plate', 'Aegis of the Fallen King');
 
-UPDATE arena_data.armor SET turn_meter_penalty = -2 WHERE name IN ('Dragon Scale Mail');
+UPDATE arena_data.armor SET turn_meter_penalty = 1 WHERE name IN ('Dragon Scale Mail');
 
 
 -- Set turn_meter_cost_reduction (robe-type armor for spellcasters)

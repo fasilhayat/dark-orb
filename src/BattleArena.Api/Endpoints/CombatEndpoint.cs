@@ -131,7 +131,7 @@ public static class CombatEndpoint
             {
                 Chest = new Armor
                 {
-                    ArmorClass = Math.Max(0, 20 - targetAc)
+                    ArmorClass = targetAc
                 }
             }
         };

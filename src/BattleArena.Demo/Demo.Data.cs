@@ -185,7 +185,7 @@ static partial class Demo
         ClassId = 8, ClassName = "Fighter", Sex = "M", StrikeRating = 14, TurnSpeed = 10, MaxHitPoints = 50, CurrentHitPoints = 50,
         Equipment = new ArmorSlots
         {
-            Chest = new Armor { Name = "Chain Mail", ArmorClass = 5, Mitigation = 2, MaxDexterityBonus = 6 },
+            Chest = new Armor { Name = "Chain Mail", ArmorClass = 16, Mitigation = 2, MaxDexterityBonus = 6 },
             RightHand = Longsword
         }
     };
@@ -196,7 +196,7 @@ static partial class Demo
         ClassId = 1, ClassName = "Barbarian", Sex = "M", StrikeRating = 16, TurnSpeed = 6, MaxHitPoints = 35, CurrentHitPoints = 35,
         Equipment = new ArmorSlots
         {
-            Chest = new Armor { Name = "Leather Armor", ArmorClass = 7, Mitigation = 1, MaxDexterityBonus = 6 },
+            Chest = new Armor { Name = "Leather Armor", ArmorClass = 11, Mitigation = 1, MaxDexterityBonus = 6 },
             RightHand = BattleAxe
         }
     };
@@ -301,7 +301,7 @@ static partial class Demo
         ClassId = 1, ClassName = "Barbarian", Sex = "M", StrikeRating = 15, TurnSpeed = 7, MaxHitPoints = 45, CurrentHitPoints = 45,
         Equipment = new ArmorSlots
         {
-            Chest = new Armor { Name = "Orcish Hide", ArmorClass = 6, Mitigation = 2, MaxDexterityBonus = 4 },
+            Chest = new Armor { Name = "Orcish Hide", ArmorClass = 12, Mitigation = 2, MaxDexterityBonus = 4 },
             RightHand = OrcAxe
         }
     };
@@ -312,7 +312,7 @@ static partial class Demo
         ClassId = 9, ClassName = "Rogue", Sex = "M", StrikeRating = 12, TurnSpeed = 12, MaxHitPoints = 20, CurrentHitPoints = 20,
         Equipment = new ArmorSlots
         {
-            Chest = new Armor { Name = "Worn Leather", ArmorClass = 8, Mitigation = 0, MaxDexterityBonus = 6 },
+            Chest = new Armor { Name = "Worn Leather", ArmorClass = 11, Mitigation = 0, MaxDexterityBonus = 6 },
             RightHand = GoblinDagger
         }
     };

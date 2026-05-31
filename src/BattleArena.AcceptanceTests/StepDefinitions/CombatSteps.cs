@@ -154,7 +154,7 @@ public class CombatSteps
         Assert.Equal(-2, _attackResult.AttackPowerPenalty);
     }
 
-    private static Character CreateDefender(int targetArmorClass)
+    private static Character CreateDefender(int armorClass)
     {
         return new Character
         {
@@ -162,7 +162,7 @@ public class CombatSteps
             {
                 Chest = new Armor
                 {
-                    ArmorClass = Math.Max(0, 20 - targetArmorClass)
+                    ArmorClass = armorClass
                 }
             }
         };

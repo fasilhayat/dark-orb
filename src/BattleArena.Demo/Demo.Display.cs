@@ -77,7 +77,7 @@ static partial class Demo
         Row($"HP: {ch.MaxHitPoints}   TurnSpeed: {ch.TurnSpeed}   StrikeRating: {ch.StrikeRating}");
         Row($"STR: {ch.Strength} ({Sign((ch.Strength - 10) / 2)}{(ch.Strength - 10) / 2})   DEX: {ch.Dexterity} ({Sign(dexMod)}{dexMod})   INT: {ch.Intelligence} ({Sign((ch.Intelligence - 10) / 2)}{(ch.Intelligence - 10) / 2})");
         Sep();
-        Row($"Armor   : {ch.Equipment.Chest?.Name ?? "None",-18} AC {ac,-2}  EffAC {20 - ac,-2}  Mitigation: {mit}");
+        Row($"Armor   : {ch.Equipment.Chest?.Name ?? "None",-18} AC {ac,-2}  Mitigation: {mit}");
         if (ch.MemorizedSpells.Count > 0)
             foreach (var spell in ch.MemorizedSpells)
                 Row($"Spells  : {spell.Name,-18} {spell.DamageCount}d{DieSides(spell.DamageDie)} {spell.DamageType}");
@@ -86,8 +86,8 @@ static partial class Demo
         Sep();
         var abilityLabel = displaySource.UsesIntelligence ? "int"
                      : displaySource.AttackType == AttackType.Ranged ? "dex" : "str";
-        Row($"Atk Power : {ap,-4}  (20-{ch.StrikeRating}) + {ch.Level} (lvl) + ({Sign(abilityMod)}{abilityMod}) ({abilityLabel}) + {displaySource.AttackBonus} (src)");
-        Row($"Def Power : {dp,-4}  (20-{ac}) + ({Sign(dexCap)}{dexCap}) (dex)");
+        Row($"Atk Power : {ap,-4}  {ch.StrikeRating} (SR) + {ch.Level} (lvl) + ({Sign(abilityMod)}{abilityMod}) ({abilityLabel}) + {displaySource.AttackBonus} (src)");
+        Row($"Def Power : {dp,-4}  {ac} (AC) + ({Sign(dexCap)}{dexCap}) (dex)");
         Sep();
         Console.WriteLine();
     }

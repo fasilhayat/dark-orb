@@ -5,8 +5,8 @@
 # and comparing against the defender's DefensePower (derived from armor class).
 #
 # Formula reference:
-#   AttackPower = (20 - StrikeRating) + Level + StrengthModifier + WeaponAttackBonus
-#   DefensePower = EffectiveAC = 20 - TotalArmorClass
+#   AttackPower = StrikeRating + Level + StrengthModifier + WeaponAttackBonus
+#   DefensePower = EffectiveAC = TotalArmorClass
 #   Hit if: d20 + AttackPower >= DefensePower
 Feature: Combat — Core Attack Resolution
     As a game designer
@@ -14,9 +14,9 @@ Feature: Combat — Core Attack Resolution
     So that combat follows the AD&D-inspired rules
 
     # Every scenario starts with a baseline character and weapon.
-    # AttackPower for this background: (20-19) + 1 (level) + 2 (STR mod) + 0 = 4
+    # AttackPower for this background: 2 (SR) + 1 (level) + 2 (STR mod) + 0 = 5
     Background:
-        Given a character with strength 14 and strike rating 19
+        Given a character with strength 14 and strike rating 2
         And a weapon named "Longsword" with D8 damage die and +0 attack bonus
 
     @ability
@@ -35,7 +35,7 @@ Feature: Combat — Core Attack Resolution
         Then the modifier should be 5
 
     @attack
-    # AttackPower = 4 (background). Roll 12 + 4 = 16 >= DefensePower 5 (EffectiveAC=20-15=5). Hit.
+    # AttackPower = 5 (background). Roll 12 + 5 = 17 >= DefensePower 6 (AC=5 + Level 1). Hit.
     # Damage = d8(5) + STR mod(2) + Level*2(2) = 9.
     Scenario: Successful melee attack hits and deals damage with strength bonus
         Given the D20 roll is 12
@@ -47,7 +47,7 @@ Feature: Combat — Core Attack Resolution
         And the weapon used should be "Longsword"
 
     @attack
-    # Roll 5 + AttackPower 4 = 9 < DefensePower 10 (EffectiveAC=20-10=10). Miss.
+    # Roll 5 + AttackPower 5 = 10 < DefensePower 11 (AC=10 + Level 1). Miss.
     # A miss always deals zero damage.
     Scenario: Attack misses when roll is too low to beat the target armor class
         Given the D20 roll is 5
@@ -69,9 +69,9 @@ Feature: Combat — Core Attack Resolution
         And the damage should be 2
 
     @attack
-    # Lower StrikeRating means higher ClassAccuracyBase (20 - StrikeRating).
-    # StrikeRating 15 → ClassAccuracyBase 5. AttackPower = 5 + 1 + 3 + 0 = 9.
-    # Roll 8 + 9 = 17 >= DefensePower 5. Hit. Damage = d6(6) + 3 + Level*2(2) = 11.
+    # Higher StrikeRating means higher ClassAccuracyBase.
+    # StrikeRating 15 → ClassAccuracyBase 15. AttackPower = 15 + 1 + 3 + 0 = 19.
+    # Roll 8 + 19 = 27 >= DefensePower 6 (AC=5 + Level 1). Hit. Damage = d6(6) + 3 + Level*2(2) = 11.
     Scenario: Lower strike rating makes attacks more likely to hit
         Given a character with strength 16 and strike rating 15
         And the D20 roll is 8
@@ -82,7 +82,7 @@ Feature: Combat — Core Attack Resolution
 
     @attack
     # Weapon attack bonus is added directly to AttackPower.
-    # AttackPower = (20-19) + 1 + 0 + 3 = 5. Roll 10 + 5 = 15 >= 5. Hit.
+    # AttackPower = 19 + 1 + 0 + 3 = 23. Roll 10 + 23 = 33 >= 6 (AC=5 + Level 1). Hit.
     # Damage = d12(7) + STR mod(0) + Level*2(2) = 9.
     Scenario: Weapon attack bonus improves hit chance
         Given a character with strength 10 and strike rating 19
@@ -94,8 +94,8 @@ Feature: Combat — Core Attack Resolution
         And the damage should be 9
 
     @attack
-    # High armor class produces a high DefensePower (EffectiveAC = 20 - 5 = 15).
-    # AttackPower = 4 (background). Roll 10 + 4 = 14 < 15. Miss.
+    # High armor class produces a high DefensePower (EffectiveAC = 15 + Level 1 = 16).
+    # AttackPower = 5 (background). Roll 10 + 5 = 15 < 16. Miss.
     Scenario: High armor class makes attacks miss
         Given the D20 roll is 10
         And the damage die roll is 4

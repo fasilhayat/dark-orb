@@ -50,3 +50,23 @@
   [API] 09.20.04  GET /v1/roll/D20  →  7
   [API] 09.20.04  GET /v1/roll/D8
   [API] 09.20.04  GET /v1/roll/D8  →  7
+  [API] 09.41.37  GET /v1/characters
+  [API] 09.41.38  GET /v1/characters  →  18 characters
+  [API] 09.41.38  GET /v1/weapons
+  [API] 09.41.38  GET /v1/weapons  →  52 weapons
+  [API] 09.42.03  GET /v1/roll/D20
+  [API] 09.42.03  GET /v1/roll/D20  →  11
+  [API] 09.42.03  GET /v1/roll/D8
+  [API] 09.42.03  GET /v1/roll/D8  →  6
+  [API] 09.42.03  GET /v1/roll/D20
+  [API] 09.42.03  GET /v1/roll/D20  →  19
+  [API] 09.42.03  GET /v1/roll/D8
+  [API] 09.42.03  GET /v1/roll/D8  →  1
+  [API] 09.42.03  GET /v1/roll/D20
+  [API] 09.42.03  GET /v1/roll/D20  →  3
+  [API] 09.42.03  GET /v1/roll/D8
+  [API] 09.42.03  GET /v1/roll/D8  →  8
+  [API] 09.42.03  GET /v1/roll/D20
+  [API] 09.42.03  GET /v1/roll/D20  →  5
+  [API] 09.42.03  GET /v1/roll/D8
+  [API] 09.42.03  GET /v1/roll/D8  →  6

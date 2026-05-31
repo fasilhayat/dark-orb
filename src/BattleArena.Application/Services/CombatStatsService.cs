@@ -18,7 +18,7 @@ public class CombatStatsService : ICombatStatsService
 
         return new CombatantStats
         {
-            ClassAccuracyBase = 20 - attacker.StrikeRating,
+            ClassAccuracyBase = attacker.StrikeRating,
             LevelScaling = attacker.Level,
             AttributeModifier = CalculateAbilityModifier(abilityScore),
             WeaponAttackBonus = source.AttackBonus,
@@ -62,7 +62,7 @@ public class CombatStatsService : ICombatStatsService
 
         return new CombatantStats
         {
-            EffectiveAC = 20 - defender.Equipment.TotalArmorClass,
+            EffectiveAC = defender.Equipment.TotalArmorClass,
             DexterityModifier = dexterityModifier,
             ShieldBonus = defender.Equipment.Shield?.DefenseBonus ?? 0,
             DefensiveBuffs = positiveBuffTotal + negativeDebuffs,

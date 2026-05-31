@@ -44,7 +44,7 @@ public class CombatServiceTests
         var attacker = new Character
         {
             Strength = 14,
-            StrikeRating = 19
+            StrikeRating = 10
         };
         var defender = CreateDefender(10);
         var weapon = new Weapon
@@ -61,7 +61,7 @@ public class CombatServiceTests
 
         Assert.True(result.IsHit);
         Assert.Equal(12, result.HitRoll);
-        Assert.Equal(4, result.AttackPower);
+        Assert.Equal(13, result.AttackPower);
         Assert.Equal(11, result.DefensePower);
         Assert.Equal(9, result.Damage);
     }
@@ -72,9 +72,9 @@ public class CombatServiceTests
         var attacker = new Character
         {
             Strength = 10,
-            StrikeRating = 19
+            StrikeRating = 4
         };
-        var defender = CreateDefender(10);
+        var defender = CreateDefender(15);
         var weapon = new Weapon
         {
             Name = "Dagger",
@@ -183,7 +183,7 @@ public class CombatServiceTests
     }
 
     [Fact]
-    public void ResolveAttack_LowerStrikeRatingIsBetter_MoreLikelyToHit()
+    public void ResolveAttack_HigherStrikeRating_MoreLikelyToHit()
     {
         var attacker = new Character
         {
@@ -204,7 +204,7 @@ public class CombatServiceTests
         var result = _sut.ResolveAttack(attacker, defender, weapon);
 
         Assert.True(result.IsHit);
-        Assert.Equal(9, result.AttackPower);
+        Assert.Equal(19, result.AttackPower);
     }
 
     [Fact]
@@ -254,7 +254,7 @@ public class CombatServiceTests
         Assert.Equal(7, result.Result);
     }
 
-    private static Character CreateDefender(int targetArmorClass)
+    private static Character CreateDefender(int armorClass)
     {
         return new Character
         {
@@ -262,7 +262,7 @@ public class CombatServiceTests
             {
                 Chest = new Armor
                 {
-                    ArmorClass = Math.Max(0, 20 - targetArmorClass)
+                    ArmorClass = armorClass
                 }
             }
         };

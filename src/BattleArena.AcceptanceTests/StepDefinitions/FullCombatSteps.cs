@@ -72,8 +72,8 @@ public class FullCombatSteps
         _combatants[characterName].Equipment.RightHand = weapon;
     }
 
-    // Equips a chest-slot armor piece. ArmorClass is the raw AD&D value (lower = better).
-    // CombatStatsService converts it: EffectiveAC = 20 - ArmorClass.
+    // Equips a chest-slot armor piece. Higher ArmorClass = better protection.
+    // CombatStatsService uses it directly: EffectiveAC = ArmorClass.
     [Given(@"""([^""]+)"" wears ""([^""]+)"" with armor class (\d+) and mitigation (\d+)")]
     public void GivenCombatantWears(string characterName, string armorName, int armorClass, int mitigation)
     {
