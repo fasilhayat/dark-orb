@@ -8,6 +8,7 @@ public class CharDisplayState
     public int Level { get; init; }
     public string ClassName { get; init; } = string.Empty;
     public string Sex { get; init; } = "Unknown";
+    public required string Race { get; init; }
     public int Hp { get; set; }
     public int Tm { get; set; }
     public int MaxMana { get; set; }

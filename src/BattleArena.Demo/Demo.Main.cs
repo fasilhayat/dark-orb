@@ -306,6 +306,7 @@ static partial class Demo
                 Level = m.Character.Level,
                 ClassName = m.Character.ClassName,
                 Sex = m.Character.Sex,
+                Race = m.Character.Race?.Name ?? "",
                 Weapon = m.AttackSource?.Name ?? "",
                 MaxMana = m.Character.MaxMana,
                 Mana = m.Character.CurrentMana
@@ -320,6 +321,7 @@ static partial class Demo
                 Level = m.Character.Level,
                 ClassName = m.Character.ClassName,
                 Sex = m.Character.Sex,
+                Race = m.Character.Race?.Name ?? "",
                 Weapon = m.AttackSource?.Name ?? "",
                 MaxMana = m.Character.MaxMana,
                 Mana = m.Character.CurrentMana

@@ -39,7 +39,8 @@ public class CombatPlaybackEngineTests
             MaxHp = 100,
             Hp = 100,
             IsHero = true,
-            IsAlive = true
+            IsAlive = true,
+            Race = "Human"
         }),
         CombatLayout.From(heroNames, ["Enemy"], false));
 
@@ -176,8 +177,8 @@ public class CombatPlaybackEngineTests
     {
         var state = new CombatDisplayState(
         [
-            new CharDisplayState { Name = "Hero", MaxHp = 100, Hp = 100, IsHero = true, IsAlive = true },
-            new CharDisplayState { Name = "Enemy", MaxHp = 80, Hp = 80, IsHero = false, IsAlive = true }
+            new CharDisplayState { Name = "Hero", MaxHp = 100, Hp = 100, IsHero = true, IsAlive = true, Race = "Human" },
+            new CharDisplayState { Name = "Enemy", MaxHp = 80, Hp = 80, IsHero = false, IsAlive = true, Race = "Orc" }
         ],
         CombatLayout.From(["Hero"], ["Enemy"], false));
 

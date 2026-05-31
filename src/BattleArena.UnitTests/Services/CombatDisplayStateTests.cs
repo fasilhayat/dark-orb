@@ -6,10 +6,10 @@ using BattleArena.Presentation;
 public class CombatDisplayStateTests
 {
     private static CharDisplayState Hero(string name, int hp = 100, int mana = 50) =>
-        new() { Name = name, MaxHp = hp, Hp = hp, MaxMana = mana, Mana = mana, IsHero = true, IsAlive = true };
+        new() { Name = name, MaxHp = hp, Hp = hp, MaxMana = mana, Mana = mana, IsHero = true, IsAlive = true, Race = "Human" };
 
     private static CharDisplayState Enemy(string name, int hp = 80, int mana = 0) =>
-        new() { Name = name, MaxHp = hp, Hp = hp, MaxMana = mana, Mana = mana, IsHero = false, IsAlive = true };
+        new() { Name = name, MaxHp = hp, Hp = hp, MaxMana = mana, Mana = mana, IsHero = false, IsAlive = true, Race = "Orc" };
 
     private static CombatLayout Layout(IEnumerable<string> heroes, IEnumerable<string> enemies) =>
         CombatLayout.From(heroes, enemies, false);

@@ -36,7 +36,8 @@ public sealed class CombatDisplayState
                 IsHero = isHero,
                 MaxMana = 0,
                 Mana = 0,
-                Weapon = string.Empty
+                Weapon = string.Empty,
+                Race = "Pet"
             };
         }
     }

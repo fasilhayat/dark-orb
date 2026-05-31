@@ -445,7 +445,7 @@ static partial class Demo
             new Seg(weapStr, active ? ConsoleColor.Yellow : ConsoleColor.Gray));
 
         var sexLabel = s.Sex switch { "F" => "Female", "M" => "Male", _ => "None" };
-        var classStr = $"{sexLabel}  ·  Lvl {s.Level}  {s.ClassName}".PadRight(CONTENT_W);
+        var classStr = $"{sexLabel}  ·  Lvl {s.Level}  {s.ClassName}  ·  {s.Race}".PadRight(CONTENT_W);
         var classLine = CL(vb, borderFg,
             new Seg(classStr, ConsoleColor.Gray));
 

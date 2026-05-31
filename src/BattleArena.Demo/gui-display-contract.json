@@ -1,5 +1,5 @@
 {
-  "version": "1.4",
+  "version": "1.5",
   "description": "Defines which data fields the BattleArena combat GUI must display. Placement and exact phrasing are left to the GUI implementation — only field presence and correctness matter. Set 'enabled' to false on any screen or field to suppress it from the console output.",
   "screens": {
     "characterCard": {
@@ -9,7 +9,8 @@
         { "enabled": true,  "field": "Name",             "source": "Character.Name",                         "description": "Character display name" },
         { "enabled": true,  "field": "Level",            "source": "Character.Level",                        "description": "Character level (1–20). Displayed as 'Lvl N  ClassName' beneath the name line in the card." },
         { "enabled": true,  "field": "Class",            "source": "Character.ClassName",                    "description": "Character class name fetched from DB (e.g. Barbarian, Mage). Rendered as text next to Level." },
-        { "enabled": true,  "field": "Sex",              "source": "Character.Sex",                          "description": "Character sex stored in DB as single char flag: M = Male, F = Female, X = None. Displayed in full in the card: 'Lvl 5  Mage  ·  Female'" },
+        { "enabled": true,  "field": "Sex",              "source": "Character.Sex",                          "description": "Character sex stored in DB as single char flag: M = Male, F = Female, X = None. Displayed in full in the card: 'Female  ·  Lvl 5  Mage  ·  Human'" },
+        { "enabled": true,  "field": "Race",             "source": "Character.Race.Name",                    "description": "Character race name (e.g. Human, Orc, Elf). Rendered in the card after class: 'Female  ·  Lvl 5  Mage  ·  Human'" },
         { "enabled": true,  "field": "CurrentHp",        "source": "Character.CurrentHitPoints",             "description": "Current hit points (can be negative after KO)" },
         { "enabled": true,  "field": "MaxHp",            "source": "Character.MaxHitPoints",                 "description": "Maximum hit points — must be > 0" },
         { "enabled": true,  "field": "CurrentMana",      "source": "Character.CurrentMana",                  "description": "Current mana points — shown for ALL characters. Non-casters render a dimmed '-- / --' placeholder so card height stays uniform." },
@@ -21,6 +22,25 @@
         { "enabled": true,  "field": "MemorizedSpells",  "source": "Character.MemorizedSpells",              "description": "List of spells the character has memorized. Each entry has: Name, School, DamageCount, DamageDie, DamageType, ManaCost, SpellLevel. Only present when Character.MemorizedSpells.Count > 0." },
         { "enabled": true,  "field": "SpellListRow",     "source": "Character.MemorizedSpells[].Name",       "description": "Compact single-row spell summary rendered inside the character card, below the HP bar. Format: 'SP  <SpellA>  <SpellB>  …' (spell names truncated to ~7 chars, separated by two spaces). Non-spellcasters render this row as blank space so card height stays equal. Colour: label in DarkYellow, names in Yellow." },
         { "enabled": true,  "field": "IsAlive",          "source": "Character.CurrentHitPoints > 0",         "description": "Alive/dead flag derivable from CurrentHitPoints" }
+      ]
+    },
+    "startupSheets": {
+      "enabled": true,
+      "description": "Pre-combat stat sheets shown before the first action. Each combatant gets a full-character summary card.",
+      "requiredFields": [
+        { "enabled": true,  "field": "Name",             "source": "Character.Name",                        "description": "Character display name" },
+        { "enabled": true,  "field": "Race",             "source": "Character.Race.Name",                  "description": "Character race name. Must be shown on the stat sheet on the main header row alongside sex, level, and class." },
+        { "enabled": true,  "field": "Sex",              "source": "Character.Sex",                        "description": "Character sex (M/F/X)" },
+        { "enabled": true,  "field": "Level",            "source": "Character.Level",                      "description": "Character level" },
+        { "enabled": true,  "field": "Class",            "source": "Character.ClassName",                  "description": "Character class" },
+        { "enabled": true,  "field": "HP",               "source": "Character.MaxHitPoints",               "description": "Maximum hit points" },
+        { "enabled": true,  "field": "TurnSpeed",        "source": "Character.TurnSpeed",                  "description": "Base turn speed" },
+        { "enabled": true,  "field": "StrikeRating",     "source": "Character.StrikeRating",               "description": "Strike rating" },
+        { "enabled": true,  "field": "Attributes",       "source": "Character.Strength/Dexterity/Intelligence", "description": "Base attributes (STR, DEX, INT) with ability modifiers" },
+        { "enabled": true,  "field": "Armor",            "source": "Character.Equipment.Chest",            "description": "Equipped armor name, AC, mitigation percentage" },
+        { "enabled": true,  "field": "WeaponOrSpells",   "source": "Character.Equipment.RightHand / Character.MemorizedSpells", "description": "Weapon (name, damage dice, attack bonus) or memorized spells list" },
+        { "enabled": true,  "field": "AttackPower",      "source": "derived",                              "description": "Attack power breakdown (StrikeRating + Level + ability mod + source bonus)" },
+        { "enabled": true,  "field": "DefensePower",     "source": "derived",                              "description": "Defense power breakdown (AC + dexterity cap)" }
       ]
     },
     "roundBar": {
