@@ -40,10 +40,6 @@ public static class CombatPlaybackEngine
             }
 
             var combatOver = turnEvents.Any(e => e.EventType is "Death" or "KnockedOut");
-
-            if (combatOver)
-                presenter.RefreshScreen(state, turnTick, null);
-
             presenter.WaitForNextTurn(combatOver);
 
             turnEvents.Clear();
@@ -188,6 +184,12 @@ public static class CombatPlaybackEngine
         }
 
         FlushQuiet();
+
+        if (result.Log.Any(e => e.EventType is "Death" or "KnockedOut"))
+        {
+            presenter.RefreshScreen(state, byTick.Last().Key, null);
+            presenter.WaitForNextTurn(true);
+        }
     }
 
     /// <summary>

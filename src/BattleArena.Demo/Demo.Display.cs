@@ -413,14 +413,13 @@ static partial class Demo
 
         // ── Card field widths (sum must equal CONTENT_W = 42) ──────────────────
         // Row 1 (name):     W_INDICATOR(2) + W_NAME(18) + W_GAP(3) + [ + W_WEAPON(17) + ] = 42
-        // Row 2 (info):     W_SEX(6) + "  ·  "(5) + "Lvl "(4) + {level,2}(2) + "  "(2) + W_CLASS(10) + "  ·  "(5) + W_RACE(8) = 42
-        // Row 3-5 (TM/HP):  " TM["(5) + BAR_W(25) + "]  "(3) + value_fields(9) = 42
+        // Row 2 (info):     W_SEX(6) + "  ·  "(5) + "Lvl "(4) + {level,2}(2) + "  "(2) + W_RACE(9) + "  ·  "(5) + W_CLASS(9) = 42
         const int W_NAME   = 18;
         const int W_GAP    = 3;
         const int W_WEAPON = 17;
         const int W_SEX    = 6;
-        const int W_CLASS  = 10;
-        const int W_RACE   = 8;
+        const int W_RACE   = 9;
+        const int W_CLASS  = 9;
 
         var borderFg = active ? ConsoleColor.White
                      : dead ? ConsoleColor.Gray
@@ -470,7 +469,7 @@ static partial class Demo
 
         // ── Info row (Sex  ·  Lvl Level  Class  ·  Race) ───────────────────────
         var sexLabel = s.Sex switch { "F" => "Female", "M" => "Male", _ => "None" };
-        var infoStr = $"{sexLabel,-W_SEX}  ·  Lvl {s.Level,2}  {s.ClassName,-W_CLASS}  ·  {s.Race,-W_RACE}";
+        var infoStr = $"{sexLabel,-W_SEX}  ·  Lvl {s.Level,2}  {s.Race,-W_RACE}  ·  {s.ClassName,-W_CLASS}";
         var classLine = CL(vb, borderFg, new Seg(infoStr, ConsoleColor.Gray));
 
         // ── TM row ─────────────────────────────────────────────────────────────
