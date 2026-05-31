@@ -38,3 +38,5 @@ src/combat-logs/
 replays/*.json
 /replays/*
 /logs/api-calls.log
+src/logs/api-calls.log
+src/logs/api-calls.log
