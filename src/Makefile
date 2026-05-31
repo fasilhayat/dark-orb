@@ -20,7 +20,7 @@ help:
 	@cmd /C "echo    make clean          Tear down everything, wipe volumes and publish output"
 	@echo.
 	@cmd /C "echo  BUILD ^& TEST"
-	@cmd /C "echo    make build-local    Publish the API locally (output to ./publish)"
+	@cmd /C "echo    make build-local    Publish the API locally (output to ../publish)"
 	@cmd /C "echo    make test           Run all unit and acceptance tests"
 	@cmd /C "echo    make test-coverage  Run tests with code coverage (opencover format)"
 	@echo.
@@ -62,11 +62,11 @@ down:
 
 clean: clean-logs
 	pwsh -NoProfile -Command "'localdev','dev','test','preprod','prod' | ForEach-Object { docker compose -p dark-orb-$$_ down -v 2>$$null }"
-	pwsh -NoProfile -Command "if (Test-Path 'publish') { Remove-Item -Recurse -Force 'publish' }; if (Test-Path 'publish-demo') { Remove-Item -Recurse -Force 'publish-demo' }"
+	pwsh -NoProfile -Command "if (Test-Path '../publish') { Remove-Item -Recurse -Force '../publish' }; if (Test-Path '../publish-demo') { Remove-Item -Recurse -Force '../publish-demo' }"
 
 clean-logs:
 	@echo Deleting combat logs...
-	@powershell -Command "Get-ChildItem -Path 'combat-logs' -File | Where-Object { $$_.Name -ne '.gitkeep' } | Remove-Item -Force; Write-Host 'combat-logs/ cleared.'"
+	@powershell -Command "Get-ChildItem -Path '../combat-logs' -File | Where-Object { $$_.Name -ne '.gitkeep' } | Remove-Item -Force; Write-Host 'combat-logs/ cleared.'"
 
 redo-local:
 	@echo Clean + build + up-local + demo...
@@ -88,13 +88,13 @@ test-coverage:
 build-local: publish
 
 publish:
-	pwsh -NoProfile -Command "if (Test-Path 'publish') { Remove-Item -Recurse -Force 'publish' }"
-	dotnet publish BattleArena.Api/BattleArena.Api.csproj -c Release -o ./publish
+	pwsh -NoProfile -Command "if (Test-Path '../publish') { Remove-Item -Recurse -Force '../publish' }"
+	dotnet publish BattleArena.Api/BattleArena.Api.csproj -c Release -o ../publish
 
 publish-demo:
-	pwsh -NoProfile -Command "if (Test-Path 'publish-demo') { Remove-Item -Recurse -Force 'publish-demo' }"
-	dotnet publish BattleArena.Demo/BattleArena.Demo.csproj -c Release -o ./publish-demo
+	pwsh -NoProfile -Command "if (Test-Path '../publish-demo') { Remove-Item -Recurse -Force '../publish-demo' }"
+	dotnet publish BattleArena.Demo/BattleArena.Demo.csproj -c Release -o ../publish-demo
 
 sync-instructions:
 	@echo Syncing AGENTS.md to .github/copilot-instructions.md...
-	pwsh scripts/sync-instructions.ps1
+	pwsh ../scripts/sync-instructions.ps1

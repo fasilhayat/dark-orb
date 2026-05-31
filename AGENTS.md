@@ -183,9 +183,9 @@ If you add a table to the SQL file you must add the entity and its relationships
 
 ---
 
-## 8. Lore update obligations (`notes/battle-arena-lore.md`)
+## 8. Lore update obligations (`design/battle-arena-lore.md`)
 
-Update **`notes/battle-arena-lore.md`** when any of the following are added to the SQL seed or game data:
+Update **`design/battle-arena-lore.md`** when any of the following are added to the SQL seed or game data:
 
 | Added content | Lore section |
 |---------------|-------------|

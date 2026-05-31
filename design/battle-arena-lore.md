@@ -29,6 +29,7 @@
 20. [Spells](#20-spells)
 21. [Subraces & Special Abilities](#21-subraces--special-abilities)
 22. [Leveling & Experience](#22-leveling--experience)
+23. [Leveling Plan (Class Features & Racial Benefits)](leveling-plan.md) — *Separate file*
 
 ---
 
@@ -735,4 +736,4 @@ All 3 survive → 180 ÷ 3 = **60 XP each** (endurance bonus + net crit benefit)
 
 ---
 
-*Last updated: May 2026 — 10 races, 9 classes, 37 weapons, 24 armor, 7 rings, 5 amulets, 5 girdles, 3 item sets, 10 NPCs, 8 deities, 9 pets, 24 spells, 12-level progression*
+*Last updated: May 2026 — 10 races, 9 classes, 37 weapons, 24 armor, 7 rings, 5 amulets, 5 girdles, 3 item sets, 10 NPCs, 8 deities, 9 pets, 24 spells, 12-level progression. Design docs live under `design/`. Class-feature & racial-unlock progression in [`leveling-plan.md`](leveling-plan.md).*

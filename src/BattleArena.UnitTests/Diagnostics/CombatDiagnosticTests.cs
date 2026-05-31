@@ -43,7 +43,8 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
         var dir = AppContext.BaseDirectory;
         while (dir != null)
         {
-            if (Directory.GetFiles(dir, "*.sln").Length > 0) return dir;
+            if (Directory.GetFiles(dir, "*.sln").Length > 0)
+                return Directory.GetParent(dir)?.FullName ?? dir;
             dir = Directory.GetParent(dir)?.FullName;
         }
         return AppContext.BaseDirectory;

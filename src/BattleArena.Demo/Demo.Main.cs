@@ -493,9 +493,10 @@ static partial class Demo
     {
         try
         {
-            // Walk up from the executable to find the repo root (contains BattleArena.sln)
             var dir = AppContext.BaseDirectory;
-            while (!string.IsNullOrEmpty(dir) && !File.Exists(Path.Combine(dir, "BattleArena.sln")))
+            while (!string.IsNullOrEmpty(dir)
+                && !File.Exists(Path.Combine(dir, "BattleArena.sln"))
+                && !File.Exists(Path.Combine(dir, "src", "BattleArena.sln")))
                 dir = Path.GetDirectoryName(dir)!;
 
             var outputDir = Path.Combine(string.IsNullOrEmpty(dir) ? AppContext.BaseDirectory : dir, "combat-logs");

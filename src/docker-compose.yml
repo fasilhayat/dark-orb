@@ -12,15 +12,15 @@ volumes:
 services:
   battle-arena-db:
     build:
-      context: .
-      dockerfile: postgres/Dockerfile
+      context: ..
+      dockerfile: src/postgres/Dockerfile
     hostname: battle-arena-db
     restart: unless-stopped
     networks:
       - app-network
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./.postgres-init:/docker-entrypoint-initdb.d
+      - ../.postgres-init:/docker-entrypoint-initdb.d
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -36,8 +36,8 @@ services:
 
   battle-arena-api:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: src/Dockerfile
     hostname: battle-arena-api
     restart: unless-stopped
     networks:

@@ -32,6 +32,7 @@ api_key.secret
 ## Combat logs (generated — replay .json files and human-readable .txt dumps)
 combat-logs/*.txt
 combat-logs/*.json
+src/combat-logs/
 
 ## Replay snapshots (user-placed .json files for demo replay; not committed)
 replays/*.json

@@ -15,8 +15,8 @@ services:
 
   battle-arena-demo:
     build:
-      context: .
-      dockerfile: BattleArena.Demo/Dockerfile
+      context: ..
+      dockerfile: src/BattleArena.Demo/Dockerfile
     stdin_open: true
     tty: true
     profiles:

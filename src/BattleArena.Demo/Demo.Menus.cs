@@ -311,7 +311,9 @@ static partial class Demo
     private static string? FindReplayFolder()
     {
         var dir = AppContext.BaseDirectory;
-        while (!string.IsNullOrEmpty(dir) && !File.Exists(Path.Combine(dir, "BattleArena.sln")))
+        while (!string.IsNullOrEmpty(dir)
+            && !File.Exists(Path.Combine(dir, "BattleArena.sln"))
+            && !File.Exists(Path.Combine(dir, "src", "BattleArena.sln")))
             dir = Path.GetDirectoryName(dir)!;
         if (string.IsNullOrEmpty(dir)) return null;
         var path = Path.Combine(dir, "combat-logs", "replay");
