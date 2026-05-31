@@ -1,10 +1,72 @@
 {
-  "version": "1.5",
+  "version": "1.6",
   "description": "Defines which data fields the BattleArena combat GUI must display. Placement and exact phrasing are left to the GUI implementation — only field presence and correctness matter. Set 'enabled' to false on any screen or field to suppress it from the console output.",
   "screens": {
     "characterCard": {
       "enabled": true,
       "description": "Character status block shown throughout combat for each combatant. All cards MUST be the same height regardless of class or alive/dead status — non-spellcasters render a dimmed placeholder MP row and an empty spell row so all cards remain aligned.",
+      "layout": {
+        "cardWidthChars": 46,
+        "contentWidthChars": 42,
+        "rows": [
+          {
+            "id": "nameRow",
+            "segments": [
+              { "label": "activeIndicator", "maxChars": 2, "content": "▶ " },
+              { "label": "name",            "maxChars": 18, "content": "character name (uppercase), truncated/padded to 18" },
+              { "label": "gap",             "maxChars": 3,  "content": "spaces" },
+              { "label": "weapon",          "maxChars": 19, "content": "[ weapon name ] padded/truncated to 17 chars inside brackets" }
+            ]
+          },
+          {
+            "id": "infoRow",
+            "description": "Sex · Lvl Level · Class · Race",
+            "segments": [
+              { "label": "sex",          "maxChars": 6,  "content": "Male / Female / None, left-aligned" },
+              { "label": "sep1",         "maxChars": 5,  "content": "  ·  " },
+              { "label": "lvlLabel",     "maxChars": 4,  "content": "Lvl " },
+              { "label": "level",        "maxChars": 2,  "content": "level number 1-99, right-aligned" },
+              { "label": "gap",          "maxChars": 2,  "content": "  " },
+              { "label": "class",        "maxChars": 10, "content": "class name (e.g. Barbarian, Mage), left-aligned, max 9 chars" },
+              { "label": "sep2",         "maxChars": 5,  "content": "  ·  " },
+              { "label": "race",         "maxChars": 8,  "content": "race name (e.g. Halfling, Human, Orc), left-aligned, max 8 chars" }
+            ]
+          },
+          {
+            "id": "turnMeterRow",
+            "segments": [
+              { "label": "prefix",  "maxChars": 5,  "content": " TM [" },
+              { "label": "bar",     "maxChars": 25, "content": "turn meter fill 0-100%, │ = filled, ░ = empty" },
+              { "label": "suffix",  "maxChars": 3,  "content": "]  " },
+              { "label": "value",   "maxChars": 5,  "content": "right-aligned 3-digit TM value, e.g. '  105' or '   65'" },
+              { "label": "max",     "maxChars": 4,  "content": "/100" }
+            ]
+          },
+          {
+            "id": "manaRow",
+            "description": "Non-casters (MaxMana = 0) render a blank row of 42 spaces to keep card height uniform.",
+            "segments": [
+              { "label": "prefix",  "maxChars": 5,  "content": " MP [" },
+              { "label": "bar",     "maxChars": 25, "content": "mana fill 0-100%, █ = filled, ░ = empty" },
+              { "label": "suffix",  "maxChars": 3,  "content": "]  " },
+              { "label": "current", "maxChars": 3,  "content": "right-aligned current mana" },
+              { "label": "sep",     "maxChars": 3,  "content": " / " },
+              { "label": "max",     "maxChars": 3,  "content": "left-aligned max mana" }
+            ]
+          },
+          {
+            "id": "hpRow",
+            "segments": [
+              { "label": "prefix",  "maxChars": 5,  "content": " HP [" },
+              { "label": "bar",     "maxChars": 25, "content": "HP fill 0-100%, █ = filled, ░ = empty" },
+              { "label": "suffix",  "maxChars": 3,  "content": "]  " },
+              { "label": "current", "maxChars": 3,  "content": "right-aligned current HP" },
+              { "label": "sep",     "maxChars": 3,  "content": " / " },
+              { "label": "max",     "maxChars": 3,  "content": "left-aligned max HP" }
+            ]
+          }
+        ]
+      },
       "requiredFields": [
         { "enabled": true,  "field": "Name",             "source": "Character.Name",                         "description": "Character display name" },
         { "enabled": true,  "field": "Level",            "source": "Character.Level",                        "description": "Character level (1–20). Displayed as 'Lvl N  ClassName' beneath the name line in the card." },

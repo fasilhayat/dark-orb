@@ -66,12 +66,12 @@ AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Sylas Moonshado
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc, sex, biography, max_mana)
-SELECT 'Captain Aldric', r.id, c.id, 7, 16, 12, 15, 10, 12, 13, 57, 57, 13, 10, 1, 'M',
+SELECT 'Captain Torvin', r.id, c.id, 7, 16, 12, 15, 10, 12, 13, 57, 57, 13, 10, 1, 'M',
        'A retired captain of the City Watch who now runs a small weapons shop in the market district. He lost his left eye to a goblin arrow during the Goblin Wars and claims it gave him better judgment of character.',
        0
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Human' AND c.name = 'Fighter'
-AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Captain Aldric');
+AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Captain Torvin');
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc, sex, biography, max_mana)
@@ -168,7 +168,7 @@ WITH weapon_map (char_name, slot_name, item_name) AS (VALUES
     ('Mira Brightholm',      'RightHand', 'Dagger'),
     ('Brorn Ironarm',        'RightHand', 'Maul'),
     ('Sylas Moonshadow',     'RightHand', 'Short Sword'),
-    ('Captain Aldric',       'RightHand', 'Long Sword'),
+    ('Captain Torvin',       'RightHand', 'Long Sword'),
     ('Sister Marigold',      'RightHand', 'Mace'),
     ('Rorik the Wanderer',   'RightHand', 'Battle Axe'),
     ('Grommash Ironhide',    'RightHand', 'Great Sword'),
@@ -200,7 +200,7 @@ WITH armor_map (char_name, slot_name, item_name) AS (VALUES
     ('Mira Brightholm',      'Chest', 'Chain Shirt'),
     ('Brorn Ironarm',        'Chest', 'Hide Armor'),
     ('Sylas Moonshadow',     'Chest', 'Studded Leather'),
-    ('Captain Aldric',       'Chest', 'Chain Mail'),
+    ('Captain Torvin',       'Chest', 'Chain Mail'),
     ('Sister Marigold',      'Chest', 'Chain Shirt'),
     ('Rorik the Wanderer',   'Chest', 'Hide Armor'),
     ('Selene Nightwhisper',  'Chest', 'Leather Armor'),

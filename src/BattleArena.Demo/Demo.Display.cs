@@ -72,7 +72,8 @@ static partial class Demo
 
         Sep();
         var sexDisplay = ch.Sex switch { "F" => "Female", "M" => "Male", _ => "None" };
-        Row2($"{role}: {ch.Name}", $"{sexDisplay} · Level {ch.Level} {ch.ClassName}", ConsoleColor.White);
+        var raceDisplay = ch.Race?.Name ?? "";
+        Row2($"{role}: {ch.Name}", $"{sexDisplay} · {raceDisplay} · Level {ch.Level} {ch.ClassName}", ConsoleColor.White);
         Sep();
         Row($"HP: {ch.MaxHitPoints}   TurnSpeed: {ch.TurnSpeed}   StrikeRating: {ch.StrikeRating}");
         Row($"STR: {ch.Strength} ({Sign((ch.Strength - 10) / 2)}{(ch.Strength - 10) / 2})   DEX: {ch.Dexterity} ({Sign(dexMod)}{dexMod})   INT: {ch.Intelligence} ({Sign((ch.Intelligence - 10) / 2)}{(ch.Intelligence - 10) / 2})");
@@ -191,14 +192,15 @@ static partial class Demo
 
     // ── ShowHp ────────────────────────────────────────────────────────────────────
 
-    internal static void ShowHp(string name, int current, int max, int w = 24)
+    internal static void ShowHp(string name, int current, int max, int w = 24, string info = "")
     {
         var pct = (double)Math.Max(0, current) / Math.Max(1, max);
         var filled = current > 0 ? Math.Max(1, (int)(pct * w)) : 0;
         var barCol = HpColor(current, max);
 
         Console.Write("  ");
-        CW($"{name,-10}", CharColor(name));
+        CW($"{name,-18}", CharColor(name));
+        if (info.Length > 0) CW($" {info,-38}", ConsoleColor.DarkGray);
         Console.Write("  HP [");
         Console.ForegroundColor = barCol;
         Console.Write(new string('\u2588', filled));
@@ -210,6 +212,12 @@ static partial class Demo
         if (current < 0) CW($"{current,3}", ConsoleColor.Red);
         else CW($"{Math.Max(0, current),3}", barCol);
         CWL($" / {max,3}", ConsoleColor.Gray);
+    }
+
+    internal static string CharInfo(Character ch)
+    {
+        var sex = ch.Sex switch { "F" => "Female", "M" => "Male", _ => "None" };
+        return $"{sex} · {ch.Race?.Name ?? ""} · Lvl {ch.Level} {ch.ClassName}";
     }
 
     // ── HpColor ───────────────────────────────────────────────────────────────────
@@ -276,7 +284,10 @@ static partial class Demo
         {
             var dmg = attacks.Where(e => e.ActorName == m.Character.Name && e.IsHit == true).Sum(e => e.DamageDealt ?? 0);
             var isWinner = wParty.Members.Any(wm => wm.Character.Name == m.Character.Name);
-            CW("    "); CW($"{m.Character.Name,-12}", isWinner ? ConsoleColor.Green : ConsoleColor.Gray);
+            var info = CharInfo(m.Character);
+            CW("    ");
+            CW($"{m.Character.Name,-18}", isWinner ? ConsoleColor.Green : ConsoleColor.Gray);
+            CW($" {info,-38}", ConsoleColor.DarkGray);
             CW($"  {dmg,3} dmg", ConsoleColor.Yellow);
             CWL(isWinner ? "  [winner side]" : "  [loser side]", isWinner ? ConsoleColor.Green : ConsoleColor.Gray);
         }
@@ -284,10 +295,10 @@ static partial class Demo
         CWL("\n  Final HP:", ConsoleColor.White);
         CWL("  ── Winners ──────────────────────────────────────────────", ConsoleColor.Green);
         foreach (var m in wParty.Members)
-            ShowHp(m.Character.Name, m.Character.CurrentHitPoints, MaxHp.GetValueOrDefault(m.Character.Name, 1));
+            ShowHp(m.Character.Name, m.Character.CurrentHitPoints, MaxHp.GetValueOrDefault(m.Character.Name, 1), info: CharInfo(m.Character));
         CWL("  ── Losers ───────────────────────────────────────────────", ConsoleColor.Red);
         foreach (var m in lParty.Members)
-            ShowHp(m.Character.Name, m.Character.CurrentHitPoints, MaxHp.GetValueOrDefault(m.Character.Name, 1));
+            ShowHp(m.Character.Name, m.Character.CurrentHitPoints, MaxHp.GetValueOrDefault(m.Character.Name, 1), info: CharInfo(m.Character));
 
         if (DisplayConfig.IsFieldEnabled("combatSummary", "LoserStatus") ||
             DisplayConfig.IsFieldEnabled("combatSummary", "LoserName"))
@@ -400,17 +411,28 @@ static partial class Demo
         var active = string.Equals(s.Name, activeActorName, StringComparison.Ordinal);
         var dead = !s.IsAlive;
 
+        // ── Card field widths (sum must equal CONTENT_W = 42) ──────────────────
+        // Row 1 (name):     W_INDICATOR(2) + W_NAME(18) + W_GAP(3) + [ + W_WEAPON(17) + ] = 42
+        // Row 2 (info):     W_SEX(6) + "  ·  "(5) + "Lvl "(4) + {level,2}(2) + "  "(2) + W_CLASS(10) + "  ·  "(5) + W_RACE(8) = 42
+        // Row 3-5 (TM/HP):  " TM["(5) + BAR_W(25) + "]  "(3) + value_fields(9) = 42
+        const int W_NAME   = 18;
+        const int W_GAP    = 3;
+        const int W_WEAPON = 17;
+        const int W_SEX    = 6;
+        const int W_CLASS  = 10;
+        const int W_RACE   = 8;
+
         var borderFg = active ? ConsoleColor.White
                      : dead ? ConsoleColor.Gray
                      : s.IsHero ? ConsoleColor.Blue
                      : ConsoleColor.Magenta;
 
-        char h = active ? '═' : '─';
-        char tl = active ? '╔' : '┌';
-        char tr = active ? '╗' : '┐';
-        char bl = active ? '╚' : '└';
-        char br = active ? '╝' : '┘';
-        char vb = active ? '║' : '│';
+        const char h  = '─';
+        const char tl = '┌';
+        const char tr = '┐';
+        const char bl = '└';
+        const char br = '┘';
+        const char vb = '│';
 
         var top = new List<Seg> { new Seg($"{tl}{new string(h, CONTENT_W + 2)}{tr}", borderFg) };
         var bot = new List<Seg> { new Seg($"{bl}{new string(h, CONTENT_W + 2)}{br}", borderFg) };
@@ -431,33 +453,39 @@ static partial class Demo
             ];
         }
 
+        // ── Name row ───────────────────────────────────────────────────────────
         var indicator = active ? "\u25b6 " : "  ";
         var indicFg = active ? ConsoleColor.White : s.IsHero ? ConsoleColor.Cyan : ConsoleColor.Red;
-        var nameStr = (s.Name.Length > 10 ? s.Name.ToUpper()[..10] : s.Name.ToUpper()).PadRight(10);
-        var weapTrunc = s.Weapon.Length > 14 ? s.Weapon[..14] : s.Weapon.PadRight(14);
+        var nameStr = (s.Name.Length > W_NAME ? s.Name.ToUpper()[..W_NAME] : s.Name.ToUpper()).PadRight(W_NAME);
+        var weapTrunc = s.Weapon.Length > W_WEAPON ? s.Weapon[..W_WEAPON] : s.Weapon.PadRight(W_WEAPON);
         var weapStr = DisplayConfig.IsFieldEnabled("characterCard", "CurrentWeapon")
-            ? $"[{weapTrunc}]" : new string(' ', weapTrunc.Length + 2);
+            ? $"[{weapTrunc}]" : new string(' ', W_WEAPON + 2);
 
         var nameLine = CL(vb, borderFg,
             new Seg(indicator, indicFg),
             new Seg(nameStr, active ? ConsoleColor.White : ConsoleColor.White),
-            new Seg("   ", ConsoleColor.Gray),
+            new Seg(new string(' ', W_GAP), ConsoleColor.Gray),
             new Seg(weapStr, active ? ConsoleColor.Yellow : ConsoleColor.Gray));
+        // Total: W_INDICATOR(2) + W_NAME(18) + W_GAP(3) + [ + W_WEAPON(17) + ] = 42 ✓
 
+        // ── Info row (Sex  ·  Lvl Level  Class  ·  Race) ───────────────────────
         var sexLabel = s.Sex switch { "F" => "Female", "M" => "Male", _ => "None" };
-        var classStr = $"{sexLabel}  ·  Lvl {s.Level}  {s.ClassName}  ·  {s.Race}".PadRight(CONTENT_W);
-        var classLine = CL(vb, borderFg,
-            new Seg(classStr, ConsoleColor.Gray));
+        var infoStr = $"{sexLabel,-W_SEX}  ·  Lvl {s.Level,2}  {s.ClassName,-W_CLASS}  ·  {s.Race,-W_RACE}";
+        var classLine = CL(vb, borderFg, new Seg(infoStr, ConsoleColor.Gray));
 
-        var tmFilled = Math.Min(BAR_W, (int)(Math.Min(1.0, s.Tm / 100.0) * BAR_W));
+        // ── TM row ─────────────────────────────────────────────────────────────
+        var cappedTm = Math.Min(100, s.Tm);
+        var tmFilled = Math.Min(BAR_W, (int)(Math.Min(1.0, cappedTm / 100.0) * BAR_W));
         var tmLine = CL(vb, borderFg,
             new Seg(" TM [", ConsoleColor.Gray),
             new Seg(new string('|', tmFilled), ConsoleColor.Cyan),
             new Seg(new string('\u2591', BAR_W - tmFilled), ConsoleColor.Gray),
             new Seg("]  ", ConsoleColor.Gray),
-            new Seg($"  {s.Tm,3}", ConsoleColor.Cyan),
-            new Seg("/100", ConsoleColor.Gray));
+            new Seg($"{cappedTm,3}", ConsoleColor.Cyan),
+            new Seg(" / ", ConsoleColor.Gray),
+            new Seg("100", ConsoleColor.Gray));
 
+        // ── Mana row ───────────────────────────────────────────────────────────
         var manaLine = s.MaxMana > 0
             ? CL(vb, borderFg,
                 new Seg(" MP [", ConsoleColor.Gray),
@@ -470,6 +498,7 @@ static partial class Demo
             : CL(vb, borderFg,
                 new Seg(new string(' ', CONTENT_W), ConsoleColor.Black));
 
+        // ── HP row ─────────────────────────────────────────────────────────────
         var pct = (double)Math.Max(0, s.Hp) / Math.Max(1, s.MaxHp);
         var hpFilled = s.Hp > 0 ? Math.Max(1, (int)(pct * BAR_W)) : 0;
         var hpFg = HpColor(s.Hp, s.MaxHp);
@@ -516,7 +545,7 @@ static partial class Demo
             foreach (var seg in l) { Console.ForegroundColor = seg.Fg; Console.Write(seg.Text); }
             Console.ResetColor();
             Console.ForegroundColor = ConsoleColor.Gray;
-            Console.Write("  \u2551  ");
+            Console.Write("  \u2502  ");
             Console.ResetColor();
             foreach (var seg in r) { Console.ForegroundColor = seg.Fg; Console.Write(seg.Text); }
             Console.ResetColor();

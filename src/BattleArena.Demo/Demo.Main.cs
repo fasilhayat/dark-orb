@@ -27,9 +27,9 @@ static partial class Demo
     private static bool UseApiRoster;
 
     // ── Block layout constants ────────────────────────────────────────────────────
-    internal const int BLOCK_W   = 35;
-    internal const int CONTENT_W = 31;
-    internal const int BAR_W     = 14;
+    internal const int BLOCK_W   = 46;
+    internal const int CONTENT_W = 42;
+    internal const int BAR_W     = 25;
 
     // ── Lookup tables ─────────────────────────────────────────────────────────────
     private static Dictionary<char, Character> AllHeroes = [];
