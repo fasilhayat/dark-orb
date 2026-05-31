@@ -43,4 +43,4 @@ replays/*.json
 src/logs/api-calls.log
 src/logs/api-calls.log
 src/BattleArena.UnitTests/TestResults/FAMH_B32JZOVHSNEV6AO_2026-05-31_12_47_47_net8.0.trx
-src/BattleArena.UnitTests/TestResults/CombatLogPrunerTests/cfa66db27c234a17bda543d229a63bb0/run_002.json
+src/BattleArena.UnitTests/TestResults/**
