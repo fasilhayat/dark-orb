@@ -66,17 +66,17 @@ ON CONFLICT (name) DO NOTHING;
 -- SEED: RACES
 -- ============================================================
 
-INSERT INTO arena_data.race (name, description, strength_bonus, dexterity_bonus, stamina_bonus, intelligence_bonus, wisdom_bonus, charisma_bonus) VALUES
-    ('Human',    'The children of the All-Father, humans are the most adaptable of the mortal races. From the barbarian hordes of the Frozen Wastes to the merchant princes of Eldergard, humanity''s ambition knows no bounds. Their settlements dot every corner of the realm, and their short lives burn twice as bright as the long-lived elves. No other race can match their versatility — a human may rise from peasant to king in a single lifetime.', 1, 1, 1, 1, 1, 1),
-    ('Elf',      'Born from the tears of the Moon goddess, the elves are the eldest of the mortal races. Their connection to magic runs in their blood, granting them innate resistance to spells and a grace that other races find unsettling. High Elves study the arcane arts in crystal towers, Dark Elves weave shadows in the underdark, and Forest Elves move as whispers through the ancient woods. Elves measure time in centuries and rarely hurry.', 0, 2, 0, 2, 0, 1),
-    ('Dwarf',    'Forged from the bones of the earth itself, dwarves are as stubborn as the mountains they call home. Their kingdoms stretch deep beneath the peaks, where they mine mithril and carve halls of breathtaking beauty. Dwarven smiths are unmatched in the mortal realm, and their resistance to magic makes them feared opponents. A dwarf''s word is their bond, and their grudges are recorded in stone to last ten generations.', 2, 0, 2, 0, 1, 0),
-    ('Lizard',   'Scales shimmering like gemstones, the lizardfolk are the Silent Children of the Sun. They are descendants of the lesser dragons, evolved from those ancient bloodlines when the world was young. The draconic heritage runs deep in their veins — their scales, their resilience, their cold patience all echo the great wyrms. To outsiders they seem emotionless, but among their own kind they share deep bonds of loyalty. Swamp Lizards glide through poisonous marshes, Desert Lizards endure the searing heat, and Forest Lizards strike from the canopy with terrifying precision.', 2, 0, 1, 0, 0, 0),
-    ('Undead',   'Not a race but a condition — souls that refused the call of the afterlife. Undead cannot be played as characters; they exist only as NPCs and monsters encountered in the world. Bound to their rotting bodies by sheer will or necromantic curse, they walk the mortal plane seeking purpose, vengeance, or redemption. Immune to fear and pain, they feel only the cold hunger of their existence. Some serve dark masters; others wander as lone penitents, searching for a peace that will not come.', 1, 0, 0, 1, 0, 0),
-    ('Kobold',   'Small, scaly, and underestimated by every other race, kobolds are survivors. They dwell in the cracks of the world — forgotten mines, sewer networks, and the underbellies of great cities. Their natural cunning and magic resistance have kept them alive against larger, stronger foes. A kobold''s greatest weapon is not their claw or fang, but their cleverness. They build traps that would impress dwarves and tunnels that baffle even elves.', 0, 2, 0, 1, 0, 0),
-    ('Demon',    'Hailing from the infernal planes beyond the mortal veil, demons are creatures of pure elemental chaos. Each demon embodies a primal force — fire demons burn with endless rage, shadow demons hunger for fear and despair. They enter the mortal world through rifts and summonings, bringing destruction in their wake. Yet some demons reject their nature, seeking redemption in a world that fears and despises them.', 2, 0, 1, 1, 0, 1),
-    ('Orc',      'The Chosen of the War God, orcs were created to fight. Their muscles bulge with unnatural strength, and their bones knit faster than any other race. Orc society is built around the concept of ''Ushog'' — the eternal struggle that gives life meaning. They value strength above all else and respect only those who can defeat them in battle. Despite their savage reputation, orcish honor is absolute; an orc who gives their word will die before breaking it.', 3, 0, 1, 0, 0, 0),
-    ('Ogre',     'Titans reduced by ages of separation from their divine ancestors, ogres are the largest of the mortal races. Standing twelve feet tall and built of solid muscle and thick bone, they are living battering rams. Mountain Ogres possess residual magic resistance from their giant bloodline, Hill Ogres throw boulders with deadly accuracy, Desert Ogres endure the harshest climates, and Forest Ogres can regenerate wounds at an alarming rate.', 3, 0, 2, 0, 0, 0),
-    ('Halfling', 'The smallest of the civilized races, halflings possess a spirit that belies their stature. They believe in the power of luck, good food, and a warm hearth, yet they are among the bravest souls in battle. Halflings feel fear but refuse to show it, using their natural agility and sharp tongues to mock and taunt enemies into reckless charges. Forest Halflings move through woodland without a trace, while Hill Halflings are renowned for their hospitality and uncanny good fortune.', 0, 2, 1, 0, 1, 1);
+INSERT INTO arena_data.race (name, description, base_movement_speed, strength_bonus, dexterity_bonus, stamina_bonus, intelligence_bonus, wisdom_bonus, charisma_bonus) VALUES
+    ('Human',    'The children of the All-Father, humans are the most adaptable of the mortal races. From the barbarian hordes of the Frozen Wastes to the merchant princes of Eldergard, humanity''s ambition knows no bounds. Their settlements dot every corner of the realm, and their short lives burn twice as bright as the long-lived elves. No other race can match their versatility — a human may rise from peasant to king in a single lifetime.', 30, 1, 1, 1, 1, 1, 1),
+    ('Elf',      'Born from the tears of the Moon goddess, the elves are the eldest of the mortal races. Their connection to magic runs in their blood, granting them innate resistance to spells and a grace that other races find unsettling. High Elves study the arcane arts in crystal towers, Dark Elves weave shadows in the underdark, and Forest Elves move as whispers through the ancient woods. Elves measure time in centuries and rarely hurry.', 35, 0, 2, 0, 2, 0, 1),
+    ('Dwarf',    'Forged from the bones of the earth itself, dwarves are as stubborn as the mountains they call home. Their kingdoms stretch deep beneath the peaks, where they mine mithril and carve halls of breathtaking beauty. Dwarven smiths are unmatched in the mortal realm, and their resistance to magic makes them feared opponents. A dwarf''s word is their bond, and their grudges are recorded in stone to last ten generations.', 25, 2, 0, 2, 0, 1, 0),
+    ('Lizard',   'Scales shimmering like gemstones, the lizardfolk are the Silent Children of the Sun. They are descendants of the lesser dragons, evolved from those ancient bloodlines when the world was young. The draconic heritage runs deep in their veins — their scales, their resilience, their cold patience all echo the great wyrms. To outsiders they seem emotionless, but among their own kind they share deep bonds of loyalty. Swamp Lizards glide through poisonous marshes, Desert Lizards endure the searing heat, and Forest Lizards strike from the canopy with terrifying precision.', 30, 2, 0, 1, 0, 0, 0),
+    ('Undead',   'Not a race but a condition — souls that refused the call of the afterlife. Undead cannot be played as characters; they exist only as NPCs and monsters encountered in the world. Bound to their rotting bodies by sheer will or necromantic curse, they walk the mortal plane seeking purpose, vengeance, or redemption. Immune to fear and pain, they feel only the cold hunger of their existence. Some serve dark masters; others wander as lone penitents, searching for a peace that will not come.', 25, 1, 0, 0, 1, 0, 0),
+    ('Kobold',   'Small, scaly, and underestimated by every other race, kobolds are survivors. They dwell in the cracks of the world — forgotten mines, sewer networks, and the underbellies of great cities. Their natural cunning and magic resistance have kept them alive against larger, stronger foes. A kobold''s greatest weapon is not their claw or fang, but their cleverness. They build traps that would impress dwarves and tunnels that baffle even elves.', 25, 0, 2, 0, 1, 0, 0),
+    ('Demon',    'Hailing from the infernal planes beyond the mortal veil, demons are creatures of pure elemental chaos. Each demon embodies a primal force — fire demons burn with endless rage, shadow demons hunger for fear and despair. They enter the mortal world through rifts and summonings, bringing destruction in their wake. Yet some demons reject their nature, seeking redemption in a world that fears and despises them.', 30, 2, 0, 1, 1, 0, 1),
+    ('Orc',      'The Chosen of the War God, orcs were created to fight. Their muscles bulge with unnatural strength, and their bones knit faster than any other race. Orc society is built around the concept of ''Ushog'' — the eternal struggle that gives life meaning. They value strength above all else and respect only those who can defeat them in battle. Despite their savage reputation, orcish honor is absolute; an orc who gives their word will die before breaking it.', 30, 3, 0, 1, 0, 0, 0),
+    ('Ogre',     'Titans reduced by ages of separation from their divine ancestors, ogres are the largest of the mortal races. Standing twelve feet tall and built of solid muscle and thick bone, they are living battering rams. Mountain Ogres possess residual magic resistance from their giant bloodline, Hill Ogres throw boulders with deadly accuracy, Desert Ogres endure the harshest climates, and Forest Ogres can regenerate wounds at an alarming rate.', 25, 3, 0, 2, 0, 0, 0),
+    ('Halfling', 'The smallest of the civilized races, halflings possess a spirit that belies their stature. They believe in the power of luck, good food, and a warm hearth, yet they are among the bravest souls in battle. Halflings feel fear but refuse to show it, using their natural agility and sharp tongues to mock and taunt enemies into reckless charges. Forest Halflings move through woodland without a trace, while Hill Halflings are renowned for their hospitality and uncanny good fortune.', 25, 0, 2, 1, 0, 1, 1);
 
 
 -- Non-playable races (Undead, Demon)
@@ -145,19 +145,19 @@ AND NOT EXISTS (SELECT 1 FROM arena_data.feat_resistance fr WHERE fr.feat_id = r
 -- SEED: CLASSES
 -- ============================================================
 
-INSERT INTO arena_data.class (name, description, hit_die_id, base_strike_rating)
-	SELECT src.name, src.description, d.id, src.strike_rating
+INSERT INTO arena_data.class (name, description, movement_bonus, hit_die_id, base_strike_rating)
+	SELECT src.name, src.description, src.movement, d.id, src.strike_rating
 	FROM (VALUES
-    ('Barbarian', 'Fierce warriors who channel rage into devastating attacks.',       'D12', 19),
-    ('Knight',    'Armored cavaliers and champions of noble causes.',                 'D10', 18),
-    ('Paladin',   'Holy warriors blessed by the gods with divine power.',             'D10', 18),
-    ('Priest',    'Devoted servants who channel divine magic to heal and protect.',    'D8',  19),
-    ('Mage',      'Masters of the arcane who wield devastating spells.',              'D4',  20),
-    ('Bard',      'Musicians and storytellers who weave magic through performance.',   'D6',  19),
-    ('Druid',     'Guardians of nature who command the elements and beasts.',         'D8',  19),
-    ('Fighter',   'Weapons masters trained in all forms of combat.',                   'D10', 18),
-    ('Rogue',     'Cunning infiltrators who strike from the shadows.',                'D6',  19)
-) AS src(name, description, die_name, strike_rating)
+    ('Barbarian', 'Fierce warriors who channel rage into devastating attacks.',       5, 'D12', 19),
+    ('Knight',    'Armored cavaliers and champions of noble causes.',                 0, 'D10', 18),
+    ('Paladin',   'Holy warriors blessed by the gods with divine power.',             0, 'D10', 18),
+    ('Priest',    'Devoted servants who channel divine magic to heal and protect.',    5, 'D8',  19),
+    ('Mage',      'Masters of the arcane who wield devastating spells.',              0, 'D4',  20),
+    ('Bard',      'Musicians and storytellers who weave magic through performance.',   5, 'D6',  19),
+    ('Druid',     'Guardians of nature who command the elements and beasts.',         5, 'D8',  19),
+    ('Fighter',   'Weapons masters trained in all forms of combat.',                   0, 'D10', 18),
+    ('Rogue',     'Cunning infiltrators who strike from the shadows.',               10, 'D6',  19)
+) AS src(name, description, movement, die_name, strike_rating)
 JOIN arena_data.die_type d ON d.name = src.die_name;
 
 
@@ -528,6 +528,16 @@ UPDATE arena_data.armor SET turn_meter_penalty = 1 WHERE name IN ('Dragon Scale 
 
 -- Set turn_meter_cost_reduction (robe-type armor for spellcasters)
 UPDATE arena_data.armor SET turn_meter_cost_reduction = 5 WHERE name IN ('Leather Armor');
+
+
+-- Set movement_penalty for armor (heavier armor slows movement speed)
+UPDATE arena_data.armor SET movement_penalty = 0 WHERE armor_category_id = (SELECT id FROM arena_data.armor_category WHERE name = 'Light');
+
+UPDATE arena_data.armor SET movement_penalty = 5 WHERE armor_category_id = (SELECT id FROM arena_data.armor_category WHERE name = 'Medium');
+
+UPDATE arena_data.armor SET movement_penalty = 10 WHERE armor_category_id = (SELECT id FROM arena_data.armor_category WHERE name = 'Heavy');
+
+UPDATE arena_data.armor SET movement_penalty = 0 WHERE armor_category_id = (SELECT id FROM arena_data.armor_category WHERE name = 'Shield');
 
 
 -- ============================================================

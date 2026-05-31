@@ -20,9 +20,10 @@ public class CombatSimulator : ICombatSimulator
     private readonly ITurnmeterService    _turnmeter;
     private readonly IStatusEffectService _statusEffect;
     private readonly IDiceService         _dice;
-    // Separate selectors so hero and enemy parties can use different strategies.
     private readonly ITargetSelector      _heroTargetSelector;
     private readonly ITargetSelector      _enemyTargetSelector;
+    private readonly IActionDecisionSource      _heroActionSource;
+    private readonly IActionDecisionSource      _enemyActionSource;
 
     public CombatSimulator(
         ICombatService combat,
@@ -30,7 +31,9 @@ public class CombatSimulator : ICombatSimulator
         IStatusEffectService statusEffect,
         IDiceService dice,
         ITargetSelector? heroTargetSelector  = null,
-        ITargetSelector? enemyTargetSelector = null)
+        ITargetSelector? enemyTargetSelector = null,
+        IActionDecisionSource? heroActionSource  = null,
+        IActionDecisionSource? enemyActionSource = null)
     {
         _combat              = combat;
         _turnmeter           = turnmeter;
@@ -38,6 +41,8 @@ public class CombatSimulator : ICombatSimulator
         _dice                = dice;
         _heroTargetSelector  = heroTargetSelector  ?? new RandomTargetSelector();
         _enemyTargetSelector = enemyTargetSelector ?? new RandomTargetSelector();
+        _heroActionSource    = heroActionSource    ?? new AutoActionDecisionSource(dice);
+        _enemyActionSource   = enemyActionSource   ?? new AutoActionDecisionSource(dice);
     }
 
     // ── Public API ─────────────────────────────────────────────────────────────
@@ -149,22 +154,6 @@ public class CombatSimulator : ICombatSimulator
         foreach (var m in enemyParty.Members)
             states.Add(new CombatantState(m.Character, m.AttackSource, partyIndex: 1));
         return states;
-    }
-
-    private IAttackSource ResolveAttackSource(CombatantState state)
-    {
-        if (state.AttackSource is not null) return state.AttackSource;
-
-        var spells = state.Character.MemorizedSpells;
-        if (spells.Count > 0)
-        {
-            var spell = spells[_dice.RollIndex(spells.Count)];
-            if (spell.ManaCost > 0 && state.Character.CurrentMana < spell.ManaCost)
-                return UnarmedStrike.Default;
-            return spell;
-        }
-
-        return UnarmedStrike.Default;
     }
 
     private CombatLogEntry BuildAfterTurnEntry(CombatantState state, int tick, int tmCost = 100)
@@ -654,10 +643,54 @@ public class CombatSimulator : ICombatSimulator
             .ToList();
         if (enemies.Count == 0) return null;
 
-        var attackSource = ResolveAttackSource(actorState);
-        var isSpell      = attackSource is Spell;
-        var meterNow     = actorState.Meter.CurrentValue;
-        var tmCost       = isSpell ? actorState.Character.ComputeSpellTurnMeterCost((Spell)attackSource) : 100;
+        var decisionSource = actorState.PartyIndex == 0 ? _heroActionSource : _enemyActionSource;
+        var attackSource = await decisionSource.ChooseAttackAsync(
+            actorState.Character,
+            actorState.AttackSource,
+            enemies.Select(s => s.Character).ToList(),
+            tick,
+            ct);
+
+        if (attackSource is null)
+        {
+            await notify(new CombatLogEntry
+            {
+                Tick      = tick,
+                ActorName = actorState.Character.Name,
+                EventType = "SkippedTurn",
+                Message   = $"{actorState.Character.Name} skips their turn."
+            });
+            actorState.Meter.IsActive = false;
+            await notify(BuildAfterTurnEntry(actorState, tick, 100));
+            return null;
+        }
+
+        if (attackSource is MoveIntent)
+        {
+            var speed = actorState.Character.EffectiveMovementSpeed;
+            var from = actorState.EngagementRange;
+            actorState.EngagementRange = from switch
+            {
+                EngagementRange.Melee => EngagementRange.Short,
+                EngagementRange.Long => EngagementRange.Short,
+                EngagementRange.Short => EngagementRange.Melee,
+                _ => EngagementRange.Melee
+            };
+            await notify(new CombatLogEntry
+            {
+                Tick      = tick,
+                ActorName = actorState.Character.Name,
+                EventType = "Move",
+                Message   = $"{actorState.Character.Name} moves 15 ft ({from} → {actorState.EngagementRange}). Speed: {speed} ft"
+            });
+            actorState.Meter.IsActive = false;
+            await notify(BuildAfterTurnEntry(actorState, tick, 100));
+            return null;
+        }
+
+        var isSpell = attackSource is Spell;
+        var meterNow = actorState.Meter.CurrentValue;
+        var tmCost = isSpell ? actorState.Character.ComputeSpellTurnMeterCost((Spell)attackSource) : 100;
 
         if (!isSpell && actorState.Character.MemorizedSpells.Count > 0)
             await notify(new CombatLogEntry

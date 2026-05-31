@@ -355,14 +355,14 @@ static partial class Demo
     private static char PickCombatMode()
     {
         CWL("\n  Choose combat mode:", ConsoleColor.Yellow);
-        CW("    "); CW("[T]", ConsoleColor.Cyan); CWL("  Turn-based  -- press any key to advance each turn", ConsoleColor.White);
-        CW("    "); CW("[R]", ConsoleColor.Cyan); CWL("  Real-time   -- fully automatic tick-by-tick playback\n", ConsoleColor.White);
+        CW("    "); CW("[T]", ConsoleColor.Cyan); CWL("  Turn-based  -- you choose actions for your heroes each turn", ConsoleColor.White);
+        CW("    "); CW("[A]", ConsoleColor.Cyan); CWL("  Auto        -- fully automatic AI-vs-AI playback\n", ConsoleColor.White);
         CW("  > ", ConsoleColor.Cyan);
         while (true)
         {
             var k = Console.ReadKey(true).KeyChar;
             if (k is 'T' or 't') { CWL("Turn-based", ConsoleColor.Cyan); return 'T'; }
-            if (k is 'R' or 'r') { CWL("Real-time", ConsoleColor.Cyan); return 'R'; }
+            if (k is 'A' or 'a') { CWL("Auto", ConsoleColor.Cyan); return 'A'; }
         }
     }
 

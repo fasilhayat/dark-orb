@@ -86,6 +86,7 @@ CREATE TABLE IF NOT EXISTS arena_data.equipment_slot (
 CREATE TABLE IF NOT EXISTS arena_data.race (
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE,
+    base_movement_speed INTEGER NOT NULL DEFAULT 30,
     strength_bonus INTEGER NOT NULL DEFAULT 0,
     dexterity_bonus INTEGER NOT NULL DEFAULT 0,
     stamina_bonus INTEGER NOT NULL DEFAULT 0,
@@ -96,9 +97,6 @@ CREATE TABLE IF NOT EXISTS arena_data.race (
     is_playable BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
-
-
-ALTER TABLE arena_data.race ADD COLUMN IF NOT EXISTS is_playable BOOLEAN NOT NULL DEFAULT TRUE;
 
 CREATE TABLE IF NOT EXISTS arena_data.subrace (
     id SERIAL PRIMARY KEY,
@@ -137,6 +135,7 @@ CREATE TABLE IF NOT EXISTS arena_data.class (
     hit_die_id INTEGER NOT NULL REFERENCES arena_data.die_type(id),
     name VARCHAR(50) NOT NULL UNIQUE,
     base_strike_rating INTEGER NOT NULL DEFAULT 20,
+    movement_bonus INTEGER NOT NULL DEFAULT 0,
     description TEXT DEFAULT ''
 );
 
@@ -248,19 +247,15 @@ CREATE TABLE IF NOT EXISTS arena_data.armor (
     stealth_disadvantage BOOLEAN NOT NULL DEFAULT FALSE,
     strength_requirement INTEGER NOT NULL DEFAULT 0,
     armor_class_bonus INTEGER NOT NULL DEFAULT 0,
+    mitigation INTEGER NOT NULL DEFAULT 0,
+    turn_meter_penalty INTEGER NOT NULL DEFAULT 0,
+    turn_meter_cost_reduction INTEGER NOT NULL DEFAULT 0,
+    movement_penalty INTEGER NOT NULL DEFAULT 0,
     cursed BOOLEAN NOT NULL DEFAULT FALSE,
     description TEXT DEFAULT '',
     curse_effect TEXT DEFAULT '',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
-
-
--- Add new columns to armor table (must match C# Armor entity)
-ALTER TABLE arena_data.armor ADD COLUMN IF NOT EXISTS mitigation INTEGER NOT NULL DEFAULT 0;
-
-ALTER TABLE arena_data.armor ADD COLUMN IF NOT EXISTS turn_meter_penalty INTEGER NOT NULL DEFAULT 0;
-
-ALTER TABLE arena_data.armor ADD COLUMN IF NOT EXISTS turn_meter_cost_reduction INTEGER NOT NULL DEFAULT 0;
 
 
 -- Set item set associations (Deity alignments already seeded above)
@@ -386,10 +381,29 @@ CREATE TABLE IF NOT EXISTS arena_data.character (
     strike_rating INTEGER NOT NULL DEFAULT 20,
     turn_speed INTEGER NOT NULL DEFAULT 10,
     sex VARCHAR(1) NOT NULL DEFAULT 'X',
+    biography TEXT DEFAULT '',
+    npc SMALLINT NOT NULL DEFAULT 0 CHECK (npc IN (0, 1)),
+    max_mana INTEGER NOT NULL DEFAULT 0,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+
+-- ============================================================
+-- CHARACTER SPELLS
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS arena_data.character_spell (
+    id SERIAL PRIMARY KEY,
+    character_id INTEGER NOT NULL REFERENCES arena_data.character(id),
+    spell_id INTEGER NOT NULL REFERENCES arena_data.spell(id),
+    UNIQUE (character_id, spell_id)
+);
+
+
+-- ============================================================
+-- CHARACTER EQUIPMENT
+-- ============================================================
 
 CREATE TABLE IF NOT EXISTS arena_data.character_equipment (
     id SERIAL PRIMARY KEY,
@@ -399,35 +413,6 @@ CREATE TABLE IF NOT EXISTS arena_data.character_equipment (
     item_id INTEGER NOT NULL,
     UNIQUE (character_id, slot_id)
 );
-
--- Validation function used by the CHECK constraint below.
--- Returns TRUE for non-weapon rows and for weapons whose type exists in class_item_restriction.
-CREATE OR REPLACE FUNCTION arena_data.fn_weapon_allowed_for_class(
-    p_character_id INTEGER,
-    p_item_type    VARCHAR,
-    p_item_id      INTEGER
-) RETURNS BOOLEAN
-LANGUAGE sql STABLE AS
-$$
-    SELECT CASE
-        WHEN p_item_type != 'weapon' THEN TRUE
-        ELSE EXISTS (
-            SELECT 1
-            FROM   arena_data.character            c
-            JOIN   arena_data.weapon               w   ON w.id                = p_item_id
-            JOIN   arena_data.class_item_restriction cir ON cir.class_id    = c.class_id
-                                                        AND cir.weapon_type_id = w.weapon_type_id
-            WHERE  c.id = p_character_id
-        )
-    END;
-$$;
-
-ALTER TABLE arena_data.character_equipment
-    DROP CONSTRAINT IF EXISTS chk_weapon_class_allowed;
-
-ALTER TABLE arena_data.character_equipment
-    ADD CONSTRAINT chk_weapon_class_allowed
-    CHECK (arena_data.fn_weapon_allowed_for_class(character_id, item_type, item_id));
 
 
 CREATE TABLE IF NOT EXISTS arena_data.character_inventory (
@@ -439,23 +424,43 @@ CREATE TABLE IF NOT EXISTS arena_data.character_inventory (
 );
 
 
-CREATE TABLE IF NOT EXISTS arena_data.character_spell (
-    id SERIAL PRIMARY KEY,
-    character_id INTEGER NOT NULL REFERENCES arena_data.character(id),
-    spell_id INTEGER NOT NULL REFERENCES arena_data.spell(id),
-    UNIQUE (character_id, spell_id)
-);
+-- Validation function used by the CHECK constraint on character_equipment.
+-- Returns TRUE for non-weapon rows and for weapons whose type exists in class_item_restriction.
+CREATE OR REPLACE FUNCTION arena_data.fn_weapon_allowed_for_class(
+    p_character_id INTEGER,
+    p_item_type VARCHAR,
+    p_item_id INTEGER
+)
+RETURNS BOOLEAN AS $$
+DECLARE
+    v_class_id INTEGER;
+    v_count INTEGER;
+BEGIN
+    IF p_item_type != 'weapon' THEN
+        RETURN TRUE;
+    END IF;
+
+    SELECT class_id INTO v_class_id
+    FROM arena_data.character
+    WHERE id = p_character_id;
+
+    SELECT COUNT(*) INTO v_count
+    FROM arena_data.class_item_restriction cir
+    JOIN arena_data.weapon w ON w.weapon_type_id = cir.weapon_type_id
+    WHERE cir.class_id = v_class_id
+      AND w.id = p_item_id;
+
+    RETURN v_count > 0;
+END;
+$$ LANGUAGE plpgsql;
 
 
--- ============================================================
--- NPC FLAG + BIOGRAPHY ON CHARACTER TABLE
--- ============================================================
+ALTER TABLE arena_data.character_equipment
+    DROP CONSTRAINT IF EXISTS chk_weapon_class_allowed;
 
-ALTER TABLE arena_data.character ADD COLUMN IF NOT EXISTS npc SMALLINT NOT NULL DEFAULT 0 CHECK (npc IN (0, 1));
-
-ALTER TABLE arena_data.character ADD COLUMN IF NOT EXISTS biography TEXT DEFAULT '';
-
-ALTER TABLE arena_data.character ADD COLUMN IF NOT EXISTS max_mana INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE arena_data.character_equipment
+    ADD CONSTRAINT chk_weapon_class_allowed
+    CHECK (arena_data.fn_weapon_allowed_for_class(character_id, item_type, item_id));
 
 
 -- ============================================================
@@ -467,6 +472,7 @@ CREATE OR REPLACE FUNCTION arena_data.fn_get_races(
 )
 RETURNS TABLE(
     id INTEGER, name VARCHAR, description TEXT,
+    base_movement_speed INTEGER,
     strength_bonus INTEGER, dexterity_bonus INTEGER,
     stamina_bonus INTEGER, intelligence_bonus INTEGER,
     wisdom_bonus INTEGER, charisma_bonus INTEGER,
@@ -475,6 +481,7 @@ RETURNS TABLE(
 BEGIN
     RETURN QUERY
     SELECT r.id, r.name::VARCHAR, r.description::TEXT,
+           r.base_movement_speed,
            r.strength_bonus, r.dexterity_bonus, r.stamina_bonus,
            r.intelligence_bonus, r.wisdom_bonus, r.charisma_bonus,
            r.is_playable
@@ -514,10 +521,10 @@ $$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE FUNCTION arena_data.fn_get_classes()
-RETURNS TABLE(id INTEGER, name VARCHAR, description TEXT, hit_die VARCHAR, base_strike_rating INTEGER) AS $$
+RETURNS TABLE(id INTEGER, name VARCHAR, description TEXT, movement_bonus INTEGER, hit_die VARCHAR, base_strike_rating INTEGER) AS $$
 BEGIN
     RETURN QUERY
-    SELECT c.id, c.name::VARCHAR, c.description::TEXT, d.name::VARCHAR AS hit_die, c.base_strike_rating
+    SELECT c.id, c.name::VARCHAR, c.description::TEXT, c.movement_bonus, d.name::VARCHAR AS hit_die, c.base_strike_rating
     FROM arena_data.class c
     JOIN arena_data.die_type d ON d.id = c.hit_die_id
     ORDER BY c.name;
@@ -570,7 +577,8 @@ RETURNS TABLE(
     max_dexterity_bonus INTEGER, stealth_disadvantage BOOLEAN,
     strength_requirement INTEGER,
     quality VARCHAR, armor_class_bonus INTEGER,
-    mitigation INTEGER, turn_meter_penalty INTEGER, turn_meter_cost_reduction INTEGER
+    mitigation INTEGER, turn_meter_penalty INTEGER, turn_meter_cost_reduction INTEGER,
+    movement_penalty INTEGER
 ) AS $$
 BEGIN
     RETURN QUERY
@@ -579,7 +587,8 @@ BEGIN
            a.max_dexterity_bonus, a.stealth_disadvantage, a.strength_requirement,
            gq.name::VARCHAR AS quality,
            a.armor_class_bonus,
-           a.mitigation, a.turn_meter_penalty, a.turn_meter_cost_reduction
+           a.mitigation, a.turn_meter_penalty, a.turn_meter_cost_reduction,
+           a.movement_penalty
     FROM arena_data.armor a
     JOIN arena_data.armor_category ac ON ac.id = a.armor_category_id
     JOIN arena_data.gear_quality gq ON gq.id = a.gear_quality_id
@@ -664,7 +673,8 @@ RETURNS TABLE(
     armor_class INTEGER, category VARCHAR,
     max_dexterity_bonus INTEGER, stealth_disadvantage BOOLEAN,
     strength_requirement INTEGER, quality VARCHAR, armor_class_bonus INTEGER,
-    mitigation INTEGER, turn_meter_penalty INTEGER, turn_meter_cost_reduction INTEGER
+    mitigation INTEGER, turn_meter_penalty INTEGER, turn_meter_cost_reduction INTEGER,
+    movement_penalty INTEGER
 ) AS $$
 BEGIN
     RETURN QUERY
@@ -674,7 +684,8 @@ BEGIN
            a.max_dexterity_bonus, a.stealth_disadvantage, a.strength_requirement,
            gq.name::VARCHAR AS quality,
            a.armor_class_bonus,
-           a.mitigation, a.turn_meter_penalty, a.turn_meter_cost_reduction
+           a.mitigation, a.turn_meter_penalty, a.turn_meter_cost_reduction,
+           a.movement_penalty
     FROM arena_data.character_equipment ce
     JOIN arena_data.equipment_slot es ON es.id = ce.slot_id
     JOIN arena_data.armor a ON a.id = ce.item_id AND ce.item_type = 'armor'

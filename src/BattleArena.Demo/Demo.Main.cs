@@ -165,22 +165,50 @@ static partial class Demo
         }
         _diceService = diceSvc;
 
+        var makeInteractive = new Func<IActionDecisionSource>(() =>
+            new ConsoleActionDecisionSource((tick, actorName) =>
+                DrawCombatScreen(BuildCurrentDisplayState(), tick, actorName)));
+
+        IActionDecisionSource heroDecision;
+        IActionDecisionSource enemyDecision;
+
+        if (mode == 'T')
+        {
+            heroDecision = makeInteractive();
+            enemyDecision = Scenario == 'D' ? makeInteractive() : new AutoActionDecisionSource(diceSvc);
+        }
+        else
+        {
+            heroDecision = new AutoActionDecisionSource(diceSvc);
+            enemyDecision = new AutoActionDecisionSource(diceSvc);
+        }
+
         var simulator = new CombatSimulator(
             new CombatService(diceSvc, CombatStats, [new RangeModifier()]),
             new TurnmeterService(),
             new StatusEffectService(),
             diceSvc,
             heroSelector,
-            enemySelector);
+            enemySelector,
+            heroDecision,
+            enemyDecision);
 
-        Result = simulator.Simulate(HeroParty, EnemyParty, 500);
+        if (mode == 'T')
+        {
+            var observer = new CombatConsoleObserver(Paced);
+            Result = simulator.SimulateAsync(HeroParty, EnemyParty, 500, observer)
+                .GetAwaiter().GetResult();
+        }
+        else
+        {
+            Result = simulator.Simulate(HeroParty, EnemyParty, 500);
+        }
+
         var diceLog = _apiDiceService?.DiceLog;
         Result.DiceLog = diceLog?.ToList();
         Result.Log = CombatLogMerger.Merge(Result.Log, diceLog);
 
-        if (mode == 'T')
-            PlayTurnBased();
-        else
+        if (mode != 'T')
             PlayRealTime();
 
         PrintSummary();
@@ -325,6 +353,48 @@ static partial class Demo
                 Weapon = m.AttackSource?.Name ?? "",
                 MaxMana = m.Character.MaxMana,
                 Mana = m.Character.CurrentMana
+            });
+
+        var layout = CombatLayout.From(
+            HeroParty.Members.Select(m => m.Character.Name),
+            EnemyParty.Members.Select(m => m.Character.Name),
+            Scenario == 'D');
+
+        return new CombatDisplayState(characters, layout);
+    }
+
+    internal static CombatDisplayState BuildCurrentDisplayState()
+    {
+        var characters = new List<CharDisplayState>();
+        foreach (var m in HeroParty.Members)
+            characters.Add(new CharDisplayState
+            {
+                Name = m.Character.Name,
+                MaxHp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
+                Hp = Math.Max(0, m.Character.CurrentHitPoints),
+                IsHero = true,
+                Level = m.Character.Level,
+                ClassName = m.Character.ClassName,
+                Sex = m.Character.Sex,
+                Race = m.Character.Race?.Name ?? "",
+                Weapon = m.AttackSource?.Name ?? "",
+                MaxMana = m.Character.MaxMana,
+                Mana = Math.Max(0, m.Character.CurrentMana)
+            });
+        foreach (var m in EnemyParty.Members)
+            characters.Add(new CharDisplayState
+            {
+                Name = m.Character.Name,
+                MaxHp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
+                Hp = Math.Max(0, m.Character.CurrentHitPoints),
+                IsHero = false,
+                Level = m.Character.Level,
+                ClassName = m.Character.ClassName,
+                Sex = m.Character.Sex,
+                Race = m.Character.Race?.Name ?? "",
+                Weapon = m.AttackSource?.Name ?? "",
+                MaxMana = m.Character.MaxMana,
+                Mana = Math.Max(0, m.Character.CurrentMana)
             });
 
         var layout = CombatLayout.From(

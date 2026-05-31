@@ -9,4 +9,5 @@ public class PlayerClass
     public string Description { get; set; } = string.Empty;
     public DieType HitDie { get; set; }
     public int BaseStrikeRating { get; set; }
+    public int MovementBonus { get; set; }
 }

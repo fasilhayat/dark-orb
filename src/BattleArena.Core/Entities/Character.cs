@@ -10,6 +10,7 @@ public class Character
     public int RaceId { get; set; }
     public int ClassId { get; set; }
     public string ClassName { get; set; } = string.Empty;
+    public PlayerClass? Class { get; set; }
     public string Sex { get; set; } = "Unknown";
     public int Strength { get; set; } = 10;
     public int StrengthPercentile { get; set; }
@@ -57,7 +58,18 @@ public class Character
     // MaxMana including any gear bonuses (e.g. arcane robes, mana-crystal amulet).
     public int EffectiveMaxMana => MaxMana + Equipment.TotalMaxManaBonus;
 
-    /// <summary>Maximum number of spells this character can memorize, based on Intelligence and equipment.</summary>
+    public int EffectiveMovementSpeed
+    {
+        get
+        {
+            var baseSpeed = Race?.BaseMovementSpeed ?? 30;
+            var classBonus = Class?.MovementBonus ?? 0;
+            var penalty = Equipment.TotalMovementPenalty;
+            var buff = ActiveStatusEffects.Sum(e => e.MovementModifier);
+            return Math.Max(10, baseSpeed + classBonus - penalty + buff);
+        }
+    }
+
     public int SpellMemorizationSlots
     {
         get

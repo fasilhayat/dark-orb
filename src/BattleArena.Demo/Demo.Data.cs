@@ -7,15 +7,17 @@ using Core.Entities.Enums;
 static partial class Demo
 {
     // ── Racial templates with resistance feats ─────────────────────────────────
-    private static readonly Race OrcRace = new()
+    private static readonly Race Orc = new()
     {
         Name = "Orc",
+        BaseMovementSpeed = 30,
         Feats = []
     };
 
-    private static readonly Race ElfRace = new()
+    private static readonly Race Elf = new()
     {
         Name = "Elf",
+        BaseMovementSpeed = 35,
         Feats =
         [
             new Feat
@@ -27,15 +29,17 @@ static partial class Demo
         ]
     };
 
-    private static readonly Race HumanRace = new()
+    private static readonly Race Human = new()
     {
         Name = "Human",
+        BaseMovementSpeed = 30,
         Feats = []
     };
 
-    private static readonly Race DarkMageRace = new()
+    private static readonly Race Undead = new()
     {
         Name = "Undead",
+        BaseMovementSpeed = 30,
         Feats =
         [
             new Feat
@@ -46,6 +50,14 @@ static partial class Demo
             }
         ]
     };
+
+    // ── Class templates ──────────────────────────────────────────────────────────
+    private static readonly PlayerClass Barbarian = new() { Id = 1, Name = "Barbarian", MovementBonus = 5 };
+    private static readonly PlayerClass Mage = new() { Id = 5, Name = "Mage", MovementBonus = 0 };
+    private static readonly PlayerClass Priest = new() { Id = 4, Name = "Priest", MovementBonus = 5 };
+    private static readonly PlayerClass Druid = new() { Id = 7, Name = "Druid", MovementBonus = 5 };
+    private static readonly PlayerClass Fighter = new() { Id = 8, Name = "Fighter", MovementBonus = 0 };
+    private static readonly PlayerClass Rogue = new() { Id = 9, Name = "Rogue", MovementBonus = 10 };
 
     // ── Hero weapons ──────────────────────────────────────────────────────────────
     private static readonly Weapon Longsword = new()
@@ -181,29 +193,32 @@ static partial class Demo
     private static readonly Character Theron = new()
     {
         Name = "Theron", Level = 5, Strength = 18, Dexterity = 12, Intelligence = 10,
-        Race = HumanRace,
+        Race = Human,
+        Class = Fighter,
         ClassId = 8, ClassName = "Fighter", Sex = "M", StrikeRating = 14, TurnSpeed = 10, MaxHitPoints = 50, CurrentHitPoints = 50,
         Equipment = new ArmorSlots
         {
-            Chest = new Armor { Name = "Chain Mail", ArmorClass = 16, Mitigation = 2, MaxDexterityBonus = 6 },
+            Chest = new Armor { Name = "Chain Mail", ArmorClass = 16, Mitigation = 2, MaxDexterityBonus = 6, MovementPenalty = 10 },
             RightHand = Longsword
         }
     };
     private static readonly Character Gruk = new()
     {
         Name = "Gruk", Level = 3, Strength = 16, Dexterity = 8, Intelligence = 8,
-        Race = OrcRace,
+        Race = Orc,
+        Class = Barbarian,
         ClassId = 1, ClassName = "Barbarian", Sex = "M", StrikeRating = 16, TurnSpeed = 6, MaxHitPoints = 35, CurrentHitPoints = 35,
         Equipment = new ArmorSlots
         {
-            Chest = new Armor { Name = "Leather Armor", ArmorClass = 11, Mitigation = 1, MaxDexterityBonus = 6 },
+            Chest = new Armor { Name = "Leather Armor", ArmorClass = 11, Mitigation = 1, MaxDexterityBonus = 6, MovementPenalty = 5 },
             RightHand = BattleAxe
         }
     };
     private static readonly Character Lyra = new()
     {
         Name = "Lyra", Level = 5, Strength = 8, Dexterity = 14, Intelligence = 18,
-        Race = ElfRace,
+        Race = Elf,
+        Class = Mage,
         ClassId = 5, ClassName = "Mage", Sex = "F", StrikeRating = 13, TurnSpeed = 8, MaxHitPoints = 30, CurrentHitPoints = 30, MaxMana = 165, CurrentMana = 165,
         Equipment = new ArmorSlots
         {
@@ -214,11 +229,12 @@ static partial class Demo
     private static readonly Character Sera = new()
     {
         Name = "Sera", Level = 4, Strength = 12, Dexterity = 10, Intelligence = 16,
-        Race = HumanRace,
+        Race = Human,
+        Class = Priest,
         ClassId = 4, ClassName = "Priest", Sex = "F", StrikeRating = 14, TurnSpeed = 8, MaxHitPoints = 35, CurrentHitPoints = 35, MaxMana = 130, CurrentMana = 130,
         Equipment = new ArmorSlots
         {
-            Chest = new Armor { Name = "Scaled Vestments", ArmorClass = 12, Mitigation = 1, MaxDexterityBonus = 6 },
+            Chest = new Armor { Name = "Scaled Vestments", ArmorClass = 12, Mitigation = 1, MaxDexterityBonus = 6, MovementPenalty = 5 },
             RightHand = CeremonialMace
         },
         MemorizedSpells = [Smite]
@@ -226,7 +242,8 @@ static partial class Demo
     private static readonly Character Elara = new()
     {
         Name = "Elara", Level = 4, Strength = 8, Dexterity = 14, Intelligence = 17,
-        Race = ElfRace,
+        Race = Elf,
+        Class = Druid,
         ClassId = 7, ClassName = "Druid", Sex = "F", StrikeRating = 14, TurnSpeed = 9, MaxHitPoints = 28, CurrentHitPoints = 28, MaxMana = 140, CurrentMana = 140,
         Equipment = new ArmorSlots
         {
@@ -297,29 +314,32 @@ static partial class Demo
     internal static readonly Character Krag = new()
     {
         Name = "Krag", Level = 4, Strength = 17, Dexterity = 9, Intelligence = 6,
-        Race = OrcRace,
+        Race = Orc,
+        Class = Barbarian,
         ClassId = 1, ClassName = "Barbarian", Sex = "M", StrikeRating = 15, TurnSpeed = 7, MaxHitPoints = 45, CurrentHitPoints = 45,
         Equipment = new ArmorSlots
         {
-            Chest = new Armor { Name = "Orcish Hide", ArmorClass = 12, Mitigation = 2, MaxDexterityBonus = 4 },
+            Chest = new Armor { Name = "Orcish Hide", ArmorClass = 12, Mitigation = 2, MaxDexterityBonus = 4, MovementPenalty = 5 },
             RightHand = OrcAxe
         }
     };
     internal static readonly Character Skrix = new()
     {
         Name = "Skrix", Level = 2, Strength = 9, Dexterity = 16, Intelligence = 10,
-        Race = HumanRace,
+        Race = Human,
+        Class = Rogue,
         ClassId = 9, ClassName = "Rogue", Sex = "M", StrikeRating = 12, TurnSpeed = 12, MaxHitPoints = 20, CurrentHitPoints = 20,
         Equipment = new ArmorSlots
         {
-            Chest = new Armor { Name = "Worn Leather", ArmorClass = 11, Mitigation = 0, MaxDexterityBonus = 6 },
+            Chest = new Armor { Name = "Worn Leather", ArmorClass = 11, Mitigation = 0, MaxDexterityBonus = 6, MovementPenalty = 5 },
             RightHand = GoblinDagger
         }
     };
     internal static readonly Character Mordak = new()
     {
         Name = "Mordak", Level = 3, Strength = 7, Dexterity = 12, Intelligence = 16,
-        Race = DarkMageRace,
+        Race = Undead,
+        Class = Mage,
         ClassId = 5, ClassName = "Mage", Sex = "M", StrikeRating = 14, TurnSpeed = 9, MaxHitPoints = 25, CurrentHitPoints = 25, MaxMana = 100, CurrentMana = 100,
         Equipment = new ArmorSlots
         {
@@ -330,7 +350,8 @@ static partial class Demo
     internal static readonly Character Zarath = new()
     {
         Name = "Zarath", Level = 5, Strength = 6, Dexterity = 12, Intelligence = 18,
-        Race = DarkMageRace,
+        Race = Undead,
+        Class = Mage,
         ClassId = 5, ClassName = "Mage", Sex = "M", StrikeRating = 15, TurnSpeed = 8, MaxHitPoints = 28, CurrentHitPoints = 28, MaxMana = 170, CurrentMana = 170,
         Equipment = new ArmorSlots
         {

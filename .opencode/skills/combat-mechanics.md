@@ -18,6 +18,15 @@ self-update-action: After modifying combat mechanic code, update this file to re
 | `StatusEffectService` | `BattleArena.Application/Services/StatusEffectService.cs` | Effect lifecycle: apply, tick, expire, resist |
 | `TurnmeterService` | `BattleArena.Application/Services/TurnmeterService.cs` | TM gain per tick, cost after action |
 | `DiceService` | `BattleArena.Application/Services/DiceService.cs` | Seeded RNG for deterministic replay |
+| `AutoActionDecisionSource` | `BattleArena.Application/Services/AutoActionDecisionSource.cs` | Default AI — picks fixed weapon, random spell, or unarmed |
+| `ConsoleActionDecisionSource` | `BattleArena.Demo/ConsoleActionDecisionSource.cs` | Interactive console menu — user picks melee, spell, or move |
+
+## Interfaces
+
+| Interface | File | Purpose |
+|-----------|------|---------|
+| `IActionDecisionSource` | `BattleArena.Application/Interfaces/IActionDecisionSource.cs` | Decides which attack source to use at turn start. Injected per-party; auto uses AI, interactive uses console menu. Returns `null` for Move/Skip. |
+| `ITargetSelector` | `BattleArena.Application/Interfaces/ITargetSelector.cs` | Decides which enemy to target. Separate from action decision. |
 
 ## Combat Loop
 
@@ -27,9 +36,9 @@ for tick = 1 to maxTicks:
   2. Find ready actors (meter >= 100, not CC'd), sort by meter descending
   3. SkippedTurn — ready but CC'd actors skip
   4. For each acting combatant:
-     a. ResolveAttackSource → weapon / spell / unarmed
-     b. SelectTarget → hero or enemy selector
-     c. TurnStart
+     a. IActionDecisionSource.ChooseAttackAsync → weapon / spell / unarmed / null(Move)
+     b. SelectTarget → hero or enemy selector (skipped if Move)
+     c. TurnStart (SkippedTurn if Move was chosen)
      d. DoTTick — DoT damage on actor
      e. TickAll — decrement effect durations, remove expired
      f. ResolveAttack — d20 + AP vs DP
@@ -85,15 +94,25 @@ Resistance is capped at 95 (always ≥5% chance to land).
 | `Attack` | Hit/miss resolved |
 | `Damage` | HP reduced |
 | `DoTTick` | DoT damage applied |
-| `SkippedTurn` | CC'd actor skips |
+| `SkippedTurn` | CC'd or voluntarily skipped turn |
+| `Move` | Actor used Move action (stub — no range effect yet) |
 | `EffectApplied` | Effect landed |
 | `EffectResisted` | Resistance blocked |
 | `EffectExpired` | Duration reached zero |
 | `FumblePenalty` | Natural-1 penalty applied |
 | `SpellDisrupted` | Melee hit on caster |
+| `SpellQueued` | Began charging a spell |
+| `SpellCharging` | Still charging (TM accumulating) |
+| `SpellLost` | Concentration broken or CC'd while charging |
+| `ConcentrationPass` | Maintained concentration after hit |
+| `ManaDeduct` | Mana spent on spell |
+| `ManaRegen` | Mana regenerated per tick |
+| `InsufficientMana` | Not enough mana to cast |
 | `Death` | HP ≤ -10 |
 | `KnockedOut` | HP -9 to 0 |
 | `TurnEnd` | Action complete |
+| `PetSummoned` | Pet entered combat |
+| `PetExpired` | Summon duration ended |
 
 ## Self-update instructions
 

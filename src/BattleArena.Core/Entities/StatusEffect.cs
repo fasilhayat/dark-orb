@@ -22,4 +22,5 @@ public class StatusEffect
     public List<ResistanceBonus> ResistanceBonuses { get; set; } = new();
     public int DoTDamageCount { get; set; }
     public DieType DoTDamageDie { get; set; }
+    public int MovementModifier { get; set; }
 }

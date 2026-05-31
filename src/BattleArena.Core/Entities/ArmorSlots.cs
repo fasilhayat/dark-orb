@@ -23,6 +23,8 @@ public class ArmorSlots
     public int TotalMaxManaBonus => SumSlots(armor => armor.MaxManaBonus, Head, Chest, Hands, Waist, Boots, Neck, Back);
     public int TotalSpellSlotsBonus => SumSlots(armor => armor.SpellSlotsBonus, Head, Neck, Back, Hands);
 
+    public int TotalMovementPenalty => SumSlots(armor => armor.MovementPenalty, Head, Chest, Hands, Waist, Boots, Neck, Back);
+
     public int TotalResistance(ResistanceType type) =>
         SumSlots(a => a.Resistances.Where(r => r.Type == type).Sum(r => r.Value),
             Head, Chest, Hands, Waist, Boots, Neck, Back);
