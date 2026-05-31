@@ -33,7 +33,21 @@ public class CombatStatsService : ICombatStatsService
         };
     }
 
-    public CombatantStats ComputeDefenderStats(Character defender)
+    public CombatantStats ComputeDefenderStats(Character defender, IAttackSource? source = null)
+    {
+        var isSpell = source?.AttackType == AttackType.Spell;
+
+        if (isSpell)
+            return ComputeSpellDefenderStats(defender);
+
+        return ComputePhysicalDefenderStats(defender);
+    }
+
+    /// <summary>
+    /// Physical defense: AC + DEX modifier (capped by armor) + shield + buffs + racial + level.
+    /// Used for Melee and Ranged attacks and for character-sheet display (source = null).
+    /// </summary>
+    private CombatantStats ComputePhysicalDefenderStats(Character defender)
     {
         var dexterityModifier = CalculateAbilityModifier(defender.Dexterity);
         var armorPieces = new[]
@@ -62,13 +76,46 @@ public class CombatStatsService : ICombatStatsService
 
         return new CombatantStats
         {
-            EffectiveAC = defender.Equipment.TotalArmorClass,
-            DexterityModifier = dexterityModifier,
-            ShieldBonus = defender.Equipment.Shield?.DefenseBonus ?? 0,
-            DefensiveBuffs = positiveBuffTotal + negativeDebuffs,
+            EffectiveAC            = defender.Equipment.TotalArmorClass,
+            DexterityModifier      = dexterityModifier,
+            ShieldBonus            = defender.Equipment.Shield?.DefenseBonus ?? 0,
+            DefensiveBuffs         = positiveBuffTotal + negativeDebuffs,
             DefenseRacialModifiers = (defender.Race?.Feats.Sum(f => f.DefenseBonus) ?? 0) + defender.Feats.Sum(f => f.DefenseBonus),
-            DefenseItemSetBonuses = 0,
-            LevelDefenseBonus = defender.Level
+            DefenseItemSetBonuses  = 0,
+            LevelDefenseBonus      = defender.Level,
+            MagicResistanceBonus   = 0
+        };
+    }
+
+    /// <summary>
+    /// Spell defense: Wisdom modifier + magic resistance (converted to d20 scale) + buffs + racial + level.
+    /// Armor and shields do not protect against spells; wisdom and innate magic resistance do.
+    /// </summary>
+    private CombatantStats ComputeSpellDefenderStats(Character defender)
+    {
+        var wisdomModifier = CalculateAbilityModifier(defender.Wisdom);
+
+        // Magic resistance (0–95 %) converted to d20 bonus scale (÷5 → 0–19).
+        var magicResistanceBonus = defender.ComputeResistance(ResistanceType.Magic) / 5;
+
+        // Protective spell buffs still apply (ward spells, etc.)
+        var defenseEffects = defender.ActiveStatusEffects.Where(e => e.DefensePowerModifier != 0).ToList();
+        var positiveBuffs  = defenseEffects.Where(e => e.Type == StatusEffectType.Buff && e.DefensePowerModifier > 0);
+        var positiveBuffTotal = positiveBuffs
+            .GroupBy(e => e.Source)
+            .Sum(group => ApplyBuffStacking(group, e => e.DefensePowerModifier, StackRule.HighestWins));
+        var negativeDebuffs = defenseEffects.Where(e => e.DefensePowerModifier < 0).Sum(e => e.DefensePowerModifier);
+
+        return new CombatantStats
+        {
+            EffectiveAC            = 0,            // armor irrelevant vs spells
+            DexterityModifier      = wisdomModifier,
+            ShieldBonus            = 0,            // shields irrelevant vs spells
+            DefensiveBuffs         = positiveBuffTotal + negativeDebuffs,
+            DefenseRacialModifiers = (defender.Race?.Feats.Sum(f => f.DefenseBonus) ?? 0) + defender.Feats.Sum(f => f.DefenseBonus),
+            DefenseItemSetBonuses  = 0,
+            LevelDefenseBonus      = defender.Level,
+            MagicResistanceBonus   = magicResistanceBonus
         };
     }
 

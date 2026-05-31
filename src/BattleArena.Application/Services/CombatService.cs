@@ -4,16 +4,21 @@ using Application.Interfaces;
 using Application.Models;
 using Core.Entities;
 using Core.Entities.Enums;
+using Core.Interfaces;
+using Core.Models;
 
 public class CombatService : ICombatService
 {
     private readonly IDiceService _dice;
     private readonly ICombatStatsService _combatStats;
+    private readonly IReadOnlyList<ICombatModifier> _modifiers;
 
-    public CombatService(IDiceService dice, ICombatStatsService combatStats)
+    public CombatService(IDiceService dice, ICombatStatsService combatStats,
+        IEnumerable<ICombatModifier> modifiers = default!)
     {
-        _dice = dice;
+        _dice      = dice;
         _combatStats = combatStats;
+        _modifiers = (modifiers ?? []).OrderBy(m => m.Priority).ToList();
     }
 
     public int CalculateAbilityModifier(int score)
@@ -31,60 +36,175 @@ public class CombatService : ICombatService
         };
     }
 
-    public AttackResult ResolveAttack(Character attacker, Character defender, IAttackSource source)
+    public AttackResult ResolveAttack(Character attacker, Character defender, IAttackSource source,
+        EngagementRange range = EngagementRange.Melee)
     {
         var attackerStats = _combatStats.ComputeAttackerStats(attacker, source);
-        var defenderStats = _combatStats.ComputeDefenderStats(defender);
-        var hitRoll = _dice.Roll(DieType.D20);
+        var defenderStats = _combatStats.ComputeDefenderStats(defender, source);
 
-        if (hitRoll == 1)
+        // Run AttackRoll-phase modifiers through the pipeline.
+        var ctx = new CombatModifierContext
+        {
+            Attacker        = attacker,
+            Defender        = defender,
+            Source          = source,
+            Range           = range,
+            BaseAttackPower = attackerStats.AttackPower,
+            BaseDefensePower = defenderStats.DefensePower
+        };
+        foreach (var mod in _modifiers.Where(m => m.Phase == CombatPhase.AttackRoll))
+            mod.Apply(ctx);
+
+        var effectiveAP = attackerStats.AttackPower + ctx.AttackPowerDelta;
+        var effectiveDP = defenderStats.DefensePower + ctx.DefensePowerDelta;
+
+        var attackRoll  = _dice.Roll(DieType.D20);
+        var defenseRoll = _dice.Roll(DieType.D20);
+
+        // ── Priority 1 ─── TotalReversal (atk=1 AND def=20) ──────────────────
+        if (attackRoll == 1 && defenseRoll == 20)
         {
             return new AttackResult
             {
-                HitRoll = hitRoll,
-                IsHit = false,
-                IsFumble = true,
+                HitRoll           = attackRoll,
+                DefenseRoll       = defenseRoll,
+                IsHit             = false,
+                IsFumble          = true,
+                IsTotalReversal   = true,
+                AttackPowerPenalty = -4,
+                DefenderTmBonus   = ComputeDefenderTmBoost(source.AttackType, range, isTotalReversal: true),
+                Damage            = 0,
+                DamageDie         = source.DamageDie,
+                WeaponName        = source.Name,
+                AttackPower       = effectiveAP,
+                DefensePower      = effectiveDP
+            };
+        }
+
+        // ── Priority 2 ─── DevastatingStrike (atk=20 AND def=1) ──────────────
+        if (attackRoll == 20 && defenseRoll == 1)
+        {
+            var dc = ResolveDamage(attacker, defender, source);
+            // Triple base damage before mitigation; mitigation still applies once.
+            var devastatingDamage = Math.Max(0,
+                (int)(dc.BaseDamage * 3 * dc.TypeMultiplier) - dc.ArmorMitigation + dc.ElementalModifiers);
+            return new AttackResult
+            {
+                HitRoll             = attackRoll,
+                DefenseRoll         = defenseRoll,
+                IsHit               = true,
+                IsDevastatingStrike = true,
+                Damage              = devastatingDamage,
+                DamageDie           = source.DamageDie,
+                WeaponName          = source.Name,
+                AttackPower         = effectiveAP,
+                DefensePower        = effectiveDP,
+                DamageContext       = dc
+            };
+        }
+
+        // ── Priority 3 ─── Clash (both roll 20) ──────────────────────────────
+        if (attackRoll == 20 && defenseRoll == 20)
+        {
+            var dc = ResolveDamage(attacker, defender, source);
+            return new AttackResult
+            {
+                HitRoll      = attackRoll,
+                DefenseRoll  = defenseRoll,
+                IsHit        = true,
+                IsClash      = true,
+                Damage       = dc.FinalDamage / 2,
+                DamageDie    = source.DamageDie,
+                WeaponName   = source.Name,
+                AttackPower  = effectiveAP,
+                DefensePower = effectiveDP,
+                DamageContext = dc
+            };
+        }
+
+        // ── Priority 4 ─── Fumble (atk=1, def != 20) ─────────────────────────
+        if (attackRoll == 1)
+        {
+            return new AttackResult
+            {
+                HitRoll            = attackRoll,
+                DefenseRoll        = defenseRoll,
+                IsHit              = false,
+                IsFumble           = true,
                 AttackPowerPenalty = -2,
-                Damage = 0,
-                DamageDie = source.DamageDie,
-                WeaponName = source.Name,
-                AttackPower = attackerStats.AttackPower,
-                DefensePower = defenderStats.DefensePower
+                Damage             = 0,
+                DamageDie          = source.DamageDie,
+                WeaponName         = source.Name,
+                AttackPower        = effectiveAP,
+                DefensePower       = effectiveDP
             };
         }
 
-        if (hitRoll == 20)
+        // ── Priority 5 ─── Critical hit (atk=20, def != 1 or 20) ─────────────
+        if (attackRoll == 20)
         {
-            var damageContext = ResolveDamage(attacker, defender, source, isCritical: true);
+            var dc = ResolveDamage(attacker, defender, source, isCritical: true);
             return new AttackResult
             {
-                HitRoll = hitRoll,
-                IsHit = true,
+                HitRoll       = attackRoll,
+                DefenseRoll   = defenseRoll,
+                IsHit         = true,
                 IsCriticalHit = true,
-                Damage = damageContext.FinalDamage,
-                DamageDie = source.DamageDie,
-                WeaponName = source.Name,
-                AttackPower = attackerStats.AttackPower,
-                DefensePower = defenderStats.DefensePower,
-                DamageContext = damageContext
+                Damage        = dc.FinalDamage,
+                DamageDie     = source.DamageDie,
+                WeaponName    = source.Name,
+                AttackPower   = effectiveAP,
+                DefensePower  = effectiveDP,
+                DamageContext = dc
             };
         }
 
-        var totalAttack = hitRoll + attackerStats.AttackPower;
-        var isHit = totalAttack >= defenderStats.DefensePower;
-        var damageContextOnHit = isHit ? ResolveDamage(attacker, defender, source) : null;
+        // ── Priority 6 ─── Perfect Parry (def=20, atk=2–19) ──────────────────
+        if (defenseRoll == 20)
+        {
+            return new AttackResult
+            {
+                HitRoll         = attackRoll,
+                DefenseRoll     = defenseRoll,
+                IsHit           = false,
+                IsPerfectParry  = true,
+                DefenderTmBonus = ComputeDefenderTmBoost(source.AttackType, range, isTotalReversal: false),
+                Damage          = 0,
+                DamageDie       = source.DamageDie,
+                WeaponName      = source.Name,
+                AttackPower     = effectiveAP,
+                DefensePower    = effectiveDP
+            };
+        }
+
+        // ── Priority 7 ─── Normal opposed roll (both 2–19) ───────────────────
+        var isHit         = (attackRoll + effectiveAP) >= (defenseRoll + effectiveDP);
+        var damageContext = isHit ? ResolveDamage(attacker, defender, source) : null;
 
         return new AttackResult
         {
-            HitRoll = hitRoll,
-            IsHit = isHit,
-            Damage = damageContextOnHit?.FinalDamage ?? 0,
-            DamageDie = source.DamageDie,
-            WeaponName = source.Name,
-            AttackPower = attackerStats.AttackPower,
-            DefensePower = defenderStats.DefensePower,
-            DamageContext = damageContextOnHit
+            HitRoll       = attackRoll,
+            DefenseRoll   = defenseRoll,
+            IsHit         = isHit,
+            Damage        = damageContext?.FinalDamage ?? 0,
+            DamageDie     = source.DamageDie,
+            WeaponName    = source.Name,
+            AttackPower   = effectiveAP,
+            DefensePower  = effectiveDP,
+            DamageContext = damageContext
         };
+    }
+
+    /// <summary>
+    /// Turn-meter boost awarded to the defender on PerfectParry or TotalReversal.
+    /// Reduced for ranged attacks at distance (harder to parry an arrow from afar).
+    /// </summary>
+    private static int ComputeDefenderTmBoost(AttackType attackType, EngagementRange range, bool isTotalReversal)
+    {
+        var baseBoost = isTotalReversal ? 30 : 20;
+        if (attackType == AttackType.Ranged && range != EngagementRange.Melee)
+            return baseBoost / 2;
+        return baseBoost;
     }
 
     public DamageContext ResolveDamage(Character attacker, Character defender, IAttackSource source, bool isCritical = false)

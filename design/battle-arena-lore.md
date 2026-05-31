@@ -300,23 +300,24 @@ Dwarf and Gladefolk Priests cannot bond with a Dragon (Human/Elf only). Instead,
 
 ## 10. Common Armor
 
-| Armor | AC | Category | Max Dex | Stealth | Str Req |
-|-------|:--:|:--------:|:-------:|:-------:|:-------:|
-| **Shield** — *A wooden shield branded with the crest of the City Watch. It has stopped arrows, blades, and a charging boar. The paint is chipped from a dozen battles.* | +2 | Shield | ∞ | OK | 0 |
-| **Padded Armor** — *Quilted cloth stuffed with raw wool and straw. Better than nothing, but only barely. Worn by militia conscripts and desperate peasants.* | 11 | Light | ∞ | DIS | 0 |
-| **Leather Armor** — *Treated leather boiled in wax and shaped to the body. Worn by scouts, highwaymen, and rangers who value mobility over raw protection.* | 11 | Light | ∞ | OK | 0 |
-| **Studded Leather** — *Leather reinforced with hundreds of iron rivets. A favorite among city guards who patrol the dangerous dock districts at night.* | 12 | Light | ∞ | OK | 0 |
-| **Hide Armor** — *The stripped hide of a cave bear, crudely cured over a campfire. Primitive but effective. Worn by the barbarian tribes of the Frozen Wastes.* | 12 | Medium | +2 | OK | 0 |
-| **Chain Shirt** — *A shirt of interlocking rings that jingles with every step. The minimum standard for any professional soldier in the Eldergard army.* | 13 | Medium | +2 | OK | 0 |
-| **Scale Mail** — *Overlapping iron plates sewn onto a leather backing resembling dragon scales. Provides excellent protection against slashing attacks. Worn by dragon-hunters of the Burning Plains.* | 14 | Medium | +2 | DIS | 0 |
-| **Breastplate** — *A polished steel breastplate engraved with the wearer's family crest. Favored by officers who need protection without sacrificing mobility.* | 14 | Medium | +2 | OK | 0 |
-| **Half Plate** — *Partial plate armor covering the vital areas while leaving joints exposed for mobility. A grim compromise between protection and speed.* | 15 | Medium | +2 | DIS | 0 |
-| **Ring Mail** — *Leather armor with heavy iron rings sewn across the surface. An old design still used by frontier garrisons who cannot afford better.* | 14 | Heavy | +0 | DIS | 0 |
-| **Chain Mail** — *A full hauberk of interlocking rings reaching to the knees. Heavy, noisy, but nearly impervious to slashing weapons. Standard issue for the Iron Company.* | 16 | Heavy | +0 | DIS | 13 |
-| **Splint Armor** — *Vertical steel strips riveted to a sturdy leather backing. An affordable alternative to full plate, favored by veteran mercenaries of the Free Companies.* | 17 | Heavy | +0 | DIS | 15 |
-| **Plate Armor** — *The pinnacle of mortal armor craft. Articulated steel plates covering every inch of the body. Only knights and wealthy lords can afford it.* | 18 | Heavy | +0 | DIS | 15 |
+| Armor | AC | Category | Max Dex | Stealth | Str Req | Mitigation |
+|-------|:--:|:--------:|:-------:|:-------:|:-------:|:----------:|
+| **Shield** — *A wooden shield branded with the crest of the City Watch. It has stopped arrows, blades, and a charging boar. The paint is chipped from a dozen battles.* | +2 | Shield | ∞ | OK | 0 | — |
+| **Padded Armor** — *Quilted cloth stuffed with raw wool and straw. Better than nothing, but only barely. Worn by militia conscripts and desperate peasants.* | 11 | Light | ∞ | DIS | 0 | — |
+| **Robes** — *Simple woven cloth robes worn by scholars, priests, and mages. No physical protection, but they allow complete freedom of movement for spellcasting.* | 10 | Caster | ∞ | OK | 0 | 0 |
+| **Leather Armor** — *Treated leather boiled in wax and shaped to the body. Worn by scouts, highwaymen, and rangers who value mobility over raw protection.* | 11 | Light | ∞ | OK | 0 | 1 |
+| **Studded Leather** — *Leather reinforced with hundreds of iron rivets. A favorite among city guards who patrol the dangerous dock districts at night.* | 12 | Light | ∞ | OK | 0 | 1 |
+| **Hide Armor** — *The stripped hide of a cave bear, crudely cured over a campfire. Primitive but effective. Worn by the barbarian tribes of the Frozen Wastes.* | 12 | Medium | +2 | OK | 0 | 2 |
+| **Chain Shirt** — *A shirt of interlocking rings that jingles with every step. The minimum standard for any professional soldier in the Eldergard army.* | 13 | Medium | +2 | OK | 0 | — |
+| **Scale Mail** — *Overlapping iron plates sewn onto a leather backing resembling dragon scales. Provides excellent protection against slashing attacks. Worn by dragon-hunters of the Burning Plains.* | 14 | Medium | +2 | DIS | 0 | 2 |
+| **Breastplate** — *A polished steel breastplate engraved with the wearer's family crest. Favored by officers who need protection without sacrificing mobility.* | 14 | Medium | +2 | OK | 0 | — |
+| **Half Plate** — *Partial plate armor covering the vital areas while leaving joints exposed for mobility. A grim compromise between protection and speed.* | 15 | Medium | +2 | DIS | 0 | — |
+| **Ring Mail** — *Leather armor with heavy iron rings sewn across the surface. An old design still used by frontier garrisons who cannot afford better.* | 14 | Heavy | +0 | DIS | 0 | — |
+| **Chain Mail** — *A full hauberk of interlocking rings reaching to the knees. Heavy, noisy, but nearly impervious to slashing weapons. Standard issue for the Iron Company.* | 16 | Heavy | +0 | DIS | 13 | 3 |
+| **Splint Armor** — *Vertical steel strips riveted to a sturdy leather backing. An affordable alternative to full plate, favored by veteran mercenaries of the Free Companies.* | 17 | Heavy | +0 | DIS | 15 | — |
+| **Plate Armor** — *The pinnacle of mortal armor craft. Articulated steel plates covering every inch of the body. Only knights and wealthy lords can afford it.* | 18 | Heavy | +0 | DIS | 15 | 5 |
 
-*(∞ = unlimited Dex bonus, DIS = Stealth Disadvantage)*
+*(∞ = unlimited Dex bonus, DIS = Stealth Disadvantage, — = not yet seeded in game data)*
 
 ---
 

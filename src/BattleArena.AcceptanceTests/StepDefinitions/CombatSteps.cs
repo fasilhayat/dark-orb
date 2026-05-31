@@ -23,7 +23,7 @@ public class CombatSteps
     public CombatSteps()
     {
         _dice = Substitute.For<IDiceService>();
-        _combat = new CombatService(_dice, new CombatStatsService());
+        _combat = new CombatService(_dice, new CombatStatsService(), [new Application.Modifiers.RangeModifier()]);
     }
 
     [Given(@"a character with strength (\d+) and strike rating (\d+)")]
@@ -50,7 +50,9 @@ public class CombatSteps
     [Given(@"the D20 roll is (\d+)")]
     public void GivenTheD20RollIs(int roll)
     {
-        _dice.Roll(DieType.D20).Returns(roll);
+        // First D20 = attack roll; second = defense roll (defaults to 10 — neutral,
+        // avoids clash/reversal/perfect-parry on scenarios that only care about attack).
+        _dice.Roll(DieType.D20).Returns(roll, 10);
     }
 
     [Given(@"the damage die roll is (\d+)")]

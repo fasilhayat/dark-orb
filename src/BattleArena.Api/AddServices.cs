@@ -1,7 +1,9 @@
 namespace BattleArena.Api;
 
 using Application.Interfaces;
+using Application.Modifiers;
 using Application.Services;
+using Core.Interfaces;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
@@ -20,6 +22,7 @@ public static class AddServices
         services.AddScoped<ICombatStatsService, CombatStatsService>();
         services.AddScoped<ITurnmeterService, TurnmeterService>();
         services.AddScoped<IStatusEffectService, StatusEffectService>();
+        services.AddScoped<ICombatModifier, RangeModifier>();
         services.AddScoped<ICombatService, CombatService>();
         services.AddScoped<ICharacterService, CharacterService>();
         services.AddScoped<ICharacterRepository, CharacterRepository>();

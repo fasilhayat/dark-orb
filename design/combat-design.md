@@ -111,6 +111,20 @@ Lower AC is better (AD&D style). A character with AC 5 has EffectiveAC 15. The A
 
 Dexterity bonus is capped by the sum of `MaxDexterityBonus` across all worn armor pieces — heavy armor limits how much DEX helps.
 
+### Canonical Armor Values (from `02-seed-data.sql`)
+
+| Name | AC | Category | MaxDexBonus | Mitigation |
+|------|----|----------|-------------|------------|
+| Robes | 10 | Caster | 99 | 0 |
+| Leather Armor | 11 | Light | 99 | 1 |
+| Studded Leather | 12 | Light | 99 | 1 |
+| Hide Armor | 12 | Medium | 2 | 2 |
+| Scale Mail | 14 | Medium | 2 | 2 |
+| Chain Mail | 16 | Heavy | 0 | 3 |
+| Plate Armor | 18 | Heavy | 0 | 5 |
+
+These values are the single source of truth. Tests must use `BattleArena.UnitTests.TestData.ArmorCatalog` to reference them — do not hard-code armor stats in test code.
+
 ---
 
 ## 7. Hit Points
@@ -438,6 +452,10 @@ All combat-log events use `CombatLogEntry` with an `EventType` string:
 | FumblePenalty | Fumble side-effect applied |
 | Death | HP ≤ -10 |
 | KnockedOut | HP in range -9 to 0 |
+| PerfectParry | Defender deflects attack; gains TM bonus |
+| Clash | Mutual weapon collision; both take reduced damage |
+| DevastatingStrike | Triple-damage critical hit |
+| TotalReversal | Fumble flipped; defender gains TM, attacker penalised harder |
 
 ### API Endpoint
 
@@ -447,7 +465,61 @@ Returns: `CombatResult` with full event log and final state.
 
 ---
 
-## 16. Pets
+## 16. Defense Roll System
+
+Every attack resolves one d20 for the attacker (`NatAttack`) and one d20 for the defender (`NatDefense`). The combination of these two rolls is evaluated against a 7-case priority matrix before the regular hit/miss check:
+
+| Priority | Condition | Outcome |
+|----------|-----------|---------|
+| 1 | atk=1 AND def=20 | **TotalReversal** — attacker fumbles hard; defender gains 30 TM (melee: +10% if ranged) |
+| 2 | atk=20 AND def=1 | **DevastatingStrike** — triple-damage critical hit |
+| 3 | atk=20 AND def=20 | **Clash** — mutual weapon lock; both take 50% of each other's base damage |
+| 4 | atk=1, def≠20 | **Fumble** — miss + fumble penalty; defender gains 20 TM |
+| 5 | atk=20, def≠1,20 | **Critical Hit** — double base damage |
+| 6 | def=20, atk=2–19 | **PerfectParry** — automatic miss; defender gains 20 TM |
+| 7 | both 2–19 | **Normal Roll** — `d20 + AttackPower ≥ DefensePower` |
+
+TM boost for PerfectParry / TotalReversal: base 20 (or 30 for TotalReversal) − 10 if range is `Ranged`, applied via `ComputeDefenderTmBoost`.
+
+---
+
+## 17. Combat Modifier Pipeline
+
+Combat modifiers are pluggable `ICombatModifier` implementations registered at DI startup and executed by `CombatService.ResolveAttack` in `Priority` order before the hit check.
+
+### Interface
+
+```csharp
+public interface ICombatModifier
+{
+    string      Name     { get; }   // for logs / diagnostics
+    int         Priority { get; }   // lower = runs first
+    CombatPhase Phase    { get; }   // which phase this participates in
+    void Apply(CombatModifierContext ctx);
+}
+```
+
+### Context
+
+`CombatModifierContext` carries read-only inputs (`Attacker`, `Defender`, `Source`, `Range`, `BaseAttackPower`, `BaseDefensePower`) and mutable output deltas (`AttackPowerDelta`, `DefensePowerDelta`). Modifiers accumulate deltas; the caller applies them to the base stats.
+
+### Priority Bands
+
+| Band | Range | Purpose |
+|------|-------|---------|
+| Positional | 10 | Range penalties, flanking, elevation |
+| Environmental | 20 | Weather, terrain, darkness |
+| Item / Set | 30 | Set-bonus effects, unique item effects |
+
+### Adding a New Modifier
+
+1. Implement `ICombatModifier` in `BattleArena.Application/Modifiers/`.
+2. Register via DI in `AddServices.cs` (or equivalent).
+3. No changes to `CombatService` are needed.
+
+---
+
+## 18. Pets
 
 Pets are independent actors:
 - Own TurnMeter (separate track)
@@ -457,7 +529,7 @@ Pets are independent actors:
 
 ---
 
-## 17. Constraints
+## 19. Constraints
 
 - No hidden formulas
 - No dual subtraction systems
@@ -465,10 +537,11 @@ Pets are independent actors:
 - All randomness limited to d20 + damage dice
 - `BattleArena.Demo` must never compute combat outcomes (display only)
 - `BattleArena.Core` must have no dependencies on other projects
+- **Cyclomatic complexity ≤ 10 per method** (modified McCabe — each `&&`/`||` counts as +1). Extract private helpers rather than letting any method exceed this limit. Values of 11–12 are acceptable only where splitting would add parameters without reducing real complexity.
 
 ---
 
-## 18. Design Intent
+## 20. Design Intent
 
 ### Supported goals
 
@@ -479,31 +552,31 @@ Pets are independent actors:
 
 ### Missing (future work)
 
-1. **Critical Hit logic** — currently natural 20 crit (simple); could extend to scaling crit model
-2. **Fumble logic** — currently natural 1 fumble with -2 AttackPower next turn; could add TM penalty
-3. **Turnmeter level scaling** — currently Level has no effect on TM; if testing shows low-level speedsters dominate, add `Level / 4` to TM gain
-4. **Status effect resolution priority** — ordering rules for simultaneous effect application
-5. **Multi-target and AoE** — area-of-effect damage, simultaneous death handling
-6. **Healing** — healing spells and effects are not yet implemented in the simulator
+1. **Multi-target and AoE** — area-of-effect damage, simultaneous death handling
+2. **Healing** — healing spells and effects are not yet implemented in the simulator
+3. **Status effect resolution priority** — ordering rules for simultaneous effect application
+4. **Turnmeter level scaling** — currently Level has no effect on TM; if testing shows low-level speedsters dominate, add `Level / 4` to TM gain
 
 ### Balance Target
 
-The system should produce these expected outcomes:
+The system should produce these expected outcomes, verified by in-memory diagnostic tests:
 
-| Matchup | Expected win rate (higher-level) |
-|---------|----------------------------------|
-| Same level, same gear | 50% |
-| +1 level, same gear | ~65% |
-| +2 levels, same gear | ~80% |
-| +3 levels, same gear | ~90% |
-| +5 levels, same gear | ≥95% |
-| +10 levels, same gear | ≥99% |
+| Matchup | Expected win rate (higher-level) | Observed hit rates |
+|---------|----------------------------------|--------------------|
+| Same level, same gear | 50% | 60–70% hit rate (both sides symmetric) |
+| +1 level, same gear | ~65% | — |
+| +2 levels, same gear | ~80% | — |
+| +3 levels, same gear | ~90% | — |
+| +5 levels, same gear | ≥95% | — |
+| +10 levels, same gear | ≥99% | — |
+
+**Verified (diagnostic tests, `CombatDiagnosticTests.cs`):** same-level mirror matches produce 60–70% hit rates with canonical seed armor, which is within the healthy range.
 
 These targets assume no extreme gear/stat disparities. A Level 1 in plate armor with a legendary weapon may defeat a higher-level unarmed opponent — gear matters within the system.
 
 ---
 
-## 19. Quick Reference: Formula Cheat Sheet
+## 21. Quick Reference: Formula Cheat Sheet
 
 ```
 To-hit:             d20 + AttackPower ≥ DefensePower

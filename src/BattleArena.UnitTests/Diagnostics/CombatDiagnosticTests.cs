@@ -5,12 +5,14 @@ namespace BattleArena.UnitTests.Diagnostics;
 // ITestOutputHelper so you can inspect every action. Run with:
 //   dotnet test --filter "FullyQualifiedName~CombatDiagnosticTests" -v normal
 //
-// A detailed .txt combat log is also written to combat-logs/ at the repo root.
+// A detailed .txt combat log is also written to combat-logs/test-results/ at the
+// repo root, named after the combatants (e.g. Theron_vs_Krag_<timestamp>.txt).
 // Structural assertions are made on top; the printed log is for manual review.
 // ─────────────────────────────────────────────────────────────────────────────
 
 using Application.Models;
 using Application.Services;
+using BattleArena.UnitTests.TestData;
 using Core.Entities;
 using Core.Entities.Enums;
 using Xunit;
@@ -29,12 +31,15 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
     }
 
     // ── Log to file + test output ─────────────────────────────────────────────
-    private void DumpLog(CombatResult result, string testName)
+    private void DumpLog(CombatResult result)
     {
         PrintLog(result);
-        var dir = FindRepoRoot();
-        var logDir = Path.Combine(dir, "combat-logs");
-        var path = CombatLogWriter.Write(result, testName, logDir);
+        var dir    = FindRepoRoot();
+        var logDir = Path.Combine(dir, "combat-logs", "test-results");
+        var p1     = result.WinningParty?.Name ?? "unknown";
+        var p2     = result.LosingParty?.Name  ?? "unknown";
+        var label  = $"{p1}_vs_{p2}".Replace(" ", "_");
+        var path   = CombatLogWriter.Write(result, label, logDir);
         out_.WriteLine($"\n  >> Log written: {path}");
     }
 
@@ -51,9 +56,10 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
     }
 
     // ── Character factory helpers ─────────────────────────────────────────────
+    // Armor stats are looked up from ArmorCatalog, which mirrors 02-seed-data.sql.
 
     static Character MakeWarrior(string name, int level, int str, int dex, int hp, int turnSpeed,
-        int strikeRating, string armorName, int ac, int mit, string weaponName, DieType die, int dieCount, int atkBonus) =>
+        int strikeRating, string armorName, string weaponName, DieType die, int dieCount, int atkBonus) =>
         new()
         {
             Name = name, Level = level, Strength = str, Dexterity = dex,
@@ -61,7 +67,7 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
             MaxHitPoints = hp, CurrentHitPoints = hp,
             Equipment = new ArmorSlots
             {
-                Chest     = new Armor { Name = armorName, ArmorClass = ac, Mitigation = mit, MaxDexterityBonus = 6 },
+                Chest     = ArmorCatalog.Get(armorName),
                 RightHand = new Weapon { Name = weaponName, DamageDie = die, DamageCount = dieCount,
                     DamageType = DamageType.Slashing, AttackType = AttackType.Melee, AttackBonus = atkBonus }
             }
@@ -76,7 +82,7 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
             MaxHitPoints = hp, CurrentHitPoints = hp,
             Equipment = new ArmorSlots
             {
-                Chest = new Armor { Name = "Robes", ArmorClass = 14, Mitigation = 0, MaxDexterityBonus = 6 }
+                Chest = ArmorCatalog.Get("Robes")
             },
             MemorizedSpells = spells.ToList()
         };
@@ -149,14 +155,14 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
     [Fact]
     public void Duel_WarriorVsWarrior()
     {
-        var theron = MakeWarrior("Theron", 5, 18, 12, 50, 10, 14, "Chain Mail",  5, 2, "Longsword",  DieType.D8,  1, 2);
-        var krag   = MakeWarrior("Krag",   4, 17,  9, 45,  7, 15, "Orcish Hide", 6, 2, "Orcish Axe", DieType.D10, 1, 1);
+        var theron = MakeWarrior("Theron", 5, 18, 12, 50, 10, 14, "Chain Mail", "Longsword",  DieType.D8,  1, 2);
+        var krag   = MakeWarrior("Krag",   4, 17,  9, 45,  7, 15, "Hide Armor", "Orcish Axe", DieType.D10, 1, 1);
 
         var result = BuildSim().Simulate(
             Party.Solo(theron, theron.Equipment.RightHand!),
             Party.Solo(krag,   krag  .Equipment.RightHand!));
 
-        DumpLog(result, nameof(Duel_WarriorVsWarrior));
+        DumpLog(result);
         Assert.NotNull(result.WinningParty);
         Assert.NotNull(result.LosingParty);
         AssertLogIntegrity(result);
@@ -174,7 +180,7 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
 
         var result = BuildSim().Simulate(Party.Solo(lyra, null), Party.Solo(mordak, null));
 
-        DumpLog(result, nameof(Duel_CasterVsCaster));
+        DumpLog(result);
 
         Assert.False(result.MaxTicksReached);
         Assert.NotNull(result.WinningParty);
@@ -193,14 +199,14 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
     [Fact]
     public void Duel_WarriorVsCaster()
     {
-        var theron = MakeWarrior("Theron", 5, 18, 12, 50, 10, 14, "Chain Mail", 5, 2, "Longsword", DieType.D8, 1, 2);
+        var theron = MakeWarrior("Theron", 5, 18, 12, 50, 10, 14, "Chain Mail", "Longsword", DieType.D8, 1, 2);
         var lyra   = MakeCaster("Lyra",   5, 18, 14, 30,  8, 13, MakeSpell("Fireball", DieType.D6, 3, 2), MakeSpell("Ice Bolt", DieType.D8, 2, 2));
 
         var result = BuildSim().Simulate(
             Party.Solo(theron, theron.Equipment.RightHand!),
             Party.Solo(lyra,   null));
 
-        DumpLog(result, nameof(Duel_WarriorVsCaster));
+        DumpLog(result);
 
         Assert.False(result.MaxTicksReached);
         Assert.NotNull(result.WinningParty);
@@ -222,20 +228,20 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
     {
         var heroes = Party.HeroParty("Heroes", new[]
         {
-            new PartyMember { Character = MakeWarrior("Theron", 5, 18, 12, 50, 10, 14, "Chain Mail",    5, 2, "Longsword",  DieType.D8,  1, 2), AttackSource = new Weapon { Name="Longsword", DamageDie=DieType.D8,  DamageCount=1, DamageType=DamageType.Slashing, AttackType=AttackType.Melee, AttackBonus=2 } },
-            new PartyMember { Character = MakeWarrior("Gruk",   3, 16,  8, 35,  6, 16, "Leather Armor", 7, 1, "Battle Axe", DieType.D8,  1, 1), AttackSource = new Weapon { Name="Battle Axe",DamageDie=DieType.D8,  DamageCount=1, DamageType=DamageType.Slashing, AttackType=AttackType.Melee, AttackBonus=1 } },
+            new PartyMember { Character = MakeWarrior("Theron", 5, 18, 12, 50, 10, 14, "Chain Mail", "Longsword",  DieType.D8,  1, 2), AttackSource = new Weapon { Name="Longsword", DamageDie=DieType.D8,  DamageCount=1, DamageType=DamageType.Slashing, AttackType=AttackType.Melee, AttackBonus=2 } },
+            new PartyMember { Character = MakeWarrior("Gruk",   3, 16,  8, 35,  6, 16, "Leather Armor", "Battle Axe", DieType.D8,  1, 1), AttackSource = new Weapon { Name="Battle Axe",DamageDie=DieType.D8,  DamageCount=1, DamageType=DamageType.Slashing, AttackType=AttackType.Melee, AttackBonus=1 } },
             new PartyMember { Character = MakeCaster("Lyra",    5, 18, 14, 30,  8, 13, MakeSpell("Fireball", DieType.D6, 3, 2), MakeSpell("Ice Bolt", DieType.D8, 2, 2)), AttackSource = null },
         });
         var enemies = Party.HeroParty("Enemies", new[]
         {
-            new PartyMember { Character = MakeWarrior("Krag",   4, 17,  9, 45,  7, 15, "Orcish Hide",  6, 2, "Orcish Axe", DieType.D10, 1, 1), AttackSource = new Weapon { Name="Orcish Axe",DamageDie=DieType.D10,DamageCount=1, DamageType=DamageType.Slashing, AttackType=AttackType.Melee, AttackBonus=1 } },
-            new PartyMember { Character = MakeWarrior("Skrix",  2,  9, 16, 20, 12, 12, "Worn Leather", 8, 0, "Dagger",     DieType.D4,  2, 3), AttackSource = new Weapon { Name="Dagger",    DamageDie=DieType.D4,  DamageCount=2, DamageType=DamageType.Piercing, AttackType=AttackType.Melee, AttackBonus=3 } },
+            new PartyMember { Character = MakeWarrior("Krag",   4, 17,  9, 45,  7, 15, "Hide Armor", "Orcish Axe", DieType.D10, 1, 1), AttackSource = new Weapon { Name="Orcish Axe",DamageDie=DieType.D10,DamageCount=1, DamageType=DamageType.Slashing, AttackType=AttackType.Melee, AttackBonus=1 } },
+            new PartyMember { Character = MakeWarrior("Skrix",  2,  9, 16, 20, 12, 12, "Studded Leather", "Dagger",     DieType.D4,  2, 3), AttackSource = new Weapon { Name="Dagger",    DamageDie=DieType.D4,  DamageCount=2, DamageType=DamageType.Piercing, AttackType=AttackType.Melee, AttackBonus=3 } },
             new PartyMember { Character = MakeCaster("Mordak",  3, 16, 12, 25,  9, 14, MakeSpell("Shadow Bolt", DieType.D8, 2, 2), MakeSpell("Soul Drain", DieType.D10, 1, 1)), AttackSource = null },
         });
 
         var result = BuildSim().Simulate(heroes, enemies);
 
-        DumpLog(result, nameof(Party_3v3_MixedComposition));
+        DumpLog(result);
 
         Assert.False(result.MaxTicksReached);
         Assert.NotNull(result.WinningParty);
@@ -251,24 +257,24 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
     {
         var heroes = Party.HeroParty("Heroes", new[]
         {
-            new PartyMember { Character = MakeWarrior("Theron", 5, 18, 12, 50, 10, 14, "Chain Mail",    5, 2, "Longsword",   DieType.D8,  1, 2), AttackSource = new Weapon { Name="Longsword",   DamageDie=DieType.D8,  DamageCount=1, DamageType=DamageType.Slashing,    AttackType=AttackType.Melee, AttackBonus=2 } },
-            new PartyMember { Character = MakeWarrior("Gruk",   3, 16,  8, 35,  6, 16, "Leather Armor", 7, 1, "Battle Axe",  DieType.D8,  1, 1), AttackSource = new Weapon { Name="Battle Axe",  DamageDie=DieType.D8,  DamageCount=1, DamageType=DamageType.Slashing,    AttackType=AttackType.Melee, AttackBonus=1 } },
+            new PartyMember { Character = MakeWarrior("Theron", 5, 18, 12, 50, 10, 14, "Chain Mail", "Longsword",   DieType.D8,  1, 2), AttackSource = new Weapon { Name="Longsword",   DamageDie=DieType.D8,  DamageCount=1, DamageType=DamageType.Slashing,    AttackType=AttackType.Melee, AttackBonus=2 } },
+            new PartyMember { Character = MakeWarrior("Gruk",   3, 16,  8, 35,  6, 16, "Leather Armor", "Battle Axe",  DieType.D8,  1, 1), AttackSource = new Weapon { Name="Battle Axe",  DamageDie=DieType.D8,  DamageCount=1, DamageType=DamageType.Slashing,    AttackType=AttackType.Melee, AttackBonus=1 } },
             new PartyMember { Character = MakeCaster("Lyra",    5, 18, 14, 30,  8, 13, MakeSpell("Fireball", DieType.D6, 3, 2), MakeSpell("Ice Bolt", DieType.D8, 2, 2)), AttackSource = null },
-            new PartyMember { Character = MakeWarrior("Brynn",  4, 15, 14, 42,  9, 13, "Scale Mail",    4, 3, "Warhammer",   DieType.D8,  1, 1), AttackSource = new Weapon { Name="Warhammer",   DamageDie=DieType.D8,  DamageCount=1, DamageType=DamageType.Bludgeoning, AttackType=AttackType.Melee, AttackBonus=1 } },
-            new PartyMember { Character = MakeWarrior("Sera",   3, 13, 17, 32, 11, 14, "Leather Armor", 7, 1, "Short Sword", DieType.D6,  1, 2), AttackSource = new Weapon { Name="Short Sword", DamageDie=DieType.D6,  DamageCount=1, DamageType=DamageType.Slashing,    AttackType=AttackType.Melee, AttackBonus=2 } },
+            new PartyMember { Character = MakeWarrior("Brynn",  4, 15, 14, 42,  9, 13, "Scale Mail", "Warhammer",   DieType.D8,  1, 1), AttackSource = new Weapon { Name="Warhammer",   DamageDie=DieType.D8,  DamageCount=1, DamageType=DamageType.Bludgeoning, AttackType=AttackType.Melee, AttackBonus=1 } },
+            new PartyMember { Character = MakeWarrior("Sera",   3, 13, 17, 32, 11, 14, "Leather Armor", "Short Sword", DieType.D6,  1, 2), AttackSource = new Weapon { Name="Short Sword", DamageDie=DieType.D6,  DamageCount=1, DamageType=DamageType.Slashing,    AttackType=AttackType.Melee, AttackBonus=2 } },
             new PartyMember { Character = MakeCaster("Zeph",    4, 17, 13, 28, 10, 13, MakeSpell("Thunder", DieType.D10, 2, 3), MakeSpell("Shadow Bolt", DieType.D8, 2, 2)), AttackSource = null },
         });
         var enemies = Party.HeroParty("Enemies", new[]
         {
-            new PartyMember { Character = MakeWarrior("Krag",   4, 17,  9, 45,  7, 15, "Orcish Hide",  6, 2, "Orcish Axe",  DieType.D10, 1, 1), AttackSource = new Weapon { Name="Orcish Axe",  DamageDie=DieType.D10, DamageCount=1, DamageType=DamageType.Slashing, AttackType=AttackType.Melee, AttackBonus=1 } },
-            new PartyMember { Character = MakeWarrior("Skrix",  2,  9, 16, 20, 12, 12, "Worn Leather", 8, 0, "Dagger",      DieType.D4,  2, 3), AttackSource = new Weapon { Name="Dagger",      DamageDie=DieType.D4,  DamageCount=2, DamageType=DamageType.Piercing, AttackType=AttackType.Melee, AttackBonus=3 } },
-            new PartyMember { Character = MakeWarrior("Gortax", 5, 19, 10, 55,  8, 15, "Heavy Plate",  2, 4, "Great Sword", DieType.D12, 1, 2), AttackSource = new Weapon { Name="Great Sword", DamageDie=DieType.D12, DamageCount=1, DamageType=DamageType.Slashing, AttackType=AttackType.Melee, AttackBonus=2 } },
+            new PartyMember { Character = MakeWarrior("Krag",   4, 17,  9, 45,  7, 15, "Hide Armor", "Orcish Axe",  DieType.D10, 1, 1), AttackSource = new Weapon { Name="Orcish Axe",  DamageDie=DieType.D10, DamageCount=1, DamageType=DamageType.Slashing, AttackType=AttackType.Melee, AttackBonus=1 } },
+            new PartyMember { Character = MakeWarrior("Skrix",  2,  9, 16, 20, 12, 12, "Studded Leather", "Dagger",      DieType.D4,  2, 3), AttackSource = new Weapon { Name="Dagger",      DamageDie=DieType.D4,  DamageCount=2, DamageType=DamageType.Piercing, AttackType=AttackType.Melee, AttackBonus=3 } },
+            new PartyMember { Character = MakeWarrior("Gortax", 5, 19, 10, 55,  8, 15, "Plate Armor", "Great Sword", DieType.D12, 1, 2), AttackSource = new Weapon { Name="Great Sword", DamageDie=DieType.D12, DamageCount=1, DamageType=DamageType.Slashing, AttackType=AttackType.Melee, AttackBonus=2 } },
             new PartyMember { Character = MakeCaster("Mordak",  3, 16, 12, 25,  9, 14, MakeSpell("Soul Drain", DieType.D10, 1, 1), MakeSpell("Shadow Bolt", DieType.D8, 2, 2)), AttackSource = null },
         });
 
         var result = BuildSim().Simulate(heroes, enemies);
 
-        DumpLog(result, nameof(Party_6v4_MaxHeroParty));
+        DumpLog(result);
 
         Assert.False(result.MaxTicksReached);
         Assert.NotNull(result.WinningParty);
@@ -334,8 +340,8 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
     public void Replay_ProducesIdenticalLog()
     {
         // Run a fresh combat and save the snapshot
-        var theron = MakeWarrior("Theron", 5, 18, 12, 50, 10, 14, "Chain Mail",  5, 2, "Longsword",  DieType.D8,  1, 2);
-        var krag   = MakeWarrior("Krag",   4, 17,  9, 45,  7, 15, "Orcish Hide", 6, 2, "Orcish Axe", DieType.D10, 1, 1);
+        var theron = MakeWarrior("Theron", 5, 18, 12, 50, 10, 14, "Chain Mail", "Longsword",  DieType.D8,  1, 2);
+        var krag   = MakeWarrior("Krag",   4, 17,  9, 45,  7, 15, "Hide Armor", "Orcish Axe", DieType.D10, 1, 1);
 
         var original = BuildSim().Simulate(
             Party.Solo(theron, theron.Equipment.RightHand!),
@@ -373,8 +379,8 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
     [Fact]
     public void Duel_HighLevelBeatsLowLevel_Consistently()
     {
-        var high = MakeWarrior("Marigold", 9, 18, 12, 80, 10, 14, "Chain Mail",  5, 2, "Longsword", DieType.D8, 1, 2);
-        var low  = MakeWarrior("Mira",     4, 17,  9, 45,  7, 16, "Leather Armor", 7, 1, "Dagger",    DieType.D4, 1, 0);
+        var high = MakeWarrior("Marigold", 9, 18, 12, 80, 10, 14, "Chain Mail", "Longsword", DieType.D8, 1, 2);
+        var low  = MakeWarrior("Mira",     4, 17,  9, 45,  7, 16, "Leather Armor", "Dagger",    DieType.D4, 1, 0);
 
         const int Trials = 20;
         var highWins = 0;
@@ -401,7 +407,7 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
             var winner   = result.WinningParty?.Members.First().Character.Name;
             var tickSpan = result.TotalTicks;
 
-            if (i == 0) DumpLog(result, nameof(Duel_HighLevelBeatsLowLevel_Consistently));
+            if (i == 0) DumpLog(result);
 
             Assert.NotNull(winner);
             Assert.NotNull(result.LosingParty);

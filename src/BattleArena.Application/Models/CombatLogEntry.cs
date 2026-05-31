@@ -11,11 +11,16 @@ public class CombatLogEntry
 
     // Present on Attack events
     public int? DieRoll { get; set; }
+    public int? DefenseRoll { get; set; }
     public int? AttackPower { get; set; }
     public int? DefensePower { get; set; }
     public bool? IsHit { get; set; }
     public bool? IsCritical { get; set; }
     public bool? IsFumble { get; set; }
+    public bool? IsPerfectParry { get; set; }
+    public bool? IsClash { get; set; }
+    public bool? IsDevastatingStrike { get; set; }
+    public bool? IsTotalReversal { get; set; }
     public int? DamageDealt { get; set; }
 
     // Present on TurnMeterGain and TurnEnd events

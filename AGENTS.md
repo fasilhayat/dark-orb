@@ -158,10 +158,16 @@ When adding or changing the resistance system:
 | `FumblePenalty` | Fumble side-effect applied |
 | `Death` | HP ≤ -10 |
 | `KnockedOut` | HP in range -9 to 0 |
+| `PerfectParry` | Defender deflects attack, gains TM bonus |
+| `Clash` | Mutual weapon collision, both take reduced damage |
+| `DevastatingStrike` | Triple-damage hit |
+| `TotalReversal` | Fumble flipped; defender gains TM, attacker penalised harder |
 
 - **Never add game logic to `BattleArena.Demo`**. The demo may read game state and render it; it must not compute combat outcomes.
 - **API combat endpoint**: `POST /v1/combat/simulate` accepts `{ heroParty, enemyParty, maxTicks, heroTargetStrategy, enemyTargetStrategy }` and returns a `CombatResult`. The demo calls this endpoint when `UseApiRoster && ApiClient is not null` — the entire simulation runs server-side.
 - **IAttackSource** must use `[JsonDerivedType]` for polymorphic serialization (`weapon`, `spell`, `unarmed` discriminators) — required by the combat simulate endpoint.
+- **Combat modifier pipeline**: `ICombatModifier` implementations are registered at DI startup and applied by `CombatService.ResolveAttack`. Priority bands: 10 = positional/range, 20 = environmental, 30 = item/set bonuses. Context carries `AttackPowerDelta` and `DefensePowerDelta`. Add new modifiers by implementing `ICombatModifier` — no changes to `CombatService` needed.
+- **Diagnostic test armor**: armor values used in `CombatDiagnosticTests` must come from `BattleArena.UnitTests.TestData.ArmorCatalog`, which mirrors `02-seed-data.sql`. Update `ArmorCatalog.cs` when SQL seed values change.
 
 ---
 
@@ -217,6 +223,7 @@ Lore entries must match what is seeded in the database:
 - **No magic numbers**: extract named constants or use enum values.
 - **Async**: use `async`/`await` throughout the demo display pipeline; the simulator itself is synchronous.
 - **Collections**: use `List<T>` for mutable, `IReadOnlyList<T>` for returned collections.
+- **Cyclomatic complexity**: ≤ 10 per method (modified McCabe — counts each `&&`/`||` as +1). Extract private helpers rather than letting any method exceed this limit. Values of 11–12 are acceptable only where splitting would add parameters without reducing real complexity.
 
 ---
 

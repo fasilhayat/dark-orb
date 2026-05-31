@@ -1,6 +1,7 @@
 namespace BattleArena.UnitTests.Services;
 
 using Application.Interfaces;
+using Application.Modifiers;
 using Application.Services;
 using Core.Entities;
 using Core.Entities.Enums;
@@ -13,7 +14,7 @@ public class CombatServiceTests
 
     public CombatServiceTests()
     {
-        _sut = new CombatService(_dice, new CombatStatsService());
+        _sut = new CombatService(_dice, new CombatStatsService(), [new RangeModifier()]);
     }
 
     [Fact]
@@ -124,7 +125,8 @@ public class CombatServiceTests
         var defender = CreateDefender(99);
         var weapon = new Weapon { Name = "Longsword", DamageDie = DieType.D8 };
 
-        _dice.Roll(DieType.D20).Returns(20);
+        // Returns: atk=20, def=5 (sequential) → Priority 5: Critical
+        _dice.Roll(DieType.D20).Returns(20, 5);
         _dice.Roll(DieType.D8).Returns(6);
 
         var result = _sut.ResolveAttack(attacker, defender, weapon);
@@ -132,6 +134,7 @@ public class CombatServiceTests
         Assert.True(result.IsHit);
         Assert.True(result.IsCriticalHit);
         Assert.False(result.IsFumble);
+        Assert.False(result.IsClash);
         Assert.Equal(16, result.Damage);
     }
 
@@ -142,7 +145,8 @@ public class CombatServiceTests
         var defender = CreateDefender(99);
         var weapon = new Weapon { Name = "Greatsword", DamageDie = DieType.D6 };
 
-        _dice.Roll(DieType.D20).Returns(20);
+        // Returns: atk=20, def=5 → Priority 5: Critical
+        _dice.Roll(DieType.D20).Returns(20, 5);
         _dice.Roll(DieType.D6).Returns(4);
 
         var result = _sut.ResolveAttack(attacker, defender, weapon);
@@ -158,13 +162,15 @@ public class CombatServiceTests
         var defender = CreateDefender(1);
         var weapon = new Weapon { Name = "Battleaxe", DamageDie = DieType.D8 };
 
-        _dice.Roll(DieType.D20).Returns(1);
+        // atk=1, def=10 → Priority 4: Fumble (not TotalReversal because def != 20)
+        _dice.Roll(DieType.D20).Returns(1, 10);
 
         var result = _sut.ResolveAttack(attacker, defender, weapon);
 
         Assert.False(result.IsHit);
         Assert.True(result.IsFumble);
         Assert.False(result.IsCriticalHit);
+        Assert.False(result.IsTotalReversal);
         Assert.Equal(0, result.Damage);
     }
 
@@ -175,7 +181,7 @@ public class CombatServiceTests
         var defender = CreateDefender(1);
         var weapon = new Weapon { Name = "Dagger", DamageDie = DieType.D4 };
 
-        _dice.Roll(DieType.D20).Returns(1);
+        _dice.Roll(DieType.D20).Returns(1, 10);
 
         var result = _sut.ResolveAttack(attacker, defender, weapon);
 
@@ -252,6 +258,189 @@ public class CombatServiceTests
 
         Assert.Equal(DieType.D8, result.DieType);
         Assert.Equal(7, result.Result);
+    }
+
+    // ── 7-Case priority matrix tests ────────────────────────────────────────
+
+    [Fact]
+    public void ResolveAttack_Atk1Def20_IsTotalReversal()
+    {
+        var attacker = new Character { Strength = 10 };
+        var defender = CreateDefender(5);
+        var weapon   = new Weapon { Name = "Sword", DamageDie = DieType.D8 };
+
+        _dice.Roll(DieType.D20).Returns(1, 20);
+
+        var result = _sut.ResolveAttack(attacker, defender, weapon);
+
+        Assert.False(result.IsHit);
+        Assert.True(result.IsFumble);
+        Assert.True(result.IsTotalReversal);
+        Assert.Equal(-4, result.AttackPowerPenalty);
+        Assert.Equal(0, result.Damage);
+        Assert.True(result.DefenderTmBonus > 0);
+    }
+
+    [Fact]
+    public void ResolveAttack_Atk20Def1_IsDevastatingStrike()
+    {
+        var attacker = new Character { Strength = 10 };
+        var defender = CreateDefender(5);
+        var weapon   = new Weapon { Name = "Sword", DamageDie = DieType.D8 };
+
+        _dice.Roll(DieType.D20).Returns(20, 1);
+        _dice.Roll(DieType.D8).Returns(4);
+
+        var result = _sut.ResolveAttack(attacker, defender, weapon);
+
+        Assert.True(result.IsHit);
+        Assert.True(result.IsDevastatingStrike);
+        Assert.False(result.IsFumble);
+        Assert.False(result.IsClash);
+        Assert.True(result.Damage > 0);
+    }
+
+    [Fact]
+    public void ResolveAttack_DevastatingStrike_DamageIsTripleBase()
+    {
+        var attacker = new Character { Strength = 10, Level = 0 }; // Level=0 removes level scaling for predictability
+        var defender = CreateDefender(0);
+        var weapon   = new Weapon { Name = "Sword", DamageDie = DieType.D8, DamageType = DamageType.Slashing };
+
+        _dice.Roll(DieType.D20).Returns(20, 1);
+        _dice.Roll(DieType.D8).Returns(4);
+
+        var result = _sut.ResolveAttack(attacker, defender, weapon);
+
+        // BaseDamage = roll(4) + STR mod(0) + flat(0) + level(0) = 4; ×3 × 1.0 − 0 = 12
+        Assert.Equal(12, result.Damage);
+    }
+
+    [Fact]
+    public void ResolveAttack_BothRoll20_IsClash()
+    {
+        var attacker = new Character { Strength = 10 };
+        var defender = CreateDefender(5);
+        var weapon   = new Weapon { Name = "Sword", DamageDie = DieType.D8 };
+
+        _dice.Roll(DieType.D20).Returns(20, 20);
+        _dice.Roll(DieType.D8).Returns(6);
+
+        var result = _sut.ResolveAttack(attacker, defender, weapon);
+
+        Assert.True(result.IsHit);
+        Assert.True(result.IsClash);
+        Assert.False(result.IsCriticalHit);       // Clash is NOT a crit
+        Assert.False(result.IsDevastatingStrike); // Clash is NOT devastating
+    }
+
+    [Fact]
+    public void ResolveAttack_Clash_DamageIsHalfNormal()
+    {
+        var attacker = new Character { Strength = 10, Level = 0 }; // Level=0 removes level scaling for predictability
+        var defender = CreateDefender(0);
+        var weapon   = new Weapon { Name = "Sword", DamageDie = DieType.D8, DamageType = DamageType.Slashing };
+
+        _dice.Roll(DieType.D20).Returns(20, 20);
+        _dice.Roll(DieType.D8).Returns(6);
+
+        var result = _sut.ResolveAttack(attacker, defender, weapon);
+
+        // BaseDamage=6, FinalDamage=6, /2 = 3
+        Assert.Equal(3, result.Damage);
+    }
+
+    [Fact]
+    public void ResolveAttack_AnyRoll1_Def2to19_IsFumbleNotTotalReversal()
+    {
+        var attacker = new Character { Strength = 10 };
+        var defender = CreateDefender(5);
+        var weapon   = new Weapon { Name = "Sword", DamageDie = DieType.D4 };
+
+        _dice.Roll(DieType.D20).Returns(1, 15);
+
+        var result = _sut.ResolveAttack(attacker, defender, weapon);
+
+        Assert.True(result.IsFumble);
+        Assert.False(result.IsTotalReversal);
+        Assert.Equal(-2, result.AttackPowerPenalty);
+    }
+
+    [Fact]
+    public void ResolveAttack_Atk20_Def2to19_IsCriticalNotClash()
+    {
+        var attacker = new Character { Strength = 10 };
+        var defender = CreateDefender(5);
+        var weapon   = new Weapon { Name = "Sword", DamageDie = DieType.D6 };
+
+        _dice.Roll(DieType.D20).Returns(20, 10);
+        _dice.Roll(DieType.D6).Returns(3);
+
+        var result = _sut.ResolveAttack(attacker, defender, weapon);
+
+        Assert.True(result.IsCriticalHit);
+        Assert.False(result.IsClash);
+        Assert.False(result.IsDevastatingStrike);
+    }
+
+    [Fact]
+    public void ResolveAttack_Def20_Atk2to19_IsPerfectParry()
+    {
+        var attacker = new Character { Strength = 10 };
+        var defender = CreateDefender(5);
+        var weapon   = new Weapon { Name = "Sword", DamageDie = DieType.D6 };
+
+        _dice.Roll(DieType.D20).Returns(10, 20);
+
+        var result = _sut.ResolveAttack(attacker, defender, weapon);
+
+        Assert.False(result.IsHit);
+        Assert.True(result.IsPerfectParry);
+        Assert.Equal(0, result.Damage);
+        Assert.True(result.DefenderTmBonus > 0);
+    }
+
+    // ── Regression: exclusive outcome flags ─────────────────────────────────
+
+    [Fact]
+    public void ResolveAttack_TotalReversal_IsNotCritAndNotClash()
+    {
+        var attacker = new Character { Strength = 10 };
+        var weapon   = new Weapon { Name = "Sword", DamageDie = DieType.D6 };
+        _dice.Roll(DieType.D20).Returns(1, 20);
+
+        var result = _sut.ResolveAttack(attacker, CreateDefender(5), weapon);
+
+        Assert.False(result.IsCriticalHit);
+        Assert.False(result.IsClash);
+        Assert.False(result.IsPerfectParry);
+    }
+
+    [Fact]
+    public void ResolveAttack_DevastatingStrike_IsNotFumbleAndNotClash()
+    {
+        var attacker = new Character { Strength = 10 };
+        var weapon   = new Weapon { Name = "Sword", DamageDie = DieType.D6 };
+        _dice.Roll(DieType.D20).Returns(20, 1);
+        _dice.Roll(DieType.D6).Returns(3);
+
+        var result = _sut.ResolveAttack(attacker, CreateDefender(5), weapon);
+
+        Assert.False(result.IsFumble);
+        Assert.False(result.IsClash);
+        Assert.False(result.IsCriticalHit);
+    }
+
+    [Fact]
+    public void ResolveAttack_PerfectParry_AttackPowerPenaltyIsZero()
+    {
+        var attacker = new Character { Strength = 10 };
+        var weapon   = new Weapon { Name = "Sword", DamageDie = DieType.D6 };
+        _dice.Roll(DieType.D20).Returns(10, 20);
+
+        var result = _sut.ResolveAttack(attacker, CreateDefender(5), weapon);
+
+        Assert.Equal(0, result.AttackPowerPenalty);
     }
 
     private static Character CreateDefender(int armorClass)

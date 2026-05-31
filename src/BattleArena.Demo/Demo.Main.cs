@@ -1,6 +1,7 @@
 namespace BattleArena.Demo;
 
 using Application.Interfaces;
+using Application.Modifiers;
 using Application.Models;
 using Application.Services;
 using BattleArena.Presentation;
@@ -165,7 +166,7 @@ static partial class Demo
         _diceService = diceSvc;
 
         var simulator = new CombatSimulator(
-            new CombatService(diceSvc, CombatStats),
+            new CombatService(diceSvc, CombatStats, [new RangeModifier()]),
             new TurnmeterService(),
             new StatusEffectService(),
             diceSvc,

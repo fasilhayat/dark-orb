@@ -28,6 +28,8 @@ services:
         condition: service_healthy
       battle-arena-api:
         condition: service_started
+    volumes:
+      - ../combat-logs:/app/combat-logs
     environment:
       DOTNET_ENVIRONMENT: Development
       BattleArenaApi__Url: "http://battle-arena-api:8585"

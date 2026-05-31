@@ -143,13 +143,17 @@ public static class CombatLogWriter
 
                 case "Attack":
                     var hit   = e.IsHit == true ? "HIT" : "MISS";
-                    var crit  = e.IsCritical == true ? " !! CRITICAL !!" : "";
-                    var fumb  = e.IsFumble  == true ? " ~~ FUMBLE ~~" : "";
+                    var crit  = e.IsCritical == true      ? " !! CRITICAL !!"      : "";
+                    var fumb  = e.IsFumble  == true       ? " ~~ FUMBLE ~~"        : "";
+                    var spcl  = e.IsDevastatingStrike == true ? " *** DEVASTATING STRIKE ***" :
+                                e.IsClash             == true ? " ~~ CLASH ~~"               :
+                                e.IsPerfectParry      == true ? " >> PERFECT PARRY <<"        :
+                                e.IsTotalReversal     == true ? " *** TOTAL REVERSAL ***"     : "";
+                    var defRoll = e.DefenseRoll.HasValue ? $"  d20_def={e.DefenseRoll,2}" : "";
                     var total = (e.DieRoll ?? 0) + (e.AttackPower ?? 0);
-                    sb.AppendLine($"           Attack   d20={e.DieRoll,2}  +AP {e.AttackPower,3}  vs DP {e.DefensePower,3}  total={total,3}  → {hit}{crit}{fumb}");
+                    sb.AppendLine($"           Attack   d20_atk={e.DieRoll,2}{defRoll}  +AP {e.AttackPower,3}  vs DP {e.DefensePower,3}  total={total,3}  -> {hit}{crit}{fumb}{spcl}");
                     if (!string.IsNullOrEmpty(e.Phrase))
                         sb.AppendLine($"                    \"{e.Phrase}\"");
-                    // Show damage formula inline (embedded in Message after "| Dmg: ")
                     if (e.IsHit == true && !string.IsNullOrEmpty(e.Message))
                     {
                         var dmgIdx = e.Message.IndexOf(" | Dmg: ", StringComparison.Ordinal);
@@ -164,6 +168,22 @@ public static class CombatLogWriter
 
                 case "FumblePenalty":
                     sb.AppendLine($"           FUMBLE   {e.ActorName} — attack power penalised next turn");
+                    break;
+
+                case "PerfectParry":
+                    sb.AppendLine($"           PARRY    {e.ActorName} — perfect parry! TM {e.TurnMeterBefore} -> {e.TurnMeterAfter}");
+                    break;
+
+                case "TotalReversal":
+                    sb.AppendLine($"           REVERSAL {e.ActorName} — total reversal! TM {e.TurnMeterBefore} -> {e.TurnMeterAfter}");
+                    break;
+
+                case "Clash":
+                    sb.AppendLine($"           CLASH    {e.ActorName} vs {e.TargetName} — weapons collide, mutual damage");
+                    break;
+
+                case "DevastatingStrike":
+                    sb.AppendLine($"           DEVAST   {e.ActorName} -> {e.TargetName} — x3 damage ({e.DamageDealt} dealt)");
                     break;
 
                 case "EffectApplied":
