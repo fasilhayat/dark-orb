@@ -43,6 +43,9 @@ public static class CombatPlaybackEngine
             inTurn = false;
         }
 
+        var combatOver = turnEvents.Any(e => e.EventType is "Death" or "KnockedOut");
+        presenter.WaitForNextTurn(combatOver);
+        
         PreSeedTurnMeters(result, state);
 
         presenter.ShowInitialScreen(state, 0);
