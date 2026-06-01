@@ -165,17 +165,27 @@ Subraces: Forest Gladefolk, Hill Gladefolk
 
 | Class | Archetype | Hit Die | StrikeRating | Description |
 |-------|:---------:|:-------:|:------------:|-------------|
-| **Barbarian** | Martial (base) | D12 | 19 | Fierce warriors who channel rage into devastating attacks. |
-| **Fighter** | Martial (base) | D10 | 18 | Weapons masters trained in all forms of combat. |
-| **Knight** | Martial (derived) | D10 | 18 | Armored cavaliers and champions of noble causes. |
-| **Paladin** | Martial (derived) | D10 | 18 | Holy warriors blessed by the gods with divine power. |
-| **Mage** | Caster (base) | D6 | 20 | Masters of the arcane who wield devastating spells. |
-| **Priest** | Caster (derived) | D10 | 19 | Devoted servants who channel divine magic to heal and protect. |
-| **Druid** | Caster (derived) | D10 | 19 | Guardians of nature who command the elements and beasts. |
+| **Barbarian** | Martial (base) | D12 | 20 | Fierce warriors who channel rage into devastating attacks. |
+| **Fighter** | Martial (base) | D10 | 21 | Weapons masters trained in all forms of combat. |
+| **Knight** | Martial (derived) | D10 | 21 | Armored cavaliers and champions of noble causes. |
+| **Paladin** | Martial (derived) | D10 | 21 | Holy warriors blessed by the gods with divine power. |
+| **Mage** | Caster (base) | D6 | 17 | Masters of the arcane who wield devastating spells. |
+| **Priest** | Caster (derived) | D10 | 18 | Devoted servants who channel divine magic to heal and protect. |
+| **Druid** | Caster (derived) | D10 | 18 | Guardians of nature who command the elements and beasts. |
 | **Rogue** | Hybrid (base) | D8 | 19 | Cunning infiltrators who strike from the shadows. |
 | **Bard** | Hybrid (derived) | D8 | 19 | Musicians and storytellers who weave magic through performance. |
 
-A lower **StrikeRating** is better. Knights, Paladins, and Fighters are the most accurate (18). Mages are the least accurate (20).
+A higher **StrikeRating** is better. Fighters, Knights, and Paladins are the most accurate (21). Mages are the least accurate (17).
+
+### Class Archetypes
+
+Classes are grouped into three archetypes that determine their progression:
+
+| Archetype | Classes | Description |
+|:---------:|---------|-------------|
+| **Martial** | Barbarian, Fighter, Knight, Paladin | Dedicated combatants; strike rating improves fastest (every 2 levels). Fewer accessory slots — they rely on their weapons and armor. Higher turnmeter level bonus (+Level/3). |
+| **Caster** | Mage, Priest, Druid | Magic-wielders; strike rating improves slowly (every 4 levels). They attune to magical accessories faster and unlock more slots. Lower turnmeter level bonus (+Level/5). |
+| **Hybrid** | Rogue, Bard | Mixed combatants; strike rating improves moderately (every 3 levels). Moderate accessory slot progression. Moderate turnmeter level bonus (+Level/4). |
 
 ---
 
@@ -591,16 +601,6 @@ The maximum level in BattleArena is **20**, following the D&D 5e standard. Reach
 | 18 | 265,000 | 40,000 |
 | 19 | 305,000 | 50,000 |
 | 20 | 355,000 | — |
-
-### Class Archetypes
-
-Classes are grouped into three archetypes that determine their progression:
-
-| Archetype | Classes | Description |
-|:---------:|---------|-------------|
-| **Martial** | Barbarian, Fighter, Knight, Paladin | Dedicated combatants; strike rating improves fastest (every 2 levels). Fewer accessory slots — they rely on their weapons and armor. Higher turnmeter level bonus (+Level/3). |
-| **Caster** | Mage, Priest, Druid | Magic-wielders; strike rating improves slowly (every 4 levels). They attune to magical accessories faster and unlock more slots. Lower turnmeter level bonus (+Level/5). |
-| **Hybrid** | Rogue, Bard | Mixed combatants; strike rating improves moderately (every 3 levels). Moderate accessory slot progression. Moderate turnmeter level bonus (+Level/4). |
 
 ### Hit Points & Hit Dice
 
