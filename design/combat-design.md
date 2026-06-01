@@ -306,6 +306,10 @@ HP                     = MaxHP + (N-1) × 6
 
 Hit rate is purely determined by gear, stats, class (StrikeRating), and d20. Level cancels out.
 
+<img width="360" alt="Balanced combat bell curve" src="diagrams/combat-distribution-bellcurve.svg">
+
+**How to read this bell curve:** The x-axis is hit count out of 2000 attacks; the y-axis is probability density (area under the curve sums to 1). The neon green curve is a normal distribution centred at **mu=1205** (60.25% × 2000) with **sigma=21.9**. The gold dashed line marks the mean. The shaded bands show the 68%/95%/99.7% confidence intervals (±1/2/3 sigma). In a balanced mirror match, most runs land between 1183 and 1227 hits (±1 sigma, 68% of the time).
+
 ---
 
 ### 13.2 Delta-Level Match (L9 vs L4)
@@ -393,28 +397,22 @@ Assuming identical gear, stats, and class (delta from level only):
 
 A delta of 5 shifts the hit probability by the equivalent of ±10 on the d20 roll. Combined with +10 damage and +30 HP, a 5-level gap is effectively unwinnable for the lower-level party under equal gear conditions.
 
----
-
-### 13.5 Hit Distribution Diagrams
-
-The following diagrams visualise the normal-distribution bell curves for the four representative combat scenarios, showing hit-count probability density over 2000 attacks:
+Hit distribution for the four representative combat scenarios, showing hit-count probability density over 2000 attacks:
 
 | Scenario | Parameters | AP | DP | P(hit) | mu | sigma |
 |----------|-----------|----|----|--------|----|-------|
-| Balanced (L2) | STR12 SR8 vs AC8 | 10 | 8 | 60.25% | 1205 | 21.9 |
 | Defensive (L1) | STR10 SR8 vs AC14 | 8 | 14 | 27.50% | 550 | 19.97 |
+| Balanced (L2) | STR12 SR8 vs AC8 | 10 | 8 | 60.25% | 1205 | 21.9 |
 | Attacker (L1) | STR14 SR10 vs AC5 | 12 | 5 | 76.50% | 1530 | 17.72 |
 | High Level (L5) | STR18 SR17 vs AC10 | 23 | 10 | 87.75% | 1755 | 9.97 |
 
-![Hit distribution comparison](diagrams/combat-distribution-comparison.svg)
+<img width="500" alt="Hit distribution comparison" src="diagrams/combat-distribution-comparison.svg">
 
-![Balanced combat bell curve](diagrams/combat-distribution-bellcurve.svg)
+**How to read the comparison chart:** Each horizontal bar spans the full 99.7% range (mu ± 3 sigma). Darker inner bands = 68% CI, medium = 95% CI, lightest outer = 99.7% CI. The gold line marks the mean. As hit rate increases (top to bottom), the CI bands tighten — higher AP/DP ratios produce more predictable outcomes. The defensive scenario (27.5% hit rate) has the widest spread; the high-level scenario (87.75%) is the tightest.
 
-![Defensive advantage bell curve](diagrams/combat-distribution-defensive.svg)
+<img width="300" alt="Defensive advantage bell curve" src="diagrams/combat-distribution-defensive.svg"> <img width="300" alt="Attacker advantage bell curve" src="diagrams/combat-distribution-attacker.svg"> <img width="300" alt="High level scaling bell curve" src="diagrams/combat-distribution-highlevel.svg">
 
-![Attacker advantage bell curve](diagrams/combat-distribution-attacker.svg)
-
-![High level scaling bell curve](diagrams/combat-distribution-highlevel.svg)
+**Defensive (left):** Low AP (8) vs high DP (14) yields P(hit)=27.5%. The distribution is wide (sigma=19.97) — few hits land, with high variance. **Attacker (centre):** High AP (12) vs low DP (5) yields P(hit)=76.5%. The curve shifts right and narrows (sigma=17.72). **High level (right):** L5 stats (AP=23, DP=10) produce P(hit)=87.75% and the tightest spread (sigma=9.97). Higher levels compress the distribution around the mean — outcomes become deterministic.
 
 ---
 
