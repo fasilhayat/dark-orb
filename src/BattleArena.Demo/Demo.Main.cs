@@ -53,167 +53,201 @@ static partial class Demo
         InitializeData();
 
         PrintHeader();
-        Scenario = PickScenario();
 
-        // ── Replay path — all setup and simulation already done by RunReplay() ──
-        if (Scenario == 'W')
+        while (true)
         {
-            if (!RunReplay()) return;
-            var replayMode = PickCombatMode();
-            PacingMultiplier = PickPacing();
-            CWL("\n  Press any key to watch the replay...", ConsoleColor.Gray);
-            Console.ReadKey(true);
-            Console.Clear();
-            PrintHeader();
-            if (replayMode == 'T') PlayTurnBased(); else PlayRealTime();
-            PrintSummary();
-            DumpCombatLog();
-            return;
-        }
+            Scenario = PickScenario();
 
-        if (Scenario == 'D')
-        {
-            RunDuel();
-        }
-        else
-        {
-            RunPartyCombat();
-        }
+            if (Scenario == 'Q')
+                return;
 
-        var mode = PickCombatMode();
-
-        // Targeting mode selection.
-        ITargetSelector heroSelector;
-        ITargetSelector enemySelector = new LowestHpTargetSelector();
-        if (Scenario == 'P')
-        {
-            var targeting = PickTargetingMode();
-            heroSelector = targeting == 'M'
-                ? new ManualConsoleTargetSelector()
-                : new LowestHpTargetSelector();
-        }
-        else
-        {
-            heroSelector = new LowestHpTargetSelector();
-        }
-
-        PacingMultiplier = PickPacing();
-
-        // Reset + build state dicts
-        foreach (var m in HeroParty.Members)  ResetCombatant(m.Character);
-        foreach (var m in EnemyParty.Members) ResetCombatant(m.Character);
-
-        var allMembers = HeroParty.Members.Concat(EnemyParty.Members).ToList();
-        MaxHp = allMembers.ToDictionary(m => m.Character.Name, m => m.Character.MaxHitPoints);
-        CurHp = new Dictionary<string, int>(MaxHp);
-
-        CWL("\n  Press any key to start the combat...", ConsoleColor.Gray);
-        Console.ReadKey(true);
-        Console.Clear();
-        PrintHeader();
-
-        // Show combatant stat sheets prior to combat
-        Console.WriteLine();
-        if (Scenario == 'D')
-        {
-            var f1 = HeroParty.Members[0];
-            var f2 = EnemyParty.Members[0];
-            var f1Atk = f1.AttackSource;
-            var f2Atk = f2.AttackSource;
-            ShowSheet("FIGHTER 1", f1.Character, f1Atk,
-                CombatStats.ComputeAttackerStats(f1.Character, GetSheetAttackSource(f1.Character, f1Atk)).AttackPower,
-                CombatStats.ComputeDefenderStats(f1.Character).DefensePower);
-            CWL("\n                           --- VS ---\n", ConsoleColor.Gray);
-            ShowSheet("FIGHTER 2", f2.Character, f2Atk,
-                CombatStats.ComputeAttackerStats(f2.Character, GetSheetAttackSource(f2.Character, f2Atk)).AttackPower,
-                CombatStats.ComputeDefenderStats(f2.Character).DefensePower);
-        }
-        else
-        {
-            CWL("  ── YOUR HEROES ───────────────────────────────────────────", ConsoleColor.Cyan);
-            foreach (var m in HeroParty.Members)
+            // ── Replay path — all setup and simulation already done by RunReplay() ──
+            if (Scenario == 'W')
             {
-                var atk = m.AttackSource;
-                ShowSheet("HERO", m.Character, atk,
-                    CombatStats.ComputeAttackerStats(m.Character, GetSheetAttackSource(m.Character, atk)).AttackPower,
-                    CombatStats.ComputeDefenderStats(m.Character).DefensePower);
+                if (!RunReplay()) continue;
+                var replayMode = PickCombatMode();
+                PacingMultiplier = PickPacing();
+                CWL("\n  Press any key to watch the replay...", ConsoleColor.Gray);
+                Console.ReadKey(true);
+                Console.Clear();
+                PrintHeader();
+                if (replayMode == 'T') PlayTurnBased(); else PlayRealTime();
+                PrintSummary();
+                DumpCombatLog();
+                Console.WriteLine();
+                CWL("  Press any key to return to the main menu...", ConsoleColor.Gray);
+                Console.ReadKey(true);
+                Console.Clear();
+                PrintHeader();
+                continue;
             }
-            CWL("\n  ── ENEMY HORDE ───────────────────────────────────────────", ConsoleColor.Red);
-            foreach (var m in EnemyParty.Members)
+
+            // ── Combat loop (fight again returns to roster selection) ──
+            char combatEndKey;
+            do
             {
-                var atk = m.AttackSource;
-                ShowSheet("ENEMY", m.Character, atk,
-                    CombatStats.ComputeAttackerStats(m.Character, GetSheetAttackSource(m.Character, atk)).AttackPower,
-                    CombatStats.ComputeDefenderStats(m.Character).DefensePower);
-            }
+                if (Scenario == 'D')
+                    RunDuel();
+                else
+                    RunPartyCombat();
+
+                var mode = PickCombatMode();
+
+                // Targeting mode selection.
+                ITargetSelector heroSelector;
+                ITargetSelector enemySelector = new LowestHpTargetSelector();
+                if (Scenario == 'P')
+                {
+                    var targeting = PickTargetingMode();
+                    heroSelector = targeting == 'M'
+                        ? new ManualConsoleTargetSelector()
+                        : new LowestHpTargetSelector();
+                }
+                else
+                {
+                    heroSelector = new LowestHpTargetSelector();
+                }
+
+                PacingMultiplier = PickPacing();
+
+                // Reset + build state dicts
+                foreach (var m in HeroParty.Members)  ResetCombatant(m.Character);
+                foreach (var m in EnemyParty.Members) ResetCombatant(m.Character);
+
+                var allMembers = HeroParty.Members.Concat(EnemyParty.Members).ToList();
+                MaxHp = allMembers.ToDictionary(m => m.Character.Name, m => m.Character.MaxHitPoints);
+                CurHp = new Dictionary<string, int>(MaxHp);
+
+                CWL("\n  Press any key to start the combat...", ConsoleColor.Gray);
+                Console.ReadKey(true);
+                Console.Clear();
+                PrintHeader();
+
+                // Show combatant stat sheets prior to combat
+                Console.WriteLine();
+                if (Scenario == 'D')
+                {
+                    var f1 = HeroParty.Members[0];
+                    var f2 = EnemyParty.Members[0];
+                    var f1Atk = f1.AttackSource;
+                    var f2Atk = f2.AttackSource;
+                    ShowSheet("FIGHTER 1", f1.Character, f1Atk,
+                        CombatStats.ComputeAttackerStats(f1.Character, GetSheetAttackSource(f1.Character, f1Atk)).AttackPower,
+                        CombatStats.ComputeDefenderStats(f1.Character).DefensePower);
+                    CWL("\n                           --- VS ---\n", ConsoleColor.Gray);
+                    ShowSheet("FIGHTER 2", f2.Character, f2Atk,
+                        CombatStats.ComputeAttackerStats(f2.Character, GetSheetAttackSource(f2.Character, f2Atk)).AttackPower,
+                        CombatStats.ComputeDefenderStats(f2.Character).DefensePower);
+                }
+                else
+                {
+                    CWL("  ── YOUR HEROES ───────────────────────────────────────────", ConsoleColor.Cyan);
+                    foreach (var m in HeroParty.Members)
+                    {
+                        var atk = m.AttackSource;
+                        ShowSheet("HERO", m.Character, atk,
+                            CombatStats.ComputeAttackerStats(m.Character, GetSheetAttackSource(m.Character, atk)).AttackPower,
+                            CombatStats.ComputeDefenderStats(m.Character).DefensePower);
+                    }
+                    CWL("\n  ── ENEMY HORDE ───────────────────────────────────────────", ConsoleColor.Red);
+                    foreach (var m in EnemyParty.Members)
+                    {
+                        var atk = m.AttackSource;
+                        ShowSheet("ENEMY", m.Character, atk,
+                            CombatStats.ComputeAttackerStats(m.Character, GetSheetAttackSource(m.Character, atk)).AttackPower,
+                            CombatStats.ComputeDefenderStats(m.Character).DefensePower);
+                    }
+                }
+
+                // Combat always runs client-side.  When the API is reachable, dice rolls
+                // are delegated to the API's /v1/roll/* endpoints via ApiDiceService;
+                // otherwise a local seeded DiceService is used.
+                _apiDiceService = null;
+
+                IDiceService diceSvc;
+                if (ApiClient is not null)
+                {
+                    _apiDiceService = new ApiDiceService(ApiClient);
+                    diceSvc = _apiDiceService;
+                }
+                else
+                {
+                    diceSvc = new DiceService();
+                }
+                _diceService = diceSvc;
+
+                var makeInteractive = new Func<IActionDecisionSource>(() =>
+                    new ConsoleActionDecisionSource((tick, actorName) =>
+                        DrawCombatScreen(BuildCurrentDisplayState(), tick, actorName)));
+
+                IActionDecisionSource heroDecision;
+                IActionDecisionSource enemyDecision;
+
+                if (mode == 'T')
+                {
+                    heroDecision = makeInteractive();
+                    enemyDecision = Scenario == 'D' ? makeInteractive() : new AutoActionDecisionSource(diceSvc);
+                }
+                else
+                {
+                    heroDecision = new AutoActionDecisionSource(diceSvc);
+                    enemyDecision = new AutoActionDecisionSource(diceSvc);
+                }
+
+                var simulator = new CombatSimulator(
+                    new CombatService(diceSvc, CombatStats, [new RangeModifier()]),
+                    new TurnmeterService(),
+                    new StatusEffectService(),
+                    diceSvc,
+                    heroSelector,
+                    enemySelector,
+                    heroDecision,
+                    enemyDecision);
+
+                if (mode == 'T')
+                {
+                    var observer = new CombatConsoleObserver(Paced);
+                    Result = simulator.SimulateAsync(HeroParty, EnemyParty, 500, observer)
+                        .GetAwaiter().GetResult();
+                }
+                else
+                {
+                    Result = simulator.Simulate(HeroParty, EnemyParty, 500);
+                }
+
+                var diceLog = _apiDiceService?.DiceLog;
+                Result.DiceLog = diceLog?.ToList();
+                Result.Log = CombatLogMerger.Merge(Result.Log, diceLog);
+
+                if (mode != 'T')
+                    PlayRealTime();
+
+                PrintSummary();
+                DumpCombatLog();
+                AwardCombatXp();
+
+                Console.WriteLine();
+                CWL("  [F]ight again (new roster)  |  [M]ain menu  |  [Q]uit", ConsoleColor.Yellow);
+                CW("  > ", ConsoleColor.Cyan);
+
+                do { combatEndKey = Console.ReadKey(true).KeyChar; }
+                while (combatEndKey is not ('F' or 'f' or 'M' or 'm' or 'Q' or 'q'));
+
+                switch (combatEndKey)
+                {
+                    case 'F': case 'f': CWL("Fight again", ConsoleColor.Cyan); break;
+                    case 'M': case 'm': CWL("Main menu", ConsoleColor.Cyan); break;
+                    case 'Q': case 'q': CWL("Quit", ConsoleColor.Cyan); break;
+                }
+
+                Console.Clear();
+                PrintHeader();
+
+            } while (combatEndKey is 'F' or 'f');
+
+            if (combatEndKey is 'Q' or 'q')
+                return;
         }
-
-        // Combat always runs client-side.  When the API is reachable, dice rolls
-        // are delegated to the API's /v1/roll/* endpoints via ApiDiceService;
-        // otherwise a local seeded DiceService is used.
-        _apiDiceService = null;
-
-        IDiceService diceSvc;
-        if (ApiClient is not null)
-        {
-            _apiDiceService = new ApiDiceService(ApiClient);
-            diceSvc = _apiDiceService;
-        }
-        else
-        {
-            diceSvc = new DiceService();
-        }
-        _diceService = diceSvc;
-
-        var makeInteractive = new Func<IActionDecisionSource>(() =>
-            new ConsoleActionDecisionSource((tick, actorName) =>
-                DrawCombatScreen(BuildCurrentDisplayState(), tick, actorName)));
-
-        IActionDecisionSource heroDecision;
-        IActionDecisionSource enemyDecision;
-
-        if (mode == 'T')
-        {
-            heroDecision = makeInteractive();
-            enemyDecision = Scenario == 'D' ? makeInteractive() : new AutoActionDecisionSource(diceSvc);
-        }
-        else
-        {
-            heroDecision = new AutoActionDecisionSource(diceSvc);
-            enemyDecision = new AutoActionDecisionSource(diceSvc);
-        }
-
-        var simulator = new CombatSimulator(
-            new CombatService(diceSvc, CombatStats, [new RangeModifier()]),
-            new TurnmeterService(),
-            new StatusEffectService(),
-            diceSvc,
-            heroSelector,
-            enemySelector,
-            heroDecision,
-            enemyDecision);
-
-        if (mode == 'T')
-        {
-            var observer = new CombatConsoleObserver(Paced);
-            Result = simulator.SimulateAsync(HeroParty, EnemyParty, 500, observer)
-                .GetAwaiter().GetResult();
-        }
-        else
-        {
-            Result = simulator.Simulate(HeroParty, EnemyParty, 500);
-        }
-
-        var diceLog = _apiDiceService?.DiceLog;
-        Result.DiceLog = diceLog?.ToList();
-        Result.Log = CombatLogMerger.Merge(Result.Log, diceLog);
-
-        if (mode != 'T')
-            PlayRealTime();
-
-        PrintSummary();
-        DumpCombatLog();
-        AwardCombatXp();
     }
 
     private static void RunDuel()

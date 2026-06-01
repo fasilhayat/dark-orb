@@ -14,7 +14,8 @@ static partial class Demo
         CWL("\n  Choose scenario:", ConsoleColor.Yellow);
         CW("    "); CW("[D]", ConsoleColor.Cyan); CWL("  Duel         -- 1v1, pick two of your characters", ConsoleColor.White);
         CW("    "); CW("[P]", ConsoleColor.Cyan); CWL("  Party Combat  -- build a hero party vs the Enemy Horde (3 enemies)", ConsoleColor.White);
-        CW("    "); CW("[W]", ConsoleColor.Cyan); CWL("  Watch Replay  -- replay a saved combat from the combat-logs/replay/ folder\n", ConsoleColor.White);
+        CW("    "); CW("[W]", ConsoleColor.Cyan); CWL("  Watch Replay  -- replay a saved combat from the combat-logs/replay/ folder", ConsoleColor.White);
+        CW("    "); CW("[Q]", ConsoleColor.Cyan); CWL("  Quit\n", ConsoleColor.White);
         CW("  > ", ConsoleColor.Cyan);
         while (true)
         {
@@ -22,6 +23,7 @@ static partial class Demo
             if (k is 'D' or 'd') { CWL("Duel", ConsoleColor.Cyan); return 'D'; }
             if (k is 'P' or 'p') { CWL("Party Combat", ConsoleColor.Cyan); return 'P'; }
             if (k is 'W' or 'w') { CWL("Watch Replay", ConsoleColor.Cyan); return 'W'; }
+            if (k is 'Q' or 'q') { CWL("Quit", ConsoleColor.Cyan); return 'Q'; }
         }
     }
 
