@@ -282,7 +282,7 @@ public class LevelingServiceTests
     [Fact]
     public void AwardCombatXp_CharacterLevelsUpWhenXpExceedsThreshold()
     {
-        var party = new[] { MakeChar("Theron", 1, xp: 95, hp: 100, alive: true) };
+        var party = new[] { MakeChar("Theron", 1, xp: 260, hp: 100, alive: true) };
         var enemies = new[] { MakeChar("Goblin", 5) };
         var log = Array.Empty<CombatLogEntry>();
         var ticks = ExpectedRounds(party, enemies);
@@ -290,52 +290,53 @@ public class LevelingServiceTests
 
         _ = _sut.AwardCombatXp(party, enemies, log, ticks);
 
-        Assert.Equal(95 + gain, party[0].ExperiencePoints);
+        Assert.Equal(260 + gain, party[0].ExperiencePoints);
         Assert.True(party[0].Level > 1);
     }
 
     [Fact]
-    public void EffectiveStrikeRating_Martial_ReducesEveryTwoLevels()
+    public void EffectiveStrikeRating_Martial_IncreasesEveryTwoLevels()
     {
         var c = MakeChar("Fighter", 10, classId: 8);
 
         var sr = _sut.EffectiveStrikeRating(c);
 
-        var expectedReduction = Math.Min((10 - 1) / 2, 6);
-        Assert.Equal(c.StrikeRating - expectedReduction, sr);
+        var expectedGain = Math.Min((10 - 1) / 2, 9); // Martial cap is 9
+        Assert.Equal(c.StrikeRating + expectedGain, sr);
     }
 
     [Fact]
-    public void EffectiveStrikeRating_Caster_ReducesEveryFourLevels()
+    public void EffectiveStrikeRating_Caster_IncreasesEveryFourLevels()
     {
         var c = MakeChar("Mage", 12, classId: 5);
 
         var sr = _sut.EffectiveStrikeRating(c);
 
-        var expectedReduction = Math.Min((12 - 1) / 4, 6);
-        Assert.Equal(c.StrikeRating - expectedReduction, sr);
+        var expectedGain = Math.Min((12 - 1) / 4, 4); // Caster cap is 4
+        Assert.Equal(c.StrikeRating + expectedGain, sr);
     }
 
     [Fact]
-    public void EffectiveStrikeRating_Hybrid_ReducesEveryThreeLevels()
+    public void EffectiveStrikeRating_Hybrid_IncreasesEveryThreeLevels()
     {
         var c = MakeChar("Rogue", 9, classId: 9);
 
         var sr = _sut.EffectiveStrikeRating(c);
 
-        var expectedReduction = Math.Min((9 - 1) / 3, 6);
-        Assert.Equal(c.StrikeRating - expectedReduction, sr);
+        var expectedGain = Math.Min((9 - 1) / 3, 6); // Hybrid cap is 6
+        Assert.Equal(c.StrikeRating + expectedGain, sr);
     }
 
     [Fact]
-    public void EffectiveStrikeRating_MinimumOfOne()
+    public void EffectiveStrikeRating_LowBaseSr_StillIncreasesWithLevel()
     {
         var c = MakeChar("Weakling", 12, classId: 8);
         c.StrikeRating = 1;
 
         var sr = _sut.EffectiveStrikeRating(c);
 
-        Assert.Equal(1, sr);
+        // Level 12 martial: gain = min((12-1)/2, 9) = min(5,9) = 5. SR = 1 + 5 = 6.
+        Assert.Equal(6, sr);
     }
 
     [Fact]

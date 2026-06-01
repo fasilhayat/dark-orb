@@ -1,7 +1,7 @@
 # BattleArena — World Lore & Data Reference
 
-> Homebrew AD&D-inspired fantasy world. Lower AC is better. StrikeRating (née THAC0) system.
-> Combat formula: `d20 + strMod + attackBonus >= StrikeRating - targetAC`
+> Modern opposed-roll D&D system. Higher AC is better. Higher StrikeRating = better attacker.
+> Combat formula: `d20 + AttackPower ≥ d20 + DefensePower` where `AttackPower = StrikeRating + Level/2 + abilityMod + weaponBonus`
 
 ---
 
@@ -565,24 +565,32 @@ Dwarf and Gladefolk Priests cannot bond with a Dragon (Human/Elf only). Instead,
 
 ### Max Level
 
-The maximum level in BattleArena is **12**. Reaching each level is meant to feel meaningful — early levels come quickly, while the final stretch to 12 requires dedication.
+The maximum level in BattleArena is **20**, following the D&D 5e standard. Reaching each level is meant to feel meaningful — early levels come quickly, while the final stretch to 20 requires dedication.
 
 ### XP Thresholds
 
 | Level | Total XP Required | XP to Next Level |
 |:-----:|:-----------------:|:----------------:|
-| 1 | 0 | 100 |
-| 2 | 100 | 200 |
-| 3 | 300 | 350 |
-| 4 | 650 | 500 |
-| 5 | 1,150 | 700 |
-| 6 | 1,850 | 900 |
-| 7 | 2,750 | 1,150 |
-| 8 | 3,900 | 1,400 |
-| 9 | 5,300 | 1,700 |
-| 10 | 7,000 | 2,100 |
-| 11 | 9,100 | 2,500 |
-| 12 | 11,600 | — |
+| 1 | 0 | 300 |
+| 2 | 300 | 600 |
+| 3 | 900 | 1,800 |
+| 4 | 2,700 | 3,800 |
+| 5 | 6,500 | 7,500 |
+| 6 | 14,000 | 9,000 |
+| 7 | 23,000 | 11,000 |
+| 8 | 34,000 | 14,000 |
+| 9 | 48,000 | 16,000 |
+| 10 | 64,000 | 21,000 |
+| 11 | 85,000 | 15,000 |
+| 12 | 100,000 | 20,000 |
+| 13 | 120,000 | 20,000 |
+| 14 | 140,000 | 25,000 |
+| 15 | 165,000 | 30,000 |
+| 16 | 195,000 | 30,000 |
+| 17 | 225,000 | 40,000 |
+| 18 | 265,000 | 40,000 |
+| 19 | 305,000 | 50,000 |
+| 20 | 355,000 | — |
 
 ### Class Archetypes
 

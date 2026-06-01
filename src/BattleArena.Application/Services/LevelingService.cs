@@ -92,12 +92,12 @@ public class LevelingService
         return result;
     }
 
-    // Effective strike rating after level-based reductions.
+    // Effective SR after level-based gains. Higher is better — SR improves as characters level up.
     public int EffectiveStrikeRating(Character character)
     {
         var archetype = LevelProgression.Archetype(character.ClassId);
-        var bonus = LevelProgression.SrBonus(character.Level, archetype);
-        return Math.Max(1, character.StrikeRating - bonus);
+        var gain = LevelProgression.SrLevelGain(character.Level, archetype);
+        return character.StrikeRating + gain;
     }
 
     // Number of accessory slots available at the character's current level and class.
@@ -115,7 +115,7 @@ public class LevelingService
         {
             OldLevel = before.Level,
             NewLevel = after.Level,
-            StrikeRatingImproved = EffectiveStrikeRating(after) < EffectiveStrikeRating(before),
+            StrikeRatingImproved = EffectiveStrikeRating(after) > EffectiveStrikeRating(before),
             NewAccessorySlots = AccessorySlotCount(after)
         };
     }

@@ -14,20 +14,20 @@ WHERE r.name = 'Dwarf' AND c.name = 'Fighter';
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, sex, biography, max_mana)
-SELECT 'Tanis Half-Elven', r.id, c.id, 5, 14, 16, 12, 14, 14, 16, 29, 29, 14, 18, 'M', '', 0
+SELECT 'Tanis Half-Elven', r.id, c.id, 5, 14, 16, 12, 14, 14, 16, 29, 29, 10, 18, 'M', '', 0
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Elf' AND c.name = 'Rogue';
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, strength_percentile, max_hit_points, current_hit_points, strike_rating, turn_speed, sex, biography, max_mana)
-SELECT 'Karg Bloodfang', r.id, c.id, 6, 18, 10, 16, 7, 8, 9, 99, 62, 62, 13, 14, 'M', '', 0
+SELECT 'Karg Bloodfang', r.id, c.id, 6, 18, 10, 16, 7, 8, 9, 99, 62, 62, 14, 14, 'M', '', 0
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Orc' AND c.name = 'Barbarian';
 
 
 -- Additional playable characters for full 6-hero party demos
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, sex, biography, max_mana)
-SELECT 'Elara Swiftwind', r.id, c.id, 5, 8, 14, 10, 18, 16, 14, 18, 18, 13, 10, 'F', '', 155
+SELECT 'Elara Swiftwind', r.id, c.id, 5, 8, 14, 10, 18, 16, 14, 18, 18, 5, 10, 'F', '', 155
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Elf' AND c.name = 'Mage'
 AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Elara Swiftwind');
@@ -41,7 +41,7 @@ AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Sir Aldric Vane
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, sex, biography, max_mana)
-SELECT 'Mira Brightholm', r.id, c.id, 4, 10, 14, 12, 15, 17, 16, 29, 29, 14, 12, 'F', '', 100
+SELECT 'Mira Brightholm', r.id, c.id, 4, 10, 14, 12, 15, 17, 16, 29, 29, 7, 12, 'F', '', 100
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Human' AND c.name = 'Priest'
 AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Mira Brightholm');
@@ -52,21 +52,21 @@ AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Mira Brightholm
 -- ============================================================
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc, sex, biography, max_mana)
-SELECT 'Brorn Ironarm', r.id, c.id, 6, 18, 10, 18, 8, 10, 9, 68, 68, 13, 10, 0, 'M', '', 0
+SELECT 'Brorn Ironarm', r.id, c.id, 6, 18, 10, 18, 8, 10, 9, 68, 68, 14, 10, 0, 'M', '', 0
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Dwarf' AND c.name = 'Barbarian'
 AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Brorn Ironarm');
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc, sex, biography, max_mana)
-SELECT 'Sylas Moonshadow', r.id, c.id, 5, 10, 16, 10, 17, 14, 15, 24, 24, 14, 16, 0, 'M', '', 0
+SELECT 'Sylas Moonshadow', r.id, c.id, 5, 10, 16, 10, 17, 14, 15, 24, 24, 10, 16, 0, 'M', '', 0
 FROM arena_data.race r, arena_data.class c
 WHERE r.name = 'Elf' AND c.name = 'Rogue'
 AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Sylas Moonshadow');
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc, sex, biography, max_mana)
-SELECT 'Captain Torvin', r.id, c.id, 7, 16, 12, 15, 10, 12, 13, 57, 57, 13, 10, 1, 'M',
+SELECT 'Captain Torvin', r.id, c.id, 7, 16, 12, 15, 10, 12, 13, 57, 57, 15, 10, 1, 'M',
        'A retired captain of the City Watch who now runs a small weapons shop in the market district. He lost his left eye to a goblin arrow during the Goblin Wars and claims it gave him better judgment of character.',
        0
 FROM arena_data.race r, arena_data.class c
@@ -75,7 +75,7 @@ AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Captain Torvin'
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc, sex, biography, max_mana)
-SELECT 'Sister Marigold', r.id, c.id, 9, 10, 10, 12, 14, 18, 16, 59, 59, 14, 10, 1, 'F',
+SELECT 'Sister Marigold', r.id, c.id, 9, 10, 10, 12, 14, 18, 16, 59, 59, 8, 10, 1, 'F',
        'A soft-spoken priestess of the Temple of Light who has healed everything from battlefield wounds to broken hearts. She never turns away the sick or poor, and the temple gardens she tends are the most beautiful in the city.',
        105
 FROM arena_data.race r, arena_data.class c
@@ -84,7 +84,7 @@ AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Sister Marigold
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc, sex, biography, max_mana)
-SELECT 'Rorik the Wanderer', r.id, c.id, 8, 18, 10, 18, 8, 10, 9, 89, 89, 13, 10, 1, 'M',
+SELECT 'Rorik the Wanderer', r.id, c.id, 8, 18, 10, 18, 8, 10, 9, 89, 89, 16, 10, 1, 'M',
        'A dwarf who has outlived three clans and drank every tavern dry from the Iron Mountains to the coast. He wanders the realm seeking worthy drinking partners and fights worth remembering. Despite his gruff exterior, he has saved more than one village from bandits.',
        0
 FROM arena_data.race r, arena_data.class c
@@ -93,7 +93,7 @@ AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Rorik the Wande
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc, sex, biography, max_mana)
-SELECT 'Selene Nightwhisper', r.id, c.id, 10, 8, 14, 10, 18, 14, 16, 33, 33, 14, 14, 1, 'F',
+SELECT 'Selene Nightwhisper', r.id, c.id, 10, 8, 14, 10, 18, 14, 16, 33, 33, 6, 14, 1, 'F',
        'A half-elf enchantress who runs an apothecary and curio shop. Her true specialty lies in identifying magical items and brokering deals between those who have them and those who seek them. She speaks four languages and is never caught off guard.',
        200
 FROM arena_data.race r, arena_data.class c
@@ -102,7 +102,7 @@ AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Selene Nightwhi
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc, sex, biography, max_mana)
-SELECT 'Grommash Ironhide', r.id, c.id, 12, 20, 10, 18, 7, 8, 10, 118, 118, 13, 10, 1, 'M',
+SELECT 'Grommash Ironhide', r.id, c.id, 12, 20, 10, 18, 7, 8, 10, 118, 118, 17, 10, 1, 'M',
        'An orc of few words and many kills. He wanders the realm seeking worthy opponents to test his steel against. Despite his fearsome reputation, he has a strict code of honor and has been known to spare foes who yield with dignity.',
        0
 FROM arena_data.race r, arena_data.class c
@@ -111,7 +111,7 @@ AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Grommash Ironhi
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc, sex, biography, max_mana)
-SELECT 'Finn Swift', r.id, c.id, 6, 8, 18, 10, 12, 10, 16, 28, 28, 14, 18, 1, 'M',
+SELECT 'Finn Swift', r.id, c.id, 6, 8, 18, 10, 12, 10, 16, 28, 28, 10, 18, 1, 'M',
        'A halfling with an infectious grin and a talent for being where he should not be. He runs an information network that spans every tavern and market stall in the city. For a few gold coins, Finn can tell you anything about anyone.',
        0
 FROM arena_data.race r, arena_data.class c
@@ -120,7 +120,7 @@ AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Finn Swift');
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc, sex, biography, max_mana)
-SELECT 'The Collector', r.id, c.id, 15, 10, 12, 10, 20, 16, 14, 48, 48, 15, 12, 1, 'X',
+SELECT 'The Collector', r.id, c.id, 15, 10, 12, 10, 20, 16, 14, 48, 48, 7, 12, 1, 'X',
        'A mysterious figure cloaked in grey who appears at auctions, estate sales, and archaeological digs across the realm. The Collector buys rare and unusual items — never sells. His vault is rumoured to contain artifacts from the Age of Gods.',
        275
 FROM arena_data.race r, arena_data.class c
@@ -129,7 +129,7 @@ AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'The Collector')
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc, sex, biography, max_mana)
-SELECT 'Morgath the Pale', r.id, c.id, 14, 18, 8, 16, 10, 12, 8, 123, 123, 14, 8, 1, 'M',
+SELECT 'Morgath the Pale', r.id, c.id, 14, 18, 8, 16, 10, 12, 8, 123, 123, 17, 8, 1, 'M',
        'An undead knight cursed to guard the Tomb of the First King for eternity. He was once a valiant paladin who broke his oath and was sentenced to unending vigilance. He speaks in a hollow whisper and his sword has never rusted.',
        0
 FROM arena_data.race r, arena_data.class c
@@ -138,7 +138,7 @@ AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Morgath the Pal
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc, sex, biography, max_mana)
-SELECT 'Sizzle', r.id, c.id, 5, 6, 14, 12, 16, 10, 12, 23, 23, 15, 14, 1, 'X',
+SELECT 'Sizzle', r.id, c.id, 5, 6, 14, 12, 16, 10, 12, 23, 23, 5, 14, 1, 'X',
        'A kobold with an unhealthy obsession with fire and explosions. Sizzle sells "perfectly safe" fireworks and alchemical mixtures from a stall that has burned down four times. He insists the fires were not his fault.',
        135
 FROM arena_data.race r, arena_data.class c
@@ -147,7 +147,7 @@ AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Sizzle');
 
 
 INSERT INTO arena_data.character (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, max_hit_points, current_hit_points, strike_rating, turn_speed, npc, sex, biography, max_mana)
-SELECT 'Ivy Thornwood', r.id, c.id, 8, 10, 14, 12, 16, 18, 14, 53, 53, 14, 14, 1, 'F',
+SELECT 'Ivy Thornwood', r.id, c.id, 8, 10, 14, 12, 16, 18, 14, 53, 53, 8, 14, 1, 'F',
        'A forest guardian who protects the ancient groves of the Singing Woods. She trades rare herbs, seeds, and components to those who prove they respect nature. She has not spoken a word in three years — she claims the trees speak enough for her.',
        145
 FROM arena_data.race r, arena_data.class c

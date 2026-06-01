@@ -5,9 +5,9 @@
 # and comparing against the defender's DefensePower (derived from armor class).
 #
 # Formula reference:
-#   AttackPower = StrikeRating + Level + StrengthModifier + WeaponAttackBonus
-#   DefensePower = EffectiveAC = TotalArmorClass
-#   Hit if: d20 + AttackPower >= DefensePower
+#   AttackPower = StrikeRating + Level/2 + StrengthModifier + WeaponAttackBonus
+#   DefensePower = EffectiveAC = TotalArmorClass + LevelDefenseBonus + other modifiers
+#   Hit if: d20 + AttackPower >= d20 + DefensePower   (modern opposed-roll, NOT THAC0)
 Feature: Combat — Core Attack Resolution
     As a game designer
     I want to resolve attacks and damage
@@ -69,10 +69,10 @@ Feature: Combat — Core Attack Resolution
         And the damage should be 0
 
     @attack
-    # Higher StrikeRating means higher ClassAccuracyBase.
+    # Higher StrikeRating means higher ClassAccuracyBase (SR is used directly; higher = better attacker).
     # StrikeRating 15 → ClassAccuracyBase 15. AttackPower = 15 + 1 + 3 + 0 = 19.
     # Roll 8 + 19 = 27 >= DefensePower 6 (AC=5 + Level 1). Hit. Damage = d6(6) + 3 + Level/2(0) = 9.
-    Scenario: Lower strike rating makes attacks more likely to hit
+    Scenario: Higher strike rating makes attacks more likely to hit
         Given a character with strength 16 and strike rating 15
         And the D20 roll is 8
         And the damage die roll is 6

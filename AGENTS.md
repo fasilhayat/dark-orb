@@ -139,7 +139,33 @@ When adding or changing the resistance system:
 
 ---
 
-## 6. Combat simulator rules
+## 6. Combat system model — modern D&D opposed-roll, NOT THAC0
+
+> **This is the authoritative rule. It overrides any older references to THAC0 or AD&D-style subtraction.**
+
+BattleArena uses the **modern opposed-roll D&D model**. The old THAC0 system has been fully retired.
+
+### What this means in practice
+
+| Concept | Modern (current) | THAC0 (retired — do NOT use) |
+|---------|-----------------|-------------------------------|
+| Formula | `d20 + AttackPower ≥ d20 + DefensePower` (both sides roll) | single roll ≥ `THAC0 - AC` |
+| StrikeRating | **Higher = better attacker** (`ClassAccuracyBase = StrikeRating`) | lower was better |
+| ArmorClass | **Higher = more defensive** (`EffectiveAC = TotalArmorClass`) | lower was better |
+| Level scaling | `LevelScaling = Level / 2` (attacker), `LevelDefenseBonus = Level` (defender) | single flat modifier |
+
+### Hard rules — violations must be flagged and corrected
+
+1. `ClassAccuracyBase` is always `attacker.StrikeRating` — **never** `20 - StrikeRating`.
+2. `EffectiveAC` is always `equipment.TotalArmorClass` — **never** `20 - ArmorClass`.
+3. "Higher StrikeRating = better attacker." Test names, comments, and design docs must use this framing.
+4. "Higher ArmorClass value = more defensive." Plate Armor (AC 18) gives `EffectiveAC 18`, which is good.
+5. `LevelingService.EffectiveStrikeRating` returns `StrikeRating + levelGain` — SR increases with level. "SR improved" means the value went **up**, not down.
+6. Any code or document that says "lower SR is better", "20 - StrikeRating", or "20 - AC" is a THAC0 remnant and must be corrected immediately.
+
+---
+
+## 6b. Combat simulator rules
 
 - `CombatSimulator` depends on `ICombatService`, `ITurnmeterService`, `IStatusEffectService`, `IDiceService`.
 - All combat-log events use `CombatLogEntry` with an `EventType` string field. Stick to the established event types:

@@ -2,6 +2,7 @@ namespace BattleArena.Api.Endpoints;
 
 using Application.Interfaces;
 using Application.Models;
+using Application.Services;
 using Core.Entities;
 using Core.Entities.Enums;
 using Core.Interfaces;

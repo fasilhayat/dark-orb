@@ -30,7 +30,7 @@
 
 ## 1. Level Cap & Overview
 
-**Max level: 12** (unchanged from §22).
+**Max level: 20** (D&D 5e standard, following §22).
 
 Every level-up grants:
 

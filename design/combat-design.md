@@ -40,15 +40,17 @@ Natural 20 → automatic hit + critical
 
 ### AttackPower
 
+> **Modern D&D model — values are used directly. There is no `20 - X` subtraction.**
+
 ```
-ClassAccuracyBase = 20 - StrikeRating
-LevelScaling     = Level
-AttributeModifier = (STR or DEX - 10) / 2   (depends on weapon type)
+ClassAccuracyBase = StrikeRating           ← higher SR = better attacker
+LevelScaling      = Level / 2
+AttributeModifier = (STR or DEX - 10) / 2   (depends on weapon type; INT for spells)
 WeaponAttackBonus = source.AttackBonus
-SkillModifiers   = sum(feat.AttackBonus)
-BuffModifiers    = stacked status effect bonuses
-RacialModifiers  = sum(race.feat.AttackBonus)
-ItemSetBonuses   = 0 (reserved)
+SkillModifiers    = sum(feat.AttackBonus)
+BuffModifiers     = stacked status effect bonuses
+RacialModifiers   = sum(race.feat.AttackBonus)
+ItemSetBonuses    = 0 (reserved)
 
 AttackPower = ClassAccuracyBase + LevelScaling + AttributeModifier
             + WeaponAttackBonus + SkillModifiers + BuffModifiers
@@ -57,8 +59,10 @@ AttackPower = ClassAccuracyBase + LevelScaling + AttributeModifier
 
 ### DefensePower
 
+> **Modern D&D model — ArmorClass value is used directly. There is no `20 - AC` subtraction.**
+
 ```
-EffectiveAC       = 20 - TotalArmorClass
+EffectiveAC       = TotalArmorClass        ← higher AC value = more defensive
 DexterityModifier = min((DEX - 10) / 2, maxDexterityBonus)
 ShieldBonus       = shield.DefenseBonus
 DefensiveBuffs    = stacked status effect bonuses / penalties
@@ -87,27 +91,38 @@ DefensePower = EffectiveAC + DexterityModifier + ShieldBonus
 
 ## 5. StrikeRating Integration
 
-`ClassAccuracyBase = 20 - StrikeRating`
+> **Higher StrikeRating = better attacker.** `ClassAccuracyBase = StrikeRating` (direct, no conversion).
+> This is the modern system. The old THAC0 formula (`20 - StrikeRating`) has been retired.
 
 | StrikeRating | ClassAccuracyBase | Typical Class |
 |-------------|-------------------|---------------|
-| 16          | 4                 | Fighter       |
-| 15          | 5                 | Ranger        |
-| 14          | 6                 | Cleric        |
-| 13          | 7                 | Mage          |
-| 12          | 8                 | Thief         |
+| 19          | 19                | Fighter       |
+| 17          | 17                | Ranger        |
+| 15          | 15                | Cleric        |
+| 13          | 13                | Thief         |
+| 10          | 10                | Mage          |
 
-Lower StrikeRating = higher base accuracy. StrikeRating is the AD&D-style abstraction for class-based combat proficiency.
+Higher StrikeRating = higher ClassAccuracyBase = more likely to hit. Fighters are the most accurate combat class; Mages are the least.
+
+`EffectiveStrikeRating` (leveling service) adds a class-archetype gain on level-up:
+- Martial: +1 per 2 levels (cap +6)
+- Hybrid: +1 per 3 levels (cap +6)
+- Caster: +1 per 4 levels (cap +6)
+
+"SR improved" means `EffectiveStrikeRating` went **up** on level-up.
 
 ---
 
 ## 6. Armor Class Model
 
+> **Higher ArmorClass value = more defensive.** `EffectiveAC = TotalArmorClass` (direct, no conversion).
+> This is the modern system. The old THAC0 formula (`20 - AC` where lower was better) has been retired.
+
 ```
-EffectiveAC = 20 - ArmorClass
+EffectiveAC = TotalArmorClass
 ```
 
-Lower AC is better (AD&D style). A character with AC 5 has EffectiveAC 15. The ArmorClass value comes from equipped armor pieces, with the lowest AC from worn armor applied.
+A character wearing Plate Armor (AC 18) has `EffectiveAC 18` — the highest physical defense value in the game. Robes (AC 10) give `EffectiveAC 10`. Higher is always better.
 
 Dexterity bonus is capped by the sum of `MaxDexterityBonus` across all worn armor pieces — heavy armor limits how much DEX helps.
 
@@ -639,9 +654,9 @@ These targets assume no extreme gear/stat disparities. A Level 1 in plate armor 
 ## 21. Quick Reference: Formula Cheat Sheet
 
 ```
-To-hit:             d20 + AttackPower ≥ DefensePower
-AttackPower:        20 - StrikeRating + Level + (STR/10-10)/2 + weapon.AttackBonus + feats + buffs + race
-DefensePower:       20 - AC + min((DEX-10)/2, maxDex) + shield + buffs + race + Level
+To-hit:             d20 + AttackPower ≥ d20 + DefensePower   (both sides roll — modern opposed-roll model)
+AttackPower:        StrikeRating + Level/2 + (STR/DEX/INT-10)/2 + weapon.AttackBonus + feats + buffs + race
+DefensePower:       TotalArmorClass + min((DEX-10)/2, maxDex) + shield + buffs + race + Level
 BaseDamage:         WeaponDiceRoll + (STR/INT-10)/2 + FlatBonus + Level / 2
 FinalDamage:        max(0, BaseDamage × (1.5 if vulnerable) - Mitigation + Elemental)
 CriticalDamage:     max(0, (BaseDamage × 2) × (1.5 if vulnerable) - Mitigation + Elemental)

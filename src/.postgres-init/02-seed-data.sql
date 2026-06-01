@@ -148,15 +148,15 @@ AND NOT EXISTS (SELECT 1 FROM arena_data.feat_resistance fr WHERE fr.feat_id = r
 INSERT INTO arena_data.class (name, description, movement_bonus, hit_die_id, base_strike_rating)
 	SELECT src.name, src.description, src.movement, d.id, src.strike_rating
 	FROM (VALUES
-    ('Barbarian', 'Fierce warriors who channel rage into devastating attacks.',       5, 'D12', 19),
-    ('Knight',    'Armored cavaliers and champions of noble causes.',                 0, 'D10', 18),
-    ('Paladin',   'Holy warriors blessed by the gods with divine power.',             0, 'D10', 18),
-    ('Priest',    'Devoted servants who channel divine magic to heal and protect.',    5, 'D8',  19),
-    ('Mage',      'Masters of the arcane who wield devastating spells.',              0, 'D4',  20),
-    ('Bard',      'Musicians and storytellers who weave magic through performance.',   5, 'D6',  19),
-    ('Druid',     'Guardians of nature who command the elements and beasts.',         5, 'D8',  19),
-    ('Fighter',   'Weapons masters trained in all forms of combat.',                   0, 'D10', 18),
-    ('Rogue',     'Cunning infiltrators who strike from the shadows.',               10, 'D6',  19)
+    ('Barbarian', 'Fierce warriors who channel rage into devastating attacks.',       5, 'D12', 12),
+    ('Knight',    'Armored cavaliers and champions of noble causes.',                 0, 'D10', 11),
+    ('Paladin',   'Holy warriors blessed by the gods with divine power.',             0, 'D10',  9),
+    ('Priest',    'Devoted servants who channel divine magic to heal and protect.',    5, 'D8',   6),
+    ('Mage',      'Masters of the arcane who wield devastating spells.',              0, 'D4',   4),
+    ('Bard',      'Musicians and storytellers who weave magic through performance.',   5, 'D6',   6),
+    ('Druid',     'Guardians of nature who command the elements and beasts.',         5, 'D8',   7),
+    ('Fighter',   'Weapons masters trained in all forms of combat.',                   0, 'D10', 12),
+    ('Rogue',     'Cunning infiltrators who strike from the shadows.',               10, 'D6',   8)
 ) AS src(name, description, movement, die_name, strike_rating)
 JOIN arena_data.die_type d ON d.name = src.die_name;
 

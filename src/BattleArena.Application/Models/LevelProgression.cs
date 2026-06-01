@@ -4,10 +4,12 @@ namespace BattleArena.Application.Models;
 
 public static class LevelProgression
 {
-    public const int MaxLevel = 12;
+    public const int MaxLevel = 20;
 
+    // D&D 5e official XP thresholds (levels 1–20).
     public static readonly int[] XpThresholds =
-        [0, 100, 300, 650, 1150, 1850, 2750, 3900, 5300, 7000, 9100, 11600];
+        [0, 300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 64000,
+         85000, 100000, 120000, 140000, 165000, 195000, 225000, 265000, 305000, 355000];
 
     public enum ClassArchetype
     {
@@ -32,38 +34,55 @@ public static class LevelProgression
         _ => ClassArchetype.Martial
     };
 
-    public static int SrBonus(int level, ClassArchetype archetype)
+    // SR increases with level — martial classes gain fastest (modern D&D: higher SR = better attacker).
+    public static int SrLevelGain(int level, ClassArchetype archetype)
     {
-        var reduction = archetype switch
+        var gain = archetype switch
         {
             ClassArchetype.Martial => (level - 1) / 2,
             ClassArchetype.Hybrid => (level - 1) / 3,
             ClassArchetype.Caster => (level - 1) / 4,
             _ => 0
         };
-        return Math.Min(reduction, 6);
+        // Per-archetype SR caps at level 20: Martial=9, Hybrid=6, Caster=4.
+        var cap = archetype switch
+        {
+            ClassArchetype.Martial => 9,
+            ClassArchetype.Hybrid  => 6,
+            ClassArchetype.Caster  => 4,
+            _ => 6
+        };
+        return Math.Min(gain, cap);
     }
 
     public static int AccessorySlots(int level, ClassArchetype archetype)
     {
         var common = level switch
         {
+            >= 18 => 6,
+            >= 15 => 5,
             >= 12 => 4,
-            >= 9 => 3,
-            >= 6 => 2,
-            >= 3 => 1,
+            >= 9  => 3,
+            >= 6  => 2,
+            >= 3  => 1,
             _ => 0
         };
         var bonus = archetype switch
         {
             ClassArchetype.Caster => level switch
             {
+                >= 18 => 3,
                 >= 11 => 2,
-                >= 8 => 1,
-                >= 4 => 1,
+                >= 8  => 1,
+                >= 4  => 1,
                 _ => 0
             },
-            ClassArchetype.Hybrid => level >= 10 ? 1 : 0,
+            ClassArchetype.Hybrid => level switch
+            {
+                >= 16 => 2,
+                >= 10 => 1,
+                _ => 0
+            },
             _ => 0
         };
         return common + bonus;
@@ -71,7 +90,7 @@ public static class LevelProgression
 
     public static int XpForLevel(int level) =>
         level < 1 ? 0 :
-        level >= 12 ? XpThresholds[^1] :
+        level >= 20 ? XpThresholds[^1] :
         XpThresholds[level - 1];
 
     public static int XpToNextLevel(int currentLevel) =>
