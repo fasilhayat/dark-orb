@@ -16,52 +16,35 @@ Feature: Resistance System — Effect Infliction
     So that racial traits, gear and protective spells have meaningful combat impact
 
     @resistance
-    # A character with no resistance sources has 0 computed resistance.
-    Scenario: Character with no resistance sources has zero computed resistance
+    # ComputeResistance is the single source of truth for character resistances,
+    # summing racial feats + equipped armor + active status-effect buffs,
+    # then clamping to [0, 95].  A value of 0 means that source is absent.
+    Scenario Outline: Magic resistance stacks correctly from all sources
         Given a character with no resistance sources
-        Then the character's computed magic resistance should be 0
+        And a racial feat granting <racial> magic resistance
+        And chest armor with <chest> magic resistance
+        And an active buff granting <buff> magic resistance
+        Then the character's computed magic resistance should be <expected>
+
+        Examples:
+            | racial | chest | buff | expected |
+            |      0 |     0 |    0 |        0 |
+            |     25 |     0 |    0 |       25 |
+            |      0 |     0 |   30 |       30 |
+            |     15 |    20 |   10 |       45 |
+            |     25 |    20 |   60 |       95 |
 
     @resistance
-    # A racial feat granting magic resistance is picked up by ComputeResistance.
-    Scenario: Racial feat contributes to magic resistance
-        Given a character with a racial feat granting 25 magic resistance
-        Then the character's computed magic resistance should be 25
+    # Fire resistance from multiple armor pieces is summed across slots.
+    Scenario Outline: Fire resistance stacks from armor pieces
+        Given a character wearing armor with <chest> fire resistance
+        And the character also wears boots with <boots> fire resistance
+        Then the character's computed fire resistance should be <expected>
 
-    @resistance
-    # A single armor piece with fire resistance is reflected correctly.
-    Scenario: Armor piece contributes to elemental resistance
-        Given a character wearing armor with 30 fire resistance
-        Then the character's computed fire resistance should be 30
-
-    @resistance
-    # Two armor pieces each contributing fire resistance are summed.
-    Scenario: Multiple armor pieces with the same resistance type are summed
-        Given a character wearing armor with 15 fire resistance
-        And the character also wears boots with 10 fire resistance
-        Then the character's computed fire resistance should be 25
-
-    @resistance
-    # An active protective buff grants additional resistance.
-    Scenario: Active protective buff contributes to magic resistance
-        Given a character with no resistance sources
-        When an Arcane Ward buff granting 30 magic resistance is applied to the character
-        Then the character's computed magic resistance should be 30
-
-    @resistance
-    # Resistance from all three sources stacks before being capped.
-    Scenario: All three resistance sources stack correctly
-        Given a character with a racial feat granting 15 magic resistance
-        And the character wears chest armor with 20 magic resistance
-        And the character has an active buff granting 10 magic resistance
-        Then the character's computed magic resistance should be 45
-
-    @resistance
-    # The cap at 95 prevents a character from becoming fully immune.
-    Scenario: Combined resistance is capped at 95
-        Given a character with a racial feat granting 25 magic resistance
-        And the character wears chest armor with 20 magic resistance
-        And the character has an active buff granting 60 magic resistance
-        Then the character's computed magic resistance should be 95
+        Examples:
+            | chest | boots | expected |
+            |    30 |     0 |       30 |
+            |    15 |    10 |       25 |
 
     @resistance
     # Having fire resistance does not affect cold resistance computation.

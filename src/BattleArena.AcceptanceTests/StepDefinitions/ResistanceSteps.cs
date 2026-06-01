@@ -90,6 +90,33 @@ public class ResistanceSteps
         });
     }
 
+    // ── Composable steps for Scenario Outline (add to existing character, skip when 0) ─
+
+    [Given(@"a racial feat granting (\d+) magic resistance")]
+    public void GivenARacialFeatGrantingMagicResistance(int value)
+    {
+        if (value <= 0) return;
+        _character.Race = new Race { Feats = [new Feat { Resistances = [new ResistanceBonus(ResistanceType.Magic, value)] }] };
+    }
+
+    [Given(@"chest armor with (\d+) magic resistance")]
+    public void GivenChestArmorWithMagicResistance(int value)
+    {
+        if (value <= 0) return;
+        _character.Equipment.Chest = new Armor { Resistances = [new ResistanceBonus(ResistanceType.Magic, value)] };
+    }
+
+    [Given(@"an active buff granting (\d+) magic resistance")]
+    public void GivenAnActiveBuffGrantingMagicResistance(int value)
+    {
+        if (value <= 0) return;
+        _character.ActiveStatusEffects.Add(new StatusEffect
+        {
+            Name = "Arcane Ward",
+            ResistanceBonuses = [new ResistanceBonus(ResistanceType.Magic, value)]
+        });
+    }
+
     // ── Actions ────────────────────────────────────────────────────────────────
 
     [When(@"an Arcane Ward buff granting (\d+) magic resistance is applied to the character")]

@@ -18,24 +18,20 @@ Feature: Combat — Turnmeter System
     So that fast lightly-armored characters act more frequently than slow heavy ones
 
     @turnmeter
-    # TurnSpeed 10, DEX 14 (+2 mod), chest armor penalty 2, head armor penalty 1, haste buff +4.
-    # Gain = 10 + 2 + 4 - 2 - 1 = 13.
-    Scenario: Turn meter gain accounts for speed, dexterity, buffs, and armor penalties
-        Given a combatant with turn speed 10 and dexterity 14
-        And the combatant wears chest armor with a turn meter penalty of 2
-        And the combatant wears head armor with a turn meter penalty of 1
-        And the combatant has a speed buff granting +4 turn meter per tick
+    # Gain per tick = max(1, TurnSpeed + DexModifier + BuffModifiers - ArmorPenalties)
+    # Values of 0 for head armor or buff mean those sources are absent.
+    Scenario Outline: Turn meter gain per tick is computed correctly
+        Given a combatant with turn speed <speed> and dexterity <dex>
+        And the combatant wears chest armor with a turn meter penalty of <chest>
+        And the combatant wears head armor with a turn meter penalty of <head>
+        And the combatant has a speed buff granting +<buff> turn meter per tick
         When the turn meter gain is computed
-        Then the turn meter gain per tick should be 13
+        Then the turn meter gain per tick should be <expected>
 
-    @turnmeter
-    # Even with TurnSpeed 1, DEX 6 (-2), and heavy armor (-10), the result is floored at 1.
-    # Raw calculation: 1 + (-2) - 10 = -11 → clamped to 1.
-    Scenario: Gain per tick is always at least one regardless of penalties
-        Given a combatant with turn speed 1 and dexterity 6
-        And the combatant wears chest armor with a turn meter penalty of 10
-        When the turn meter gain is computed
-        Then the turn meter gain per tick should be 1
+        Examples:
+            | speed | dex | chest | head | buff | expected |
+            |    10 |  14 |     2 |    1 |    4 |       13 |
+            |     1 |   6 |    10 |    0 |    0 |        1 |
 
     @turnmeter
     # Starting at 190 with a gain of 17 brings the meter to 207.
