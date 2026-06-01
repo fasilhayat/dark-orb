@@ -114,6 +114,44 @@ Resistance is capped at 95 (always ≥5% chance to land).
 | `PetSummoned` | Pet entered combat |
 | `PetExpired` | Summon duration ended |
 
+## Attack Outcome Distributions
+
+Because attack resolution uses an **opposed d20 roll** (attacker d20 + AP vs defender d20 + DP), with special-rule overrides for natural 1s and 20s, the theoretical hit rate depends on both the AP/DP difference and the priority-ordered special outcomes.
+
+### Special-outcome rates (fixed, independent of AP/DP)
+
+| Outcome | Dice condition | Probability | Notes |
+|---------|---------------|-------------|-------|
+| TotalReversal | atk=1, def=20 | 1/400 (0.25 %) | Auto-miss, −4 AP penalty, +30 TM to defender |
+| DevastatingStrike | atk=20, def=1 | 1/400 (0.25 %) | Auto-hit, triple base damage |
+| PerfectParry (both-20) | atk=20, def=20 | 1/400 (0.25 %) | Auto-miss, +20 TM to defender |
+| Fumble | atk=1, def≠20 | 19/400 (4.75 %) | Auto-miss, −2 AP penalty |
+| Critical hit | atk=20, def∉{1,20} | 18/400 (4.50 %) | Auto-hit, double base damage |
+| PerfectParry (def-20) | atk∉{1,20}, def=20 | 18/400 (4.50 %) | Auto-miss, +20 TM to defender |
+| Normal opposed roll | atk∈[2,19], def∈[1,19] | 342/400 (85.50 %) | Hit iff d20 + AP ≥ d20 + DP |
+
+### Overall hit probability (all outcomes)
+
+```
+P(hit) = (18 cases Critical + 1 case Devastating + NormalHits) / 400
+```
+
+Where `NormalHits` = number of (atk∈[2,19], def∈[1,19]) pairs where `atk + AP ≥ def + DP`.
+
+### Measured distributions (verified by `CombatDistribution.feature`)
+
+Each scenario runs **2000 attack resolutions** with live seeded dice and asserts ≥3σ statistical bounds.
+
+The normal-distribution confidence intervals are computed as μ ± z·σ where σ = √(N·p·(1-p)) and z = 1 (68 %), 2 (95 %), 3 (99.7 %). The special-outcome rates (crit 4.5 %, fumble 4.75 %, PP 4.75 %) are constant across all AP/DP configurations and verified in the balanced scenario.
+
+<img src="../../design/diagrams/combat-distribution-comparison.svg" alt="Hit distribution comparison across 4 combat scenarios" width="100%"/>
+<img src="../../design/diagrams/combat-distribution-bellcurve.svg" alt="Balanced scenario bell curve" width="100%"/>
+<img src="../../design/diagrams/combat-distribution-defensive.svg" alt="Defensive advantage bell curve" width="100%"/>
+<img src="../../design/diagrams/combat-distribution-attacker.svg" alt="Attacker advantage bell curve" width="100%"/>
+<img src="../../design/diagrams/combat-distribution-highlevel.svg" alt="High level bell curve" width="100%"/>
+
+Each SVG embeds the full raw dataset (hit, z-score, PDF value for every x) in XML comments, making it machine-readable for automated re-analysis.
+
 ## Self-update instructions
 
 When you modify any of the following files, update this skill to match the new behaviour:

@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  COMBAT DISTRIBUTION COMPARISON -- Machine-readable data
+  Fields: scenario,ap,dp,hit_rate,mu,sigma,ci68_l,ci68_r,ci95_l,ci95_r,ci997_l,ci997_r,crit_rate,fumble_rate,pp_rate
+  Balanced,10,8,60.25%,1205,21,90,1183,1227,1161,1249,1139,1271,4.5%,4.75%,4.75%
+  Defensive,8,14,27.50%,550,19,97,530,570,510,590,480,620,-,-,-
+  Attacker,12,5,76.50%,1530,17,72,1512,1548,1495,1565,1460,1600,-,-,-
+  High Lvl,23,10,87.75%,1755,9,97,1745,1765,1735,1775,1700,1810,-,-,-
+-->
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 700 400' font-family='Consolas, monospace' font-size='11'>
+  <title>Combat distribution comparison</title>
+  <rect width="700" height="400" fill="#fafafa"/>
+  <g font-size="10">
+    <rect x='190' y='20' width='12' height='10' fill='rgba(65,105,225,0.25)' stroke='#999' stroke-width='0.5'/>
+    <text x='208' y='29' fill='#333'>68% CI (+-1s)</text>
+    <rect x='190' y='34' width='12' height='10' fill='rgba(65,105,225,0.13)' stroke='#999' stroke-width='0.5'/>
+    <text x='208' y='43' fill='#333'>95% CI (+-2s)</text>
+    <rect x='190' y='48' width='12' height='10' fill='rgba(65,105,225,0.06)' stroke='#999' stroke-width='0.5'/>
+    <text x='208' y='57' fill='#333'>99.7% CI (+-3s)</text>
+    <rect x='190' y='62' width='12' height='10' fill='#e74c3c' stroke='#999' stroke-width='0.5'/>
+    <text x='208' y='71' fill='#333'>Mean (mu)</text>
+  </g>
+    <rect x='180' y='80' width='440' height='12' fill='rgba(65,105,225,0.06)' rx='2'/>
+    <rect x='254' y='80' width='292' height='12' fill='rgba(65,105,225,0.13)' rx='2'/>
+    <rect x='327' y='80' width='146.000000000001' height='12' fill='rgba(65,105,225,0.25)' rx='2'/>
+    <line x1='400' y1='76' x2='400' y2='96' stroke='#e74c3c' stroke-width='2.5'/>
+    <line x1='180' y1='92' x2='180' y2='97' stroke='#999' stroke-width='1'/>
+    <line x1='620' y1='92' x2='620' y2='97' stroke='#999' stroke-width='1'/>
+    <text x='172' y='90' text-anchor='end' fill='#1a1a1a' font-weight='bold'>Balanced</text>
+    <text x='620' y='76' text-anchor='start' fill='#666' font-size='10'>P(hit)=60.25%</text>
+    <text x='620' y='86' text-anchor='start' fill='#888' font-size='9'>AP=10 DP=8</text>
+    <text x='400' y='106' text-anchor='middle' fill='#e74c3c' font-size='10' font-weight='bold'>mu=1205</text>
+    <rect x='180' y='160' width='440' height='12' fill='rgba(65,105,225,0.06)' rx='2'/>
+    <rect x='274.474285714286' y='160' width='251.051428571429' height='12' fill='rgba(65,105,225,0.13)' rx='2'/>
+    <rect x='337.237142857143' y='160' width='125.525714285714' height='12' fill='rgba(65,105,225,0.25)' rx='2'/>
+    <line x1='400' y1='156' x2='400' y2='176' stroke='#e74c3c' stroke-width='2.5'/>
+    <line x1='180' y1='172' x2='180' y2='177' stroke='#999' stroke-width='1'/>
+    <line x1='620' y1='172' x2='620' y2='177' stroke='#999' stroke-width='1'/>
+    <text x='172' y='170' text-anchor='end' fill='#1a1a1a' font-weight='bold'>Defensive</text>
+    <text x='620' y='156' text-anchor='start' fill='#666' font-size='10'>P(hit)=27.50%</text>
+    <text x='620' y='166' text-anchor='start' fill='#888' font-size='9'>AP=8 DP=14</text>
+    <text x='400' y='186' text-anchor='middle' fill='#e74c3c' font-size='10' font-weight='bold'>mu=550</text>
+    <rect x='180' y='240' width='440' height='12' fill='rgba(65,105,225,0.06)' rx='2'/>
+    <rect x='288.617142857143' y='240' width='222.765714285715' height='12' fill='rgba(65,105,225,0.13)' rx='2'/>
+    <rect x='344.308571428571' y='240' width='111.382857142857' height='12' fill='rgba(65,105,225,0.25)' rx='2'/>
+    <line x1='400' y1='236' x2='400' y2='256' stroke='#e74c3c' stroke-width='2.5'/>
+    <line x1='180' y1='252' x2='180' y2='257' stroke='#999' stroke-width='1'/>
+    <line x1='620' y1='252' x2='620' y2='257' stroke='#999' stroke-width='1'/>
+    <text x='172' y='250' text-anchor='end' fill='#1a1a1a' font-weight='bold'>Attacker</text>
+    <text x='620' y='236' text-anchor='start' fill='#666' font-size='10'>P(hit)=76.50%</text>
+    <text x='620' y='246' text-anchor='start' fill='#888' font-size='9'>AP=12 DP=5</text>
+    <text x='400' y='266' text-anchor='middle' fill='#e74c3c' font-size='10' font-weight='bold'>mu=1530</text>
+    <rect x='180' y='320' width='440' height='12' fill='rgba(65,105,225,0.06)' rx='2'/>
+    <rect x='320.24' y='320' width='159.52' height='12' fill='rgba(65,105,225,0.13)' rx='2'/>
+    <rect x='360.12' y='320' width='79.7600000000002' height='12' fill='rgba(65,105,225,0.25)' rx='2'/>
+    <line x1='400' y1='316' x2='400' y2='336' stroke='#e74c3c' stroke-width='2.5'/>
+    <line x1='180' y1='332' x2='180' y2='337' stroke='#999' stroke-width='1'/>
+    <line x1='620' y1='332' x2='620' y2='337' stroke='#999' stroke-width='1'/>
+    <text x='172' y='330' text-anchor='end' fill='#1a1a1a' font-weight='bold'>High Lvl</text>
+    <text x='620' y='316' text-anchor='start' fill='#666' font-size='10'>P(hit)=87.75%</text>
+    <text x='620' y='326' text-anchor='start' fill='#888' font-size='9'>AP=23 DP=10</text>
+    <text x='400' y='346' text-anchor='middle' fill='#e74c3c' font-size='10' font-weight='bold'>mu=1755</text>
+  <g font-size="9" fill="#888" text-anchor="middle">
+    <text x='400' y='415'>Each bar spans the full 99.7% range; darker = narrower CI</text>
+  </g>
+</svg>
+
