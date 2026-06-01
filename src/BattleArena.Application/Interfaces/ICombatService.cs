@@ -6,15 +6,14 @@ using Core.Entities.Enums;
 
 public interface ICombatService
 {
-    /// <param name="range">
-    /// Distance between attacker and defender. Defaults to <see cref="EngagementRange.Melee"/>.
-    /// Ranged weapons in melee range suffer a -2 AP penalty; ranged attacks at distance
-    /// reduce the defender's DP by 1 (harder to dodge). When the full distance system is
-    /// implemented, the simulator will populate this from position state.
-    /// </param>
     AttackResult ResolveAttack(Character attacker, Character defender, IAttackSource source,
-        EngagementRange range = EngagementRange.Melee);
-    DamageContext ResolveDamage(Character attacker, Character defender, IAttackSource source, bool isCritical = false);
+        EngagementRange range = EngagementRange.Melee,
+        TerrainType terrain = TerrainType.Plains);
+    DamageContext ResolveDamage(Character attacker, Character defender, IAttackSource source, bool isCritical = false,
+        EngagementRange range = EngagementRange.Melee,
+        TerrainType terrain = TerrainType.Plains);
+    int ResolveHealing(Character healer, Character target, Spell spell,
+        TerrainType terrain = TerrainType.Plains);
     DamageRollResult RollDamage(IAttackSource source);
     int CalculateAbilityModifier(int score);
 }

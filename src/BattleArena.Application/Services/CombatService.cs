@@ -16,9 +16,9 @@ public class CombatService : ICombatService
     public CombatService(IDiceService dice, ICombatStatsService combatStats,
         IEnumerable<ICombatModifier> modifiers = default!)
     {
-        _dice      = dice;
+        _dice        = dice;
         _combatStats = combatStats;
-        _modifiers = (modifiers ?? []).OrderBy(m => m.Priority).ToList();
+        _modifiers   = (modifiers ?? []).OrderBy(m => m.Priority).ToList();
     }
 
     public int CalculateAbilityModifier(int score)
@@ -32,12 +32,13 @@ public class CombatService : ICombatService
         return new DamageRollResult
         {
             DieType = source.DamageDie,
-            Result = result
+            Result  = result
         };
     }
 
     public AttackResult ResolveAttack(Character attacker, Character defender, IAttackSource source,
-        EngagementRange range = EngagementRange.Melee)
+        EngagementRange range = EngagementRange.Melee,
+        TerrainType terrain = TerrainType.Plains)
     {
         var attackerStats = _combatStats.ComputeAttackerStats(attacker, source);
         var defenderStats = _combatStats.ComputeDefenderStats(defender, source);
@@ -45,11 +46,12 @@ public class CombatService : ICombatService
         // Run AttackRoll-phase modifiers through the pipeline.
         var ctx = new CombatModifierContext
         {
-            Attacker        = attacker,
-            Defender        = defender,
-            Source          = source,
-            Range           = range,
-            BaseAttackPower = attackerStats.AttackPower,
+            Attacker         = attacker,
+            Defender         = defender,
+            Source           = source,
+            Range            = range,
+            Terrain          = terrain,
+            BaseAttackPower  = attackerStats.AttackPower,
             BaseDefensePower = defenderStats.DefensePower
         };
         foreach (var mod in _modifiers.Where(m => m.Phase == CombatPhase.AttackRoll))
@@ -84,8 +86,7 @@ public class CombatService : ICombatService
         // ── Priority 2 ─── DevastatingStrike (atk=20 AND def=1) ──────────────
         if (attackRoll == 20 && defenseRoll == 1)
         {
-            var dc = ResolveDamage(attacker, defender, source);
-            // Triple base damage before mitigation; mitigation still applies once.
+            var dc = ResolveDamage(attacker, defender, source, isCritical: false, range, terrain);
             var devastatingDamage = Math.Max(0,
                 (int)(dc.BaseDamage * 3 * dc.TypeMultiplier) - dc.ArmorMitigation + dc.ElementalModifiers);
             return new AttackResult
@@ -142,7 +143,7 @@ public class CombatService : ICombatService
         // ── Priority 5 ─── Critical hit (atk=20, def != 1 or 20) ─────────────
         if (attackRoll == 20)
         {
-            var dc = ResolveDamage(attacker, defender, source, isCritical: true);
+            var dc = ResolveDamage(attacker, defender, source, isCritical: true, range, terrain);
             return new AttackResult
             {
                 HitRoll       = attackRoll,
@@ -178,7 +179,7 @@ public class CombatService : ICombatService
 
         // ── Priority 7 ─── Normal opposed roll (both 2–19) ───────────────────
         var isHit         = (attackRoll + effectiveAP) >= (defenseRoll + effectiveDP);
-        var damageContext = isHit ? ResolveDamage(attacker, defender, source) : null;
+        var damageContext = isHit ? ResolveDamage(attacker, defender, source, isCritical: false, range, terrain) : null;
 
         return new AttackResult
         {
@@ -194,9 +195,85 @@ public class CombatService : ICombatService
         };
     }
 
+    public DamageContext ResolveDamage(Character attacker, Character defender, IAttackSource source,
+        bool isCritical = false,
+        EngagementRange range = EngagementRange.Melee,
+        TerrainType terrain = TerrainType.Plains)
+    {
+        // Run DamageCalculation-phase modifiers through the pipeline.
+        var ctx = new CombatModifierContext
+        {
+            Attacker         = attacker,
+            Defender         = defender,
+            Source           = source,
+            Range            = range,
+            Terrain          = terrain,
+            BaseAttackPower  = 0,
+            BaseDefensePower = 0
+        };
+        foreach (var mod in _modifiers.Where(m => m.Phase == CombatPhase.DamageCalculation))
+            mod.Apply(ctx);
+
+        var abilityScore = source.UsesIntelligence
+            ? attacker.Intelligence
+            : source.AttackType == AttackType.Ranged ? attacker.Dexterity : attacker.Strength;
+        var attributeModifier = CalculateAbilityModifier(abilityScore);
+        var weaponDiceRoll    = RollAttackDamageTotal(source);
+        var levelScaling      = attacker.Level * 2;
+        var baseDamage        = weaponDiceRoll + attributeModifier + source.FlatDamageBonus + levelScaling;
+        var typeMultiplier    = defender.Vulnerabilities.Contains(source.DamageType) ? 1.5f : 1.0f;
+
+        // Apply damage modifiers from the pipeline.
+        var scaledBase = isCritical ? baseDamage * 2 : baseDamage;
+        scaledBase = (int)(scaledBase * ctx.DamageMultiplier);
+
+        var finalDamage = Math.Max(0,
+            (int)(scaledBase * typeMultiplier) - defender.Equipment.TotalMitigation + source.ElementalDamage + ctx.DamageDelta);
+
+        return new DamageContext
+        {
+            WeaponDiceRoll    = weaponDiceRoll,
+            AttributeModifier = attributeModifier,
+            FlatBonuses       = source.FlatDamageBonus,
+            LevelScaling      = levelScaling,
+            BaseDamage        = baseDamage,
+            TypeMultiplier    = typeMultiplier,
+            ArmorMitigation   = defender.Equipment.TotalMitigation,
+            ElementalModifiers = source.ElementalDamage,
+            FinalDamage       = finalDamage
+        };
+    }
+
+    public int ResolveHealing(Character healer, Character target, Spell spell,
+        TerrainType terrain = TerrainType.Plains)
+    {
+        // Run Healing-phase modifiers through the pipeline.
+        var ctx = new CombatModifierContext
+        {
+            Attacker         = healer,
+            Defender         = target,
+            Source           = spell,
+            Range            = EngagementRange.Melee,
+            Terrain          = terrain,
+            BaseAttackPower  = 0,
+            BaseDefensePower = 0
+        };
+        foreach (var mod in _modifiers.Where(m => m.Phase == CombatPhase.Healing))
+            mod.Apply(ctx);
+
+        var abilityMod = CalculateAbilityModifier(healer.Intelligence);
+        var totalDice  = 0;
+        for (var i = 0; i < spell.DamageCount; i++)
+            totalDice += _dice.Roll(spell.DamageDie);
+
+        var baseHeal = totalDice + abilityMod + spell.FlatDamageBonus + ctx.HealingPowerDelta;
+        var final    = (int)(baseHeal * ctx.HealingMultiplier);
+
+        return Math.Max(1, final);
+    }
+
     /// <summary>
     /// Turn-meter boost awarded to the defender on PerfectParry or TotalReversal.
-    /// Reduced for ranged attacks at distance (harder to parry an arrow from afar).
     /// </summary>
     private static int ComputeDefenderTmBoost(AttackType attackType, EngagementRange range, bool isTotalReversal)
     {
@@ -204,33 +281,6 @@ public class CombatService : ICombatService
         if (attackType == AttackType.Ranged && range != EngagementRange.Melee)
             return baseBoost / 2;
         return baseBoost;
-    }
-
-    public DamageContext ResolveDamage(Character attacker, Character defender, IAttackSource source, bool isCritical = false)
-    {
-        var abilityScore = source.UsesIntelligence
-            ? attacker.Intelligence
-            : source.AttackType == AttackType.Ranged ? attacker.Dexterity : attacker.Strength;
-        var attributeModifier = CalculateAbilityModifier(abilityScore);
-        var weaponDiceRoll = RollAttackDamageTotal(source);
-        var levelScaling = attacker.Level * 2;
-        var baseDamage = weaponDiceRoll + attributeModifier + source.FlatDamageBonus + levelScaling;
-        var typeMultiplier = defender.Vulnerabilities.Contains(source.DamageType) ? 1.5f : 1.0f;
-        var scaledBaseDamage = isCritical ? baseDamage * 2 : baseDamage;
-        var finalDamage = Math.Max(0, (int)(scaledBaseDamage * typeMultiplier) - defender.Equipment.TotalMitigation + source.ElementalDamage);
-
-        return new DamageContext
-        {
-            WeaponDiceRoll = weaponDiceRoll,
-            AttributeModifier = attributeModifier,
-            FlatBonuses = source.FlatDamageBonus,
-            LevelScaling = levelScaling,
-            BaseDamage = baseDamage,
-            TypeMultiplier = typeMultiplier,
-            ArmorMitigation = defender.Equipment.TotalMitigation,
-            ElementalModifiers = source.ElementalDamage,
-            FinalDamage = finalDamage
-        };
     }
 
     private int RollAttackDamageTotal(IAttackSource source)

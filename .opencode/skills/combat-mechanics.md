@@ -21,6 +21,19 @@ self-update-action: After modifying combat mechanic code, update this file to re
 | `AutoActionDecisionSource` | `BattleArena.Application/Services/AutoActionDecisionSource.cs` | Default AI — picks fixed weapon, random spell, or unarmed |
 | `ConsoleActionDecisionSource` | `BattleArena.Demo/ConsoleActionDecisionSource.cs` | Interactive console menu — user picks melee, spell, or move |
 
+## Modifier Pipeline
+
+The `ICombatModifier` pipeline allows plugging in combat adjustments without modifying `CombatService`.
+
+| Phase | When it runs | Fields affected | Example |
+|-------|-------------|-----------------|---------|
+| `AttackRoll` | Before opposed d20 roll | `AttackPowerDelta`, `DefensePowerDelta` | `RangeModifier`, `TerrainModifier` |
+| `DamageCalculation` | Inside `ResolveDamage`, after base damage | `DamageDelta`, `DamageMultiplier` | `DamageModifier` (protective buffs) |
+| `Healing` | Inside `ResolveHealing`, after base heal | `HealingPowerDelta`, `HealingMultiplier` | `HealingModifier` (caster buffs, group heal penalty) |
+
+Priority bands: **10** = base/range, **20** = environmental, **30** = item/set/spell-buff.
+To add a modifier: implement `ICombatModifier` → register in DI → done.
+
 ## Interfaces
 
 | Interface | File | Purpose |
@@ -39,15 +52,17 @@ for tick = 1 to maxTicks:
      a. IActionDecisionSource.ChooseAttackAsync → weapon / spell / unarmed / null(Move)
      b. SelectTarget → hero or enemy selector (skipped if Move)
      c. TurnStart (SkippedTurn if Move was chosen)
-     d. DoTTick — DoT damage on actor
-     e. TickAll — decrement effect durations, remove expired
-     f. ResolveAttack — d20 + AP vs DP
-     g. Damage — if hit, reduce HP
-     h. OnHitEffects — spell status effects
-     i. SpellDisruption — 20% melee hit on caster
-     j. CheckDefeat — Death / KnockedOut
-     k. FumblePenalty — natural 1
-     l. TurnEnd — deduct TM cost
+     d. If healing spell → ResolveHealing (skip attack), else continue below
+     e. DoTTick — DoT damage on actor
+     f. TickAll — decrement effect durations, remove expired
+     g. ResolveAttack — d20 + AP vs DP (runs AttackRoll-phase modifiers)
+     h. Damage — if hit, reduce HP (runs DamageCalculation-phase modifiers)
+     i. OnHitEffects — spell status effects
+     j. SelfBuffs — apply buff-type OnHitEffects to caster
+     k. SpellDisruption — 20% melee hit on caster
+     l. CheckDefeat — Death / KnockedOut
+     m. FumblePenalty — natural 1
+     n. TurnEnd — deduct TM cost
 ```
 
 ## Attack Resolution
@@ -71,13 +86,28 @@ defenseRoll = d20
 
 ## Damage Formula
 
+Before damage calculation, **`CombatPhase.DamageCalculation` modifiers** run.
+They can set `DamageDelta` (flat) and `DamageMultiplier` (multiplicative).
+
 ```
 BaseDamage   = diceRoll + abilityModifier + source.FlatDamageBonus + Level × 2
 scaledBase   = isCritical ? BaseDamage × 2 : BaseDamage
-FinalDamage  = max(0, (int)(scaledBase × typeMultiplier) - mitigation + elementalDamage)
-Where typeMultiplier = 1.5 if defender vulnerable, else 1.0
+scaledBase   = (int)(scaledBase × DamageMultiplier)            ← modifier pipeline
+FinalDamage  = max(0, (int)(scaledBase × typeMultiplier) - mitigation + elementalDamage + DamageDelta)
 ```
 DevastatingStrike uses `BaseDamage × 3` instead of `× 2`.
+
+## Healing Formula
+
+Before healing, **`CombatPhase.Healing` modifiers** run.
+They can set `HealingPowerDelta` (flat) and `HealingMultiplier` (multiplicative).
+
+```
+BaseHeal   = diceRoll + INTmod + source.FlatDamageBonus + HealingPowerDelta
+FinalHeal  = max(1, (int)(BaseHeal × HealingMultiplier))
+```
+
+Group heals (name contains "Mass") apply at 0.6× potency per target.
 
 ## Turn Meter
 
@@ -95,6 +125,27 @@ Phase 2 (Resistance):        Roll D100 <= resistance → EffectResisted
 ```
 
 Resistance is capped at 95 (always ≥5% chance to land).
+
+## Terrain System
+
+`TerrainType` enum: `Plains`, `Desert`, `Mountain`, `Rocky`, `Icy`, `Forest`, `Jungle`, `Swamp`.
+
+The `TerrainModifier` (band 20, AttackRoll phase) applies racial AP/DP adjustments:
+
+| Race | Bonuses | Penalties |
+|------|---------|-----------|
+| Human | — (adaptable) | — |
+| Elf | Forest +2 AP | Desert −1 AP, Swamp −1 AP |
+| Dwarf | Mountain +2 DP, Rocky +1 DP | Swamp −1 DP |
+| Lizard | Desert +1 AP/+1 DP, Swamp +1 AP/+1 DP | Icy −1 AP/−1 DP |
+| Orc | Desert +1 AP, Mountain +1 AP | Forest −1 AP, Swamp −1 AP |
+| Ogre | Mountain +2 AP, Rocky +1 DP | Forest −1 AP |
+| Kobold | Desert +1 AP, Rocky +1 AP | Forest −1 AP |
+| Gladefolk | Forest +1 AP/+1 DP, Jungle +1 AP | Desert −1 AP |
+| Undead | Icy +1 AP | — |
+| Demon | Desert +1 AP | — |
+
+`SimulateAsync` accepts a `TerrainType` parameter (defaults to `Plains`).
 
 ## Event Types
 
@@ -124,6 +175,8 @@ Resistance is capped at 95 (always ≥5% chance to land).
 | `TurnEnd` | Action complete |
 | `PetSummoned` | Pet entered combat |
 | `PetExpired` | Summon duration ended |
+| `Healed` | HP restored by healing spell |
+| `Clash` | Both combatants exchange glancing blows |
 
 ## Attack Outcome Distributions
 
@@ -169,6 +222,7 @@ When you modify any of the following files, **immediately** update this skill to
 
 - `BattleArena.Core/Entities/` (Character, StatusEffect, Party, etc.)
 - `BattleArena.Application/Services/` (CombatSimulator, CombatService, StatusEffectService, TurnmeterService, DiceService)
+- `BattleArena.Application/Modifiers/` (any `ICombatModifier` implementation)
 - `BattleArena.Application/Models/` (CombatLogEntry, CombatResult)
 - `BattleArena.Application/Interfaces/` (new interfaces added)
 
@@ -181,5 +235,8 @@ When you modify any of the following files, **immediately** update this skill to
 | Turn Meter | `TurnmeterService.ComputeGainPerTick` | `max(1, TurnSpeed + DEXmod + buffs - armorPenalty)` |
 | Status Effect Two-Phase Roll | `StatusEffectService.TryApply` | Phase 1 (app chance) before Phase 2 (resistance) |
 | Event Types | All services above | Every `EventType` string emitted by the code must be listed |
+| Healing Formula | `CombatService.ResolveHealing` | `ResolveHealing` dice + INT mod + flat bonus + modifier pipeline |
+| Modifier Pipeline | `CombatService` modifier-loop in each phase | All `CombatPhase` values wired, priority ordering |
+| Terrain System | `TerrainModifier.Apply` | Race-terrain lookup table, AttackRoll-phase wiring |
 
 The `design/combat-design.md` file is the human-facing design spec — it should also be updated when you change formulas here, but this skill file is the **AI's source of truth** and must always match the code exactly.

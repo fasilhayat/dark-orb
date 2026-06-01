@@ -25,6 +25,8 @@ public class CombatSimulator : ICombatSimulator
     private readonly IActionDecisionSource      _heroActionSource;
     private readonly IActionDecisionSource      _enemyActionSource;
 
+    private TerrainType _terrain = TerrainType.Plains;
+
     public CombatSimulator(
         ICombatService combat,
         ITurnmeterService turnmeter,
@@ -54,8 +56,10 @@ public class CombatSimulator : ICombatSimulator
         Party heroParty, Party enemyParty,
         int maxTicks = 1000,
         ICombatObserver? observer = null,
-        CancellationToken ct = default)
+        CancellationToken ct = default,
+        TerrainType terrain = TerrainType.Plains)
     {
+        _terrain = terrain;
         const int RoundLength = 10;
 
         var log            = new List<CombatLogEntry>();
@@ -126,22 +130,25 @@ public class CombatSimulator : ICombatSimulator
         Character opponent, IAttackSource? opponentAttack,
         int maxTicks = 1000,
         ICombatObserver? observer = null,
-        CancellationToken ct = default) =>
+        CancellationToken ct = default,
+        TerrainType terrain = TerrainType.Plains) =>
         SimulateAsync(
             Party.Solo(fighter,  fighterAttack),
             Party.Solo(opponent, opponentAttack),
-            maxTicks, observer, ct);
+            maxTicks, observer, ct, terrain);
 
     // Sync wrappers — safe for console/test contexts (no sync context).
     // Do not call from a UI thread.
-    public CombatResult Simulate(Party heroParty, Party enemyParty, int maxTicks = 1000) =>
-        SimulateAsync(heroParty, enemyParty, maxTicks).GetAwaiter().GetResult();
+    public CombatResult Simulate(Party heroParty, Party enemyParty, int maxTicks = 1000,
+        TerrainType terrain = TerrainType.Plains) =>
+        SimulateAsync(heroParty, enemyParty, maxTicks, terrain: terrain).GetAwaiter().GetResult();
 
     public CombatResult Simulate(
         Character fighter,  IAttackSource? fighterAttack,
         Character opponent, IAttackSource? opponentAttack,
-        int maxTicks = 1000) =>
-        SimulateAsync(fighter, fighterAttack, opponent, opponentAttack, maxTicks)
+        int maxTicks = 1000,
+        TerrainType terrain = TerrainType.Plains) =>
+        SimulateAsync(fighter, fighterAttack, opponent, opponentAttack, maxTicks, terrain: terrain)
             .GetAwaiter().GetResult();
 
     // ── Private helpers ────────────────────────────────────────────────────────
@@ -265,6 +272,104 @@ public class CombatSimulator : ICombatSimulator
         TargetHpAfter  = hpAfter,
         Message        = $"{targetName} takes {damage} damage.  HP: {hpBefore} -> {hpAfter}"
     };
+
+    // ── Healing helpers ────────────────────────────────────────────────────────
+
+    private async Task<CombatResult?> ProcessHealingSpellAsync(
+        int tick, CombatantState actorState, ActorSetup setup, Spell spell,
+        List<CombatantState> states, Func<CombatLogEntry, Task> notify)
+    {
+        if (spell.IsGroupHeal)
+        {
+            var allies = states
+                .Where(s => s.PartyIndex == actorState.PartyIndex && s.Character.IsAlive && s.Character.CurrentHitPoints < s.Character.MaxHitPoints)
+                .ToList();
+
+            foreach (var ally in allies)
+            {
+                var healAmount = _combat.ResolveHealing(actorState.Character, ally.Character, spell, _terrain);
+                var hpBefore = ally.Character.CurrentHitPoints;
+                ally.Character.CurrentHitPoints = Math.Min(ally.Character.MaxHitPoints, hpBefore + healAmount);
+                await notify(new CombatLogEntry
+                {
+                    Tick            = tick,
+                    ActorName       = ally.Character.Name,
+                    EventType       = "Healed",
+                    DamageDealt     = healAmount,
+                    TargetHpBefore  = hpBefore,
+                    TargetHpAfter   = ally.Character.CurrentHitPoints,
+                    AttackSourceName = spell.Name,
+                    IsSpell         = true,
+                    Message         = $"{ally.Character.Name} is healed for {healAmount} by {spell.Name}.  HP: {hpBefore} -> {ally.Character.CurrentHitPoints}"
+                });
+            }
+            return null;
+        }
+
+        // Single-target heal: pick the ally with the lowest HP.
+        var target = states
+            .Where(s => s.PartyIndex == actorState.PartyIndex && s.Character.IsAlive && s.Character.CurrentHitPoints < s.Character.MaxHitPoints)
+            .OrderBy(s => s.Character.CurrentHitPoints)
+            .FirstOrDefault();
+
+        if (target is null) return null;
+
+        var heal = _combat.ResolveHealing(actorState.Character, target.Character, spell, _terrain);
+        var hpB = target.Character.CurrentHitPoints;
+        target.Character.CurrentHitPoints = Math.Min(target.Character.MaxHitPoints, hpB + heal);
+        await notify(new CombatLogEntry
+        {
+            Tick            = tick,
+            ActorName       = target.Character.Name,
+            EventType       = "Healed",
+            DamageDealt     = heal,
+            TargetHpBefore  = hpB,
+            TargetHpAfter   = target.Character.CurrentHitPoints,
+            AttackSourceName = spell.Name,
+            IsSpell         = true,
+            Message         = $"{target.Character.Name} is healed for {heal} by {spell.Name}.  HP: {hpB} -> {target.Character.CurrentHitPoints}"
+        });
+        return null;
+    }
+
+    // ── Self-buff helpers ─────────────────────────────────────────────────────
+
+    private async Task ProcessSelfBuffsAsync(
+        int tick, Character caster, Spell spell,
+        Func<CombatLogEntry, Task> notify)
+    {
+        foreach (var template in spell.OnHitEffects)
+        {
+            var effect = new StatusEffect
+            {
+                Name                 = template.Name,
+                Type                 = template.Type,
+                ResistanceType       = template.ResistanceType,
+                ResistanceBonuses    = template.ResistanceBonuses,
+                Duration             = template.Duration,
+                DamagePerTurn        = template.DamagePerTurn,
+                AttackPowerModifier  = template.AttackPowerModifier,
+                DefensePowerModifier = template.DefensePowerModifier,
+                TurnMeterModifier    = template.TurnMeterModifier,
+                ManaRegenModifier    = template.ManaRegenModifier,
+                StackRule            = template.StackRule,
+                ApplicationChance    = template.ApplicationChance,
+                Source               = spell.Name
+            };
+
+            _statusEffect.Apply(caster, effect);
+            await notify(new CombatLogEntry
+            {
+                Tick             = tick,
+                ActorName        = caster.Name,
+                EventType        = "EffectApplied",
+                StatusEffectName = effect.Name,
+                AttackSourceName = spell.Name,
+                IsBuff           = true,
+                Message          = $"{caster.Name} gains {effect.Name} from {spell.Name}!"
+            });
+        }
+    }
 
     // ── Status effect helpers ─────────────────────────────────────────────────
 
@@ -562,7 +667,16 @@ public class CombatSimulator : ICombatSimulator
         var expired = _statusEffect.TickAll(actorState.Character);
         await NotifyExpiredEffectsAsync(tick, actorState.Character, expired, notify);
 
-        var result = _combat.ResolveAttack(actorState.Character, setup.Target, setup.Source, actorState.EngagementRange);
+        // ── Healing spells take a different path ──────────────────────────
+        if (setup.Source is Spell castSpell && castSpell.IsHealing)
+        {
+            var healResult = await ProcessHealingSpellAsync(tick, actorState, setup, castSpell, states, notify);
+            actorState.Meter.IsActive = false;
+            await notify(BuildAfterTurnEntry(actorState, tick, setup.TmCost));
+            return healResult;
+        }
+
+        var result = _combat.ResolveAttack(actorState.Character, setup.Target, setup.Source, actorState.EngagementRange, _terrain);
         await notify(BuildAttackEntry(tick, actorState.Character.Name, setup.Source.Name, setup.IsSpell, setup.Target.Name, result, setup.Source.DamageType));
 
         var outcome = await ResolveAttackOutcomeAsync(
@@ -577,6 +691,10 @@ public class CombatSimulator : ICombatSimulator
 
         await ApplyDefenderTmBoostAsync(tick, actorState, setup.Target, result, states, notify);
         await ApplyFumblePenaltyAsync(tick, actorState, result, notify);
+
+        // ── Self-buffs from protective spells ────────────────────────────
+        if (setup.Source is Spell spellWithBuffs && spellWithBuffs.OnHitEffects.Count > 0)
+            await ProcessSelfBuffsAsync(tick, actorState.Character, spellWithBuffs, notify);
 
         actorState.Meter.IsActive = false;
         await notify(BuildAfterTurnEntry(actorState, tick, setup.TmCost));

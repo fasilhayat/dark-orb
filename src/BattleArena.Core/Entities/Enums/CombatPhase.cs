@@ -10,5 +10,15 @@ public enum CombatPhase
     /// <summary>
     /// Modifies attack power and/or defense power before the hit/miss roll is resolved.
     /// </summary>
-    AttackRoll
+    AttackRoll,
+
+    /// <summary>
+    /// Modifies damage dealt after a hit is confirmed (before mitigation).
+    /// </summary>
+    DamageCalculation,
+
+    /// <summary>
+    /// Modifies healing amount when a healing spell or effect is resolved.
+    /// </summary>
+    Healing
 }

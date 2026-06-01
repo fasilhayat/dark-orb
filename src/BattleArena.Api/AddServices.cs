@@ -22,6 +22,9 @@ public static class AddServices
         services.AddScoped<ITurnmeterService, TurnmeterService>();
         services.AddScoped<IStatusEffectService, StatusEffectService>();
         services.AddScoped<ICombatModifier, RangeModifier>();
+        services.AddScoped<ICombatModifier, TerrainModifier>();
+        services.AddScoped<ICombatModifier, DamageModifier>();
+        services.AddScoped<ICombatModifier, HealingModifier>();
         services.AddScoped<ICombatService, CombatService>();
         services.AddScoped<ICharacterService, CharacterService>();
         services.AddScoped<ICharacterRepository, CharacterRepository>();

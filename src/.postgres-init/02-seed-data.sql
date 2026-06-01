@@ -51,7 +51,7 @@ ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell_school (name) VALUES
-    ('AoE'), ('CC'), ('Other'), ('Evocation'), ('Conjuration')
+    ('AoE'), ('CC'), ('Other'), ('Evocation'), ('Conjuration'), ('Healing')
 ON CONFLICT (name) DO NOTHING;
 
 
@@ -939,6 +939,64 @@ INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damag
 SELECT 'Soul Drain', 'Drains the life force of an enemy to restore the caster.', ss.id, d.id, dt.id, at.id, 7, 80, 3, 2, 1, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
 WHERE ss.name = 'Evocation' AND d.name = 'D6' AND dt.name = 'Shadow' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+-- ============================================================
+-- HEALING SPELLS
+-- ============================================================
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Heal', 'Restores a moderate amount of hit points to a single ally.', ss.id, d.id, NULL, at.id, 6, 70, 2, 2, 0, 4, 'None', 0
+FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.attack_type at
+WHERE ss.name = 'Healing' AND d.name = 'D8' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Mass Heal', 'A wave of holy light restores hit points to all allies.', ss.id, d.id, NULL, at.id, 14, 100, 4, 3, 0, 6, 'None', 0
+FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.attack_type at
+WHERE ss.name = 'Healing' AND d.name = 'D6' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Regeneration', 'Bestows rapid healing over time on a single ally.', ss.id, d.id, NULL, at.id, 10, 85, 3, 2, 0, 2, 'None', 0
+FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.attack_type at
+WHERE ss.name = 'Healing' AND d.name = 'D6' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Restoration', 'Cures all ailments and restores a small amount of health.', ss.id, d.id, NULL, at.id, 8, 80, 3, 1, 0, 8, 'None', 0
+FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.attack_type at
+WHERE ss.name = 'Healing' AND d.name = 'D10' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Prayer of Healing', 'A group heal that calls upon divine favour to mend all allies.', ss.id, d.id, NULL, at.id, 12, 95, 4, 2, 0, 10, 'None', 0
+FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.attack_type at
+WHERE ss.name = 'Healing' AND d.name = 'D8' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+
+-- ============================================================
+-- PROTECTIVE SPELLS (self/ally buffs)
+-- ============================================================
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Arcane Ward', 'Wraps the caster in a protective magical barrier that grants magic resistance and increases defense.', ss.id, NULL, NULL, at.id, 8, 75, 2, 1, 0, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.attack_type at
+WHERE ss.name = 'Evocation' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Divine Protection', 'Holy energy shields the target, reducing all incoming damage for a short time.', ss.id, NULL, NULL, at.id, 10, 80, 3, 1, 0, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.attack_type at
+WHERE ss.name = 'Evocation' AND at.name = 'Spell'
+ON CONFLICT (name) DO NOTHING;
+
+INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
+SELECT 'Stone Skin', 'Hardens the caster''s skin to stone, granting significant damage resistance.', ss.id, NULL, NULL, at.id, 7, 70, 2, 1, 0, 0, 'None', 0
+FROM arena_data.spell_school ss, arena_data.attack_type at
+WHERE ss.name = 'Evocation' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 

@@ -6,5 +6,6 @@ public enum SpellSchool
     CC,
     Conjuration,
     Evocation,
-    Other
+    Other,
+    Healing
 }

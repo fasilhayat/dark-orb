@@ -306,3 +306,30 @@ WHERE c.name = 'Sister Marigold'
   AND s.name IN ('Smite', 'Sleep')
   AND NOT EXISTS (SELECT 1 FROM arena_data.character_spell cs WHERE cs.character_id = c.id AND cs.spell_id = s.id);
 
+
+-- Mira Brightholm (Human Priest) — healing spells
+INSERT INTO arena_data.character_spell (character_id, spell_id)
+SELECT c.id, s.id
+FROM arena_data.character c, arena_data.spell s
+WHERE c.name = 'Mira Brightholm'
+  AND s.name IN ('Heal', 'Prayer of Healing', 'Restoration')
+  AND NOT EXISTS (SELECT 1 FROM arena_data.character_spell cs WHERE cs.character_id = c.id AND cs.spell_id = s.id);
+
+
+-- Elara Swiftwind (Elf Mage) — protective spells
+INSERT INTO arena_data.character_spell (character_id, spell_id)
+SELECT c.id, s.id
+FROM arena_data.character c, arena_data.spell s
+WHERE c.name = 'Elara Swiftwind'
+  AND s.name IN ('Arcane Ward', 'Stone Skin')
+  AND NOT EXISTS (SELECT 1 FROM arena_data.character_spell cs WHERE cs.character_id = c.id AND cs.spell_id = s.id);
+
+
+-- Sir Aldric Vane (Human Knight) — divine protection
+INSERT INTO arena_data.character_spell (character_id, spell_id)
+SELECT c.id, s.id
+FROM arena_data.character c, arena_data.spell s
+WHERE c.name = 'Sir Aldric Vane'
+  AND s.name IN ('Divine Protection')
+  AND NOT EXISTS (SELECT 1 FROM arena_data.character_spell cs WHERE cs.character_id = c.id AND cs.spell_id = s.id);
+

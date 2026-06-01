@@ -48,6 +48,9 @@ public class CombatLogEntry
     // The name of the character being targeted (present on TurnStart and Attack events).
     public string? TargetName { get; set; }
 
+    // True when the status effect being applied is a self/ally buff (not a hostile debuff).
+    public bool? IsBuff { get; set; }
+
     // Name of a status effect involved in this event (present on DoTTick, EffectApplied events).
     public string? StatusEffectName { get; set; }
 
