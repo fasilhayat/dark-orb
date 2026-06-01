@@ -395,6 +395,29 @@ A delta of 5 shifts the hit probability by the equivalent of ±10 on the d20 rol
 
 ---
 
+### 13.5 Hit Distribution Diagrams
+
+The following diagrams visualise the normal-distribution bell curves for the four representative combat scenarios, showing hit-count probability density over 2000 attacks:
+
+| Scenario | Parameters | AP | DP | P(hit) | mu | sigma |
+|----------|-----------|----|----|--------|----|-------|
+| Balanced (L2) | STR12 SR8 vs AC8 | 10 | 8 | 60.25% | 1205 | 21.9 |
+| Defensive (L1) | STR10 SR8 vs AC14 | 8 | 14 | 27.50% | 550 | 19.97 |
+| Attacker (L1) | STR14 SR10 vs AC5 | 12 | 5 | 76.50% | 1530 | 17.72 |
+| High Level (L5) | STR18 SR17 vs AC10 | 23 | 10 | 87.75% | 1755 | 9.97 |
+
+![Hit distribution comparison](diagrams/combat-distribution-comparison.svg)
+
+![Balanced combat bell curve](diagrams/combat-distribution-bellcurve.svg)
+
+![Defensive advantage bell curve](diagrams/combat-distribution-defensive.svg)
+
+![Attacker advantage bell curve](diagrams/combat-distribution-attacker.svg)
+
+![High level scaling bell curve](diagrams/combat-distribution-highlevel.svg)
+
+---
+
 ## 14. Turnmeter Math
 
 ### Level vs Turnmeter
