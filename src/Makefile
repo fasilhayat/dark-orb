@@ -1,4 +1,4 @@
-.PHONY: help up-local up-dev run-dev up-test up-preprod up-prod down clean clean-logs install redo-local demo-local test test-coverage build-local sync-instructions publish publish-demo
+.PHONY: help up-local up-dev dev-up run-dev up-test up-preprod up-prod down clean clean-logs install install-dev redo-local demo-local test test-coverage build-local sync-instructions publish publish-demo
 
 help:
 	@cmd /C "echo  BattleArena -- available make targets"
@@ -25,6 +25,7 @@ help:
 	@cmd /C "echo    make test-coverage  Run tests with code coverage (opencover format)"
 	@echo.
 	@cmd /C "echo  OTHER"
+	@cmd /C "echo    make install-dev     Full dev setup: clean + dotnet clean + test + dev-up"
 	@cmd /C "echo    make sync-instructions  Copy AGENTS.md to .github/copilot-instructions.md"
 	@cmd /C "echo    make clean-logs     Delete generated combat-logs/ files"
 
@@ -38,6 +39,11 @@ up-dev: publish publish-demo
 	@echo Building demo in Release mode and starting everything in Docker...
 	docker compose -p dark-orb-dev -f docker-compose.yml -f docker-compose.dev.yml --profile demo build --no-cache battle-arena-api battle-arena-demo
 	docker compose -p dark-orb-dev -f docker-compose.yml -f docker-compose.dev.yml up -d
+	docker compose -p dark-orb-dev -f docker-compose.yml -f docker-compose.dev.yml --profile demo run --rm battle-arena-demo
+
+dev-up: publish publish-demo
+	@echo Starting development stack (DB + API + demo in Docker)...
+	docker compose -p dark-orb-dev -f docker-compose.yml -f docker-compose.dev.yml up -d --build
 	docker compose -p dark-orb-dev -f docker-compose.yml -f docker-compose.dev.yml --profile demo run --rm battle-arena-demo
 
 run-dev:
@@ -74,6 +80,13 @@ install:
 	dotnet test BattleArena.sln
 	@$(MAKE) up-local
 	dotnet run --project BattleArena.Demo/BattleArena.Demo.csproj
+
+install-dev:
+	@echo Running full dev install: clean + dotnet clean + test + dev-up...
+	@$(MAKE) clean
+	dotnet clean BattleArena.sln
+	dotnet test BattleArena.sln
+	@$(MAKE) dev-up
 
 redo-local:
 	@echo Clean + build + up-local + demo...
