@@ -103,22 +103,21 @@ public class CombatService : ICombatService
             };
         }
 
-        // ── Priority 3 ─── Clash (both roll 20) ──────────────────────────────
+        // ── Priority 3 ─── Perfect Parry vs Critical (both roll 20) ───────────
         if (attackRoll == 20 && defenseRoll == 20)
         {
-            var dc = ResolveDamage(attacker, defender, source);
             return new AttackResult
             {
-                HitRoll      = attackRoll,
-                DefenseRoll  = defenseRoll,
-                IsHit        = true,
-                IsClash      = true,
-                Damage       = dc.FinalDamage / 2,
-                DamageDie    = source.DamageDie,
-                WeaponName   = source.Name,
-                AttackPower  = effectiveAP,
-                DefensePower = effectiveDP,
-                DamageContext = dc
+                HitRoll         = attackRoll,
+                DefenseRoll     = defenseRoll,
+                IsHit           = false,
+                IsPerfectParry  = true,
+                DefenderTmBonus = ComputeDefenderTmBoost(source.AttackType, range, isTotalReversal: false),
+                Damage          = 0,
+                DamageDie       = source.DamageDie,
+                WeaponName      = source.Name,
+                AttackPower     = effectiveAP,
+                DefensePower    = effectiveDP
             };
         }
 

@@ -19,7 +19,7 @@ public class CombatStatsService : ICombatStatsService
         return new CombatantStats
         {
             ClassAccuracyBase = attacker.StrikeRating,
-            LevelScaling = attacker.Level,
+            LevelScaling = attacker.Level / 2,
             AttributeModifier = CalculateAbilityModifier(abilityScore),
             WeaponAttackBonus = source.AttackBonus,
             SkillModifiers = attacker.Feats.Sum(f => f.AttackBonus),

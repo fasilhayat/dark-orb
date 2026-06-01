@@ -118,6 +118,20 @@ public static class LevelProgression
         return Math.Max(1, 2 + mod + equipmentBonus);
     }
 
+    /// <summary>Computes expected MaxHp for a character at the given level, using average (not rolled) HD values.</summary>
+    public static int ComputeExpectedMaxHp(int level, int classId, int stamina, int raceHitPointBonus = 0)
+    {
+        var staminaMod = (stamina - 10) / 2;
+        var hitDieSides = HitDieSides(classId);
+        var hp = Math.Max(1, hitDieSides + staminaMod + raceHitPointBonus);
+        if (level > 1)
+        {
+            var avgPerLevel = Math.Max(1, (hitDieSides + 1) / 2 + staminaMod + raceHitPointBonus);
+            hp += (level - 1) * avgPerLevel;
+        }
+        return hp;
+    }
+
     /// <summary>Converts hit die sides to DieType for rolling on level-up.</summary>
     public static DieType HitDieToDieType(int sides) => sides switch
     {

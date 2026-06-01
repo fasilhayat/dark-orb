@@ -421,8 +421,8 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
 
         out_.WriteLine($"  ── Result: High-level won {highWins}/{Trials}");
 
-        // Level 9 has Level*2 = +18 damage, LevelDefenseBonus = +9 defense.
-        // Level 4 has Level*2 = +8  damage, LevelDefenseBonus = +4 defense.
+        // Level 9 has Level*2 = +18 damage, Level/2 = +4 attack scaling.
+        // Level 4 has Level*2 = +8  damage, Level/2 = +2 attack scaling.
         // The L4 can still get lucky (crit streak), but the L9 should dominate.
         Assert.True(highWins >= 16, $"High-level should win ≥ 16/20 (won {highWins})");
     }

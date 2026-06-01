@@ -62,8 +62,8 @@ public class CombatServiceTests
 
         Assert.True(result.IsHit);
         Assert.Equal(12, result.HitRoll);
-        Assert.Equal(13, result.AttackPower);
-        Assert.Equal(11, result.DefensePower);
+        Assert.Equal(12, result.AttackPower);  // Level 1 / 2 = 0
+        Assert.Equal(10, result.DefensePower); // LevelDefenseBonus removed
         Assert.Equal(9, result.Damage);
     }
 
@@ -210,7 +210,7 @@ public class CombatServiceTests
         var result = _sut.ResolveAttack(attacker, defender, weapon);
 
         Assert.True(result.IsHit);
-        Assert.Equal(19, result.AttackPower);
+        Assert.Equal(18, result.AttackPower);  // Level 1 / 2 = 0
     }
 
     [Fact]
@@ -296,7 +296,6 @@ public class CombatServiceTests
         Assert.True(result.IsHit);
         Assert.True(result.IsDevastatingStrike);
         Assert.False(result.IsFumble);
-        Assert.False(result.IsClash);
         Assert.True(result.Damage > 0);
     }
 
@@ -317,7 +316,7 @@ public class CombatServiceTests
     }
 
     [Fact]
-    public void ResolveAttack_BothRoll20_IsClash()
+    public void ResolveAttack_BothRoll20_IsPerfectParry()
     {
         var attacker = new Character { Strength = 10 };
         var defender = CreateDefender(5);
@@ -328,16 +327,17 @@ public class CombatServiceTests
 
         var result = _sut.ResolveAttack(attacker, defender, weapon);
 
-        Assert.True(result.IsHit);
-        Assert.True(result.IsClash);
-        Assert.False(result.IsCriticalHit);       // Clash is NOT a crit
-        Assert.False(result.IsDevastatingStrike); // Clash is NOT devastating
+        Assert.True(result.IsPerfectParry);
+        Assert.False(result.IsHit);              // Perfect parry is not a hit
+        Assert.False(result.IsClash);            // No longer a clash
+        Assert.False(result.IsCriticalHit);
+        Assert.False(result.IsDevastatingStrike);
     }
 
     [Fact]
-    public void ResolveAttack_Clash_DamageIsHalfNormal()
+    public void ResolveAttack_PerfectParry_DamageIsZero()
     {
-        var attacker = new Character { Strength = 10, Level = 0 }; // Level=0 removes level scaling for predictability
+        var attacker = new Character { Strength = 10, Level = 0 };
         var defender = CreateDefender(0);
         var weapon   = new Weapon { Name = "Sword", DamageDie = DieType.D8, DamageType = DamageType.Slashing };
 
@@ -346,8 +346,8 @@ public class CombatServiceTests
 
         var result = _sut.ResolveAttack(attacker, defender, weapon);
 
-        // BaseDamage=6, FinalDamage=6, /2 = 3
-        Assert.Equal(3, result.Damage);
+        // PerfectParry: defender deflects — zero damage
+        Assert.Equal(0, result.Damage);
     }
 
     [Fact]

@@ -29,7 +29,7 @@
               { "label": "gap",          "maxChars": 2,  "content": "  " },
               { "label": "class",        "maxChars": 10, "content": "class name (e.g. Barbarian, Mage), left-aligned, max 9 chars" },
               { "label": "sep2",         "maxChars": 5,  "content": "  ·  " },
-              { "label": "race",         "maxChars": 8,  "content": "race name (e.g. Halfling, Human, Orc), left-aligned, max 8 chars" }
+              { "label": "race",         "maxChars": 8,  "content": "race name (e.g. Gladefolk, Human, Orc), left-aligned, max 8 chars" }
             ]
           },
           {

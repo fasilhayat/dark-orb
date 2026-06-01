@@ -158,10 +158,9 @@ When adding or changing the resistance system:
 | `FumblePenalty` | Fumble side-effect applied |
 | `Death` | HP ≤ -10 |
 | `KnockedOut` | HP in range -9 to 0 |
-| `PerfectParry` | Defender deflects attack, gains TM bonus |
-| `Clash` | Mutual weapon collision, both take reduced damage |
-| `DevastatingStrike` | Triple-damage hit |
-| `TotalReversal` | Fumble flipped; defender gains TM, attacker penalised harder |
+| `PerfectParry` | Defender deflects attack (also on both-20), gains TM bonus |
+| `DevastatingStrike` | Triple-damage hit (atk=20 vs def=1) |
+| `TotalReversal` | Fumble flipped; defender gains TM, attacker penalised harder (atk=1 vs def=20) |
 
 - **Never add game logic to `BattleArena.Demo`**. The demo may read game state and render it; it must not compute combat outcomes.
 - **API combat endpoint**: `POST /v1/combat/simulate` accepts `{ heroParty, enemyParty, maxTicks, heroTargetStrategy, enemyTargetStrategy }` and returns a `CombatResult`. The demo calls this endpoint when `UseApiRoster && ApiClient is not null` — the entire simulation runs server-side.

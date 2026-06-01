@@ -94,6 +94,7 @@ CREATE TABLE IF NOT EXISTS arena_data.race (
     wisdom_bonus INTEGER NOT NULL DEFAULT 0,
     charisma_bonus INTEGER NOT NULL DEFAULT 0,
     description TEXT DEFAULT '',
+    hit_point_bonus INTEGER NOT NULL DEFAULT 0,
     is_playable BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

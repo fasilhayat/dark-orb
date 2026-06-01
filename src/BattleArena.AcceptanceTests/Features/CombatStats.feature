@@ -26,20 +26,20 @@ Feature: Combat — AttackPower and DefensePower Derivation
     @combat-stats
     # Level 3 fighter, STR 16, StrikeRating 17, melee weapon +2.
     # ClassAccuracyBase = 17
-    # LevelScaling = 3
+    # LevelScaling = floor(3/2) = 1
     # AttributeModifier = (16-10)/2 = 3
     # WeaponAttackBonus = 2
     # SkillModifiers = 2 (feat)
     # RacialModifiers = 1 (racial feat)
     # BuffModifiers = 0
-    # Total AttackPower = 17+3+3+2+2+1 = 28
+    # Total AttackPower = 17+1+3+2+2+1 = 26
     Scenario: Attack power aggregates class accuracy, level, strength, weapon, feats, and race
         Given an attacker at level 3 with strength 16 and strike rating 17
         And the attacker has a combat feat granting +2 attack bonus
         And the attacker's race has a combat feat granting +1 attack bonus
         And the attacker uses a melee weapon with attack bonus 2
         When attack power is computed
-        Then the total attack power should be 28
+        Then the total attack power should be 26
 
     @combat-stats
     # Buff stacking rules are enforced before summing:
@@ -47,9 +47,9 @@ Feature: Combat — AttackPower and DefensePower Derivation
     #   HighestWins    → only the strongest instance is counted
     #   NoStack        → ignored if the effect name already exists
     #   Debuffs        → always sum regardless of rule
-    # Level=1, STR=10, StrikeRating=20 → base = 20+1+0 = 21
+    # Level=1, STR=10, StrikeRating=20 → base = 20+0+0 = 20
     # Stack buff +3, HighestWins buffs [+4, +2] → max = 4, debuff -2
-    # BuffModifiers = 3 + 4 + (-2) = 5. AttackPower = 21 + 5 = 26.
+    # BuffModifiers = 3 + 4 + (-2) = 5. AttackPower = 20 + 5 = 25.
     Scenario: Buff stacking rules are applied correctly to attack power
         Given an attacker at level 1 with strength 10 and strike rating 20
         And the attacker uses a melee weapon with attack bonus 0
@@ -58,8 +58,8 @@ Feature: Combat — AttackPower and DefensePower Derivation
         And the attacker has a highest-wins attack buff with +2 modifier
         And the attacker has an attack debuff with -2 modifier
         When attack power is computed
-        # Base 21 + buffs 5 = 26
-        Then the total attack power should be 26
+        # Base 20 + buffs 5 = 25
+        Then the total attack power should be 25
 
     @combat-stats
     # EffectiveAC = 5. No shield, no dex modifier, no buffs.
@@ -68,15 +68,15 @@ Feature: Combat — AttackPower and DefensePower Derivation
         Given a stats defender with dexterity 10
         And the stats defender wears chest armor with class 5 and max dex bonus 10
         When defense power is computed
-        # EffectiveAC = 5, LevelDefenseBonus = Level = 1, total = 6
-        Then the total defense power should be 6
+        # EffectiveAC = 5, no LevelDefenseBonus, total = 5
+        Then the total defense power should be 5
 
     @combat-stats
     # Heavy armor caps the dexterity bonus even when DEX is very high.
     # TotalArmorClass = 6 + 2 = 8 → EffectiveAC = 8.
     # DEX 18 → raw +4, capped to min(2 + 1) = 3 by armor.
-        # Shield +3. LevelDefenseBonus = Level = 1.
-        # DefensePower = 8 + 3 (dex capped) + 3 (shield) + 1 (level) = 15.
+        # Shield +3. No LevelDefenseBonus.
+        # DefensePower = 8 + 3 (dex capped) + 3 (shield) = 14.
     Scenario: Dexterity bonus is capped by the most restrictive armor piece
         Given a stats defender with dexterity 18
         And the stats defender wears chest armor with class 6 and max dex bonus 2
@@ -85,4 +85,4 @@ Feature: Combat — AttackPower and DefensePower Derivation
         When defense power is computed
         Then the computed effective armor class should be 8
         And the computed dexterity modifier should be 3
-        And the total defense power should be 15
+        And the total defense power should be 14

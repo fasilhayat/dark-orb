@@ -39,13 +39,13 @@ public class CombatStatsServiceTests
         var result = _sut.ComputeAttackerStats(attacker, weapon);
 
         Assert.Equal(17, result.ClassAccuracyBase);
-        Assert.Equal(3, result.LevelScaling);
+        Assert.Equal(1, result.LevelScaling);  // Level 3 / 2 = 1
         Assert.Equal(3, result.AttributeModifier);
         Assert.Equal(2, result.WeaponAttackBonus);
         Assert.Equal(2, result.SkillModifiers);
         Assert.Equal(5, result.BuffModifiers);
         Assert.Equal(1, result.RacialModifiers);
-        Assert.Equal(33, result.AttackPower);
+        Assert.Equal(31, result.AttackPower);
     }
 
     [Fact]
@@ -81,7 +81,6 @@ public class CombatStatsServiceTests
         Assert.Equal(3, result.ShieldBonus);
         Assert.Equal(3, result.DefensiveBuffs);
         Assert.Equal(3, result.DefenseRacialModifiers);
-        Assert.Equal(1, result.LevelDefenseBonus);
-        Assert.Equal(21, result.DefensePower);
+        Assert.Equal(20, result.DefensePower);
     }
 }

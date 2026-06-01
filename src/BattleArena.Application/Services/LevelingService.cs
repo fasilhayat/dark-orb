@@ -78,10 +78,11 @@ public class LevelingService
             {
                 var staminaMod = (c.Stamina - 10) / 2;
                 var hitDieSides = LevelProgression.HitDieSides(c.ClassId);
+                var raceHpBonus = c.Race?.HitPointBonus ?? 0;
                 for (var lvl = oldLevel; lvl < c.Level; lvl++)
                 {
                     var rolled = _dice.Roll(LevelProgression.HitDieToDieType(hitDieSides));
-                    var gain = Math.Max(1, rolled + staminaMod);
+                    var gain = Math.Max(1, rolled + staminaMod + raceHpBonus);
                     c.MaxHitPoints += gain;
                     c.CurrentHitPoints += gain;
                 }

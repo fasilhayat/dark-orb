@@ -2,7 +2,7 @@
 
 > Every creature stat block uses the same AD&D-inspired system: **lower AC is better**, attack rolls use `d20 + AttackBonus ≥ StrikeRating - targetAC`.  
 > **Level** indicates the equivalent character level the creature is balanced against.  
-> **Movement Speed** is 30 ft. for most humanoids unless otherwise noted in their special abilities (e.g. Fly, Swim, Climb). Base speed varies by race (Elves 35 ft., Dwarves 25 ft., Halflings 25 ft., etc.) and is modified by class bonuses and armour penalties in the simulation engine.  
+> **Movement Speed** is 30 ft. for most humanoids unless otherwise noted in their special abilities (e.g. Fly, Swim, Climb). Base speed varies by race (Elves 35 ft., Dwarves 25 ft., Gladefolk 25 ft., etc.) and is modified by class bonuses and armour penalties in the simulation engine.  
 > Most families come in three tiers: **Lesser** (weaker variant), **Normal** (unprefixed), **Greater** (elite variant).
 
 ---

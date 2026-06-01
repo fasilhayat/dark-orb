@@ -66,17 +66,17 @@ ON CONFLICT (name) DO NOTHING;
 -- SEED: RACES
 -- ============================================================
 
-INSERT INTO arena_data.race (name, description, base_movement_speed, strength_bonus, dexterity_bonus, stamina_bonus, intelligence_bonus, wisdom_bonus, charisma_bonus) VALUES
-    ('Human',    'The children of the All-Father, humans are the most adaptable of the mortal races. From the barbarian hordes of the Frozen Wastes to the merchant princes of Eldergard, humanity''s ambition knows no bounds. Their settlements dot every corner of the realm, and their short lives burn twice as bright as the long-lived elves. No other race can match their versatility — a human may rise from peasant to king in a single lifetime.', 30, 1, 1, 1, 1, 1, 1),
-    ('Elf',      'Born from the tears of the Moon goddess, the elves are the eldest of the mortal races. Their connection to magic runs in their blood, granting them innate resistance to spells and a grace that other races find unsettling. High Elves study the arcane arts in crystal towers, Dark Elves weave shadows in the underdark, and Forest Elves move as whispers through the ancient woods. Elves measure time in centuries and rarely hurry.', 35, 0, 2, 0, 2, 0, 1),
-    ('Dwarf',    'Forged from the bones of the earth itself, dwarves are as stubborn as the mountains they call home. Their kingdoms stretch deep beneath the peaks, where they mine mithril and carve halls of breathtaking beauty. Dwarven smiths are unmatched in the mortal realm, and their resistance to magic makes them feared opponents. A dwarf''s word is their bond, and their grudges are recorded in stone to last ten generations.', 25, 2, 0, 2, 0, 1, 0),
-    ('Lizard',   'Scales shimmering like gemstones, the lizardfolk are the Silent Children of the Sun. They are descendants of the lesser dragons, evolved from those ancient bloodlines when the world was young. The draconic heritage runs deep in their veins — their scales, their resilience, their cold patience all echo the great wyrms. To outsiders they seem emotionless, but among their own kind they share deep bonds of loyalty. Swamp Lizards glide through poisonous marshes, Desert Lizards endure the searing heat, and Forest Lizards strike from the canopy with terrifying precision.', 30, 2, 0, 1, 0, 0, 0),
-    ('Undead',   'Not a race but a condition — souls that refused the call of the afterlife. Undead cannot be played as characters; they exist only as NPCs and monsters encountered in the world. Bound to their rotting bodies by sheer will or necromantic curse, they walk the mortal plane seeking purpose, vengeance, or redemption. Immune to fear and pain, they feel only the cold hunger of their existence. Some serve dark masters; others wander as lone penitents, searching for a peace that will not come.', 25, 1, 0, 0, 1, 0, 0),
-    ('Kobold',   'Small, scaly, and underestimated by every other race, kobolds are survivors. They dwell in the cracks of the world — forgotten mines, sewer networks, and the underbellies of great cities. Their natural cunning and magic resistance have kept them alive against larger, stronger foes. A kobold''s greatest weapon is not their claw or fang, but their cleverness. They build traps that would impress dwarves and tunnels that baffle even elves.', 25, 0, 2, 0, 1, 0, 0),
-    ('Demon',    'Hailing from the infernal planes beyond the mortal veil, demons are creatures of pure elemental chaos. Each demon embodies a primal force — fire demons burn with endless rage, shadow demons hunger for fear and despair. They enter the mortal world through rifts and summonings, bringing destruction in their wake. Yet some demons reject their nature, seeking redemption in a world that fears and despises them.', 30, 2, 0, 1, 1, 0, 1),
-    ('Orc',      'The Chosen of the War God, orcs were created to fight. Their muscles bulge with unnatural strength, and their bones knit faster than any other race. Orc society is built around the concept of ''Ushog'' — the eternal struggle that gives life meaning. They value strength above all else and respect only those who can defeat them in battle. Despite their savage reputation, orcish honor is absolute; an orc who gives their word will die before breaking it.', 30, 3, 0, 1, 0, 0, 0),
-    ('Ogre',     'Titans reduced by ages of separation from their divine ancestors, ogres are the largest of the mortal races. Standing twelve feet tall and built of solid muscle and thick bone, they are living battering rams. Mountain Ogres possess residual magic resistance from their giant bloodline, Hill Ogres throw boulders with deadly accuracy, Desert Ogres endure the harshest climates, and Forest Ogres can regenerate wounds at an alarming rate.', 25, 3, 0, 2, 0, 0, 0),
-    ('Halfling', 'The smallest of the civilized races, halflings possess a spirit that belies their stature. They believe in the power of luck, good food, and a warm hearth, yet they are among the bravest souls in battle. Halflings feel fear but refuse to show it, using their natural agility and sharp tongues to mock and taunt enemies into reckless charges. Forest Halflings move through woodland without a trace, while Hill Halflings are renowned for their hospitality and uncanny good fortune.', 25, 0, 2, 1, 0, 1, 1);
+INSERT INTO arena_data.race (name, description, base_movement_speed, strength_bonus, dexterity_bonus, stamina_bonus, intelligence_bonus, wisdom_bonus, charisma_bonus, hit_point_bonus) VALUES
+    ('Human',    'The children of the All-Father, humans are the most adaptable of the mortal races. From the barbarian hordes of the Frozen Wastes to the merchant princes of Eldergard, humanity''s ambition knows no bounds. Their settlements dot every corner of the realm, and their short lives burn twice as bright as the long-lived elves. No other race can match their versatility — a human may rise from peasant to king in a single lifetime.', 30, 1, 1, 1, 1, 1, 1, 0),
+    ('Elf',      'Born from the tears of the Moon goddess, the elves are the eldest of the mortal races. Their connection to magic runs in their blood, granting them innate resistance to spells and a grace that other races find unsettling. High Elves study the arcane arts in crystal towers, Dark Elves weave shadows in the underdark, and Forest Elves move as whispers through the ancient woods. Elves measure time in centuries and rarely hurry.', 35, 0, 2, 0, 2, 0, 1, 0),
+    ('Dwarf',    'Forged from the bones of the earth itself, dwarves are as stubborn as the mountains they call home. Their kingdoms stretch deep beneath the peaks, where they mine mithril and carve halls of breathtaking beauty. Dwarven smiths are unmatched in the mortal realm, and their resistance to magic makes them feared opponents. A dwarf''s word is their bond, and their grudges are recorded in stone to last ten generations.', 25, 2, 0, 2, 0, 1, 0, 2),
+    ('Lizard',   'Scales shimmering like gemstones, the lizardfolk are the Silent Children of the Sun. They are descendants of the lesser dragons, evolved from those ancient bloodlines when the world was young. The draconic heritage runs deep in their veins — their scales, their resilience, their cold patience all echo the great wyrms. To outsiders they seem emotionless, but among their own kind they share deep bonds of loyalty. Swamp Lizards glide through poisonous marshes, Desert Lizards endure the searing heat, and Forest Lizards strike from the canopy with terrifying precision.', 30, 2, 0, 1, 0, 0, 0, 1),
+    ('Undead',   'Not a race but a condition — souls that refused the call of the afterlife. Undead cannot be played as characters; they exist only as NPCs and monsters encountered in the world. Bound to their rotting bodies by sheer will or necromantic curse, they walk the mortal plane seeking purpose, vengeance, or redemption. Immune to fear and pain, they feel only the cold hunger of their existence. Some serve dark masters; others wander as lone penitents, searching for a peace that will not come.', 25, 1, 0, 0, 1, 0, 0, 0),
+    ('Kobold',   'Small, scaly, and underestimated by every other race, kobolds are survivors. They dwell in the cracks of the world — forgotten mines, sewer networks, and the underbellies of great cities. Their natural cunning and magic resistance have kept them alive against larger, stronger foes. A kobold''s greatest weapon is not their claw or fang, but their cleverness. They build traps that would impress dwarves and tunnels that baffle even elves.', 25, 0, 2, 0, 1, 0, 0, 0),
+    ('Demon',    'Hailing from the infernal planes beyond the mortal veil, demons are creatures of pure elemental chaos. Each demon embodies a primal force — fire demons burn with endless rage, shadow demons hunger for fear and despair. They enter the mortal world through rifts and summonings, bringing destruction in their wake. Yet some demons reject their nature, seeking redemption in a world that fears and despises them.', 30, 2, 0, 1, 1, 0, 1, 1),
+    ('Orc',      'The Chosen of the War God, orcs were created to fight. Their muscles bulge with unnatural strength, and their bones knit faster than any other race. Orc society is built around the concept of ''Ushog'' — the eternal struggle that gives life meaning. They value strength above all else and respect only those who can defeat them in battle. Despite their savage reputation, orcish honor is absolute; an orc who gives their word will die before breaking it.', 30, 3, 0, 1, 0, 0, 0, 2),
+    ('Ogre',     'Titans reduced by ages of separation from their divine ancestors, ogres are the largest of the mortal races. Standing twelve feet tall and built of solid muscle and thick bone, they are living battering rams. Mountain Ogres possess residual magic resistance from their giant bloodline, Hill Ogres throw boulders with deadly accuracy, Desert Ogres endure the harshest climates, and Forest Ogres can regenerate wounds at an alarming rate.', 25, 3, 0, 2, 0, 0, 0, 3),
+    ('Gladefolk', 'The smallest of the civilized races, gladefolk possess a spirit that belies their stature. They believe in the power of luck, good food, and a warm hearth, yet they are among the bravest souls in battle. Gladefolk feel fear but refuse to show it, using their natural agility and sharp tongues to mock and taunt enemies into reckless charges. Forest Gladefolk move through woodland without a trace, while Hill Gladefolk are renowned for their hospitality and uncanny good fortune.', 25, 0, 2, 1, 0, 1, 1, 0);
 
 
 -- Non-playable races (Undead, Demon)
@@ -104,8 +104,8 @@ FROM (VALUES
     ('Ogre', 'Hill Ogre',      'Boulder-throwing brutes of the lowlands.'),
     ('Ogre', 'Desert Ogre',    'Sun-hardened giants resistant to heat.'),
     ('Ogre', 'Forest Ogre',    'Troll-kin with regenerative properties.'),
-    ('Halfling', 'Forest Halfling', 'Wood-wise halflings who disappear into foliage.'),
-    ('Halfling', 'Hill Halfling',   'Pastoral folk known for luck and hospitality.')
+    ('Gladefolk', 'Forest Gladefolk', 'Wood-wise gladefolk who disappear into foliage.'),
+    ('Gladefolk', 'Hill Gladefolk',   'Pastoral folk known for luck and hospitality.')
 ) AS s(race_name, name, descr)
 JOIN arena_data.race r ON r.name = s.race_name;
 
@@ -126,8 +126,8 @@ FROM (VALUES
     ('Orc', 'Extra Strength',      '+2 bonus to melee damage rolls.'),
     ('Ogre', 'Magic Resistance',   'Advantage on saving throws against magical effects.'),
     ('Ogre', 'Extra Strength',     '+2 bonus to melee damage rolls.'),
-    ('Halfling', 'Taunt',          'Can force enemies to target them instead of allies.'),
-    ('Halfling', 'Fear Immunity',  'Immune to being frightened.')
+    ('Gladefolk', 'Taunt',          'Can force enemies to target them instead of allies.'),
+    ('Gladefolk', 'Fear Immunity',  'Immune to being frightened.')
 ) AS s(race_name, name, descr)
 JOIN arena_data.race r ON r.name = s.race_name;
 
@@ -169,13 +169,13 @@ FROM (VALUES
     ('Knight',    'Human'), ('Knight',    'Elf'), ('Knight',    'Dwarf'), ('Knight',    'Orc'),
     ('Paladin',   'Human'), ('Paladin',   'Elf'), ('Paladin',   'Dwarf'),
     ('Priest',    'Human'), ('Priest',    'Elf'), ('Priest',    'Dwarf'), ('Priest',    'Lizard'),
-    ('Priest',    'Kobold'), ('Priest',   'Halfling'), ('Priest',  'Orc'),
+    ('Priest',    'Kobold'), ('Priest',   'Gladefolk'), ('Priest',  'Orc'),
     ('Mage',      'Human'), ('Mage',      'Elf'), ('Mage',      'Kobold'),
-    ('Bard',      'Human'), ('Bard',      'Elf'), ('Bard',      'Halfling'),
-    ('Druid',     'Human'), ('Druid',     'Elf'), ('Druid',     'Halfling'), ('Druid',    'Lizard'),
+    ('Bard',      'Human'), ('Bard',      'Elf'), ('Bard',      'Gladefolk'),
+    ('Druid',     'Human'), ('Druid',     'Elf'), ('Druid',     'Gladefolk'), ('Druid',    'Lizard'),
     ('Fighter',   'Human'), ('Fighter',   'Elf'), ('Fighter',   'Dwarf'), ('Fighter',   'Lizard'),
-    ('Fighter',   'Kobold'), ('Fighter',  'Orc'), ('Fighter',   'Ogre'), ('Fighter',   'Halfling'),
-    ('Rogue',     'Human'), ('Rogue',     'Elf'), ('Rogue',     'Dwarf'), ('Rogue',     'Halfling'), ('Rogue', 'Kobold')
+    ('Fighter',   'Kobold'), ('Fighter',  'Orc'), ('Fighter',   'Ogre'), ('Fighter',   'Gladefolk'),
+    ('Rogue',     'Human'), ('Rogue',     'Elf'), ('Rogue',     'Dwarf'), ('Rogue',     'Gladefolk'), ('Rogue', 'Kobold')
 ) AS src(class_name, race_name)
 JOIN arena_data.class c ON c.name = src.class_name
 JOIN arena_data.race r ON r.name = src.race_name;
@@ -696,7 +696,7 @@ FROM arena_data.race r, arena_data.class c WHERE r.name = 'Undead' AND c.name = 
 INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
 SELECT 'Lysander the Bard', r.id, c.id, 7, 10, 14, 12, 14, 12, 20, FALSE, TRUE, FALSE,
        'A halfling bard who knows every legend, song, and secret in the realm. He can reveal the location of any legendary item for a price.'
-FROM arena_data.race r, arena_data.class c WHERE r.name = 'Halfling' AND c.name = 'Bard';
+FROM arena_data.race r, arena_data.class c WHERE r.name = 'Gladefolk' AND c.name = 'Bard';
 
 
 INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)

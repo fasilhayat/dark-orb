@@ -115,7 +115,7 @@ SELECT 'Finn Swift', r.id, c.id, 6, 8, 18, 10, 12, 10, 16, 23, 23, 14, 18, 1, 'M
        'A halfling with an infectious grin and a talent for being where he should not be. He runs an information network that spans every tavern and market stall in the city. For a few gold coins, Finn can tell you anything about anyone.',
        0
 FROM arena_data.race r, arena_data.class c
-WHERE r.name = 'Halfling' AND c.name = 'Rogue'
+WHERE r.name = 'Gladefolk' AND c.name = 'Rogue'
 AND NOT EXISTS (SELECT 1 FROM arena_data.character WHERE name = 'Finn Swift');
 
 

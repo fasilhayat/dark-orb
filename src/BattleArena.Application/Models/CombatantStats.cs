@@ -33,5 +33,5 @@ public class CombatantStats
     /// Base defense power computed from character stats and equipment.
     /// Combat-phase modifiers are applied on top of this by the <c>ICombatModifier</c> pipeline.
     /// </summary>
-    public int DefensePower => EffectiveAC + DexterityModifier + ShieldBonus + DefensiveBuffs + DefenseRacialModifiers + DefenseItemSetBonuses + LevelDefenseBonus + MagicResistanceBonus;
+    public int DefensePower => EffectiveAC + DexterityModifier + ShieldBonus + DefensiveBuffs + DefenseRacialModifiers + DefenseItemSetBonuses + MagicResistanceBonus;
 }
