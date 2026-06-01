@@ -8,11 +8,13 @@ public class TurnmeterService : ITurnmeterService
 {
     public int ComputeGainPerTick(Character character)
     {
-        var dexMod = (character.Dexterity - 10) / 2;
+        var dexMod       = (character.Dexterity - 10) / 2;
         var armorPenalty = character.Equipment.TotalTurnMeterPenalty;
-        var buffMod = character.ActiveStatusEffects.Sum(e => e.TurnMeterModifier);
-        var archetype = LevelProgression.Archetype(character.ClassId);
-        var levelBonus = LevelProgression.TurnMeterLevelBonus(character.Level, archetype);
+        var archetype    = LevelProgression.Archetype(character.ClassId);
+        var levelBonus   = LevelProgression.TurnMeterLevelBonus(character.Level, archetype);
+        var buffMod      = 0;
+        foreach (var e in character.ActiveStatusEffects)
+            buffMod += e.TurnMeterModifier;
         return Math.Max(1, character.TurnSpeed + dexMod + levelBonus + buffMod - armorPenalty);
     }
 

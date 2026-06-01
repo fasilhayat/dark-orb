@@ -2,6 +2,7 @@ namespace BattleArena.Application.Services;
 
 using System.Text.Json;
 using Application.Models;
+using Application.Modifiers;
 
 // Replays a previously recorded combat from a .json snapshot file, producing
 // an identical CombatResult when the same seed and character data are used.
@@ -51,7 +52,13 @@ public static class CombatReplayer
     // ── Private ───────────────────────────────────────────────────────────────
 
     private static CombatSimulator BuildSimulator(DiceService dice) =>
-        new(new CombatService(dice, new CombatStatsService()),
+        new(new CombatService(dice, new CombatStatsService(),
+                [
+                    new Modifiers.RangeModifier(),
+                    new Modifiers.TerrainModifier(),
+                    new Modifiers.DamageModifier(),
+                    new Modifiers.HealingModifier()
+                ]),
             new TurnmeterService(),
             new StatusEffectService(),
             dice);

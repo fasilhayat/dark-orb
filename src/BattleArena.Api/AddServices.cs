@@ -26,6 +26,7 @@ public static class AddServices
         services.AddScoped<ICombatModifier, DamageModifier>();
         services.AddScoped<ICombatModifier, HealingModifier>();
         services.AddScoped<ICombatService, CombatService>();
+        services.AddScoped<ICombatSimulatorFactory, CombatSimulatorFactory>();
         services.AddScoped<ICharacterService, CharacterService>();
         services.AddScoped<ICharacterRepository, CharacterRepository>();
         services.AddScoped<IWeaponRepository, WeaponRepository>();

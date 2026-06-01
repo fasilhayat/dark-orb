@@ -90,7 +90,7 @@ Before damage calculation, **`CombatPhase.DamageCalculation` modifiers** run.
 They can set `DamageDelta` (flat) and `DamageMultiplier` (multiplicative).
 
 ```
-BaseDamage   = diceRoll + abilityModifier + source.FlatDamageBonus + Level × 2
+BaseDamage   = diceRoll + abilityModifier + source.FlatDamageBonus + Level / 2
 scaledBase   = isCritical ? BaseDamage × 2 : BaseDamage
 scaledBase   = (int)(scaledBase × DamageMultiplier)            ← modifier pipeline
 FinalDamage  = max(0, (int)(scaledBase × typeMultiplier) - mitigation + elementalDamage + DamageDelta)
@@ -112,9 +112,11 @@ Group heals (name contains "Mass") apply at 0.6× potency per target.
 ## Turn Meter
 
 ```
-GainPerTick = max(1, TurnSpeed + DEXmod + buffs - armorPenalty)
+GainPerTick = max(1, TurnSpeed + DEXmod + levelBonus + buffs - armorPenalty)
 AfterActionCost: meter -= 100 (weapons) or spell cost
 ```
+
+`levelBonus` is `LevelProgression.TurnMeterLevelBonus(level, archetype)` — typically +0 to +3 depending on class archetype.
 
 ## Status Effect Two-Phase Roll
 

@@ -9,28 +9,60 @@ public class CombatStatsService : ICombatStatsService
 {
     public CombatantStats ComputeAttackerStats(Character attacker, IAttackSource source)
     {
-        var attackEffects = attacker.ActiveStatusEffects.Where(e => e.AttackPowerModifier != 0).ToList();
-        var positiveBuffs = attackEffects.Where(e => e.AttackPowerModifier > 0).ToList();
-        var negativeBuffs = attackEffects.Where(e => e.AttackPowerModifier < 0).Sum(e => e.AttackPowerModifier);
-        var abilityScore = source.UsesIntelligence
-            ? attacker.Intelligence
-            : source.AttackType == AttackType.Ranged ? attacker.Dexterity : attacker.Strength;
+        var buffModifiers = AccumulateAttackBuffs(attacker);
+        var abilityScore  = ResolveAttackerAbilityScore(attacker, source);
 
         return new CombatantStats
         {
             ClassAccuracyBase = attacker.StrikeRating,
-            LevelScaling = attacker.Level / 2,
+            LevelScaling      = attacker.Level / 2,
             AttributeModifier = CalculateAbilityModifier(abilityScore),
             WeaponAttackBonus = source.AttackBonus,
-            SkillModifiers = attacker.Feats.Sum(f => f.AttackBonus),
-            BuffModifiers =
-                ApplyBuffStacking(positiveBuffs.Where(e => e.StackRule == StackRule.Stack), e => e.AttackPowerModifier, StackRule.Stack) +
-                ApplyBuffStacking(positiveBuffs.Where(e => e.StackRule == StackRule.HighestWins), e => e.AttackPowerModifier, StackRule.HighestWins) +
-                ApplyBuffStacking(positiveBuffs.Where(e => e.StackRule == StackRule.NoStack), e => e.AttackPowerModifier, StackRule.NoStack) +
-                negativeBuffs,
-            RacialModifiers = attacker.Race?.Feats.Sum(f => f.AttackBonus) ?? 0,
-            ItemSetBonuses = 0
+            SkillModifiers    = attacker.Feats.Sum(f => f.AttackBonus),
+            BuffModifiers     = buffModifiers,
+            RacialModifiers   = attacker.Race?.Feats.Sum(f => f.AttackBonus) ?? 0,
+            ItemSetBonuses    = 0
         };
+    }
+
+    private static int AccumulateAttackBuffs(Character attacker)
+    {
+        var stackSum       = 0;
+        var highestWinsMax = 0;
+        var hasHighestWins = false;
+        var noStackFirst   = 0;
+        var hasNoStack     = false;
+        var negativeSum    = 0;
+
+        foreach (var e in attacker.ActiveStatusEffects)
+        {
+            var mod = e.AttackPowerModifier;
+            if (mod == 0) continue;
+            if (mod < 0) { negativeSum += mod; continue; }
+            switch (e.StackRule)
+            {
+                case StackRule.Stack:
+                    stackSum += mod;
+                    break;
+                case StackRule.HighestWins:
+                    if (mod > highestWinsMax) { highestWinsMax = mod; hasHighestWins = true; }
+                    break;
+                case StackRule.NoStack:
+                    if (!hasNoStack) { noStackFirst = mod; hasNoStack = true; }
+                    break;
+            }
+        }
+
+        return stackSum
+            + (hasHighestWins ? highestWinsMax : 0)
+            + (hasNoStack     ? noStackFirst   : 0)
+            + negativeSum;
+    }
+
+    private static int ResolveAttackerAbilityScore(Character attacker, IAttackSource source)
+    {
+        if (source.UsesIntelligence) return attacker.Intelligence;
+        return source.AttackType == AttackType.Ranged ? attacker.Dexterity : attacker.Strength;
     }
 
     public CombatantStats ComputeDefenderStats(Character defender, IAttackSource? source = null)
@@ -50,29 +82,25 @@ public class CombatStatsService : ICombatStatsService
     private CombatantStats ComputePhysicalDefenderStats(Character defender)
     {
         var dexterityModifier = CalculateAbilityModifier(defender.Dexterity);
-        var armorPieces = new[]
-        {
-            defender.Equipment.Head,
-            defender.Equipment.Chest,
-            defender.Equipment.Hands,
-            defender.Equipment.Waist,
-            defender.Equipment.Boots,
-            defender.Equipment.Neck,
-            defender.Equipment.Back
-        }.Where(a => a is not null).ToList();
+        var maxDexBonus       = ComputeMaxDexBonus(defender.Equipment);
+        if (maxDexBonus.HasValue)
+            dexterityModifier = Math.Min(dexterityModifier, maxDexBonus.Value);
 
-        if (armorPieces.Count > 0)
+        // Per-source HighestWins: buffs from the same source don't stack — only the best applies.
+        // Negative debuffs always stack regardless of source.
+        var sourceBestBuffs = new Dictionary<string, int>();
+        var negativeDebuffs = 0;
+        foreach (var e in defender.ActiveStatusEffects)
         {
-            var maxDexterityBonus = armorPieces.Sum(a => a!.MaxDexterityBonus);
-            dexterityModifier = Math.Min(dexterityModifier, maxDexterityBonus);
+            var mod = e.DefensePowerModifier;
+            if (mod == 0) continue;
+            if (mod < 0) { negativeDebuffs += mod; continue; }
+            if (e.Type != StatusEffectType.Buff) continue;
+            var src = e.Source ?? string.Empty;
+            if (!sourceBestBuffs.TryGetValue(src, out var best) || mod > best)
+                sourceBestBuffs[src] = mod;
         }
-
-        var defenseEffects = defender.ActiveStatusEffects.Where(e => e.DefensePowerModifier != 0).ToList();
-        var positiveBuffs = defenseEffects.Where(e => e.Type == StatusEffectType.Buff && e.DefensePowerModifier > 0);
-        var positiveBuffTotal = positiveBuffs
-            .GroupBy(e => e.Source)
-            .Sum(group => ApplyBuffStacking(group, e => e.DefensePowerModifier, StackRule.HighestWins));
-        var negativeDebuffs = defenseEffects.Where(e => e.DefensePowerModifier < 0).Sum(e => e.DefensePowerModifier);
+        var positiveBuffTotal = sourceBestBuffs.Values.Sum();
 
         return new CombatantStats
         {
@@ -87,6 +115,20 @@ public class CombatStatsService : ICombatStatsService
         };
     }
 
+    private static int? ComputeMaxDexBonus(ArmorSlots equipment)
+    {
+        var total = 0;
+        var found = false;
+        if (equipment.Head   is { } h) { total += h.MaxDexterityBonus; found = true; }
+        if (equipment.Chest  is { } c) { total += c.MaxDexterityBonus; found = true; }
+        if (equipment.Hands  is { } g) { total += g.MaxDexterityBonus; found = true; }
+        if (equipment.Waist  is { } w) { total += w.MaxDexterityBonus; found = true; }
+        if (equipment.Boots  is { } b) { total += b.MaxDexterityBonus; found = true; }
+        if (equipment.Neck   is { } n) { total += n.MaxDexterityBonus; found = true; }
+        if (equipment.Back   is { } k) { total += k.MaxDexterityBonus; found = true; }
+        return found ? total : null;
+    }
+
     /// <summary>
     /// Spell defense: Wisdom modifier + magic resistance (converted to d20 scale) + buffs + racial + level.
     /// Armor and shields do not protect against spells; wisdom and innate magic resistance do.
@@ -99,12 +141,20 @@ public class CombatStatsService : ICombatStatsService
         var magicResistanceBonus = defender.ComputeResistance(ResistanceType.Magic) / 5;
 
         // Protective spell buffs still apply (ward spells, etc.)
-        var defenseEffects = defender.ActiveStatusEffects.Where(e => e.DefensePowerModifier != 0).ToList();
-        var positiveBuffs  = defenseEffects.Where(e => e.Type == StatusEffectType.Buff && e.DefensePowerModifier > 0);
-        var positiveBuffTotal = positiveBuffs
-            .GroupBy(e => e.Source)
-            .Sum(group => ApplyBuffStacking(group, e => e.DefensePowerModifier, StackRule.HighestWins));
-        var negativeDebuffs = defenseEffects.Where(e => e.DefensePowerModifier < 0).Sum(e => e.DefensePowerModifier);
+        // Per-source HighestWins: buffs from the same source don't stack — only the best applies.
+        var sourceBestBuffs = new Dictionary<string, int>();
+        var negativeDebuffs = 0;
+        foreach (var e in defender.ActiveStatusEffects)
+        {
+            var mod = e.DefensePowerModifier;
+            if (mod == 0) continue;
+            if (mod < 0) { negativeDebuffs += mod; continue; }
+            if (e.Type != StatusEffectType.Buff) continue;
+            var src = e.Source ?? string.Empty;
+            if (!sourceBestBuffs.TryGetValue(src, out var best) || mod > best)
+                sourceBestBuffs[src] = mod;
+        }
+        var positiveBuffTotal = sourceBestBuffs.Values.Sum();
 
         return new CombatantStats
         {
@@ -116,24 +166,6 @@ public class CombatStatsService : ICombatStatsService
             DefenseItemSetBonuses  = 0,
             LevelDefenseBonus      = defender.Level,
             MagicResistanceBonus   = magicResistanceBonus
-        };
-    }
-
-    private static int ApplyBuffStacking(IEnumerable<StatusEffect> effects, Func<StatusEffect, int> selector, StackRule rule)
-    {
-        var effectList = effects.ToList();
-        if (effectList.Count == 0)
-            return 0;
-
-        if (effectList.All(e => selector(e) < 0))
-            return effectList.Sum(selector);
-
-        return rule switch
-        {
-            StackRule.Stack => effectList.Sum(selector),
-            StackRule.HighestWins => effectList.Max(selector),
-            StackRule.NoStack => selector(effectList[0]),
-            _ => 0
         };
     }
 

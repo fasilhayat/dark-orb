@@ -162,50 +162,60 @@ public static class CombatNarrator
         }
     }
 
-    public static string GetPhrase(string attacker, string target, NarrativeContext context, bool isSpell = false, DamageType damageType = DamageType.Slashing)
+    public static string GetPhrase(string attacker, string target, NarrativeContext context,
+        bool isSpell = false, DamageType damageType = DamageType.Slashing,
+        Func<int, int>? rollIndex = null)
     {
         if (isSpell)
-        {
-            var element = damageType switch
-            {
-                DamageType.Fire      => "fire",
-                DamageType.Ice       => "ice",
-                DamageType.Lightning => "lightning",
-                _                   => "arcane"
-            };
+            return GetSpellPhrase(attacker, target, context, damageType, rollIndex);
 
-            var spellBank = context switch
-            {
-                NarrativeContext.CriticalHit  => SpellCriticalPhrases,
-                NarrativeContext.Fumble       => SpellFumblePhrases,
-                NarrativeContext.CrushingHit  => SpellCrushingPhrases,
-                NarrativeContext.SolidHit     => SpellSolidPhrases,
-                NarrativeContext.GlancingHit  => SpellGlancingPhrases,
-                NarrativeContext.NearMiss     => SpellMissPhrases,
-                NarrativeContext.WideMiss     => SpellMissPhrases,
-                _                             => SpellSolidPhrases
-            };
-
-            return spellBank[Random.Shared.Next(spellBank.Length)]
-                .Replace("{attacker}", attacker)
-                .Replace("{target}",   target)
-                .Replace("{element}",  element);
-        }
-
-        var bank = context switch
-        {
-            NarrativeContext.CriticalHit  => CriticalPhrases,
-            NarrativeContext.Fumble       => FumblePhrases,
-            NarrativeContext.CrushingHit  => CrushingPhrases,
-            NarrativeContext.SolidHit     => SolidPhrases,
-            NarrativeContext.GlancingHit  => GlancingPhrases,
-            NarrativeContext.NearMiss     => NearMissPhrases,
-            NarrativeContext.WideMiss     => WideMissPhrases,
-            _                             => SolidPhrases
-        };
-
-        return bank[Random.Shared.Next(bank.Length)]
+        var bank = SelectWeaponPhraseBank(context);
+        return bank[(rollIndex ?? Random.Shared.Next)(bank.Length)]
             .Replace("{attacker}", attacker)
             .Replace("{target}",   target);
     }
+
+    private static string GetSpellPhrase(
+        string attacker, string target, NarrativeContext context,
+        DamageType damageType, Func<int, int>? rollIndex)
+    {
+        var element   = SelectSpellElement(damageType);
+        var spellBank = SelectSpellPhraseBank(context);
+        return spellBank[(rollIndex ?? Random.Shared.Next)(spellBank.Length)]
+            .Replace("{attacker}", attacker)
+            .Replace("{target}",   target)
+            .Replace("{element}",  element);
+    }
+
+    private static string SelectSpellElement(DamageType damageType) => damageType switch
+    {
+        DamageType.Fire      => "fire",
+        DamageType.Ice       => "ice",
+        DamageType.Lightning => "lightning",
+        _                    => "arcane"
+    };
+
+    private static string[] SelectSpellPhraseBank(NarrativeContext context) => context switch
+    {
+        NarrativeContext.CriticalHit => SpellCriticalPhrases,
+        NarrativeContext.Fumble      => SpellFumblePhrases,
+        NarrativeContext.CrushingHit => SpellCrushingPhrases,
+        NarrativeContext.SolidHit    => SpellSolidPhrases,
+        NarrativeContext.GlancingHit => SpellGlancingPhrases,
+        NarrativeContext.NearMiss    => SpellMissPhrases,
+        NarrativeContext.WideMiss    => SpellMissPhrases,
+        _                            => SpellSolidPhrases
+    };
+
+    private static string[] SelectWeaponPhraseBank(NarrativeContext context) => context switch
+    {
+        NarrativeContext.CriticalHit => CriticalPhrases,
+        NarrativeContext.Fumble      => FumblePhrases,
+        NarrativeContext.CrushingHit => CrushingPhrases,
+        NarrativeContext.SolidHit    => SolidPhrases,
+        NarrativeContext.GlancingHit => GlancingPhrases,
+        NarrativeContext.NearMiss    => NearMissPhrases,
+        NarrativeContext.WideMiss    => WideMissPhrases,
+        _                            => SolidPhrases
+    };
 }

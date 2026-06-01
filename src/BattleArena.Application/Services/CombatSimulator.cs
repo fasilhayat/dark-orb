@@ -25,8 +25,6 @@ public class CombatSimulator : ICombatSimulator
     private readonly IActionDecisionSource      _heroActionSource;
     private readonly IActionDecisionSource      _enemyActionSource;
 
-    private TerrainType _terrain = TerrainType.Plains;
-
     public CombatSimulator(
         ICombatService combat,
         ITurnmeterService turnmeter,
@@ -59,20 +57,21 @@ public class CombatSimulator : ICombatSimulator
         CancellationToken ct = default,
         TerrainType terrain = TerrainType.Plains)
     {
-        _terrain = terrain;
         const int RoundLength = 10;
 
-        var log            = new List<CombatLogEntry>();
         var states         = BuildCombatantStates(heroParty, enemyParty);
+        var stateMap       = states.ToDictionary(s => s.Character);
         var currentRound   = 0;
         var lastAttackerOf = new Dictionary<Character, Character>();
+        string? activeActorName = null;
+        var log            = new List<CombatLogEntry>();
 
         // Log + notify the observer for every event in one call.
         // Automatically stamps the currently-acting character so consumers
         // never need to track it themselves.
         async Task Notify(CombatLogEntry entry)
         {
-            entry.ActiveActorName = states.FirstOrDefault(s => s.Meter.IsActive)?.Character.Name;
+            entry.ActiveActorName = activeActorName;
             log.Add(entry);
             if (observer != null)
                 await observer.OnEventAsync(entry, ct);
@@ -102,8 +101,8 @@ public class CombatSimulator : ICombatSimulator
             {
                 if (!actorState.Character.IsAlive) continue;
                 var turnResult = await ProcessActingActorAsync(
-                    tick, currentRound, actorState, states, lastAttackerOf,
-                    heroParty, enemyParty, log, Notify, ct);
+                    tick, currentRound, actorState, states, stateMap, lastAttackerOf,
+                    heroParty, enemyParty, log, Notify, name => { activeActorName = name; }, ct, terrain);
                 if (turnResult is not null) return turnResult;
             }
 
@@ -206,27 +205,18 @@ public class CombatSimulator : ICombatSimulator
             : $"{target.Name} is unconscious! (HP: {target.CurrentHitPoints})"
     };
 
-    private static CombatLogEntry BuildAttackEntry(
+    private CombatLogEntry BuildAttackEntry(
         int tick, string actorName, string attackSourceName, bool isSpell,
         string targetName, AttackResult result, DamageType damageType = DamageType.Slashing)
     {
-        var outcome = result.IsDevastatingStrike ? "DEVASTATING STRIKE!!!" :
-                      result.IsTotalReversal     ? "TOTAL REVERSAL!"       :
-                      result.IsClash             ? "CLASH!"                :
-                      result.IsPerfectParry      ? "PERFECT PARRY!"        :
-                      result.IsCriticalHit       ? "CRITICAL HIT!"         :
-                      result.IsFumble            ? "FUMBLE!"               :
-                      result.IsHit               ? "HIT"                   : "MISS";
-
+        var outcome = GetOutcomeTag(result);
         var msg = $"{actorName} [{attackSourceName}] -> {targetName}: " +
                   $"d20_atk={result.HitRoll} d20_def={result.DefenseRoll} + AP={result.AttackPower} " +
                   $"vs DP={result.DefensePower} -> {outcome}";
 
         if (result.IsHit && result.DamageContext is { } dc)
         {
-            var critTag = result.IsCriticalHit      ? " [x2 CRIT]"     :
-                          result.IsDevastatingStrike ? " [x3 DEVAS]"    :
-                          result.IsClash             ? " [x0.5 CLASH]"  : "";
+            var critTag = GetCritTag(result);
             msg += $" | Dmg: roll({dc.WeaponDiceRoll}) + attr({dc.AttributeModifier}) + flat({dc.FlatBonuses}) + lvl({dc.LevelScaling})" +
                    $" = {dc.BaseDamage}{critTag} x{dc.TypeMultiplier:0.0} - mit({dc.ArmorMitigation}) + elem({dc.ElementalModifiers}) = {result.Damage}";
         }
@@ -234,7 +224,7 @@ public class CombatSimulator : ICombatSimulator
         var ctx    = CombatNarrator.GetContext(
             result.HitRoll, result.HitRoll + result.AttackPower, result.DefensePower, result.DefenseRoll,
             result.IsHit || result.IsCriticalHit, result.IsCriticalHit, result.IsFumble);
-        var phrase = CombatNarrator.GetPhrase(actorName, targetName, ctx, isSpell, damageType);
+        var phrase = CombatNarrator.GetPhrase(actorName, targetName, ctx, isSpell, damageType, rollIndex: _dice.RollIndex);
 
         return new CombatLogEntry
         {
@@ -261,6 +251,20 @@ public class CombatSimulator : ICombatSimulator
         };
     }
 
+    private static string GetOutcomeTag(AttackResult result) =>
+        result.IsDevastatingStrike ? "DEVASTATING STRIKE!!!" :
+        result.IsTotalReversal     ? "TOTAL REVERSAL!"       :
+        result.IsClash             ? "CLASH!"                :
+        result.IsPerfectParry      ? "PERFECT PARRY!"        :
+        result.IsCriticalHit       ? "CRITICAL HIT!"         :
+        result.IsFumble            ? "FUMBLE!"               :
+        result.IsHit               ? "HIT"                   : "MISS";
+
+    private static string GetCritTag(AttackResult result) =>
+        result.IsCriticalHit       ? " [x2 CRIT]"    :
+        result.IsDevastatingStrike ? " [x3 DEVAS]"   :
+        result.IsClash             ? " [x0.5 CLASH]" : "";
+
     private static CombatLogEntry BuildDamageEntry(
         int tick, string targetName, int damage, int hpBefore, int hpAfter) => new()
     {
@@ -277,7 +281,7 @@ public class CombatSimulator : ICombatSimulator
 
     private async Task<CombatResult?> ProcessHealingSpellAsync(
         int tick, CombatantState actorState, ActorSetup setup, Spell spell,
-        List<CombatantState> states, Func<CombatLogEntry, Task> notify)
+        List<CombatantState> states, Func<CombatLogEntry, Task> notify, TerrainType terrain)
     {
         if (spell.IsGroupHeal)
         {
@@ -287,7 +291,7 @@ public class CombatSimulator : ICombatSimulator
 
             foreach (var ally in allies)
             {
-                var healAmount = _combat.ResolveHealing(actorState.Character, ally.Character, spell, _terrain);
+                var healAmount = _combat.ResolveHealing(actorState.Character, ally.Character, spell, terrain);
                 var hpBefore = ally.Character.CurrentHitPoints;
                 ally.Character.CurrentHitPoints = Math.Min(ally.Character.MaxHitPoints, hpBefore + healAmount);
                 await notify(new CombatLogEntry
@@ -309,12 +313,11 @@ public class CombatSimulator : ICombatSimulator
         // Single-target heal: pick the ally with the lowest HP.
         var target = states
             .Where(s => s.PartyIndex == actorState.PartyIndex && s.Character.IsAlive && s.Character.CurrentHitPoints < s.Character.MaxHitPoints)
-            .OrderBy(s => s.Character.CurrentHitPoints)
-            .FirstOrDefault();
+            .MinBy(s => s.Character.CurrentHitPoints);
 
         if (target is null) return null;
 
-        var heal = _combat.ResolveHealing(actorState.Character, target.Character, spell, _terrain);
+        var heal = _combat.ResolveHealing(actorState.Character, target.Character, spell, terrain);
         var hpB = target.Character.CurrentHitPoints;
         target.Character.CurrentHitPoints = Math.Min(target.Character.MaxHitPoints, hpB + heal);
         await notify(new CombatLogEntry
@@ -374,22 +377,22 @@ public class CombatSimulator : ICombatSimulator
 
     // ── Status effect helpers ─────────────────────────────────────────────────
 
-    private bool IsCrowdControlled(Character character) =>
-        _statusEffect.HasEffectType(character, StatusEffectType.Stun) ||
-        _statusEffect.HasEffectType(character, StatusEffectType.Root) ||
-        _statusEffect.HasEffectType(character, StatusEffectType.Fear);
-
-    private static string GetCrowdControlLabel(Character character)
+    // Returns the CC label string if the character is crowd controlled, null otherwise.
+    // Combines the former IsCrowdControlled + GetCrowdControlLabel into one pass.
+    private static string? TryGetCrowdControlLabel(Character character)
     {
-        var effect = character.ActiveStatusEffects.FirstOrDefault(
-            e => e.Type is StatusEffectType.Stun or StatusEffectType.Root or StatusEffectType.Fear);
-        return effect?.Type switch
+        foreach (var e in character.ActiveStatusEffects)
         {
-            StatusEffectType.Stun => "stunned",
-            StatusEffectType.Root => "rooted",
-            StatusEffectType.Fear => "fear",
-            _                     => "crowd-controlled"
-        };
+            if (e.Type is StatusEffectType.Stun or StatusEffectType.Root or StatusEffectType.Fear)
+                return e.Type switch
+                {
+                    StatusEffectType.Stun => "stunned",
+                    StatusEffectType.Root => "rooted",
+                    StatusEffectType.Fear => "feared",
+                    _                     => "crowd-controlled"
+                };
+        }
+        return null;
     }
 
     private int RollDie(DieType die) => _dice.Roll(die);
@@ -402,10 +405,9 @@ public class CombatSimulator : ICombatSimulator
         List<CombatLogEntry> log,
         Func<CombatLogEntry, Task> notify)
     {
-        foreach (var dotEffect in actorState.Character.ActiveStatusEffects
-            .Where(e => e.Type == StatusEffectType.DamageOverTime && e.DamagePerTurn > 0)
-            .ToList())
+        foreach (var dotEffect in actorState.Character.ActiveStatusEffects)
         {
+            if (dotEffect.Type != StatusEffectType.DamageOverTime || dotEffect.DamagePerTurn <= 0) continue;
             var dotName = dotEffect.Name;
             var dotDmg  = dotEffect.DamagePerTurn;
             actorState.Character.CurrentHitPoints -= dotDmg;
@@ -437,10 +439,9 @@ public class CombatSimulator : ICombatSimulator
         int tick, CombatantState actorState,
         Func<CombatLogEntry, Task> notify)
     {
-        foreach (var hotEffect in actorState.Character.ActiveStatusEffects
-            .Where(e => e.Type == StatusEffectType.HealOverTime && e.HealingPerTurn > 0)
-            .ToList())
+        foreach (var hotEffect in actorState.Character.ActiveStatusEffects)
         {
+            if (hotEffect.Type != StatusEffectType.HealOverTime || hotEffect.HealingPerTurn <= 0) continue;
             var hotName = hotEffect.Name;
             var hotHeal = hotEffect.HealingPerTurn;
             var hpBefore = actorState.Character.CurrentHitPoints;
@@ -546,12 +547,10 @@ public class CombatSimulator : ICombatSimulator
         List<CombatantState> states,
         Func<CombatLogEntry, Task> notify)
     {
-        foreach (var s in states.Where(s =>
-            s.IsSummoned &&
-            s.Character.IsAlive &&
-            s.SummonExpiryRound > 0 &&
-            s.SummonExpiryRound <= currentRound).ToList())
+        foreach (var s in states)
         {
+            if (!s.IsSummoned || !s.Character.IsAlive || s.SummonExpiryRound <= 0 || s.SummonExpiryRound > currentRound)
+                continue;
             s.Character.CurrentHitPoints = -999;
             await notify(new CombatLogEntry
             {
@@ -591,45 +590,51 @@ public class CombatSimulator : ICombatSimulator
 
     private List<CombatantState> GetActingOrder(List<CombatantState> states) =>
         states
-            .Where(s => s.Character.IsAlive && s.Meter.IsReady && !IsCrowdControlled(s.Character))
+            .Where(s => s.Character.IsAlive && s.Meter.IsReady && TryGetCrowdControlLabel(s.Character) is null)
             .OrderByDescending(s => s.Meter.CurrentValue)
             .ToList();
 
     private async Task ProcessTickMeterAndManaAsync(
         int tick, List<CombatantState> states, Func<CombatLogEntry, Task> notify)
     {
-        foreach (var s in states.Where(s => s.Character.IsAlive))
+        foreach (var s in states)
         {
+            if (!s.Character.IsAlive) continue;
+
             s.SnapshotMeter();
             s.Meter = _turnmeter.Tick(s.Character, s.Meter);
             await notify(BuildTurnMeterGainEntry(tick, s));
-        }
-        foreach (var s in states.Where(s => s.Character.IsAlive && s.Character.MaxMana > 0))
-        {
-            var regen      = s.Character.ManaRegenPerTick;
-            var manaBefore = s.Character.CurrentMana;
-            s.Character.CurrentMana = Math.Min(s.Character.EffectiveMaxMana, manaBefore + regen);
-            await notify(new CombatLogEntry
+
+            if (s.Character.MaxMana > 0)
             {
-                Tick      = tick,
-                ActorName = s.Character.Name,
-                EventType = "ManaRegen",
-                ManaRegen = regen,
-                ManaAfter = s.Character.CurrentMana,
-                Message   = $"{s.Character.Name} regens {regen} mana  ({manaBefore} -> {s.Character.CurrentMana})"
-            });
+                var regen      = s.Character.ManaRegenPerTick;
+                var manaBefore = s.Character.CurrentMana;
+                s.Character.CurrentMana = Math.Min(s.Character.EffectiveMaxMana, manaBefore + regen);
+                await notify(new CombatLogEntry
+                {
+                    Tick      = tick,
+                    ActorName = s.Character.Name,
+                    EventType = "ManaRegen",
+                    ManaRegen = regen,
+                    ManaAfter = s.Character.CurrentMana,
+                    Message   = $"{s.Character.Name} regens {regen} mana  ({manaBefore} -> {s.Character.CurrentMana})"
+                });
+            }
+
+            if (s.QueuedSpell is not null)
+                s.QueuedSpell.RemainingCost -= _turnmeter.ComputeGainPerTick(s.Character);
         }
-        foreach (var s in states.Where(s => s.QueuedSpell is not null && s.Character.IsAlive))
-            s.QueuedSpell!.RemainingCost -= _turnmeter.ComputeGainPerTick(s.Character);
     }
 
     private async Task ProcessCrowdControlledActorsAsync(
         int tick, List<CombatantState> states, Func<CombatLogEntry, Task> notify)
     {
-        foreach (var s in states
-            .Where(s => s.Character.IsAlive && s.Meter.IsReady && IsCrowdControlled(s.Character))
-            .ToList())
+        foreach (var s in states)
         {
+            if (!s.Character.IsAlive || !s.Meter.IsReady) continue;
+            var ccLabel = TryGetCrowdControlLabel(s.Character);
+            if (ccLabel is null) continue;
+
             var expired = _statusEffect.TickAll(s.Character);
             await NotifyExpiredEffectsAsync(tick, s.Character, expired, notify);
 
@@ -651,7 +656,7 @@ public class CombatSimulator : ICombatSimulator
                 Tick      = tick,
                 ActorName = s.Character.Name,
                 EventType = "SkippedTurn",
-                Message   = $"{s.Character.Name} is {GetCrowdControlLabel(s.Character)} and cannot act!"
+                Message   = $"{s.Character.Name} is {ccLabel} and cannot act!"
             });
         }
     }
@@ -660,14 +665,17 @@ public class CombatSimulator : ICombatSimulator
 
     private async Task<CombatResult?> ProcessActingActorAsync(
         int tick, int currentRound, CombatantState actorState,
-        List<CombatantState> states, Dictionary<Character, Character> lastAttackerOf,
+        List<CombatantState> states, Dictionary<Character, CombatantState> stateMap,
+        Dictionary<Character, Character> lastAttackerOf,
         Party heroParty, Party enemyParty, List<CombatLogEntry> log,
-        Func<CombatLogEntry, Task> notify, CancellationToken ct)
+        Func<CombatLogEntry, Task> notify, Action<string?> setActiveActor,
+        CancellationToken ct, TerrainType terrain)
     {
         var setup = await SetupActorAttackAsync(tick, actorState, states, lastAttackerOf, notify, ct);
         if (setup is null) return null;
 
         actorState.Meter.IsActive = true;
+        setActiveActor(actorState.Character.Name);
         await notify(new CombatLogEntry
         {
             Tick             = tick,
@@ -682,8 +690,9 @@ public class CombatSimulator : ICombatSimulator
             Message          = $"{actorState.Character.Name} takes their turn  (TM: {actorState.Meter.CurrentValue})"
         });
 
-        if (await TryHandlePetSummonAsync(tick, actorState, setup, states, currentRound, notify))
+        if (await TryHandlePetSummonAsync(tick, actorState, setup, states, stateMap, currentRound, notify))
         {
+            setActiveActor(null);
             actorState.Meter.IsActive = false;
             await notify(BuildAfterTurnEntry(actorState, tick, setup.TmCost));
             return null;
@@ -694,6 +703,7 @@ public class CombatSimulator : ICombatSimulator
         var dotResult = await ProcessActorDoTAsync(tick, actorState, heroParty, enemyParty, log, notify);
         if (dotResult is not null)
         {
+            setActiveActor(null);
             actorState.Meter.IsActive = false;
             await notify(BuildAfterTurnEntry(actorState, tick, setup.TmCost));
             return dotResult;
@@ -705,32 +715,35 @@ public class CombatSimulator : ICombatSimulator
         // ── Healing spells take a different path ──────────────────────────
         if (setup.Source is Spell castSpell && castSpell.IsHealing)
         {
-            var healResult = await ProcessHealingSpellAsync(tick, actorState, setup, castSpell, states, notify);
+            var healResult = await ProcessHealingSpellAsync(tick, actorState, setup, castSpell, states, notify, terrain);
+            setActiveActor(null);
             actorState.Meter.IsActive = false;
             await notify(BuildAfterTurnEntry(actorState, tick, setup.TmCost));
             return healResult;
         }
 
-        var result = _combat.ResolveAttack(actorState.Character, setup.Target, setup.Source, actorState.EngagementRange, _terrain);
+        var result = _combat.ResolveAttack(actorState.Character, setup.Target, setup.Source, actorState.EngagementRange, terrain);
         await notify(BuildAttackEntry(tick, actorState.Character.Name, setup.Source.Name, setup.IsSpell, setup.Target.Name, result, setup.Source.DamageType));
 
         var outcome = await ResolveAttackOutcomeAsync(
-            tick, actorState, setup, result, states, lastAttackerOf,
+            tick, actorState, setup, result, states, stateMap, lastAttackerOf,
             heroParty, enemyParty, log, notify);
         if (outcome is not null)
         {
+            setActiveActor(null);
             actorState.Meter.IsActive = false;
             await notify(BuildAfterTurnEntry(actorState, tick, setup.TmCost));
             return outcome;
         }
 
-        await ApplyDefenderTmBoostAsync(tick, actorState, setup.Target, result, states, notify);
+        await ApplyDefenderTmBoostAsync(tick, actorState, setup.Target, result, stateMap, notify);
         await ApplyFumblePenaltyAsync(tick, actorState, result, notify);
 
         // ── Self-buffs from protective spells ────────────────────────────
         if (setup.Source is Spell spellWithBuffs && spellWithBuffs.OnHitEffects.Count > 0)
             await ProcessSelfBuffsAsync(tick, actorState.Character, spellWithBuffs, notify);
 
+        setActiveActor(null);
         actorState.Meter.IsActive = false;
         await notify(BuildAfterTurnEntry(actorState, tick, setup.TmCost));
         return null;
@@ -925,7 +938,7 @@ public class CombatSimulator : ICombatSimulator
 
     private async Task<bool> TryHandlePetSummonAsync(
         int tick, CombatantState actorState, ActorSetup setup,
-        List<CombatantState> states, int currentRound,
+        List<CombatantState> states, Dictionary<Character, CombatantState> stateMap, int currentRound,
         Func<CombatLogEntry, Task> notify)
     {
         if (!setup.IsSpell || setup.Source is not Spell castSpell || castSpell.SummonedPet is null)
@@ -963,11 +976,13 @@ public class CombatSimulator : ICombatSimulator
             DamageType  = pet.DamageType,
             AttackType  = AttackType.Melee,
         };
-        states.Add(new CombatantState(petChar, petWeapon, actorState.PartyIndex)
+        var newState = new CombatantState(petChar, petWeapon, actorState.PartyIndex)
         {
             SummonedBy        = actorState.Character,
             SummonExpiryRound = expiryRound,
-        });
+        };
+        states.Add(newState);
+        stateMap[petChar] = newState;
 
         await notify(new CombatLogEntry
         {
@@ -986,29 +1001,31 @@ public class CombatSimulator : ICombatSimulator
 
     private async Task<CombatResult?> ResolveAttackOutcomeAsync(
         int tick, CombatantState actorState, ActorSetup setup, AttackResult result,
-        List<CombatantState> states, Dictionary<Character, Character> lastAttackerOf,
+        List<CombatantState> states, Dictionary<Character, CombatantState> stateMap,
+        Dictionary<Character, Character> lastAttackerOf,
         Party heroParty, Party enemyParty, List<CombatLogEntry> log,
         Func<CombatLogEntry, Task> notify)
     {
         if (result.IsClash)
             return await ProcessClashAsync(
-                tick, actorState, setup, result, states, lastAttackerOf,
+                tick, actorState, setup, result, states, stateMap, lastAttackerOf,
                 heroParty, enemyParty, log, notify);
         if (result.IsHit)
             return await ProcessHitAsync(
-                tick, actorState, setup, result, states, lastAttackerOf,
+                tick, actorState, setup, result, states, stateMap, lastAttackerOf,
                 heroParty, enemyParty, log, notify);
         return null;
     }
 
     private async Task<CombatResult?> ProcessClashAsync(
         int tick, CombatantState actorState, ActorSetup setup, AttackResult result,
-        List<CombatantState> states, Dictionary<Character, Character> lastAttackerOf,
+        List<CombatantState> states, Dictionary<Character, CombatantState> stateMap,
+        Dictionary<Character, Character> lastAttackerOf,
         Party heroParty, Party enemyParty, List<CombatLogEntry> log,
         Func<CombatLogEntry, Task> notify)
     {
         var target        = setup.Target;
-        var defenderState = states.First(s => s.Character == target);
+        var defenderState = stateMap[target];
         var counterSource = defenderState.AttackSource ?? (IAttackSource)UnarmedStrike.Default;
         var counterDc     = _combat.ResolveDamage(target, actorState.Character, counterSource);
         var counterDamage = Math.Max(0, counterDc.FinalDamage / 2);
@@ -1049,7 +1066,7 @@ public class CombatSimulator : ICombatSimulator
             var r = BuildDefeatResult(tick, targetPartyIdx, target, heroParty, enemyParty, log);
             if (r is not null)
             {
-                var deadState = states.FirstOrDefault(s => s.Character == target);
+                var deadState = stateMap.GetValueOrDefault(target);
                 if (deadState?.QueuedSpell is not null) deadState.QueuedSpell = null;
                 return r;
             }
@@ -1059,7 +1076,8 @@ public class CombatSimulator : ICombatSimulator
 
     private async Task<CombatResult?> ProcessHitAsync(
         int tick, CombatantState actorState, ActorSetup setup, AttackResult result,
-        List<CombatantState> states, Dictionary<Character, Character> lastAttackerOf,
+        List<CombatantState> states, Dictionary<Character, CombatantState> stateMap,
+        Dictionary<Character, Character> lastAttackerOf,
         Party heroParty, Party enemyParty, List<CombatLogEntry> log,
         Func<CombatLogEntry, Task> notify)
     {
@@ -1085,8 +1103,8 @@ public class CombatSimulator : ICombatSimulator
         if (setup.Source is Spell hitSpell)
             await ProcessOnHitEffectsAsync(tick, target, hitSpell, notify);
 
-        await ProcessSpellDisruptionAsync(tick, setup, result, states, notify);
-        await ProcessConcentrationAsync(tick, target, result, states, notify);
+        await ProcessSpellDisruptionAsync(tick, setup, result, stateMap, notify);
+        await ProcessConcentrationAsync(tick, target, result, stateMap, notify);
 
         if (target.CurrentHitPoints > 0) return null;
 
@@ -1095,7 +1113,7 @@ public class CombatSimulator : ICombatSimulator
         var defResult = BuildDefeatResult(tick, targetPartyIdx, target, heroParty, enemyParty, log);
         if (defResult is not null)
         {
-            var deadState = states.FirstOrDefault(s => s.Character == target);
+            var deadState = stateMap.GetValueOrDefault(target);
             if (deadState?.QueuedSpell is not null) deadState.QueuedSpell = null;
             return defResult;
         }
@@ -1104,11 +1122,11 @@ public class CombatSimulator : ICombatSimulator
 
     private async Task ProcessSpellDisruptionAsync(
         int tick, ActorSetup setup, AttackResult result,
-        List<CombatantState> states, Func<CombatLogEntry, Task> notify)
+        Dictionary<Character, CombatantState> stateMap, Func<CombatLogEntry, Task> notify)
     {
         if (setup.Source.AttackType != AttackType.Melee) return;
         if (result.Damage <= 0 || setup.Target.MemorizedSpells.Count == 0) return;
-        var targetState = states.First(s => s.Character == setup.Target);
+        var targetState = stateMap[setup.Target];
         await TryApplySpellDisruptionAsync(tick, targetState, notify);
     }
 
@@ -1133,10 +1151,10 @@ public class CombatSimulator : ICombatSimulator
 
     private async Task ProcessConcentrationAsync(
         int tick, Character target, AttackResult result,
-        List<CombatantState> states, Func<CombatLogEntry, Task> notify)
+        Dictionary<Character, CombatantState> stateMap, Func<CombatLogEntry, Task> notify)
     {
         if (result.Damage <= 0) return;
-        var concState = states.FirstOrDefault(s => s.Character == target);
+        var concState = stateMap.GetValueOrDefault(target);
         if (concState?.QueuedSpell is null) return;
         var dc   = Math.Max(10, result.Damage / 2);
         var roll = _dice.Roll(DieType.D20) + concState.Character.Level;
@@ -1169,10 +1187,10 @@ public class CombatSimulator : ICombatSimulator
 
     private async Task ApplyDefenderTmBoostAsync(
         int tick, CombatantState actorState, Character target, AttackResult result,
-        List<CombatantState> states, Func<CombatLogEntry, Task> notify)
+        Dictionary<Character, CombatantState> stateMap, Func<CombatLogEntry, Task> notify)
     {
         if (!result.IsPerfectParry && !result.IsTotalReversal) return;
-        var defenderState = states.First(s => s.Character == target);
+        var defenderState = stateMap[target];
         var tmBefore      = defenderState.Meter.CurrentValue;
         defenderState.Meter.CurrentValue += result.DefenderTmBonus;
         var eventType = result.IsTotalReversal ? "TotalReversal" : "PerfectParry";

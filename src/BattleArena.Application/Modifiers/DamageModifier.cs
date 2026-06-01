@@ -46,9 +46,12 @@ public sealed class DamageModifier : ICombatModifier
             }
 
             // Each protective buff provides 5 % damage reduction (multiplicative).
+            // Floor at 0.5 to prevent extreme stacking from reducing damage below 50%.
             if (effect.DefensePowerModifier > 0)
                 ctx.DamageMultiplier *= 0.95;
         }
+
+        ctx.DamageMultiplier = Math.Max(0.5, ctx.DamageMultiplier);
     }
 
     private static bool MatchingResistance(ElementalType elemental, ResistanceType resistance)

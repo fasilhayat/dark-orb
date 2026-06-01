@@ -2,7 +2,6 @@ namespace BattleArena.Api.Endpoints;
 
 using Application.Interfaces;
 using Application.Models;
-using Application.Services;
 using Core.Entities;
 using Core.Entities.Enums;
 using Core.Interfaces;
@@ -56,10 +55,7 @@ public static class CombatEndpoint
 
         app.MapPost("/v1/combat/simulate", async (
             CombatSimulateByMembersRequest req,
-            ICombatService combatService,
-            ITurnmeterService turnmeterService,
-            IStatusEffectService statusEffectService,
-            IDiceService diceService,
+            ICombatSimulatorFactory simulatorFactory,
             ICharacterService characterService) =>
         {
             if (req.MaxTicks is < 1 or > 10_000)
@@ -86,11 +82,8 @@ public static class CombatEndpoint
             var heroSelector  = CreateSelector(req.HeroTargetStrategy);
             var enemySelector = CreateSelector(req.EnemyTargetStrategy);
 
-            var simulator = new CombatSimulator(
-                combatService, turnmeterService, statusEffectService, diceService,
-                heroSelector, enemySelector);
-
-            var result = await simulator.SimulateAsync(heroParty, enemyParty, req.MaxTicks);
+            var simulator = simulatorFactory.Create(heroSelector, enemySelector);
+            var result    = await simulator.SimulateAsync(heroParty, enemyParty, req.MaxTicks);
             return Results.Ok(result);
         });
     }

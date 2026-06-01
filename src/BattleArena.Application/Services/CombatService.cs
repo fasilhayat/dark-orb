@@ -11,14 +11,19 @@ public class CombatService : ICombatService
 {
     private readonly IDiceService _dice;
     private readonly ICombatStatsService _combatStats;
-    private readonly IReadOnlyList<ICombatModifier> _modifiers;
+    private readonly IReadOnlyList<ICombatModifier> _attackRollMods;
+    private readonly IReadOnlyList<ICombatModifier> _damageCalcMods;
+    private readonly IReadOnlyList<ICombatModifier> _healingMods;
 
     public CombatService(IDiceService dice, ICombatStatsService combatStats,
         IEnumerable<ICombatModifier> modifiers = default!)
     {
-        _dice        = dice;
-        _combatStats = combatStats;
-        _modifiers   = (modifiers ?? []).OrderBy(m => m.Priority).ToList();
+        _dice           = dice;
+        _combatStats    = combatStats;
+        var ordered     = (modifiers ?? []).OrderBy(m => m.Priority).ToList();
+        _attackRollMods = ordered.Where(m => m.Phase == CombatPhase.AttackRoll).ToList();
+        _damageCalcMods = ordered.Where(m => m.Phase == CombatPhase.DamageCalculation).ToList();
+        _healingMods    = ordered.Where(m => m.Phase == CombatPhase.Healing).ToList();
     }
 
     public int CalculateAbilityModifier(int score)
@@ -54,7 +59,7 @@ public class CombatService : ICombatService
             BaseAttackPower  = attackerStats.AttackPower,
             BaseDefensePower = defenderStats.DefensePower
         };
-        foreach (var mod in _modifiers.Where(m => m.Phase == CombatPhase.AttackRoll))
+        foreach (var mod in _attackRollMods)
             mod.Apply(ctx);
 
         var effectiveAP = attackerStats.AttackPower + ctx.AttackPowerDelta;
@@ -211,7 +216,7 @@ public class CombatService : ICombatService
             BaseAttackPower  = 0,
             BaseDefensePower = 0
         };
-        foreach (var mod in _modifiers.Where(m => m.Phase == CombatPhase.DamageCalculation))
+        foreach (var mod in _damageCalcMods)
             mod.Apply(ctx);
 
         var abilityScore = source.UsesIntelligence
@@ -258,7 +263,7 @@ public class CombatService : ICombatService
             BaseAttackPower  = 0,
             BaseDefensePower = 0
         };
-        foreach (var mod in _modifiers.Where(m => m.Phase == CombatPhase.Healing))
+        foreach (var mod in _healingMods)
             mod.Apply(ctx);
 
         var abilityMod = CalculateAbilityModifier(healer.Intelligence);
