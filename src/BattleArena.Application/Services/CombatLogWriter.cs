@@ -24,7 +24,7 @@ public static class CombatLogWriter
 
     // ── Entry point ───────────────────────────────────────────────────────────────
 
-    public static string Write(CombatResult result, string label, string outputDirectory)
+    public static string Write(CombatResult result, string label, string outputDirectory, string mode = "")
     {
         Directory.CreateDirectory(outputDirectory);
 
@@ -41,14 +41,14 @@ public static class CombatLogWriter
         File.WriteAllText(jsonPath, JsonSerializer.Serialize(snapshot, _json), Encoding.UTF8);
 
         // Write human-readable text log
-        File.WriteAllText(txtPath, BuildContent(result, label, snapshot, baseName), Encoding.UTF8);
+        File.WriteAllText(txtPath, BuildContent(result, label, snapshot, baseName, mode), Encoding.UTF8);
 
         return txtPath;
     }
 
     // ── Content builder ───────────────────────────────────────────────────────────
 
-    private static string BuildContent(CombatResult result, string label, CombatSnapshot snapshot, string baseName)
+    private static string BuildContent(CombatResult result, string label, CombatSnapshot snapshot, string baseName, string mode = "")
     {
         var sb   = new StringBuilder();
         var bar  = new string('═', 80);
@@ -58,6 +58,8 @@ public static class CombatLogWriter
         sb.AppendLine(bar);
         sb.AppendLine($"  COMBAT LOG  —  {label}");
         sb.AppendLine($"  Generated : {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+        if (!string.IsNullOrEmpty(mode))
+            sb.AppendLine($"  Mode      : {mode}");
         sb.AppendLine(bar);
 
         // ── Replay metadata ──────────────────────────────────────────────────────

@@ -232,7 +232,7 @@ public class CombatSimulator : ICombatSimulator
         }
 
         var ctx    = CombatNarrator.GetContext(
-            result.HitRoll, result.HitRoll + result.AttackPower, result.DefensePower,
+            result.HitRoll, result.HitRoll + result.AttackPower, result.DefensePower, result.DefenseRoll,
             result.IsHit || result.IsCriticalHit, result.IsCriticalHit, result.IsFumble);
         var phrase = CombatNarrator.GetPhrase(actorName, targetName, ctx, isSpell, damageType);
 

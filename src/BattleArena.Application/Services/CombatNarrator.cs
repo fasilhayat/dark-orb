@@ -140,13 +140,14 @@ public static class CombatNarrator
     // ── Public API ────────────────────────────────────────────────────────────
 
     public static NarrativeContext GetContext(
-        int hitRoll, int total, int defensePower,
+        int hitRoll, int total, int defensePower, int? defenseRoll,
         bool isHit, bool isCritical, bool isFumble)
     {
         if (isFumble  || hitRoll == 1)  return NarrativeContext.Fumble;
         if (isCritical || hitRoll == 20) return NarrativeContext.CriticalHit;
 
-        var margin = total - defensePower;
+        var defenseTotal = defensePower + (defenseRoll ?? 0);
+        var margin = total - defenseTotal;
 
         if (isHit)
         {
@@ -156,7 +157,7 @@ public static class CombatNarrator
         }
         else
         {
-            if (margin >= -3) return NarrativeContext.NearMiss;
+            if (margin >= -5) return NarrativeContext.NearMiss;
             return NarrativeContext.WideMiss;
         }
     }

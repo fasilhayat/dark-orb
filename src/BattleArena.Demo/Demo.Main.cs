@@ -42,6 +42,7 @@ static partial class Demo
     internal static Party HeroParty = null!;
     internal static Party EnemyParty = null!;
     private static char Scenario;
+    private static string _combatModeLabel = "";
 
     internal static CombatStatsService Stats => CombatStats;
 
@@ -66,6 +67,7 @@ static partial class Demo
             {
                 if (!RunReplay()) continue;
                 var replayMode = PickCombatMode();
+                _combatModeLabel = replayMode == 'T' ? "Turn-based" : "Auto";
                 PacingMultiplier = PickPacing();
                 CWL("\n  Press any key to watch the replay...", ConsoleColor.Gray);
                 Console.ReadKey(true);
@@ -92,6 +94,7 @@ static partial class Demo
                     RunPartyCombat();
 
                 var mode = PickCombatMode();
+                _combatModeLabel = mode == 'T' ? "Turn-based" : "Auto";
 
                 // Targeting mode selection.
                 ITargetSelector heroSelector;
@@ -614,7 +617,7 @@ static partial class Demo
             var winner  = Result.WinningParty?.Name ?? "unknown";
             var loser   = Result.LosingParty?.Name  ?? "unknown";
             var label   = $"{winner}_vs_{loser}".Replace(" ", "_");
-            var txtPath = CombatLogWriter.Write(Result, label, outputDir);
+            var txtPath = CombatLogWriter.Write(Result, label, outputDir, _combatModeLabel);
             var jsonPath = Path.ChangeExtension(txtPath, ".json");
 
             Console.WriteLine();
