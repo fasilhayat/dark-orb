@@ -139,7 +139,9 @@ function New-BellCurveSvg {
     $sb.AppendLine("  <text x='$($W/2)' y='40' text-anchor='middle' fill='#555' font-size='12'>$Scenario -- P(hit)=$HitRate  mu=$Mu  sigma=$($Sigma.ToString('F1'))  N=$N</text>") | Out-Null
 
     $sb.AppendLine('</svg>') | Out-Null
-    $sb.ToString() | Out-File -Encoding utf8 $OutFile
+    $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
+    $fullPath = [System.IO.Path]::GetFullPath((Join-Path $PWD $OutFile))
+    [System.IO.File]::WriteAllText($fullPath, $sb.ToString(), $utf8NoBom)
     Write-Host "  $OutFile"
 }
 
@@ -224,7 +226,9 @@ function New-ComparisonSvg {
     $sb.AppendLine('  </g>') | Out-Null
 
     $sb.AppendLine('</svg>') | Out-Null
-    $sb.ToString() | Out-File -Encoding utf8 $OutFile
+    $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
+    $fullPath = [System.IO.Path]::GetFullPath((Join-Path $PWD $OutFile))
+    [System.IO.File]::WriteAllText($fullPath, $sb.ToString(), $utf8NoBom)
     Write-Host "  $OutFile"
 }
 

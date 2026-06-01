@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   COMBAT DISTRIBUTION COMPARISON -- Machine-readable data
   Fields: scenario,ap,dp,hit_rate,mu,sigma,ci68_l,ci68_r,ci95_l,ci95_r,ci997_l,ci997_r,crit_rate,fumble_rate,pp_rate
@@ -64,4 +64,3 @@
     <text x='400' y='415'>Each bar spans the full 99.7% range; darker = narrower CI</text>
   </g>
 </svg>
-
