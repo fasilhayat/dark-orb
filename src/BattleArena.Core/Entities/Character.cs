@@ -49,9 +49,8 @@ public class Character
                        CharacterVitalStatus.Alive;
 
     public int ManaRegenPerTick =>
-        Math.Max(1,
+        Math.Max(0,
             (Intelligence - 10) / 2
-            + Level / 2
             + Equipment.TotalManaRegenBonus
             + ActiveStatusEffects.Sum(e => e.ManaRegenModifier));
 

@@ -92,7 +92,7 @@ static partial class Demo
     {
         Name = "Fireball", Description = "A blazing orb of fire",
         School = SpellSchool.Evocation, DamageDie = DieType.D6, DamageCount = 3,
-        DamageType = DamageType.Fire, AttackBonus = 2, SpellLevel = 3, TurnMeterCost = 90, ManaCost = 30,
+        DamageType = DamageType.Fire, AttackBonus = 2, SpellLevel = 3, TurnMeterCost = 90, ManaCost = 50,
         OnHitEffects =
         [
             new StatusEffect { Name = "Burning",   Type = StatusEffectType.DamageOverTime, ResistanceType = ResistanceType.Fire, Duration = 3, DoTDamageCount = 1, DoTDamageDie = DieType.D4, ApplicationChance = 30, StackRule = StackRule.HighestWins }
@@ -102,7 +102,7 @@ static partial class Demo
     {
         Name = "Ice Bolt", Description = "A shard of magical ice",
         School = SpellSchool.Evocation, DamageDie = DieType.D8, DamageCount = 2,
-        DamageType = DamageType.Ice, AttackBonus = 2, SpellLevel = 2, TurnMeterCost = 80, ManaCost = 20,
+        DamageType = DamageType.Ice, AttackBonus = 2, SpellLevel = 2, TurnMeterCost = 80, ManaCost = 35,
         OnHitEffects =
         [
             new StatusEffect { Name = "Freezing",  Type = StatusEffectType.DamageOverTime, ResistanceType = ResistanceType.Cold, Duration = 2, DoTDamageCount = 1, DoTDamageDie = DieType.D6, ApplicationChance = 25, StackRule = StackRule.HighestWins },
@@ -113,7 +113,7 @@ static partial class Demo
     {
         Name = "Lightning Strike", Description = "A bolt of crackling lightning",
         School = SpellSchool.Evocation, DamageDie = DieType.D10, DamageCount = 2,
-        DamageType = DamageType.Lightning, AttackBonus = 3, SpellLevel = 4, TurnMeterCost = 100, ManaCost = 40,
+        DamageType = DamageType.Lightning, AttackBonus = 3, SpellLevel = 4, TurnMeterCost = 100, ManaCost = 60,
         OnHitEffects =
         [
             new StatusEffect { Name = "Shocked",   Type = StatusEffectType.Debuff,         ResistanceType = ResistanceType.Magic, Duration = 2, AttackPowerModifier = -2, ApplicationChance = 20, StackRule = StackRule.HighestWins }
@@ -123,7 +123,7 @@ static partial class Demo
     {
         Name = "Blade Barrier", Description = "A wall of spinning blades that slicks the ground with oil",
         School = SpellSchool.AoE, DamageDie = DieType.D8, DamageCount = 3,
-        DamageType = DamageType.Slashing, AttackBonus = 2, SpellLevel = 3, TurnMeterCost = 90, ManaCost = 25,
+        DamageType = DamageType.Slashing, AttackBonus = 2, SpellLevel = 3, TurnMeterCost = 90, ManaCost = 40,
         OnHitEffects =
         [
             new StatusEffect { Name = "Oil Slick", Type = StatusEffectType.Debuff,         ResistanceType = ResistanceType.Magic, Duration = 3, TurnMeterModifier = -4, ApplicationChance = 40, StackRule = StackRule.HighestWins },
@@ -134,13 +134,13 @@ static partial class Demo
     {
         Name = "Smite", Description = "A blast of holy light",
         School = SpellSchool.Evocation, DamageDie = DieType.D8, DamageCount = 2,
-        DamageType = DamageType.Holy, AttackBonus = 2, SpellLevel = 2, TurnMeterCost = 80, ManaCost = 20,
+        DamageType = DamageType.Holy, AttackBonus = 2, SpellLevel = 2, TurnMeterCost = 80, ManaCost = 35,
     };
     private static readonly Spell Moonfire = new()
     {
         Name = "Moonfire", Description = "Lunar energy sears the target",
         School = SpellSchool.Evocation, DamageDie = DieType.D6, DamageCount = 2,
-        DamageType = DamageType.Lightning, AttackBonus = 1, SpellLevel = 2, TurnMeterCost = 80, ManaCost = 18,
+        DamageType = DamageType.Lightning, AttackBonus = 1, SpellLevel = 2, TurnMeterCost = 80, ManaCost = 30,
         OnHitEffects =
         [
             new StatusEffect { Name = "Burning", Type = StatusEffectType.DamageOverTime, ResistanceType = ResistanceType.Magic, Duration = 2, DoTDamageCount = 1, DoTDamageDie = DieType.D4, ApplicationChance = 40, StackRule = StackRule.HighestWins }
@@ -150,10 +150,71 @@ static partial class Demo
     {
         Name = "Entangle", Description = "Grasping vines root the target",
         School = SpellSchool.CC, DamageDie = DieType.D4, DamageCount = 1,
-        DamageType = DamageType.Bludgeoning, AttackBonus = 0, SpellLevel = 2, TurnMeterCost = 80, ManaCost = 15,
+        DamageType = DamageType.Bludgeoning, AttackBonus = 0, SpellLevel = 2, TurnMeterCost = 80, ManaCost = 25,
         OnHitEffects =
         [
             new StatusEffect { Name = "Rooted", Type = StatusEffectType.Root, ResistanceType = ResistanceType.Magic, Duration = 2, ApplicationChance = 80, StackRule = StackRule.NoStack }
+        ]
+    };
+
+    // ── Healing spells ─────────────────────────────────────────────────────────────
+    private static readonly Spell Heal = new()
+    {
+        Name = "Heal", Description = "Restores a moderate amount of hit points to a single ally",
+        School = SpellSchool.Healing, DamageDie = DieType.D8, DamageCount = 2,
+        DamageType = DamageType.Holy, AttackBonus = 0, SpellLevel = 2, TurnMeterCost = 80, ManaCost = 25,
+        FlatDamageBonus = 4
+    };
+    private static readonly Spell MassHeal = new()
+    {
+        Name = "Mass Heal", Description = "A wave of holy light restores hit points to all allies",
+        School = SpellSchool.Healing, DamageDie = DieType.D6, DamageCount = 3,
+        DamageType = DamageType.Holy, AttackBonus = 0, SpellLevel = 4, TurnMeterCost = 100, ManaCost = 45,
+        FlatDamageBonus = 6
+    };
+    private static readonly Spell Regeneration = new()
+    {
+        Name = "Regeneration", Description = "Bestows rapid healing over time on a single ally",
+        School = SpellSchool.Healing, DamageDie = DieType.D6, DamageCount = 2,
+        DamageType = DamageType.Holy, AttackBonus = 0, SpellLevel = 3, TurnMeterCost = 85, ManaCost = 30,
+        FlatDamageBonus = 2,
+        OnHitEffects =
+        [
+            new StatusEffect { Name = "Rejuvenation", Type = StatusEffectType.HealOverTime, Duration = 3, HealingPerTurn = 6, StackRule = StackRule.HighestWins }
+        ]
+    };
+
+    // ── CC / Debuff spells ─────────────────────────────────────────────────────────
+    private static readonly Spell Sleep = new()
+    {
+        Name = "Sleep", Description = "Puts the target into a magical slumber",
+        School = SpellSchool.CC, DamageDie = DieType.D4, DamageCount = 0,
+        DamageType = DamageType.Psychic, AttackBonus = 0, SpellLevel = 1, TurnMeterCost = 60, ManaCost = 15,
+        OnHitEffects =
+        [
+            new StatusEffect { Name = "Sleep", Type = StatusEffectType.Stun, ResistanceType = ResistanceType.Magic, Duration = 2, ApplicationChance = 80, StackRule = StackRule.NoStack }
+        ]
+    };
+    private static readonly Spell Shock = new()
+    {
+        Name = "Shock", Description = "A jolt of electricity that stuns the target",
+        School = SpellSchool.Evocation, DamageDie = DieType.D6, DamageCount = 2,
+        DamageType = DamageType.Lightning, AttackBonus = 2, SpellLevel = 2, TurnMeterCost = 75, ManaCost = 20,
+        OnHitEffects =
+        [
+            new StatusEffect { Name = "Shocked", Type = StatusEffectType.Stun, ResistanceType = ResistanceType.Magic, Duration = 1, ApplicationChance = 60, StackRule = StackRule.NoStack }
+        ]
+    };
+
+    // ── Protective spells ──────────────────────────────────────────────────────────
+    private static readonly Spell ShieldOfFaith = new()
+    {
+        Name = "Shield of Faith", Description = "Holy energy shields the target, reducing incoming damage",
+        School = SpellSchool.Evocation, DamageDie = DieType.D4, DamageCount = 0,
+        DamageType = DamageType.Holy, AttackBonus = 0, SpellLevel = 2, TurnMeterCost = 70, ManaCost = 20,
+        OnHitEffects =
+        [
+            new StatusEffect { Name = "Divine Ward", Type = StatusEffectType.Buff, Duration = 3, DefensePowerModifier = 4, StackRule = StackRule.HighestWins }
         ]
     };
 
@@ -185,7 +246,7 @@ static partial class Demo
         AttackBonus = 0,
         SpellLevel = 3,
         TurnMeterCost = 90,
-        ManaCost = 35,
+        ManaCost = 50,
         SummonedPet = SpiritWolf
     };
 
@@ -219,38 +280,38 @@ static partial class Demo
         Name = "Lyra", Level = 5, Strength = 8, Dexterity = 14, Intelligence = 18,
         Race = Elf,
         Class = Mage,
-        ClassId = 5, ClassName = "Mage", Sex = "F", StrikeRating = 13, TurnSpeed = 8, MaxHitPoints = 30, CurrentHitPoints = 30, MaxMana = 165, CurrentMana = 165,
+        ClassId = 5, ClassName = "Mage", Sex = "F", StrikeRating = 13, TurnSpeed = 8, MaxHitPoints = 30, CurrentHitPoints = 30, MaxMana = 80, CurrentMana = 80,
         Equipment = new ArmorSlots
         {
             Chest = new Armor { Name = "Mage Robes", ArmorClass = 14, Mitigation = 0, MaxDexterityBonus = 6, TurnMeterCostReduction = 5 }
         },
-        MemorizedSpells = [Fireball, IceBolt, LightningStrike, BladeBarrier]
+        MemorizedSpells = [Fireball, IceBolt, LightningStrike, BladeBarrier, Shock]
     };
     private static readonly Character Sera = new()
     {
         Name = "Sera", Level = 4, Strength = 12, Dexterity = 10, Intelligence = 16,
         Race = Human,
         Class = Priest,
-        ClassId = 4, ClassName = "Priest", Sex = "F", StrikeRating = 14, TurnSpeed = 8, MaxHitPoints = 35, CurrentHitPoints = 35, MaxMana = 130, CurrentMana = 130,
+        ClassId = 4, ClassName = "Priest", Sex = "F", StrikeRating = 14, TurnSpeed = 8, MaxHitPoints = 35, CurrentHitPoints = 35, MaxMana = 60, CurrentMana = 60,
         Equipment = new ArmorSlots
         {
             Chest = new Armor { Name = "Scaled Vestments", ArmorClass = 12, Mitigation = 1, MaxDexterityBonus = 6, MovementPenalty = 5 },
             RightHand = CeremonialMace
         },
-        MemorizedSpells = [Smite]
+        MemorizedSpells = [Smite, Heal, ShieldOfFaith]
     };
     private static readonly Character Elara = new()
     {
         Name = "Elara", Level = 4, Strength = 8, Dexterity = 14, Intelligence = 17,
         Race = Elf,
         Class = Druid,
-        ClassId = 7, ClassName = "Druid", Sex = "F", StrikeRating = 14, TurnSpeed = 9, MaxHitPoints = 28, CurrentHitPoints = 28, MaxMana = 140, CurrentMana = 140,
+        ClassId = 7, ClassName = "Druid", Sex = "F", StrikeRating = 14, TurnSpeed = 9, MaxHitPoints = 28, CurrentHitPoints = 28, MaxMana = 70, CurrentMana = 70,
         Equipment = new ArmorSlots
         {
             Chest = new Armor { Name = "Druidic Robes", ArmorClass = 14, Mitigation = 0, MaxDexterityBonus = 6 },
             RightHand = ArcaneStaff
         },
-        MemorizedSpells = [Moonfire, Entangle, SummonSpiritWolf]
+        MemorizedSpells = [Moonfire, Entangle, SummonSpiritWolf, Regeneration]
     };
 
     // ── Enemy weapons ─────────────────────────────────────────────────────────────
@@ -272,7 +333,7 @@ static partial class Demo
     {
         Name = "Shadow Bolt", Description = "A bolt of shadow energy",
         School = SpellSchool.Other, DamageDie = DieType.D8, DamageCount = 2,
-        DamageType = DamageType.Ice, AttackBonus = 2, SpellLevel = 2, TurnMeterCost = 80, ManaCost = 20,
+        DamageType = DamageType.Ice, AttackBonus = 2, SpellLevel = 2, TurnMeterCost = 80, ManaCost = 35,
         OnHitEffects =
         [
             new StatusEffect { Name = "Chilled",   Type = StatusEffectType.DamageOverTime, ResistanceType = ResistanceType.Cold, Duration = 2, DoTDamageCount = 1, DoTDamageDie = DieType.D4, ApplicationChance = 20, StackRule = StackRule.HighestWins }
@@ -282,7 +343,7 @@ static partial class Demo
     {
         Name = "Soul Drain", Description = "Saps the life force of a target",
         School = SpellSchool.Other, DamageDie = DieType.D10, DamageCount = 1,
-        DamageType = DamageType.Fire, AttackBonus = 1, SpellLevel = 2, TurnMeterCost = 80, ManaCost = 15,
+        DamageType = DamageType.Fire, AttackBonus = 1, SpellLevel = 2, TurnMeterCost = 80, ManaCost = 25,
         OnHitEffects =
         [
             new StatusEffect { Name = "Burning",   Type = StatusEffectType.DamageOverTime, ResistanceType = ResistanceType.Fire, Duration = 3, DoTDamageCount = 1, DoTDamageDie = DieType.D4, ApplicationChance = 20, StackRule = StackRule.HighestWins }
@@ -292,7 +353,7 @@ static partial class Demo
     {
         Name = "Root", Description = "Anchors the target with grasping vines",
         School = SpellSchool.CC, DamageDie = DieType.D4, DamageCount = 1,
-        DamageType = DamageType.Bludgeoning, AttackBonus = 0, SpellLevel = 2, TurnMeterCost = 80, ManaCost = 20,
+        DamageType = DamageType.Bludgeoning, AttackBonus = 0, SpellLevel = 2, TurnMeterCost = 80, ManaCost = 30,
         OnHitEffects =
         [
             new StatusEffect { Name = "Rooted",    Type = StatusEffectType.Root,            ResistanceType = ResistanceType.Magic, Duration = 2, ApplicationChance = 100, StackRule = StackRule.NoStack },
@@ -303,7 +364,7 @@ static partial class Demo
     {
         Name = "Curse", Description = "Dark energy weakens the target",
         School = SpellSchool.CC, DamageDie = DieType.D6, DamageCount = 1,
-        DamageType = DamageType.Shadow, AttackBonus = 0, SpellLevel = 2, TurnMeterCost = 70, ManaCost = 12,
+        DamageType = DamageType.Shadow, AttackBonus = 0, SpellLevel = 2, TurnMeterCost = 70, ManaCost = 20,
         OnHitEffects =
         [
             new StatusEffect { Name = "Weakened", Type = StatusEffectType.Debuff, ResistanceType = ResistanceType.Magic, Duration = 3, AttackPowerModifier = -2, DefensePowerModifier = -2, ApplicationChance = 70, StackRule = StackRule.HighestWins }
@@ -340,7 +401,7 @@ static partial class Demo
         Name = "Mordak", Level = 3, Strength = 7, Dexterity = 12, Intelligence = 16,
         Race = Undead,
         Class = Mage,
-        ClassId = 5, ClassName = "Mage", Sex = "M", StrikeRating = 14, TurnSpeed = 9, MaxHitPoints = 25, CurrentHitPoints = 25, MaxMana = 100, CurrentMana = 100,
+        ClassId = 5, ClassName = "Mage", Sex = "M", StrikeRating = 14, TurnSpeed = 9, MaxHitPoints = 25, CurrentHitPoints = 25, MaxMana = 50, CurrentMana = 50,
         Equipment = new ArmorSlots
         {
             Chest = new Armor { Name = "Dark Robes", ArmorClass = 14, Mitigation = 0, MaxDexterityBonus = 6, TurnMeterCostReduction = 5 }
@@ -352,7 +413,7 @@ static partial class Demo
         Name = "Zarath", Level = 5, Strength = 6, Dexterity = 12, Intelligence = 18,
         Race = Undead,
         Class = Mage,
-        ClassId = 5, ClassName = "Mage", Sex = "M", StrikeRating = 15, TurnSpeed = 8, MaxHitPoints = 28, CurrentHitPoints = 28, MaxMana = 170, CurrentMana = 170,
+        ClassId = 5, ClassName = "Mage", Sex = "M", StrikeRating = 15, TurnSpeed = 8, MaxHitPoints = 28, CurrentHitPoints = 28, MaxMana = 85, CurrentMana = 85,
         Equipment = new ArmorSlots
         {
             Chest = new Armor { Name = "Shadowweave Robes", ArmorClass = 14, Mitigation = 0, MaxDexterityBonus = 6, TurnMeterCostReduction = 5 }

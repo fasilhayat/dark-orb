@@ -82,6 +82,20 @@ public class StatusEffectService : IStatusEffectService
         return total;
     }
 
+    public int TickHoT(Character target)
+    {
+        var total = 0;
+        foreach (var effect in target.ActiveStatusEffects
+            .Where(e => e.Type == StatusEffectType.HealOverTime && e.HealingPerTurn > 0)
+            .ToList())
+        {
+            var before = target.CurrentHitPoints;
+            target.CurrentHitPoints = Math.Min(target.MaxHitPoints, before + effect.HealingPerTurn);
+            total += target.CurrentHitPoints - before;
+        }
+        return total;
+    }
+
     public bool HasEffectType(Character target, StatusEffectType type)
     {
         return target.ActiveStatusEffects.Any(e => e.Type == type);

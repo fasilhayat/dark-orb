@@ -8,26 +8,27 @@ public class CharacterTests
     // ── ManaRegenPerTick ────────────────────────────────────────────────────
 
     [Fact]
-    public void ManaRegenPerTick_BaselineIntelligence_ReturnsMinimumOne()
+    public void ManaRegenPerTick_BaselineIntelligence_ReturnsZero()
     {
+        // INT 10 → mod 0; level factor removed; total = Max(0, 0) = 0
         var character = new Character { Intelligence = 10, Level = 1 };
 
-        Assert.Equal(1, character.ManaRegenPerTick);
+        Assert.Equal(0, character.ManaRegenPerTick);
     }
 
     [Fact]
-    public void ManaRegenPerTick_HighIntelligenceAndLevel_IncludesBothFactors()
+    public void ManaRegenPerTick_HighIntelligence_IncludesIntModOnly()
     {
-        // INT 18 → mod (18-10)/2 = 4; Level 4 → 4/2 = 2; total = 6
+        // INT 18 → mod (18-10)/2 = 4; level factor removed; total = 4
         var character = new Character { Intelligence = 18, Level = 4 };
 
-        Assert.Equal(6, character.ManaRegenPerTick);
+        Assert.Equal(4, character.ManaRegenPerTick);
     }
 
     [Fact]
     public void ManaRegenPerTick_WithStatusEffectBonus_IncludesBonus()
     {
-        // INT 10 → mod 0; Level 1 → 1/2=0; effect bonus 3 → total = Max(1, 3) = 3
+        // INT 10 → mod 0; effect bonus 3 → total = Max(0, 3) = 3
         var character = new Character { Intelligence = 10, Level = 1 };
         character.ActiveStatusEffects.Add(new StatusEffect { ManaRegenModifier = 3 });
 

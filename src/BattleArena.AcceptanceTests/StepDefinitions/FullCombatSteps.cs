@@ -86,6 +86,28 @@ public class FullCombatSteps
         };
     }
 
+    // ── Crowd‑control setup ─────────────────────────────────────────────────────
+
+    // Applies a status effect to a combatant before combat begins.
+    [Given(@"""([^""]+)"" is afflicted with a (\w+) status effect lasting (\d+) turns?")]
+    public void GivenIsAfflictedWithStatusEffect(string name, string effectType, int duration)
+    {
+        var type = effectType switch
+        {
+            "Stun" => StatusEffectType.Stun,
+            "Fear" => StatusEffectType.Fear,
+            "Root" => StatusEffectType.Root,
+            _      => throw new ArgumentOutOfRangeException(nameof(effectType), $"Unknown CC type: {effectType}")
+        };
+
+        _combatants[name].ActiveStatusEffects.Add(new StatusEffect
+        {
+            Name     = $"{effectType} ({name})",
+            Type     = type,
+            Duration = duration
+        });
+    }
+
     // ── Combat execution ───────────────────────────────────────────────────────
 
     // Runs the combat with real dice. The result is verified by the Then steps below.
@@ -182,6 +204,31 @@ public class FullCombatSteps
             500);
 
         Assert.NotEqual(_combatResult.CombatId, secondResult.CombatId);
+    }
+
+    // ── CC event assertions ────────────────────────────────────────────────────
+
+    [Then(@"the combat log should contain at least one ""([^""]+)"" event")]
+    public void ThenCombatLogContainsEventType(string eventType)
+    {
+        Assert.Contains(_combatResult.Log, e => e.EventType == eventType);
+    }
+
+    [Then(@"the combat log should contain an ""([^""]+)"" event for the (\w+) effect")]
+    public void ThenCombatLogContainsExpiredEffect(string eventType, string effectName)
+    {
+        Assert.Contains(_combatResult.Log, e =>
+            e.EventType == eventType &&
+            e.StatusEffectName != null &&
+            e.StatusEffectName.StartsWith(effectName));
+    }
+
+    [Then(@"the combat log should contain at least one ""([^""]+)"" event from ""([^""]+)""")]
+    public void ThenCombatLogContainsAttackEventFrom(string eventType, string actorName)
+    {
+        Assert.Contains(_combatResult.Log, e =>
+            e.EventType == eventType &&
+            e.ActorName == actorName);
     }
 
     // ── Helpers ────────────────────────────────────────────────────────────────

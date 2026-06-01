@@ -348,6 +348,7 @@ public class CombatSimulator : ICombatSimulator
                 ResistanceBonuses    = template.ResistanceBonuses,
                 Duration             = template.Duration,
                 DamagePerTurn        = template.DamagePerTurn,
+                HealingPerTurn       = template.HealingPerTurn,
                 AttackPowerModifier  = template.AttackPowerModifier,
                 DefensePowerModifier = template.DefensePowerModifier,
                 TurnMeterModifier    = template.TurnMeterModifier,
@@ -375,16 +376,18 @@ public class CombatSimulator : ICombatSimulator
 
     private bool IsCrowdControlled(Character character) =>
         _statusEffect.HasEffectType(character, StatusEffectType.Stun) ||
-        _statusEffect.HasEffectType(character, StatusEffectType.Root);
+        _statusEffect.HasEffectType(character, StatusEffectType.Root) ||
+        _statusEffect.HasEffectType(character, StatusEffectType.Fear);
 
     private static string GetCrowdControlLabel(Character character)
     {
         var effect = character.ActiveStatusEffects.FirstOrDefault(
-            e => e.Type is StatusEffectType.Stun or StatusEffectType.Root);
+            e => e.Type is StatusEffectType.Stun or StatusEffectType.Root or StatusEffectType.Fear);
         return effect?.Type switch
         {
             StatusEffectType.Stun => "stunned",
             StatusEffectType.Root => "rooted",
+            StatusEffectType.Fear => "fear",
             _                     => "crowd-controlled"
         };
     }
@@ -430,6 +433,35 @@ public class CombatSimulator : ICombatSimulator
         return null;
     }
 
+    private async Task ProcessActorHoTAsync(
+        int tick, CombatantState actorState,
+        Func<CombatLogEntry, Task> notify)
+    {
+        foreach (var hotEffect in actorState.Character.ActiveStatusEffects
+            .Where(e => e.Type == StatusEffectType.HealOverTime && e.HealingPerTurn > 0)
+            .ToList())
+        {
+            var hotName = hotEffect.Name;
+            var hotHeal = hotEffect.HealingPerTurn;
+            var hpBefore = actorState.Character.CurrentHitPoints;
+            actorState.Character.CurrentHitPoints = Math.Min(
+                actorState.Character.MaxHitPoints,
+                hpBefore + hotHeal);
+
+            await notify(new CombatLogEntry
+            {
+                Tick             = tick,
+                ActorName        = actorState.Character.Name,
+                EventType        = "HoTTick",
+                DamageDealt      = hotHeal,
+                TargetHpBefore   = hpBefore,
+                TargetHpAfter    = actorState.Character.CurrentHitPoints,
+                StatusEffectName = hotName,
+                Message          = $"{actorState.Character.Name} recovers {hotHeal} HP from {hotName}.  HP: {hpBefore} -> {actorState.Character.CurrentHitPoints}"
+            });
+        }
+    }
+
     private async Task ProcessOnHitEffectsAsync(
         int tick, Character target, Spell spell,
         Func<CombatLogEntry, Task> notify)
@@ -451,6 +483,7 @@ public class CombatSimulator : ICombatSimulator
                 ResistanceBonuses    = template.ResistanceBonuses,
                 Duration             = template.Duration,
                 DamagePerTurn        = dmgPerTurn,
+                HealingPerTurn       = template.HealingPerTurn,
                 AttackPowerModifier  = template.AttackPowerModifier,
                 DefensePowerModifier = template.DefensePowerModifier,
                 TurnMeterModifier    = template.TurnMeterModifier,
@@ -655,6 +688,8 @@ public class CombatSimulator : ICombatSimulator
             await notify(BuildAfterTurnEntry(actorState, tick, setup.TmCost));
             return null;
         }
+
+        await ProcessActorHoTAsync(tick, actorState, notify);
 
         var dotResult = await ProcessActorDoTAsync(tick, actorState, heroParty, enemyParty, log, notify);
         if (dotResult is not null)

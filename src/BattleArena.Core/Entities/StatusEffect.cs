@@ -17,6 +17,7 @@ public class StatusEffect
     public int TurnMeterModifier { get; set; }
     public int ManaRegenModifier { get; set; }
     public int DamagePerTurn { get; set; }
+    public int HealingPerTurn { get; set; }
     public int ApplicationChance { get; set; } = 100;
     public ResistanceType ResistanceType { get; set; } = ResistanceType.Magic;
     public List<ResistanceBonus> ResistanceBonuses { get; set; } = new();

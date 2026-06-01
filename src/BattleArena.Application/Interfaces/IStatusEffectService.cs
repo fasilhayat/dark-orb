@@ -10,6 +10,7 @@ public interface IStatusEffectService
     EffectApplicationResult TryApply(Character target, StatusEffect effect, int resistance, IDiceService dice);
     IReadOnlyList<string> TickAll(Character target);
     int TickDoT(Character target);
+    int TickHoT(Character target);
     bool HasEffectType(Character target, StatusEffectType type);
     void Remove(Character target, string effectName);
     IReadOnlyList<StatusEffect> GetActive(Character target);

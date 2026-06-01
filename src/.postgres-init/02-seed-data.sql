@@ -712,140 +712,140 @@ FROM arena_data.race r, arena_data.class c WHERE r.name = 'Elf' AND c.name = 'Dr
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Blade Barrier', 'A wall of spinning blades.', ss.id, d.id, dt.id, at.id, 10, 90, 3, 3, 2, 0, 'None', 0
+SELECT 'Blade Barrier', 'A wall of spinning blades.', ss.id, d.id, dt.id, at.id, 40, 90, 3, 3, 2, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
 WHERE ss.name = 'AoE' AND d.name = 'D8' AND dt.name = 'Slashing' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Ice Storm', 'Hail and ice pummel the area.', ss.id, d.id, dt.id, at.id, 8, 85, 3, 3, 2, 0, 'None', 0
+SELECT 'Ice Storm', 'Hail and ice pummel the area.', ss.id, d.id, dt.id, at.id, 35, 85, 3, 3, 2, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
 WHERE ss.name = 'AoE' AND d.name = 'D8' AND dt.name = 'Ice' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Fire Storm', 'A conflagration engulfs the area.', ss.id, d.id, dt.id, at.id, 12, 95, 4, 4, 2, 0, 'None', 0
+SELECT 'Fire Storm', 'A conflagration engulfs the area.', ss.id, d.id, dt.id, at.id, 50, 95, 4, 4, 2, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
 WHERE ss.name = 'AoE' AND d.name = 'D10' AND dt.name = 'Fire' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Acid Rain', 'Corrosive rain burns all in the area.', ss.id, d.id, dt.id, at.id, 9, 80, 3, 3, 1, 0, 'None', 0
+SELECT 'Acid Rain', 'Corrosive rain burns all in the area.', ss.id, d.id, dt.id, at.id, 30, 80, 3, 3, 1, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
 WHERE ss.name = 'AoE' AND d.name = 'D6' AND dt.name = 'Acid' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Lava Hail', 'Molten rock rains from the sky.', ss.id, d.id, dt.id, at.id, 15, 100, 5, 4, 3, 0, 'None', 0
+SELECT 'Lava Hail', 'Molten rock rains from the sky.', ss.id, d.id, dt.id, at.id, 60, 100, 5, 4, 3, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
 WHERE ss.name = 'AoE' AND d.name = 'D12' AND dt.name = 'Fire' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Lightning Strike', 'A bolt of lightning strikes from above.', ss.id, d.id, dt.id, at.id, 10, 90, 4, 3, 3, 0, 'None', 0
+SELECT 'Lightning Strike', 'A bolt of lightning strikes from above.', ss.id, d.id, dt.id, at.id, 60, 90, 4, 3, 3, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
 WHERE ss.name = 'AoE' AND d.name = 'D10' AND dt.name = 'Lightning' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Sand Storm', 'Blinding sand scours the battlefield.', ss.id, d.id, dt.id, at.id, 7, 75, 2, 2, 1, 0, 'None', 0
+SELECT 'Sand Storm', 'Blinding sand scours the battlefield.', ss.id, d.id, dt.id, at.id, 20, 75, 2, 2, 1, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
 WHERE ss.name = 'AoE' AND d.name = 'D6' AND dt.name = 'Bludgeoning' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Blizzard', 'Freezing winds and snow pelt the area.', ss.id, d.id, dt.id, at.id, 10, 85, 4, 3, 2, 0, 'None', 0
+SELECT 'Blizzard', 'Freezing winds and snow pelt the area.', ss.id, d.id, dt.id, at.id, 45, 85, 4, 3, 2, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
 WHERE ss.name = 'AoE' AND d.name = 'D8' AND dt.name = 'Ice' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Earthquake', 'The ground shakes violently.', ss.id, d.id, dt.id, at.id, 14, 95, 5, 4, 2, 0, 'None', 0
+SELECT 'Earthquake', 'The ground shakes violently.', ss.id, d.id, dt.id, at.id, 55, 95, 5, 4, 2, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
 WHERE ss.name = 'AoE' AND d.name = 'D12' AND dt.name = 'Bludgeoning' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Insect Swarm', 'A cloud of biting insects descends.', ss.id, d.id, dt.id, at.id, 7, 75, 2, 2, 1, 0, 'None', 0
+SELECT 'Insect Swarm', 'A cloud of biting insects descends.', ss.id, d.id, dt.id, at.id, 20, 75, 2, 2, 1, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
 WHERE ss.name = 'AoE' AND d.name = 'D4' AND dt.name = 'Piercing' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Blinding Flash', 'A brilliant flash blinds all who see it.', ss.id, NULL, NULL, at.id, 6, 70, 2, 1, 0, 0, 'None', 0
+SELECT 'Blinding Flash', 'A brilliant flash blinds all who see it.', ss.id, NULL, NULL, at.id, 15, 70, 2, 1, 0, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.attack_type at
 WHERE ss.name = 'AoE' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Fog of Despair', 'A choking fog that saps morale.', ss.id, NULL, NULL, at.id, 8, 70, 2, 1, 0, 0, 'None', 0
+SELECT 'Fog of Despair', 'A choking fog that saps morale.', ss.id, NULL, NULL, at.id, 20, 70, 2, 1, 0, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.attack_type at
 WHERE ss.name = 'AoE' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Stun', 'A concussive force that stuns the target.', ss.id, NULL, NULL, at.id, 5, 65, 2, 1, 0, 0, 'None', 0
+SELECT 'Stun', 'A concussive force that stuns the target.', ss.id, NULL, NULL, at.id, 15, 65, 2, 1, 0, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.attack_type at
 WHERE ss.name = 'CC' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Sleep', 'Puts the target into a magical slumber.', ss.id, dd.id, dt.id, at.id, 6, 60, 1, 1, 0, 0, 'None', 0
+SELECT 'Sleep', 'Puts the target into a magical slumber.', ss.id, dd.id, dt.id, at.id, 15, 60, 1, 0, 0, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.die_type dd, arena_data.damage_type dt, arena_data.attack_type at
 WHERE ss.name = 'CC' AND dd.name = 'D4' AND dt.name = 'Psychic' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Charm Enemy', 'Bends an enemy to your will.', ss.id, NULL, NULL, at.id, 8, 75, 3, 1, 0, 0, 'None', 0
+SELECT 'Charm Enemy', 'Bends an enemy to your will.', ss.id, NULL, NULL, at.id, 20, 75, 3, 1, 0, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.attack_type at
 WHERE ss.name = 'CC' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Fear', 'Instills overwhelming terror.', ss.id, NULL, NULL, at.id, 7, 70, 2, 1, 0, 0, 'None', 0
+SELECT 'Fear', 'Instills overwhelming terror.', ss.id, NULL, NULL, at.id, 20, 70, 2, 1, 0, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.attack_type at
 WHERE ss.name = 'CC' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Taunt', 'Forces an enemy to attack you.', ss.id, NULL, NULL, at.id, 4, 55, 1, 1, 0, 0, 'None', 0
+SELECT 'Taunt', 'Forces an enemy to attack you.', ss.id, NULL, NULL, at.id, 10, 55, 1, 1, 0, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.attack_type at
 WHERE ss.name = 'CC' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Freeze', 'Encases the target in ice.', ss.id, NULL, NULL, at.id, 7, 75, 3, 1, 0, 0, 'None', 0
+SELECT 'Freeze', 'Encases the target in ice.', ss.id, NULL, NULL, at.id, 20, 75, 3, 1, 0, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.attack_type at
 WHERE ss.name = 'CC' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Confuse', 'Makes the target act erratically.', ss.id, NULL, NULL, at.id, 6, 70, 2, 1, 0, 0, 'None', 0
+SELECT 'Confuse', 'Makes the target act erratically.', ss.id, NULL, NULL, at.id, 15, 70, 2, 1, 0, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.attack_type at
 WHERE ss.name = 'CC' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Provoke', 'Enrages the target, reducing its defenses.', ss.id, NULL, NULL, at.id, 5, 60, 1, 1, 0, 0, 'None', 0
+SELECT 'Provoke', 'Enrages the target, reducing its defenses.', ss.id, NULL, NULL, at.id, 12, 60, 1, 1, 0, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.attack_type at
 WHERE ss.name = 'CC' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
@@ -859,84 +859,84 @@ ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Blind', 'Robs the target of sight.', ss.id, NULL, NULL, at.id, 5, 65, 2, 1, 0, 0, 'None', 0
+SELECT 'Blind', 'Robs the target of sight.', ss.id, NULL, NULL, at.id, 12, 65, 2, 1, 0, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.attack_type at
 WHERE ss.name = 'CC' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Root', 'Anchors the target to the ground.', ss.id, NULL, NULL, at.id, 5, 65, 2, 1, 0, 0, 'None', 0
+SELECT 'Root', 'Anchors the target to the ground.', ss.id, NULL, NULL, at.id, 30, 65, 2, 1, 0, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.attack_type at
 WHERE ss.name = 'CC' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Entangle', 'Calls roots from the ground to hold enemies in place.', ss.id, NULL, NULL, at.id, 5, 70, 2, 1, 0, 0, 'None', 0
+SELECT 'Entangle', 'Calls roots from the ground to hold enemies in place.', ss.id, NULL, NULL, at.id, 25, 70, 2, 1, 0, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.attack_type at
 WHERE ss.name = 'CC' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Curse', 'Lays a dark curse on the target, weakening their resolve.', ss.id, NULL, NULL, at.id, 6, 70, 2, 1, 0, 0, 'None', 0
+SELECT 'Curse', 'Lays a dark curse on the target, weakening their resolve.', ss.id, NULL, NULL, at.id, 20, 70, 2, 1, 0, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.attack_type at
 WHERE ss.name = 'CC' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Summon Creature', 'Calls a creature to fight for you.', ss.id, NULL, NULL, at.id, 12, 85, 4, 1, 0, 0, 'None', 0
+SELECT 'Summon Creature', 'Calls a creature to fight for you.', ss.id, NULL, NULL, at.id, 40, 85, 4, 1, 0, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.attack_type at
 WHERE ss.name = 'Other' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Summon: Spirit Wolf', 'Summons a spirit wolf to protect and fight alongside its master.', ss.id, NULL, NULL, at.id, 12, 100, 4, 1, 0, 0, 'None', 0
+SELECT 'Summon: Spirit Wolf', 'Summons a spirit wolf to protect and fight alongside its master.', ss.id, NULL, NULL, at.id, 50, 100, 4, 1, 0, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.attack_type at
 WHERE ss.name = 'Conjuration' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Fireball', 'A blazing orb of fire that explodes on impact.', ss.id, d.id, dt.id, at.id, 8, 90, 3, 3, 2, 0, 'None', 0
+SELECT 'Fireball', 'A blazing orb of fire that explodes on impact.', ss.id, d.id, dt.id, at.id, 50, 90, 3, 3, 2, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
 WHERE ss.name = 'Evocation' AND d.name = 'D6' AND dt.name = 'Fire' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Ice Bolt', 'A shard of enchanted ice that pierces and slows.', ss.id, d.id, dt.id, at.id, 6, 80, 2, 2, 2, 0, 'None', 0
+SELECT 'Ice Bolt', 'A shard of enchanted ice that pierces and slows.', ss.id, d.id, dt.id, at.id, 35, 80, 2, 2, 2, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
 WHERE ss.name = 'Evocation' AND d.name = 'D8' AND dt.name = 'Ice' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Shadow Bolt', 'A bolt of shadow energy that drains vitality.', ss.id, d.id, dt.id, at.id, 5, 70, 2, 2, 1, 0, 'None', 0
+SELECT 'Shadow Bolt', 'A bolt of shadow energy that drains vitality.', ss.id, d.id, dt.id, at.id, 35, 70, 2, 2, 1, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
 WHERE ss.name = 'Evocation' AND d.name = 'D6' AND dt.name = 'Shadow' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Smite', 'A powerful holy strike channelled through the caster.', ss.id, d.id, dt.id, at.id, 8, 85, 3, 2, 3, 0, 'None', 0
+SELECT 'Smite', 'A powerful holy strike channelled through the caster.', ss.id, d.id, dt.id, at.id, 35, 85, 3, 2, 3, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
 WHERE ss.name = 'Evocation' AND d.name = 'D8' AND dt.name = 'Holy' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Moonfire', 'Sacred moonlight burns unholy enemies and heals allies.', ss.id, d.id, dt.id, at.id, 6, 75, 2, 2, 2, 0, 'None', 0
+SELECT 'Moonfire', 'Sacred moonlight burns unholy enemies and heals allies.', ss.id, d.id, dt.id, at.id, 30, 75, 2, 2, 2, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
 WHERE ss.name = 'Evocation' AND d.name = 'D6' AND dt.name = 'Holy' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Soul Drain', 'Drains the life force of an enemy to restore the caster.', ss.id, d.id, dt.id, at.id, 7, 80, 3, 2, 1, 0, 'None', 0
+SELECT 'Soul Drain', 'Drains the life force of an enemy to restore the caster.', ss.id, d.id, dt.id, at.id, 25, 80, 3, 2, 1, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
 WHERE ss.name = 'Evocation' AND d.name = 'D6' AND dt.name = 'Shadow' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
@@ -947,31 +947,31 @@ ON CONFLICT (name) DO NOTHING;
 -- ============================================================
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Heal', 'Restores a moderate amount of hit points to a single ally.', ss.id, d.id, NULL, at.id, 6, 70, 2, 2, 0, 4, 'None', 0
+SELECT 'Heal', 'Restores a moderate amount of hit points to a single ally.', ss.id, d.id, NULL, at.id, 25, 70, 2, 2, 0, 4, 'None', 0
 FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.attack_type at
 WHERE ss.name = 'Healing' AND d.name = 'D8' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Mass Heal', 'A wave of holy light restores hit points to all allies.', ss.id, d.id, NULL, at.id, 14, 100, 4, 3, 0, 6, 'None', 0
+SELECT 'Mass Heal', 'A wave of holy light restores hit points to all allies.', ss.id, d.id, NULL, at.id, 45, 100, 4, 3, 0, 6, 'None', 0
 FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.attack_type at
 WHERE ss.name = 'Healing' AND d.name = 'D6' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Regeneration', 'Bestows rapid healing over time on a single ally.', ss.id, d.id, NULL, at.id, 10, 85, 3, 2, 0, 2, 'None', 0
+SELECT 'Regeneration', 'Bestows rapid healing over time on a single ally.', ss.id, d.id, NULL, at.id, 30, 85, 3, 2, 0, 2, 'None', 0
 FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.attack_type at
 WHERE ss.name = 'Healing' AND d.name = 'D6' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Restoration', 'Cures all ailments and restores a small amount of health.', ss.id, d.id, NULL, at.id, 8, 80, 3, 1, 0, 8, 'None', 0
+SELECT 'Restoration', 'Cures all ailments and restores a small amount of health.', ss.id, d.id, NULL, at.id, 25, 80, 3, 1, 0, 8, 'None', 0
 FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.attack_type at
 WHERE ss.name = 'Healing' AND d.name = 'D10' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Prayer of Healing', 'A group heal that calls upon divine favour to mend all allies.', ss.id, d.id, NULL, at.id, 12, 95, 4, 2, 0, 10, 'None', 0
+SELECT 'Prayer of Healing', 'A group heal that calls upon divine favour to mend all allies.', ss.id, d.id, NULL, at.id, 40, 95, 4, 2, 0, 10, 'None', 0
 FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.attack_type at
 WHERE ss.name = 'Healing' AND d.name = 'D8' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
@@ -982,19 +982,19 @@ ON CONFLICT (name) DO NOTHING;
 -- ============================================================
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Arcane Ward', 'Wraps the caster in a protective magical barrier that grants magic resistance and increases defense.', ss.id, NULL, NULL, at.id, 8, 75, 2, 1, 0, 0, 'None', 0
+SELECT 'Arcane Ward', 'Wraps the caster in a protective magical barrier that grants magic resistance and increases defense.', ss.id, NULL, NULL, at.id, 20, 75, 2, 1, 0, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.attack_type at
 WHERE ss.name = 'Evocation' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Divine Protection', 'Holy energy shields the target, reducing all incoming damage for a short time.', ss.id, NULL, NULL, at.id, 10, 80, 3, 1, 0, 0, 'None', 0
+SELECT 'Divine Protection', 'Holy energy shields the target, reducing all incoming damage for a short time.', ss.id, NULL, NULL, at.id, 25, 80, 3, 1, 0, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.attack_type at
 WHERE ss.name = 'Evocation' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
 
 INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Stone Skin', 'Hardens the caster''s skin to stone, granting significant damage resistance.', ss.id, NULL, NULL, at.id, 7, 70, 2, 1, 0, 0, 'None', 0
+SELECT 'Stone Skin', 'Hardens the caster''s skin to stone, granting significant damage resistance.', ss.id, NULL, NULL, at.id, 20, 70, 2, 1, 0, 0, 'None', 0
 FROM arena_data.spell_school ss, arena_data.attack_type at
 WHERE ss.name = 'Evocation' AND at.name = 'Spell'
 ON CONFLICT (name) DO NOTHING;
