@@ -1,6 +1,6 @@
 # BattleArena — Bestiary
 
-> Every creature stat block uses the same AD&D-inspired system: **lower AC is better**, attack rolls use `d20 + AttackBonus ≥ StrikeRating - targetAC`.  
+> Every creature stat block uses the modern D&D opposed-roll system: **higher AC is better**, attack rolls use `d20 + AttackPower ≥ d20 + DefensePower` where `DefensePower = AC + DexModifier + Shield + Buffs`.  
 > **Level** indicates the equivalent character level the creature is balanced against.  
 > **Movement Speed** is 30 ft. for most humanoids unless otherwise noted in their special abilities (e.g. Fly, Swim, Climb). Base speed varies by race (Elves 35 ft., Dwarves 25 ft., Gladefolk 25 ft., etc.) and is modified by class bonuses and armour penalties in the simulation engine.  
 > Most families come in three tiers: **Lesser** (weaker variant), **Normal** (unprefixed), **Greater** (elite variant).
@@ -50,7 +50,7 @@ Small, green-skinned nuisances that infest caves and ruins. Cowardly alone, dang
 | Level | 2 |
 | STR/DEX/CON/INT/WIS/CHA | +0 / +1 / +0 / +0 / -1 / -1 |
 | Max HP | 10 |
-| AC | 9 |
+| AC | 11 |
 | Attack | +1, 1D6 (short sword) or +1, 1D4 (short bow, ranged) |
 | Special | **Pack Tactics** — +1 to hit when an ally is within 5 ft. of the target. |
 
@@ -63,7 +63,7 @@ Small, green-skinned nuisances that infest caves and ruins. Cowardly alone, dang
 | Level | 3 |
 | STR/DEX/CON/INT/WIS/CHA | +1 / +1 / +1 / +0 / +0 / -1 |
 | Max HP | 18 |
-| AC | 8 |
+| AC | 12 |
 | Attack | +2, 1D6+1 (scimitar) |
 | Special | **Command** — once per combat, grant one goblin ally an immediate extra attack.<br>**Pack Tactics** — +1 to hit when an ally is within 5 ft. of the target. |
 
@@ -95,7 +95,7 @@ Small, scaly tunnel-dwellers with sharp cunning and magic resistance.
 | Level | 2 |
 | STR/DEX/CON/INT/WIS/CHA | +0 / +2 / +0 / +1 / +0 / -1 |
 | Max HP | 9 |
-| AC | 9 |
+| AC | 11 |
 | Attack | +1, 1D4+1 (short spear) or +2, 1D4 (sling, ranged) |
 | Special | **Magic Resistance** — advantage on saves vs. magical effects.<br>**Trap Sense** — +2 to saves against traps; knows if a trapped area is nearby. |
 
@@ -108,7 +108,7 @@ Small, scaly tunnel-dwellers with sharp cunning and magic resistance.
 | Level | 3 |
 | STR/DEX/CON/INT/WIS/CHA | +0 / +2 / +0 / +1 / +1 / +0 |
 | Max HP | 14 |
-| AC | 8 |
+| AC | 12 |
 | Attack | +1, 1D4+1 (ritual dagger) |
 | Special | **Magic Resistance** — advantage on saves vs. magical effects.<br>**Cantrip** — once per turn: *Acid Splash* (1D4 acid, 30 ft. ranged) or *Daze* (target loses next action on failed WIS save).<br>**Inspire Minions** — allied kobolds within 20 ft. gain +1 to hit. |
 
@@ -127,7 +127,7 @@ The Chosen of the War God — bred for battle, hardened by endless conflict.
 | Level | 3 |
 | STR/DEX/CON/INT/WIS/CHA | +2 / +1 / +1 / +0 / +0 / -1 |
 | Max HP | 18 |
-| AC | 8 |
+| AC | 12 |
 | Attack | +3, 1D8+2 (battle axe) |
 | Special | **Extra Strength** — +2 to melee damage rolls (included).<br>**Aggressive** — may move up to its speed toward an enemy as a bonus action. |
 
@@ -140,7 +140,7 @@ The Chosen of the War God — bred for battle, hardened by endless conflict.
 | Level | 5 |
 | STR/DEX/CON/INT/WIS/CHA | +3 / +0 / +2 / +0 / +0 / -1 |
 | Max HP | 30 |
-| AC | 7 |
+| AC | 13 |
 | Attack | +5, 1D10+3 (greataxe) |
 | Special | **Extra Strength** — +2 to melee damage rolls (included).<br>**Aggressive** — may move up to its speed toward an enemy as a bonus action.<br>**Relentless** — once per combat, when reduced to 0 HP, drop to 1 HP instead. |
 
@@ -153,7 +153,7 @@ The Chosen of the War God — bred for battle, hardened by endless conflict.
 | Level | 8 |
 | STR/DEX/CON/INT/WIS/CHA | +4 / +1 / +3 / +1 / +1 / +0 |
 | Max HP | 55 |
-| AC | 5 |
+| AC | 15 |
 | Attack | +7, 1D12+4 (great axe) or +6, 1D8+4 (throwing axe, 20 ft. ranged) |
 | Special | **Extra Strength** — +2 to melee damage rolls (included).<br>**Aggressive** — may move up to its speed toward an enemy as a bonus action.<br>**Battle Cry** — once per combat, all orc allies within 30 ft. gain +1 to hit and +2 damage for 2 rounds.<br>**Relentless** — once per combat, when reduced to 0 HP, drop to 1 HP instead. |
 
@@ -172,7 +172,7 @@ Elves of the underdark, twisted by centuries of shadow and intrigue.
 | Level | 5 |
 | STR/DEX/CON/INT/WIS/CHA | +0 / +3 / +0 / +1 / +1 / +1 |
 | Max HP | 22 |
-| AC | 6 |
+| AC | 14 |
 | Attack | +5, 1D6+3 (short sword) + poison, or +6, 1D6+3 (hand crossbow, ranged) + poison |
 | Special | **Magic Resistance** — advantage on saves vs. magical effects.<br>**Poison** — on hit, target makes a CON save or takes 1D4 poison and is Poisoned for 1 round.<br>**Darkvision** — sees in magical darkness.<br>**Fade** — bonus action to become Invisible for 1 round (recharges on a short rest). |
 
@@ -185,7 +185,7 @@ Elves of the underdark, twisted by centuries of shadow and intrigue.
 | Level | 7 |
 | STR/DEX/CON/INT/WIS/CHA | +0 / +2 / +0 / +3 / +1 / +2 |
 | Max HP | 28 |
-| AC | 6 |
+| AC | 14 |
 | Attack | +5, 1D4+1 (ritual dagger) |
 | Special | **Magic Resistance** — advantage on saves vs. magical effects.<br>**Spells** — *Darkness* (20 ft. radius, 3 rounds), *Magic Missile* (2D4+2 force, auto-hit), *Fear* (once per combat).<br>**Darkvision** — sees in magical darkness. |
 
@@ -198,7 +198,7 @@ Elves of the underdark, twisted by centuries of shadow and intrigue.
 | Level | 9 |
 | STR/DEX/CON/INT/WIS/CHA | +1 / +2 / +1 / +3 / +2 / +3 |
 | Max HP | 42 |
-| AC | 4 |
+| AC | 16 |
 | Attack | +7, 1D8+3 (magic rapier + poison) |
 | Special | **Magic Resistance** — advantage on saves vs. magical effects.<br>**Poison** — on hit, target makes a CON save or takes 2D4 poison and is Poisoned for 2 rounds.<br>**Darkvision** — sees in magical darkness.<br>**Spells** — *Darkness*, *Hold Person* (WIS save or Paralyzed), *Cloudkill* (once per combat, 20 ft. radius, 2D8 poison).<br>**Fade** — bonus action to become Invisible for 2 rounds (recharges on a short rest).<br>**Lolth's Favour** — once per combat, reroll any save. |
 
@@ -217,7 +217,7 @@ Children of the Moon goddess — graceful, long-lived, and deeply connected to m
 | Level | 3 |
 | STR/DEX/CON/INT/WIS/CHA | +0 / +2 / +0 / +1 / +1 / +1 |
 | Max HP | 14 |
-| AC | 8 |
+| AC | 12 |
 | Attack | +4, 1D8+2 (long bow, 80 ft. ranged) or +3, 1D6+1 (short sword) |
 | Special | **Magic Resistance** — advantage on saves vs. magical effects.<br>**Keen Eye** — +2 to Perception; ignores half-cover bonuses. |
 
@@ -230,7 +230,7 @@ Children of the Moon goddess — graceful, long-lived, and deeply connected to m
 | Level | 6 |
 | STR/DEX/CON/INT/WIS/CHA | +0 / +2 / +0 / +3 / +1 / +2 |
 | Max HP | 22 |
-| AC | 7 |
+| AC | 13 |
 | Attack | +5, 1D4 (arcane staff) |
 | Special | **Magic Resistance** — advantage on saves vs. magical effects.<br>**Spells** — *Magic Missile* (3D4+3 force, auto-hit), *Sleep* (WIS save or unconscious for 2 rounds), *Mist Step* (bonus action, teleport 20 ft., once per combat).<br>**Trance** — immune to sleep effects. |
 
@@ -243,7 +243,7 @@ Children of the Moon goddess — graceful, long-lived, and deeply connected to m
 | Level | 9 |
 | STR/DEX/CON/INT/WIS/CHA | +2 / +3 / +1 / +2 / +2 / +3 |
 | Max HP | 40 |
-| AC | 3 |
+| AC | 17 |
 | Attack | +8, 1D10+3 (elven great sword) or +9, 1D8+3 (elven long bow, 100 ft. ranged) |
 | Special | **Magic Resistance** — advantage on saves vs. magical effects.<br>**Trance** — immune to sleep effects.<br>**Bladesong** — once per combat, enter a defensive stance for 3 rounds: +2 AC, -2 attack. May still attack and cast spells.<br>**Fey Step** — as a bonus action, teleport up to 30 ft. (recharges on short rest). |
 
@@ -262,7 +262,7 @@ Scales shimmer with draconic heritage. Cold, patient, and utterly without mercy.
 | Level | 3 |
 | STR/DEX/CON/INT/WIS/CHA | +2 / +1 / +1 / +0 / +0 / -1 |
 | Max HP | 16 |
-| AC | 9 |
+| AC | 11 |
 | Attack | +2, 1D6+2 (stone club) |
 | Special | **Poison Immunity** — immune to poison damage and the poisoned condition.<br>**Hold Breath** — can hold its breath for 30 minutes. |
 
@@ -275,7 +275,7 @@ Scales shimmer with draconic heritage. Cold, patient, and utterly without mercy.
 | Level | 5 |
 | STR/DEX/CON/INT/WIS/CHA | +2 / +1 / +2 / +0 / +1 / +0 |
 | Max HP | 28 |
-| AC | 7 |
+| AC | 13 |
 | Attack | +4, 1D8+2 (bone spear) or +4, 1D6+1 (javelin, 30 ft. ranged) |
 | Special | **Poison Immunity** — immune to poison damage and the poisoned condition.<br>**Hold Breath** — can hold its breath for 30 minutes.<br>**Natural Armour** — thick scales grant base AC 7 unarmoured. |
 
@@ -288,7 +288,7 @@ Scales shimmer with draconic heritage. Cold, patient, and utterly without mercy.
 | Level | 8 |
 | STR/DEX/CON/INT/WIS/CHA | +2 / +1 / +2 / +1 / +3 / +1 |
 | Max HP | 40 |
-| AC | 6 |
+| AC | 14 |
 | Attack | +5, 1D8+2 (bone staff) |
 | Special | **Poison Immunity** — immune to poison damage and the poisoned condition.<br>**Hold Breath** — can hold its breath for 30 minutes.<br>**Natural Armour** — thick scales grant base AC 6 unarmoured.<br>**Primal Magic** — *Venom Spray* (once per combat, 15 ft. cone, 2D6 poison, save for half) or *Regenerate* (heals 2D8 HP once per combat). |
 
@@ -320,7 +320,7 @@ The most adaptable race. Human opponents take many forms — bandits, mercenarie
 | Level | 3 |
 | STR/DEX/CON/INT/WIS/CHA | +1 / +1 / +1 / +0 / +0 / +0 |
 | Max HP | 18 |
-| AC | 8 |
+| AC | 12 |
 | Attack | +3, 1D8+1 (long sword) or +3, 1D6+1 (crossbow, ranged) |
 | Special | **Shield Wall** — if adjacent to another Mercenary, both gain +1 AC. |
 
@@ -333,7 +333,7 @@ The most adaptable race. Human opponents take many forms — bandits, mercenarie
 | Level | 6 |
 | STR/DEX/CON/INT/WIS/CHA | +2 / +1 / +2 / +0 / +1 / +1 |
 | Max HP | 38 |
-| AC | 4 |
+| AC | 16 |
 | Attack | +5, 1D10+2 (great sword) or +4, 1D8+1 (lance, mounted) |
 | Special | **Heavy Armour** — damage reduction 2 vs. non-magical weapons.<br>**Shield Bash** — bonus action: 1D4+2 bludgeoning, target pushed 5 ft. on hit. |
 
@@ -346,7 +346,7 @@ The most adaptable race. Human opponents take many forms — bandits, mercenarie
 | Level | 9 |
 | STR/DEX/CON/INT/WIS/CHA | +3 / +2 / +2 / +2 / +1 / +2 |
 | Max HP | 55 |
-| AC | 3 |
+| AC | 17 |
 | Attack | +8, 1D10+3 (bastard sword, two-handed) or +7, 1D8+1 (heavy crossbow, ranged) |
 | Special | **Heavy Armour** — damage reduction 2 vs. non-magical weapons.<br>**Command** — once per combat, an ally within 20 ft. may make an immediate attack out of turn.<br>**Inspiring Presence** — all allies within 30 ft. gain +1 to hit and +1 to saves.<br>**Second Wind** — bonus action to heal 2D10+5 HP, once per combat. |
 
@@ -365,7 +365,7 @@ Stubborn, tough, and carrying grudges that span generations.
 | Level | 3 |
 | STR/DEX/CON/INT/WIS/CHA | +2 / +0 / +2 / +0 / +1 / +0 |
 | Max HP | 22 |
-| AC | 8 |
+| AC | 12 |
 | Attack | +3, 1D8+2 (battle axe) or +3, 1D6+1 (throwing axe, 20 ft. ranged) |
 | Special | **Magic Resistance** — advantage on saves vs. magical effects. |
 
@@ -378,7 +378,7 @@ Stubborn, tough, and carrying grudges that span generations.
 | Level | 5 |
 | STR/DEX/CON/INT/WIS/CHA | +3 / +0 / +3 / +0 / +1 / -1 |
 | Max HP | 38 |
-| AC | 7 |
+| AC | 13 |
 | Attack | +5, 1D10+3 (greataxe) |
 | Special | **Magic Resistance** — advantage on saves vs. magical effects.<br>**Berserker Rage** — once per combat, enter a rage: +2 damage, damage reduction 2, but -2 AC for 3 rounds. |
 
@@ -391,7 +391,7 @@ Stubborn, tough, and carrying grudges that span generations.
 | Level | 8 |
 | STR/DEX/CON/INT/WIS/CHA | +3 / +1 / +3 / +1 / +2 / +1 |
 | Max HP | 58 |
-| AC | 4 |
+| AC | 16 |
 | Attack | +7, 1D10+3 (dwarven war hammer) or +6, 1D6+2 (throwing hammer, 20 ft. ranged) |
 | Special | **Magic Resistance** — advantage on saves vs. magical effects.<br>**Heavy Armour** — damage reduction 2 vs. non-magical weapons.<br>**Ancestral Ward** — once per combat, reduce all damage taken by 5 for 2 rounds.<br>**Grudge** — +1 to hit against any creature that damaged an ally in the previous round. |
 
@@ -410,7 +410,7 @@ Small in stature, immense in courage. Standing no taller than a human child of t
 | Level | 2 |
 | STR/DEX/CON/INT/WIS/CHA | +0 / +2 / +1 / +0 / +1 / +1 |
 | Max HP | 10 |
-| AC | 9 |
+| AC | 11 |
 | Attack | +2, 1D4+1 (short blade) or +3, 1D4+1 (sling, ranged) |
 | Special | **Taunt** — bonus action: one enemy within 20 ft. makes a WIS save or has disadvantage on attacks against creatures other than the Gladefolk for 1 round.<br>**Fear Immunity** — immune to fear effects. |
 
@@ -423,7 +423,7 @@ Small in stature, immense in courage. Standing no taller than a human child of t
 | Level | 4 |
 | STR/DEX/CON/INT/WIS/CHA | +0 / +3 / +1 / +1 / +1 / +1 |
 | Max HP | 16 |
-| AC | 7 |
+| AC | 13 |
 | Attack | +4, 1D4+1 (short blade) or +5, 1D6+1 (sling, 40 ft. ranged) |
 | Special | **Taunt** — bonus action: one enemy within 20 ft. makes a WIS save or has disadvantage on attacks against creatures other than the Gladefolk for 1 round.<br>**Fear Immunity** — immune to fear effects.<br>**Nimble** — may move through spaces occupied by larger creatures without penalty.<br>**Lucky** — once per combat, reroll a missed attack. |
 
@@ -436,7 +436,7 @@ Small in stature, immense in courage. Standing no taller than a human child of t
 | Level | 6 |
 | STR/DEX/CON/INT/WIS/CHA | +0 / +3 / +2 / +1 / +2 / +2 |
 | Max HP | 28 |
-| AC | 5 |
+| AC | 15 |
 | Attack | +6, 1D6+1 (magic short sword) or +7, 1D6+2 (sling, 50 ft. ranged) |
 | Special | **Taunt** — bonus action: one enemy within 30 ft. makes a WIS save or has disadvantage on attacks against creatures other than the Gladefolk for 1 round.<br>**Fear Immunity** — immune to fear effects.<br>**Nimble** — may move through spaces occupied by larger creatures without penalty.<br>**Lucky** — once per combat, reroll a missed attack or failed save.<br>**Inspire** — once per combat, all Gladefolk allies within 30 ft. gain +1 to hit and +2 damage for 2 rounds. |
 
@@ -455,7 +455,7 @@ Natural animals and their giant variants. Beasts rely on instinct, fang, and cla
 | Level | 1 |
 | STR/DEX/CON/INT/WIS/CHA | -1 / +2 / +0 / -3 / -1 / -3 |
 | Max HP | 5 |
-| AC | 11 |
+| AC | 9 |
 | Attack | +1, 1D4 (bite) |
 | Special | **Disease** — on hit, target makes a CON save or contracts Filth Fever (1D4 poison damage each turn for 3 turns). |
 
@@ -468,7 +468,7 @@ Natural animals and their giant variants. Beasts rely on instinct, fang, and cla
 | Level | 2 |
 | STR/DEX/CON/INT/WIS/CHA | +1 / +2 / +1 / -2 / +1 / -2 |
 | Max HP | 12 |
-| AC | 8 |
+| AC | 12 |
 | Attack | +2, 1D6+1 (bite) |
 | Special | **Pack Tactics** — +1 to hit when an ally is within 5 ft. of the target.<br>**Trip** — on hit, target makes a DEX save or is knocked Prone. |
 
@@ -481,7 +481,7 @@ Natural animals and their giant variants. Beasts rely on instinct, fang, and cla
 | Level | 3 |
 | STR/DEX/CON/INT/WIS/CHA | +1 / +2 / +1 / -2 / +0 / -3 |
 | Max HP | 14 |
-| AC | 8 |
+| AC | 12 |
 | Attack | +3, 1D6+1 (bite) + poison |
 | Special | **Poison** — on hit, target makes a CON save or takes 1D6 poison and is Poisoned for 2 rounds.<br>**Web** — once per combat, 20 ft. ranged: target is Restrained (DEX save to escape).<br>**Climb** — can move on walls and ceilings without penalty. |
 
@@ -494,7 +494,7 @@ Natural animals and their giant variants. Beasts rely on instinct, fang, and cla
 | Level | 4 |
 | STR/DEX/CON/INT/WIS/CHA | +4 / +1 / +3 / -2 / +1 / -2 |
 | Max HP | 30 |
-| AC | 8 |
+| AC | 12 |
 | Attack | +4, 1D8+4 (claw/claw) or +4, 2D6+4 (bite) |
 | Special | **Grab** — if both claws hit the same target, the bear automatically bites as a bonus action.<br>**Rage** — when below 50 % HP, gains +2 damage. |
 
@@ -509,7 +509,7 @@ Natural animals and their giant variants. Beasts rely on instinct, fang, and cla
 | Level | 4 |
 | STR/DEX/CON/INT/WIS/CHA | +2 / +2 / +2 / -2 / +1 / -2 |
 | Max HP | 22 |
-| AC | 7 |
+| AC | 13 |
 | Attack | +4, 1D10+2 (bite) |
 | Special | **Pack Tactics** — +1 to hit when an ally is within 5 ft. of the target.<br>**Trip** — on hit, target makes a DEX save or is knocked Prone.<br>**Fearsome Howl** — once per combat, all enemies within 30 ft. make a WIS save or are Frightened for 1 round. |
 
@@ -522,7 +522,7 @@ Natural animals and their giant variants. Beasts rely on instinct, fang, and cla
 | Level | 6 |
 | STR/DEX/CON/INT/WIS/CHA | +2 / +3 / +2 / +2 / +2 / +1 |
 | Max HP | 35 |
-| AC | 6 |
+| AC | 14 |
 | Attack | +6, 1D8+2 (antlers) or +5, 1D10+2 (hooves, charge) |
 | Special | **Charge** — if the stag moves at least 20 ft. before attacking, the hooves attack deals +2D6 damage and knocks the target Prone.<br>**Fey Step** — once per combat, teleport up to 30 ft. as a bonus action.<br>**Forest Walk** — cannot be slowed or hindered by natural terrain. |
 
@@ -545,7 +545,7 @@ Titans diminished by age, but still mighty beyond measure.
 | Level | 5 |
 | STR/DEX/CON/INT/WIS/CHA | +3 / +0 / +2 / -2 / -1 / -1 |
 | Max HP | 35 |
-| AC | 8 |
+| AC | 12 |
 | Attack | +4, 2D6+3 (huge club) |
 | Special | **Extra Strength** — +2 to melee damage rolls (included).<br>**Massive** — cannot be knocked prone by creatures smaller than Large. |
 
@@ -558,7 +558,7 @@ Titans diminished by age, but still mighty beyond measure.
 | Level | 7 |
 | STR/DEX/CON/INT/WIS/CHA | +4 / +0 / +3 / -2 / -1 / -1 |
 | Max HP | 50 |
-| AC | 6 |
+| AC | 14 |
 | Attack | +6, 2D8+4 (greatclub) |
 | Special | **Extra Strength** — +2 to melee damage rolls (included).<br>**Magic Resistance** — advantage on saves vs. magical effects.<br>**Massive** — cannot be knocked prone by creatures smaller than Large. |
 
@@ -571,7 +571,7 @@ Titans diminished by age, but still mighty beyond measure.
 | Level | 10 |
 | STR/DEX/CON/INT/WIS/CHA | +5 / +0 / +4 / -1 / +0 / +0 |
 | Max HP | 80 |
-| AC | 4 |
+| AC | 16 |
 | Attack | +8, 2D10+5 (iron-bound club) or +6, 2D8+5 (boulder toss, 60 ft. ranged) |
 | Special | **Extra Strength** — +2 to melee damage rolls (included).<br>**Magic Resistance** — advantage on saves vs. magical effects.<br>**Massive** — cannot be knocked prone by creatures smaller than Large.<br>**Earth Shake** — once per combat, slam the ground: all enemies within 20 ft. make a DEX save or are knocked Prone.<br>**Enrage** — when first reduced to 50 % HP, gains +2 damage for the rest of combat. |
 
@@ -590,7 +590,7 @@ Feral regenerators that haunt wild places. Fire and acid are their only true wea
 | Level | 7 |
 | STR/DEX/CON/INT/WIS/CHA | +3 / +1 / +3 / -1 / +0 / -2 |
 | Max HP | 45 |
-| AC | 6 |
+| AC | 14 |
 | Attack | +5, 1D8+3 (claw/claw) or +5, 1D10+3 (bite) |
 | Special | **Regeneration** — regains 5 HP at the start of its turn unless the damage was fire or acid. Can reattach severed limbs.<br>**Keen Scent** — advantage on tracking and perception checks involving smell. |
 
@@ -603,7 +603,7 @@ Feral regenerators that haunt wild places. Fire and acid are their only true wea
 | Level | 9 |
 | STR/DEX/CON/INT/WIS/CHA | +4 / +1 / +4 / -1 / +0 / -2 |
 | Max HP | 65 |
-| AC | 5 |
+| AC | 15 |
 | Attack | +7, 2D6+4 (claw/claw) or +7, 1D12+4 (bite) |
 | Special | **Regeneration** — regains 8 HP at the start of its turn unless the damage was fire or acid.<br>**Darkvision** — sees in total darkness.<br>**Rending Claws** — if both claw attacks hit the same target, deal an additional 2D6 slashing damage. |
 
@@ -616,7 +616,7 @@ Feral regenerators that haunt wild places. Fire and acid are their only true wea
 | Level | 10 |
 | STR/DEX/CON/INT/WIS/CHA | +5 / +0 / +5 / -1 / +1 / -2 |
 | Max HP | 80 |
-| AC | 4 |
+| AC | 16 |
 | Attack | +8, 2D8+5 (rocky fists) |
 | Special | **Regeneration** — regains 10 HP at the start of its turn unless the damage was fire or acid.<br>**Stone Hide** — AC 4 unarmoured; damage reduction 2 vs. non-magical weapons.<br>**Earth Shake** — once per combat, slam the ground: all enemies within 15 ft. make a DEX save or are knocked Prone.<br>**Rock Throw** — +6, 2D6+5 (boulder, 50 ft. ranged). |
 
@@ -635,7 +635,7 @@ Living remnants of a primordial age. Each one is a walking natural disaster.
 | Level | 10 |
 | STR/DEX/CON/INT/WIS/CHA | +5 / +0 / +4 / -2 / +0 / -1 |
 | Max HP | 75 |
-| AC | 4 |
+| AC | 16 |
 | Attack | +8, 2D10+5 (giant club) or +6, 2D8+5 (boulder, 80 ft. ranged) |
 | Special | **Massive** — cannot be knocked prone by creatures smaller than Huge.<br>**Crushing Blow** — on a critical hit, target is knocked Prone and Stunned for 1 round. |
 
@@ -648,7 +648,7 @@ Living remnants of a primordial age. Each one is a walking natural disaster.
 | Level | 11 |
 | STR/DEX/CON/INT/WIS/CHA | +5 / +1 / +5 / +0 / +1 / +0 |
 | Max HP | 90 |
-| AC | 2 |
+| AC | 18 |
 | Attack | +9, 2D12+5 (stone greatclub) or +8, 3D8+5 (boulder, 100 ft. ranged) |
 | Special | **Massive** — cannot be knocked prone by creatures smaller than Huge.<br>**Stone Skin** — damage reduction 3 vs. non-magical weapons.<br>**Crushing Blow** — on a critical hit, target is knocked Prone and Stunned for 1 round. |
 
@@ -661,7 +661,7 @@ Living remnants of a primordial age. Each one is a walking natural disaster.
 | Level | 12 |
 | STR/DEX/CON/INT/WIS/CHA | +6 / +0 / +5 / +1 / +1 / +1 |
 | Max HP | 105 |
-| AC | 0 |
+| AC | 20 |
 | Attack | +10, 2D12+6 (greataxe) or +8, 3D10+6 (ice boulder, 100 ft. ranged) |
 | Special | **Massive** — cannot be knocked prone by creatures smaller than Huge.<br>**Icy Aura** — any creature within 10 ft. at the start of its turn takes 1D6 cold damage.<br>**Crushing Blow** — on a critical hit, target is knocked Prone and Stunned for 1 round.<br>**Freezing Roar** — once per combat, all enemies within 30 ft. make a CON save or take 3D8 cold damage (half on save). |
 
@@ -678,7 +678,7 @@ Living remnants of a primordial age. Each one is a walking natural disaster.
 | Level | 7 |
 | STR/DEX/CON/INT/WIS/CHA | +4 / +1 / +3 / -1 / +0 / -1 |
 | Max HP | 52 |
-| AC | 6 |
+| AC | 14 |
 | Attack | +6, 2D8+4 (greataxe) or +6, 1D6+4 (gore) |
 | Special | **Charge** — if the minotaur moves at least 20 ft. before attacking, the gore attack deals +2D6 damage and knocks the target Prone.<br>**Labyrinth Memory** — cannot be lost or confused by maze-like terrain.<br>**Reckless** — the minotaur may attack with advantage, but all attacks against it also have advantage until its next turn. |
 
@@ -695,7 +695,7 @@ Living remnants of a primordial age. Each one is a walking natural disaster.
 | Level | 5 |
 | STR/DEX/CON/INT/WIS/CHA | +0 / +3 / +1 / +0 / +1 / +0 |
 | Max HP | 20 |
-| AC | 7 |
+| AC | 13 |
 | Attack | +5, 1D6+2 (talons) or +5, 1D4+2 (club) |
 | Special | **Fly** — 50 ft. flying speed.<br>**Captivating Song** — once per combat, all enemies within 60 ft. make a WIS save or spend their next turn moving toward the harpy (cannot attack, takes opportunity attacks as normal). |
 
@@ -712,7 +712,7 @@ Living remnants of a primordial age. Each one is a walking natural disaster.
 | Level | 9 |
 | STR/DEX/CON/INT/WIS/CHA | +3 / +1 / +3 / -1 / +2 / -2 |
 | Max HP | 60 |
-| AC | 4 |
+| AC | 16 |
 | Attack | +7, 2D8+3 (bite) |
 | Special | **Petrifying Gaze** — once per combat, all enemies within 30 ft. who meet its gaze make a CON save. On failure, they are Restrained and begin turning to stone. If already Restrained by this effect, they are fully Petrified (unconscious, cannot be revived without *Stone to Flesh*).<br>**Poison Bite** — CON save or take 2D6 poison and be Poisoned for 3 rounds.<br>**Stony Hide** — damage reduction 2 vs. non-magical weapons. |
 
@@ -729,7 +729,7 @@ Living remnants of a primordial age. Each one is a walking natural disaster.
 | Level | 11 |
 | STR/DEX/CON/INT/WIS/CHA | +5 / +2 / +4 / -1 / +1 / +0 |
 | Max HP | 85 |
-| AC | 2 |
+| AC | 18 |
 | Attack | +9, 1D12+5 (lion bite) or +9, 1D10+5 (goat horns) or +8, 3D8 (dragon breath, 30 ft. cone) |
 | Special | **Multiattack** — the chimera attacks with its lion bite, goat horns, and dragon head in the same turn.<br>**Fire Breath** — once per combat, 30 ft. cone: 3D8 fire damage (CON save for half). The dragon head may use this in place of its attack.<br>**Fly** — 60 ft. flying speed. |
 
@@ -748,7 +748,7 @@ Living remnants of a primordial age. Each one is a walking natural disaster.
 | Level | 5 |
 | STR/DEX/CON/INT/WIS/CHA | +2 / +3 / +2 / +0 / +1 / +0 |
 | Max HP | 28 |
-| AC | 7 |
+| AC | 13 |
 | Attack | +6, 1D8+3 (long bow, 80 ft. ranged) or +5, 1D6+2 (hooves) |
 | Special | **Skirmish** — the centaur may move up to its speed and still make a ranged attack at no penalty.<br>**Charge** — if the centaur moves at least 20 ft. before attacking with hooves, it deals +2D6 damage and knocks the target Prone. |
 
@@ -761,7 +761,7 @@ Living remnants of a primordial age. Each one is a walking natural disaster.
 | Level | 8 |
 | STR/DEX/CON/INT/WIS/CHA | +3 / +3 / +3 / +1 / +2 / +1 |
 | Max HP | 45 |
-| AC | 5 |
+| AC | 15 |
 | Attack | +7, 1D10+3 (great bow, 100 ft. ranged) or +7, 2D6+3 (hooves, charge) |
 | Special | **Skirmish** — the centaur may move up to its speed and still make a ranged attack at no penalty.<br>**Charge** — if the centaur moves at least 20 ft. before attacking with hooves, it deals +2D6 damage and knocks the target Prone.<br>**Herd Leader** — once per combat, all centaur allies within 30 ft. gain +1 to hit and +1 to AC for 2 rounds.<br>**Trample** — as a bonus action, the centaur may move through an enemy's space, dealing 2D4+3 bludgeoning damage (DEX save for half). |
 
@@ -780,7 +780,7 @@ Souls bound to rotting flesh by necromantic will, or risen by curses that transc
 | Level | 1 |
 | STR/DEX/CON/INT/WIS/CHA | +0 / +1 / +0 / -2 / -1 / -2 |
 | Max HP | 8 |
-| AC | 8 |
+| AC | 12 |
 | Attack | +1, 1D6 (rusted long sword) or +1, 1D4 (short bow, ranged) |
 | Special | **Fear Immunity** — immune to fear effects.<br>**Fragile Bones** — bludgeoning attacks deal +1 damage. |
 
@@ -808,7 +808,7 @@ Souls bound to rotting flesh by necromantic will, or risen by curses that transc
 | Level | 3 |
 | STR/DEX/CON/INT/WIS/CHA | +1 / +2 / +1 / -1 / +0 / -2 |
 | Max HP | 15 |
-| AC | 9 |
+| AC | 11 |
 | Attack | +3, 1D6+1 (claw) |
 | Special | **Fear Immunity** — immune to fear effects.<br>**Paralyzing Touch** — on hit, target makes a CON save or is Paralyzed for 1 round.<br>**Carrion Hunger** — the ghoul may use a bonus action to bite a Paralyzed or Prone target: 1D4+1 piercing + 1D4 necrotic. |
 
@@ -823,7 +823,7 @@ Souls bound to rotting flesh by necromantic will, or risen by curses that transc
 | Level | 6 |
 | STR/DEX/CON/INT/WIS/CHA | +3 / +0 / +2 / +0 / +0 / -1 |
 | Max HP | 40 |
-| AC | 6 |
+| AC | 14 |
 | Attack | +5, 1D10+3 (rusted great axe) |
 | Special | **Fear Immunity** — immune to fear effects.<br>**Undead Fortitude** — when reduced to 0 HP, make a CON save (DC = damage taken). On success, drop to 1 HP instead.<br>**Rotten Flesh** — on hit, target makes a CON save or takes 1D4 necrotic and is Poisoned for 1 round.<br>**Burial Curse** — while the draugr's burial mound remains unplundered, it returns 1D4 days after being destroyed. |
 
@@ -836,7 +836,7 @@ Souls bound to rotting flesh by necromantic will, or risen by curses that transc
 | Level | 5 |
 | STR/DEX/CON/INT/WIS/CHA | +2 / +1 / +1 / +1 / +1 / +0 |
 | Max HP | 32 |
-| AC | 6 |
+| AC | 14 |
 | Attack | +4, 1D8+2 (long sword, necrotic-infused) |
 | Special | **Fear Immunity** — immune to fear effects.<br>**Life Drain** — on hit, target loses 1 Max HP until next rest. If a creature is reduced to 0 Max HP by this, it rises as a Zombie under the wight's control.<br>**Cause Fear** — once per combat, all enemies within 15 ft. make a WIS save or are Frightened for 2 rounds. |
 
@@ -851,7 +851,7 @@ Souls bound to rotting flesh by necromantic will, or risen by curses that transc
 | Level | 9 |
 | STR/DEX/CON/INT/WIS/CHA | +3 / +0 / +3 / +1 / +2 / +1 |
 | Max HP | 55 |
-| AC | 4 |
+| AC | 16 |
 | Attack | +7, 1D8+3 (rotting fist) |
 | Special | **Fear Immunity** — immune to fear effects.<br>**Mummy Rot** — on hit, target is cursed with Mummy Rot. At the start of each of its turns, it takes 1D6 necrotic and its Max HP is reduced by the same amount. The curse ends on a *Remove Curse* or similar magic.<br>**Fear Aura** — once per combat, all enemies within 30 ft. make a WIS save or are Frightened for 3 rounds.<br>**Vulnerability to Fire** — fire damage bypasses damage reduction and deals double damage.<br>**Undead Fortitude** — when reduced to 0 HP, make a CON save (DC = damage taken). On success, drop to 1 HP instead. |
 
@@ -864,7 +864,7 @@ Souls bound to rotting flesh by necromantic will, or risen by curses that transc
 | Level | 12 |
 | STR/DEX/CON/INT/WIS/CHA | +1 / +1 / +2 / +4 / +3 / +2 |
 | Max HP | 85 |
-| AC | 0 |
+| AC | 20 |
 | Attack | +9, 2D10+3 (necrotic blast, 60 ft. ranged) |
 | Special | **Fear Immunity** — immune to fear effects.<br>**Magic Resistance** — advantage on saves vs. magical effects.<br>**Cause Fear** — once per combat, all enemies within 30 ft. make a WIS save or are Frightened for 3 rounds.<br>**Paralyzing Touch** — as an action, target makes a CON save or is Paralyzed for 1 round.<br>**Rejuvenation** — unless its phylactery is destroyed, the lich reforms in 1D10 days. |
 
@@ -900,7 +900,7 @@ Incorporeal entities that exist between the veil of life and death. They cannot 
 | Level | 5 |
 | STR/DEX/CON/INT/WIS/CHA | +0 / +2 / +0 / +0 / +1 / +0 |
 | Max HP | 18 |
-| AC | 8 |
+| AC | 12 |
 | Attack | +4, 1D8 (telekinetic blast, 30 ft. ranged) |
 | Special | **Incorporeal** — takes half damage from non-magical weapons; immune to non-magical bludgeoning/piercing/slashing.<br>**Invisible** — the poltergeist is naturally invisible. It can be detected by effects that reveal invisible creatures, or by observing the objects it hurls.<br>**Telekinetic Throw** — as a bonus action, the poltergeist hurls a loose object (crate, chair, rock) at a target: +4, 1D6 bludgeoning. |
 
@@ -930,7 +930,7 @@ Incorporeal entities that exist between the veil of life and death. They cannot 
 | Level | 8 |
 | STR/DEX/CON/INT/WIS/CHA | +0 / +2 / +0 / +1 / +2 / +3 |
 | Max HP | 30 |
-| AC | 5 |
+| AC | 15 |
 | Attack | +6, 1D10 (necrotic touch) |
 | Special | **Incorporeal** — takes half damage from non-magical weapons; immune to non-magical bludgeoning/piercing/slashing.<br>**Fear Immunity** — immune to fear effects.<br>**Wail** — once per combat, all enemies within 40 ft. make a WIS save. On failure, they take 3D8 psychic damage and are Frightened for 3 rounds. On success, they take half damage and are not Frightened. |
 
@@ -943,7 +943,7 @@ Incorporeal entities that exist between the veil of life and death. They cannot 
 | Level | 8 |
 | STR/DEX/CON/INT/WIS/CHA | +0 / +3 / +0 / +2 / +2 / +1 |
 | Max HP | 45 |
-| AC | 4 |
+| AC | 16 |
 | Attack | +6, 1D10+2 (life siphon, touch) |
 | Special | **Fear Immunity** — immune to fear effects.<br>**Incorporeal** — takes half damage from non-magical weapons; immune to non-magical bludgeoning/piercing/slashing.<br>**Life Siphon** — on hit, regain HP equal to half the damage dealt.<br>**Stun** — as an action, target makes a CON save or is Stunned for 1 round. |
 
@@ -958,7 +958,7 @@ Incorporeal entities that exist between the veil of life and death. They cannot 
 | Level | 10 |
 | STR/DEX/CON/INT/WIS/CHA | +2 / +1 / +2 / +1 / +3 / +2 |
 | Max HP | 45 |
-| AC | 3 |
+| AC | 17 |
 | Attack | +8, 1D12+2 (spiritual spear) or +7, 2D6 (ancestral blast, 40 ft. ranged) |
 | Special | **Incorporeal** — takes half damage from non-magical weapons; immune to non-magical bludgeoning/piercing/slashing.<br>**Fear Immunity** — immune to fear effects.<br>**Guardian Ward** — as a reaction when an ally within 20 ft. takes damage, the guardian may reduce that damage by 2D10+5.<br>**Ancestral Insight** — the guardian may grant one ally advantage on its next attack or save once per combat. |
 
@@ -977,7 +977,7 @@ Creatures of pure elemental chaos from beyond the mortal veil. Each demon embodi
 | Level | 8 |
 | STR/DEX/CON/INT/WIS/CHA | +1 / +3 / +1 / +1 / +0 / +0 |
 | Max HP | 28 |
-| AC | 5 |
+| AC | 15 |
 | Attack | +6, 1D6+1 (claw) or +7, 2D4 (hellflame bolt, 40 ft. ranged) |
 | Special | **Cause Fear** — once per combat, one enemy within 20 ft. makes a WIS save or is Frightened for 2 rounds.<br>**Fire Aura** — any creature that starts its turn within 5 ft. takes 1D4 fire damage.<br>**Teleport** — as a bonus action, teleport up to 30 ft. to a visible location. |
 
@@ -990,7 +990,7 @@ Creatures of pure elemental chaos from beyond the mortal veil. Each demon embodi
 | Level | 10 |
 | STR/DEX/CON/INT/WIS/CHA | +3 / +2 / +3 / +2 / +1 / +1 |
 | Max HP | 55 |
-| AC | 3 |
+| AC | 17 |
 | Attack | +8, 1D10+3 (fiery claws) or +7, 2D8 (hellflame bolt, 60 ft. ranged) |
 | Special | **Cause Fear** — once per combat, all enemies within 20 ft. make a WIS save or are Frightened for 2 rounds.<br>**Fire Aura** — any creature that starts its turn within 5 ft. takes 1D6 fire damage.<br>**Stun** — as an action, target makes a CON save or is Stunned for 1 round.<br>**Teleport** — as a bonus action, teleport up to 30 ft. to a visible location. |
 
@@ -1005,7 +1005,7 @@ Creatures of pure elemental chaos from beyond the mortal veil. Each demon embodi
 | Level | 10 |
 | STR/DEX/CON/INT/WIS/CHA | +5 / +1 / +4 / +1 / +1 / +0 |
 | Max HP | 70 |
-| AC | 3 |
+| AC | 17 |
 | Attack | +9, 2D10+5 (massive club, 2H) or +7, 2D8+5 (chunk of rubble, 40 ft. ranged) |
 | Special | **Cause Fear** — once per combat, all enemies within 20 ft. make a WIS save or are Frightened for 2 rounds.<br>**Regeneration** — regains 5 HP at the start of its turn (fire and acid suppress this for 1 round).<br>**Shapechange** — as an action, the oni may appear as any Medium humanoid (no mechanical effect, but can fool observers).<br>**Darkvision** — sees in magical darkness. |
 
@@ -1018,7 +1018,7 @@ Creatures of pure elemental chaos from beyond the mortal veil. Each demon embodi
 | Level | 12 |
 | STR/DEX/CON/INT/WIS/CHA | +4 / +3 / +4 / +3 / +2 / +3 |
 | Max HP | 85 |
-| AC | 0 |
+| AC | 20 |
 | Attack | +10, 2D10+4 (shadow claws) or +9, 3D8 (shadow bolt, 80 ft. ranged) |
 | Special | **Cause Fear** — once per combat, all enemies within 30 ft. make a WIS save or are Frightened for 3 rounds.<br>**Stun** — as an action, target makes a CON save or is Stunned for 2 rounds.<br>**Shadow Aura** — any creature within 10 ft. at the start of its turn takes 1D8 necrotic damage.<br>**Teleport** — as a bonus action, teleport up to 40 ft. to a visible location.<br>**Summon Demon** — once per combat, summon a Lesser Demon that acts immediately.<br>**Shadow Form** — takes half damage from non-magical weapons. |
 
@@ -1037,7 +1037,7 @@ Magically animated entities of stone, metal, or flesh. They feel nothing, tire n
 | Level | 8 |
 | STR/DEX/CON/INT/WIS/CHA | +4 / -2 / +4 / -3 / -2 / -3 |
 | Max HP | 50 |
-| AC | 4 |
+| AC | 16 |
 | Attack | +6, 1D10+4 (slam) |
 | Special | **Magic Immunity** — immune to all spells that allow spell resistance; *Disintegrate* slows it for 1 round, *Earthquake* heals it 2D8.<br>**Berserk** — when it drops below 25 HP, make a DC 10 check each turn. On failure, it attacks the nearest creature (friend or foe) for 1 round.<br>**Construct Traits** — immune to fear, poison, sleep, paralysis, stun. |
 
@@ -1050,7 +1050,7 @@ Magically animated entities of stone, metal, or flesh. They feel nothing, tire n
 | Level | 10 |
 | STR/DEX/CON/INT/WIS/CHA | +5 / -1 / +5 / -3 / -2 / -3 |
 | Max HP | 70 |
-| AC | 2 |
+| AC | 18 |
 | Attack | +8, 2D8+5 (slam) or +7, 2D6+5 (poison gas breath, 15 ft. cone, once per combat) |
 | Special | **Magic Immunity** — immune to all spells that allow spell resistance; fire spells heal it 1D8 per level, lightning slows it for 1 round.<br>**Construct Traits** — immune to fear, poison, sleep, paralysis, stun.<br>**Poison Gas Breath** — CON save or take 2D6 poison and be Poisoned for 2 rounds. |
 
@@ -1063,7 +1063,7 @@ Magically animated entities of stone, metal, or flesh. They feel nothing, tire n
 | Level | 12 |
 | STR/DEX/CON/INT/WIS/CHA | +6 / -1 / +6 / -3 / -2 / -3 |
 | Max HP | 100 |
-| AC | -1 |
+| AC | 21 |
 | Attack | +10, 2D10+6 (slam) or +9, 3D8 (heat beam, 60 ft. ranged, once per combat) |
 | Special | **Magic Immunity** — immune to all spells that allow spell resistance.<br>**Construct Traits** — immune to fear, poison, sleep, paralysis, stun.<br>**Adamantite Skin** — damage reduction 5 vs. all sources.<br>**Heat Beam** — target takes 3D8 fire damage; save for half. Ignites flammable materials.<br>**Crushing Blow** — on a critical hit with slam, the target is knocked Prone and Stunned for 2 rounds. |
 
@@ -1082,7 +1082,7 @@ The apex predators of the world. Young dragons are encountered in the wild; anci
 | Level | 10 |
 | STR/DEX/CON/INT/WIS/CHA | +3 / +2 / +3 / +2 / +2 / +2 |
 | Max HP | 60 |
-| AC | 2 |
+| AC | 18 |
 | Attack | +8, 1D10+3 (claw/claw) or +8, 2D8+3 (bite) |
 | Special | **Breath Weapon** — once per combat, 20 ft. cone (or 40 ft. line) of elemental damage. Targets take 4D8 (CON save for half).<br>**Frightful Presence** — once per combat, all enemies within 30 ft. make a WIS save or are Frightened for 2 rounds.<br>**Fly** — 60 ft. flying speed.<br>**Elemental Resistance** — resistance to its own element type. |
 
@@ -1095,7 +1095,7 @@ The apex predators of the world. Young dragons are encountered in the wild; anci
 | Level | 12 |
 | STR/DEX/CON/INT/WIS/CHA | +5 / +2 / +5 / +3 / +3 / +4 |
 | Max HP | 100 |
-| AC | -2 |
+| AC | 22 |
 | Attack | +10, 2D10+5 (claw/claw) or +10, 3D10+5 (bite) |
 | Special | **Breath Weapon** — once per combat, 40 ft. cone (or 60 ft. line) of elemental damage. Targets take 6D8 (CON save for half).<br>**Frightful Presence** — once per combat, all enemies within 60 ft. make a WIS save or are Frightened for 3 rounds.<br>**Fly** — 80 ft. flying speed.<br>**Elemental Immunity** — immune to its own element type.<br>**Crush** — when landing on a Huge or smaller creature, target takes 3D10 bludgeoning and is knocked Prone.<br>**Spellcasting** — knows 3 spells appropriate to its element (e.g., red dragon knows *Fireball*, *Burning Hands*, *Heat Metal*). |
 
@@ -1108,7 +1108,7 @@ The apex predators of the world. Young dragons are encountered in the wild; anci
 | Level | 12+ (Boss) |
 | STR/DEX/CON/INT/WIS/CHA | +7 / +2 / +6 / +5 / +4 / +5 |
 | Max HP | 150 |
-| AC | -4 |
+| AC | 24 |
 | Attack | +12, 3D10+7 (claw/claw) or +12, 4D12+7 (bite) |
 | Special | **Breath Weapon** — once per combat, 60 ft. cone (or 80 ft. line) of elemental devastation. Targets take 8D12 (CON save for half).<br>**Frightful Presence** — every enemy within 120 ft. makes a WIS save or is Frightened for 5 rounds.<br>**Fly** — 100 ft. flying speed.<br>**Elemental Immunity** — immune to its own element type.<br>**Crush** — when landing on a Huge or smaller creature, target takes 4D10 bludgeoning and is knocked Prone.<br>**Spellcasting** — knows 6 spells appropriate to its element.<br>**Legendary Resistance** — three times per combat, may choose to succeed on a failed saving throw.<br>**Tail Swipe** — as a bonus action, all creatures within 15 ft. behind the dragon make a DEX save or take 3D8 bludgeoning and are knocked Prone. |
 
@@ -1129,7 +1129,7 @@ Divine beings and messengers from the higher planes. They serve gods, guard sacr
 | Level | 11 |
 | STR/DEX/CON/INT/WIS/CHA | +4 / +3 / +3 / +2 / +3 / +4 |
 | Max HP | 65 |
-| AC | 1 |
+| AC | 19 |
 | Attack | +10, 1D12+4 (spear) or +10, 2D6+3 (long sword) |
 | Special | **Fly** — 60 ft. flying speed.<br>**Battle Blessing** — once per combat, the valkyrie may grant one ally advantage on all attacks and saves for 1 round.<br>**Choose the Fallen** — when the valkyrie reduces a creature to 0 HP, she regains 2D10 HP.<br>**Magic Resistance** — advantage on saves vs. magical effects.<br>**Radiant Aura** — any Undead or Demon within 10 ft. at the start of its turn takes 1D8 radiant damage. |
 
@@ -1150,7 +1150,7 @@ Creatures of the natural world infused with primal magic. Fey are capricious, an
 | Level | 7 |
 | STR/DEX/CON/INT/WIS/CHA | +2 / +2 / +2 / +1 / +3 / +1 |
 | Max HP | 35 |
-| AC | 6 |
+| AC | 14 |
 | Attack | +6, 1D8+2 (gnarled staff) or +7, 1D6+2 (thorn volley, 40 ft. ranged) |
 | Special | **Forest Walk** — cannot be slowed or hindered by natural terrain; moves through undergrowth without penalty.<br>**Shapechange** — as an action, the leshy may appear as a gnarled tree stump or a large forest animal (wolf, stag, boar).<br>**Entangle** — once per combat, all enemies in a 20 ft. radius make a DEX save or are Restrained by vines and roots for 2 rounds.<br>**Fey Step** — as a bonus action, teleport up to 30 ft. through living vegetation. |
 
@@ -1165,7 +1165,7 @@ Creatures of the natural world infused with primal magic. Fey are capricious, an
 | Level | 6 |
 | STR/DEX/CON/INT/WIS/CHA | +3 / +2 / +2 / +0 / +1 / +2 |
 | Max HP | 32 |
-| AC | 6 |
+| AC | 14 |
 | Attack | +6, 1D8+3 (hooves) or +6, 1D6+3 (bite) |
 | Special | **Shapechange** — the kelpie appears as a magnificent horse (grey or black, with a shimmering coat and wild eyes). It may revert to its true form (a slimy, skeletal horse-creature) as a bonus action.<br>**Drown** — if the kelpie hits the same target with both hooves and bite in one turn, it grapples the target and drags them underwater. The target must hold its breath or begin suffocating.<br>**Water Walk** — the kelpie can move across water as though it were solid ground.<br>**Charge** — if the kelpie moves at least 20 ft. before attacking with hooves, it deals +2D6 damage and knocks the target Prone. |
 

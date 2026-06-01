@@ -668,25 +668,25 @@ A Level 9 Priest (D10, Stamina 12) with 59 HP is comparable to a Level 5 Fighter
 
 ### Strike Rating (SR) Progression
 
-A lower Strike Rating is better. The table below shows the cumulative reduction applied to the class base SR.
+A higher Strike Rating is better. The table below shows the cumulative bonus added to the class base SR.
 
 | Level | Martial | Hybrid | Caster |
 |:-----:|:-------:|:------:|:------:|
-| 1 | 0 | 0 | 0 |
-| 2 | 0 | 0 | 0 |
-| 3 | –1 | 0 | 0 |
-| 4 | –1 | –1 | 0 |
-| 5 | –2 | –1 | –1 |
-| 6 | –2 | –1 | –1 |
-| 7 | –3 | –2 | –1 |
-| 8 | –3 | –2 | –2 |
-| 9 | –4 | –2 | –2 |
-| 10 | –4 | –3 | –2 |
-| 11 | –5 | –3 | –3 |
-| 12 | –5 | –3 | –3 |
+| 1 | +0 | +0 | +0 |
+| 2 | +0 | +0 | +0 |
+| 3 | +1 | +0 | +0 |
+| 4 | +1 | +1 | +0 |
+| 5 | +2 | +1 | +1 |
+| 6 | +2 | +1 | +1 |
+| 7 | +3 | +2 | +1 |
+| 8 | +3 | +2 | +2 |
+| 9 | +4 | +2 | +2 |
+| 10 | +4 | +3 | +2 |
+| 11 | +5 | +3 | +3 |
+| 12 | +5 | +3 | +3 |
 
-**Example:** A Level 10 Fighter (base SR 18) → effective SR = 18 – 4 = **14**.  
-A Level 10 Mage (base SR 20) → effective SR = 20 – 2 = **18**.
+**Example:** A Level 10 Fighter (base SR 21) → effective SR = 21 + 4 = **25**.  
+A Level 10 Mage (base SR 17) → effective SR = 17 + 2 = **19**.
 
 ### Turnmeter Level Bonus
 
