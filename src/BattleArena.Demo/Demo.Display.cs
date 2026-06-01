@@ -451,24 +451,32 @@ static partial class Demo
             var dInfoStr = $"{dSexLabel,-W_SEX}  ·  Lvl {s.Level,2}  {s.Race,-W_RACE}  ·  {s.ClassName,-W_CLASS}";
             var dClassLine = CL(vb, borderFg, new Seg(dInfoStr, ConsoleColor.Gray));
 
+            // TM bar — show actual value at time of death
+            var dCappedTm = Math.Min(100, s.Tm);
+            var dTmFilled = Math.Min(BAR_W, (int)(Math.Min(1.0, dCappedTm / 100.0) * BAR_W));
             var dTmLine = CL(vb, borderFg,
                 new Seg(" TM [", ConsoleColor.Gray),
-                new Seg(new string('\u2591', BAR_W), ConsoleColor.Gray),
+                new Seg(new string('|', dTmFilled), ConsoleColor.Cyan),
+                new Seg(new string('\u2591', BAR_W - dTmFilled), ConsoleColor.Gray),
                 new Seg("]  ", ConsoleColor.Gray),
-                new Seg("  0", ConsoleColor.Gray),
+                new Seg($"{dCappedTm,3}", ConsoleColor.Cyan),
                 new Seg(" / ", ConsoleColor.Gray),
                 new Seg("100", ConsoleColor.Gray));
 
+            // Mana bar — show actual value at time of death
             var dManaLine = s.MaxMana > 0
                 ? CL(vb, borderFg,
                     new Seg(" MP [", ConsoleColor.Gray),
-                    new Seg(new string('\u2591', BAR_W), ConsoleColor.Gray),
+                    new Seg(new string('\u2588', Math.Max(1, (int)((double)Math.Max(0, s.Mana) / s.MaxMana * BAR_W))), ConsoleColor.Magenta),
+                    new Seg(new string('\u2591', BAR_W - Math.Max(1, (int)((double)Math.Max(0, s.Mana) / s.MaxMana * BAR_W))), ConsoleColor.Gray),
                     new Seg("]  ", ConsoleColor.Gray),
-                    new Seg("  0", ConsoleColor.Gray),
+                    new Seg($"{Math.Max(0, s.Mana),3}", ConsoleColor.Magenta),
                     new Seg(" / ", ConsoleColor.Gray),
                     new Seg($"{s.MaxMana,-3}", ConsoleColor.Gray))
-                : CL(vb, borderFg, new Seg(new string(' ', CONTENT_W), ConsoleColor.Black));
+                : CL(vb, borderFg,
+                    new Seg(new string(' ', CONTENT_W), ConsoleColor.Black));
 
+            // HP bar — always empty
             var dMaxHpLabel = DisplayConfig.IsFieldEnabled("characterCard", "MaxHp")
                 ? $"{s.MaxHp,-3}" : "   ";
             var dHpLine = CL(vb, borderFg,
