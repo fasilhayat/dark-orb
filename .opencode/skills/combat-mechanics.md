@@ -52,21 +52,32 @@ for tick = 1 to maxTicks:
 
 ## Attack Resolution
 
+Attack resolution uses an **opposed d20 roll** with a 7-case priority matrix evaluated before the normal hit check:
+
 ```
-hitRoll = d20
-if hitRoll == 1  → auto-miss, fumble
-if hitRoll == 20 → auto-hit, critical (2× damage)
-total = hitRoll + AttackPower
-IsHit = (total >= DefensePower)
+attackRoll  = d20
+defenseRoll = d20
 ```
+
+| Priority | Condition | Outcome |
+|----------|-----------|---------|
+| 1 | atk=1 AND def=20 | **TotalReversal** — miss, −4 AP penalty, defender +30 TM |
+| 2 | atk=20 AND def=1 | **DevastatingStrike** — auto-hit, triple base damage |
+| 3 | atk=20 AND def=20 | **Clash** — both take 50% of each other's base damage |
+| 4 | atk=1, def≠20 | **Fumble** — miss, −2 AP penalty, defender +20 TM |
+| 5 | atk=20, def≠1,20 | **Critical Hit** — auto-hit, double base damage |
+| 6 | def=20, atk≠1 | **PerfectParry** — miss, defender +20 TM |
+| 7 | both 2–19 | **Normal opposed roll** — hit iff `attackRoll + AP ≥ defenseRoll + DP` |
 
 ## Damage Formula
 
 ```
-FinalDamage = max(0, (BaseDamage × TypeMultiplier × CriticalMultiplier) - Mitigation + ElementalDamage)
+BaseDamage   = diceRoll + abilityModifier + source.FlatDamageBonus + Level × 2
+scaledBase   = isCritical ? BaseDamage × 2 : BaseDamage
+FinalDamage  = max(0, (int)(scaledBase × typeMultiplier) - mitigation + elementalDamage)
+Where typeMultiplier = 1.5 if defender vulnerable, else 1.0
 ```
-
-Where `BaseDamage = diceRoll + abilityModifier + flatBonus`, `TypeMultiplier` is 1.5 for vulnerability, `CriticalMultiplier` is 2 on crit.
+DevastatingStrike uses `BaseDamage × 3` instead of `× 2`.
 
 ## Turn Meter
 
@@ -154,11 +165,21 @@ Each SVG embeds the full raw dataset (hit, z-score, PDF value for every x) in XM
 
 ## Self-update instructions
 
-When you modify any of the following files, update this skill to match the new behaviour:
+When you modify any of the following files, **immediately** update this skill to match the new behaviour:
 
 - `BattleArena.Core/Entities/` (Character, StatusEffect, Party, etc.)
 - `BattleArena.Application/Services/` (CombatSimulator, CombatService, StatusEffectService, TurnmeterService, DiceService)
 - `BattleArena.Application/Models/` (CombatLogEntry, CombatResult)
 - `BattleArena.Application/Interfaces/` (new interfaces added)
 
-**What to update**: Attack resolution logic, damage formula, TM formula, status effect lifecycle, new event types, changed property names, new stacking rules.
+**What to update**:
+
+| Section | Source of truth | Key things to verify |
+|---------|----------------|---------------------|
+| Attack Resolution | `CombatService.ResolveAttack` | Priority matrix conditions & outcomes, opposed-roll formula |
+| Damage Formula | `CombatService.ResolveDamage` | `BaseDamage` components (especially `Level * 2`), crit multiplier placement, DevastatingStrike ×3 |
+| Turn Meter | `TurnmeterService.ComputeGainPerTick` | `max(1, TurnSpeed + DEXmod + buffs - armorPenalty)` |
+| Status Effect Two-Phase Roll | `StatusEffectService.TryApply` | Phase 1 (app chance) before Phase 2 (resistance) |
+| Event Types | All services above | Every `EventType` string emitted by the code must be listed |
+
+The `design/combat-design.md` file is the human-facing design spec — it should also be updated when you change formulas here, but this skill file is the **AI's source of truth** and must always match the code exactly.
