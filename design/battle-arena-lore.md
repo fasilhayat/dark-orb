@@ -163,17 +163,17 @@ Subraces: Forest Gladefolk, Hill Gladefolk
 
 ## 2. Classes
 
-| Class | Hit Die | StrikeRating | Description |
-|-------|:-------:|:------------:|-------------|
-| **Barbarian** | D12 | 19 | Fierce warriors who channel rage into devastating attacks. |
-| **Knight** | D10 | 18 | Armored cavaliers and champions of noble causes. |
-| **Paladin** | D10 | 18 | Holy warriors blessed by the gods with divine power. |
-| **Priest** | D8 | 19 | Devoted servants who channel divine magic to heal and protect. |
-| **Mage** | D4 | 20 | Masters of the arcane who wield devastating spells. |
-| **Bard** | D6 | 19 | Musicians and storytellers who weave magic through performance. |
-| **Druid** | D8 | 19 | Guardians of nature who command the elements and beasts. |
-| **Fighter** | D10 | 18 | Weapons masters trained in all forms of combat. |
-| **Rogue** | D6 | 19 | Cunning infiltrators who strike from the shadows. |
+| Class | Archetype | Hit Die | StrikeRating | Description |
+|-------|:---------:|:-------:|:------------:|-------------|
+| **Barbarian** | Martial (base) | D12 | 19 | Fierce warriors who channel rage into devastating attacks. |
+| **Fighter** | Martial (base) | D10 | 18 | Weapons masters trained in all forms of combat. |
+| **Knight** | Martial (derived) | D10 | 18 | Armored cavaliers and champions of noble causes. |
+| **Paladin** | Martial (derived) | D10 | 18 | Holy warriors blessed by the gods with divine power. |
+| **Mage** | Caster (base) | D6 | 20 | Masters of the arcane who wield devastating spells. |
+| **Priest** | Caster (derived) | D10 | 19 | Devoted servants who channel divine magic to heal and protect. |
+| **Druid** | Caster (derived) | D10 | 19 | Guardians of nature who command the elements and beasts. |
+| **Rogue** | Hybrid (base) | D8 | 19 | Cunning infiltrators who strike from the shadows. |
+| **Bard** | Hybrid (derived) | D8 | 19 | Musicians and storytellers who weave magic through performance. |
 
 A lower **StrikeRating** is better. Knights, Paladins, and Fighters are the most accurate (18). Mages are the least accurate (20).
 
@@ -598,17 +598,17 @@ Classes are grouped into three archetypes that determine their progression:
 
 Each class uses a specific **Hit Die** that determines how many HP a character gains per level.
 
-| Class | Hit Die | Hit Die Sides | Avg per level |
-|-------|:-------:|:-------------:|:-------------:|
-| Barbarian | D12 | 12 | 6.5 |
-| Knight | D10 | 10 | 5.5 |
-| Paladin | D10 | 10 | 5.5 |
-| Priest | D8 | 8 | 4.5 |
-| Mage | D4 | 4 | 2.5 |
-| Bard | D6 | 6 | 3.5 |
-| Druid | D8 | 8 | 4.5 |
-| Fighter | D10 | 10 | 5.5 |
-| Rogue | D6 | 6 | 3.5 |
+| Class | Archetype | Hit Die | Hit Die Sides | Avg per level |
+|-------|:---------:|:-------:|:-------------:|:-------------:|
+| Barbarian | Martial | D12 | 12 | 6.5 |
+| Fighter | Martial | D10 | 10 | 5.5 |
+| Knight | Martial | D10 | 10 | 5.5 |
+| Paladin | Martial | D10 | 10 | 5.5 |
+| Mage | Caster | D6 | 6 | 3.5 |
+| Priest | Caster | D10 | 10 | 5.5 |
+| Druid | Caster | D10 | 10 | 5.5 |
+| Rogue | Hybrid | D8 | 8 | 4.5 |
+| Bard | Hybrid | D8 | 8 | 4.5 |
 
 #### Level 1 HP
 
@@ -630,20 +630,20 @@ HP Gain = Roll(HitDie) + StaminaModifier (minimum 1)
 
 This gain is added to **both** MaxHitPoints and CurrentHitPoints.
 
-Stamina (Constitution) is the primary defensive stat — a Fighter with 18 Stamina (+4 modifier) gains an average of 9.5 HP per level, compared to a Mage with 10 Stamina (+0) gaining only 2.5.
+Stamina (Constitution) is the primary defensive stat — a Fighter with 18 Stamina (+4 modifier) gains an average of 9.5 HP per level, compared to a Mage with 10 Stamina (+0) gaining 3.5.
 
 #### HP Examples
 
 | Character | Class | Level | Stamina | Hit Die | Expected HP |
 |-----------|-------|:-----:|:-------:|:-------:|:-----------:|
-| Priest (avg) | D8 | 1 | 12 | D8 | 9 |
-| Priest (avg) | D8 | 4 | 12 | D8 | 25 |
-| Priest (avg) | D8 | 9 | 12 | D8 | 53 |
+| Priest (avg) | D10 | 1 | 12 | D10 | 11 |
+| Priest (avg) | D10 | 4 | 12 | D10 | 29 |
+| Priest (avg) | D10 | 9 | 12 | D10 | 59 |
 | Fighter (tough) | D10 | 5 | 18 | D10 | 52 |
-| Mage (frail) | D4 | 10 | 10 | D4 | 26 |
-| Barbarian (sturdy) | D12 | 8 | 18 | D12 | 82 |
+| Mage (frail) | D6 | 10 | 10 | D6 | 33 |
+| Barbarian (sturdy) | D12 | 8 | 18 | D12 | 86 |
 
-A Level 9 Priest (D8, Stamina 12) with 53 HP is frail compared to a Level 5 Fighter (D10, Stamina 18) with 52 HP — the Fighter has more HP at half the level, correctly reflecting the class and stamina differences.
+A Level 9 Priest (D10, Stamina 12) with 59 HP is comparable to a Level 5 Fighter (D10, Stamina 18) with 52 HP — the Fighter keeps pace thanks to a higher Stamina, while the Priest's larger hit die closes the gap at higher levels compared to the old D8.
 
 ### Stamina Modifier Table
 

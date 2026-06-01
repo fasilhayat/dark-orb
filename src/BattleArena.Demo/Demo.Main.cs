@@ -468,12 +468,13 @@ static partial class Demo
         if (string.IsNullOrWhiteSpace(apiUrl))
             return;
 
-        // Open log file at repo root / logs
+        // Open log file at repo root / combat-logs
         var repoDir = AppContext.BaseDirectory;
-        while (!string.IsNullOrEmpty(repoDir) && !File.Exists(Path.Combine(repoDir, "BattleArena.sln")))
+        while (!string.IsNullOrEmpty(repoDir)
+            && !File.Exists(Path.Combine(repoDir, "src", "BattleArena.sln")))
             repoDir = Path.GetDirectoryName(repoDir)!;
 
-        var logDir = Path.Combine(string.IsNullOrEmpty(repoDir) ? AppContext.BaseDirectory : repoDir, "logs");
+        var logDir = Path.Combine(string.IsNullOrEmpty(repoDir) ? AppContext.BaseDirectory : repoDir, "combat-logs");
         Directory.CreateDirectory(logDir);
         var logPath = Path.Combine(logDir, "api-calls.log");
         var logWriter = new StreamWriter(logPath, append: true) { AutoFlush = true };
@@ -568,7 +569,6 @@ static partial class Demo
         {
             var dir = AppContext.BaseDirectory;
             while (!string.IsNullOrEmpty(dir)
-                && !File.Exists(Path.Combine(dir, "BattleArena.sln"))
                 && !File.Exists(Path.Combine(dir, "src", "BattleArena.sln")))
                 dir = Path.GetDirectoryName(dir)!;
 

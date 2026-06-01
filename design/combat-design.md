@@ -139,7 +139,7 @@ These values are the single source of truth. Tests must use `BattleArena.UnitTes
 EffectiveMaxHitPoints = MaxHitPoints + max(0, Level - 1) × HitPointsPerLevel
 ```
 
-`HitPointsPerLevel` defaults to 6 (d6 HD, typical for priests and mages). Can be overridden per character (e.g., d10 for fighters).
+`HitPointsPerLevel` varies by class (Mage d6, Rogue/Bard d8, Priest/Druid d10, Fighter/Knight/Paladin d10, Barbarian d12). The average across all classes is roughly 6 + Stamina modifier per level.
 
 ### HP Scaling Examples
 
@@ -167,7 +167,7 @@ When a character gains a level, `CurrentHitPoints` increases by `HitPointsPerLev
 ## 8. Damage Formula
 
 ```
-BaseDamage   = WeaponDiceRoll + AttributeModifier + FlatDamageBonus + Level × 2
+BaseDamage   = WeaponDiceRoll + AttributeModifier + FlatDamageBonus + Level / 2
 FinalDamage  = max(0, (int)(BaseDamage × TypeMultiplier) - ArmorMitigation + ElementalDamage)
 ```
 
@@ -175,7 +175,7 @@ Where:
 - `WeaponDiceRoll` = sum of `DamageCount` rolls of `DamageDie`
 - `AttributeModifier` = (STR or INT - 10) / 2
 - `FlatDamageBonus` = source.FlatDamageBonus
-- `Level × 2` = level-based damage scaling
+- `Level / 2` = level-based damage scaling
 - `TypeMultiplier` = 1.5 if defender is vulnerable to this damage type, else 1.0
 - `ArmorMitigation` = sum of all equipped armor `Mitigation` values
 - `ElementalDamage` = flat elemental bonus from source
@@ -189,12 +189,12 @@ CriticalFinalDamage = max(0, (int)((BaseDamage × 2) × TypeMultiplier) - ArmorM
 
 ### Damage Scaling by Level
 
-| Level | Level × 2 | Example: 1d8+2 weapon, STR mod 0 |
+| Level | Level / 2 | Example: 1d8+2 weapon, STR mod 0 |
 |-------|-----------|-----------------------------------|
-| 1     | 2         | avg 4.5 + 2 = 6.5                |
-| 4     | 8         | avg 4.5 + 8 = 12.5               |
-| 9     | 18        | avg 4.5 + 18 = 22.5              |
-| 15    | 30        | avg 4.5 + 30 = 34.5              |
+| 1     | 0         | avg 4.5 + 0 = 4.5                |
+| 4     | 2         | avg 4.5 + 2 = 6.5                |
+| 9     | 4         | avg 4.5 + 4 = 8.5                |
+| 15    | 7         | avg 4.5 + 7 = 11.5               |
 
 ---
 
@@ -285,7 +285,7 @@ This section provides the mathematical derivation of why higher-level characters
 |--------|---------|----------------|-----------------|
 | Attack | +Level | +5             | Higher-level hits more often |
 | Defense | +Level | +5             | Higher-level is harder to hit |
-| Damage | +Level × 2 | +10        | Higher-level hits harder |
+| Damage | +Level / 2 | +2              | Higher-level hits harder |
 | HP | +(Level-1) × 6 | +30      | Higher-level has more HP buffer |
 
 All four factors compound **in the same direction** (higher-level benefits in all four).
@@ -343,14 +343,14 @@ In this example, Marigold hits 95% of the time while Mira hits only 15% — a **
 
 Using the test character stats:
 ```
-Marigold:  1d8+2 longsword + Level×2(18) = avg 4.5 + 2 + 18 = avg 24.5
-Mira:      1d4 dagger + Level×2(8) = avg 2.5 + 8 = avg 10.5
+Marigold:  1d8+2 longsword + Level/2(4) = avg 4.5 + 2 + 4 = avg 10.5
+Mira:      1d4 dagger + Level/2(2) = avg 2.5 + 2 = avg 4.5
 ```
 
 Against armor mitigation:
 ```
-Marigold deals: avg 24.5 - 2 = avg 22.5 per hit
-Mira deals:     avg 10.5 - 1 = avg 9.5 per hit
+Marigold deals: avg 10.5 - 2 = avg 8.5 per hit
+Mira deals:     avg 4.5 - 1 = avg 3.5 per hit
 ```
 
 Marigold hits **2.4× harder** per landed hit.
@@ -477,7 +477,7 @@ L20 tank:      6 - 3 =  3 TM/tick → 33.3 ticks/action
 However, the L20 tank:
 - Hits 19 more on attack (LevelScaling)
 - Defends with +20 more defense (LevelDefenseBonus)
-- Deals +40 more damage per hit (Level × 2)
+- Deals +10 more damage per hit (Level / 2)
 - Has +114 more HP (19 × 6)
 
 The level gap overwhelms any turnmeter advantage. This is by design.
@@ -642,7 +642,7 @@ These targets assume no extreme gear/stat disparities. A Level 1 in plate armor 
 To-hit:             d20 + AttackPower ≥ DefensePower
 AttackPower:        20 - StrikeRating + Level + (STR/10-10)/2 + weapon.AttackBonus + feats + buffs + race
 DefensePower:       20 - AC + min((DEX-10)/2, maxDex) + shield + buffs + race + Level
-BaseDamage:         WeaponDiceRoll + (STR/INT-10)/2 + FlatBonus + Level × 2
+BaseDamage:         WeaponDiceRoll + (STR/INT-10)/2 + FlatBonus + Level / 2
 FinalDamage:        max(0, BaseDamage × (1.5 if vulnerable) - Mitigation + Elemental)
 CriticalDamage:     max(0, (BaseDamage × 2) × (1.5 if vulnerable) - Mitigation + Elemental)
 EffectiveMaxHP:     MaxHitPoints + max(0, Level - 1) × HitPointsPerLevel

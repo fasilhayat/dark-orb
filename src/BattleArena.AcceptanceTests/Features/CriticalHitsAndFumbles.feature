@@ -14,7 +14,7 @@ Feature: Combat — Critical Hits and Fumbles
 
     @critical
     # A natural 20 auto-hits regardless of how high the defender's armor class is.
-    # Base damage = d8(6) + STR mod(0) + Level*2(2) = 8. Doubled on crit = 16.
+    # Base damage = d8(6) + STR mod(0) + Level/2(0) = 6. Doubled on crit = 12.
     Scenario: Natural 20 always hits and doubles base damage
         Given a character with strength 10 and strike rating 19
         And a weapon named "Longsword" with D8 damage die and +0 attack bonus
@@ -24,12 +24,12 @@ Feature: Combat — Critical Hits and Fumbles
         When the character attacks a target with armor class 99
         Then the attack should hit
         And the attack is a critical hit
-        # (6 + 0 + 2) * 2 = 16
-        And the damage should be 16
+        # (6 + 0 + 0) * 2 = 12
+        And the damage should be 12
 
     @critical
     # Strength modifier is included in base damage before doubling.
-    # STR 14 gives +2. Base = d6(4) + 2 + Level*2(2) = 8. Doubled = 16.
+    # STR 14 gives +2. Base = d6(4) + 2 + Level/2(0) = 6. Doubled = 12.
     Scenario: Critical hit doubles damage including the strength modifier
         Given a character with strength 14 and strike rating 19
         And a weapon named "Greatsword" with D6 damage die and +0 attack bonus
@@ -37,8 +37,8 @@ Feature: Combat — Critical Hits and Fumbles
         And the damage die roll is 4
         When the character attacks a target with armor class 99
         Then the attack is a critical hit
-        # (4 + 2 + 2) * 2 = 16
-        And the damage should be 16
+        # (4 + 2 + 0) * 2 = 12
+        And the damage should be 12
 
     @fumble
     # A natural 1 is always a fumble regardless of attacker strength or target armor.

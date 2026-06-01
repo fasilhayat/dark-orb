@@ -1,4 +1,4 @@
-.PHONY: help up-local up-dev run-dev up-test up-preprod up-prod down clean clean-logs redo-local demo-local test test-coverage build-local sync-instructions publish publish-demo
+.PHONY: help up-local up-dev run-dev up-test up-preprod up-prod down clean clean-logs install redo-local demo-local test test-coverage build-local sync-instructions publish publish-demo
 
 help:
 	@cmd /C "echo  BattleArena -- available make targets"
@@ -66,7 +66,17 @@ clean: clean-logs
 
 clean-logs:
 	@echo Deleting combat logs...
-	@powershell -Command "Get-ChildItem -Path '../combat-logs' -File | Where-Object { $$_.Name -ne '.gitkeep' } | Remove-Item -Force; Write-Host 'combat-logs/ cleared.'"
+	@powershell -Command "Get-ChildItem -Path '../combat-logs' -Recurse -File | Where-Object { $$_.Name -ne '.gitkeep' } | Remove-Item -Force; Get-ChildItem -Path '../combat-logs' -Recurse -Directory | Where-Object { (Get-ChildItem $$_.FullName -File).Count -eq 0 } | Remove-Item -Force; Write-Host 'combat-logs/ cleared.'"
+
+install:
+	@echo Install: clean Docker, clean build, build, test (logs cleaned post-test), up-local, demo...
+	@$(MAKE) clean
+	dotnet clean BattleArena.sln
+	dotnet build BattleArena.sln
+	dotnet test BattleArena.sln
+	@$(MAKE) clean-logs
+	@$(MAKE) up-local
+	dotnet run --project BattleArena.Demo/BattleArena.Demo.csproj
 
 redo-local:
 	@echo Clean + build + up-local + demo...

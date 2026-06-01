@@ -219,7 +219,7 @@ public class CombatService : ICombatService
             : source.AttackType == AttackType.Ranged ? attacker.Dexterity : attacker.Strength;
         var attributeModifier = CalculateAbilityModifier(abilityScore);
         var weaponDiceRoll    = RollAttackDamageTotal(source);
-        var levelScaling      = attacker.Level * 2;
+            var levelScaling = attacker.Level / 2;
         var baseDamage        = weaponDiceRoll + attributeModifier + source.FlatDamageBonus + levelScaling;
         var typeMultiplier    = defender.Vulnerabilities.Contains(source.DamageType) ? 1.5f : 1.0f;
 

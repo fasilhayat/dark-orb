@@ -90,15 +90,15 @@ public static class LevelProgression
     /// <summary>Hit die sides for each class (indexed by ClassId 1-9).</summary>
     public static int HitDieSides(int classId) => classId switch
     {
-        1 => 12,  // Barbarian
-        2 => 10,  // Knight
-        3 => 10,  // Paladin
-        4 => 8,   // Priest
-        5 => 4,   // Mage
-        6 => 6,   // Bard
-        7 => 8,   // Druid
-        8 => 10,  // Fighter
-        9 => 6,   // Rogue
+        1 => 12,  // Barbarian (unchanged)
+        2 => 10,  // Knight (unchanged)
+        3 => 10,  // Paladin (unchanged)
+        4 => 10,  // Priest (was d8)
+        5 => 6,   // Mage (was d4)
+        6 => 8,   // Bard (was d6)
+        7 => 10,  // Druid (was d8)
+        8 => 10,  // Fighter (unchanged)
+        9 => 8,   // Rogue (was d6)
         _ => 8
     };
 

@@ -3,7 +3,7 @@
 # Damage resolution is a separate step from the hit/miss check.
 # It models the full §9 damage pipeline:
 #
-#   BaseDamage  = WeaponDiceRoll + AttributeModifier + FlatDamageBonus + Level*2
+#   BaseDamage  = WeaponDiceRoll + AttributeModifier + FlatDamageBonus + Level/2
 #   FinalDamage = (int)(BaseDamage × TypeMultiplier) - ArmorMitigation + ElementalDamage
 #   FinalDamage is clamped to a minimum of 0.
 #
@@ -22,47 +22,47 @@ Feature: Combat — Damage Formula
 
     @damage-formula
     # The simplest case: no bonuses, no mitigation, no vulnerability.
-    # BaseDamage = d8(5) + 2 + Level*2(2) = 9. TypeMultiplier = 1.0. FinalDamage = 9.
+    # BaseDamage = d8(5) + 2 + Level/2(0) = 7. TypeMultiplier = 1.0. FinalDamage = 7.
     Scenario: Standard damage applies weapon dice and attribute modifier
         And a damage formula target with no modifiers
+        And the weapon damage die rolls 5
+        When damage is resolved against the target
+        Then the base damage should be 7
+        And the final damage should be 7
+
+    @damage-formula
+    # A weapon's flat damage bonus is added to BaseDamage before any multipliers.
+    # BaseDamage = d8(5) + 2 + 2 + Level/2(0) = 9. FinalDamage = 9.
+    Scenario: Flat weapon damage bonus increases base damage
+        And a damage formula target with no modifiers
+        And the weapon has a flat damage bonus of 2
         And the weapon damage die rolls 5
         When damage is resolved against the target
         Then the base damage should be 9
         And the final damage should be 9
 
     @damage-formula
-    # A weapon's flat damage bonus is added to BaseDamage before any multipliers.
-    # BaseDamage = d8(5) + 2 + 2 + Level*2(2) = 11. FinalDamage = 11.
-    Scenario: Flat weapon damage bonus increases base damage
-        And a damage formula target with no modifiers
-        And the weapon has a flat damage bonus of 2
-        And the weapon damage die rolls 5
-        When damage is resolved against the target
-        Then the base damage should be 11
-        And the final damage should be 11
-
-    @damage-formula
     # Elemental damage is added after the mitigation step, so armor cannot reduce it.
-    # BaseDamage = d8(5) + 2 + Level*2(2) = 9. Mitigation = 0. Elemental = +3. FinalDamage = 12.
+    # BaseDamage = d8(5) + 2 + Level/2(0) = 7. Mitigation = 0. Elemental = +3. FinalDamage = 10.
     Scenario: Elemental damage bonus is added after armor mitigation
         And a damage formula target with no modifiers
         And the weapon deals 3 elemental bonus damage
         And the weapon damage die rolls 5
         When damage is resolved against the target
-        Then the final damage should be 12
+        Then the final damage should be 10
 
     @damage-formula
     # Armor mitigation reduces final damage as a flat subtraction.
-    # BaseDamage = d8(5) + 2 + Level*2(2) = 9. Mitigation = 3. FinalDamage = 9 - 3 = 6.
+    # BaseDamage = d8(5) + 2 + Level/2(0) = 7. Mitigation = 3. FinalDamage = 7 - 3 = 4.
     Scenario: Armor mitigation reduces final damage
         And a damage formula target with armor mitigation of 3
         And the weapon damage die rolls 5
         When damage is resolved against the target
-        Then the final damage should be 6
+        Then the final damage should be 4
 
     @damage-formula
     # Mitigation can exceed raw damage, but final damage is clamped to zero.
-    # BaseDamage = d4(1) + 0 + Level*2(2) = 3 (STR 10, no modifier). Mitigation = 5. 3 - 5 = -2 → 0.
+    # BaseDamage = d4(1) + 0 + Level/2(0) = 1 (STR 10, no modifier). Mitigation = 5. 1 - 5 = -4 → 0.
     Scenario: Final damage cannot fall below zero when mitigation exceeds base damage
         Given a damage formula attacker with strength 10
         And a Slashing damage weapon with D4 die
@@ -73,21 +73,21 @@ Feature: Combat — Damage Formula
 
     @damage-formula
     # Vulnerability multiplies BaseDamage by 1.5 before applying mitigation.
-    # BaseDamage = d8(6) + 2 + Level*2(2) = 10. 10 * 1.5 = 15.0 → int = 15. FinalDamage = 15.
+    # BaseDamage = d8(6) + 2 + Level/2(0) = 8. 8 * 1.5 = 12.0 → int = 12. FinalDamage = 12.
     Scenario: Defender vulnerability multiplies base damage by one point five
         And a damage formula target with no modifiers
         And the target is vulnerable to Slashing damage
         And the weapon damage die rolls 6
         When damage is resolved against the target
-        Then the base damage should be 10
-        And the final damage should be 15
+        Then the base damage should be 8
+        And the final damage should be 12
 
     @damage-formula
     # Full pipeline: flat bonus + vulnerability + mitigation + elemental all combine.
-    # BaseDamage = d8(5) + 2 + 1 + Level*2(2) = 10
-    # After vulnerability: (int)(10 * 1.5) = 15
-    # After mitigation: 15 - 2 = 13
-    # After elemental: 13 + 3 = 16
+    # BaseDamage = d8(5) + 2 + 1 + Level/2(0) = 8
+    # After vulnerability: (int)(8 * 1.5) = 12
+    # After mitigation: 12 - 2 = 10
+    # After elemental: 10 + 3 = 13
     Scenario: All damage modifiers combine correctly in the full pipeline
         And the weapon has a flat damage bonus of 1
         And the weapon deals 3 elemental bonus damage
@@ -95,5 +95,5 @@ Feature: Combat — Damage Formula
         And the target is vulnerable to Slashing damage
         And the weapon damage die rolls 5
         When damage is resolved against the target
-        Then the base damage should be 10
-        And the final damage should be 16
+        Then the base damage should be 8
+        And the final damage should be 13
