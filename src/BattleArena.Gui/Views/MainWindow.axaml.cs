@@ -253,8 +253,8 @@ public partial class MainWindow : Window
             Name = "Theron", Level = 5, Strength = 8, Dexterity = 14, Intelligence = 18,
             Race = elf,
             ClassId = 5, ClassName = "Mage", Sex = "M",
-            StrikeRating = 13, TurnSpeed = 8, MaxHitPoints = 30,
-            CurrentHitPoints = 30, MaxMana = 80, CurrentMana = 80,
+            StrikeRating = 13, TurnSpeed = 8,             MaxHitPoints = 30,
+            CurrentHitPoints = 30, MaxMana = 155, CurrentMana = 155,
             Equipment = new ArmorSlots
             {
                 Chest = new Armor { Name = "Mage Robes", ArmorClass = 14, Mitigation = 0,

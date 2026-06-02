@@ -193,9 +193,9 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
     public double TmFraction => Math.Clamp((double)Tm / 100, 0, 1);
     public double ManaFraction => MaxMana > 0 ? Math.Clamp((double)Math.Max(0, Mana) / MaxMana, 0, 1) : 0;
 
-    public string HpDisplay => IsDead ? "0" : $"{Math.Max(0, Hp)}/{MaxHp}";
-    public string TmDisplay => $"{Tm}/100";
-    public string ManaDisplay => MaxMana > 0 ? $"{Math.Max(0, Mana)}/{MaxMana}" : "--/--";
+    public string HpDisplay => IsDead ? "0%" : $"{Math.Max(0, Hp) * 100 / MaxHp}%";
+    public string TmDisplay => $"{Tm}%";
+    public string ManaDisplay => MaxMana > 0 ? $"{Math.Max(0, Mana) * 100 / MaxMana}%" : "--";
     public string ActiveIndicator => IsDead ? "  " : "\u25b6 ";
     public string InfoLine => $"{SexDisplay} \u00b7 Lvl {Level,2} {Race} \u00b7 {ClassName}";
 
