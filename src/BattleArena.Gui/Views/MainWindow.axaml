@@ -19,6 +19,8 @@
       <Setter Property="CornerRadius" Value="3" />
       <Setter Property="Cursor" Value="Hand" />
       <Setter Property="FontWeight" Value="Bold" />
+      <Setter Property="HorizontalContentAlignment" Value="Center" />
+      <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>
     <Style Selector="Button:pointerover">
       <Setter Property="Background" Value="#00bfff" />
@@ -43,6 +45,33 @@
     </Style>
     <Style Selector="Button:disabled /template/ ContentPresenter">
       <Setter Property="Foreground" Value="#555" />
+    </Style>
+
+    <!-- Toggle buttons: disabled state = "selected/active" appearance -->
+    <Style Selector="Button.toggle:disabled">
+      <Setter Property="Background" Value="#00bfff" />
+      <Setter Property="Foreground" Value="#0d0d1a" />
+      <Setter Property="BorderBrush" Value="#00dfff" />
+      <Setter Property="BorderThickness" Value="2" />
+      <Setter Property="Opacity" Value="1" />
+    </Style>
+    <Style Selector="Button.toggle:disabled /template/ ContentPresenter">
+      <Setter Property="Background" Value="#00bfff" />
+      <Setter Property="Foreground" Value="#0d0d1a" />
+    </Style>
+
+    <!-- Compact combat-log list items: strip Fluent default padding/min-height -->
+    <Style Selector="ListBoxItem">
+      <Setter Property="Padding" Value="0,0" />
+      <Setter Property="Margin" Value="0" />
+      <Setter Property="MinHeight" Value="0" />
+      <Setter Property="Background" Value="Transparent" />
+    </Style>
+    <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+      <Setter Property="Background" Value="Transparent" />
+    </Style>
+    <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="#0a1a2e" />
     </Style>
   </Window.Styles>
 
@@ -171,9 +200,9 @@
 
       <!-- Scenario toggle -->
       <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="4" Margin="0,0,0,8">
-        <Button x:Name="DuelButton" Content="DUEL 1v1" Click="OnDuelClick"
+        <Button x:Name="DuelButton" Classes="toggle" Content="DUEL 1v1" Click="OnDuelClick"
                 Width="130" Height="30" FontSize="12" />
-        <Button x:Name="PartyButton" Content="PARTY vs PARTY" Click="OnPartyClick"
+        <Button x:Name="PartyButton" Classes="toggle" Content="PARTY vs PARTY" Click="OnPartyClick"
                 Width="150" Height="30" FontSize="12" />
       </StackPanel>
 

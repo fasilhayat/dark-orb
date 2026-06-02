@@ -82,13 +82,15 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
     public void ShowCombatEvent(CombatLogEntry entry, CombatDisplayState state)
     {
-        var segments = BuildSegments(entry, state);
-        if (segments.Count == 0) return;
+        var rows = BuildRows(entry, state);
+        if (rows.Count == 0) return;
 
         _dispatcher.Post(() =>
         {
             _vm.UpdateFromState(state, entry.Tick);
-            _vm.AddLogEntry(segments);
+            foreach (var row in rows)
+                if (row.Count > 0)
+                    _vm.AddLogEntry(row);
         });
     }
 
@@ -135,33 +137,35 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             _vm.AddLogEntry([Seg($"  ... {toTick - fromTick + 1} quiet ticks (TM building)", Dim)]));
     }
 
-    private List<LogSegment> BuildSegments(CombatLogEntry e, CombatDisplayState state) => e.EventType switch
-    {
-        "TurnStart" => BuildTurnStart(e, state),
-        "Attack" => BuildAttack(e, state),
-        "Damage" => BuildDamage(e),
-        "DoTTick" => BuildDoTTick(e, state),
-        "EffectApplied" => BuildEffectApplied(e, state),
-        "EffectResisted" => BuildEffectResisted(e, state),
-        "EffectExpired" => BuildEffectExpired(e, state),
-        "FumblePenalty" => [Seg($"  \u26a0 {e.Message}", Yellow)],
-        "PetSummoned" => [Seg($"  \u2726 {e.SummonedPetName ?? "Unknown"} has been summoned!", Magenta),
-                          _eol, Seg(e.SummonedPetName ?? "", White)],
-        "PetExpired" => [Seg($"  \u2726 {e.SummonedPetName} fades away...", Gray)],
-        "SkippedTurn" => BuildSkippedTurn(e, state),
-        "RoundStart" => BuildRoundStart(e),
-        "RoundEnd" => BuildRoundEnd(e),
-        "ManaRegen" => BuildManaRegen(e, state),
-        "ManaDeduct" => BuildManaDeduct(e, state),
-        "ApiCall" => [Seg("  \u26a1 ", Cyan), Seg(e.Message, DarkGray)],
-        "PerfectParry" => BuildPerfectParry(e, state),
-        "DevastatingStrike" => BuildDevastatingStrike(e, state),
-        "TotalReversal" => BuildTotalReversal(e, state),
-        "TurnEnd" => [],
-        _ => [Seg($"  [{e.EventType}] {e.Message}", Gray)]
-    };
+    private IReadOnlyList<List<LogSegment>> BuildRows(CombatLogEntry e, CombatDisplayState state) =>
+        e.EventType switch
+        {
+            "TurnStart"          => [BuildTurnStartRow(e, state)],
+            "Attack"             => BuildAttackRows(e, state),
+            "Damage"             => [BuildDamageRow(e)],
+            "DoTTick"            => [BuildDoTTickRow(e, state)],
+            "EffectApplied"      => [BuildEffectAppliedRow(e, state)],
+            "EffectResisted"     => [BuildEffectResistedRow(e, state)],
+            "EffectExpired"      => [BuildEffectExpiredRow(e, state)],
+            "FumblePenalty"      => [[Seg($"  \u26a0 {e.Message}", Yellow)]],
+            "PetSummoned"        => [[Seg($"  \u2726 {e.SummonedPetName ?? "Unknown"} has been summoned!", Magenta)]],
+            "PetExpired"         => [[Seg($"  \u2726 {e.SummonedPetName} fades away...", Gray)]],
+            "SkippedTurn"        => [BuildSkippedTurnRow(e, state)],
+            "RoundStart"         => [BuildRoundStartRow(e)],
+            "RoundEnd"           => [],
+            "ManaRegen"          => [BuildManaRegenRow(e, state)],
+            "ManaDeduct"         => [BuildManaDeductRow(e, state)],
+            "ApiCall"            => [[Seg("  \u26a1 ", Cyan), Seg(e.Message, DarkGray)]],
+            "PerfectParry"       => [BuildPerfectParryRow(e, state)],
+            "DevastatingStrike"  => [BuildDevastatingStrikeRow(e, state)],
+            "TotalReversal"      => [BuildTotalReversalRow(e, state)],
+            "Death"              => [BuildDeathRow(e)],
+            "KnockedOut"         => [BuildKnockedOutRow(e)],
+            "TurnEnd"            => [],
+            _                    => [[Seg($"  [{e.EventType}] {e.Message}", Gray)]]
+        };
 
-    private List<LogSegment> BuildTurnStart(CombatLogEntry e, CombatDisplayState state)
+    private static List<LogSegment> BuildTurnStartRow(CombatLogEntry e, CombatDisplayState state)
     {
         var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         var targetColor = NameBrush(state.IsHeroSide(e.TargetName), e.TargetName, actorColor);
@@ -178,53 +182,53 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         ];
     }
 
-    private List<LogSegment> BuildAttack(CombatLogEntry e, CombatDisplayState state)
+    private List<List<LogSegment>> BuildAttackRows(CombatLogEntry e, CombatDisplayState state)
     {
-        var list = new List<LogSegment>();
-        var total = (e.DieRoll ?? 0) + (e.AttackPower ?? 0);
+        var rows = new List<List<LogSegment>>();
+        var total  = (e.DieRoll ?? 0) + (e.AttackPower ?? 0);
         var margin = total - (e.DefensePower ?? 0);
         var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         var srcColor = e.IsSpell == true ? Magenta : Yellow;
 
-        list.Add(Seg("  ", White));
-        list.Add(Seg(e.ActorName, actorColor));
-        list.Add(Seg(e.IsSpell ? "  casts  " : "  attacks with  ", Gray));
-        list.Add(Seg($"[{e.AttackSourceName ?? "?"}]", srcColor));
-
+        // Row 1: attacker + weapon + inline roll summary
+        var row1 = new List<LogSegment>
+        {
+            Seg("  ", White),
+            Seg(e.ActorName, actorColor),
+            Seg(e.IsSpell ? "  casts  " : "  attacks with  ", Gray),
+            Seg($"[{e.AttackSourceName ?? "?"}]", srcColor),
+        };
         if (_config.IsFieldEnabled("attackEvent", "DieRoll") ||
             _config.IsFieldEnabled("attackEvent", "AttackPower") ||
             _config.IsFieldEnabled("attackEvent", "DefensePower"))
         {
-            list.Add(_eol);
+            row1.Add(Seg("   d20=", DarkGray));
             if (_config.IsFieldEnabled("attackEvent", "DieRoll"))
-            {
-                list.Add(Seg("     d20=", DarkGray));
-                list.Add(Seg($"{e.DieRoll,2}", DarkGray));
-            }
+                row1.Add(Seg($"{e.DieRoll}", DarkGray));
             if (_config.IsFieldEnabled("attackEvent", "AttackPower"))
             {
-                list.Add(Seg("  ATK ", DarkGray));
-                list.Add(Seg($"{e.AttackPower}", DarkGray));
+                row1.Add(Seg("+", DarkGray));
+                row1.Add(Seg($"{e.AttackPower}", DarkGray));
             }
-            list.Add(Seg("  \u2192  total ", DarkGray));
-            list.Add(Seg($"{total,2}", DarkGray));
+            row1.Add(Seg($"={total}", DarkGray));
             if (_config.IsFieldEnabled("attackEvent", "DefensePower"))
             {
-                list.Add(Seg("   vs  DEF ", DarkGray));
-                list.Add(Seg($"{e.DefensePower}", DarkGray));
+                row1.Add(Seg("  vs ", DarkGray));
+                row1.Add(Seg($"{e.DefensePower}", DarkGray));
             }
-            list.Add(Seg("   \u2502  margin ", DarkGray));
-            list.Add(Seg(margin >= 0 ? $"+{margin}" : $"{margin}", margin >= 0 ? Green : Red));
+            row1.Add(Seg("  ", DarkGray));
+            row1.Add(Seg(margin >= 0 ? $"+{margin}" : $"{margin}", margin >= 0 ? Green : Red));
         }
+        rows.Add(row1);
 
+        // Row 2: outcome (only when enabled)
         if (_config.IsFieldEnabled("attackEvent", "IsHit"))
         {
-            list.Add(_eol);
-            list.Add(Seg("     ", White));
+            var row2 = new List<LogSegment> { Seg("     ", White) };
             if (_config.IsFieldEnabled("attackEvent", "IsCritical") && e.IsCritical == true)
-                list.Add(Seg("\u26a1 CRITICAL HIT", Magenta));
+                row2.Add(Seg("\u26a1 CRITICAL HIT", Magenta));
             else if (_config.IsFieldEnabled("attackEvent", "IsFumble") && e.IsFumble == true)
-                list.Add(Seg("\u26a0 FUMBLE", Yellow));
+                row2.Add(Seg("\u26a0 FUMBLE", Yellow));
             else if (e.IsHit == true)
             {
                 var dmg = e.DamageDealt ?? 0;
@@ -232,34 +236,32 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                 var labelColor = label switch
                 {
                     "CRUSHING HIT" => Magenta,
-                    "HEAVY HIT" => Yellow,
-                    "SOLID HIT" => Green,
+                    "HEAVY HIT"    => Yellow,
+                    "SOLID HIT"    => Green,
                     "GLANCING HIT" => White,
-                    _ => Gray,
+                    _              => Gray,
                 };
-                list.Add(Seg(label, labelColor));
+                row2.Add(Seg(label, labelColor));
                 if (_config.IsFieldEnabled("attackEvent", "DamageDealt"))
                 {
-                    list.Add(Seg("   \u2502   ", Gray));
-                    list.Add(Seg($"Dmg: {dmg}", Cyan));
+                    row2.Add(Seg("   \u2502   ", Gray));
+                    row2.Add(Seg($"Dmg: {dmg}", Cyan));
                 }
             }
             else
-            {
-                list.Add(Seg(margin >= -3 ? "\u25cb NEAR MISS" : "\u25cb MISS", Red));
-            }
+                row2.Add(Seg(margin >= -3 ? "\u25cb NEAR MISS" : "\u25cb MISS", Red));
+
+            rows.Add(row2);
         }
 
+        // Row 3 (optional): flavour phrase
         if (!string.IsNullOrEmpty(e.Phrase))
-        {
-            list.Add(_eol);
-            list.Add(Seg($"     \"{e.Phrase}\"", Cyan));
-        }
+            rows.Add([Seg($"     \"{e.Phrase}\"", Cyan)]);
 
-        return list;
+        return rows;
     }
 
-    private List<LogSegment> BuildDamage(CombatLogEntry e)
+    private List<LogSegment> BuildDamageRow(CombatLogEntry e)
     {
         var list = new List<LogSegment>
         {
@@ -277,15 +279,14 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             {
                 list.Add(Seg(" \u2192 ", Gray));
                 list.Add(Seg($"{Math.Max(0, e.TargetHpAfter ?? 0)}", White));
-                list.Add(Seg("/", Gray));
-                list.Add(Seg($"HP", Gray));
+                list.Add(Seg("/HP", Gray));
             }
             list.Add(Seg("]", Gray));
         }
         return list;
     }
 
-    private static List<LogSegment> BuildDoTTick(CombatLogEntry e, CombatDisplayState state)
+    private static List<LogSegment> BuildDoTTickRow(CombatLogEntry e, CombatDisplayState state)
     {
         var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         return
@@ -298,7 +299,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         ];
     }
 
-    private static List<LogSegment> BuildEffectApplied(CombatLogEntry e, CombatDisplayState state)
+    private static List<LogSegment> BuildEffectAppliedRow(CombatLogEntry e, CombatDisplayState state)
     {
         var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         return
@@ -309,7 +310,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         ];
     }
 
-    private static List<LogSegment> BuildEffectResisted(CombatLogEntry e, CombatDisplayState state)
+    private static List<LogSegment> BuildEffectResistedRow(CombatLogEntry e, CombatDisplayState state)
     {
         var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         return
@@ -322,7 +323,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         ];
     }
 
-    private static List<LogSegment> BuildEffectExpired(CombatLogEntry e, CombatDisplayState state)
+    private static List<LogSegment> BuildEffectExpiredRow(CombatLogEntry e, CombatDisplayState state)
     {
         var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         return
@@ -334,7 +335,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         ];
     }
 
-    private static List<LogSegment> BuildSkippedTurn(CombatLogEntry e, CombatDisplayState state)
+    private static List<LogSegment> BuildSkippedTurnRow(CombatLogEntry e, CombatDisplayState state)
     {
         var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         return
@@ -346,17 +347,12 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         ];
     }
 
-    private static List<LogSegment> BuildRoundStart(CombatLogEntry e) =>
+    private static List<LogSegment> BuildRoundStartRow(CombatLogEntry e) =>
     [
         Seg($"  \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 ROUND {e.RoundNumber} \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550", Yellow),
     ];
 
-    private static List<LogSegment> BuildRoundEnd(CombatLogEntry e) =>
-    [
-        Seg($"  \u2500\u2500 end of round {e.RoundNumber} \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500", Gray),
-    ];
-
-    private static List<LogSegment> BuildManaRegen(CombatLogEntry e, CombatDisplayState state)
+    private static List<LogSegment> BuildManaRegenRow(CombatLogEntry e, CombatDisplayState state)
     {
         var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         return
@@ -368,7 +364,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         ];
     }
 
-    private static List<LogSegment> BuildManaDeduct(CombatLogEntry e, CombatDisplayState state)
+    private static List<LogSegment> BuildManaDeductRow(CombatLogEntry e, CombatDisplayState state)
     {
         var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         return
@@ -381,7 +377,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         ];
     }
 
-    private static List<LogSegment> BuildPerfectParry(CombatLogEntry e, CombatDisplayState state)
+    private static List<LogSegment> BuildPerfectParryRow(CombatLogEntry e, CombatDisplayState state)
     {
         var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         return
@@ -392,7 +388,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         ];
     }
 
-    private static List<LogSegment> BuildDevastatingStrike(CombatLogEntry e, CombatDisplayState state)
+    private static List<LogSegment> BuildDevastatingStrikeRow(CombatLogEntry e, CombatDisplayState state)
     {
         var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         return
@@ -403,7 +399,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         ];
     }
 
-    private static List<LogSegment> BuildTotalReversal(CombatLogEntry e, CombatDisplayState state)
+    private static List<LogSegment> BuildTotalReversalRow(CombatLogEntry e, CombatDisplayState state)
     {
         var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         return
@@ -414,14 +410,25 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         ];
     }
 
+    private static List<LogSegment> BuildDeathRow(CombatLogEntry e) =>
+    [
+        Seg("  \u2020  ", Red),
+        Seg(e.Message.ToUpper(), Red),
+    ];
+
+    private static List<LogSegment> BuildKnockedOutRow(CombatLogEntry e) =>
+    [
+        Seg("  \u2298  ", Yellow),
+        Seg(e.Message.ToUpper(), Yellow),
+    ];
+
     private static string DamageLabel(int damage) => damage switch
     {
-        <= 0 => "GRAZE",
-        < 3 => "GRAZE",
-        < 8 => "GLANCING HIT",
+        < 3  => "GRAZE",
+        < 8  => "GLANCING HIT",
         < 15 => "SOLID HIT",
         < 25 => "HEAVY HIT",
-        _ => "CRUSHING HIT"
+        _    => "CRUSHING HIT"
     };
 
     private static IBrush NameBrush(bool isHero, string? name, IBrush? fallback)
@@ -432,5 +439,4 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
     private static IBrush MakeBrush(string hex) => new SolidColorBrush(Color.Parse(hex));
     private static LogSegment Seg(string text, IBrush brush) => new() { Text = text, Brush = brush };
-    private static readonly LogSegment _eol = new() { Text = "\n", Brush = Gray };
 }

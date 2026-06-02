@@ -246,13 +246,18 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
     public bool HasStatusOverlay => !string.IsNullOrEmpty(StatusLine);
 
     public double HpFraction => MaxHp > 0 ? Math.Clamp((double)Math.Max(0, Hp) / MaxHp, 0, 1) : 0;
+    public double HpEmptyFraction => 1.0 - HpFraction;
     public double TmFraction => Math.Clamp((double)Tm / 100, 0, 1);
     public double ManaFraction => MaxMana > 0 ? Math.Clamp((double)Math.Max(0, Mana) / MaxMana, 0, 1) : 0;
+    public double ManaEmptyFraction => 1.0 - ManaFraction;
 
-    public string HpDisplay => IsDead ? "0" : $"{Math.Max(0, Hp)}/{MaxHp}";
+    public string HpDisplay => IsDead ? "" : $"{Math.Max(0, Hp)}/{MaxHp}";
     public string TmDisplay => $"{Tm}";
     public string ManaDisplay => MaxMana > 0 ? $"{Math.Max(0, Mana)}" : "--";
     public string ActiveIndicator => IsDead ? "  " : "\u25b6 ";
+    public string PortraitInitial =>
+        string.IsNullOrWhiteSpace(Name) ? "?" : Name.TrimStart()[0].ToString().ToUpperInvariant();
+
     public string InfoLine => $"{SexDisplay} \u00b7 Lvl {Level,2} {Race} \u00b7 {ClassName}";
 
     public string BorderColor => IsDead ? "#666" : IsHero ? "#4488ff" : "#ff4488";
@@ -300,6 +305,7 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
         {
             case nameof(Hp):
                 Raise(nameof(HpFraction));
+                Raise(nameof(HpEmptyFraction));
                 Raise(nameof(HpDisplay));
                 Raise(nameof(HpBarColor));
                 break;
@@ -310,6 +316,7 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
                 break;
             case nameof(Mana):
                 Raise(nameof(ManaFraction));
+                Raise(nameof(ManaEmptyFraction));
                 Raise(nameof(ManaDisplay));
                 break;
             case nameof(IsAlive):

@@ -195,7 +195,7 @@ public partial class MainWindow : Window
 
         var state = new CombatDisplayState(charStates, layout);
 
-        var diceService = new DiceService();
+        var diceService = new LoggingDiceService();
         var combatStats = new CombatStatsService();
         var combatService = new CombatService(diceService, combatStats, [new RangeModifier()]);
         var turnmeterService = new TurnmeterService();
@@ -207,6 +207,7 @@ public partial class MainWindow : Window
 
         var result = await Task.Run(() => simulator.Simulate(party1, party2, 200), _cts.Token);
 
+        result.DiceLog = diceService.DiceLog;
         result.Log = CombatLogMerger.Merge(result.Log, result.DiceLog);
 
         _waitForNext.Reset();
