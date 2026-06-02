@@ -132,6 +132,63 @@ public partial class MainWindow : Window
         AutoButton.IsEnabled = false;
     }
 
+    private void OnDemoClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        _vm.Phase = "Setup";
+        _vm.CombatLog.Clear();
+        _vm.Heroes.Clear();
+        _vm.Enemies.Clear();
+        _vm.Fighter1Name = "";
+        _vm.Fighter2Name = "";
+        _fighter1 = null;
+        _fighter2 = null;
+        DuelButton.IsEnabled = false;
+        PartyButton.IsEnabled = true;
+        SelectionHint.Text = "Select Fighter 1";
+        HeroListBox.SelectedItem = null;
+    }
+
+    private void OnApiModeClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        _vm.Phase = "ApiMenu";
+    }
+
+    private void OnCreateCharClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        // Not yet implemented
+    }
+
+    private void OnVsClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        // Not yet implemented
+    }
+
+    private void OnPartyVsPartyClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        // Not yet implemented
+    }
+
+    private void OnBackToMainClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        _vm.Phase = "MainMenu";
+    }
+
+    private void OnBackToMainFromSetupClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        _presenter = null;
+        _cts?.Cancel();
+        _cts?.Dispose();
+        _waitForNext?.Dispose();
+        _cts = null;
+        _waitForNext = null;
+
+        _vm.Phase = "MainMenu";
+        _vm.CombatLog.Clear();
+        _vm.Heroes.Clear();
+        _vm.Enemies.Clear();
+        _vm.IsRunning = false;
+    }
+
     private async Task RunCombat(Party party1, Party party2)
     {
         _cts?.Cancel();

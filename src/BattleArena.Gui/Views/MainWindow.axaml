@@ -3,7 +3,8 @@
         xmlns:views="clr-namespace:BattleArena.Gui.Views"
         x:Class="BattleArena.Gui.Views.MainWindow"
         Title="BattleArena — Combat Simulation"
-        Width="1200" Height="800" MinWidth="900" MinHeight="600"
+        MinWidth="900" MinHeight="600"
+        WindowState="Maximized"
         Background="#0d0d1a">
   <Window.Resources>
     <views:DoubleToWidthConverter x:Key="WidthConv" />
@@ -76,6 +77,24 @@
   </Window.Styles>
 
   <Grid Margin="8">
+    <!-- ── MAIN MENU PHASE ── -->
+    <Grid IsVisible="{Binding IsMainMenuPhase}" RowDefinitions="*,Auto,Auto,*" Margin="20">
+      <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
+        <TextBlock Text="BATTLE ARENA"
+                   Foreground="#00bfff" FontSize="36" FontWeight="Bold"
+                   HorizontalAlignment="Center" />
+        <TextBlock Text="Choose Mode"
+                   Foreground="#888" FontSize="16"
+                   HorizontalAlignment="Center" Margin="0,0,0,20" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="24">
+          <Button x:Name="DemoButton" Content="DEMO" Click="OnDemoClick"
+                  Width="180" Height="60" FontSize="20" />
+          <Button x:Name="ApiModeButton" Content="API VERSION" Click="OnApiModeClick"
+                  Width="180" Height="60" FontSize="20" />
+        </StackPanel>
+      </StackPanel>
+    </Grid>
+
     <!-- ── COMBAT PHASE ── -->
     <Grid IsVisible="{Binding IsCombatPhase}" RowDefinitions="Auto,Auto,*,220,Auto">
 
@@ -252,6 +271,27 @@
         </Border>
         <Button x:Name="FightButton" Content="FIGHT!" Click="OnFightClick"
                 Width="140" Height="34" FontSize="14" IsEnabled="{Binding CanStartCombat}" />
+        <Separator Width="1" Background="#444" Margin="4,0" />
+        <Button x:Name="BackToMainFromSetupButton" Content="Back to Main Menu" Click="OnBackToMainFromSetupClick"
+                Width="140" Height="34" FontSize="11" Background="#5c3a3a" BorderBrush="#755" />
+      </StackPanel>
+    </Grid>
+
+    <!-- ── API MENU PHASE ── -->
+    <Grid IsVisible="{Binding IsApiMenuPhase}" RowDefinitions="*,Auto,*" Margin="20">
+      <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12">
+        <TextBlock Text="API VERSION"
+                   Foreground="#00bfff" FontSize="28" FontWeight="Bold"
+                   HorizontalAlignment="Center" Margin="0,0,0,16" />
+        <Button x:Name="CreateCharButton" Content="Create Character"
+                Width="220" Height="44" FontSize="15" Click="OnCreateCharClick" />
+        <Button x:Name="VsButton" Content="1 vs 1"
+                Width="220" Height="44" FontSize="15" Click="OnVsClick" />
+        <Button x:Name="PartyVsPartyButton" Content="Party vs Party"
+                Width="220" Height="44" FontSize="15" Click="OnPartyVsPartyClick" />
+        <Button x:Name="BackToMainButton" Content="Back"
+                Width="220" Height="44" FontSize="15" Click="OnBackToMainClick"
+                Background="#5c3a3a" BorderBrush="#755" />
       </StackPanel>
     </Grid>
   </Grid>

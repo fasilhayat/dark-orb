@@ -76,7 +76,7 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         set => SetField(ref _isRunning, value);
     }
 
-    private string _phase = "Setup";
+    private string _phase = "MainMenu";
     public string Phase
     {
         get => _phase;
@@ -84,13 +84,17 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         {
             if (SetField(ref _phase, value))
             {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsMainMenuPhase)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSetupPhase)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsCombatPhase)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsApiMenuPhase)));
             }
         }
     }
+    public bool IsMainMenuPhase => Phase == "MainMenu";
     public bool IsSetupPhase => Phase == "Setup";
     public bool IsCombatPhase => Phase == "Combat";
+    public bool IsApiMenuPhase => Phase == "ApiMenu";
 
     private string _scenario = "Duel";
     public string Scenario

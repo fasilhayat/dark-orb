@@ -1,4 +1,4 @@
-.PHONY: help up-local up-dev dev-up run-dev up-test up-preprod up-prod down clean clean-logs install install-dev redo-local demo-local gui-local test test-coverage build-local sync-instructions publish publish-demo
+.PHONY: help up-local up-dev dev-up run-dev up-test up-preprod up-prod down clean clean-logs install install-gui start-gui install-dev redo-local demo-local gui-local test test-coverage build-local sync-instructions publish publish-demo
 
 help:
 	@cmd /C "echo  BattleArena -- available make targets"
@@ -17,6 +17,7 @@ help:
 	@echo.
 	@cmd /C "echo    make demo-local     Run demo on host against up-local (DOTNET_ENVIRONMENT=LocalDev)"
 	@cmd /C "echo    make gui-local      Run Avalonia GUI on host (standalone, no DB needed)"
+	@cmd /C "echo    make start-gui      Run Avalonia GUI locally (alias for gui-local)"
 	@cmd /C "echo    make down           Tear down all containers"
 	@cmd /C "echo    make clean          Tear down everything, wipe volumes and publish output"
 	@echo.
@@ -26,6 +27,8 @@ help:
 	@cmd /C "echo    make test-coverage  Run tests with code coverage (opencover format)"
 	@echo.
 	@cmd /C "echo  OTHER"
+	@cmd /C "echo    make install          Clean Docker, test, up-local, then run demo locally"
+	@cmd /C "echo    make install-gui      Clean Docker, build, up-local, then run GUI locally"
 	@cmd /C "echo    make install-dev     Full dev setup: clean + dotnet clean + test + dev-up"
 	@cmd /C "echo    make sync-instructions  Copy AGENTS.md to .github/copilot-instructions.md"
 	@cmd /C "echo    make clean-logs     Delete generated combat-logs/ files"
@@ -82,6 +85,13 @@ install:
 	@$(MAKE) up-local
 	dotnet run --project BattleArena.Demo/BattleArena.Demo.csproj
 
+install-gui:
+	@echo Install GUI: clean Docker, build, up-local, launch GUI...
+	@$(MAKE) clean
+	dotnet build BattleArena.sln
+	@$(MAKE) up-local
+	dotnet run --project BattleArena.Gui/BattleArena.Gui.csproj
+
 install-dev:
 	@echo Running full dev install: clean + dotnet clean + test + dev-up...
 	@$(MAKE) clean
@@ -102,6 +112,10 @@ demo-local:
 
 gui-local:
 	@echo Starting BattleArena GUI (standalone, no DB or API required)...
+	dotnet run --project BattleArena.Gui/BattleArena.Gui.csproj
+
+start-gui:
+	@echo Starting BattleArena GUI...
 	dotnet run --project BattleArena.Gui/BattleArena.Gui.csproj
 
 test:
