@@ -47,29 +47,29 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         ["TotalReversal"] = 1000,
     };
 
-    private static readonly Dictionary<string, IBrush> _eventColors = new()
+    private static readonly Dictionary<string, string> _eventColors = new()
     {
-        ["TurnStart"] = Brush("#88bbff"),
-        ["Attack"] = Brush("#ffcc00"),
-        ["Damage"] = Brush("#ff6666"),
-        ["DoTTick"] = Brush("#d4a017"),
-        ["EffectApplied"] = Brush("#ffdd44"),
-        ["EffectResisted"] = Brush("#44cc44"),
-        ["EffectExpired"] = Brush("#888"),
-        ["PetSummoned"] = Brush("#cc44cc"),
-        ["PetExpired"] = Brush("#888"),
-        ["RoundStart"] = Brush("#d4a017"),
-        ["RoundEnd"] = Brush("#666"),
-        ["SkippedTurn"] = Brush("#d4a017"),
-        ["FumblePenalty"] = Brush("#d4a017"),
-        ["Death"] = Brush("#ff2222"),
-        ["KnockedOut"] = Brush("#d4a017"),
-        ["ManaRegen"] = Brush("#cc44cc"),
-        ["ManaDeduct"] = Brush("#cc44cc"),
-        ["ApiCall"] = Brush("#00bfff"),
-        ["PerfectParry"] = Brush("#00ff88"),
-        ["DevastatingStrike"] = Brush("#ff00ff"),
-        ["TotalReversal"] = Brush("#ff6600"),
+        ["TurnStart"] = "#88bbff",
+        ["Attack"] = "#ffcc00",
+        ["Damage"] = "#ff4444",
+        ["DoTTick"] = "#ff4444",
+        ["EffectApplied"] = "#ffdd44",
+        ["EffectResisted"] = "#44cc44",
+        ["EffectExpired"] = "#888",
+        ["PetSummoned"] = "#cc44cc",
+        ["PetExpired"] = "#888",
+        ["RoundStart"] = "#d4a017",
+        ["RoundEnd"] = "#666",
+        ["SkippedTurn"] = "#d4a017",
+        ["FumblePenalty"] = "#d4a017",
+        ["Death"] = "#ff2222",
+        ["KnockedOut"] = "#d4a017",
+        ["ManaRegen"] = "#cc44cc",
+        ["ManaDeduct"] = "#cc44cc",
+        ["ApiCall"] = "#00bfff",
+        ["PerfectParry"] = "#00ff88",
+        ["DevastatingStrike"] = "#ff00ff",
+        ["TotalReversal"] = "#ff6600",
     };
 
     public AvaloniaCombatPresenter(
@@ -90,7 +90,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         _dispatcher.Post(() =>
         {
             _vm.UpdateFromState(state, tick);
-            _vm.AddLogEntry("═══════ Combat starting ═══════", Brush("#888"));
+            _vm.AddLogEntry("═══════ Combat starting ═══════", new SolidColorBrush(Color.Parse("#888")));
         });
     }
 
@@ -116,8 +116,9 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         _dispatcher.Post(() =>
         {
             _vm.UpdateFromState(state, entry.Tick);
-            var color = _eventColors.GetValueOrDefault(entry.EventType, Brushes.White);
-            _vm.AddLogEntry(text, color);
+            var hex = _eventColors.GetValueOrDefault(entry.EventType, "#ffffff");
+            var brush = new SolidColorBrush(Color.Parse(hex));
+            _vm.AddLogEntry(text, brush);
         });
     }
 
@@ -138,7 +139,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             var arrow = isHero ? "\u2192" : "\u2190";
             _vm.AddLogEntry(
                 $"  \u2500 Turn {turnNumber}  \u2502  {actorName.ToUpper()}  {arrow}  {targetName?.ToUpper() ?? "?"}",
-                Brush("#888"));
+                new SolidColorBrush(Color.Parse("#888")));
         });
     }
 
@@ -159,7 +160,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     public void ShowQuietTicksSummary(int fromTick, int toTick)
     {
         _dispatcher.Post(() =>
-            _vm.AddLogEntry($"  ... {toTick - fromTick + 1} quiet ticks (TM building)", Brush("#555")));
+            _vm.AddLogEntry($"  ... {toTick - fromTick + 1} quiet ticks (TM building)", new SolidColorBrush(Color.Parse("#555"))));
     }
 
     private string FormatEntry(CombatLogEntry e) => e.EventType switch
@@ -262,5 +263,4 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         };
     }
 
-    private static IBrush Brush(string hex) => new SolidColorBrush(Color.Parse(hex));
 }

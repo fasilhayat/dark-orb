@@ -38,6 +38,11 @@ public partial class MainWindow : Window
         DataContext = _vm;
         Console.WriteLine("MainWindow ctor: DataContext set");
         _displayConfig = GuiDisplayConfig.Load();
+        _vm.CombatLog.CollectionChanged += (_, _) =>
+        {
+            if (CombatLogListBox.ItemCount > 0)
+                CombatLogListBox.ScrollIntoView(CombatLogListBox.Items[^1]!);
+        };
         Console.WriteLine("MainWindow ctor: complete");
     }
 
@@ -199,8 +204,10 @@ public partial class MainWindow : Window
 
     private void OnSpeedChanged(object? sender, Avalonia.Controls.Primitives.RangeBaseValueChangedEventArgs e)
     {
+        var speed = Math.Round(e.NewValue, 1);
+        SpeedLabel.Text = $"{speed:F1}x";
         if (_presenter is not null)
-            _presenter.PacingMultiplier = e.NewValue;
+            _presenter.PacingMultiplier = speed;
     }
 
     private static (Party, Party) BuildDuelParties()
