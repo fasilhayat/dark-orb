@@ -40,6 +40,7 @@ BattleArena.Application     — Services, interfaces, models (depends on Core on
 BattleArena.Infrastructure  — Repositories, DbContext (depends on Core + Application)
 BattleArena.Api             — ASP.NET endpoints (depends on Application + Infrastructure)
 BattleArena.Demo            — Console demo (depends on Application + Core)
+BattleArena.Gui             — Avalonia bridge GUI (depends on Application + Core + Presentation)
 BattleArena.UnitTests       — xUnit unit tests (NSubstitute for mocks)
 BattleArena.AcceptanceTests — Reqnroll BDD acceptance tests
 ```
@@ -278,7 +279,57 @@ The demo (`BattleArena.Demo`) is split into:
 
 ---
 
-## 12. Project skills (opencode.jsonc)
+## 12. GUI layer — Avalonia bridge (future: Unity target)
+
+**CRITICAL: The GUI layer must be pluggable and unpluggable.** Combat rules and logic must NEVER live in the GUI. The GUI is a pure renderer — it reads state and presents it. All combat simulation, dice rolling, status effect resolution, damage calculation, and turn management stay in `BattleArena.Application` and `BattleArena.Core`. Swapping the GUI (Avalonia → Unity → web) must require zero changes to the simulation engine.
+
+`BattleArena.Gui` is an **Avalonia** project that acts as a bridge GUI — it validates the `ICombatPresenter` contract today and proves the display pipeline end-to-end. The final production GUI target is **Unity** (or another open-source game engine). Avalonia is temporary bridgework, not the destination.
+
+### 12.1 What survives the Avalonia → Unity migration
+
+| Layer | Project | Survives? |
+|-------|---------|-----------|
+| `ICombatPresenter` | `BattleArena.Presentation` | ✅ Reimplemented in Unity as `UnityCombatPresenter` |
+| `CombatPlaybackEngine` | `BattleArena.Presentation` | ✅ Unchanged — references `ICombatPresenter`, not Avalonia |
+| `CombatDisplayState` / `CharDisplayState` | `BattleArena.Presentation` | ✅ Unchanged — pure data objects |
+| `GuiDisplayConfig` + `gui-display-contract.json` | `BattleArena.Presentation` | ✅ Unchanged — JSON-driven field visibility |
+| `CombatLayout` | `BattleArena.Presentation` | ✅ Unchanged |
+| `CombatLogMerger` | `BattleArena.Presentation` | ✅ Unchanged |
+| **Avalonia XAML views (`.axaml` files)** | `BattleArena.Gui` | ❌ Replaced by Unity UI canvas / prefabs |
+| **Avalonia ViewModels** | `BattleArena.Gui` | ❌ Replaced by Unity `MonoBehaviour` components |
+| **`AvaloniaCombatPresenter`** | `BattleArena.Gui` | ❌ Replaced by `UnityCombatPresenter` |
+
+### 12.2 Hard rules — Avalonia bridge must remain thin
+
+1. **Zero combat logic in Avalonia ViewModels.** ViewModels are thin wrappers that read from `CharDisplayState` — they must not compute combat outcomes, apply status effects, or make dice rolls. All simulation logic stays in `BattleArena.Application`.
+2. **Zero business logic in `.axaml` code-behind.** No `if/else` that interprets combat state. That belongs in `AvaloniaCombatPresenter` or in `BattleArena.Presentation`.
+3. **`ICombatPresenter` is the only rendering contract.** The `CombatPlaybackEngine` calls it; Avalonia implements it. When Unity arrives, you delete `AvaloniaCombatPresenter` and write `UnityCombatPresenter`. The engine and the presenter interface never change.
+4. **Do not extend `CharDisplayState` speculatively.** Add fields only when the Avalonia presenter actually needs them to render. Unused fields in `CharDisplayState` are dead code that survives migration for no reason.
+5. **`gui-display-contract.json` is authoritative.** Both Avalonia and future Unity presenter must respect `GuiDisplayConfig.IsFieldEnabled()`. If a field is disabled in the JSON, no renderer should show it.
+6. **Demo is not the GUI.** The demo (`BattleArena.Demo`) remains the independent console showcase. The GUI project must not depend on or duplicate Demo code. Both consume `BattleArena.Presentation` and `ICombatPresenter`.
+
+### 12.3 Migration workflow
+
+```
+Today:     AvaloniaCombatPresenter → ICombatPresenter → CombatPlaybackEngine
+             (XAML views + ViewModels for validation only)
+
+Migration: UnityCombatPresenter → ICombatPresenter → CombatPlaybackEngine
+             (Canvas UI + MonoBehaviour components)
+             │
+             └── Delete: BattleArena.Gui entirely (all .axaml, ViewModels, AvaloniaCombatPresenter)
+```
+
+Steps when Unity arrives:
+1. Create `BattleArena.Unity` project (or integrate into existing Unity solution)
+2. Write `UnityCombatPresenter : ICombatPresenter` — maps `CharDisplayState` to Unity UI elements
+3. Reference `BattleArena.Application` + `BattleArena.Presentation` from Unity
+4. Call `CombatPlaybackEngine.PlayTurnBased(result, state, unityPresenter)` — same call Avalonia makes today
+5. Delete `BattleArena.Gui` from solution
+
+---
+
+## 13. Project skills (opencode.jsonc)
 
 Two project-scoped skills are registered in `opencode.jsonc`:
 

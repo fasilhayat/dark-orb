@@ -26,6 +26,8 @@ BattleArena is a homebrew fantasy RPG backend and data model for a Dungeons & Dr
   - Console-based demo app for running turn-based and real-time combats with narrated playback
 - `BattleArena.Presentation`
   - GUI-agnostic presentation layer — playback engine, display state, ICombatPresenter contract (depends on Core + Application)
+- `BattleArena.Gui`
+  - Avalonia desktop GUI — validates the ICombatPresenter contract end-to-end (depends on Application + Core + Presentation)
 - `BattleArena.UnitTests`
   - xUnit unit tests for application behaviour, resistance system, and XP/levelling logic (NSubstitute for mocks)
 - `BattleArena.AcceptanceTests`
@@ -457,6 +459,9 @@ make up-prod
 
 # Run the demo locally (against up-local)
 make demo-local
+
+# Run the Avalonia GUI locally (standalone, no DB required)
+make gui-local
 
 # Stop containers
 make down

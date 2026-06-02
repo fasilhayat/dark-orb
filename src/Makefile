@@ -1,4 +1,4 @@
-.PHONY: help up-local up-dev dev-up run-dev up-test up-preprod up-prod down clean clean-logs install install-dev redo-local demo-local test test-coverage build-local sync-instructions publish publish-demo
+.PHONY: help up-local up-dev dev-up run-dev up-test up-preprod up-prod down clean clean-logs install install-dev redo-local demo-local gui-local test test-coverage build-local sync-instructions publish publish-demo
 
 help:
 	@cmd /C "echo  BattleArena -- available make targets"
@@ -16,6 +16,7 @@ help:
 	@cmd /C "echo    make up-prod        Start DB + API only (no host ports)"
 	@echo.
 	@cmd /C "echo    make demo-local     Run demo on host against up-local (DOTNET_ENVIRONMENT=LocalDev)"
+	@cmd /C "echo    make gui-local      Run Avalonia GUI on host (standalone, no DB needed)"
 	@cmd /C "echo    make down           Tear down all containers"
 	@cmd /C "echo    make clean          Tear down everything, wipe volumes and publish output"
 	@echo.
@@ -98,6 +99,10 @@ redo-local:
 demo-local:
 	@echo Starting BattleArena Demo locally (DOTNET_ENVIRONMENT=LocalDev)...
 	cmd /C "set DOTNET_ENVIRONMENT=LocalDev && dotnet run --project BattleArena.Demo/BattleArena.Demo.csproj"
+
+gui-local:
+	@echo Starting BattleArena GUI (standalone, no DB or API required)...
+	dotnet run --project BattleArena.Gui/BattleArena.Gui.csproj
 
 test:
 	dotnet test BattleArena.sln

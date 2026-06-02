@@ -1,0 +1,176 @@
+{
+  "version": "1.6",
+  "description": "Defines which data fields the BattleArena combat GUI must display. Placement and exact phrasing are left to the GUI implementation — only field presence and correctness matter. Set 'enabled' to false on any screen or field to suppress it from the console output.",
+  "screens": {
+    "characterCard": {
+      "enabled": true,
+      "description": "Character status block shown throughout combat for each combatant. All cards MUST be the same height regardless of class or alive/dead status — non-spellcasters render a dimmed placeholder MP row and an empty spell row so all cards remain aligned.",
+      "layout": {
+        "cardWidthChars": 46,
+        "contentWidthChars": 42,
+        "rows": [
+          {
+            "id": "nameRow",
+            "segments": [
+              { "label": "activeIndicator", "maxChars": 2, "content": "▶ " },
+              { "label": "name",            "maxChars": 18, "content": "character name (uppercase), truncated/padded to 18" },
+              { "label": "gap",             "maxChars": 3,  "content": "spaces" },
+              { "label": "weapon",          "maxChars": 19, "content": "[ weapon name ] padded/truncated to 17 chars inside brackets" }
+            ]
+          },
+          {
+            "id": "infoRow",
+            "description": "Sex · Lvl Level · Class · Race",
+            "segments": [
+              { "label": "sex",          "maxChars": 6,  "content": "Male / Female / None, left-aligned" },
+              { "label": "sep1",         "maxChars": 5,  "content": "  ·  " },
+              { "label": "lvlLabel",     "maxChars": 4,  "content": "Lvl " },
+              { "label": "level",        "maxChars": 2,  "content": "level number 1-99, right-aligned" },
+              { "label": "gap",          "maxChars": 2,  "content": "  " },
+              { "label": "class",        "maxChars": 10, "content": "class name (e.g. Barbarian, Mage), left-aligned, max 9 chars" },
+              { "label": "sep2",         "maxChars": 5,  "content": "  ·  " },
+              { "label": "race",         "maxChars": 8,  "content": "race name (e.g. Gladefolk, Human, Orc), left-aligned, max 8 chars" }
+            ]
+          },
+          {
+            "id": "turnMeterRow",
+            "segments": [
+              { "label": "prefix",  "maxChars": 5,  "content": " TM [" },
+              { "label": "bar",     "maxChars": 25, "content": "turn meter fill 0-100%, │ = filled, ░ = empty" },
+              { "label": "suffix",  "maxChars": 3,  "content": "]  " },
+              { "label": "value",   "maxChars": 5,  "content": "right-aligned 3-digit TM value, e.g. '  105' or '   65'" },
+              { "label": "max",     "maxChars": 4,  "content": "/100" }
+            ]
+          },
+          {
+            "id": "manaRow",
+            "description": "Non-casters (MaxMana = 0) render a blank row of 42 spaces to keep card height uniform.",
+            "segments": [
+              { "label": "prefix",  "maxChars": 5,  "content": " MP [" },
+              { "label": "bar",     "maxChars": 25, "content": "mana fill 0-100%, █ = filled, ░ = empty" },
+              { "label": "suffix",  "maxChars": 3,  "content": "]  " },
+              { "label": "current", "maxChars": 3,  "content": "right-aligned current mana" },
+              { "label": "sep",     "maxChars": 3,  "content": " / " },
+              { "label": "max",     "maxChars": 3,  "content": "left-aligned max mana" }
+            ]
+          },
+          {
+            "id": "hpRow",
+            "segments": [
+              { "label": "prefix",  "maxChars": 5,  "content": " HP [" },
+              { "label": "bar",     "maxChars": 25, "content": "HP fill 0-100%, █ = filled, ░ = empty" },
+              { "label": "suffix",  "maxChars": 3,  "content": "]  " },
+              { "label": "current", "maxChars": 3,  "content": "right-aligned current HP" },
+              { "label": "sep",     "maxChars": 3,  "content": " / " },
+              { "label": "max",     "maxChars": 3,  "content": "left-aligned max HP" }
+            ]
+          }
+        ]
+      },
+      "requiredFields": [
+        { "enabled": true,  "field": "Name",             "source": "Character.Name",                         "description": "Character display name" },
+        { "enabled": true,  "field": "Level",            "source": "Character.Level",                        "description": "Character level (1–20). Displayed as 'Lvl N  ClassName' beneath the name line in the card." },
+        { "enabled": true,  "field": "Class",            "source": "Character.ClassName",                    "description": "Character class name fetched from DB (e.g. Barbarian, Mage). Rendered as text next to Level." },
+        { "enabled": true,  "field": "Sex",              "source": "Character.Sex",                          "description": "Character sex stored in DB as single char flag: M = Male, F = Female, X = None. Displayed in full in the card: 'Female  ·  Lvl 5  Mage  ·  Human'" },
+        { "enabled": true,  "field": "Race",             "source": "Character.Race.Name",                    "description": "Character race name (e.g. Human, Orc, Elf). Rendered in the card after class: 'Female  ·  Lvl 5  Mage  ·  Human'" },
+        { "enabled": true,  "field": "CurrentHp",        "source": "Character.CurrentHitPoints",             "description": "Current hit points (can be negative after KO)" },
+        { "enabled": true,  "field": "MaxHp",            "source": "Character.MaxHitPoints",                 "description": "Maximum hit points — must be > 0" },
+        { "enabled": true,  "field": "CurrentMana",      "source": "Character.CurrentMana",                  "description": "Current mana points — shown for ALL characters. Non-casters render a dimmed '-- / --' placeholder so card height stays uniform." },
+        { "enabled": true,  "field": "MaxMana",          "source": "Character.MaxMana",                      "description": "Maximum mana points. Spellcasters only (MaxMana > 0). Formula: Mage=50+(INT-10)*10+level*5, Priest/Druid/Bard=40+(INT-10)*8+level*5" },
+        { "enabled": true,  "field": "ManaRegenPerTick", "source": "Character.ManaRegenPerTick",             "description": "Mana regenerated each tick. Derived from Intelligence, level, equipped gear bonuses and regenerative spells. Formula: max(1, (INT-10)/2 + level/2 + gearBonus)" },
+        { "enabled": true,  "field": "TurnMeter",        "source": "CombatLogEntry.TurnMeterAfter",          "description": "Turn meter value (0–100), tracked via TurnMeterGain / TurnEnd events" },
+        { "enabled": true,  "field": "EquippedWeapon",   "source": "Character.Equipment.RightHand.Name",     "description": "Weapon currently held in the right hand — always shown regardless of spellcaster status" },
+        { "enabled": true,  "field": "CurrentWeapon",    "source": "CombatLogEntry.AttackSourceName",        "description": "Active attack source used this turn (weapon or spell name), updated on TurnStart events" },
+        { "enabled": true,  "field": "MemorizedSpells",  "source": "Character.MemorizedSpells",              "description": "List of spells the character has memorized. Each entry has: Name, School, DamageCount, DamageDie, DamageType, ManaCost, SpellLevel. Only present when Character.MemorizedSpells.Count > 0." },
+        { "enabled": true,  "field": "SpellListRow",     "source": "Character.MemorizedSpells[].Name",       "description": "Compact single-row spell summary rendered inside the character card, below the HP bar. Format: 'SP  <SpellA>  <SpellB>  …' (spell names truncated to ~7 chars, separated by two spaces). Non-spellcasters render this row as blank space so card height stays equal. Colour: label in DarkYellow, names in Yellow." },
+        { "enabled": true,  "field": "IsAlive",          "source": "Character.CurrentHitPoints > 0",         "description": "Alive/dead flag derivable from CurrentHitPoints" }
+      ]
+    },
+    "startupSheets": {
+      "enabled": true,
+      "description": "Pre-combat stat sheets shown before the first action. Each combatant gets a full-character summary card.",
+      "requiredFields": [
+        { "enabled": true,  "field": "Name",             "source": "Character.Name",                        "description": "Character display name" },
+        { "enabled": true,  "field": "Race",             "source": "Character.Race.Name",                  "description": "Character race name. Must be shown on the stat sheet on the main header row alongside sex, level, and class." },
+        { "enabled": true,  "field": "Sex",              "source": "Character.Sex",                        "description": "Character sex (M/F/X)" },
+        { "enabled": true,  "field": "Level",            "source": "Character.Level",                      "description": "Character level" },
+        { "enabled": true,  "field": "Class",            "source": "Character.ClassName",                  "description": "Character class" },
+        { "enabled": true,  "field": "HP",               "source": "Character.MaxHitPoints",               "description": "Maximum hit points" },
+        { "enabled": true,  "field": "TurnSpeed",        "source": "Character.TurnSpeed",                  "description": "Base turn speed" },
+        { "enabled": true,  "field": "StrikeRating",     "source": "Character.StrikeRating",               "description": "Strike rating" },
+        { "enabled": true,  "field": "Attributes",       "source": "Character.Strength/Dexterity/Intelligence", "description": "Base attributes (STR, DEX, INT) with ability modifiers" },
+        { "enabled": true,  "field": "Armor",            "source": "Character.Equipment.Chest",            "description": "Equipped armor name, AC, mitigation percentage" },
+        { "enabled": true,  "field": "WeaponOrSpells",   "source": "Character.Equipment.RightHand / Character.MemorizedSpells", "description": "Weapon (name, damage dice, attack bonus) or memorized spells list" },
+        { "enabled": true,  "field": "AttackPower",      "source": "derived",                              "description": "Attack power breakdown (StrikeRating + Level + ability mod + source bonus)" },
+        { "enabled": true,  "field": "DefensePower",     "source": "derived",                              "description": "Defense power breakdown (AC + dexterity cap)" }
+      ]
+    },
+    "roundBar": {
+      "enabled": true,
+      "description": "A full-width progress bar shown at the TOP of the combat screen, immediately below the BattleArena header and above the character grid. Renders every tick. A round is a fixed number of ticks (RoundLength = 10). The bar fills left-to-right from empty to full as ticks advance within the round and resets at each RoundStart. Console rendering: 'ROUND N  [████░░░░░░░]  tickInRound / 10 ticks' using Unicode block characters (█ = U+2588 filled, ░ = U+2591 light shade). Fill colour: Blue. Empty colour: DarkBlue. Label colour: Cyan.",
+      "requiredFields": [
+        { "enabled": true,  "field": "RoundNumber",      "source": "CombatLogEntry.RoundNumber",             "description": "Current round number, starting at 1. Updated on RoundStart and RoundEnd events." },
+        { "enabled": true,  "field": "CurrentTick",      "source": "CombatLogEntry.Tick",                    "description": "Absolute tick counter. Position within round = ((Tick - 1) % RoundLength) + 1, range 1–10." },
+        { "enabled": true,  "field": "TicksPerRound",    "source": "CombatSimulator.RoundLength (constant)", "description": "Fixed at 10. One round = 10 ticks. RoundStart fires at tick 1, 11, 21 … RoundEnd fires at tick 10, 20, 30 …" },
+        { "enabled": true,  "field": "RoundProgress",    "source": "derived: tickInRound / RoundLength",     "description": "0.0–1.0 fill fraction for the round bar. At tick 5 of 10 this is 0.5. Formula: ((Tick-1) % 10 + 1) / 10.0" }
+      ]
+    },
+    "attackEvent": {
+      "enabled": true,
+      "description": "Displayed each time a character makes an attack (CombatLogEntry with EventType = Attack)",
+      "requiredFields": [
+        { "enabled": true,  "field": "ActorName",        "source": "CombatLogEntry.ActorName",        "description": "Name of the attacking character" },
+        { "enabled": true,  "field": "TargetName",       "source": "CombatLogEntry.TargetName",       "description": "Name of the defending character" },
+        { "enabled": true,  "field": "AttackSourceName", "source": "CombatLogEntry.AttackSourceName", "description": "Weapon or spell used for the attack" },
+        { "enabled": true,  "field": "DieRoll",          "source": "CombatLogEntry.DieRoll",          "description": "d20 roll result" },
+        { "enabled": true,  "field": "AttackPower",      "source": "CombatLogEntry.AttackPower",      "description": "Attacker's total combat power" },
+        { "enabled": true,  "field": "DefensePower",     "source": "CombatLogEntry.DefensePower",     "description": "Defender's total defense power" },
+        { "enabled": true,  "field": "IsHit",            "source": "CombatLogEntry.IsHit",            "description": "Whether the attack connected" },
+        { "enabled": true,  "field": "IsCritical",       "source": "CombatLogEntry.IsCritical",       "description": "Critical hit flag" },
+        { "enabled": true,  "field": "IsFumble",         "source": "CombatLogEntry.IsFumble",         "description": "Fumble flag" },
+        { "enabled": true,  "field": "DamageDealt",      "source": "CombatLogEntry.DamageDealt",      "description": "Damage dealt — required to be > 0 on a hit, null/absent on a miss" }
+      ]
+    },
+    "manaEvent": {
+      "enabled": true,
+      "description": "Tracks mana changes during combat. Two event types: ManaDeduct (spell cast) and ManaRegen (end-of-round regeneration). Only relevant for spellcasters (MaxMana > 0).",
+      "requiredFields": [
+        { "enabled": true,  "field": "ActorName",     "source": "CombatLogEntry.ActorName",     "description": "Spellcaster whose mana changed" },
+        { "enabled": true,  "field": "ManaCost",      "source": "CombatLogEntry.ManaCost",      "description": "Mana spent on this cast (ManaDeduct event). Null on ManaRegen events." },
+        { "enabled": true,  "field": "ManaAfter",     "source": "CombatLogEntry.ManaAfter",     "description": "Mana pool after the change. Use this to update the MP bar." },
+        { "enabled": true,  "field": "ManaRegen",     "source": "CombatLogEntry.ManaRegen",     "description": "Amount regenerated this tick (ManaRegen event). Derived from Character.ManaRegenPerTick." }
+      ]
+    },
+    "damageEvent": {
+      "enabled": true,
+      "description": "Displayed when a character takes HP damage (CombatLogEntry with EventType = Damage)",
+      "requiredFields": [
+        { "enabled": true,  "field": "ActorName",      "source": "CombatLogEntry.ActorName",      "description": "Name of the character taking damage" },
+        { "enabled": true,  "field": "DamageDealt",    "source": "CombatLogEntry.DamageDealt",    "description": "HP lost in this event" },
+        { "enabled": true,  "field": "TargetHpBefore", "source": "CombatLogEntry.TargetHpBefore", "description": "HP before taking damage" },
+        { "enabled": true,  "field": "TargetHpAfter",  "source": "CombatLogEntry.TargetHpAfter",  "description": "HP after taking damage" }
+      ]
+    },
+    "combatSummary": {
+      "enabled": true,
+      "description": "End-of-combat results screen",
+      "requiredFields": [
+        { "enabled": true,  "field": "CombatId",    "source": "CombatResult.CombatId",              "description": "Unique GUID identifying this combat run" },
+        { "enabled": true,  "field": "TotalTicks",  "source": "CombatResult.TotalTicks",            "description": "Total ticks the combat lasted" },
+        { "enabled": true,  "field": "WinnerName",  "source": "CombatResult.WinningParty.Name",     "description": "Winning party name" },
+        { "enabled": true,  "field": "LoserName",   "source": "CombatResult.LosingParty.Name",      "description": "Losing party name" },
+        { "enabled": true,  "field": "LoserStatus", "source": "CombatResult.LoserStatus",           "description": "Dead (HP ≤ -10) or KnockedOut (HP 0 to -9)" }
+      ]
+    },
+    "hitLabels": {
+      "description": "Graded hit severity labels shown in attack events. Label is computed by CombatHitLabelService.GetLabel(damage, targetMaxHp) as damage / targetMaxHp percentage.",
+      "requiredLabels": [
+        { "label": "GRAZE",        "condition": "damage < 3% of target max HP"   },
+        { "label": "GLANCING HIT", "condition": "damage 3–8% of target max HP"   },
+        { "label": "SOLID HIT",    "condition": "damage 8–15% of target max HP"  },
+        { "label": "HEAVY HIT",    "condition": "damage 15–25% of target max HP" },
+        { "label": "CRUSHING HIT", "condition": "damage ≥ 25% of target max HP"  }
+      ]
+    }
+  }
+}
