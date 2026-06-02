@@ -367,7 +367,6 @@ static partial class Demo
                 Name = m.Character.Name,
                 MaxHp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
                 Hp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
-                IsHero = true,
                 Level = m.Character.Level,
                 ClassName = m.Character.ClassName,
                 Sex = m.Character.Sex,
@@ -382,7 +381,6 @@ static partial class Demo
                 Name = m.Character.Name,
                 MaxHp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
                 Hp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
-                IsHero = false,
                 Level = m.Character.Level,
                 ClassName = m.Character.ClassName,
                 Sex = m.Character.Sex,
@@ -410,7 +408,6 @@ static partial class Demo
                 MaxHp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
                 Hp = Math.Max(0, m.Character.CurrentHitPoints),
                 IsAlive = m.Character.CurrentHitPoints > 0,
-                IsHero = true,
                 Level = m.Character.Level,
                 ClassName = m.Character.ClassName,
                 Sex = m.Character.Sex,
@@ -426,7 +423,6 @@ static partial class Demo
                 MaxHp = MaxHp.GetValueOrDefault(m.Character.Name, m.Character.MaxHitPoints),
                 Hp = Math.Max(0, m.Character.CurrentHitPoints),
                 IsAlive = m.Character.CurrentHitPoints > 0,
-                IsHero = false,
                 Level = m.Character.Level,
                 ClassName = m.Character.ClassName,
                 Sex = m.Character.Sex,
@@ -450,15 +446,12 @@ static partial class Demo
             return;
 
         var pet = FindSummonedPet(entry.SummonedPetName);
-        var summonerState = state.TryGet(entry.ActorName);
-        var isHero = summonerState?.IsHero
-            ?? HeroParty.Members.Any(m => m.Character.Name == entry.ActorName);
         var maxHp = pet?.MaxHitPoints ?? 1;
         var weaponName = pet is null ? string.Empty : $"{pet.Name}'s Attack";
 
         MaxHp[entry.SummonedPetName] = maxHp;
         CurHp[entry.SummonedPetName] = maxHp;
-        state.EnsurePet(entry.SummonedPetName, maxHp, isHero);
+        state.EnsurePet(entry.SummonedPetName, maxHp, entry.ActorName);
         if (state.TryGet(entry.SummonedPetName) is { } petState)
             petState.Weapon = weaponName;
     }

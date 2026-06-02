@@ -6,10 +6,10 @@ using BattleArena.Presentation;
 public class CombatDisplayStateTests
 {
     private static CharDisplayState Hero(string name, int hp = 100, int mana = 50) =>
-        new() { Name = name, MaxHp = hp, Hp = hp, MaxMana = mana, Mana = mana, IsHero = true, IsAlive = true, Race = "Human" };
+        new() { Name = name, MaxHp = hp, Hp = hp, MaxMana = mana, Mana = mana, IsAlive = true, Race = "Human" };
 
     private static CharDisplayState Enemy(string name, int hp = 80, int mana = 0) =>
-        new() { Name = name, MaxHp = hp, Hp = hp, MaxMana = mana, Mana = mana, IsHero = false, IsAlive = true, Race = "Orc" };
+        new() { Name = name, MaxHp = hp, Hp = hp, MaxMana = mana, Mana = mana, IsAlive = true, Race = "Orc" };
 
     private static CombatLayout Layout(IEnumerable<string> heroes, IEnumerable<string> enemies) =>
         CombatLayout.From(heroes, enemies, false);
@@ -49,6 +49,25 @@ public class CombatDisplayStateTests
         });
 
         Assert.Equal("Longsword", state.TryGet("Alice")!.Weapon);
+    }
+
+    [Fact]
+    public void ApplyEvent_TurnStart_AppliesTurnMeterSnapshot()
+    {
+        var state = new CombatDisplayState(
+            [Hero("Alice"), Enemy("Goblin")],
+            Layout(["Alice"], ["Goblin"]));
+
+        state.ApplyEvent(new CombatLogEntry
+        {
+            EventType = "TurnStart",
+            ActorName = "Alice",
+            AttackSourceName = "Dagger",
+            TurnMeterSnapshot = new Dictionary<string, int> { ["Alice"] = 100, ["Goblin"] = 55 }
+        });
+
+        Assert.Equal(100, state.TryGet("Alice")!.Tm);
+        Assert.Equal(55, state.TryGet("Goblin")!.Tm);
     }
 
     [Fact]
@@ -143,22 +162,22 @@ public class CombatDisplayStateTests
     {
         var state = new CombatDisplayState([Hero("Alice")], Layout(["Alice"], []));
 
-        state.EnsurePet("Fluffy", 30, true);
+        state.EnsurePet("Fluffy", 30, "Alice");
 
         var pet = state.TryGet("Fluffy");
         Assert.NotNull(pet);
         Assert.Equal(30, pet!.Hp);
-        Assert.True(pet.IsHero);
+        Assert.True(state.IsHeroSide("Fluffy"));
     }
 
     [Fact]
     public void EnsurePet_ExistingPet_DoesNotOverwrite()
     {
         var state = new CombatDisplayState([Hero("Alice")], Layout(["Alice"], []));
-        state.EnsurePet("Fluffy", 30, true);
+        state.EnsurePet("Fluffy", 30, "Alice");
         state.TryGet("Fluffy")!.Hp = 10;
 
-        state.EnsurePet("Fluffy", 30, true);
+        state.EnsurePet("Fluffy", 30, "Alice");
 
         Assert.Equal(10, state.TryGet("Fluffy")!.Hp);
     }
@@ -167,7 +186,7 @@ public class CombatDisplayStateTests
     public void ApplyEvent_PetSummoned_RevivesExistingPetAtFullHp()
     {
         var state = new CombatDisplayState([Hero("Alice")], Layout(["Alice"], []));
-        state.EnsurePet("Fluffy", 30, true);
+        state.EnsurePet("Fluffy", 30, "Alice");
         state.TryGet("Fluffy")!.Hp = 5;
         state.TryGet("Fluffy")!.IsAlive = false;
 
@@ -184,7 +203,7 @@ public class CombatDisplayStateTests
     public void ApplyEvent_PetExpired_SetsDeadAndZeroHp()
     {
         var state = new CombatDisplayState([Hero("Alice")], Layout(["Alice"], []));
-        state.EnsurePet("Fluffy", 30, true);
+        state.EnsurePet("Fluffy", 30, "Alice");
 
         state.ApplyEvent(new CombatLogEntry
         {
@@ -244,5 +263,82 @@ public class CombatDisplayStateTests
         var state = new CombatDisplayState([Hero("Alice"), Enemy("Goblin")], Layout(["Alice"], ["Goblin"]));
 
         state.ApplyEvent(new CombatLogEntry { EventType = "SomeNewEventType", ActorName = "Alice" });
+    }
+
+    // ── IsHeroSide ───────────────────────────────────────────────────────────────
+
+    [Fact]
+    public void IsHeroSide_HeroInLayout_ReturnsTrue()
+    {
+        var state = new CombatDisplayState([Hero("Alice"), Enemy("Goblin")], Layout(["Alice"], ["Goblin"]));
+
+        Assert.True(state.IsHeroSide("Alice"));
+    }
+
+    [Fact]
+    public void IsHeroSide_EnemyInLayout_ReturnsFalse()
+    {
+        var state = new CombatDisplayState([Hero("Alice"), Enemy("Goblin")], Layout(["Alice"], ["Goblin"]));
+
+        Assert.False(state.IsHeroSide("Goblin"));
+    }
+
+    [Fact]
+    public void IsHeroSide_NullName_ReturnsFalse()
+    {
+        var state = new CombatDisplayState([Hero("Alice")], Layout(["Alice"], []));
+
+        Assert.False(state.IsHeroSide(null));
+    }
+
+    [Fact]
+    public void IsHeroSide_UnknownName_ReturnsFalse()
+    {
+        var state = new CombatDisplayState([Hero("Alice")], Layout(["Alice"], []));
+
+        Assert.False(state.IsHeroSide("NobodyKnowsMe"));
+    }
+
+    [Fact]
+    public void IsHeroSide_MultipleHeroesInLayout_AllReturnTrue()
+    {
+        var state = new CombatDisplayState(
+            [Hero("Alice"), Hero("Bob"), Hero("Carol"), Enemy("Goblin")],
+            Layout(["Alice", "Bob", "Carol"], ["Goblin"]));
+
+        Assert.True(state.IsHeroSide("Alice"));
+        Assert.True(state.IsHeroSide("Bob"));
+        Assert.True(state.IsHeroSide("Carol"));
+        Assert.False(state.IsHeroSide("Goblin"));
+    }
+
+    [Fact]
+    public void EnsurePet_EnemySummoner_PetIsNotHeroSide()
+    {
+        var state = new CombatDisplayState(
+            [Hero("Alice"), Enemy("Goblin")],
+            Layout(["Alice"], ["Goblin"]));
+
+        state.EnsurePet("GoblinSkeleton", 20, "Goblin");
+
+        Assert.NotNull(state.TryGet("GoblinSkeleton"));
+        Assert.False(state.IsHeroSide("GoblinSkeleton"));
+    }
+
+    // ── TurnMeterSnapshot backward-compat ────────────────────────────────────────
+
+    [Fact]
+    public void ApplyEvent_TurnStart_NullSnapshot_LeavesExistingTmUnchanged()
+    {
+        var hero = Hero("Alice");
+        hero.Tm = 77;
+        var state = new CombatDisplayState([hero], Layout(["Alice"], []));
+
+        state.ApplyEvent(new CombatLogEntry
+        {
+            EventType = "TurnStart", ActorName = "Alice", TurnMeterSnapshot = null
+        });
+
+        Assert.Equal(77, state.TryGet("Alice")!.Tm);
     }
 }

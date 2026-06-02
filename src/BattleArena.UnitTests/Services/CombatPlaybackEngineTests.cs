@@ -38,7 +38,6 @@ public class CombatPlaybackEngineTests
             Name = n,
             MaxHp = 100,
             Hp = 100,
-            IsHero = true,
             IsAlive = true,
             Race = "Human"
         }),
@@ -177,8 +176,8 @@ public class CombatPlaybackEngineTests
     {
         var state = new CombatDisplayState(
         [
-            new CharDisplayState { Name = "Hero", MaxHp = 100, Hp = 100, IsHero = true, IsAlive = true, Race = "Human" },
-            new CharDisplayState { Name = "Enemy", MaxHp = 80, Hp = 80, IsHero = false, IsAlive = true, Race = "Orc" }
+            new CharDisplayState { Name = "Hero", MaxHp = 100, Hp = 100, IsAlive = true, Race = "Human" },
+            new CharDisplayState { Name = "Enemy", MaxHp = 80, Hp = 80, IsAlive = true, Race = "Orc" }
         ],
         CombatLayout.From(["Hero"], ["Enemy"], false));
 
@@ -245,6 +244,139 @@ public class CombatPlaybackEngineTests
         Assert.Contains("ShowQuietTicksSummary", spy.Calls);
     }
 
+    // ── PlayTurnBased — TurnEnd ───────────────────────────────────────────────────
+
+    [Fact]
+    public void PlayTurnBased_TurnEnd_NeverRenderedAsEvent()
+    {
+        var state = MakeState("Hero");
+        var spy = new SpyPresenter();
+        var result = MakeResult([
+            E(1, "TurnStart"),
+            E(1, "Attack"),
+            E(1, "TurnEnd")
+        ]);
+
+        CombatPlaybackEngine.PlayTurnBased(result, state, spy);
+
+        Assert.DoesNotContain("ShowCombatEvent:TurnEnd", spy.Calls);
+    }
+
+    // ── PlayTurnBased — pending messages ─────────────────────────────────────────
+
+    [Fact]
+    public void PlayTurnBased_RoundStart_OutsideTurn_RenderedAtStartOfFirstTurn()
+    {
+        var state = MakeState("Hero");
+        var spy = new SpyPresenter();
+        var result = MakeResult([
+            E(1, "RoundStart"),
+            E(2, "TurnStart"),
+            E(2, "Attack")
+        ]);
+        result.Log[0].RoundNumber = 1;
+
+        CombatPlaybackEngine.PlayTurnBased(result, state, spy);
+
+        var rendered = spy.RenderedEvents.Select(e => e.EventType).ToList();
+        Assert.Contains("RoundStart", rendered);
+        Assert.True(rendered.IndexOf("RoundStart") < rendered.IndexOf("Attack"),
+            "RoundStart must be rendered before Attack");
+    }
+
+    // ── PlayTurnBased — TM snapshot regression ───────────────────────────────────
+    //
+    // These tests guard the specific bug where TurnMeterGain was applied eagerly
+    // in the main loop, so fast characters always showed TM=100 at RefreshScreen
+    // because their TM had already re-accumulated by the time FlushTurn fired.
+    // The fix: TM is only ever set via the TurnMeterSnapshot on TurnStart.
+
+    [Fact]
+    public void PlayTurnBased_TmGainWithinTurn_NeverAppliedToState()
+    {
+        // A TurnMeterGain that fires inside a turn must not dirty the display state.
+        var heroSt = new CharDisplayState { Name = "Hero", MaxHp = 100, Hp = 100, IsAlive = true, Race = "Human" };
+        var state  = new CombatDisplayState([heroSt], CombatLayout.From(["Hero"], ["Enemy"], false));
+
+        var presenter = new RefreshCapturingPresenter();
+        var log = new List<CombatLogEntry>
+        {
+            new() { Tick = 1, EventType = "TurnStart", ActorName = "Hero", TargetName = "Enemy",
+                    TurnMeterSnapshot = new Dictionary<string, int> { ["Hero"] = 100 } },
+            // TM re-accumulates mid-turn in the simulator — must be ignored by the display
+            new() { Tick = 1, EventType = "TurnMeterGain", ActorName = "Hero", TurnMeterAfter = 15 },
+        };
+
+        CombatPlaybackEngine.PlayTurnBased(MakeResult(log), state, presenter);
+
+        // Snapshot said 100; the TurnMeterGain of 15 must NOT have been applied
+        Assert.Equal(100, state.TryGet("Hero")!.Tm);
+    }
+
+    [Fact]
+    public void PlayTurnBased_RefreshScreen_ShowsSnapshotTm_NotGainedAfterSnapshot()
+    {
+        // Core regression: before the fix, Goblin would show TM=80 at RefreshScreen
+        // because the TurnMeterGain (→80) was applied eagerly before FlushTurn.
+        // Correct behaviour: RefreshScreen must see the snapshot value of 40.
+
+        var heroSt = new CharDisplayState { Name = "Hero",   MaxHp = 100, Hp = 100, IsAlive = true, Race = "Human" };
+        var goblin = new CharDisplayState { Name = "Goblin", MaxHp =  80, Hp =  80, IsAlive = true, Race = "Orc" };
+        var state  = new CombatDisplayState([heroSt, goblin],
+                         CombatLayout.From(["Hero"], ["Goblin"], false));
+
+        var presenter = new RefreshCapturingPresenter();
+        var log = new List<CombatLogEntry>
+        {
+            new() { Tick = 1, EventType = "TurnStart", ActorName = "Hero", TargetName = "Goblin",
+                    TurnMeterSnapshot = new Dictionary<string, int> { ["Hero"] = 100, ["Goblin"] = 40 } },
+            // Goblin's TM re-accumulates within the turn — must not reach RefreshScreen
+            new() { Tick = 1, EventType = "TurnMeterGain", ActorName = "Goblin", TurnMeterAfter = 80 },
+            new() { Tick = 1, EventType = "Attack", ActorName = "Hero", TargetName = "Goblin" }
+        };
+
+        CombatPlaybackEngine.PlayTurnBased(MakeResult(log), state, presenter);
+
+        Assert.Single(presenter.TmSnapshotsAtRefresh);
+        Assert.Equal(40,  presenter.TmSnapshotsAtRefresh[0]["Goblin"]);
+        Assert.Equal(100, presenter.TmSnapshotsAtRefresh[0]["Hero"]);
+    }
+
+    [Fact]
+    public void PlayTurnBased_SecondTurn_RefreshScreenShowsSecondTurnSnapshot()
+    {
+        // Each turn's RefreshScreen must use that turn's own TurnMeterSnapshot,
+        // completely independent of the previous turn's values.
+
+        var heroSt = new CharDisplayState { Name = "Hero",   MaxHp = 100, Hp = 100, IsAlive = true, Race = "Human" };
+        var goblin = new CharDisplayState { Name = "Goblin", MaxHp =  80, Hp =  80, IsAlive = true, Race = "Orc" };
+        var state  = new CombatDisplayState([heroSt, goblin],
+                         CombatLayout.From(["Hero"], ["Goblin"], false));
+
+        var presenter = new RefreshCapturingPresenter();
+        var log = new List<CombatLogEntry>
+        {
+            new() { Tick = 1, EventType = "TurnStart", ActorName = "Hero",   TargetName = "Goblin",
+                    TurnMeterSnapshot = new Dictionary<string, int> { ["Hero"] = 100, ["Goblin"] = 30 } },
+            new() { Tick = 1, EventType = "Attack", ActorName = "Hero", TargetName = "Goblin" },
+            new() { Tick = 2, EventType = "TurnStart", ActorName = "Goblin", TargetName = "Hero",
+                    TurnMeterSnapshot = new Dictionary<string, int> { ["Hero"] = 18, ["Goblin"] = 100 } },
+            new() { Tick = 2, EventType = "Attack", ActorName = "Goblin", TargetName = "Hero" }
+        };
+
+        CombatPlaybackEngine.PlayTurnBased(MakeResult(log), state, presenter);
+
+        Assert.Equal(2, presenter.TmSnapshotsAtRefresh.Count);
+        // Turn 1
+        Assert.Equal(100, presenter.TmSnapshotsAtRefresh[0]["Hero"]);
+        Assert.Equal(30,  presenter.TmSnapshotsAtRefresh[0]["Goblin"]);
+        // Turn 2
+        Assert.Equal(18,  presenter.TmSnapshotsAtRefresh[1]["Hero"]);
+        Assert.Equal(100, presenter.TmSnapshotsAtRefresh[1]["Goblin"]);
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────────
+
     private sealed class CapturingPresenter : ICombatPresenter
     {
         private readonly Action<CombatLogEntry> _onEvent;
@@ -260,5 +392,28 @@ public class CombatPlaybackEngineTests
         public void ShowCombatEvent(CombatLogEntry entry, CombatDisplayState state) => _onEvent(entry);
         public int GetEventDelayMs(string eventType) => 0;
         public void Wait(int milliseconds) { }
+    }
+
+    /// <summary>
+    /// Captures a snapshot of every character's TM value (int, not a reference)
+    /// each time <see cref="RefreshScreen"/> is called.  GUI-agnostic — no Avalonia
+    /// or Unity dependency, tests only the Presentation contract.
+    /// </summary>
+    private sealed class RefreshCapturingPresenter : ICombatPresenter
+    {
+        public List<Dictionary<string, int>> TmSnapshotsAtRefresh { get; } = [];
+
+        public void RefreshScreen(CombatDisplayState state, int tick, string? active) =>
+            TmSnapshotsAtRefresh.Add(
+                state.All.ToDictionary(kv => kv.Key, kv => kv.Value.Tm));
+
+        public void ShowInitialScreen(CombatDisplayState state, int tick) { }
+        public void WaitForCombatStart() { }
+        public void ShowTurnHeader(int turn, string actor, string? target, bool isHero) { }
+        public void WaitForNextTurn(bool over) { }
+        public void ShowQuietTicksSummary(int from, int to) { }
+        public void ShowCombatEvent(CombatLogEntry entry, CombatDisplayState state) { }
+        public int GetEventDelayMs(string eventType) => 0;
+        public void Wait(int ms) { }
     }
 }

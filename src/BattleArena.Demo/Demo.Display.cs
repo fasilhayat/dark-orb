@@ -361,11 +361,11 @@ static partial class Demo
         var enemyNames = state.Layout.EnemyNames.ToHashSet(StringComparer.Ordinal);
         var heroes = state.Layout.HeroNames
             .Select(name => state.All[name])
-            .Concat(state.All.Values.Where(s => s.IsHero && !heroNames.Contains(s.Name)).OrderBy(s => s.Name))
+            .Concat(state.All.Values.Where(s => state.IsHeroSide(s.Name) && !heroNames.Contains(s.Name)).OrderBy(s => s.Name))
             .ToList();
         var enemies = state.Layout.EnemyNames
             .Select(name => state.All[name])
-            .Concat(state.All.Values.Where(s => !s.IsHero && !enemyNames.Contains(s.Name)).OrderBy(s => s.Name))
+            .Concat(state.All.Values.Where(s => !state.IsHeroSide(s.Name) && !enemyNames.Contains(s.Name)).OrderBy(s => s.Name))
             .ToList();
 
         bool isDuel = state.Layout.IsDuel;
@@ -385,8 +385,8 @@ static partial class Demo
 
         for (var i = 0; i < maxCount; i++)
         {
-            var left = i < heroes.Count ? BuildCharBlock(heroes[i], activeActorName) : empty;
-            var right = i < enemies.Count ? BuildCharBlock(enemies[i], activeActorName) : empty;
+            var left = i < heroes.Count ? BuildCharBlock(heroes[i], true, activeActorName) : empty;
+            var right = i < enemies.Count ? BuildCharBlock(enemies[i], false, activeActorName) : empty;
             PrintBlockPair(left, right);
             if (i < maxCount - 1) Console.WriteLine();
         }
@@ -406,7 +406,7 @@ static partial class Demo
         return [blank, blank, blank, blank, blank, blank];
     }
 
-    private static List<List<Seg>> BuildCharBlock(CharDisplayState s, string? activeActorName = null)
+    private static List<List<Seg>> BuildCharBlock(CharDisplayState s, bool isHeroSide, string? activeActorName = null)
     {
         var active = string.Equals(s.Name, activeActorName, StringComparison.Ordinal);
         var dead = !s.IsAlive;
@@ -423,7 +423,7 @@ static partial class Demo
 
         var borderFg = active ? ConsoleColor.White
                      : dead ? ConsoleColor.Gray
-                     : s.IsHero ? ConsoleColor.Blue
+                     : isHeroSide ? ConsoleColor.Blue
                      : ConsoleColor.Magenta;
 
         const char h  = '─';
@@ -499,7 +499,7 @@ static partial class Demo
 
         // ── Name row ───────────────────────────────────────────────────────────
         var indicator = active ? "\u25b6 " : "  ";
-        var indicFg = active ? ConsoleColor.White : s.IsHero ? ConsoleColor.Cyan : ConsoleColor.Red;
+        var indicFg = active ? ConsoleColor.White : isHeroSide ? ConsoleColor.Cyan : ConsoleColor.Red;
         var nameStr = (s.Name.Length > W_NAME ? s.Name.ToUpper()[..W_NAME] : s.Name.ToUpper()).PadRight(W_NAME);
         var weapTrunc = s.Weapon.Length > W_WEAPON ? s.Weapon[..W_WEAPON] : s.Weapon.PadRight(W_WEAPON);
         var weapStr = DisplayConfig.IsFieldEnabled("characterCard", "CurrentWeapon")

@@ -112,18 +112,16 @@ internal sealed class ConsoleCombatPresenter : ICombatPresenter
 
     private void HandleTurnStart(CombatLogEntry entry, CombatDisplayState state)
     {
-        var targetState = state.TryGet(entry.TargetName ?? string.Empty);
-        var actorState = state.TryGet(entry.ActorName);
         var verb = entry.IsSpell == true ? "conjures" : "readies";
 
         Console.WriteLine();
         Demo.CWL("  " + new string('·', 77), ConsoleColor.Gray);
         Demo.CW("  ▶ ", ConsoleColor.White);
-        Demo.CW(entry.ActorName.ToUpper(), actorState?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
+        Demo.CW(entry.ActorName.ToUpper(), state.IsHeroSide(entry.ActorName) ? ConsoleColor.Cyan : ConsoleColor.Red);
         Demo.CW($"  {verb}  ", ConsoleColor.Gray);
         Demo.CW($"[{entry.AttackSourceName}]", entry.IsSpell == true ? ConsoleColor.Magenta : ConsoleColor.Yellow);
         Demo.CW("  →  ", ConsoleColor.Gray);
-        Demo.CWL(entry.TargetName ?? "?", targetState?.IsHero == true ? ConsoleColor.Cyan : ConsoleColor.Red);
+        Demo.CWL(entry.TargetName ?? "?", state.IsHeroSide(entry.TargetName) ? ConsoleColor.Cyan : ConsoleColor.Red);
     }
 
     private static void HandleAttack(CombatLogEntry entry, CombatDisplayState _) => Demo.PrintAttack(entry);

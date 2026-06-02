@@ -678,16 +678,19 @@ public class CombatSimulator : ICombatSimulator
         setActiveActor(actorState.Character.Name);
         await notify(new CombatLogEntry
         {
-            Tick             = tick,
-            ActorName        = actorState.Character.Name,
-            EventType        = "TurnStart",
-            TurnMeterBefore  = actorState.Meter.CurrentValue,
-            IsReady          = true,
-            IsActive         = true,
-            AttackSourceName = setup.Source.Name,
-            IsSpell          = setup.IsSpell,
-            TargetName       = setup.Target.Name,
-            Message          = $"{actorState.Character.Name} takes their turn  (TM: {actorState.Meter.CurrentValue})"
+            Tick               = tick,
+            ActorName          = actorState.Character.Name,
+            EventType          = "TurnStart",
+            TurnMeterBefore    = actorState.Meter.CurrentValue,
+            IsReady            = true,
+            IsActive           = true,
+            AttackSourceName   = setup.Source.Name,
+            IsSpell            = setup.IsSpell,
+            TargetName         = setup.Target.Name,
+            TurnMeterSnapshot  = states
+                .Where(s => s.Character.IsAlive)
+                .ToDictionary(s => s.Character.Name, s => s.Meter.CurrentValue),
+            Message            = $"{actorState.Character.Name} takes their turn  (TM: {actorState.Meter.CurrentValue})"
         });
 
         if (await TryHandlePetSummonAsync(tick, actorState, setup, states, stateMap, currentRound, notify))

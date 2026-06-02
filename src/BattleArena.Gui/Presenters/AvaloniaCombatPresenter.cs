@@ -163,8 +163,8 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
     private List<LogSegment> BuildTurnStart(CombatLogEntry e, CombatDisplayState state)
     {
-        var actorColor = NameBrush(state.TryGet(e.ActorName ?? "")?.IsHero, e.ActorName, null);
-        var targetColor = NameBrush(state.TryGet(e.TargetName ?? "")?.IsHero, e.TargetName, actorColor);
+        var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
+        var targetColor = NameBrush(state.IsHeroSide(e.TargetName), e.TargetName, actorColor);
         var srcColor = e.IsSpell == true ? Magenta : Yellow;
         var verb = e.IsSpell == true ? "conjures" : "readies";
         return
@@ -183,7 +183,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         var list = new List<LogSegment>();
         var total = (e.DieRoll ?? 0) + (e.AttackPower ?? 0);
         var margin = total - (e.DefensePower ?? 0);
-        var actorColor = NameBrush(state.TryGet(e.ActorName)?.IsHero, e.ActorName, null);
+        var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         var srcColor = e.IsSpell == true ? Magenta : Yellow;
 
         list.Add(Seg("  ", White));
@@ -287,7 +287,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
     private static List<LogSegment> BuildDoTTick(CombatLogEntry e, CombatDisplayState state)
     {
-        var actorColor = NameBrush(state.TryGet(e.ActorName)?.IsHero, e.ActorName, null);
+        var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         return
         [
             Seg("  \u2193 ", Yellow),
@@ -300,7 +300,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
     private static List<LogSegment> BuildEffectApplied(CombatLogEntry e, CombatDisplayState state)
     {
-        var actorColor = NameBrush(state.TryGet(e.ActorName)?.IsHero, e.ActorName, null);
+        var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         return
         [
             Seg("  \u2605 ", Yellow),
@@ -311,7 +311,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
     private static List<LogSegment> BuildEffectResisted(CombatLogEntry e, CombatDisplayState state)
     {
-        var actorColor = NameBrush(state.TryGet(e.ActorName)?.IsHero, e.ActorName, null);
+        var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         return
         [
             Seg("  \u2713 ", Green),
@@ -324,7 +324,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
     private static List<LogSegment> BuildEffectExpired(CombatLogEntry e, CombatDisplayState state)
     {
-        var actorColor = NameBrush(state.TryGet(e.ActorName)?.IsHero, e.ActorName, null);
+        var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         return
         [
             Seg("  \u25cb ", Gray),
@@ -336,7 +336,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
     private static List<LogSegment> BuildSkippedTurn(CombatLogEntry e, CombatDisplayState state)
     {
-        var actorColor = NameBrush(state.TryGet(e.ActorName)?.IsHero, e.ActorName, null);
+        var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         return
         [
             Seg("  \u2298 ", Yellow),
@@ -358,7 +358,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
     private static List<LogSegment> BuildManaRegen(CombatLogEntry e, CombatDisplayState state)
     {
-        var actorColor = NameBrush(state.TryGet(e.ActorName)?.IsHero, e.ActorName, null);
+        var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         return
         [
             Seg("  \u266a ", Magenta),
@@ -370,7 +370,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
     private static List<LogSegment> BuildManaDeduct(CombatLogEntry e, CombatDisplayState state)
     {
-        var actorColor = NameBrush(state.TryGet(e.ActorName)?.IsHero, e.ActorName, null);
+        var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         return
         [
             Seg("  \u25c6 ", Magenta),
@@ -383,7 +383,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
     private static List<LogSegment> BuildPerfectParry(CombatLogEntry e, CombatDisplayState state)
     {
-        var actorColor = NameBrush(state.TryGet(e.ActorName)?.IsHero, e.ActorName, null);
+        var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         return
         [
             Seg("  \u29df ", Green),
@@ -394,7 +394,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
     private static List<LogSegment> BuildDevastatingStrike(CombatLogEntry e, CombatDisplayState state)
     {
-        var actorColor = NameBrush(state.TryGet(e.ActorName)?.IsHero, e.ActorName, null);
+        var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         return
         [
             Seg("  \u2620 ", Magenta),
@@ -405,7 +405,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
     private static List<LogSegment> BuildTotalReversal(CombatLogEntry e, CombatDisplayState state)
     {
-        var actorColor = NameBrush(state.TryGet(e.ActorName)?.IsHero, e.ActorName, null);
+        var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         return
         [
             Seg("  \u21bb ", Yellow),
@@ -424,15 +424,10 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         _ => "CRUSHING HIT"
     };
 
-    private static IBrush NameBrush(bool? isHero, string? name, IBrush? fallback)
+    private static IBrush NameBrush(bool isHero, string? name, IBrush? fallback)
     {
         if (name is null) return fallback ?? White;
-        return isHero switch
-        {
-            true => HeroName,
-            false => EnemyName,
-            _ => fallback ?? White
-        };
+        return isHero ? HeroName : EnemyName;
     }
 
     private static IBrush MakeBrush(string hex) => new SolidColorBrush(Color.Parse(hex));

@@ -21,6 +21,9 @@ public static class CombatPlaybackEngine
         var turnCount = 0;
         var turnTick = 0;
 
+        // Apply TurnStart snapshot first so RefreshScreen shows correct TM for
+        // this turn, then apply every other event just before it is rendered so
+        // HP / mana / effect updates reach the screen at the right moment.
         void FlushTurn()
         {
             if (!inTurn || turnEvents.Count == 0) return;
@@ -28,11 +31,15 @@ public static class CombatPlaybackEngine
             var turnStart = turnEvents.First(e => e.EventType == "TurnStart");
             var isHero = state.Layout.HeroNames.Contains(turnStart.ActorName);
 
+            state.ApplyEvent(turnStart);
             presenter.RefreshScreen(state, turnTick, turnStart.ActiveActorName);
             presenter.ShowTurnHeader(turnCount, turnStart.ActorName, turnStart.TargetName, isHero);
 
             foreach (var entry in turnEvents)
             {
+                if (!ReferenceEquals(entry, turnStart))
+                    state.ApplyEvent(entry);
+
                 presenter.ShowCombatEvent(entry, state);
                 var delay = presenter.GetEventDelayMs(entry.EventType);
                 if (delay > 0)
@@ -54,12 +61,13 @@ public static class CombatPlaybackEngine
         foreach (var entry in result.Log)
         {
             prepareEventState?.Invoke(entry, state);
-            state.ApplyEvent(entry);
 
             switch (entry.EventType)
             {
                 case "TurnMeterGain":
                 case "TurnEnd":
+                    // Skipped in turn-based mode — TM is displayed via the
+                    // TurnMeterSnapshot on each TurnStart event.
                     break;
 
                 case "TurnStart":

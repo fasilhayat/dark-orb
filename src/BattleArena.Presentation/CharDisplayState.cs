@@ -4,7 +4,6 @@ public class CharDisplayState
 {
     public required string Name { get; init; }
     public required int MaxHp { get; init; }
-    public required bool IsHero { get; init; }
     public int Level { get; init; }
     public string ClassName { get; init; } = string.Empty;
     public string Sex { get; init; } = "Unknown";

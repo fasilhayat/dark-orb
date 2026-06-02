@@ -9,6 +9,7 @@ using BattleArena.Application.Models;
 public sealed class CombatDisplayState
 {
     private readonly Dictionary<string, CharDisplayState> _chars;
+    private readonly HashSet<string> _heroSideNames;
 
     public CombatLayout Layout { get; }
 
@@ -16,35 +17,42 @@ public sealed class CombatDisplayState
     {
         _chars = characters.ToDictionary(c => c.Name, c => c);
         Layout = layout;
+        _heroSideNames = Layout.HeroNames.ToHashSet();
     }
 
     public CharDisplayState? TryGet(string name) => _chars.GetValueOrDefault(name);
     public IReadOnlyDictionary<string, CharDisplayState> All => _chars;
 
+    /// <summary>Returns true when <paramref name="name"/> is on the hero side (including summoned pets).</summary>
+    public bool IsHeroSide(string? name) => name is not null && _heroSideNames.Contains(name);
+
     /// <summary>
     /// Ensure a summoned pet has a display entry (called when PetSummoned fires).
+    /// The pet inherits its side from the summoner.
     /// </summary>
-    public void EnsurePet(string petName, int maxHp, bool isHero)
+    public void EnsurePet(string petName, int maxHp, string summonerName)
     {
-        if (!_chars.ContainsKey(petName))
+        if (_chars.ContainsKey(petName)) return;
+
+        if (_heroSideNames.Contains(summonerName))
+            _heroSideNames.Add(petName);
+
+        _chars[petName] = new CharDisplayState
         {
-            _chars[petName] = new CharDisplayState
-            {
-                Name = petName,
-                MaxHp = maxHp,
-                Hp = maxHp,
-                IsHero = isHero,
-                MaxMana = 0,
-                Mana = 0,
-                Weapon = string.Empty,
-                Race = "Pet"
-            };
-        }
+            Name   = petName,
+            MaxHp  = maxHp,
+            Hp     = maxHp,
+            MaxMana = 0,
+            Mana   = 0,
+            Weapon = string.Empty,
+            Race   = "Pet"
+        };
     }
 
     /// <summary>
     /// Apply a combat log event to update display state.
-    /// MUST be called before presenting the event to the renderer.
+    /// In <see cref="CombatPlaybackEngine.PlayTurnBased"/> this is called lazily
+    /// (inside FlushTurn) so each event is applied immediately before it is rendered.
     /// </summary>
     public void ApplyEvent(CombatLogEntry e)
     {
@@ -58,6 +66,12 @@ public sealed class CombatDisplayState
             case "TurnStart":
                 if (_chars.TryGetValue(e.ActorName, out var tsSt))
                     tsSt.Weapon = e.AttackSourceName ?? tsSt.Weapon;
+                if (e.TurnMeterSnapshot is not null)
+                {
+                    foreach (var (name, tm) in e.TurnMeterSnapshot)
+                        if (_chars.TryGetValue(name, out var snapSt))
+                            snapSt.Tm = tm;
+                }
                 break;
 
             case "TurnEnd":

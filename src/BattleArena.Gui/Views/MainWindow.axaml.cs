@@ -225,7 +225,7 @@ public partial class MainWindow : Window
                     {
                         if (!string.IsNullOrWhiteSpace(entry.SummonedPetName) && s.TryGet(entry.SummonedPetName) is null)
                         {
-                            s.EnsurePet(entry.SummonedPetName, 20, true);
+                            s.EnsurePet(entry.SummonedPetName, 20, entry.ActorName);
                         }
                     });
             }
@@ -247,7 +247,6 @@ public partial class MainWindow : Window
             Name = c.Name,
             MaxHp = c.MaxHp,
             Hp = c.MaxHp,
-            IsHero = c.IsHero,
             Level = c.Level,
             ClassName = c.ClassName,
             Sex = c.Sex,
