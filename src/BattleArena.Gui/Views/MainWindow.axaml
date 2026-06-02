@@ -111,7 +111,14 @@
             <ColumnDefinition Width="{Binding RoundProgress, Converter={StaticResource GridLenConv}}" />
             <ColumnDefinition Width="{Binding RoundRemainder, Converter={StaticResource GridLenConv}}" />
           </Grid.ColumnDefinitions>
-          <Border Grid.Column="0" Background="#d4a017" CornerRadius="2" />
+          <Border Grid.Column="0" CornerRadius="2">
+            <Border.Background>
+              <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                <GradientStop Color="#001a33" Offset="0.0" />
+                <GradientStop Color="#3399ff" Offset="1.0" />
+              </LinearGradientBrush>
+            </Border.Background>
+          </Border>
           <Border Grid.Column="1" Background="#0a0a1a" />
           <TextBlock Grid.ColumnSpan="2" Text="{Binding RoundBarHeader}"
                      Foreground="White" FontSize="13" FontWeight="Bold"
@@ -197,13 +204,17 @@
           <Button x:Name="StartButton" Content="Back to Setup" Click="OnBackToSetupClick"
                   Width="110" Height="28" FontSize="11"
                   HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
-          <Button x:Name="NextButton" Content="Next" Click="OnNextClick"
+          <Button x:Name="NextButton" Content="Next Turn" Click="OnNextClick"
                   Width="70" Height="28" FontSize="11" IsEnabled="False"
                   HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
           <Button x:Name="AutoButton" Content="Auto Play" Click="OnAutoClick"
                   Width="70" Height="28" FontSize="11" IsEnabled="False"
                   HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
           <Separator Width="1" Background="#444" Margin="4,0" />
+          <Button x:Name="NewCombatButton" Content="New Combat" Click="OnNewCombatClick"
+                  Width="100" Height="28" FontSize="11" IsVisible="False"
+                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                  Background="#3a5c3a" BorderBrush="#575" />
           <TextBlock Text="Speed:" Foreground="#999" VerticalAlignment="Center" FontSize="12" />
           <Slider x:Name="SpeedSlider" Width="120" Minimum="0" Maximum="2"
                   Value="1" TickFrequency="1" IsSnapToTickEnabled="True"
@@ -216,7 +227,7 @@
     </Grid>
 
     <!-- ── SETUP PHASE ── -->
-    <Grid IsVisible="{Binding IsSetupPhase}" RowDefinitions="Auto,Auto,Auto,*,Auto" Margin="20">
+    <Grid IsVisible="{Binding IsSetupPhase}" RowDefinitions="Auto,Auto,Auto,Auto,*,Auto" Margin="20">
 
       <TextBlock Grid.Row="0" Text="CHOOSE YOUR CHAMPIONS"
                  Foreground="#00bfff" FontSize="20" FontWeight="Bold"
@@ -224,18 +235,26 @@
 
       <!-- Scenario toggle -->
       <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="4" Margin="0,0,0,8">
-        <Button x:Name="DuelButton" Classes="toggle" Content="DUEL 1v1" Click="OnDuelClick"
-                Width="130" Height="30" FontSize="12" />
-        <Button x:Name="PartyButton" Classes="toggle" Content="PARTY vs PARTY" Click="OnPartyClick"
-                Width="150" Height="30" FontSize="12" />
+        <Button x:Name="DuelButton" Classes="toggle" Content="Duel" Click="OnDuelClick"
+                Width="110" Height="30" FontSize="12" />
+        <Button x:Name="ClashButton" Classes="toggle" Content="Clash" Click="OnClashClick"
+                Width="110" Height="30" FontSize="12" />
+      </StackPanel>
+
+      <!-- Mode toggle -->
+      <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="4" Margin="0,0,0,4">
+        <Button x:Name="TurnBasedButton" Classes="toggle" Content="Manual" Click="OnTurnBasedClick"
+                Width="100" Height="28" FontSize="11" />
+        <Button x:Name="AutoModeButton" Classes="toggle" Content="Auto" Click="OnAutoModeClick"
+                Width="100" Height="28" FontSize="11" />
       </StackPanel>
 
       <!-- Selection hint -->
-      <TextBlock x:Name="SelectionHint" Grid.Row="2" Foreground="#888" FontSize="13"
+      <TextBlock x:Name="SelectionHint" Grid.Row="3" Foreground="#888" FontSize="13"
                  HorizontalAlignment="Center" Margin="0,4" />
 
       <!-- Hero roster -->
-      <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" Margin="0,4">
+      <ScrollViewer Grid.Row="4" VerticalScrollBarVisibility="Auto" Margin="0,4">
         <ListBox x:Name="HeroListBox" Background="Transparent" BorderThickness="0"
                  SelectionMode="Single" SelectionChanged="OnHeroSelected">
           <ListBox.ItemTemplate>
@@ -261,7 +280,7 @@
       </ScrollViewer>
 
       <!-- Selected fighters display -->
-      <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20" Margin="0,4">
+      <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20" Margin="0,4">
         <Border Background="#1a1a2e" BorderBrush="#4488ff" BorderThickness="1" CornerRadius="4" Padding="8,4" Width="180">
           <TextBlock HorizontalAlignment="Center">
             <Run Text="Fighter 1: " Foreground="#888" />
@@ -274,8 +293,8 @@
             <Run Text="{Binding Fighter2Name}" Foreground="#ff8888" FontWeight="Bold" />
           </TextBlock>
         </Border>
-        <Button x:Name="FightButton" Content="FIGHT!" Click="OnFightClick"
-                Width="140" Height="34" FontSize="14" IsEnabled="{Binding CanStartCombat}" />
+        <Button x:Name="FightButton" Content="Fight" Click="OnFightClick"
+                Width="120" Height="34" FontSize="14" IsEnabled="{Binding CanStartCombat}" />
         <Separator Width="1" Background="#444" Margin="4,0" />
         <Button x:Name="BackToMainFromSetupButton" Content="Back to Main Menu" Click="OnBackToMainFromSetupClick"
                 Width="140" Height="34" FontSize="11" Background="#5c3a3a" BorderBrush="#755" />
@@ -290,9 +309,9 @@
                    HorizontalAlignment="Center" Margin="0,0,0,16" />
         <Button x:Name="CreateCharButton" Content="Create Character"
                 Width="220" Height="44" FontSize="15" Click="OnCreateCharClick" />
-        <Button x:Name="VsButton" Content="1 vs 1"
+        <Button x:Name="VsButton" Content="Duel"
                 Width="220" Height="44" FontSize="15" Click="OnVsClick" />
-        <Button x:Name="PartyVsPartyButton" Content="Party vs Party"
+        <Button x:Name="PartyVsPartyButton" Content="Clash"
                 Width="220" Height="44" FontSize="15" Click="OnPartyVsPartyClick" />
         <Button x:Name="BackToMainButton" Content="Back"
                 Width="220" Height="44" FontSize="15" Click="OnBackToMainClick"

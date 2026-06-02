@@ -112,6 +112,22 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     public bool IsDuel => Scenario == "Duel";
     public bool IsParty => Scenario == "Party";
 
+    private string _mode = "TurnBased";
+    public string Mode
+    {
+        get => _mode;
+        set
+        {
+            if (SetField(ref _mode, value))
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsTurnBased)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsAutoMode)));
+            }
+        }
+    }
+    public bool IsTurnBased => Mode == "TurnBased";
+    public bool IsAutoMode => Mode == "Auto";
+
     private string _fighter1Name = "";
     public string Fighter1Name
     {

@@ -48,7 +48,7 @@ public partial class MainWindow : Window
     {
         _vm.Scenario = "Duel";
         DuelButton.IsEnabled = false;
-        PartyButton.IsEnabled = true;
+        ClashButton.IsEnabled = true;
         _fighter1 = null;
         _fighter2 = null;
         _vm.Fighter1Name = "";
@@ -56,29 +56,41 @@ public partial class MainWindow : Window
         SelectionHint.Text = "Select Fighter 1";
     }
 
-    private void OnPartyClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private void OnClashClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         _vm.Scenario = "Party";
         DuelButton.IsEnabled = true;
-        PartyButton.IsEnabled = false;
+        ClashButton.IsEnabled = false;
         _fighter1 = null;
         _fighter2 = null;
         _vm.Fighter1Name = "";
         _vm.Fighter2Name = "";
-        SelectionHint.Text = "Party mode coming soon — pick two fighters for now";
+        SelectionHint.Text = "Clash mode — pick two fighters";
     }
 
     private void OnHeroSelected(object? sender, SelectionChangedEventArgs e)
     {
         if (HeroListBox.SelectedItem is not Character hero) return;
 
-        if (_fighter1 is null || _fighter1.Name == hero.Name)
+        if (_fighter1?.Name == hero.Name)
+        {
+            _fighter1 = null;
+            _vm.Fighter1Name = "";
+            SelectionHint.Text = "Select Fighter 1";
+        }
+        else if (_fighter2?.Name == hero.Name)
+        {
+            _fighter2 = null;
+            _vm.Fighter2Name = "";
+            SelectionHint.Text = "Select Fighter 2";
+        }
+        else if (_fighter1 is null)
         {
             _fighter1 = hero;
             _vm.Fighter1Name = hero.Name;
-            SelectionHint.Text = "Select Fighter 2";
+            SelectionHint.Text = _fighter2 is null ? "Select Fighter 2" : "Both fighters selected!";
         }
-        else if (_fighter2 is null || _fighter2.Name == hero.Name)
+        else if (_fighter2 is null)
         {
             _fighter2 = hero;
             _vm.Fighter2Name = hero.Name;
@@ -86,7 +98,6 @@ public partial class MainWindow : Window
         }
         else
         {
-            // Both selected, clicking again replaces Fighter 2
             _fighter2 = hero;
             _vm.Fighter2Name = hero.Name;
         }
@@ -97,19 +108,33 @@ public partial class MainWindow : Window
     private async void OnFightClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         if (_fighter1 is null || _fighter2 is null) return;
+        await StartCombat();
+    }
 
+    private async void OnNewCombatClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        NewCombatButton.IsVisible = false;
+        if (_fighter1 is null || _fighter2 is null) return;
+        await StartCombat();
+    }
+
+    private async Task StartCombat()
+    {
         _vm.Phase = "Combat";
         _vm.CombatLog.Clear();
         _vm.Heroes.Clear();
         _vm.Enemies.Clear();
         _vm.ActiveActorName = "";
         _vm.CombatOver = false;
+        _vm.Tick = 0;
+        _vm.RoundNumber = 0;
+        _vm.TickInRound = 0;
 
-        ResetCombatant(_fighter1);
-        ResetCombatant(_fighter2);
+        ResetCombatant(_fighter1!);
+        ResetCombatant(_fighter2!);
 
-        var party1 = Party.Solo(_fighter1, Roster.GetAttackSource(_fighter1));
-        var party2 = Party.Solo(_fighter2, Roster.GetAttackSource(_fighter2));
+        var party1 = Party.Solo(_fighter1!, Roster.GetAttackSource(_fighter1!));
+        var party2 = Party.Solo(_fighter2!, Roster.GetAttackSource(_fighter2!));
 
         await RunCombat(party1, party2);
     }
@@ -133,22 +158,34 @@ public partial class MainWindow : Window
         _vm.Heroes.Clear();
         _vm.Enemies.Clear();
         _vm.IsRunning = false;
+        _vm.CombatOver = false;
+        _vm.Tick = 0;
+        _vm.RoundNumber = 0;
+        _vm.TickInRound = 0;
         NextButton.IsEnabled = false;
         AutoButton.IsEnabled = false;
+        NewCombatButton.IsVisible = false;
     }
 
     private void OnDemoClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         _vm.Phase = "Setup";
+        _vm.Mode = "TurnBased";
         _vm.CombatLog.Clear();
         _vm.Heroes.Clear();
         _vm.Enemies.Clear();
         _vm.Fighter1Name = "";
         _vm.Fighter2Name = "";
+        _vm.CombatOver = false;
+        _vm.Tick = 0;
+        _vm.RoundNumber = 0;
+        _vm.TickInRound = 0;
         _fighter1 = null;
         _fighter2 = null;
         DuelButton.IsEnabled = false;
-        PartyButton.IsEnabled = true;
+        ClashButton.IsEnabled = true;
+        TurnBasedButton.IsEnabled = false;
+        AutoModeButton.IsEnabled = true;
         SelectionHint.Text = "Select Fighter 1";
         HeroListBox.SelectedItem = null;
     }
@@ -176,6 +213,24 @@ public partial class MainWindow : Window
     private void OnBackToMainClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         _vm.Phase = "MainMenu";
+        _vm.CombatOver = false;
+        _vm.Tick = 0;
+        _vm.RoundNumber = 0;
+        _vm.TickInRound = 0;
+    }
+
+    private void OnTurnBasedClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        _vm.Mode = "TurnBased";
+        TurnBasedButton.IsEnabled = false;
+        AutoModeButton.IsEnabled = true;
+    }
+
+    private void OnAutoModeClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        _vm.Mode = "Auto";
+        TurnBasedButton.IsEnabled = true;
+        AutoModeButton.IsEnabled = false;
     }
 
     private void OnBackToMainFromSetupClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -192,6 +247,10 @@ public partial class MainWindow : Window
         _vm.Heroes.Clear();
         _vm.Enemies.Clear();
         _vm.IsRunning = false;
+        _vm.CombatOver = false;
+        _vm.Tick = 0;
+        _vm.RoundNumber = 0;
+        _vm.TickInRound = 0;
     }
 
     private async Task RunCombat(Party party1, Party party2)
@@ -208,6 +267,7 @@ public partial class MainWindow : Window
         NextButton.IsEnabled = true;
         AutoButton.IsEnabled = true;
         AutoButton.Content = "Auto Play";
+        NewCombatButton.IsVisible = false;
 
         foreach (var pm in party1.Members)
         {
@@ -276,7 +336,8 @@ public partial class MainWindow : Window
 
         _presenter = new AvaloniaCombatPresenter(_vm, _displayConfig, _waitForNext, Dispatcher.UIThread)
         {
-            PacingMultiplier = SpeedSlider.Value
+            PacingMultiplier = SpeedSlider.Value,
+            AutoMode = _vm.Mode == "Auto"
         };
 
         _ = Task.Run(() =>
@@ -299,8 +360,10 @@ public partial class MainWindow : Window
                 Dispatcher.UIThread.Post(() =>
                 {
                     _vm.IsRunning = false;
+                    _vm.CombatOver = true;
                     NextButton.IsEnabled = false;
                     AutoButton.IsEnabled = false;
+                    NewCombatButton.IsVisible = true;
                 });
             }
         }, _cts.Token);
