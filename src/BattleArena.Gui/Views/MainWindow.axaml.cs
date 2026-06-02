@@ -1,8 +1,13 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using BattleArena.Application.Interfaces;
+using BattleArena.Application.Models;
 using BattleArena.Application.Modifiers;
 using BattleArena.Application.Services;
 using BattleArena.Core.Entities;
@@ -289,6 +294,8 @@ public partial class MainWindow : Window
             }
             finally
             {
+                DumpCombatLogFiles(result);
+
                 Dispatcher.UIThread.Post(() =>
                 {
                     _vm.IsRunning = false;
@@ -297,6 +304,52 @@ public partial class MainWindow : Window
                 });
             }
         }, _cts.Token);
+    }
+
+    private void DumpCombatLogFiles(CombatResult result)
+    {
+        try
+        {
+            var dir = AppContext.BaseDirectory;
+            while (!string.IsNullOrEmpty(dir)
+                && !File.Exists(Path.Combine(dir, "src", "BattleArena.sln")))
+                dir = Path.GetDirectoryName(dir);
+
+            var outputDir = Path.Combine(
+                string.IsNullOrEmpty(dir) ? AppContext.BaseDirectory : dir,
+                "combat-logs");
+            Directory.CreateDirectory(outputDir);
+
+            var p1Name = result.Party1?.Name ?? "Party1";
+            var p2Name = result.Party2?.Name ?? "Party2";
+            var label = $"{p1Name}_vs_{p2Name}".Replace(" ", "_");
+
+            CombatLogWriter.Write(result, label, outputDir, "GUI");
+
+            CombatLogPruner.Prune(new DirectoryInfo(outputDir));
+        }
+        catch
+        {
+            // Best-effort — don't crash the GUI if file I/O fails
+        }
+    }
+
+    private async void OnCopyLogClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var sb = new StringBuilder();
+        foreach (var entry in _vm.CombatLog)
+        {
+            foreach (var seg in entry.Segments)
+                sb.Append(seg.Text);
+            sb.AppendLine();
+        }
+
+        if (sb.Length > 0)
+        {
+            var topLevel = TopLevel.GetTopLevel(this);
+            if (topLevel?.Clipboard is { } clipboard)
+                await clipboard.SetTextAsync(sb.ToString());
+        }
     }
 
     private static CharDisplayState MakeState(CharCardViewModel c) =>
