@@ -26,7 +26,7 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         set
         {
             if (SetField(ref _roundNumber, value))
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RoundHeader)));
+                NotifyRoundProps();
         }
     }
 
@@ -37,8 +37,20 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         set
         {
             if (SetField(ref _tickInRound, value))
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RoundHeader)));
+                NotifyRoundProps();
         }
+    }
+
+    public double RoundProgress => Math.Clamp((double)TickInRound / 10, 0, 1);
+    public double RoundRemainder => 1.0 - RoundProgress;
+    public string RoundBarHeader => $"ROUND {RoundNumber}  —  {TickInRound}/10 ticks";
+
+    private void NotifyRoundProps()
+    {
+        var e = new PropertyChangedEventArgs(nameof(RoundBarHeader));
+        PropertyChanged?.Invoke(this, e);
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RoundProgress)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RoundRemainder)));
     }
 
     private string _activeActorName = "";
@@ -61,8 +73,6 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         get => _isRunning;
         set => SetField(ref _isRunning, value);
     }
-
-    public string RoundHeader => $"ROUND {RoundNumber}  Tick {TickInRound}/10";
 
     public void UpdateFromState(CombatDisplayState state, int tick)
     {

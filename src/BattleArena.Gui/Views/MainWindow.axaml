@@ -5,20 +5,72 @@
         Title="BattleArena — Combat Simulation"
         Width="1200" Height="800" MinWidth="900" MinHeight="600"
         Background="#0d0d1a">
-  <Grid RowDefinitions="Auto,*,220,Auto" Margin="8">
+  <Window.Resources>
+    <views:DoubleToWidthConverter x:Key="WidthConv" />
+    <views:DoubleToGridLengthConverter x:Key="GridLenConv" />
+  </Window.Resources>
 
-    <!-- Row 0: Header -->
-    <StackPanel Grid.Row="0">
-      <TextBlock Text="***  BATTLE ARENA  —  COMBAT SIMULATION  ***"
-                 Foreground="#00bfff" FontSize="18" FontWeight="Bold"
-                 HorizontalAlignment="Center" Margin="0,4" />
-      <TextBlock Foreground="#d4a017" FontSize="13" FontWeight="Bold"
-                 HorizontalAlignment="Center"
-                 Text="{Binding RoundHeader}" />
-    </StackPanel>
+  <Window.Styles>
+    <Style Selector="Button">
+      <Setter Property="Background" Value="#3a3a5c" />
+      <Setter Property="Foreground" Value="White" />
+      <Setter Property="BorderBrush" Value="#555" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="3" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+    <Style Selector="Button:pointerover">
+      <Setter Property="Background" Value="#00bfff" />
+      <Setter Property="Foreground" Value="White" />
+    </Style>
+    <Style Selector="Button:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="#00bfff" />
+      <Setter Property="Foreground" Value="White" />
+    </Style>
+    <Style Selector="Button:pressed">
+      <Setter Property="Background" Value="#0088cc" />
+      <Setter Property="Foreground" Value="White" />
+    </Style>
+    <Style Selector="Button:pressed /template/ ContentPresenter">
+      <Setter Property="Background" Value="#0088cc" />
+      <Setter Property="Foreground" Value="White" />
+    </Style>
+    <Style Selector="Button:disabled">
+      <Setter Property="Background" Value="#1a1a2e" />
+      <Setter Property="Foreground" Value="#555" />
+      <Setter Property="BorderBrush" Value="#333" />
+    </Style>
+    <Style Selector="Button:disabled /template/ ContentPresenter">
+      <Setter Property="Foreground" Value="#555" />
+    </Style>
+  </Window.Styles>
 
-    <!-- Row 1: Character cards side by side -->
-    <Grid Grid.Row="1" ColumnDefinitions="*,Auto,*" Margin="0,4">
+  <Grid RowDefinitions="Auto,Auto,*,220,Auto" Margin="8">
+
+    <!-- Row 0: Title -->
+    <TextBlock Grid.Row="0" Text="***  BATTLE ARENA  —  COMBAT SIMULATION  ***"
+               Foreground="#00bfff" FontSize="18" FontWeight="Bold"
+               HorizontalAlignment="Center" Margin="0,4" />
+
+    <!-- Row 1: Round progress bar -->
+    <Border Grid.Row="1" BorderBrush="#333" BorderThickness="1" CornerRadius="3"
+            Background="#0d0d1a" Height="28" Margin="0,0,0,2">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="{Binding RoundProgress, Converter={StaticResource GridLenConv}}" />
+          <ColumnDefinition Width="{Binding RoundRemainder, Converter={StaticResource GridLenConv}}" />
+        </Grid.ColumnDefinitions>
+        <Border Grid.Column="0" Background="#d4a017" CornerRadius="2" />
+        <Border Grid.Column="1" Background="#0a0a1a" />
+        <TextBlock Grid.ColumnSpan="2" Text="{Binding RoundBarHeader}"
+                   Foreground="White" FontSize="13" FontWeight="Bold"
+                   HorizontalAlignment="Center" VerticalAlignment="Center" />
+      </Grid>
+    </Border>
+
+    <!-- Row 2: Character cards side by side -->
+    <Grid Grid.Row="2" ColumnDefinitions="*,Auto,*" Margin="0,4">
       <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
         <ItemsControl ItemsSource="{Binding Heroes}">
           <ItemsControl.ItemsPanel>
@@ -52,8 +104,8 @@
       </ScrollViewer>
     </Grid>
 
-    <!-- Row 2: Combat log -->
-    <Border Grid.Row="2" BorderBrush="#333" BorderThickness="1" CornerRadius="3"
+    <!-- Row 3: Combat log -->
+    <Border Grid.Row="3" BorderBrush="#333" BorderThickness="1" CornerRadius="3"
             Background="#0a0a1a" Margin="0,4">
       <Grid RowDefinitions="Auto,*">
         <TextBlock Grid.Row="0" Text="COMBAT LOG" Foreground="#888" FontSize="11"
@@ -71,28 +123,26 @@
       </Grid>
     </Border>
 
-    <!-- Row 3: Control bar -->
-    <Border Grid.Row="3" BorderBrush="#333" BorderThickness="1" CornerRadius="3"
+    <!-- Row 4: Control bar -->
+    <Border Grid.Row="4" BorderBrush="#333" BorderThickness="1" CornerRadius="3"
             Padding="8,4" Background="#1a1a2e">
       <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
         <Button x:Name="StartButton" Content="Start Combat" Click="OnStartClick"
-                Width="110" Height="28" FontSize="11" Foreground="White" BorderThickness="1"
+                Width="110" Height="28" FontSize="11"
                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
         <Button x:Name="NextButton" Content="Next" Click="OnNextClick"
                 Width="70" Height="28" FontSize="11" IsEnabled="False"
-                Foreground="White" BorderThickness="1"
                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
         <Button x:Name="AutoButton" Content="Auto Play" Click="OnAutoClick"
                 Width="70" Height="28" FontSize="11" IsEnabled="False"
-                Foreground="White" BorderThickness="1"
                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
         <Separator Width="1" Background="#444" Margin="4,0" />
         <TextBlock Text="Speed:" Foreground="#999" VerticalAlignment="Center" FontSize="12" />
-        <Slider x:Name="SpeedSlider" Width="120" Minimum="0.5" Maximum="2"
-                Value="1" TickFrequency="0.5" IsSnapToTickEnabled="True"
+        <Slider x:Name="SpeedSlider" Width="120" Minimum="0" Maximum="2"
+                Value="1" TickFrequency="1" IsSnapToTickEnabled="True"
                 VerticalAlignment="Center" ValueChanged="OnSpeedChanged" />
-        <TextBlock x:Name="SpeedLabel" Text="1.0x" Foreground="#88bbff" FontSize="12"
-                   FontWeight="Bold" VerticalAlignment="Center" Width="36"
+        <TextBlock x:Name="SpeedLabel" Text="Normal" Foreground="#88bbff" FontSize="12"
+                   FontWeight="Bold" VerticalAlignment="Center" Width="60"
                    TextAlignment="Center" />
       </StackPanel>
     </Border>

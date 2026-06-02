@@ -49,27 +49,27 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
     private static readonly Dictionary<string, string> _eventColors = new()
     {
-        ["TurnStart"] = "#88bbff",
-        ["Attack"] = "#ffcc00",
+        ["TurnStart"] = "#888",
+        ["Attack"] = "#ffffff",
         ["Damage"] = "#ff4444",
-        ["DoTTick"] = "#ff4444",
-        ["EffectApplied"] = "#ffdd44",
+        ["DoTTick"] = "#d4a017",
+        ["EffectApplied"] = "#d4a017",
         ["EffectResisted"] = "#44cc44",
         ["EffectExpired"] = "#888",
         ["PetSummoned"] = "#cc44cc",
         ["PetExpired"] = "#888",
         ["RoundStart"] = "#d4a017",
-        ["RoundEnd"] = "#666",
+        ["RoundEnd"] = "#888",
         ["SkippedTurn"] = "#d4a017",
         ["FumblePenalty"] = "#d4a017",
-        ["Death"] = "#ff2222",
+        ["Death"] = "#ff4444",
         ["KnockedOut"] = "#d4a017",
         ["ManaRegen"] = "#cc44cc",
         ["ManaDeduct"] = "#cc44cc",
         ["ApiCall"] = "#00bfff",
-        ["PerfectParry"] = "#00ff88",
-        ["DevastatingStrike"] = "#ff00ff",
-        ["TotalReversal"] = "#ff6600",
+        ["PerfectParry"] = "#44cc44",
+        ["DevastatingStrike"] = "#cc44cc",
+        ["TotalReversal"] = "#d4a017",
     };
 
     public AvaloniaCombatPresenter(

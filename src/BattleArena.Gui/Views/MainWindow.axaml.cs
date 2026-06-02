@@ -204,10 +204,22 @@ public partial class MainWindow : Window
 
     private void OnSpeedChanged(object? sender, Avalonia.Controls.Primitives.RangeBaseValueChangedEventArgs e)
     {
-        var speed = Math.Round(e.NewValue, 1);
-        SpeedLabel.Text = $"{speed:F1}x";
+        var sliderVal = (int)Math.Round(e.NewValue);
+        var pacing = sliderVal switch
+        {
+            0 => 2.0,
+            1 => 1.0,
+            2 => 0.1,
+            _ => 1.0
+        };
+        SpeedLabel.Text = pacing switch
+        {
+            >= 1.5 => "Slow",
+            >= 0.75 => "Normal",
+            _ => "Fast"
+        };
         if (_presenter is not null)
-            _presenter.PacingMultiplier = speed;
+            _presenter.PacingMultiplier = pacing;
     }
 
     private static (Party, Party) BuildDuelParties()
