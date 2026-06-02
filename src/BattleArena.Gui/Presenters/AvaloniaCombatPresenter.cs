@@ -64,6 +64,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     {
         _dispatcher.Post(() =>
         {
+            _vm.IsApiMode = state.IsApiMode;
             _vm.UpdateFromState(state, tick);
             _vm.AddLogEntry([Seg("\u2550\u2550\u2550\u2550\u2550\u2550\u2550 Combat starting \u2550\u2550\u2550\u2550\u2550\u2550\u2550", Dim)]);
         });

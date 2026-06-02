@@ -354,7 +354,52 @@ The most adaptable race. Human opponents take many forms — bandits, mercenarie
 
 ---
 
-### 1.8 Dwarves
+### 1.8 Half-Elves
+
+Bridging two worlds, half-elves carry the grace of their elven heritage and the adaptability of their human blood. They are often charismatic diplomats, natural leaders, and gifted magic-users. Half-elves are welcomed in both human cities and elven enclaves, yet belong fully to neither — a perspective that grants them insight and empathy beyond their years.
+
+#### Half-Elf Scout (Lesser Half-Elf)
+
+| Stat | |
+|------|-|
+| Level | 2 |
+| STR/DEX/CON/INT/WIS/CHA | +0 / +1 / +0 / +1 / +0 / +2 |
+| Max HP | 12 |
+| AC | 11 |
+| Attack | +2, 1D6 (short sword) or +2, 1D4 (sling, ranged) |
+| Special | **Magic Resistance** — advantage on saving throws against magical effects.<br>**Fey Ancestry** — advantage against being charmed; cannot be put to sleep by magic. |
+
+*A quick-eyed half-elf in a traveller's cloak, one hand resting on a short sword. Their ears, slightly pointed, mark their mixed heritage.*
+
+#### Half-Elf Spellblade
+
+| Stat | |
+|------|-|
+| Level | 5 |
+| STR/DEX/CON/INT/WIS/CHA | +1 / +1 / +0 / +2 / +0 / +2 |
+| Max HP | 28 |
+| AC | 13 |
+| Attack | +5, 1D8+1 (long sword) or +5, 1D6+1 (short bow, ranged) |
+| Special | **Magic Resistance** — advantage on saving throws against magical effects.<br>**Fey Ancestry** — advantage against being charmed; cannot be put to sleep by magic.<br>**Cantrip** — *Fire Bolt* (+5, 1D10 fire, ranged spell). |
+
+*A half-elf in studded leather with a blade in one hand and arcane fire flickering in the other. They move with the confidence of one who has trained twice as hard to earn half the acceptance.*
+
+#### Half-Elf Envoy (Greater Half-Elf)
+
+| Stat | |
+|------|-|
+| Level | 8 |
+| STR/DEX/CON/INT/WIS/CHA | +1 / +2 / +1 / +2 / +1 / +3 |
+| Max HP | 42 |
+| AC | 15 |
+| Attack | +7, 1D8+2 (long sword) or +7, 1D8+1 (light crossbow, ranged) |
+| Special | **Magic Resistance** — advantage on saving throws against magical effects.<br>**Fey Ancestry** — advantage against being charmed; cannot be put to sleep by magic.<br>**Inspiring Presence** — all allies within 30 ft. gain +1 to hit and +1 to saves.<br>**Cantrips** — *Fire Bolt* (+7, 1D10 fire) and *Minor Healing* (1D8+3 heal, touch). |
+
+*A half-elf dressed in fine silks and elegant leather armour, a silver-tipped wand at their belt. They speak with the authority of someone who has negotiated peace between nations and fought beside the soldiers who enforced it.*
+
+---
+
+### 1.9 Dwarves
 
 Stubborn, tough, and carrying grudges that span generations.
 

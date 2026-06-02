@@ -308,7 +308,21 @@ The demo (`BattleArena.Demo`) is split into:
 5. **`gui-display-contract.json` is authoritative.** Both Avalonia and future Unity presenter must respect `GuiDisplayConfig.IsFieldEnabled()`. If a field is disabled in the JSON, no renderer should show it.
 6. **Demo is not the GUI.** The demo (`BattleArena.Demo`) remains the independent console showcase. The GUI project must not depend on or duplicate Demo code. Both consume `BattleArena.Presentation` and `ICombatPresenter`.
 
-### 12.3 Migration workflow
+### 12.3 UI chrome state — badges, mode indicators, overlays
+
+Non-character-display UI state (e.g. "API MODE" badge, combat mode label, speed indicator) must also survive the migration. The rules:
+
+1. **`CombatDisplayState` carries UI chrome flags.** Add properties like `IsApiMode` directly to `CombatDisplayState` in `BattleArena.Presentation`. The presenter reads them from the state it already receives — no new interface methods needed.
+
+2. **Avalonia bridge pattern:** The ViewModel mirrors the chrome flags so XAML can bind to them. The `AvaloniaCombatPresenter` copies `state.IsApiMode → _vm.IsApiMode` inside `ShowInitialScreen`. This keeps the XAML binding clean and the escape hatch simple.
+
+3. **Unity migration:** `UnityCombatPresenter` reads `state.IsApiMode` the same way and shows/hides a Unity UI element. No changes to `CombatDisplayState` or `ICombatPresenter` — just delete `_vm.IsApiMode` along with the rest of `BattleArena.Gui`.
+
+4. **Setup/pre-combat chrome is framework-specific.** Badges shown before `CombatDisplayState` exists (e.g. API mode badge on the character-selection screen) are driven by each framework's own code (Avalonia code-behind, Unity scene scripts). They do not need a shared contract — they are replaced during migration along with the rest of the screen.
+
+5. **`gui-display-contract.json` is for character-display fields only.** Do **not** add UI chrome flags there. The contract controls which character stats are rendered (HP, Mana, DieRoll, etc.), not which badges are shown. Chrome flags belong on `CombatDisplayState`.
+
+### 12.4 Migration workflow
 
 ```
 Today:     AvaloniaCombatPresenter → ICombatPresenter → CombatPlaybackEngine

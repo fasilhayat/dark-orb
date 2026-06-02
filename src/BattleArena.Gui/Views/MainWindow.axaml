@@ -61,6 +61,19 @@
       <Setter Property="Foreground" Value="#0d0d1a" />
     </Style>
 
+    <!-- Mode toggle (purple accent) -->
+    <Style Selector="Button.toggle-mode:disabled">
+      <Setter Property="Background" Value="#6a3a8a" />
+      <Setter Property="Foreground" Value="#e0d0f0" />
+      <Setter Property="BorderBrush" Value="#8a5aaa" />
+      <Setter Property="BorderThickness" Value="2" />
+      <Setter Property="Opacity" Value="1" />
+    </Style>
+    <Style Selector="Button.toggle-mode:disabled /template/ ContentPresenter">
+      <Setter Property="Background" Value="#6a3a8a" />
+      <Setter Property="Foreground" Value="#e0d0f0" />
+    </Style>
+
     <!-- Compact combat-log list items: strip Fluent default padding/min-height -->
     <Style Selector="ListBoxItem">
       <Setter Property="Padding" Value="0,0" />
@@ -99,9 +112,16 @@
     <Grid IsVisible="{Binding IsCombatPhase}" RowDefinitions="Auto,Auto,*,220,Auto">
 
       <!-- Row 0: Title -->
-      <TextBlock Grid.Row="0" Text="***  BATTLE ARENA  —  COMBAT SIMULATION  ***"
-                 Foreground="#00bfff" FontSize="18" FontWeight="Bold"
-                 HorizontalAlignment="Center" Margin="0,4" />
+      <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,4">
+        <TextBlock Grid.Column="0" Text="***  BATTLE ARENA  —  COMBAT SIMULATION  ***"
+                   Foreground="#00bfff" FontSize="18" FontWeight="Bold"
+                   HorizontalAlignment="Center" />
+        <Border Grid.Column="1" Background="#6a3a8a" CornerRadius="3" Padding="6,2"
+                BorderBrush="#8a5aaa" BorderThickness="1"
+                VerticalAlignment="Center" IsVisible="{Binding IsApiMode}">
+          <TextBlock Text="API MODE" Foreground="#e0d0f0" FontSize="10" FontWeight="Bold" />
+        </Border>
+      </Grid>
 
       <!-- Row 1: Round progress bar -->
       <Border Grid.Row="1" BorderBrush="#333" BorderThickness="1" CornerRadius="3"
@@ -229,9 +249,14 @@
     <!-- ── SETUP PHASE ── -->
     <Grid IsVisible="{Binding IsSetupPhase}" RowDefinitions="Auto,Auto,Auto,Auto,*,Auto" Margin="20">
 
-      <TextBlock Grid.Row="0" Text="CHOOSE YOUR CHAMPIONS"
-                 Foreground="#00bfff" FontSize="20" FontWeight="Bold"
-                 HorizontalAlignment="Center" Margin="0,10" />
+      <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8" Margin="0,10">
+        <TextBlock Text="CHOOSE YOUR CHAMPIONS" Foreground="#00bfff" FontSize="20" FontWeight="Bold" />
+        <Border Background="#6a3a8a" CornerRadius="3" Padding="5,1"
+                BorderBrush="#8a5aaa" BorderThickness="1"
+                VerticalAlignment="Center" IsVisible="{Binding IsApiMode}">
+          <TextBlock Text="API MODE" Foreground="#e0d0f0" FontSize="9" FontWeight="Bold" />
+        </Border>
+      </StackPanel>
 
       <!-- Scenario toggle -->
       <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="4" Margin="0,0,0,8">
@@ -243,9 +268,9 @@
 
       <!-- Mode toggle -->
       <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="4" Margin="0,0,0,4">
-        <Button x:Name="TurnBasedButton" Classes="toggle" Content="Manual" Click="OnTurnBasedClick"
-                Width="100" Height="28" FontSize="11" />
-        <Button x:Name="AutoModeButton" Classes="toggle" Content="Auto" Click="OnAutoModeClick"
+        <Button x:Name="TurnBasedButton" Classes="toggle-mode" Content="Turn-based" Click="OnTurnBasedClick"
+                Width="110" Height="28" FontSize="11" />
+        <Button x:Name="AutoModeButton" Classes="toggle-mode" Content="Auto" Click="OnAutoModeClick"
                 Width="100" Height="28" FontSize="11" />
       </StackPanel>
 
@@ -317,6 +342,139 @@
                 Width="220" Height="44" FontSize="15" Click="OnBackToMainClick"
                 Background="#5c3a3a" BorderBrush="#755" />
       </StackPanel>
+    </Grid>
+
+    <!-- ── CHARACTER CREATION PHASE ── -->
+    <Grid IsVisible="{Binding IsCharCreationPhase}" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" Margin="20">
+      <!-- Row 0: Title -->
+      <TextBlock Grid.Row="0" Text="CHARACTER CREATION"
+                 Foreground="#00bfff" FontSize="22" FontWeight="Bold"
+                 HorizontalAlignment="Center" Margin="0,4,0,8" />
+
+      <!-- Row 1: Name + Race + Class -->
+      <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="16" Margin="0,0,0,10">
+        <StackPanel Orientation="Horizontal" Spacing="6">
+          <TextBlock Text="Name:" Foreground="#aaa" FontSize="13" VerticalAlignment="Center" />
+          <TextBox x:Name="CharNameBox" Text="{Binding CharName}" Width="160" Height="26"
+                   FontSize="12" Background="#1a1a2e" Foreground="White"
+                   BorderBrush="#444" BorderThickness="1" TextChanged="OnCharNameChanged" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Spacing="6">
+          <TextBlock Text="Race:" Foreground="#aaa" FontSize="13" VerticalAlignment="Center" />
+          <ComboBox ItemsSource="{Binding RaceOptions}" SelectedIndex="{Binding SelectedRaceIndex}"
+                    Width="130" Height="26" FontSize="12"
+                    Background="#1a1a2e" Foreground="White"
+                    BorderBrush="#444" SelectionChanged="OnCharRaceChanged" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Spacing="6">
+          <TextBlock Text="Class:" Foreground="#aaa" FontSize="13" VerticalAlignment="Center" />
+          <ComboBox ItemsSource="{Binding ClassOptions}" SelectedIndex="{Binding SelectedClassIndex}"
+                    Width="130" Height="26" FontSize="12"
+                    Background="#1a1a2e" Foreground="White"
+                    BorderBrush="#444" SelectionChanged="OnCharClassChanged" />
+        </StackPanel>
+      </StackPanel>
+
+      <!-- Row 2: Roll Stats button + exceptional str indicator -->
+      <StackPanel Grid.Row="2" HorizontalAlignment="Center" Orientation="Horizontal" Spacing="12" Margin="0,0,0,10">
+        <Button x:Name="RollStatsButton" Content="Roll Stats" Click="OnRollStatsClick"
+                Width="120" Height="30" FontSize="13" />
+        <TextBlock x:Name="ExcStrLabel" Text="" Foreground="#d4a017" FontSize="12"
+                   VerticalAlignment="Center" />
+      </StackPanel>
+
+      <!-- Row 3: Stats display header -->
+      <TextBlock Grid.Row="3" Text="Ability Scores"
+                 Foreground="#888" FontSize="11" FontWeight="Bold"
+                 HorizontalAlignment="Center" Margin="0,2" />
+
+      <!-- Row 4: Stats in a single horizontal row -->
+      <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,8">
+        <!-- STR -->
+        <Border Background="#1a1a2e" BorderBrush="#333"
+                BorderThickness="1" CornerRadius="4" Padding="10,4" Margin="3" Width="90">
+          <StackPanel HorizontalAlignment="Center" Spacing="1">
+            <TextBlock Text="STR" Foreground="#88bbff" FontSize="10" FontWeight="Bold"
+                       HorizontalAlignment="Center" />
+            <TextBlock Text="{Binding CharStrDisplay}" Foreground="White" FontSize="20" FontWeight="Bold"
+                       HorizontalAlignment="Center" />
+            <TextBlock Text="{Binding CharStrMod}" Foreground="#888" FontSize="11"
+                       HorizontalAlignment="Center" />
+          </StackPanel>
+        </Border>
+        <!-- DEX -->
+        <Border Background="#1a1a2e" BorderBrush="#333"
+                BorderThickness="1" CornerRadius="4" Padding="10,4" Margin="3" Width="90">
+          <StackPanel HorizontalAlignment="Center" Spacing="1">
+            <TextBlock Text="DEX" Foreground="#88bbff" FontSize="10" FontWeight="Bold"
+                       HorizontalAlignment="Center" />
+            <TextBlock Text="{Binding CharDex}" Foreground="White" FontSize="20" FontWeight="Bold"
+                       HorizontalAlignment="Center" />
+            <TextBlock Text="{Binding CharDexMod}" Foreground="#888" FontSize="11"
+                       HorizontalAlignment="Center" />
+          </StackPanel>
+        </Border>
+        <!-- STA -->
+        <Border Background="#1a1a2e" BorderBrush="#333"
+                BorderThickness="1" CornerRadius="4" Padding="10,4" Margin="3" Width="90">
+          <StackPanel HorizontalAlignment="Center" Spacing="1">
+            <TextBlock Text="STA" Foreground="#88bbff" FontSize="10" FontWeight="Bold"
+                       HorizontalAlignment="Center" />
+            <TextBlock Text="{Binding CharSta}" Foreground="White" FontSize="20" FontWeight="Bold"
+                       HorizontalAlignment="Center" />
+            <TextBlock Text="{Binding CharStaMod}" Foreground="#888" FontSize="11"
+                       HorizontalAlignment="Center" />
+          </StackPanel>
+        </Border>
+        <!-- INT -->
+        <Border Background="#1a1a2e" BorderBrush="#333"
+                BorderThickness="1" CornerRadius="4" Padding="10,4" Margin="3" Width="90">
+          <StackPanel HorizontalAlignment="Center" Spacing="1">
+            <TextBlock Text="INT" Foreground="#88bbff" FontSize="10" FontWeight="Bold"
+                       HorizontalAlignment="Center" />
+            <TextBlock Text="{Binding CharInt}" Foreground="White" FontSize="20" FontWeight="Bold"
+                       HorizontalAlignment="Center" />
+            <TextBlock Text="{Binding CharIntMod}" Foreground="#888" FontSize="11"
+                       HorizontalAlignment="Center" />
+          </StackPanel>
+        </Border>
+        <!-- WIS -->
+        <Border Background="#1a1a2e" BorderBrush="#333"
+                BorderThickness="1" CornerRadius="4" Padding="10,4" Margin="3" Width="90">
+          <StackPanel HorizontalAlignment="Center" Spacing="1">
+            <TextBlock Text="WIS" Foreground="#88bbff" FontSize="10" FontWeight="Bold"
+                       HorizontalAlignment="Center" />
+            <TextBlock Text="{Binding CharWis}" Foreground="White" FontSize="20" FontWeight="Bold"
+                       HorizontalAlignment="Center" />
+            <TextBlock Text="{Binding CharWisMod}" Foreground="#888" FontSize="11"
+                       HorizontalAlignment="Center" />
+          </StackPanel>
+        </Border>
+        <!-- CHA -->
+        <Border Background="#1a1a2e" BorderBrush="#333"
+                BorderThickness="1" CornerRadius="4" Padding="10,4" Margin="3" Width="90">
+          <StackPanel HorizontalAlignment="Center" Spacing="1">
+            <TextBlock Text="CHA" Foreground="#88bbff" FontSize="10" FontWeight="Bold"
+                       HorizontalAlignment="Center" />
+            <TextBlock Text="{Binding CharCha}" Foreground="White" FontSize="20" FontWeight="Bold"
+                       HorizontalAlignment="Center" />
+            <TextBlock Text="{Binding CharChaMod}" Foreground="#888" FontSize="11"
+                       HorizontalAlignment="Center" />
+          </StackPanel>
+        </Border>
+      </StackPanel>
+
+      <!-- Row 5: Create Character -->
+      <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12" Margin="0,4">
+        <Button x:Name="CreateCharButton2" Content="Create Character" Click="OnCharCreateClick"
+                Width="160" Height="34" FontSize="13" IsEnabled="False" />
+      </StackPanel>
+
+      <!-- Row 6: Back -->
+      <Button Grid.Row="6" Content="Back" Click="OnCharBackClick"
+              Width="120" Height="30" FontSize="12"
+              HorizontalAlignment="Center" Margin="0,4"
+              Background="#5c3a3a" BorderBrush="#755" />
     </Grid>
   </Grid>
 </Window>

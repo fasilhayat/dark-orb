@@ -76,7 +76,8 @@ INSERT INTO arena_data.race (name, description, base_movement_speed, strength_bo
     ('Demon',    'Hailing from the infernal planes beyond the mortal veil, demons are creatures of pure elemental chaos. Each demon embodies a primal force — fire demons burn with endless rage, shadow demons hunger for fear and despair. They enter the mortal world through rifts and summonings, bringing destruction in their wake. Yet some demons reject their nature, seeking redemption in a world that fears and despises them.', 30, 2, 0, 1, 1, 0, 1, 1),
     ('Orc',      'The Chosen of the War God, orcs were created to fight. Their muscles bulge with unnatural strength, and their bones knit faster than any other race. Orc society is built around the concept of ''Ushog'' — the eternal struggle that gives life meaning. They value strength above all else and respect only those who can defeat them in battle. Despite their savage reputation, orcish honor is absolute; an orc who gives their word will die before breaking it.', 30, 3, 0, 1, 0, 0, 0, 2),
     ('Ogre',     'Titans reduced by ages of separation from their divine ancestors, ogres are the largest of the mortal races. Standing twelve feet tall and built of solid muscle and thick bone, they are living battering rams. Mountain Ogres possess residual magic resistance from their giant bloodline, Hill Ogres throw boulders with deadly accuracy, Desert Ogres endure the harshest climates, and Forest Ogres can regenerate wounds at an alarming rate.', 25, 3, 0, 2, 0, 0, 0, 3),
-    ('Gladefolk', 'The smallest of the civilized races, gladefolk possess a spirit that belies their stature. They believe in the power of luck, good food, and a warm hearth, yet they are among the bravest souls in battle. Gladefolk feel fear but refuse to show it, using their natural agility and sharp tongues to mock and taunt enemies into reckless charges. Forest Gladefolk move through woodland without a trace, while Hill Gladefolk are renowned for their hospitality and uncanny good fortune.', 25, 0, 2, 1, 0, 1, 1, 0);
+    ('Gladefolk', 'The smallest of the civilized races, gladefolk possess a spirit that belies their stature. They believe in the power of luck, good food, and a warm hearth, yet they are among the bravest souls in battle. Gladefolk feel fear but refuse to show it, using their natural agility and sharp tongues to mock and taunt enemies into reckless charges. Forest Gladefolk move through woodland without a trace, while Hill Gladefolk are renowned for their hospitality and uncanny good fortune.', 25, 0, 2, 1, 0, 1, 1, 0),
+    ('Half-Elf', 'Bridging two worlds, half-elves carry the grace of their elven heritage and the adaptability of their human blood. They are charismatic diplomats, natural leaders, and gifted magic-users. Welcomed in both human cities and elven enclaves yet belonging fully to neither, their dual heritage grants them insight and empathy beyond their years. Their pointed ears and ageless features hint at elven ancestry, while their drive and ambition are purely human.', 30, 0, 1, 0, 1, 0, 2, 0);
 
 
 -- Non-playable races (Undead, Demon)
@@ -105,7 +106,9 @@ FROM (VALUES
     ('Ogre', 'Desert Ogre',    'Sun-hardened giants resistant to heat.'),
     ('Ogre', 'Forest Ogre',    'Troll-kin with regenerative properties.'),
     ('Gladefolk', 'Forest Gladefolk', 'Wood-wise gladefolk who disappear into foliage.'),
-    ('Gladefolk', 'Hill Gladefolk',   'Pastoral folk known for luck and hospitality.')
+    ('Gladefolk', 'Hill Gladefolk',   'Pastoral folk known for luck and hospitality.'),
+    ('Half-Elf', 'Half-High-Elf', 'Half-elves with high-elven heritage, inheriting keen intellect and innate magic.'),
+    ('Half-Elf', 'Half-Wood-Elf', 'Half-elves with wood-elven heritage, gaining enhanced agility and woodland instincts.')
 ) AS s(race_name, name, descr)
 JOIN arena_data.race r ON r.name = s.race_name;
 
@@ -127,7 +130,9 @@ FROM (VALUES
     ('Ogre', 'Magic Resistance',   'Advantage on saving throws against magical effects.'),
     ('Ogre', 'Extra Strength',     '+2 bonus to melee damage rolls.'),
     ('Gladefolk', 'Taunt',          'Can force enemies to target them instead of allies.'),
-    ('Gladefolk', 'Fear Immunity',  'Immune to being frightened.')
+    ('Gladefolk', 'Fear Immunity',  'Immune to being frightened.'),
+    ('Half-Elf', 'Magic Resistance', 'Advantage on saving throws against magical effects.'),
+    ('Half-Elf', 'Fey Ancestry',     'Advantage against being charmed; immune to magical sleep.')
 ) AS s(race_name, name, descr)
 JOIN arena_data.race r ON r.name = s.race_name;
 
@@ -138,6 +143,13 @@ SELECT rsa.id, 'Magic', 25
 FROM arena_data.race_special_ability rsa
 JOIN arena_data.race r ON r.id = rsa.race_id
 WHERE r.name IN ('Elf', 'Dwarf', 'Kobold', 'Ogre') AND rsa.name = 'Magic Resistance'
+AND NOT EXISTS (SELECT 1 FROM arena_data.feat_resistance fr WHERE fr.feat_id = rsa.id);
+
+INSERT INTO arena_data.feat_resistance (feat_id, resistance_type, resistance_value)
+SELECT rsa.id, 'Magic', 25
+FROM arena_data.race_special_ability rsa
+JOIN arena_data.race r ON r.id = rsa.race_id
+WHERE r.name = 'Half-Elf' AND rsa.name = 'Magic Resistance'
 AND NOT EXISTS (SELECT 1 FROM arena_data.feat_resistance fr WHERE fr.feat_id = rsa.id);
 
 
@@ -175,7 +187,11 @@ FROM (VALUES
     ('Druid',     'Human'), ('Druid',     'Elf'), ('Druid',     'Gladefolk'), ('Druid',    'Lizard'),
     ('Fighter',   'Human'), ('Fighter',   'Elf'), ('Fighter',   'Dwarf'), ('Fighter',   'Lizard'),
     ('Fighter',   'Kobold'), ('Fighter',  'Orc'), ('Fighter',   'Ogre'), ('Fighter',   'Gladefolk'),
-    ('Rogue',     'Human'), ('Rogue',     'Elf'), ('Rogue',     'Dwarf'), ('Rogue',     'Gladefolk'), ('Rogue', 'Kobold')
+    ('Rogue',     'Human'), ('Rogue',     'Elf'), ('Rogue',     'Dwarf'), ('Rogue',     'Gladefolk'), ('Rogue', 'Kobold'),
+    -- Half-Elf gets all classes (versatile like Humans)
+    ('Barbarian', 'Half-Elf'), ('Knight',  'Half-Elf'), ('Paladin',  'Half-Elf'), ('Priest',   'Half-Elf'),
+    ('Mage',      'Half-Elf'), ('Bard',    'Half-Elf'), ('Druid',    'Half-Elf'), ('Fighter',  'Half-Elf'),
+    ('Rogue',     'Half-Elf')
 ) AS src(class_name, race_name)
 JOIN arena_data.class c ON c.name = src.class_name
 JOIN arena_data.race r ON r.name = src.race_name;

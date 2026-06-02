@@ -88,6 +88,7 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSetupPhase)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsCombatPhase)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsApiMenuPhase)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsCharCreationPhase)));
             }
         }
     }
@@ -95,6 +96,7 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     public bool IsSetupPhase => Phase == "Setup";
     public bool IsCombatPhase => Phase == "Combat";
     public bool IsApiMenuPhase => Phase == "ApiMenu";
+    public bool IsCharCreationPhase => Phase == "CharCreation";
 
     private string _scenario = "Duel";
     public string Scenario
@@ -127,6 +129,150 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     }
     public bool IsTurnBased => Mode == "TurnBased";
     public bool IsAutoMode => Mode == "Auto";
+
+    // ── Character Creation ────────────────────────────────────
+
+    public ObservableCollection<string> RaceOptions { get; } =
+    [
+        "Human", "Elf", "Dwarf", "Orc", "Lizard", "Kobold", "Ogre", "Gladefolk", "Half-Elf"
+    ];
+
+    public ObservableCollection<string> ClassOptions { get; } =
+    [
+        "Barbarian", "Knight", "Paladin", "Priest", "Mage", "Bard", "Druid", "Fighter", "Rogue"
+    ];
+
+    private string _charName = "";
+    public string CharName
+    {
+        get => _charName;
+        set => SetField(ref _charName, value);
+    }
+
+    private int _selectedRaceIndex = -1;
+    public int SelectedRaceIndex
+    {
+        get => _selectedRaceIndex;
+        set
+        {
+            if (SetField(ref _selectedRaceIndex, value))
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedRace)));
+        }
+    }
+    public string SelectedRace => SelectedRaceIndex >= 0 && SelectedRaceIndex < RaceOptions.Count
+        ? RaceOptions[SelectedRaceIndex] : "";
+
+    private int _selectedClassIndex = -1;
+    public int SelectedClassIndex
+    {
+        get => _selectedClassIndex;
+        set
+        {
+            if (SetField(ref _selectedClassIndex, value))
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedClass)));
+        }
+    }
+    public string SelectedClass => SelectedClassIndex >= 0 && SelectedClassIndex < ClassOptions.Count
+        ? ClassOptions[SelectedClassIndex] : "";
+
+    private int _charStr;
+    public int CharStr
+    {
+        get => _charStr;
+        set
+        {
+            if (SetField(ref _charStr, value))
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharStrMod)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharStrDisplay)));
+            }
+        }
+    }
+
+    private int _charStrExceptional;
+    public int CharStrExceptional
+    {
+        get => _charStrExceptional;
+        set
+        {
+            if (SetField(ref _charStrExceptional, value))
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharStrDisplay)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharStrMod)));
+            }
+        }
+    }
+    public string CharStrDisplay => CharStrExceptional > 0
+        ? $"{CharStr}/{CharStrExceptional:00}" : CharStr.ToString();
+
+    private int _charDex;
+    public int CharDex
+    {
+        get => _charDex;
+        set
+        {
+            if (SetField(ref _charDex, value))
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharDexMod)));
+        }
+    }
+
+    private int _charSta;
+    public int CharSta
+    {
+        get => _charSta;
+        set
+        {
+            if (SetField(ref _charSta, value))
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharStaMod)));
+        }
+    }
+
+    private int _charInt;
+    public int CharInt
+    {
+        get => _charInt;
+        set
+        {
+            if (SetField(ref _charInt, value))
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharIntMod)));
+        }
+    }
+
+    private int _charWis;
+    public int CharWis
+    {
+        get => _charWis;
+        set
+        {
+            if (SetField(ref _charWis, value))
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharWisMod)));
+        }
+    }
+
+    private int _charCha;
+    public int CharCha
+    {
+        get => _charCha;
+        set
+        {
+            if (SetField(ref _charCha, value))
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharChaMod)));
+        }
+    }
+
+    public string CharStrMod => $"({(CharStr - 10) / 2:+#;-#;0})";
+    public string CharDexMod => $"({(CharDex - 10) / 2:+#;-#;0})";
+    public string CharStaMod => $"({(CharSta - 10) / 2:+#;-#;0})";
+    public string CharIntMod => $"({(CharInt - 10) / 2:+#;-#;0})";
+    public string CharWisMod => $"({(CharWis - 10) / 2:+#;-#;0})";
+    public string CharChaMod => $"({(CharCha - 10) / 2:+#;-#;0})";
+
+    private bool _isApiMode;
+    public bool IsApiMode
+    {
+        get => _isApiMode;
+        set => SetField(ref _isApiMode, value);
+    }
 
     private string _fighter1Name = "";
     public string Fighter1Name

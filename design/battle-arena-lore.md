@@ -161,6 +161,19 @@ Subraces: Forest Gladefolk, Hill Gladefolk
 
 ---
 
+### Half-Elf
+*Bridging two worlds, half-elves carry the grace of their elven heritage and the adaptability of their human blood. They are often charismatic diplomats, natural leaders, and gifted magic-users. Half-elves are welcomed in both human cities and elven enclaves, yet belong fully to neither — a perspective that grants them insight and empathy beyond their years. Their pointed ears and ageless features hint at their elven ancestry, while their drive and ambition are purely human.*
+
+| Str | Dex | Sta | Int | Wis | Cha |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| +0 | +1 | +0 | +1 | +0 | +2 |
+
+Special Abilities: **Magic Resistance** — advantage on saving throws against magical effects. **Fey Ancestry** — advantage against being charmed; immune to magical sleep.
+Available classes: Barbarian, Knight, Paladin, Priest, Mage, Bard, Druid, Fighter, Rogue
+Subraces: Half-High-Elf, Half-Wood-Elf
+
+---
+
 ## 2. Classes
 
 | Class | Archetype | Hit Die | StrikeRating | Description |
@@ -568,6 +581,7 @@ Dwarf and Gladefolk Priests cannot bond with a Dragon (Human/Elf only). Instead,
 | Orc | Extra Strength (+2 melee damage) |
 | Ogre | Magic Resistance, Extra Strength |
 | Gladefolk | Taunt, Fear Immunity |
+| Half-Elf | Magic Resistance, Fey Ancestry |
 
 ---
 

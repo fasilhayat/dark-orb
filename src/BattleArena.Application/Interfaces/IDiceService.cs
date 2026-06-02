@@ -1,5 +1,6 @@
 namespace BattleArena.Application.Interfaces;
 
+using BattleArena.Application.Models;
 using Core.Entities.Enums;
 
 public interface IDiceService
@@ -18,4 +19,7 @@ public interface IDiceService
 
     // Returns a value in [0, maxExclusive). Use instead of Random.Shared for determinism.
     int RollIndex(int maxExclusive);
+
+    /// <summary>Accumulated dice-roll log entries for inclusion in the combat log.</summary>
+    List<CombatLogEntry> DiceLog { get; }
 }

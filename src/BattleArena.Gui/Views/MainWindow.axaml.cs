@@ -28,6 +28,9 @@ public partial class MainWindow : Window
     private AvaloniaCombatPresenter? _presenter;
     private Character? _fighter1;
     private Character? _fighter2;
+    private bool _useApi;
+    private BattleArenaApiClient? _apiClient;
+    private List<Character> _apiRoster = [];
 
     public MainWindow()
     {
@@ -42,6 +45,23 @@ public partial class MainWindow : Window
         HeroListBox.ItemsSource = Roster.AllHeroes;
         DuelButton.IsEnabled = false;
         SelectionHint.Text = "Select Fighter 1";
+
+        try
+        {
+            var path = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
+            if (File.Exists(path))
+            {
+                var json = System.Text.Json.JsonDocument.Parse(File.ReadAllText(path));
+                var apiSection = json.RootElement.GetProperty("BattleArenaApi");
+                var url = apiSection.GetProperty("Url").GetString() ?? "http://localhost:5000";
+                var key = apiSection.GetProperty("ApiKey").GetString() ?? "";
+                _apiClient = new BattleArenaApiClient(url, key);
+            }
+        }
+        catch
+        {
+            _apiClient = null;
+        }
     }
 
     private void OnDuelClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -197,18 +217,21 @@ public partial class MainWindow : Window
 
     private void OnCreateCharClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        // Not yet implemented
+        _vm.Phase = "CharCreation";
+        _vm.CharName = "";
+        _vm.SelectedRaceIndex = -1;
+        _vm.SelectedClassIndex = -1;
+        _vm.CharStr = 0;
+        _vm.CharStrExceptional = 0;
+        _vm.CharDex = 0;
+        _vm.CharSta = 0;
+        _vm.CharInt = 0;
+        _vm.CharWis = 0;
+        _vm.CharCha = 0;
+        ExcStrLabel.Text = "";
+        CreateCharButton2.IsEnabled = false;
     }
 
-    private void OnVsClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        // Not yet implemented
-    }
-
-    private void OnPartyVsPartyClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        // Not yet implemented
-    }
 
     private void OnBackToMainClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
@@ -217,6 +240,136 @@ public partial class MainWindow : Window
         _vm.Tick = 0;
         _vm.RoundNumber = 0;
         _vm.TickInRound = 0;
+    }
+
+    private async void OnVsClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (_apiClient is null) return;
+        try
+        {
+            _apiRoster = await _apiClient.GetCharactersAsync();
+            if (_apiRoster.Count == 0) return;
+        }
+        catch
+        {
+            return;
+        }
+        HeroListBox.ItemsSource = _apiRoster;
+        _vm.IsApiMode = true;
+        _useApi = true;
+        _vm.Scenario = "Duel";
+        _vm.Phase = "Setup";
+        _fighter1 = null;
+        _fighter2 = null;
+        _vm.Fighter1Name = "";
+        _vm.Fighter2Name = "";
+        DuelButton.IsEnabled = false;
+        ClashButton.IsEnabled = true;
+        SelectionHint.Text = "Select Fighter 1";
+    }
+
+    private async void OnPartyVsPartyClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (_apiClient is null) return;
+        try
+        {
+            _apiRoster = await _apiClient.GetCharactersAsync();
+            if (_apiRoster.Count == 0) return;
+        }
+        catch
+        {
+            return;
+        }
+        HeroListBox.ItemsSource = _apiRoster;
+        _vm.IsApiMode = true;
+        _useApi = true;
+        _vm.Scenario = "Party";
+        _vm.Phase = "Setup";
+        _fighter1 = null;
+        _fighter2 = null;
+        _vm.Fighter1Name = "";
+        _vm.Fighter2Name = "";
+        DuelButton.IsEnabled = true;
+        ClashButton.IsEnabled = false;
+        SelectionHint.Text = "Clash mode — pick two fighters";
+    }
+
+    // ── Character Creation Handlers ───────────────────────────
+
+    private static readonly Random _charRng = new();
+    private static readonly string[] _warriorClasses = ["Barbarian", "Fighter", "Paladin", "Knight", "Ranger"];
+
+    private void OnRollStatsClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var str = Roll4d6DropLowest();
+        _vm.CharStr = str;
+        _vm.CharDex = Roll4d6DropLowest();
+        _vm.CharSta = Roll4d6DropLowest();
+        _vm.CharInt = Roll4d6DropLowest();
+        _vm.CharWis = Roll4d6DropLowest();
+        _vm.CharCha = Roll4d6DropLowest();
+        RollExceptionalStrength(str);
+        UpdateCreateButton();
+    }
+
+    private void RollExceptionalStrength(int str)
+    {
+        var cls = _vm.SelectedClass;
+        if (str == 18 && _warriorClasses.Contains(cls))
+        {
+            _vm.CharStrExceptional = _charRng.Next(1, 101); // 1-100, 100 shown as 00
+            ExcStrLabel.Text = $"Exceptional strength: 18/{_vm.CharStrExceptional:00}";
+        }
+        else
+        {
+            _vm.CharStrExceptional = 0;
+            ExcStrLabel.Text = "";
+        }
+    }
+
+    private static int Roll4d6DropLowest()
+    {
+        var rolls = new int[4];
+        for (var i = 0; i < 4; i++)
+            rolls[i] = _charRng.Next(1, 7);
+        Array.Sort(rolls);
+        return rolls[1] + rolls[2] + rolls[3];
+    }
+
+    private void OnCharRaceChanged(object? sender, Avalonia.Controls.SelectionChangedEventArgs e)
+    {
+        UpdateCreateButton();
+    }
+
+    private void OnCharClassChanged(object? sender, Avalonia.Controls.SelectionChangedEventArgs e)
+    {
+        if (_vm.CharStr == 18)
+            RollExceptionalStrength(_vm.CharStr);
+        UpdateCreateButton();
+    }
+
+    private void OnCharCreateClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        // Character creation complete — not saving yet.
+    }
+
+    private void OnCharNameChanged(object? sender, Avalonia.Controls.TextChangedEventArgs e)
+    {
+        UpdateCreateButton();
+    }
+
+    private void OnCharBackClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        _vm.Phase = "ApiMenu";
+    }
+
+    private void UpdateCreateButton()
+    {
+        CreateCharButton2.IsEnabled =
+            !string.IsNullOrWhiteSpace(_vm.CharName) &&
+            _vm.SelectedRaceIndex >= 0 &&
+            _vm.SelectedClassIndex >= 0 &&
+            _vm.CharStr > 0;
     }
 
     private void OnTurnBasedClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -251,6 +404,13 @@ public partial class MainWindow : Window
         _vm.Tick = 0;
         _vm.RoundNumber = 0;
         _vm.TickInRound = 0;
+
+        if (_useApi)
+        {
+            _useApi = false;
+            _vm.IsApiMode = false;
+            HeroListBox.ItemsSource = Roster.AllHeroes;
+        }
     }
 
     private async Task RunCombat(Party party1, Party party2)
@@ -315,9 +475,11 @@ public partial class MainWindow : Window
             party2.Members.Select(m => m.Character.Name),
             isDuel: true);
 
-        var state = new CombatDisplayState(charStates, layout);
+        var state = new CombatDisplayState(charStates, layout, isApiMode: _useApi);
 
-        var diceService = new LoggingDiceService();
+        IDiceService diceService = _useApi && _apiClient is not null
+            ? new ApiDiceService(_apiClient)
+            : new LoggingDiceService();
         var combatStats = new CombatStatsService();
         var combatService = new CombatService(diceService, combatStats, [new RangeModifier()]);
         var turnmeterService = new TurnmeterService();

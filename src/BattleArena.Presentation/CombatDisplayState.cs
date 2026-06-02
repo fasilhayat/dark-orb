@@ -13,11 +13,14 @@ public sealed class CombatDisplayState
 
     public CombatLayout Layout { get; }
 
-    public CombatDisplayState(IEnumerable<CharDisplayState> characters, CombatLayout layout)
+    public bool IsApiMode { get; }
+
+    public CombatDisplayState(IEnumerable<CharDisplayState> characters, CombatLayout layout, bool isApiMode = false)
     {
         _chars = characters.ToDictionary(c => c.Name, c => c);
         Layout = layout;
         _heroSideNames = Layout.HeroNames.ToHashSet();
+        IsApiMode = isApiMode;
     }
 
     public CharDisplayState? TryGet(string name) => _chars.GetValueOrDefault(name);

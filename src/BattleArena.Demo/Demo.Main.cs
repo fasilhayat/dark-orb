@@ -18,22 +18,16 @@ static partial class Demo
     // ── GUI display configuration (loaded from gui-display-contract.json) ─────────
     internal static GuiDisplayConfig DisplayConfig { get; private set; } = GuiDisplayConfig.Default;
 
-    // ── Optional API connection ───────────────────────────────────────────────────
+    // ── API connection ────────────────────────────────────────────────────────────
     private static BattleArenaApiClient? ApiClient;
-    private static ApiDiceService? _apiDiceService;
     private static IDiceService? _diceService;
-    private static List<Character> ApiRoster = [];
-    private static List<Weapon> ApiWeapons = [];
-    private static bool UseApiRoster;
+    internal static List<Character> ApiRoster = [];
+    internal static List<Weapon> ApiWeapons = [];
 
     // ── Block layout constants ────────────────────────────────────────────────────
     internal const int BLOCK_W   = 46;
     internal const int CONTENT_W = 42;
     internal const int BAR_W     = 25;
-
-    // ── Lookup tables ─────────────────────────────────────────────────────────────
-    private static Dictionary<char, Character> AllHeroes = [];
-    private static Dictionary<string, IAttackSource?> AttackMap = [];
 
     // ── Outer state (shared by playback functions) ────────────────────────────────
     internal static CombatResult Result = null!;
@@ -50,8 +44,6 @@ static partial class Demo
     {
         DisplayConfig = GuiDisplayConfig.Load(logger: message => Console.Error.WriteLine(message));
         ConnectApi();
-        PickDataSource();
-        InitializeData();
 
         PrintHeader();
 
@@ -62,7 +54,7 @@ static partial class Demo
             if (Scenario == 'Q')
                 return;
 
-            // ── Replay path — all setup and simulation already done by RunReplay() ──
+            // ── Replay path ──
             if (Scenario == 'W')
             {
                 if (!RunReplay()) continue;
@@ -96,7 +88,6 @@ static partial class Demo
                 var mode = PickCombatMode();
                 _combatModeLabel = mode == 'T' ? "Turn-based" : "Auto";
 
-                // Targeting mode selection.
                 ITargetSelector heroSelector;
                 ITargetSelector enemySelector = new LowestHpTargetSelector();
                 if (Scenario == 'P')
@@ -132,8 +123,8 @@ static partial class Demo
                 {
                     var f1 = HeroParty.Members[0];
                     var f2 = EnemyParty.Members[0];
-                    var f1Atk = f1.AttackSource;
-                    var f2Atk = f2.AttackSource;
+                    var f1Atk = GetAttackSource(f1.Character);
+                    var f2Atk = GetAttackSource(f2.Character);
                     ShowSheet("FIGHTER 1", f1.Character, f1Atk,
                         CombatStats.ComputeAttackerStats(f1.Character, GetSheetAttackSource(f1.Character, f1Atk)).AttackPower,
                         CombatStats.ComputeDefenderStats(f1.Character).DefensePower);
@@ -147,7 +138,7 @@ static partial class Demo
                     CWL("  ── YOUR HEROES ───────────────────────────────────────────", ConsoleColor.Cyan);
                     foreach (var m in HeroParty.Members)
                     {
-                        var atk = m.AttackSource;
+                        var atk = GetAttackSource(m.Character);
                         ShowSheet("HERO", m.Character, atk,
                             CombatStats.ComputeAttackerStats(m.Character, GetSheetAttackSource(m.Character, atk)).AttackPower,
                             CombatStats.ComputeDefenderStats(m.Character).DefensePower);
@@ -162,16 +153,10 @@ static partial class Demo
                     }
                 }
 
-                // Combat always runs client-side.  When the API is reachable, dice rolls
-                // are delegated to the API's /v1/roll/* endpoints via ApiDiceService;
-                // otherwise a local seeded DiceService is used.
-                _apiDiceService = null;
-
                 IDiceService diceSvc;
                 if (ApiClient is not null)
                 {
-                    _apiDiceService = new ApiDiceService(ApiClient);
-                    diceSvc = _apiDiceService;
+                    diceSvc = new ApiDiceService(ApiClient);
                 }
                 else
                 {
@@ -218,9 +203,8 @@ static partial class Demo
                     Result = simulator.Simulate(HeroParty, EnemyParty, 500);
                 }
 
-                var diceLog = _apiDiceService?.DiceLog;
-                Result.DiceLog = diceLog?.ToList();
-                Result.Log = CombatLogMerger.Merge(Result.Log, diceLog);
+                Result.DiceLog = _diceService?.DiceLog;
+                Result.Log = CombatLogMerger.Merge(Result.Log, Result.DiceLog);
 
                 if (mode != 'T')
                     PlayRealTime();
@@ -257,10 +241,11 @@ static partial class Demo
     {
         var fighter1 = PickFighter("Fighter 1", null);
         var fighter2 = PickFighter("Fighter 2", fighter1.Name);
-        ResetAll();
 
-        var f1Atk = AttackMap[fighter1.Name];
-        var f2Atk = AttackMap[fighter2.Name];
+        foreach (var ch in ApiRoster) ResetCombatant(ch);
+
+        var f1Atk = GetAttackSource(fighter1);
+        var f2Atk = GetAttackSource(fighter2);
         var f1Ap = CombatStats.ComputeAttackerStats(fighter1, GetSheetAttackSource(fighter1, f1Atk)).AttackPower;
         var f1Dp = CombatStats.ComputeDefenderStats(fighter1).DefensePower;
         var f2Ap = CombatStats.ComputeAttackerStats(fighter2, GetSheetAttackSource(fighter2, f2Atk)).AttackPower;
@@ -279,13 +264,14 @@ static partial class Demo
     {
         var heroes = PickHeroParty();
         EnemyParty = BuildEnemyParty();
-        ResetAll();
+
+        foreach (var ch in ApiRoster) ResetCombatant(ch);
 
         Console.WriteLine();
         CWL("  ── YOUR HEROES ───────────────────────────────────────────", ConsoleColor.Cyan);
         foreach (var h in heroes)
         {
-            var atk = AttackMap[h.Name];
+            var atk = GetAttackSource(h);
             ShowSheet("HERO", h, atk,
                 CombatStats.ComputeAttackerStats(h, GetSheetAttackSource(h, atk)).AttackPower,
                 CombatStats.ComputeDefenderStats(h).DefensePower);
@@ -301,7 +287,7 @@ static partial class Demo
 
         HeroParty = Party.HeroParty(
             "Heroes",
-            heroes.Select(h => new PartyMember { Character = h, AttackSource = AttackMap[h.Name] }));
+            heroes.Select(h => new PartyMember { Character = h, AttackSource = GetAttackSource(h) }));
     }
 
     // ── Helpers ─────────────────────────────────────────────────────────────────
@@ -311,19 +297,6 @@ static partial class Demo
         character.CurrentHitPoints = character.MaxHitPoints;
         character.CurrentMana = character.MaxMana;
         character.ActiveStatusEffects.Clear();
-    }
-
-    private static void ResetAll()
-    {
-        if (UseApiRoster)
-            foreach (var ch in ApiRoster) ResetCombatant(ch);
-        else
-            foreach (var (_, ch) in AllHeroes) ResetCombatant(ch);
-
-        ResetCombatant(Krag);
-        ResetCombatant(Skrix);
-        ResetCombatant(Mordak);
-        ResetCombatant(Zarath);
     }
 
     internal static IAttackSource GetSheetAttackSource(Character character, IAttackSource? attackSource)
@@ -458,8 +431,7 @@ static partial class Demo
 
     private static Pet? FindSummonedPet(string petName)
     {
-        var roster = AllHeroes.Values.Concat([Krag, Skrix, Mordak, Zarath]);
-        return roster
+        return ApiRoster
             .SelectMany(character => character.MemorizedSpells)
             .Select(spell => spell.SummonedPet)
             .FirstOrDefault(pet => pet is not null && string.Equals(pet.Name, petName, StringComparison.OrdinalIgnoreCase));
@@ -511,8 +483,6 @@ static partial class Demo
         var logPath = Path.Combine(logDir, "api-calls.log");
         var logWriter = new StreamWriter(logPath, append: true) { AutoFlush = true };
 
-        // Use console logger during initial connection so the user can see the API calls being made.
-        // After connecting, store a silent client (no console logger) for use during simulation.
         var initClient = new BattleArenaApiClient(
             apiUrl,
             apiKey: apiKey,
@@ -546,7 +516,8 @@ static partial class Demo
         catch (Exception ex)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"  Unreachable ({ex.Message})");
+            Console.WriteLine($"  API unreachable ({ex.Message})");
+            Console.WriteLine("  The demo requires a running BattleArena API backend.");
             Console.ResetColor();
         }
 
@@ -560,39 +531,6 @@ static partial class Demo
             apiKey: apiKey,
             consoleLogger: null,
             fileLogger: logWriter);
-    }
-
-    private static void PickDataSource()
-    {
-        if (ApiRoster.Count == 0)
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("  Using local hardcoded characters.");
-            Console.ResetColor();
-            return;
-        }
-
-        while (true)
-        {
-            Console.WriteLine();
-            CWL("  Character source:", ConsoleColor.Yellow);
-            CW("    "); CW("[A]", ConsoleColor.Cyan); CWL("  API characters  — loaded from BattleArena API", ConsoleColor.White);
-            CW("    "); CW("[L]", ConsoleColor.Cyan); CWL("  Local characters  — hardcoded demo data\n", ConsoleColor.White);
-            CW("  > ", ConsoleColor.Cyan);
-            var k = Console.ReadKey(true).KeyChar;
-            if (k is 'A' or 'a')
-            {
-                UseApiRoster = true;
-                CWL("API characters", ConsoleColor.Cyan);
-                return;
-            }
-            if (k is 'L' or 'l')
-            {
-                UseApiRoster = false;
-                CWL("Local characters", ConsoleColor.Cyan);
-                return;
-            }
-        }
     }
 
     private static void DumpCombatLog()
@@ -631,7 +569,7 @@ static partial class Demo
             }
             catch
             {
-                // Best-effort cleanup — don't fail the save if pruning fails
+                // Best-effort cleanup
             }
         }
         catch (Exception ex)
