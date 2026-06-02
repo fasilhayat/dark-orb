@@ -229,7 +229,7 @@ public partial class MainWindow : Window
         _vm.CharWis = 0;
         _vm.CharCha = 0;
         ExcStrLabel.Text = "";
-        CreateCharButton2.IsEnabled = false;
+        UpdateCreateButton();
     }
 
 
@@ -299,26 +299,43 @@ public partial class MainWindow : Window
     private static readonly Random _charRng = new();
     private static readonly string[] _warriorClasses = ["Barbarian", "Fighter", "Paladin", "Knight", "Ranger"];
 
+    // Race: (strength bonus, max strength after bonus, can have exceptional 18/xx)
+    private static readonly Dictionary<string, (int Bonus, int Max, bool Exceptional)> RaceStrData = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["Human"]    = ( 1, 18, true),
+        ["Half-Elf"] = ( 0, 18, true),
+        ["Elf"]      = ( 0, 18, false),
+        ["Dwarf"]    = ( 2, 19, false),
+        ["Lizard"]   = ( 2, 19, false),
+        ["Kobold"]   = ( 0, 18, false),
+        ["Orc"]      = ( 3, 20, false),
+        ["Ogre"]     = ( 3, 20, false),
+        ["Gladefolk"]= ( 0, 18, false),
+    };
+
     private void OnRollStatsClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        var str = Roll4d6DropLowest();
-        _vm.CharStr = str;
+        var rd = RaceStrData.GetValueOrDefault(_vm.SelectedRace, (0, 18, false));
+        var (strBonus, strMax, canExceptional) = rd;
+
+        var baseStr = Roll4d6DropLowest();
+        _vm.CharStr = Math.Min(baseStr + strBonus, strMax);
         _vm.CharDex = Roll4d6DropLowest();
         _vm.CharSta = Roll4d6DropLowest();
         _vm.CharInt = Roll4d6DropLowest();
         _vm.CharWis = Roll4d6DropLowest();
         _vm.CharCha = Roll4d6DropLowest();
-        RollExceptionalStrength(str);
+        RollExceptionalStrength(_vm.CharStr, canExceptional);
         UpdateCreateButton();
     }
 
-    private void RollExceptionalStrength(int str)
+    private void RollExceptionalStrength(int finalStr, bool raceCanExceptional)
     {
         var cls = _vm.SelectedClass;
-        if (str == 18 && _warriorClasses.Contains(cls))
+        if (finalStr == 18 && raceCanExceptional && _warriorClasses.Contains(cls))
         {
-            _vm.CharStrExceptional = _charRng.Next(1, 101); // 1-100, 100 shown as 00
-            ExcStrLabel.Text = $"Exceptional strength: 18/{_vm.CharStrExceptional:00}";
+            _vm.CharStrExceptional = _charRng.Next(1, 101);
+            ExcStrLabel.Text = $"Exceptional strength: 18/{FormatExceptional(_vm.CharStrExceptional)}";
         }
         else
         {
@@ -326,6 +343,8 @@ public partial class MainWindow : Window
             ExcStrLabel.Text = "";
         }
     }
+
+    private static string FormatExceptional(int pct) => pct == 100 ? "00" : pct.ToString("00");
 
     private static int Roll4d6DropLowest()
     {
@@ -343,8 +362,9 @@ public partial class MainWindow : Window
 
     private void OnCharClassChanged(object? sender, Avalonia.Controls.SelectionChangedEventArgs e)
     {
+        var rd = RaceStrData.GetValueOrDefault(_vm.SelectedRace, (0, 18, false));
         if (_vm.CharStr == 18)
-            RollExceptionalStrength(_vm.CharStr);
+            RollExceptionalStrength(_vm.CharStr, rd.Item3);
         UpdateCreateButton();
     }
 
@@ -477,22 +497,33 @@ public partial class MainWindow : Window
 
         var state = new CombatDisplayState(charStates, layout, isApiMode: _useApi);
 
-        IDiceService diceService = _useApi && _apiClient is not null
-            ? new ApiDiceService(_apiClient)
-            : new LoggingDiceService();
-        var combatStats = new CombatStatsService();
-        var combatService = new CombatService(diceService, combatStats, [new RangeModifier()]);
-        var turnmeterService = new TurnmeterService();
-        var statusEffectService = new StatusEffectService();
-        var simulator = new CombatSimulator(
-            combatService, turnmeterService, statusEffectService, diceService,
-            new LowestHpTargetSelector(), new LowestHpTargetSelector(),
-            new AutoActionDecisionSource(diceService), new AutoActionDecisionSource(diceService));
+        CombatResult result;
+        if (_useApi && _apiClient is not null)
+        {
+            result = await _apiClient.SimulateCombatAsync(
+                _fighter1!.Name,
+                new List<int> { _fighter1!.Id },
+                _fighter2!.Name,
+                new List<int> { _fighter2!.Id },
+                maxTicks: 500);
+        }
+        else
+        {
+            var diceService = new LoggingDiceService();
+            var combatStats = new CombatStatsService();
+            var combatService = new CombatService(diceService, combatStats, [new RangeModifier()]);
+            var turnmeterService = new TurnmeterService();
+            var statusEffectService = new StatusEffectService();
+            var simulator = new CombatSimulator(
+                combatService, turnmeterService, statusEffectService, diceService,
+                new LowestHpTargetSelector(), new LowestHpTargetSelector(),
+                new AutoActionDecisionSource(diceService), new AutoActionDecisionSource(diceService));
 
-        var result = await Task.Run(() => simulator.Simulate(party1, party2, 200), _cts.Token);
+            result = await Task.Run(() => simulator.Simulate(party1, party2, 200), _cts.Token);
 
-        result.DiceLog = diceService.DiceLog;
-        result.Log = CombatLogMerger.Merge(result.Log, result.DiceLog);
+            result.DiceLog = diceService.DiceLog;
+            result.Log = CombatLogMerger.Merge(result.Log, result.DiceLog);
+        }
 
         _waitForNext.Reset();
 

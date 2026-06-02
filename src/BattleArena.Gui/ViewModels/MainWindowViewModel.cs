@@ -156,7 +156,10 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         set
         {
             if (SetField(ref _selectedRaceIndex, value))
+            {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedRace)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanRollStats)));
+            }
         }
     }
     public string SelectedRace => SelectedRaceIndex >= 0 && SelectedRaceIndex < RaceOptions.Count
@@ -169,11 +172,16 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         set
         {
             if (SetField(ref _selectedClassIndex, value))
+            {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedClass)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanRollStats)));
+            }
         }
     }
     public string SelectedClass => SelectedClassIndex >= 0 && SelectedClassIndex < ClassOptions.Count
         ? ClassOptions[SelectedClassIndex] : "";
+
+    public bool CanRollStats => SelectedRaceIndex >= 0 && SelectedClassIndex >= 0;
 
     private int _charStr;
     public int CharStr
@@ -203,7 +211,9 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         }
     }
     public string CharStrDisplay => CharStrExceptional > 0
-        ? $"{CharStr}/{CharStrExceptional:00}" : CharStr.ToString();
+        ? $"{CharStr}/{FormatExceptional(CharStrExceptional)}" : CharStr.ToString();
+
+    private static string FormatExceptional(int pct) => pct == 100 ? "00" : pct.ToString("00");
 
     private int _charDex;
     public int CharDex

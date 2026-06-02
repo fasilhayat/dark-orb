@@ -378,7 +378,7 @@
       <!-- Row 2: Roll Stats button + exceptional str indicator -->
       <StackPanel Grid.Row="2" HorizontalAlignment="Center" Orientation="Horizontal" Spacing="12" Margin="0,0,0,10">
         <Button x:Name="RollStatsButton" Content="Roll Stats" Click="OnRollStatsClick"
-                Width="120" Height="30" FontSize="13" />
+                Width="120" Height="30" FontSize="13" IsEnabled="{Binding CanRollStats}" />
         <TextBlock x:Name="ExcStrLabel" Text="" Foreground="#d4a017" FontSize="12"
                    VerticalAlignment="Center" />
       </StackPanel>

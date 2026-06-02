@@ -60,4 +60,30 @@ internal sealed class BattleArenaApiClient
 
     internal sealed record DieRollResponse(string Die, int Result);
     internal sealed record DiceRollResponse(string Dice, int Result);
+
+    public async Task<CombatResult> SimulateCombatAsync(
+        string heroPartyName, List<int> heroMemberIds,
+        string enemyPartyName, List<int> enemyMemberIds,
+        int maxTicks = 500,
+        string heroTargetStrategy = "lowestHp",
+        string enemyTargetStrategy = "lowestHp")
+    {
+        var req = new CombatSimulateByMembersRequest(
+            heroPartyName, heroMemberIds,
+            enemyPartyName, enemyMemberIds,
+            maxTicks, heroTargetStrategy, enemyTargetStrategy);
+        var resp = await _http.PostAsJsonAsync("/v1/combat/simulate", req, JsonOptions);
+        resp.EnsureSuccessStatusCode();
+        return await resp.Content.ReadFromJsonAsync<CombatResult>(JsonOptions) ?? new CombatResult();
+    }
 }
+
+public record CombatSimulateByMembersRequest(
+    string HeroPartyName,
+    List<int> HeroPartyMemberIds,
+    string EnemyPartyName,
+    List<int> EnemyPartyMemberIds,
+    int MaxTicks = 500,
+    string HeroTargetStrategy = "lowestHp",
+    string EnemyTargetStrategy = "lowestHp"
+);
