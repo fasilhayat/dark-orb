@@ -17,6 +17,19 @@ Always stop after making file changes and let the user review the diff before co
 
 ---
 
+## 1b. Critical test-failure analysis
+
+**When a unit test fails, do NOT blindly modify it to make it pass.** Always ask: *"Is the test telling me the implementation introduced a bug?"*
+
+- First, read the test and understand what contract it asserts.
+- Then re-read your implementation to see if it violates that contract.
+- If the implementation is wrong, fix the implementation.
+- Only if the test is genuinely stale (referencing a removed feature, testing wrong behaviour) should you update the test — and document why.
+
+**This is especially important with tests that pre-date changes:** a failing test is often the first signal that your change broke an existing invariant. Treat it as a valuable guard, not an inconvenience.
+
+---
+
 ## 2. Project vocabulary
 
 | Term | Meaning | Example |

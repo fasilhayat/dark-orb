@@ -301,3 +301,185 @@ public class CombatSimulatorSpellcasterTests
         Assert.Empty(unarmedAttacks);
     }
 }
+
+// ── Healing combat tests ───────────────────────────────────────────────────────
+
+public class CombatSimulatorHealingTests
+{
+    // ── helpers ───────────────────────────────────────────────────────────────
+
+    private static (IDiceService Dice, CombatSimulator Simulator) CreateSimulator()
+    {
+        var dice = Substitute.For<IDiceService>();
+        dice.Seed.Returns(42);
+        dice.RollIndex(Arg.Any<int>()).Returns(0);
+        dice.Roll(DieType.D20).Returns(15);
+        dice.Roll(DieType.D4).Returns(2);
+        dice.Roll(DieType.D6).Returns(3);
+        dice.Roll(DieType.D8).Returns(4);
+        dice.Roll(DieType.D10).Returns(5);
+        dice.Roll(DieType.D100).Returns(100);
+
+        return (dice, new CombatSimulator(
+            new CombatService(dice, new CombatStatsService()),
+            new TurnmeterService(),
+            new StatusEffectService(),
+            dice));
+    }
+
+    private static Character MakeHealer(string name, int hp, int maxHp, int mana, params Spell[] spells) =>
+        new()
+        {
+            Name             = name,
+            ClassId          = 6,
+            Level            = 4,
+            Strength         = 10,
+            Dexterity        = 12,
+            Intelligence     = 16,
+            StrikeRating     = 13,
+            TurnSpeed        = 100,
+            MaxHitPoints     = maxHp,
+            CurrentHitPoints = hp,
+            MaxMana          = mana,
+            CurrentMana      = mana,
+            MemorizedSpells  = spells.ToList()
+        };
+
+    private static Character MakeTarget(string name, int hp, int maxHp) =>
+        new()
+        {
+            Name             = name,
+            ClassId          = 8,
+            Level            = 1,
+            Strength         = 10,
+            Dexterity        = 10,
+            Intelligence     = 10,
+            StrikeRating     = 10,
+            TurnSpeed        = 1,
+            MaxHitPoints     = maxHp,
+            CurrentHitPoints = hp
+        };
+
+    private static Spell MakeHeal(string name = "Heal", int manaCost = 10) =>
+        new()
+        {
+            Name          = name,
+            School        = SpellSchool.Healing,
+            DamageDie     = DieType.D8,
+            DamageCount   = 2,
+            DamageType    = DamageType.Holy,
+            ManaCost      = manaCost,
+            TurnMeterCost = 80,
+            SpellLevel    = 2
+        };
+
+    private static Spell MakeDamage(string name = "Smite", int manaCost = 15) =>
+        new()
+        {
+            Name          = name,
+            School        = SpellSchool.Evocation,
+            DamageDie     = DieType.D8,
+            DamageCount   = 2,
+            DamageType    = DamageType.Holy,
+            ManaCost      = manaCost,
+            TurnMeterCost = 80,
+            SpellLevel    = 2,
+            AttackBonus   = 2
+        };
+
+    // ── Tests ─────────────────────────────────────────────────────────────────
+
+    [Fact]
+    public void Simulate_HealerWithInjuredAlly_TurnStartTargetsAllyNotEnemy()
+    {
+        var (_, simulator) = CreateSimulator();
+        var healer = MakeHealer("Sera", hp: 30, maxHp: 50, mana: 200,
+            MakeHeal(),
+            MakeDamage("Smite"));
+        var ally = MakeTarget("Ally", hp: 10, maxHp: 50);
+        var enemy = MakeTarget("Gruk", hp: 50, maxHp: 50);
+
+        var heroParty = new Party
+        {
+            Name = "Heroes",
+            Members = new List<PartyMember>
+            {
+                new() { Character = healer, AttackSource = null },
+                new() { Character = ally, AttackSource = new Weapon { Name = "Fists", DamageDie = DieType.D4, DamageCount = 1, DamageType = DamageType.Bludgeoning, AttackType = AttackType.Melee } }
+            }
+        };
+        var enemyParty = Party.Solo(enemy, new Weapon { Name = "Club", DamageDie = DieType.D6, DamageCount = 1, DamageType = DamageType.Bludgeoning, AttackType = AttackType.Melee });
+
+        var result = simulator.Simulate(heroParty, enemyParty, maxTicks: 50);
+
+        // Find the healer's TurnStart events
+        var healerTurns = result.Log
+            .Where(e => e.EventType == "TurnStart" && e.ActorName == "Sera")
+            .ToList();
+
+        Assert.NotEmpty(healerTurns);
+
+        // Every turn where Sera casts Heal must target an ally (Ally or Sera herself)
+        foreach (var turn in healerTurns)
+        {
+            if (turn.AttackSourceName == "Heal")
+            {
+                Assert.True(turn.TargetName == "Ally" || turn.TargetName == "Sera",
+                    $"Heal targeted '{turn.TargetName}' — expected an ally (Ally or Sera)");
+            }
+        }
+    }
+
+    [Fact]
+    public void Simulate_HealerWithFullHpParty_DoesNotWasteTurnsOnHeal()
+    {
+        var (_, simulator) = CreateSimulator();
+        // Both healer and ally at full HP → AI should prefer Smite over Heal
+        var healer = MakeHealer("Sera", hp: 50, maxHp: 50, mana: 200,
+            MakeHeal(),
+            MakeDamage("Smite"));
+        var ally = MakeTarget("Ally", hp: 50, maxHp: 50);
+        var enemy = MakeTarget("Gruk", hp: 50, maxHp: 50);
+
+        var heroParty = new Party
+        {
+            Name = "Heroes",
+            Members = new List<PartyMember>
+            {
+                new() { Character = healer, AttackSource = null },
+                new() { Character = ally, AttackSource = new Weapon { Name = "Fists", DamageDie = DieType.D4, DamageCount = 1, DamageType = DamageType.Bludgeoning, AttackType = AttackType.Melee } }
+            }
+        };
+        var enemyParty = Party.Solo(enemy, new Weapon { Name = "Club", DamageDie = DieType.D6, DamageCount = 1, DamageType = DamageType.Bludgeoning, AttackType = AttackType.Melee });
+
+        var result = simulator.Simulate(heroParty, enemyParty, maxTicks: 50);
+
+        var healTurns = result.Log
+            .Where(e => e.EventType == "TurnStart" && e.ActorName == "Sera" && e.AttackSourceName == "Heal")
+            .ToList();
+
+        // With all allies at full HP, AI should not pick Heal at all
+        Assert.Empty(healTurns);
+    }
+
+    [Fact]
+    public void Simulate_HealerWithBothHealAndDamage_AtFullHp_PrefersDamage()
+    {
+        // Regression test: when a healer has both heal and damage spells
+        // and all allies are at full HP, the AI should prefer Smite over Heal.
+        var (_, simulator) = CreateSimulator();
+        var healer = MakeHealer("Sera", hp: 50, maxHp: 50, mana: 200,
+            MakeHeal(),
+            MakeDamage("Smite"));
+        var enemy = MakeTarget("Gruk", hp: 50, maxHp: 50);
+
+        var result = simulator.Simulate(Party.Solo(healer), Party.Solo(enemy), maxTicks: 30);
+
+        var healTurns = result.Log
+            .Where(e => e.EventType == "TurnStart" && e.ActorName == "Sera" && e.AttackSourceName == "Heal")
+            .ToList();
+
+        // With self at full HP and Smite available, AI should never pick Heal
+        Assert.Empty(healTurns);
+    }
+}

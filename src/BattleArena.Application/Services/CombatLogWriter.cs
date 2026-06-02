@@ -265,6 +265,11 @@ public static class CombatLogWriter
                     sb.AppendLine($"  [{e.Tick,5}]  MANACOST  {e.Message}");
                     lastTick = e.Tick;
                     break;
+
+                case "Healed":
+                    sb.AppendLine($"  [{e.Tick,5}]  HEALED {e.ActorName,-12}  +{e.DamageDealt} HP  ({e.TargetHpBefore} → {e.TargetHpAfter})  [{e.AttackSourceName}]");
+                    lastTick = e.Tick;
+                    break;
             }
         }
 
@@ -299,10 +304,11 @@ public static class CombatLogWriter
         sb.AppendLine();
 
         // Per-character stats
-        var effects     = result.Log.Where(e => e.EventType == "EffectApplied").ToList();
-        var resisted    = result.Log.Where(e => e.EventType == "EffectResisted").ToList();
-        var dots        = result.Log.Where(e => e.EventType == "DoTTick").ToList();
-        var allActors   = attacks.Select(e => e.ActorName).Distinct().OrderBy(n => n).ToList();
+        var turnStarts = result.Log.Where(e => e.EventType == "TurnStart").ToList();
+        var effects    = result.Log.Where(e => e.EventType == "EffectApplied").ToList();
+        var resisted   = result.Log.Where(e => e.EventType == "EffectResisted").ToList();
+        var dots       = result.Log.Where(e => e.EventType == "DoTTick").ToList();
+        var allActors  = turnStarts.Select(e => e.ActorName).Distinct().OrderBy(n => n).ToList();
 
         sb.AppendLine("  Per-character breakdown:");
         sb.AppendLine($"  {"Name",-14} {"Turns",6} {"Hits",5} {"Crits",6} {"Fmb",4} {"DmgDealt",9} {"Avg",6} {"DoT",5} {"FxApplied",10} {"FxResisted",10}");
@@ -310,20 +316,21 @@ public static class CombatLogWriter
 
         foreach (var name in allActors)
         {
-            var myAtk  = attacks.Where(e => e.ActorName == name).ToList();
-            var myHits = myAtk.Count(e => e.IsHit == true);
-            var myCrit = myAtk.Count(e => e.IsCritical == true);
-            var myFmb  = myAtk.Count(e => e.IsFumble == true);
-            var myDmg  = result.Log
+            var myTurns = turnStarts.Count(e => e.ActorName == name);
+            var myAtk   = attacks.Where(e => e.ActorName == name).ToList();
+            var myHits  = myAtk.Count(e => e.IsHit == true);
+            var myCrit  = myAtk.Count(e => e.IsCritical == true);
+            var myFmb   = myAtk.Count(e => e.IsFumble == true);
+            var myDmg   = result.Log
                 .Where(e => e.EventType == "Damage" && e.ActorName != name)
                 .Where(e => IsActorTurn(result.Log, e, name))
                 .Sum(e => e.DamageDealt ?? 0);
-            var myAvg  = myHits > 0 ? (double)myDmg / myHits : 0;
-            var myDot  = dots.Count(e => e.ActorName == name);
-            var myFx   = effects.Count(e => e.Message.Contains(name) || e.ActorName == name);
-            var myRes  = resisted.Count(e => e.ActorName == name);
+            var myAvg   = myHits > 0 ? (double)myDmg / myHits : 0;
+            var myDot   = dots.Count(e => e.ActorName == name);
+            var myFx    = effects.Count(e => e.Message.Contains(name) || e.ActorName == name);
+            var myRes   = resisted.Count(e => e.ActorName == name);
 
-            sb.AppendLine($"  {name,-14} {myAtk.Count,6} {myHits,5} {myCrit,6} {myFmb,4} {myDmg,9} {myAvg,6:F1} {myDot,5} {myFx,10} {myRes,10}");
+            sb.AppendLine($"  {name,-14} {myTurns,6} {myHits,5} {myCrit,6} {myFmb,4} {myDmg,9} {myAvg,6:F1} {myDot,5} {myFx,10} {myRes,10}");
         }
 
         sb.AppendLine();

@@ -789,13 +789,27 @@ public class CombatSimulator : ICombatSimulator
 
         if (!target.IsAlive)
         {
-            var liveEnemies = states
-                .Where(s => s.PartyIndex != actorState.PartyIndex && s.Character.IsAlive)
-                .ToList();
-            if (liveEnemies.Count == 0) return null;
-            var reSelector = actorState.PartyIndex == 0 ? _heroTargetSelector : _enemyTargetSelector;
-            target = await reSelector.SelectTargetAsync(
-                actorState.Character, liveEnemies.Select(s => s.Character), ct);
+            if (qs.Spell.IsHealing)
+            {
+                var liveAllies = states
+                    .Where(s => s.PartyIndex == actorState.PartyIndex && s.Character.IsAlive)
+                    .Select(s => s.Character)
+                    .ToList();
+                var healTarget = liveAllies
+                    .Where(a => a.CurrentHitPoints < a.MaxHitPoints)
+                    .MinBy(a => a.CurrentHitPoints);
+                target = healTarget ?? actorState.Character;
+            }
+            else
+            {
+                var liveEnemies = states
+                    .Where(s => s.PartyIndex != actorState.PartyIndex && s.Character.IsAlive)
+                    .ToList();
+                if (liveEnemies.Count == 0) return null;
+                var reSelector = actorState.PartyIndex == 0 ? _heroTargetSelector : _enemyTargetSelector;
+                target = await reSelector.SelectTargetAsync(
+                    actorState.Character, liveEnemies.Select(s => s.Character), ct);
+            }
         }
 
         await DeductManaCostAsync(tick, actorState, qs.Spell, notify);
@@ -812,11 +826,17 @@ public class CombatSimulator : ICombatSimulator
             .ToList();
         if (enemies.Count == 0) return null;
 
+        var allies = states
+            .Where(s => s.PartyIndex == actorState.PartyIndex && s.Character.IsAlive)
+            .Select(s => s.Character)
+            .ToList();
+
         var decisionSource = actorState.PartyIndex == 0 ? _heroActionSource : _enemyActionSource;
         var attackSource = await decisionSource.ChooseAttackAsync(
             actorState.Character,
             actorState.AttackSource,
             enemies.Select(s => s.Character).ToList(),
+            allies,
             tick,
             ct);
 
@@ -872,11 +892,23 @@ public class CombatSimulator : ICombatSimulator
 
         if (isSpell && meterNow < tmCost)
         {
-            await QueueSpellAsync(tick, actorState, (Spell)attackSource, enemies, tmCost, meterNow, notify, ct);
+            await QueueSpellAsync(tick, actorState, (Spell)attackSource, enemies, allies, tmCost, meterNow, notify, ct);
             return null;
         }
 
-        var target = await SelectActorTargetAsync(actorState, enemies, lastAttackerOf, ct);
+        Character target;
+        if (attackSource is Spell castSpell && castSpell.IsHealing)
+        {
+            // For healing spells, pick the most injured ally as the logged target
+            var healTarget = allies
+                .Where(a => a.CurrentHitPoints < a.MaxHitPoints)
+                .MinBy(a => a.CurrentHitPoints);
+            target = healTarget ?? actorState.Character;
+        }
+        else
+        {
+            target = await SelectActorTargetAsync(actorState, enemies, lastAttackerOf, ct);
+        }
         await DeductManaCostAsync(tick, actorState, isSpell ? (Spell)attackSource : null, notify);
         return new ActorSetup(attackSource, target, tmCost, isSpell);
     }
@@ -898,12 +930,23 @@ public class CombatSimulator : ICombatSimulator
 
     private async Task QueueSpellAsync(
         int tick, CombatantState actorState, Spell spell,
-        List<CombatantState> enemies, int tmCost, int meterNow,
+        List<CombatantState> enemies, List<Character> allies, int tmCost, int meterNow,
         Func<CombatLogEntry, Task> notify, CancellationToken ct)
     {
-        var selector = actorState.PartyIndex == 0 ? _heroTargetSelector : _enemyTargetSelector;
-        var target   = await selector.SelectTargetAsync(
-            actorState.Character, enemies.Select(s => s.Character), ct);
+        Character target;
+        if (spell.IsHealing)
+        {
+            var healTarget = allies
+                .Where(a => a.CurrentHitPoints < a.MaxHitPoints)
+                .MinBy(a => a.CurrentHitPoints);
+            target = healTarget ?? actorState.Character;
+        }
+        else
+        {
+            var selector = actorState.PartyIndex == 0 ? _heroTargetSelector : _enemyTargetSelector;
+            target = await selector.SelectTargetAsync(
+                actorState.Character, enemies.Select(s => s.Character), ct);
+        }
         actorState.QueuedSpell = new QueuedSpellInfo(spell, target, tmCost - meterNow);
         await notify(new CombatLogEntry
         {

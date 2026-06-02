@@ -8,6 +8,7 @@ public interface IActionDecisionSource
         Character actor,
         IAttackSource? defaultAttack,
         IReadOnlyList<Character> enemies,
+        IReadOnlyList<Character> allies,
         int currentTick,
         CancellationToken ct);
 }
