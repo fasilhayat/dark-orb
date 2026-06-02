@@ -76,6 +76,62 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         set => SetField(ref _isRunning, value);
     }
 
+    private string _phase = "Setup";
+    public string Phase
+    {
+        get => _phase;
+        set
+        {
+            if (SetField(ref _phase, value))
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSetupPhase)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsCombatPhase)));
+            }
+        }
+    }
+    public bool IsSetupPhase => Phase == "Setup";
+    public bool IsCombatPhase => Phase == "Combat";
+
+    private string _scenario = "Duel";
+    public string Scenario
+    {
+        get => _scenario;
+        set
+        {
+            if (SetField(ref _scenario, value))
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsDuel)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsParty)));
+            }
+        }
+    }
+    public bool IsDuel => Scenario == "Duel";
+    public bool IsParty => Scenario == "Party";
+
+    private string _fighter1Name = "";
+    public string Fighter1Name
+    {
+        get => _fighter1Name;
+        set
+        {
+            if (SetField(ref _fighter1Name, value))
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanStartCombat)));
+        }
+    }
+
+    private string _fighter2Name = "";
+    public string Fighter2Name
+    {
+        get => _fighter2Name;
+        set
+        {
+            if (SetField(ref _fighter2Name, value))
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanStartCombat)));
+        }
+    }
+
+    public bool CanStartCombat => !string.IsNullOrEmpty(Fighter1Name) && !string.IsNullOrEmpty(Fighter2Name);
+
     public void UpdateFromState(CombatDisplayState state, int tick)
     {
         Tick = tick;
@@ -193,9 +249,9 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
     public double TmFraction => Math.Clamp((double)Tm / 100, 0, 1);
     public double ManaFraction => MaxMana > 0 ? Math.Clamp((double)Math.Max(0, Mana) / MaxMana, 0, 1) : 0;
 
-    public string HpDisplay => IsDead ? "0%" : $"{Math.Max(0, Hp) * 100 / MaxHp}%";
-    public string TmDisplay => $"{Tm}%";
-    public string ManaDisplay => MaxMana > 0 ? $"{Math.Max(0, Mana) * 100 / MaxMana}%" : "--";
+    public string HpDisplay => IsDead ? "0" : $"{Math.Max(0, Hp)}/{MaxHp}";
+    public string TmDisplay => $"{Tm}";
+    public string ManaDisplay => MaxMana > 0 ? $"{Math.Max(0, Mana)}" : "--";
     public string ActiveIndicator => IsDead ? "  " : "\u25b6 ";
     public string InfoLine => $"{SexDisplay} \u00b7 Lvl {Level,2} {Race} \u00b7 {ClassName}";
 

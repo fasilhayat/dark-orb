@@ -21,8 +21,8 @@
                    FontStyle="Italic" FontSize="11" />
         <TextBlock Text="{Binding InfoLine}" Foreground="#888" FontSize="11" />
 
-        <!-- TM bar -->
-        <Border BorderBrush="#333" BorderThickness="1" CornerRadius="3" Background="#111" Height="16" ClipToBounds="True">
+        <!-- TM bar — piped segments -->
+        <Border BorderBrush="#333" BorderThickness="1" CornerRadius="3" Background="#111" Height="18" ClipToBounds="True">
           <Grid>
             <ItemsControl ItemsSource="{Binding TmPipes}">
               <ItemsControl.ItemsPanel>
@@ -36,7 +36,7 @@
                 </DataTemplate>
               </ItemsControl.ItemTemplate>
             </ItemsControl>
-            <TextBlock Text="{Binding TmDisplay}" Foreground="White" FontSize="10"
+            <TextBlock Text="{Binding TmDisplay}" Foreground="White" FontSize="11" FontWeight="Bold"
                        HorizontalAlignment="Center" VerticalAlignment="Center" />
           </Grid>
         </Border>
@@ -47,13 +47,13 @@
             <Border HorizontalAlignment="Left" CornerRadius="2"
                     Width="{Binding ManaFraction, Converter={StaticResource WidthConv}}"
                     Background="{Binding ManaBarColor}" />
-            <TextBlock Text="{Binding ManaDisplay}" Foreground="White" FontSize="10"
+            <TextBlock Text="{Binding ManaDisplay}" Foreground="White" FontSize="11" FontWeight="Bold"
                        HorizontalAlignment="Center" VerticalAlignment="Center" />
           </Grid>
         </Border>
 
         <!-- HP bar -->
-        <Border BorderBrush="#333" BorderThickness="1" CornerRadius="3" Background="#111" Height="22">
+        <Border BorderBrush="#333" BorderThickness="1" CornerRadius="3" Background="#111" Height="18">
           <Grid>
             <Border HorizontalAlignment="Left" CornerRadius="2"
                     Width="{Binding HpFraction, Converter={StaticResource WidthConv}}"

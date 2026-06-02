@@ -6,7 +6,7 @@ using BattleArena.Application.Interfaces;
 using BattleArena.Application.Modifiers;
 using BattleArena.Application.Services;
 using BattleArena.Core.Entities;
-using BattleArena.Core.Entities.Enums;
+using BattleArena.Gui.Data;
 using BattleArena.Gui.Presenters;
 using BattleArena.Gui.ViewModels;
 using BattleArena.Presentation;
@@ -21,35 +21,119 @@ public partial class MainWindow : Window
     private CancellationTokenSource? _cts;
     private ManualResetEventSlim? _waitForNext;
     private AvaloniaCombatPresenter? _presenter;
+    private Character? _fighter1;
+    private Character? _fighter2;
 
     public MainWindow()
     {
-        Console.WriteLine("MainWindow ctor: starting");
-        try
-        {
-            InitializeComponent();
-            Console.WriteLine("MainWindow ctor: InitializeComponent OK");
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine($"MainWindow ctor: InitializeComponent FAILED: {ex}");
-            throw;
-        }
+        InitializeComponent();
         DataContext = _vm;
-        Console.WriteLine("MainWindow ctor: DataContext set");
         _displayConfig = GuiDisplayConfig.Load();
         _vm.CombatLog.CollectionChanged += (_, _) =>
         {
             if (CombatLogListBox.ItemCount > 0)
                 CombatLogListBox.ScrollIntoView(CombatLogListBox.Items[^1]!);
         };
-        Console.WriteLine("MainWindow ctor: complete");
+        HeroListBox.ItemsSource = Roster.AllHeroes;
+        DuelButton.IsEnabled = false;
+        SelectionHint.Text = "Select Fighter 1";
     }
 
-    private async void OnStartClick(object? sender, Avalonia.Interactivity.RoutedEventArgs args)
+    private void OnDuelClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        if (_vm.IsRunning) return;
+        _vm.Scenario = "Duel";
+        DuelButton.IsEnabled = false;
+        PartyButton.IsEnabled = true;
+        _fighter1 = null;
+        _fighter2 = null;
+        _vm.Fighter1Name = "";
+        _vm.Fighter2Name = "";
+        SelectionHint.Text = "Select Fighter 1";
+    }
 
+    private void OnPartyClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        _vm.Scenario = "Party";
+        DuelButton.IsEnabled = true;
+        PartyButton.IsEnabled = false;
+        _fighter1 = null;
+        _fighter2 = null;
+        _vm.Fighter1Name = "";
+        _vm.Fighter2Name = "";
+        SelectionHint.Text = "Party mode coming soon — pick two fighters for now";
+    }
+
+    private void OnHeroSelected(object? sender, SelectionChangedEventArgs e)
+    {
+        if (HeroListBox.SelectedItem is not Character hero) return;
+
+        if (_fighter1 is null || _fighter1.Name == hero.Name)
+        {
+            _fighter1 = hero;
+            _vm.Fighter1Name = hero.Name;
+            SelectionHint.Text = "Select Fighter 2";
+        }
+        else if (_fighter2 is null || _fighter2.Name == hero.Name)
+        {
+            _fighter2 = hero;
+            _vm.Fighter2Name = hero.Name;
+            SelectionHint.Text = "Both fighters selected!";
+        }
+        else
+        {
+            // Both selected, clicking again replaces Fighter 2
+            _fighter2 = hero;
+            _vm.Fighter2Name = hero.Name;
+        }
+
+        HeroListBox.SelectedItem = null;
+    }
+
+    private async void OnFightClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (_fighter1 is null || _fighter2 is null) return;
+
+        _vm.Phase = "Combat";
+        _vm.CombatLog.Clear();
+        _vm.Heroes.Clear();
+        _vm.Enemies.Clear();
+        _vm.ActiveActorName = "";
+        _vm.CombatOver = false;
+
+        ResetCombatant(_fighter1);
+        ResetCombatant(_fighter2);
+
+        var party1 = Party.Solo(_fighter1, Roster.GetAttackSource(_fighter1));
+        var party2 = Party.Solo(_fighter2, Roster.GetAttackSource(_fighter2));
+
+        await RunCombat(party1, party2);
+    }
+
+    private async void OnStartClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        // No longer used — replaced by OnFightClick
+    }
+
+    private void OnBackToSetupClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        _presenter = null;
+        _cts?.Cancel();
+        _cts?.Dispose();
+        _waitForNext?.Dispose();
+        _cts = null;
+        _waitForNext = null;
+
+        _vm.Phase = "Setup";
+        _vm.CombatLog.Clear();
+        _vm.Heroes.Clear();
+        _vm.Enemies.Clear();
+        _vm.IsRunning = false;
+        NextButton.IsEnabled = false;
+        AutoButton.IsEnabled = false;
+    }
+
+    private async Task RunCombat(Party party1, Party party2)
+    {
         _cts?.Cancel();
         _cts?.Dispose();
         _waitForNext?.Dispose();
@@ -59,27 +143,13 @@ public partial class MainWindow : Window
 
         _presenter = null;
         _vm.IsRunning = true;
-        StartButton.IsEnabled = false;
         NextButton.IsEnabled = true;
         AutoButton.IsEnabled = true;
         AutoButton.Content = "Auto Play";
 
-        _vm.CombatLog.Clear();
-        _vm.Heroes.Clear();
-        _vm.Enemies.Clear();
-
-        // Build character data
-        var (party1, party2) = BuildDuelParties();
-
-        // Build display states
-        var maxHp = new Dictionary<string, int>();
-        var heroes = new List<CharCardViewModel>();
-        var enemies = new List<CharCardViewModel>();
-
         foreach (var pm in party1.Members)
         {
-            maxHp[pm.Character.Name] = pm.Character.MaxHitPoints;
-            heroes.Add(new CharCardViewModel
+            _vm.Heroes.Add(new CharCardViewModel
             {
                 Name = pm.Character.Name,
                 MaxHp = pm.Character.MaxHitPoints,
@@ -96,8 +166,7 @@ public partial class MainWindow : Window
         }
         foreach (var pm in party2.Members)
         {
-            maxHp[pm.Character.Name] = pm.Character.MaxHitPoints;
-            enemies.Add(new CharCardViewModel
+            _vm.Enemies.Add(new CharCardViewModel
             {
                 Name = pm.Character.Name,
                 MaxHp = pm.Character.MaxHitPoints,
@@ -113,24 +182,11 @@ public partial class MainWindow : Window
             });
         }
 
-        foreach (var h in heroes) _vm.Heroes.Add(h);
-        foreach (var e in enemies) _vm.Enemies.Add(e);
-
-        var charStates = heroes.Concat(enemies)
-            .Select(c => new CharDisplayState
-            {
-                Name = c.Name,
-                MaxHp = c.MaxHp,
-                Hp = c.MaxHp,
-                IsHero = c.IsHero,
-                Level = c.Level,
-                ClassName = c.ClassName,
-                Sex = c.Sex,
-                Race = c.Race,
-                MaxMana = c.MaxMana,
-                Mana = c.Mana,
-                Weapon = c.CurrentWeapon
-            }).ToList();
+        var charStates = new List<CharDisplayState>();
+        foreach (var c in _vm.Heroes)
+            charStates.Add(MakeState(c));
+        foreach (var c in _vm.Enemies)
+            charStates.Add(MakeState(c));
 
         var layout = CombatLayout.From(
             party1.Members.Select(m => m.Character.Name),
@@ -139,7 +195,6 @@ public partial class MainWindow : Window
 
         var state = new CombatDisplayState(charStates, layout);
 
-        // Wire up services
         var diceService = new DiceService();
         var combatStats = new CombatStatsService();
         var combatService = new CombatService(diceService, combatStats, [new RangeModifier()]);
@@ -150,10 +205,8 @@ public partial class MainWindow : Window
             new LowestHpTargetSelector(), new LowestHpTargetSelector(),
             new AutoActionDecisionSource(diceService), new AutoActionDecisionSource(diceService));
 
-        // Run simulation
         var result = await Task.Run(() => simulator.Simulate(party1, party2, 200), _cts.Token);
 
-        // Merge dice log
         result.Log = CombatLogMerger.Merge(result.Log, result.DiceLog);
 
         _waitForNext.Reset();
@@ -163,7 +216,6 @@ public partial class MainWindow : Window
             PacingMultiplier = SpeedSlider.Value
         };
 
-        // Present via engine on background thread
         _ = Task.Run(() =>
         {
             try
@@ -173,8 +225,7 @@ public partial class MainWindow : Window
                     {
                         if (!string.IsNullOrWhiteSpace(entry.SummonedPetName) && s.TryGet(entry.SummonedPetName) is null)
                         {
-                            var petMaxHp = 20;
-                            s.EnsurePet(entry.SummonedPetName, petMaxHp, true);
+                            s.EnsurePet(entry.SummonedPetName, 20, true);
                         }
                     });
             }
@@ -183,12 +234,34 @@ public partial class MainWindow : Window
                 Dispatcher.UIThread.Post(() =>
                 {
                     _vm.IsRunning = false;
-                    StartButton.IsEnabled = true;
                     NextButton.IsEnabled = false;
                     AutoButton.IsEnabled = false;
                 });
             }
         }, _cts.Token);
+    }
+
+    private static CharDisplayState MakeState(CharCardViewModel c) =>
+        new()
+        {
+            Name = c.Name,
+            MaxHp = c.MaxHp,
+            Hp = c.MaxHp,
+            IsHero = c.IsHero,
+            Level = c.Level,
+            ClassName = c.ClassName,
+            Sex = c.Sex,
+            Race = c.Race,
+            MaxMana = c.MaxMana,
+            Mana = c.Mana,
+            Weapon = c.CurrentWeapon
+        };
+
+    private static void ResetCombatant(Character c)
+    {
+        c.CurrentHitPoints = c.MaxHitPoints;
+        c.CurrentMana = c.MaxMana;
+        c.ActiveStatusEffects.Clear();
     }
 
     private void OnNextClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -226,58 +299,5 @@ public partial class MainWindow : Window
         };
         if (_presenter is not null)
             _presenter.PacingMultiplier = pacing;
-    }
-
-    private static (Party, Party) BuildDuelParties()
-    {
-        var iceBolt = new Spell
-        {
-            Name = "Ice Bolt",
-            School = SpellSchool.Evocation, DamageDie = DieType.D8, DamageCount = 2,
-            DamageType = DamageType.Ice, AttackBonus = 2, SpellLevel = 2,
-            TurnMeterCost = 80, ManaCost = 35
-        };
-
-        var orcAxe = new Weapon
-        {
-            Name = "Orcish Axe", DamageDie = DieType.D10, DamageCount = 1,
-            DamageType = DamageType.Slashing, AttackType = AttackType.Melee, AttackBonus = 1,
-            Archetype = ArchetypeWeapon.Axe, Hands = 1
-        };
-
-        var elf = new Race { Name = "High Elf", BaseMovementSpeed = 30 };
-        var orc = new Race { Name = "Orc", BaseMovementSpeed = 30 };
-
-        var hero = new Character
-        {
-            Name = "Theron", Level = 5, Strength = 8, Dexterity = 14, Intelligence = 18,
-            Race = elf,
-            ClassId = 5, ClassName = "Mage", Sex = "M",
-            StrikeRating = 13, TurnSpeed = 8,             MaxHitPoints = 30,
-            CurrentHitPoints = 30, MaxMana = 155, CurrentMana = 155,
-            Equipment = new ArmorSlots
-            {
-                Chest = new Armor { Name = "Mage Robes", ArmorClass = 14, Mitigation = 0,
-                    MaxDexterityBonus = 6 }
-            },
-            MemorizedSpells = [iceBolt]
-        };
-
-        var enemy = new Character
-        {
-            Name = "Krag", Level = 4, Strength = 17, Dexterity = 9, Intelligence = 6,
-            Race = orc,
-            ClassId = 1, ClassName = "Barbarian", Sex = "M",
-            StrikeRating = 15, TurnSpeed = 7, MaxHitPoints = 45,
-            CurrentHitPoints = 45,
-            Equipment = new ArmorSlots
-            {
-                Chest = new Armor { Name = "Orcish Hide", ArmorClass = 12, Mitigation = 2,
-                    MaxDexterityBonus = 4, MovementPenalty = 5 },
-                RightHand = orcAxe
-            }
-        };
-
-        return (Party.Solo(hero, iceBolt), Party.Solo(enemy, orcAxe));
     }
 }
