@@ -8,71 +8,68 @@
   </UserControl.Resources>
 
   <Border BorderBrush="{Binding BorderColor}" BorderThickness="2" CornerRadius="4"
-          Background="#1a1a2e" Padding="8">
-    <StackPanel Spacing="3">
-      <StackPanel Orientation="Horizontal" Spacing="4">
-        <TextBlock Text="{Binding ActiveIndicator}" Foreground="#88bbff" FontSize="13" />
-        <TextBlock Text="{Binding Name}" Foreground="{Binding NameColor}"
-                   FontWeight="Bold" FontSize="14" />
-      </StackPanel>
-      <TextBlock Text="{Binding CurrentWeapon}" Foreground="#888"
-                 FontStyle="Italic" FontSize="11" />
-      <TextBlock Text="{Binding InfoLine}" Foreground="#888" FontSize="11" />
+          Background="#1a1a2e" Padding="8" MinHeight="0">
+    <Grid>
+      <!-- Content layer -->
+      <StackPanel Spacing="3">
+        <StackPanel Orientation="Horizontal" Spacing="4">
+          <TextBlock Text="{Binding ActiveIndicator}" Foreground="#88bbff" FontSize="13" />
+          <TextBlock Text="{Binding Name}" Foreground="{Binding NameColor}"
+                     FontWeight="Bold" FontSize="14" />
+        </StackPanel>
+        <TextBlock Text="{Binding CurrentWeapon}" Foreground="#888"
+                   FontStyle="Italic" FontSize="11" />
+        <TextBlock Text="{Binding InfoLine}" Foreground="#888" FontSize="11" />
 
-      <!-- TM bar -->
-      <Border BorderBrush="#333" BorderThickness="1" CornerRadius="3" Background="#111" Height="18">
-        <Grid>
-          <Border HorizontalAlignment="Left" CornerRadius="2"
-                  Width="{Binding TmFraction, Converter={StaticResource WidthConv}}"
-                  Background="#00bfff" />
+        <!-- TM bar -->
+        <Border BorderBrush="#333" BorderThickness="1" CornerRadius="3" Background="#111" Height="16" ClipToBounds="True">
           <Grid>
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition /><ColumnDefinition /><ColumnDefinition />
-              <ColumnDefinition /><ColumnDefinition /><ColumnDefinition />
-              <ColumnDefinition /><ColumnDefinition /><ColumnDefinition />
-              <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <Rectangle Grid.Column="0" Fill="#00000020" Width="1" HorizontalAlignment="Right" />
-            <Rectangle Grid.Column="1" Fill="#00000020" Width="1" HorizontalAlignment="Right" />
-            <Rectangle Grid.Column="2" Fill="#00000020" Width="1" HorizontalAlignment="Right" />
-            <Rectangle Grid.Column="3" Fill="#00000020" Width="1" HorizontalAlignment="Right" />
-            <Rectangle Grid.Column="4" Fill="#00000020" Width="1" HorizontalAlignment="Right" />
-            <Rectangle Grid.Column="5" Fill="#00000020" Width="1" HorizontalAlignment="Right" />
-            <Rectangle Grid.Column="6" Fill="#00000020" Width="1" HorizontalAlignment="Right" />
-            <Rectangle Grid.Column="7" Fill="#00000020" Width="1" HorizontalAlignment="Right" />
-            <Rectangle Grid.Column="8" Fill="#00000020" Width="1" HorizontalAlignment="Right" />
+            <ItemsControl ItemsSource="{Binding TmPipes}">
+              <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <VirtualizingStackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+              </ItemsControl.ItemsPanel>
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <Border Width="3" Margin="0,0,1,0" Background="{Binding}" />
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <TextBlock Text="{Binding TmDisplay}" Foreground="White" FontSize="10"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" />
           </Grid>
-          <TextBlock Text="{Binding TmDisplay}" Foreground="White" FontSize="10"
-                     HorizontalAlignment="Center" VerticalAlignment="Center" />
-        </Grid>
-      </Border>
+        </Border>
 
-      <!-- Mana bar -->
-      <Border BorderBrush="#333" BorderThickness="1" CornerRadius="3" Background="#111" Height="18">
-        <Grid>
-          <Border HorizontalAlignment="Left" CornerRadius="2"
-                  Width="{Binding ManaFraction, Converter={StaticResource WidthConv}}"
-                  Background="{Binding ManaBarColor}" />
-          <TextBlock Text="{Binding ManaDisplay}" Foreground="White" FontSize="10"
-                     HorizontalAlignment="Center" VerticalAlignment="Center" />
-        </Grid>
-      </Border>
+        <!-- Mana bar -->
+        <Border BorderBrush="#333" BorderThickness="1" CornerRadius="3" Background="#111" Height="18">
+          <Grid>
+            <Border HorizontalAlignment="Left" CornerRadius="2"
+                    Width="{Binding ManaFraction, Converter={StaticResource WidthConv}}"
+                    Background="{Binding ManaBarColor}" />
+            <TextBlock Text="{Binding ManaDisplay}" Foreground="White" FontSize="10"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+          </Grid>
+        </Border>
 
-      <!-- HP bar -->
-      <Border BorderBrush="#333" BorderThickness="1" CornerRadius="3" Background="#111" Height="22">
-        <Grid>
-          <Border HorizontalAlignment="Left" CornerRadius="2"
-                  Width="{Binding HpFraction, Converter={StaticResource WidthConv}}"
-                  Background="{Binding HpBarColor}" />
-          <TextBlock Text="{Binding HpDisplay}" Foreground="White" FontSize="11" FontWeight="Bold"
-                     HorizontalAlignment="Center" VerticalAlignment="Center" />
-        </Grid>
-      </Border>
+        <!-- HP bar -->
+        <Border BorderBrush="#333" BorderThickness="1" CornerRadius="3" Background="#111" Height="22">
+          <Grid>
+            <Border HorizontalAlignment="Left" CornerRadius="2"
+                    Width="{Binding HpFraction, Converter={StaticResource WidthConv}}"
+                    Background="{Binding HpBarColor}" />
+            <TextBlock Text="{Binding HpDisplay}" Foreground="White" FontSize="11" FontWeight="Bold"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+          </Grid>
+        </Border>
+      </StackPanel>
 
-      <Border IsVisible="{Binding IsDead}" Background="#80000040" CornerRadius="2" Margin="0">
-        <TextBlock Text="{Binding DeadLabel}" Foreground="#ff4444" FontWeight="Bold"
-                   FontSize="16" HorizontalAlignment="Center" />
+      <!-- Overlay layer: death or status effects -->
+      <Border IsVisible="{Binding HasStatusOverlay}" Background="#80000040" CornerRadius="2"
+              VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="24">
+        <TextBlock Text="{Binding StatusLine}" Foreground="#ff4444" FontWeight="Bold"
+                   FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" />
       </Border>
-    </StackPanel>
+    </Grid>
   </Border>
 </UserControl>

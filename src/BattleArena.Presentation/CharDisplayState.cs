@@ -15,4 +15,5 @@ public class CharDisplayState
     public int Mana { get; set; }
     public bool IsAlive { get; set; } = true;
     public string Weapon { get; set; } = "";
+    public List<string> ActiveEffects { get; set; } = new();
 }

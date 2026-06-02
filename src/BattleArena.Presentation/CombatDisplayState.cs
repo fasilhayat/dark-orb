@@ -75,16 +75,6 @@ public sealed class CombatDisplayState
                     dotSt.Hp = e.TargetHpAfter ?? Math.Max(dotSt.Hp - (e.DamageDealt ?? 0), -10);
                 break;
 
-            case "Death":
-                if (_chars.TryGetValue(e.ActorName, out var dSt))
-                    dSt.IsAlive = false;
-                break;
-
-            case "KnockedOut":
-                if (_chars.TryGetValue(e.ActorName, out var koSt))
-                    koSt.IsAlive = false;
-                break;
-
             case "ManaDeduct":
             case "ManaRegen":
                 if (_chars.TryGetValue(e.ActorName, out var manaSt) && e.ManaAfter.HasValue)
@@ -106,6 +96,32 @@ public sealed class CombatDisplayState
                 {
                     petSt.Hp = 0;
                     petSt.IsAlive = false;
+                }
+                break;
+
+            case "EffectApplied":
+                if (!string.IsNullOrWhiteSpace(e.StatusEffectName)
+                    && _chars.TryGetValue(e.ActorName, out var applySt))
+                {
+                    if (!applySt.ActiveEffects.Contains(e.StatusEffectName))
+                        applySt.ActiveEffects.Add(e.StatusEffectName);
+                }
+                break;
+
+            case "EffectExpired":
+                if (!string.IsNullOrWhiteSpace(e.StatusEffectName)
+                    && _chars.TryGetValue(e.ActorName, out var expSt))
+                {
+                    expSt.ActiveEffects.Remove(e.StatusEffectName);
+                }
+                break;
+
+            case "Death":
+            case "KnockedOut":
+                if (_chars.TryGetValue(e.ActorName, out var deadSt))
+                {
+                    deadSt.IsAlive = false;
+                    deadSt.ActiveEffects.Clear();
                 }
                 break;
         }

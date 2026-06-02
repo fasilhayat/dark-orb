@@ -115,8 +115,20 @@
                  ScrollViewer.VerticalScrollBarVisibility="Auto">
           <ListBox.ItemTemplate>
             <DataTemplate>
-              <TextBlock Text="{Binding Text}" Foreground="{Binding Brush}"
-                         FontSize="12" TextWrapping="NoWrap" Margin="4,0" />
+              <ItemsControl ItemsSource="{Binding Segments}"
+                            Margin="4,0">
+                <ItemsControl.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                  </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <TextBlock Text="{Binding Text}" Foreground="{Binding Brush}"
+                               FontSize="12" TextWrapping="NoWrap" />
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
             </DataTemplate>
           </ListBox.ItemTemplate>
         </ListBox>

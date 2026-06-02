@@ -50,13 +50,19 @@ public partial class MainWindow : Window
     {
         if (_vm.IsRunning) return;
 
+        _cts?.Cancel();
+        _cts?.Dispose();
+        _waitForNext?.Dispose();
+
         _cts = new CancellationTokenSource();
         _waitForNext = new ManualResetEventSlim(false);
 
+        _presenter = null;
         _vm.IsRunning = true;
         StartButton.IsEnabled = false;
         NextButton.IsEnabled = true;
         AutoButton.IsEnabled = true;
+        AutoButton.Content = "Auto Play";
 
         _vm.CombatLog.Clear();
         _vm.Heroes.Clear();
@@ -224,11 +230,12 @@ public partial class MainWindow : Window
 
     private static (Party, Party) BuildDuelParties()
     {
-        var longsword = new Weapon
+        var iceBolt = new Spell
         {
-            Name = "Longsword", DamageDie = DieType.D8, DamageCount = 1,
-            DamageType = DamageType.Slashing, AttackType = AttackType.Melee, AttackBonus = 2,
-            Archetype = ArchetypeWeapon.Sword, Hands = 1
+            Name = "Ice Bolt",
+            School = SpellSchool.Evocation, DamageDie = DieType.D8, DamageCount = 2,
+            DamageType = DamageType.Ice, AttackBonus = 2, SpellLevel = 2,
+            TurnMeterCost = 80, ManaCost = 35
         };
 
         var orcAxe = new Weapon
@@ -238,22 +245,22 @@ public partial class MainWindow : Window
             Archetype = ArchetypeWeapon.Axe, Hands = 1
         };
 
-        var human = new Race { Name = "Human", BaseMovementSpeed = 30 };
+        var elf = new Race { Name = "High Elf", BaseMovementSpeed = 30 };
         var orc = new Race { Name = "Orc", BaseMovementSpeed = 30 };
 
         var hero = new Character
         {
-            Name = "Theron", Level = 5, Strength = 18, Dexterity = 12, Intelligence = 10,
-            Race = human,
-            ClassId = 8, ClassName = "Fighter", Sex = "M",
-            StrikeRating = 14, TurnSpeed = 10, MaxHitPoints = 50,
-            CurrentHitPoints = 50,
+            Name = "Theron", Level = 5, Strength = 8, Dexterity = 14, Intelligence = 18,
+            Race = elf,
+            ClassId = 5, ClassName = "Mage", Sex = "M",
+            StrikeRating = 13, TurnSpeed = 8, MaxHitPoints = 30,
+            CurrentHitPoints = 30, MaxMana = 80, CurrentMana = 80,
             Equipment = new ArmorSlots
             {
-                Chest = new Armor { Name = "Chain Mail", ArmorClass = 16, Mitigation = 2,
-                    MaxDexterityBonus = 6, MovementPenalty = 10 },
-                RightHand = longsword
-            }
+                Chest = new Armor { Name = "Mage Robes", ArmorClass = 14, Mitigation = 0,
+                    MaxDexterityBonus = 6 }
+            },
+            MemorizedSpells = [iceBolt]
         };
 
         var enemy = new Character
@@ -271,6 +278,6 @@ public partial class MainWindow : Window
             }
         };
 
-        return (Party.Solo(hero, longsword), Party.Solo(enemy, orcAxe));
+        return (Party.Solo(hero, iceBolt), Party.Solo(enemy, orcAxe));
     }
 }

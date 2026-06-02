@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -88,10 +90,12 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         }
     }
 
-    public void AddLogEntry(string text, IBrush? brush = null)
+    public void AddLogEntry(IReadOnlyList<LogSegment> segments)
     {
-        CombatLog.Add(new LogEntryViewModel { Text = text, Brush = brush });
+        CombatLog.Add(new LogEntryViewModel { Segments = segments });
     }
+
+    private static IBrush MakeBrush(string hex) => new SolidColorBrush(Color.Parse(hex));
 
     private CharCardViewModel? FindCard(string name)
     {
@@ -115,6 +119,10 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
 
 public sealed class CharCardViewModel : INotifyPropertyChanged
 {
+    private const int TmTotalPipes = 64;
+    private static readonly IBrush TmPipeFilled = new SolidColorBrush(Color.Parse("#00bfff"));
+    private static readonly IBrush TmPipeEmpty = new SolidColorBrush(Color.Parse("#1a1a2e"));
+
     public string Name { get; init; } = "";
     public bool IsHero { get; init; }
     public int MaxHp { get; init; }
@@ -123,6 +131,15 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
     public string Race { get; init; } = "";
     public string Sex { get; init; } = "";
     public int Level { get; init; }
+
+    public ObservableCollection<IBrush> TmPipes { get; }
+
+    public CharCardViewModel()
+    {
+        TmPipes = new ObservableCollection<IBrush>();
+        for (var i = 0; i < TmTotalPipes; i++)
+            TmPipes.Add(TmPipeEmpty);
+    }
 
     private int _hp;
     public int Hp
@@ -159,10 +176,18 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
         set => SetField(ref _currentWeapon, value);
     }
 
+    private string _activeEffects = "";
+    public string ActiveEffects
+    {
+        get => _activeEffects;
+        set => SetField(ref _activeEffects, value);
+    }
+
     // Computed display properties
 
     public bool IsDead => !IsAlive;
-    public string DeadLabel => Hp <= -10 ? "SLAIN" : "UNCONSCIOUS";
+    public string StatusLine => IsDead ? (Hp <= -10 ? "SLAIN" : "UNCONSCIOUS") : ActiveEffects;
+    public bool HasStatusOverlay => !string.IsNullOrEmpty(StatusLine);
 
     public double HpFraction => MaxHp > 0 ? Math.Clamp((double)Math.Max(0, Hp) / MaxHp, 0, 1) : 0;
     public double TmFraction => Math.Clamp((double)Tm / 100, 0, 1);
@@ -198,6 +223,7 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
         Tm = Math.Min(100, s.Tm);
         Mana = Math.Max(0, s.Mana);
         IsAlive = s.IsAlive;
+        ActiveEffects = s.ActiveEffects.Count > 0 ? string.Join(", ", s.ActiveEffects) : "";
         if (!string.IsNullOrEmpty(s.Weapon))
             CurrentWeapon = s.Weapon;
     }
@@ -224,6 +250,7 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
             case nameof(Tm):
                 Raise(nameof(TmFraction));
                 Raise(nameof(TmDisplay));
+                UpdateTmPipes();
                 break;
             case nameof(Mana):
                 Raise(nameof(ManaFraction));
@@ -236,6 +263,12 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
                 Raise(nameof(NameColor));
                 Raise(nameof(HpBarColor));
                 Raise(nameof(HpDisplay));
+                Raise(nameof(StatusLine));
+                Raise(nameof(HasStatusOverlay));
+                break;
+            case nameof(ActiveEffects):
+                Raise(nameof(StatusLine));
+                Raise(nameof(HasStatusOverlay));
                 break;
             case nameof(CurrentWeapon):
                 break;
@@ -243,10 +276,26 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
 
         void Raise(string n) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(n));
     }
+
+    private void UpdateTmPipes()
+    {
+        var fillCount = (int)Math.Round(TmFraction * TmTotalPipes);
+        for (var i = 0; i < TmTotalPipes; i++)
+        {
+            var brush = i < fillCount ? TmPipeFilled : TmPipeEmpty;
+            if (!ReferenceEquals(TmPipes[i], brush))
+                TmPipes[i] = brush;
+        }
+    }
+}
+
+public sealed class LogSegment
+{
+    public string Text { get; init; } = "";
+    public IBrush? Brush { get; init; }
 }
 
 public sealed class LogEntryViewModel
 {
-    public string Text { get; init; } = "";
-    public IBrush? Brush { get; init; }
+    public IReadOnlyList<LogSegment> Segments { get; init; } = Array.Empty<LogSegment>();
 }
