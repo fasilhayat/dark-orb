@@ -4,13 +4,13 @@ using BattleArena.Core.Entities.Enums;
 
 namespace BattleArena.Gui.Data;
 
-internal sealed class RosterData
+public sealed class RosterData
 {
     public List<Character> Heroes { get; init; } = [];
     public List<Character> Enemies { get; init; } = [];
 }
 
-internal static class RosterLoader
+public static class RosterLoader
 {
     private static RosterData? _cached;
     private static readonly object _lock = new();
@@ -24,23 +24,28 @@ internal static class RosterLoader
         {
             if (_cached is not null)
                 return _cached;
-
-            var text = File.ReadAllText(jsonPath);
-            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            var dto = JsonSerializer.Deserialize<RosterFileDto>(text, options)
-                ?? throw new InvalidOperationException("Failed to deserialize roster.json");
-
-            var races = BuildRaces(dto.Races);
-            var weapons = BuildWeapons(dto.Weapons);
-            var spells = BuildSpells(dto.Spells);
-            var armors = BuildArmors(dto.Armors);
-
-            var heroes = BuildCharacters(dto.Heroes, races, weapons, spells, armors);
-            var enemies = BuildCharacters(dto.Enemies, races, weapons, spells, armors);
-
-            _cached = new RosterData { Heroes = heroes, Enemies = enemies };
-            return _cached;
+            return ForceLoad(jsonPath);
         }
+    }
+
+    /// <summary>Bypasses cache — used by tests.</summary>
+    public static RosterData ForceLoad(string jsonPath)
+    {
+        var text = File.ReadAllText(jsonPath);
+        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        var dto = JsonSerializer.Deserialize<RosterFileDto>(text, options)
+            ?? throw new InvalidOperationException("Failed to deserialize roster.json");
+
+        var races = BuildRaces(dto.Races);
+        var weapons = BuildWeapons(dto.Weapons);
+        var spells = BuildSpells(dto.Spells);
+        var armors = BuildArmors(dto.Armors);
+
+        var heroes = BuildCharacters(dto.Heroes, races, weapons, spells, armors);
+        var enemies = BuildCharacters(dto.Enemies, races, weapons, spells, armors);
+
+        _cached = new RosterData { Heroes = heroes, Enemies = enemies };
+        return _cached;
     }
 
     private static Dictionary<string, Race> BuildRaces(IReadOnlyList<RaceDto> dtos)

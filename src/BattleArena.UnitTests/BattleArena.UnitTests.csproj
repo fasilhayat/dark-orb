@@ -31,6 +31,7 @@
     <ProjectReference Include="..\BattleArena.Application\BattleArena.Application.csproj" />
     <ProjectReference Include="..\BattleArena.Core\BattleArena.Core.csproj" />
     <ProjectReference Include="..\BattleArena.Presentation\BattleArena.Presentation.csproj" />
+    <ProjectReference Include="..\BattleArena.Gui\BattleArena.Gui.csproj" />
   </ItemGroup>
 
 </Project>
