@@ -554,34 +554,50 @@ Dwarf and Gladefolk Priests cannot bond with a Dragon (Human/Elf only). Instead,
 
 ### Subraces
 
-**Elf:** High Elf (*innate spellcasting*), Dark Elf / Drow (*superior darkvision*), Forest Elf (*move unseen through terrain*)
-
-**Dwarf:** Mountain Dwarf (*expert metalworkers*), Hill Dwarf (*endurance*)
-
-**Lizard:** Swamp Lizard (*immune to toxins*), Desert Lizard (*heat resistant*), Forest Lizard (*keen senses*)
-
-**Demon:** Fire Demon (*hellflame, fire damage*), Shadow Demon (*shadows, fear*)
-
-**Orc:** Green Orc (*poisoned weapons, stealth*), Blue Orc (*coastal raiders, unnatural strength*), Red Orc (*mountain berserkers, blood fury*)
-
-**Ogre:** Mountain Ogre (*magic resistance*), Hill Ogre (*boulder-throwing*), Desert Ogre (*heat resistant*), Forest Ogre (*regeneration*)
-
-**Gladefolk:** Forest Gladefolk (*disappear into foliage*), Hill Gladefolk (*luck, hospitality*)
+| Parent Race | Subrace | Special Trait / Feat |
+|:-----------:|---------|----------------------|
+| **Elf** | High Elf | Innate arcane spellcasting — can cast cantrips from elven magic |
+| | Dark Elf / Drow | Superior darkvision 120ft — see perfectly even in magical darkness |
+| | Forest Elf | Move unseen through natural terrain — cannot be tracked in wilderness |
+| **Dwarf** | Mountain Dwarf | Expert metalworkers and smiths — craft the finest arms and armor |
+| | Hill Dwarf | Unyielding endurance — +1 HP per level, resistance to poison |
+| **Lizard** | Swamp Lizard | Immune to all toxins and poisons — breathes freely in poisonous swamps |
+| | Desert Lizard | Heat resistant — ignores extreme heat, fire damage reduced |
+| | Forest Lizard | Keen senses — heightened perception, cannot be surprised |
+| **Demon** | Fire Demon | Wreathed in hellflame — fire attacks deal extra damage, resistant to fire |
+| | Shadow Demon | Move through shadows and darkness — attacks sow fear in enemies |
+| **Orc** | Green Orc | Poisoned weapons and stealth — coats blades with natural venom |
+| | Blue Orc | Coastal raiders with unnatural strength — stronger near the sea |
+| | Red Orc | Mountain berserkers — blood fury grants bonus damage when wounded |
+| **Ogre** | Mountain Ogre | Ancient giant blood grants magic resistance — advantage on magical saves |
+| | Hill Ogre | Hurls boulders with deadly accuracy — ranged bludgeoning attack |
+| | Desert Ogre | Heat resistant — thrives in blistering heat, fire does not burn |
+| | Forest Ogre | Rapid regeneration — heals wounds each turn, can regrow limbs |
+| **Gladefolk** | Forest Gladefolk | Vanishes into foliage — can hide in woodland as a bonus action |
+| | Hill Gladefolk | Uncanny luck and hospitality — once per day reroll a failed roll |
+| **Half-Elf** | Half-High-Elf | Inherited arcane affinity from High Elf blood — +1 Intelligence |
+| | Half-Wood-Elf | Natural agility and woodland empathy — +1 Dexterity, bonus to stealth |
 
 ### Special Abilities by Race
 
-| Race | Abilities |
-|------|-----------|
-| Elf | Magic Resistance |
-| Dwarf | Magic Resistance |
-| Lizard | Poison Immunity |
-| Undead | Fear Immunity, Cause Fear, Stun |
-| Kobold | Magic Resistance |
-| Demon | Cause Fear, Stun |
-| Orc | Extra Strength (+2 melee damage) |
-| Ogre | Magic Resistance, Extra Strength |
-| Gladefolk | Taunt, Fear Immunity |
-| Half-Elf | Magic Resistance, Fey Ancestry |
+| Race | Special Ability | Description |
+|------|:---------------:|-------------|
+| Elf | Magic Resistance | Advantage on saving throws against magical effects |
+| Dwarf | Magic Resistance | Advantage on saving throws against magical effects |
+| Lizard | Poison Immunity | Immune to poison damage and the poisoned condition |
+| Undead | Fear Immunity | Immune to fear effects |
+| | Cause Fear | Can instill fear in enemies |
+| | Stun | Can stun targets |
+| Kobold | Magic Resistance | Advantage on saving throws against magical effects |
+| Demon | Cause Fear | Can instill fear in enemies |
+| | Stun | Can stun targets |
+| Orc | Extra Strength | +2 bonus to melee damage rolls |
+| Ogre | Magic Resistance | Advantage on saving throws against magical effects |
+| | Extra Strength | +2 bonus to melee damage rolls |
+| Gladefolk | Taunt | Forces an enemy to attack the taunter |
+| | Fear Immunity | Immune to fear effects |
+| Half-Elf | Magic Resistance | Advantage on saving throws against magical effects |
+| | Fey Ancestry | Advantage against being charmed; immune to magical sleep |
 
 ---
 
