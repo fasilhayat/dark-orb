@@ -717,5 +717,8 @@ public partial class MainWindow : Window
     }
 
     private static List<CharacterDisplayItem> ToDisplayItems(List<Character> characters) =>
-        characters.ConvertAll(c => new CharacterDisplayItem(c));
+        characters
+            .Where(c => PortraitResolver.HasPortrait(c.Name))
+            .Select(c => new CharacterDisplayItem(c))
+            .ToList();
 }

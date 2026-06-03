@@ -28,6 +28,11 @@ internal static class PortraitResolver
     private static readonly string PortraitDir = Path.Combine(AppContext.BaseDirectory, "Assets", "Portraits");
     private static readonly Dictionary<string, Bitmap?> Cache = new(StringComparer.OrdinalIgnoreCase);
 
+    public static IReadOnlyCollection<string> KnownNames => NameToFile.Keys;
+
+    public static bool HasPortrait(string characterName) =>
+        NameToFile.ContainsKey(characterName);
+
     public static Bitmap? GetPortrait(string characterName)
     {
         if (Cache.TryGetValue(characterName, out var cached))

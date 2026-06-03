@@ -4,7 +4,8 @@
     { "name": "Orc",       "baseMovementSpeed": 30 },
     { "name": "Elf",       "baseMovementSpeed": 35 },
     { "name": "Undead",    "baseMovementSpeed": 30 },
-    { "name": "Gladefolk", "baseMovementSpeed": 30 }
+    { "name": "Gladefolk", "baseMovementSpeed": 30 },
+    { "name": "Dwarf",     "baseMovementSpeed": 25 }
   ],
 
   "weapons": [
@@ -144,6 +145,66 @@
       "strikeRating": 17, "turnSpeed": 12,
       "maxHitPoints": 40,
       "equipment": { "chest": "Studded Leather", "rightHand": "Dagger" }
+    },
+    {
+      "name": "Old Man Kael", "level": 14,
+      "strength": 10, "dexterity": 12, "stamina": 10, "intelligence": 18, "wisdom": 16, "charisma": 13,
+      "race": "Human", "classId": 8, "className": "Fighter", "sex": "M",
+      "strikeRating": 14, "turnSpeed": 7,
+      "maxHitPoints": 55, "maxMana": 100,
+      "equipment": { "chest": "Padded Armor", "rightHand": "Long Sword" },
+      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock"]
+    },
+    {
+      "name": "Greta Ironhand", "level": 9,
+      "strength": 17, "dexterity": 13, "stamina": 16, "intelligence": 10, "wisdom": 10, "charisma": 12,
+      "race": "Dwarf", "classId": 1, "className": "Barbarian", "sex": "F",
+      "strikeRating": 14, "turnSpeed": 6,
+      "maxHitPoints": 110,
+      "equipment": { "chest": "Chain Mail", "rightHand": "War Hammer" }
+    },
+    {
+      "name": "Merchant Vex", "level": 6,
+      "strength": 10, "dexterity": 16, "stamina": 12, "intelligence": 15, "wisdom": 11, "charisma": 14,
+      "race": "Human", "classId": 9, "className": "Rogue", "sex": "M",
+      "strikeRating": 16, "turnSpeed": 11,
+      "maxHitPoints": 35,
+      "equipment": { "chest": "Studded Leather", "rightHand": "Dagger" }
+    },
+    {
+      "name": "High Priestess Luna", "level": 12,
+      "strength": 9, "dexterity": 12, "stamina": 13, "intelligence": 14, "wisdom": 19, "charisma": 17,
+      "race": "Human", "classId": 4, "className": "Priest", "sex": "F",
+      "strikeRating": 17, "turnSpeed": 8,
+      "maxHitPoints": 55, "maxMana": 110,
+      "equipment": { "chest": "Padded Armor", "rightHand": "Mace" },
+      "memorizedSpells": ["Smite", "Heal"]
+    },
+    {
+      "name": "Lysander the Bard", "level": 8,
+      "strength": 10, "dexterity": 15, "stamina": 12, "intelligence": 14, "wisdom": 12, "charisma": 19,
+      "race": "Human", "classId": 8, "className": "Fighter", "sex": "M",
+      "strikeRating": 15, "turnSpeed": 9,
+      "maxHitPoints": 48, "maxMana": 60,
+      "equipment": { "chest": "Studded Leather", "rightHand": "Short Sword" },
+      "memorizedSpells": ["Heal", "Shock"]
+    },
+    {
+      "name": "Elder Treant", "level": 13,
+      "strength": 20, "dexterity": 6, "stamina": 19, "intelligence": 12, "wisdom": 14, "charisma": 10,
+      "race": "Human", "classId": 1, "className": "Barbarian", "sex": "M",
+      "strikeRating": 12, "turnSpeed": 4,
+      "maxHitPoints": 190,
+      "equipment": { "chest": "Hide Armor", "rightHand": "Maul" }
+    },
+    {
+      "name": "Infernal Commander Maleth", "level": 16,
+      "strength": 20, "dexterity": 14, "stamina": 18, "intelligence": 16, "wisdom": 12, "charisma": 18,
+      "race": "Human", "classId": 3, "className": "Paladin", "sex": "M",
+      "strikeRating": 16, "turnSpeed": 7,
+      "maxHitPoints": 140, "maxMana": 80,
+      "equipment": { "chest": "Plate Armor", "rightHand": "Great Sword" },
+      "memorizedSpells": ["Smite"]
     }
   ],
 
