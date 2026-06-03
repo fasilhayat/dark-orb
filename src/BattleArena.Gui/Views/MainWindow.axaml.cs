@@ -228,8 +228,9 @@ public partial class MainWindow : Window
     {
         _vm.Phase = "CharCreation";
         _vm.CharName = "";
-        _vm.SelectedRaceIndex = -1;
-        _vm.SelectedClassIndex = -1;
+        _vm.SelectedClassName = null;
+        _vm.SelectedRaceName = null;
+        _vm.SelectedSubraceName = null;
         _vm.CharStr = 0;
         _vm.CharStrExceptional = 0;
         _vm.CharDex = 0;
@@ -238,6 +239,9 @@ public partial class MainWindow : Window
         _vm.CharWis = 0;
         _vm.CharCha = 0;
         ExcStrLabel.Text = "";
+        ClassListBox.SelectedItem = null;
+        RaceListBox.SelectedItem = null;
+        SubraceListBox.SelectedItem = null;
         UpdateCreateButton();
     }
 
@@ -364,17 +368,39 @@ public partial class MainWindow : Window
         return rolls[1] + rolls[2] + rolls[3];
     }
 
-    private void OnCharRaceChanged(object? sender, Avalonia.Controls.SelectionChangedEventArgs e)
+    private void OnCharClassSelected(object? sender, Avalonia.Controls.SelectionChangedEventArgs e)
     {
-        UpdateCreateButton();
+        if (ClassListBox.SelectedItem is string cls && _vm.SelectedClassName != cls)
+        {
+            _vm.SelectedClassName = cls;
+            RaceListBox.SelectedItem = null;
+            SubraceListBox.SelectedItem = null;
+            UpdateCreateButton();
+        }
     }
 
-    private void OnCharClassChanged(object? sender, Avalonia.Controls.SelectionChangedEventArgs e)
+    private void OnCharRaceSelected(object? sender, Avalonia.Controls.SelectionChangedEventArgs e)
     {
-        var rd = RaceStrData.GetValueOrDefault(_vm.SelectedRace, (0, 18, false));
-        if (_vm.CharStr == 18)
-            RollExceptionalStrength(_vm.CharStr, rd.Item3);
-        UpdateCreateButton();
+        if (RaceListBox.SelectedItem is string race && _vm.SelectedRaceName != race)
+        {
+            if (_vm.CharStr > 0)
+            {
+                var rd = RaceStrData.GetValueOrDefault(race, (Bonus: 0, Max: 18, Exceptional: false));
+                RollExceptionalStrength(_vm.CharStr, rd.Exceptional);
+            }
+            _vm.SelectedRaceName = race;
+            SubraceListBox.SelectedItem = null;
+            UpdateCreateButton();
+        }
+    }
+
+    private void OnCharSubraceSelected(object? sender, Avalonia.Controls.SelectionChangedEventArgs e)
+    {
+        if (SubraceListBox.SelectedItem is string sub && _vm.SelectedSubraceName != sub)
+        {
+            _vm.SelectedSubraceName = sub;
+            UpdateCreateButton();
+        }
     }
 
     private void OnCharCreateClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -396,8 +422,8 @@ public partial class MainWindow : Window
     {
         CreateCharButton2.IsEnabled =
             !string.IsNullOrWhiteSpace(_vm.CharName) &&
-            _vm.SelectedRaceIndex >= 0 &&
-            _vm.SelectedClassIndex >= 0 &&
+            _vm.SelectedClassName is not null &&
+            _vm.SelectedRaceName is not null &&
             _vm.CharStr > 0;
     }
 

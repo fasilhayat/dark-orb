@@ -103,7 +103,14 @@ CREATE TABLE IF NOT EXISTS arena_data.subrace (
     id SERIAL PRIMARY KEY,
     race_id INTEGER NOT NULL REFERENCES arena_data.race(id),
     name VARCHAR(50) NOT NULL,
-    description TEXT DEFAULT ''
+    description TEXT DEFAULT '',
+    strength_bonus INTEGER NOT NULL DEFAULT 0,
+    dexterity_bonus INTEGER NOT NULL DEFAULT 0,
+    stamina_bonus INTEGER NOT NULL DEFAULT 0,
+    intelligence_bonus INTEGER NOT NULL DEFAULT 0,
+    wisdom_bonus INTEGER NOT NULL DEFAULT 0,
+    charisma_bonus INTEGER NOT NULL DEFAULT 0,
+    hit_point_bonus INTEGER NOT NULL DEFAULT 0
 );
 
 
@@ -122,6 +129,28 @@ CREATE TABLE IF NOT EXISTS arena_data.race_special_ability (
 CREATE TABLE IF NOT EXISTS arena_data.feat_resistance (
     id SERIAL PRIMARY KEY,
     feat_id INTEGER NOT NULL REFERENCES arena_data.race_special_ability(id),
+    resistance_type VARCHAR(50) NOT NULL,
+    resistance_value INTEGER NOT NULL DEFAULT 0
+);
+
+
+-- ============================================================
+-- SUBRACE SPECIAL ABILITIES
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS arena_data.subrace_special_ability (
+    id SERIAL PRIMARY KEY,
+    subrace_id INTEGER NOT NULL REFERENCES arena_data.subrace(id),
+    name VARCHAR(100) NOT NULL,
+    description TEXT DEFAULT '',
+    attack_bonus INTEGER NOT NULL DEFAULT 0,
+    defense_bonus INTEGER NOT NULL DEFAULT 0
+);
+
+
+CREATE TABLE IF NOT EXISTS arena_data.subrace_feat_resistance (
+    id SERIAL PRIMARY KEY,
+    feat_id INTEGER NOT NULL REFERENCES arena_data.subrace_special_ability(id),
     resistance_type VARCHAR(50) NOT NULL,
     resistance_value INTEGER NOT NULL DEFAULT 0
 );
@@ -366,6 +395,7 @@ CREATE TABLE IF NOT EXISTS arena_data.spell (
 CREATE TABLE IF NOT EXISTS arena_data.character (
     id SERIAL PRIMARY KEY,
     race_id INTEGER NOT NULL REFERENCES arena_data.race(id),
+    subrace_id INTEGER REFERENCES arena_data.subrace(id),
     class_id INTEGER NOT NULL REFERENCES arena_data.class(id),
     name VARCHAR(100) NOT NULL,
     level INTEGER NOT NULL DEFAULT 1,
@@ -496,10 +526,19 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION arena_data.fn_get_subraces(
     p_race_id INTEGER DEFAULT NULL
 )
-RETURNS TABLE(id INTEGER, race_id INTEGER, name VARCHAR, description TEXT) AS $$
+RETURNS TABLE(
+    id INTEGER, race_id INTEGER, name VARCHAR, description TEXT,
+    strength_bonus INTEGER, dexterity_bonus INTEGER,
+    stamina_bonus INTEGER, intelligence_bonus INTEGER,
+    wisdom_bonus INTEGER, charisma_bonus INTEGER,
+    hit_point_bonus INTEGER
+) AS $$
 BEGIN
     RETURN QUERY
-    SELECT s.id, s.race_id, s.name::VARCHAR, s.description::TEXT
+    SELECT s.id, s.race_id, s.name::VARCHAR, s.description::TEXT,
+           s.strength_bonus, s.dexterity_bonus, s.stamina_bonus,
+           s.intelligence_bonus, s.wisdom_bonus, s.charisma_bonus,
+           s.hit_point_bonus
     FROM arena_data.subrace s
     WHERE (p_race_id IS NULL OR s.race_id = p_race_id)
     ORDER BY s.name;
@@ -755,6 +794,32 @@ END;
 $$ LANGUAGE plpgsql;
 
 
+CREATE OR REPLACE FUNCTION arena_data.fn_get_subrace_abilities(
+    p_subrace_id INTEGER DEFAULT NULL
+)
+RETURNS TABLE(id INTEGER, subrace_id INTEGER, name VARCHAR, description TEXT, attack_bonus INTEGER, defense_bonus INTEGER) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT sa.id, sa.subrace_id, sa.name::VARCHAR, sa.description::TEXT, sa.attack_bonus, sa.defense_bonus
+    FROM arena_data.subrace_special_ability sa
+    WHERE (p_subrace_id IS NULL OR sa.subrace_id = p_subrace_id)
+    ORDER BY sa.name;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION arena_data.fn_get_subrace_feat_resistances(p_feat_id INTEGER DEFAULT NULL)
+RETURNS TABLE(id INTEGER, feat_id INTEGER, resistance_type VARCHAR, resistance_value INTEGER) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT fr.id, fr.feat_id, fr.resistance_type, fr.resistance_value
+    FROM arena_data.subrace_feat_resistance fr
+    WHERE (p_feat_id IS NULL OR fr.feat_id = p_feat_id)
+    ORDER BY fr.resistance_type;
+END;
+$$ LANGUAGE plpgsql;
+
+
 -- ============================================================
 -- DEITIES
 -- ============================================================
@@ -797,7 +862,8 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION arena_data.fn_get_characters()
 RETURNS TABLE(
-    id INTEGER, name VARCHAR, level INTEGER, race_id INTEGER, class_id INTEGER, class_name VARCHAR,
+    id INTEGER, name VARCHAR, level INTEGER, race_id INTEGER, subrace_id INTEGER,
+    class_id INTEGER, class_name VARCHAR,
     strength INTEGER, dexterity INTEGER, stamina INTEGER,
     intelligence INTEGER, wisdom INTEGER, charisma INTEGER,
     strength_percentile INTEGER, max_hit_points INTEGER, current_hit_points INTEGER,
@@ -807,7 +873,7 @@ RETURNS TABLE(
 ) AS $$
 BEGIN
     RETURN QUERY
-    SELECT c.id, c.name::VARCHAR, c.level, c.race_id, c.class_id, cl.name::VARCHAR,
+    SELECT c.id, c.name::VARCHAR, c.level, c.race_id, c.subrace_id, c.class_id, cl.name::VARCHAR,
            c.strength, c.dexterity, c.stamina,
            c.intelligence, c.wisdom, c.charisma,
            c.strength_percentile, c.max_hit_points, c.current_hit_points,
@@ -823,7 +889,8 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION arena_data.fn_get_character(p_id INTEGER)
 RETURNS TABLE(
-    id INTEGER, name VARCHAR, level INTEGER, race_id INTEGER, class_id INTEGER, class_name VARCHAR,
+    id INTEGER, name VARCHAR, level INTEGER, race_id INTEGER, subrace_id INTEGER,
+    class_id INTEGER, class_name VARCHAR,
     strength INTEGER, dexterity INTEGER, stamina INTEGER,
     intelligence INTEGER, wisdom INTEGER, charisma INTEGER,
     strength_percentile INTEGER, max_hit_points INTEGER, current_hit_points INTEGER,
@@ -833,7 +900,7 @@ RETURNS TABLE(
 ) AS $$
 BEGIN
     RETURN QUERY
-    SELECT c.id, c.name::VARCHAR, c.level, c.race_id, c.class_id, cl.name::VARCHAR,
+    SELECT c.id, c.name::VARCHAR, c.level, c.race_id, c.subrace_id, c.class_id, cl.name::VARCHAR,
            c.strength, c.dexterity, c.stamina,
            c.intelligence, c.wisdom, c.charisma,
            c.strength_percentile, c.max_hit_points, c.current_hit_points,
@@ -862,7 +929,8 @@ CREATE OR REPLACE FUNCTION arena_data.fn_create_character(
     p_npc SMALLINT DEFAULT 0,
     p_biography TEXT DEFAULT '',
     p_experience_points INTEGER DEFAULT 0,
-    p_max_mana INTEGER DEFAULT 0
+    p_max_mana INTEGER DEFAULT 0,
+    p_subrace_id INTEGER DEFAULT NULL
 )
 RETURNS INTEGER AS $$
 DECLARE
@@ -872,12 +940,12 @@ BEGIN
     SELECT base_strike_rating INTO v_strike_rating FROM arena_data.class WHERE id = p_class_id;
 
     INSERT INTO arena_data.character (
-        name, race_id, class_id, level,
+        name, race_id, subrace_id, class_id, level,
         strength, dexterity, stamina, intelligence, wisdom, charisma,
         strength_percentile, max_hit_points, current_hit_points, strike_rating,
         npc, biography, experience_points, max_mana
     ) VALUES (
-        p_name, p_race_id, p_class_id, 1,
+        p_name, p_race_id, p_subrace_id, p_class_id, 1,
         p_strength, p_dexterity, p_stamina, p_intelligence, p_wisdom, p_charisma,
         p_strength_percentile, p_max_hit_points, p_max_hit_points, v_strike_rating,
         p_npc, p_biography, p_experience_points, p_max_mana

@@ -53,6 +53,11 @@ public class CharacterService : ICharacterService
         if (character.RaceId > 0)
             character.Race = await _raceRepository.GetByIdAsync(character.RaceId);
 
+        // Load subrace with feats and resistances
+        if (character.SubraceId > 0)
+            character.Subrace = (await _raceRepository.GetSubracesByRaceIdAsync(character.RaceId))
+                .FirstOrDefault(s => s.Id == character.SubraceId);
+
         // Load equipment
         await LoadEquipmentAsync(character);
 

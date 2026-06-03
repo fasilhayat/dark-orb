@@ -8,9 +8,11 @@ public class Character
     public string Name { get; set; } = string.Empty;
     public int Level { get; set; } = 1;
     public int RaceId { get; set; }
+    public int? SubraceId { get; set; }
     public int ClassId { get; set; }
     public string ClassName { get; set; } = string.Empty;
     public PlayerClass? Class { get; set; }
+    public Subrace? Subrace { get; set; }
     public string Sex { get; set; } = "Unknown";
     public int Strength { get; set; } = 10;
     public int StrengthPercentile { get; set; }
@@ -110,6 +112,11 @@ public class Character
 
         if (Race is not null)
             foreach (var feat in Race.Feats)
+                foreach (var r in feat.Resistances)
+                    if (r.Type == type) total += r.Value;
+
+        if (Subrace is not null)
+            foreach (var feat in Subrace.Feats)
                 foreach (var r in feat.Resistances)
                     if (r.Type == type) total += r.Value;
 

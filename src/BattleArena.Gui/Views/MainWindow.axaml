@@ -338,51 +338,92 @@
     </Grid>
 
     <!-- ── CHARACTER CREATION PHASE ── -->
-    <Grid IsVisible="{Binding IsCharCreationPhase}" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" Margin="20">
+    <Grid IsVisible="{Binding IsCharCreationPhase}" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" Margin="20">
       <!-- Row 0: Title -->
       <TextBlock Grid.Row="0" Text="CHARACTER CREATION"
                  Foreground="#00bfff" FontSize="22" FontWeight="Bold"
                  HorizontalAlignment="Center" Margin="0,4,0,8" />
 
-      <!-- Row 1: Name + Race + Class -->
-      <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="16" Margin="0,0,0,10">
-        <StackPanel Orientation="Horizontal" Spacing="6">
-          <TextBlock Text="Name:" Foreground="#aaa" FontSize="13" VerticalAlignment="Center" />
-          <TextBox x:Name="CharNameBox" Text="{Binding CharName}" Width="160" Height="26"
-                   FontSize="12" Background="#1a1a2e" Foreground="White"
-                   BorderBrush="#444" BorderThickness="1" TextChanged="OnCharNameChanged" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Spacing="6">
-          <TextBlock Text="Race:" Foreground="#aaa" FontSize="13" VerticalAlignment="Center" />
-          <ComboBox ItemsSource="{Binding RaceOptions}" SelectedIndex="{Binding SelectedRaceIndex}"
-                    Width="130" Height="26" FontSize="12"
-                    Background="#1a1a2e" Foreground="White"
-                    BorderBrush="#444" SelectionChanged="OnCharRaceChanged" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Spacing="6">
-          <TextBlock Text="Class:" Foreground="#aaa" FontSize="13" VerticalAlignment="Center" />
-          <ComboBox ItemsSource="{Binding ClassOptions}" SelectedIndex="{Binding SelectedClassIndex}"
-                    Width="130" Height="26" FontSize="12"
-                    Background="#1a1a2e" Foreground="White"
-                    BorderBrush="#444" SelectionChanged="OnCharClassChanged" />
-        </StackPanel>
+      <!-- Row 1: Name -->
+      <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="6" Margin="0,0,0,8">
+        <TextBlock Text="Name:" Foreground="#aaa" FontSize="13" VerticalAlignment="Center" />
+        <TextBox x:Name="CharNameBox" Text="{Binding CharName}" Width="160" Height="26"
+                 FontSize="12" Background="#1a1a2e" Foreground="White"
+                 BorderBrush="#444" BorderThickness="1" TextChanged="OnCharNameChanged" />
       </StackPanel>
 
-      <!-- Row 2: Roll Stats button + exceptional str indicator -->
-      <StackPanel Grid.Row="2" HorizontalAlignment="Center" Orientation="Horizontal" Spacing="12" Margin="0,0,0,10">
+      <!-- Row 2: Step 1 — Class Selection -->
+      <StackPanel Grid.Row="2" HorizontalAlignment="Center" Spacing="4" Margin="0,0,0,6">
+        <TextBlock Text="Step 1: Choose Class" Foreground="#88bbff" FontSize="13" FontWeight="Bold"
+                   HorizontalAlignment="Center" />
+        <ListBox x:Name="ClassListBox" ItemsSource="{Binding AvailableClasses}"
+                 Background="Transparent" BorderThickness="0" MinHeight="60" MaxHeight="80"
+                 SelectionMode="Single" SelectionChanged="OnCharClassSelected">
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <Border Background="#1a1a2e" BorderBrush="#555" BorderThickness="1"
+                      CornerRadius="3" Padding="8,3" Margin="2" Width="170">
+                <TextBlock Text="{Binding}" Foreground="#ccc" FontSize="12"
+                           HorizontalAlignment="Center" />
+              </Border>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </StackPanel>
+
+      <!-- Row 3: Step 2 — Race Selection -->
+      <StackPanel Grid.Row="3" HorizontalAlignment="Center" Spacing="4" Margin="0,0,0,6">
+        <TextBlock Text="Step 2: Choose Race" Foreground="#88bbff" FontSize="13" FontWeight="Bold"
+                   HorizontalAlignment="Center" />
+        <ListBox x:Name="RaceListBox" ItemsSource="{Binding AvailableRaces}"
+                 Background="Transparent" BorderThickness="0" MinHeight="40" MaxHeight="80"
+                 SelectionMode="Single" SelectionChanged="OnCharRaceSelected">
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <Border Background="#1a1a2e" BorderBrush="#555" BorderThickness="1"
+                      CornerRadius="3" Padding="8,3" Margin="2" Width="170">
+                <TextBlock Text="{Binding}" Foreground="#ccc" FontSize="12"
+                           HorizontalAlignment="Center" />
+              </Border>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </StackPanel>
+
+      <!-- Row 4: Step 3 — Subrace Selection -->
+      <StackPanel Grid.Row="4" HorizontalAlignment="Center" Spacing="4" Margin="0,0,0,6">
+        <TextBlock Text="Step 3: Choose Subrace (optional)" Foreground="#88bbff" FontSize="13" FontWeight="Bold"
+                   HorizontalAlignment="Center" />
+        <ListBox x:Name="SubraceListBox" ItemsSource="{Binding AvailableSubraces}"
+                 Background="Transparent" BorderThickness="0" MinHeight="40" MaxHeight="80"
+                 SelectionMode="Single" SelectionChanged="OnCharSubraceSelected">
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <Border Background="#1a1a2e" BorderBrush="#555" BorderThickness="1"
+                      CornerRadius="3" Padding="8,3" Margin="2" Width="170">
+                <TextBlock Text="{Binding}" Foreground="#ccc" FontSize="12"
+                           HorizontalAlignment="Center" />
+              </Border>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </StackPanel>
+
+      <!-- Row 5: Roll Stats button + exceptional str indicator -->
+      <StackPanel Grid.Row="5" HorizontalAlignment="Center" Orientation="Horizontal" Spacing="12" Margin="0,0,0,8">
         <Button x:Name="RollStatsButton" Content="Roll Stats" Click="OnRollStatsClick"
                 Width="120" Height="30" FontSize="13" IsEnabled="{Binding CanRollStats}" />
         <TextBlock x:Name="ExcStrLabel" Text="" Foreground="#d4a017" FontSize="12"
                    VerticalAlignment="Center" />
       </StackPanel>
 
-      <!-- Row 3: Stats display header -->
-      <TextBlock Grid.Row="3" Text="Ability Scores"
+      <!-- Row 6: Stats display header -->
+      <TextBlock Grid.Row="6" Text="Ability Scores"
                  Foreground="#888" FontSize="11" FontWeight="Bold"
                  HorizontalAlignment="Center" Margin="0,2" />
 
-      <!-- Row 4: Stats in a single horizontal row -->
-      <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,8">
+      <!-- Row 7: Stats in a single horizontal row -->
+      <StackPanel Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,8">
         <!-- STR -->
         <Border Background="#1a1a2e" BorderBrush="#333"
                 BorderThickness="1" CornerRadius="4" Padding="10,4" Margin="3" Width="90">
@@ -457,14 +498,14 @@
         </Border>
       </StackPanel>
 
-      <!-- Row 5: Create Character -->
-      <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12" Margin="0,4">
+      <!-- Row 8: Create Character -->
+      <StackPanel Grid.Row="8" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12" Margin="0,4">
         <Button x:Name="CreateCharButton2" Content="Create Character" Click="OnCharCreateClick"
                 Width="160" Height="34" FontSize="13" IsEnabled="False" />
       </StackPanel>
 
-      <!-- Row 6: Back -->
-      <Button Grid.Row="6" Content="Back" Click="OnCharBackClick"
+      <!-- Row 9: Back -->
+      <Button Grid.Row="9" Content="Back" Click="OnCharBackClick"
               Width="120" Height="30" FontSize="12"
               HorizontalAlignment="Center" Margin="0,4"
               Background="#5c3a3a" BorderBrush="#755" />

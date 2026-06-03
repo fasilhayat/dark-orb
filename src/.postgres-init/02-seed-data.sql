@@ -113,6 +113,102 @@ FROM (VALUES
 JOIN arena_data.race r ON r.name = s.race_name;
 
 
+-- Kobold subraces
+INSERT INTO arena_data.subrace (race_id, name, description, strength_bonus, dexterity_bonus, stamina_bonus, intelligence_bonus, wisdom_bonus, charisma_bonus, hit_point_bonus)
+SELECT r.id, s.name, s.descr, s.str, s.dex, s.sta, s.int, s.wis, s.cha, s.hp
+FROM (VALUES
+    ('Kobold', 'Cave Kobold',  'Cave kobolds are master trap-makers who dwell in the dark warrens beneath the world. Their keen intellect and natural cunning make them deadly in prepared positions.',   0, 1, 0, 2, 0, 0, 0),
+    ('Kobold', 'Desert Kobold','Desert kobolds survive in the searing wastes by burrowing beneath the dunes. Their agility and heat-hardened scales let them strike and vanish like mirages.',          0, 2, 1, 0, 0, 0, 0),
+    ('Kobold', 'Swamp Kobold', 'Swamp kobolds thrive in the poisonous marshes where even orcs fear to tread. Their hardy constitutions shrug off toxins that would fell larger creatures.',          0, 0, 2, 0, 1, 0, 1),
+    ('Kobold', 'Forest Kobold','Forest kobolds are the unseen hunters of the deep woods, reading the language of leaves and shadows. They set snares that would shame a ranger.',                       0, 1, 0, 0, 2, 0, 0)
+) AS s(race_name, name, descr, str, dex, sta, int, wis, cha, hp)
+JOIN arena_data.race r ON r.name = s.race_name
+WHERE NOT EXISTS (SELECT 1 FROM arena_data.subrace sb WHERE sb.race_id = r.id AND sb.name = s.name);
+
+
+-- Subrace ability bonuses (stacked on top of race bonuses)
+UPDATE arena_data.subrace SET strength_bonus = 0, dexterity_bonus = 1, stamina_bonus = 0, intelligence_bonus = 1, wisdom_bonus = 0, charisma_bonus = 0, hit_point_bonus = 0 WHERE name = 'High Elf';
+UPDATE arena_data.subrace SET strength_bonus = 0, dexterity_bonus = 0, stamina_bonus = 0, intelligence_bonus = 0, wisdom_bonus = 0, charisma_bonus = 1, hit_point_bonus = 0 WHERE name = 'Dark Elf';
+UPDATE arena_data.subrace SET strength_bonus = 0, dexterity_bonus = 1, stamina_bonus = 0, intelligence_bonus = 0, wisdom_bonus = 0, charisma_bonus = 0, hit_point_bonus = 0 WHERE name = 'Forest Elf';
+UPDATE arena_data.subrace SET strength_bonus = 1, dexterity_bonus = 0, stamina_bonus = 0, intelligence_bonus = 0, wisdom_bonus = 0, charisma_bonus = 0, hit_point_bonus = 1 WHERE name = 'Mountain Dwarf';
+UPDATE arena_data.subrace SET strength_bonus = 0, dexterity_bonus = 0, stamina_bonus = 1, intelligence_bonus = 0, wisdom_bonus = 1, charisma_bonus = 0, hit_point_bonus = 1 WHERE name = 'Hill Dwarf';
+UPDATE arena_data.subrace SET strength_bonus = 0, dexterity_bonus = 0, stamina_bonus = 1, intelligence_bonus = 0, wisdom_bonus = 0, charisma_bonus = 0, hit_point_bonus = 1 WHERE name = 'Swamp Lizard';
+UPDATE arena_data.subrace SET strength_bonus = 1, dexterity_bonus = 0, stamina_bonus = 0, intelligence_bonus = 0, wisdom_bonus = 0, charisma_bonus = 0, hit_point_bonus = 0 WHERE name = 'Desert Lizard';
+UPDATE arena_data.subrace SET strength_bonus = 0, dexterity_bonus = 1, stamina_bonus = 0, intelligence_bonus = 0, wisdom_bonus = 0, charisma_bonus = 0, hit_point_bonus = 0 WHERE name = 'Forest Lizard';
+UPDATE arena_data.subrace SET strength_bonus = 0, dexterity_bonus = 1, stamina_bonus = 0, intelligence_bonus = 0, wisdom_bonus = 0, charisma_bonus = 0, hit_point_bonus = 0 WHERE name = 'Green Orc';
+UPDATE arena_data.subrace SET strength_bonus = 1, dexterity_bonus = 0, stamina_bonus = 0, intelligence_bonus = 0, wisdom_bonus = 0, charisma_bonus = 0, hit_point_bonus = 1 WHERE name = 'Blue Orc';
+UPDATE arena_data.subrace SET strength_bonus = 0, dexterity_bonus = 0, stamina_bonus = 1, intelligence_bonus = 0, wisdom_bonus = 0, charisma_bonus = 0, hit_point_bonus = 1 WHERE name = 'Red Orc';
+UPDATE arena_data.subrace SET strength_bonus = 0, dexterity_bonus = 0, stamina_bonus = 1, intelligence_bonus = 0, wisdom_bonus = 0, charisma_bonus = 0, hit_point_bonus = 2 WHERE name = 'Mountain Ogre';
+UPDATE arena_data.subrace SET strength_bonus = 1, dexterity_bonus = 0, stamina_bonus = 0, intelligence_bonus = 0, wisdom_bonus = 0, charisma_bonus = 0, hit_point_bonus = 0 WHERE name = 'Hill Ogre';
+UPDATE arena_data.subrace SET strength_bonus = 0, dexterity_bonus = 0, stamina_bonus = 1, intelligence_bonus = 0, wisdom_bonus = 0, charisma_bonus = 0, hit_point_bonus = 1 WHERE name = 'Desert Ogre';
+UPDATE arena_data.subrace SET strength_bonus = 0, dexterity_bonus = 0, stamina_bonus = 1, intelligence_bonus = 0, wisdom_bonus = 0, charisma_bonus = 0, hit_point_bonus = 1 WHERE name = 'Forest Ogre';
+UPDATE arena_data.subrace SET strength_bonus = 0, dexterity_bonus = 1, stamina_bonus = 0, intelligence_bonus = 0, wisdom_bonus = 0, charisma_bonus = 0, hit_point_bonus = 0 WHERE name = 'Forest Gladefolk';
+UPDATE arena_data.subrace SET strength_bonus = 0, dexterity_bonus = 0, stamina_bonus = 0, intelligence_bonus = 0, wisdom_bonus = 0, charisma_bonus = 1, hit_point_bonus = 0 WHERE name = 'Hill Gladefolk';
+UPDATE arena_data.subrace SET strength_bonus = 0, dexterity_bonus = 0, stamina_bonus = 0, intelligence_bonus = 1, wisdom_bonus = 0, charisma_bonus = 0, hit_point_bonus = 0 WHERE name = 'Half-High-Elf';
+UPDATE arena_data.subrace SET strength_bonus = 0, dexterity_bonus = 1, stamina_bonus = 0, intelligence_bonus = 0, wisdom_bonus = 0, charisma_bonus = 0, hit_point_bonus = 0 WHERE name = 'Half-Wood-Elf';
+
+
+-- Subrace special abilities
+INSERT INTO arena_data.subrace_special_ability (subrace_id, name, description, attack_bonus, defense_bonus)
+SELECT s.id, a.name, a.descr, a.atk, a.def
+FROM (VALUES
+    ('High Elf',      'Arcane Affinity',   'Innate spellcasting: knows one cantrip. +1 Intelligence for spell attacks.', 1, 0),
+    ('Dark Elf',      'Drow Magic',        'Can cast darkness and faerie fire once per day. +1 Charisma for spell DCs.', 0, 0),
+    ('Forest Elf',    'Mask of the Wild',  'Can Hide in natural terrain even when lightly observed.', 0, 0),
+    ('Mountain Dwarf', 'Stonecraft',       'Expert armourers: +1 AC when wearing heavy armour.', 0, 1),
+    ('Hill Dwarf',    'Dwarven Toughness', 'Stubborn endurance: +2 HP per level.', 0, 0),
+    ('Swamp Lizard',  'Toxin Resistance',  'Advantage on saves vs. poison; natural poison damage +1.', 1, 0),
+    ('Desert Lizard', 'Heat Adaptation',   'Immune to extreme heat; fire resistance +10.', 0, 1),
+    ('Forest Lizard', 'Camouflage Scales', 'Advantage on Stealth checks in forest terrain; +1 AC when ambushing.', 0, 1),
+    ('Green Orc',     'Jungle Stalker',    'Move silently through undergrowth; poisoned weapon attacks deal +1 damage.', 1, 0),
+    ('Blue Orc',      'Tides of War',      '+2 to damage rolls when below half HP.', 2, 0),
+    ('Red Orc',       'Blood Frenzy',      '+1 attack bonus for each consecutive hit on the same target (max +3).', 1, 0),
+    ('Mountain Ogre', 'Giant Blood',       'Residual giant lineage grants magic resistance +5 and +1 AC.', 0, 1),
+    ('Hill Ogre',     'Boulder Toss',      'Can throw improvised projectiles dealing +1 damage die.', 1, 0),
+    ('Desert Ogre',   'Heat Endurance',    'Fire resistance +15; ignore difficult terrain from sand.', 0, 1),
+    ('Forest Ogre',   'Regeneration',      'Regain 2 HP per tick while below half HP.', 0, 0),
+    ('Forest Gladefolk', 'Woodland Stride','Moving through non-magical terrain costs no extra movement.', 0, 0),
+    ('Hill Gladefolk',   'Fortunate',       'May re-roll a single D20 once per combat.', 0, 0),
+    ('Half-High-Elf',    'Cantrip Adept',   'Knows one wizard cantrip; +1 Intelligence for spell attacks.', 1, 0),
+    ('Half-Wood-Elf',    'Fleet of Foot',   '+5 movement speed; can Dash as a bonus action once per combat.', 0, 0),
+    ('Cave Kobold',      'Trap Master',     'Gains +2 to hit against targets that have already acted this round.', 2, 0),
+    ('Desert Kobold',    'Sand Veil',       'Burrowing speed 10 ft; +2 AC when in sandy terrain.', 0, 2),
+    ('Swamp Kobold',     'Marsh Dweller',    'Ignore poison damage; ignores movement penalties from swamp terrain.', 0, 1),
+    ('Forest Kobold',    'Ambush Tactics',   '+1 attack bonus and +1 damage when attacking from hiding.', 1, 1)
+) AS a(subrace_name, name, descr, atk, def)
+JOIN arena_data.subrace s ON s.name = a.subrace_name;
+
+
+-- Subrace feat resistances
+INSERT INTO arena_data.subrace_feat_resistance (feat_id, resistance_type, resistance_value)
+SELECT ssa.id, 'Fire', 10
+FROM arena_data.subrace_special_ability ssa
+JOIN arena_data.subrace s ON s.id = ssa.subrace_id
+WHERE s.name = 'Desert Lizard' AND ssa.name = 'Heat Adaptation'
+AND NOT EXISTS (SELECT 1 FROM arena_data.subrace_feat_resistance fr WHERE fr.feat_id = ssa.id);
+
+INSERT INTO arena_data.subrace_feat_resistance (feat_id, resistance_type, resistance_value)
+SELECT ssa.id, 'Fire', 15
+FROM arena_data.subrace_special_ability ssa
+JOIN arena_data.subrace s ON s.id = ssa.subrace_id
+WHERE s.name = 'Desert Ogre' AND ssa.name = 'Heat Endurance'
+AND NOT EXISTS (SELECT 1 FROM arena_data.subrace_feat_resistance fr WHERE fr.feat_id = ssa.id);
+
+INSERT INTO arena_data.subrace_feat_resistance (feat_id, resistance_type, resistance_value)
+SELECT ssa.id, 'Magic', 5
+FROM arena_data.subrace_special_ability ssa
+JOIN arena_data.subrace s ON s.id = ssa.subrace_id
+WHERE s.name = 'Mountain Ogre' AND ssa.name = 'Giant Blood'
+AND NOT EXISTS (SELECT 1 FROM arena_data.subrace_feat_resistance fr WHERE fr.feat_id = ssa.id);
+
+INSERT INTO arena_data.subrace_feat_resistance (feat_id, resistance_type, resistance_value)
+SELECT ssa.id, 'Poison', 25
+FROM arena_data.subrace_special_ability ssa
+JOIN arena_data.subrace s ON s.id = ssa.subrace_id
+WHERE s.name = 'Swamp Kobold' AND ssa.name = 'Marsh Dweller'
+AND NOT EXISTS (SELECT 1 FROM arena_data.subrace_feat_resistance fr WHERE fr.feat_id = ssa.id);
+
+
 -- Race Special Abilities (SP)
 INSERT INTO arena_data.race_special_ability (race_id, name, description)
 SELECT r.id, s.name, s.descr

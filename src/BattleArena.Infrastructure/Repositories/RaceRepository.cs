@@ -57,6 +57,40 @@ public class RaceRepository : IRaceRepository
             new NpgsqlParameter("p_feat_id", featId));
     }
 
+    public async Task<List<Subrace>> GetSubracesByRaceIdAsync(int raceId)
+    {
+        var subraces = await _context.ExecuteQueryAsync(
+            "fn_get_subraces(p_race_id := @p_race_id)",
+            MapSubrace,
+            new NpgsqlParameter("p_race_id", raceId));
+
+        foreach (var subrace in subraces)
+            subrace.Feats = await GetSubraceAbilitiesAsync(subrace.Id);
+
+        return subraces;
+    }
+
+    public async Task<List<Feat>> GetSubraceAbilitiesAsync(int subraceId)
+    {
+        var feats = await _context.ExecuteQueryAsync(
+            "fn_get_subrace_abilities(p_subrace_id := @p_subrace_id)",
+            MapSubraceFeat,
+            new NpgsqlParameter("p_subrace_id", subraceId));
+
+        foreach (var feat in feats)
+            feat.Resistances = await GetSubraceFeatResistancesAsync(feat.Id);
+
+        return feats;
+    }
+
+    public async Task<List<ResistanceBonus>> GetSubraceFeatResistancesAsync(int featId)
+    {
+        return await _context.ExecuteQueryAsync(
+            "fn_get_subrace_feat_resistances(p_feat_id := @p_feat_id)",
+            MapResistance,
+            new NpgsqlParameter("p_feat_id", featId));
+    }
+
     private static Race MapRace(NpgsqlDataReader reader)
     {
         var race = new Race
@@ -96,4 +130,28 @@ public class RaceRepository : IRaceRepository
             ? parsed : ResistanceType.Magic;
         return new ResistanceBonus(type, (int)reader["resistance_value"]);
     }
+
+    private static Subrace MapSubrace(NpgsqlDataReader reader) => new()
+    {
+        Id = (int)reader["id"],
+        RaceId = (int)reader["race_id"],
+        Name = (string)reader["name"],
+        Description = reader["description"] as string ?? string.Empty,
+        StrengthBonus = reader["strength_bonus"] as int? ?? 0,
+        DexterityBonus = reader["dexterity_bonus"] as int? ?? 0,
+        StaminaBonus = reader["stamina_bonus"] as int? ?? 0,
+        IntelligenceBonus = reader["intelligence_bonus"] as int? ?? 0,
+        WisdomBonus = reader["wisdom_bonus"] as int? ?? 0,
+        CharismaBonus = reader["charisma_bonus"] as int? ?? 0,
+        HitPointBonus = reader["hit_point_bonus"] as int? ?? 0
+    };
+
+    private static Feat MapSubraceFeat(NpgsqlDataReader reader) => new()
+    {
+        Id = (int)reader["id"],
+        Name = (string)reader["name"],
+        Description = reader["description"] as string ?? string.Empty,
+        AttackBonus = reader["attack_bonus"] as int? ?? 0,
+        DefenseBonus = reader["defense_bonus"] as int? ?? 0
+    };
 }

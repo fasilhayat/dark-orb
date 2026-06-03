@@ -132,15 +132,39 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
 
     // ── Character Creation ────────────────────────────────────
 
-    public ObservableCollection<string> RaceOptions { get; } =
-    [
-        "Human", "Elf", "Dwarf", "Orc", "Lizard", "Kobold", "Ogre", "Gladefolk", "Half-Elf"
-    ];
-
-    public ObservableCollection<string> ClassOptions { get; } =
+    public ObservableCollection<string> AvailableClasses { get; } =
     [
         "Barbarian", "Knight", "Paladin", "Priest", "Mage", "Bard", "Druid", "Fighter", "Rogue"
     ];
+
+    public ObservableCollection<string> AvailableRaces { get; } = [];
+    public ObservableCollection<string> AvailableSubraces { get; } = [];
+
+    private static readonly Dictionary<string, string[]> ClassRaceRestrictions = new()
+    {
+        ["Barbarian"] = ["Human", "Orc", "Ogre", "Dwarf"],
+        ["Knight"]    = ["Human", "Elf", "Dwarf", "Orc"],
+        ["Paladin"]   = ["Human", "Elf", "Dwarf"],
+        ["Priest"]    = ["Human", "Elf", "Dwarf", "Lizard", "Kobold", "Gladefolk", "Orc"],
+        ["Mage"]      = ["Human", "Elf", "Kobold"],
+        ["Bard"]      = ["Human", "Elf", "Gladefolk"],
+        ["Druid"]     = ["Human", "Elf", "Gladefolk", "Lizard"],
+        ["Fighter"]   = ["Human", "Elf", "Dwarf", "Lizard", "Kobold", "Orc", "Ogre", "Gladefolk"],
+        ["Rogue"]     = ["Human", "Elf", "Dwarf", "Gladefolk", "Kobold"]
+    };
+
+    private static readonly Dictionary<string, string[]> RaceSubraceLookup = new()
+    {
+        ["Human"]     = [],
+        ["Elf"]       = ["High Elf", "Dark Elf", "Forest Elf"],
+        ["Dwarf"]     = ["Mountain Dwarf", "Hill Dwarf"],
+        ["Lizard"]    = ["Swamp Lizard", "Desert Lizard", "Forest Lizard"],
+        ["Kobold"]    = ["Cave Kobold", "Desert Kobold", "Swamp Kobold", "Forest Kobold"],
+        ["Orc"]       = ["Green Orc", "Blue Orc", "Red Orc"],
+        ["Ogre"]      = ["Mountain Ogre", "Hill Ogre", "Desert Ogre", "Forest Ogre"],
+        ["Gladefolk"] = ["Forest Gladefolk", "Hill Gladefolk"],
+        ["Half-Elf"]  = ["Half-High-Elf", "Half-Wood-Elf"]
+    };
 
     private string _charName = "";
     public string CharName
@@ -149,39 +173,63 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         set => SetField(ref _charName, value);
     }
 
-    private int _selectedRaceIndex = -1;
-    public int SelectedRaceIndex
+    private string? _selectedClassName;
+    public string? SelectedClassName
     {
-        get => _selectedRaceIndex;
+        get => _selectedClassName;
         set
         {
-            if (SetField(ref _selectedRaceIndex, value))
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedRace)));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanRollStats)));
-            }
-        }
-    }
-    public string SelectedRace => SelectedRaceIndex >= 0 && SelectedRaceIndex < RaceOptions.Count
-        ? RaceOptions[SelectedRaceIndex] : "";
-
-    private int _selectedClassIndex = -1;
-    public int SelectedClassIndex
-    {
-        get => _selectedClassIndex;
-        set
-        {
-            if (SetField(ref _selectedClassIndex, value))
+            if (SetField(ref _selectedClassName, value))
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedClass)));
+                SelectedRaceName = null;
+                SelectedSubraceName = null;
+                AvailableRaces.Clear();
+                AvailableSubraces.Clear();
+                if (value is not null && ClassRaceRestrictions.TryGetValue(value, out var races))
+                    foreach (var r in races)
+                        AvailableRaces.Add(r);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanRollStats)));
             }
         }
     }
-    public string SelectedClass => SelectedClassIndex >= 0 && SelectedClassIndex < ClassOptions.Count
-        ? ClassOptions[SelectedClassIndex] : "";
+    public string SelectedClass => SelectedClassName ?? "";
 
-    public bool CanRollStats => SelectedRaceIndex >= 0 && SelectedClassIndex >= 0;
+    private string? _selectedRaceName;
+    public string? SelectedRaceName
+    {
+        get => _selectedRaceName;
+        set
+        {
+            if (SetField(ref _selectedRaceName, value))
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedRace)));
+                SelectedSubraceName = null;
+                AvailableSubraces.Clear();
+                if (value is not null && RaceSubraceLookup.TryGetValue(value, out var subraces))
+                    foreach (var s in subraces)
+                        AvailableSubraces.Add(s);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanRollStats)));
+            }
+        }
+    }
+    public string SelectedRace => SelectedRaceName ?? "";
+
+    private string? _selectedSubraceName;
+    public string? SelectedSubraceName
+    {
+        get => _selectedSubraceName;
+        set
+        {
+            if (SetField(ref _selectedSubraceName, value))
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedSubrace)));
+            }
+        }
+    }
+    public string SelectedSubrace => SelectedSubraceName ?? "";
+
+    public bool CanRollStats => SelectedClassName is not null && SelectedRaceName is not null;
 
     private int _charStr;
     public int CharStr

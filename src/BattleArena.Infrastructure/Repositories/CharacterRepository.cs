@@ -32,7 +32,7 @@ public class CharacterRepository : ICharacterRepository
     public async Task<int> CreateAsync(Character character)
     {
         var result = await _context.ExecuteScalarAsync<int>(
-            "fn_create_character(@p_name, @p_race_id, @p_class_id, @p_strength, @p_dexterity, @p_stamina, @p_intelligence, @p_wisdom, @p_charisma, @p_strength_percentile, @p_max_hit_points, @p_npc, @p_biography, @p_experience_points, @p_max_mana)",
+            "fn_create_character(@p_name, @p_race_id, @p_class_id, @p_strength, @p_dexterity, @p_stamina, @p_intelligence, @p_wisdom, @p_charisma, @p_strength_percentile, @p_max_hit_points, @p_npc, @p_biography, @p_experience_points, @p_max_mana, @p_subrace_id)",
             new NpgsqlParameter("p_name", character.Name),
             new NpgsqlParameter("p_race_id", character.RaceId),
             new NpgsqlParameter("p_class_id", character.ClassId),
@@ -47,7 +47,8 @@ public class CharacterRepository : ICharacterRepository
             new NpgsqlParameter("p_npc", character.Npc),
             new NpgsqlParameter("p_biography", character.Biography),
             new NpgsqlParameter("p_experience_points", character.ExperiencePoints),
-            new NpgsqlParameter("p_max_mana", character.MaxMana));
+            new NpgsqlParameter("p_max_mana", character.MaxMana),
+            new NpgsqlParameter("p_subrace_id", (object?)character.SubraceId ?? DBNull.Value));
         return result;
     }
 
@@ -112,6 +113,7 @@ public class CharacterRepository : ICharacterRepository
             Level = (int)reader["level"],
             RaceId = (int)reader["race_id"],
             ClassId = (int)reader["class_id"],
+            SubraceId = reader["subrace_id"] as int?,
             ClassName = reader["class_name"] as string ?? string.Empty,
             Sex = reader["sex"] as string ?? "Unknown",
             Strength = (int)reader["strength"],
