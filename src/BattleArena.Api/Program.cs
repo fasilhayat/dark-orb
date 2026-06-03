@@ -34,7 +34,7 @@ app.UseExceptionHandler(errApp => errApp.Run(async ctx =>
     await ctx.Response.WriteAsync("{\"error\":\"An unexpected error occurred.\"}");
 }));
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("LocalDev"))
 {
     app.UseSwagger();
     app.UseSwaggerUI(options =>

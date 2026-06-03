@@ -267,7 +267,6 @@ public partial class MainWindow : Window
         {
             return;
         }
-        HeroListBox.ItemsSource = _apiRoster;
         _vm.IsApiMode = true;
         _useApi = true;
         _vm.Scenario = "Duel";
@@ -279,6 +278,8 @@ public partial class MainWindow : Window
         DuelButton.IsEnabled = false;
         ClashButton.IsEnabled = true;
         SelectionHint.Text = "Select Fighter 1";
+        HeroListBox.ItemsSource = null;
+        HeroListBox.ItemsSource = _apiRoster;
     }
 
     private async void OnPartyVsPartyClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -293,7 +294,6 @@ public partial class MainWindow : Window
         {
             return;
         }
-        HeroListBox.ItemsSource = _apiRoster;
         _vm.IsApiMode = true;
         _useApi = true;
         _vm.Scenario = "Party";
@@ -305,6 +305,8 @@ public partial class MainWindow : Window
         DuelButton.IsEnabled = true;
         ClashButton.IsEnabled = false;
         SelectionHint.Text = "Clash mode — pick two fighters";
+        HeroListBox.ItemsSource = null;
+        HeroListBox.ItemsSource = _apiRoster;
     }
 
     // ── Character Creation Handlers ───────────────────────────
