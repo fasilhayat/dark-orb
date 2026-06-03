@@ -1622,35 +1622,35 @@ INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity,
 SELECT 'Kaela Vornskald', r.id, c.id, 10, 19, 15, 17, 9, 11, 13, FALSE, FALSE, FALSE,
        'A wandering barbarian woman. She wields a great sword and fears nothing.'
 FROM arena_data.race r, arena_data.class c WHERE r.name = 'Human' AND c.name = 'Barbarian'
-WHERE NOT EXISTS (SELECT 1 FROM arena_data.npc n WHERE n.name = 'Kaela Vornskald');
+AND NOT EXISTS (SELECT 1 FROM arena_data.npc n WHERE n.name = 'Kaela Vornskald');
 
 INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
 SELECT 'Ser Garrick Dawnshield', r.id, c.id, 12, 18, 11, 15, 11, 13, 17, FALSE, FALSE, FALSE,
        'A paladin of the Silver Basilica who survived the Fall of Black Hollow. Seeks infernal corruption to purge.'
 FROM arena_data.race r, arena_data.class c WHERE r.name = 'Human' AND c.name = 'Paladin'
-WHERE NOT EXISTS (SELECT 1 FROM arena_data.npc n WHERE n.name = 'Ser Garrick Dawnshield');
+AND NOT EXISTS (SELECT 1 FROM arena_data.npc n WHERE n.name = 'Ser Garrick Dawnshield');
 
 INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
 SELECT 'Vaelith Moonveil', r.id, c.id, 9, 14, 18, 10, 19, 10, 13, FALSE, FALSE, FALSE,
        'An arcane duelist who combines blade mastery with devastating magical precision. Seeks forgotten magical artifacts.'
 FROM arena_data.race r, arena_data.class c WHERE r.name = 'Elf' AND c.name = 'Fighter'
-WHERE NOT EXISTS (SELECT 1 FROM arena_data.npc n WHERE n.name = 'Vaelith Moonveil');
+AND NOT EXISTS (SELECT 1 FROM arena_data.npc n WHERE n.name = 'Vaelith Moonveil');
 
 INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
 SELECT 'Sister Elira Vane', r.id, c.id, 7, 11, 13, 15, 13, 18, 15, FALSE, FALSE, FALSE,
        'A healer and exorcist of the Moon Temple. Tended plague victims during the Ash Fever outbreak.'
 FROM arena_data.race r, arena_data.class c WHERE r.name = 'Human' AND c.name = 'Priest'
-WHERE NOT EXISTS (SELECT 1 FROM arena_data.npc n WHERE n.name = 'Sister Elira Vane');
+AND NOT EXISTS (SELECT 1 FROM arena_data.npc n WHERE n.name = 'Sister Elira Vane');
 
 INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
 SELECT 'Lord Aethor Valeborn', r.id, c.id, 11, 16, 16, 14, 14, 10, 15, FALSE, FALSE, FALSE,
        'An exiled elven knight who wields the greatsword Winter Oath. Fights with measured precision.'
 FROM arena_data.race r, arena_data.class c WHERE r.name = 'Elf' AND c.name = 'Knight'
-WHERE NOT EXISTS (SELECT 1 FROM arena_data.npc n WHERE n.name = 'Lord Aethor Valeborn');
+AND NOT EXISTS (SELECT 1 FROM arena_data.npc n WHERE n.name = 'Lord Aethor Valeborn');
 
 INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
 SELECT 'Finnick Bramblefoot', r.id, c.id, 8, 8, 20, 13, 14, 11, 16, FALSE, FALSE, FALSE,
        'A notorious Gladefolk thief. Charming, sarcastic, and impossible to pin down.'
 FROM arena_data.race r, arena_data.class c WHERE r.name = 'Gladefolk' AND c.name = 'Rogue'
-WHERE NOT EXISTS (SELECT 1 FROM arena_data.npc n WHERE n.name = 'Finnick Bramblefoot');
+AND NOT EXISTS (SELECT 1 FROM arena_data.npc n WHERE n.name = 'Finnick Bramblefoot');
 
