@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:views="clr-namespace:BattleArena.Gui.Views"
              x:Class="BattleArena.Gui.Views.CharacterCard"
-             Width="280" MinHeight="120">
+              Width="300" MinHeight="160">
   <UserControl.Resources>
     <views:DoubleToGridLengthConverter x:Key="GridLengthConv" />
   </UserControl.Resources>
@@ -14,11 +14,11 @@
       <StackPanel Spacing="4">
 
         <!-- Top row: portrait + name / info -->
-        <Grid ColumnDefinitions="82,*">
-          <!-- Portrait (72×96, 3:4 ratio) -->
-          <Border Grid.Column="0" Width="72" Height="96"
+        <Grid ColumnDefinitions="112,*">
+          <!-- Portrait (100×133, 3:4 ratio) -->
+          <Border Grid.Column="0" Width="100" Height="133"
                   BorderBrush="{Binding BorderColor}" BorderThickness="1"
-                  CornerRadius="4" Background="#111" Margin="0,0,10,0"
+                  CornerRadius="4" Background="#111" Margin="0,0,12,0"
                   ClipToBounds="True">
             <Grid>
               <!-- Fallback: initial letter when no portrait -->
@@ -26,7 +26,7 @@
                       IsVisible="{Binding PortraitIsNull}" />
               <TextBlock Text="{Binding PortraitInitial}"
                          HorizontalAlignment="Center" VerticalAlignment="Center"
-                         Foreground="{Binding NameColor}" FontSize="32" FontWeight="Bold"
+                          Foreground="{Binding NameColor}" FontSize="42" FontWeight="Bold"
                          Opacity="0.6"
                          IsVisible="{Binding PortraitIsNull}" />
               <!-- Actual portrait -->
@@ -36,7 +36,7 @@
           </Border>
 
           <!-- Name / weapon / info -->
-          <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
+          <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Top">
             <StackPanel Orientation="Horizontal" Spacing="4">
               <TextBlock Text="{Binding ActiveIndicator}" Foreground="#88bbff" FontSize="13" />
               <TextBlock Text="{Binding Name}" Foreground="{Binding NameColor}"

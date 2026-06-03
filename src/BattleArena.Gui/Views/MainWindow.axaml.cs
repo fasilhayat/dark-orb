@@ -169,6 +169,7 @@ public partial class MainWindow : Window
 
     private async Task StartCombat()
     {
+        SpeedSlider.Value = 1;
         _vm.Phase = "Combat";
         _vm.CombatLog.Clear();
         _vm.Heroes.Clear();
