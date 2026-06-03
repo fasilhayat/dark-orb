@@ -1,5 +1,6 @@
 namespace BattleArena.Gui.Data;
 
+using BattleArena.Application.Services;
 using BattleArena.Core.Entities;
 
 internal static class Roster

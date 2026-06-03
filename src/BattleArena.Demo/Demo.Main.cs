@@ -517,8 +517,18 @@ static partial class Demo
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"  API unreachable ({ex.Message})");
-            Console.WriteLine("  The demo requires a running BattleArena API backend.");
             Console.ResetColor();
+
+            var rosterPath = Path.Combine(AppContext.BaseDirectory, "roster.json");
+            if (File.Exists(rosterPath))
+            {
+                var data = RosterLoader.ForceLoad(rosterPath);
+                foreach (var h in data.Heroes)  { h.Npc = 0; ApiRoster.Add(h); }
+                foreach (var e in data.Enemies) { e.Npc = 1; ApiRoster.Add(e); }
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine($"  Loaded local roster  ─  {data.Heroes.Count} heroes, {data.Enemies.Count} enemies.");
+                Console.ResetColor();
+            }
         }
 
         Console.ForegroundColor = ConsoleColor.Cyan;

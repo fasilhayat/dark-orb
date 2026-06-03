@@ -760,382 +760,314 @@ FROM (VALUES
     ('Cursed Girdle of Weakness', 'An ornate golden belt that feels heavy. +3 Charisma but -3 Strength (drains your power).',                                    'Girdle', 'Legendary', 'Charisma',      3, TRUE,  '-3 Strength, -1 max HP per day worn')
 ) AS src(name, description, type_name, quality_name, effect, value, cursed, curse)
 JOIN arena_data.accessory_type atype ON atype.name = src.type_name
-JOIN arena_data.gear_quality    gq    ON gq.name    = src.quality_name;
-
-
-INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
-SELECT 'Old Man Kael',    r.id, c.id, 8, 8, 10, 12, 16, 18, 14, FALSE, TRUE, FALSE,
-       'A blind seer who speaks in riddles. He knows the location of the Sun''s Wrath and will trade the knowledge for a vial of dragon''s blood.'
-FROM arena_data.race r, arena_data.class c WHERE r.name = 'Human' AND c.name = 'Priest';
-
-
-INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
-SELECT 'Greta Ironhand',  r.id, c.id, 12, 16, 12, 18, 10, 12, 10, TRUE, FALSE, FALSE,
-       'A dwarf smith who forged weapons for three kings. She keeps the Soul Reaver hidden beneath her forge, waiting for a worthy champion. She buys and sells all weapons and armor.'
-FROM arena_data.race r, arena_data.class c WHERE r.name = 'Dwarf' AND c.name = 'Fighter';
-
-
-INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
-SELECT 'Shadowmere',      r.id, c.id, 10, 14, 20, 12, 14, 16, 18, FALSE, TRUE, FALSE,
-       'The leader of the Nightblades guild. She offers membership to those who prove their worth by retrieving the Shadow Sting from the Crypt of Whispers.'
-FROM arena_data.race r, arena_data.class c WHERE r.name = 'Elf' AND c.name = 'Rogue';
-
-
-INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
-SELECT 'Korg Stonefist',  r.id, c.id, 15, 20, 8, 20, 6, 8, 7, FALSE, FALSE, TRUE,
-       'A wandering orc berserker who challenges all who cross his path. Wields a massive maul and wears cursed plate that feeds on his pain.'
-FROM arena_data.race r, arena_data.class c WHERE r.name = 'Orc' AND c.name = 'Barbarian';
-
-
-INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
-SELECT 'Merchant Vex',    r.id, c.id, 6, 10, 14, 10, 16, 12, 16, TRUE, FALSE, FALSE,
-       'A kobold trader with a cart full of "authentic" artifacts. Most are fakes, but occasionally she comes across a real treasure. She sells rings, amulets, and girdles.'
-FROM arena_data.race r, arena_data.class c WHERE r.name = 'Kobold' AND c.name = 'Rogue';
-
-
-INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
-SELECT 'High Priestess Luna', r.id, c.id, 14, 10, 12, 14, 16, 20, 18, FALSE, TRUE, FALSE,
-       'The head of the Moon temple. She bestows the Amulet of the Archon upon those who complete the pilgrimage to the Moonlit Peak.'
-FROM arena_data.race r, arena_data.class c WHERE r.name = 'Human' AND c.name = 'Priest';
-
-
-INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
-SELECT 'Graveworm',       r.id, c.id, 9, 14, 14, 16, 10, 10, 6, FALSE, FALSE, TRUE,
-       'An undead warlord who commands a legion of skeletons in the Bone Fields. He carries Frostbite, the blade that killed him centuries ago.'
-FROM arena_data.race r, arena_data.class c WHERE r.name = 'Undead' AND c.name = 'Fighter';
-
-
-INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
-SELECT 'Lysander the Bard', r.id, c.id, 7, 10, 14, 12, 14, 12, 20, FALSE, TRUE, FALSE,
-       'A halfling bard who knows every legend, song, and secret in the realm. He can reveal the location of any legendary item for a price.'
-FROM arena_data.race r, arena_data.class c WHERE r.name = 'Gladefolk' AND c.name = 'Bard';
-
-
-INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
-SELECT 'Infernal Commander Zoth', r.id, c.id, 18, 22, 14, 20, 16, 14, 16, FALSE, FALSE, TRUE,
-       'A demon lord commanding the legions of the Fire Pits. He wields the Stormbringer lance and rides a nightmare steed. The final boss of the Burning Plains.'
-FROM arena_data.race r, arena_data.class c WHERE r.name = 'Demon' AND c.name = 'Knight';
-
-
-INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
-SELECT 'Elder Treant',    r.id, c.id, 20, 20, 8, 22, 14, 20, 14, FALSE, TRUE, FALSE,
-       'An ancient treant awakened by the druids of the Deepwood. He grants the Dragon Scale Mail to those who prove they can protect the forest.'
-FROM arena_data.race r, arena_data.class c WHERE r.name = 'Elf' AND c.name = 'Druid';
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Blade Barrier', 'A wall of spinning blades.', ss.id, d.id, dt.id, at.id, 40, 90, 3, 3, 2, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
-WHERE ss.name = 'AoE' AND d.name = 'D8' AND dt.name = 'Slashing' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Ice Storm', 'Hail and ice pummel the area.', ss.id, d.id, dt.id, at.id, 35, 85, 3, 3, 2, 0, 'Ice', 2
-FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
-WHERE ss.name = 'AoE' AND d.name = 'D8' AND dt.name = 'Ice' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Fire Storm', 'A conflagration engulfs the area.', ss.id, d.id, dt.id, at.id, 50, 95, 4, 4, 2, 0, 'Fire', 2
-FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
-WHERE ss.name = 'AoE' AND d.name = 'D10' AND dt.name = 'Fire' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Acid Rain', 'Corrosive rain burns all in the area.', ss.id, d.id, dt.id, at.id, 30, 80, 3, 3, 1, 0, 'Acid', 2
-FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
-WHERE ss.name = 'AoE' AND d.name = 'D6' AND dt.name = 'Acid' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Lava Hail', 'Molten rock rains from the sky.', ss.id, d.id, dt.id, at.id, 60, 100, 5, 4, 3, 0, 'Fire', 3
-FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
-WHERE ss.name = 'AoE' AND d.name = 'D12' AND dt.name = 'Fire' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Lightning Strike', 'A bolt of lightning strikes from above.', ss.id, d.id, dt.id, at.id, 60, 90, 4, 3, 3, 0, 'Lightning', 2
-FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
-WHERE ss.name = 'AoE' AND d.name = 'D10' AND dt.name = 'Lightning' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Sand Storm', 'Blinding sand scours the battlefield.', ss.id, d.id, dt.id, at.id, 20, 75, 2, 2, 1, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
-WHERE ss.name = 'AoE' AND d.name = 'D6' AND dt.name = 'Bludgeoning' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Blizzard', 'Freezing winds and snow pelt the area.', ss.id, d.id, dt.id, at.id, 45, 85, 4, 3, 2, 0, 'Ice', 2
-FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
-WHERE ss.name = 'AoE' AND d.name = 'D8' AND dt.name = 'Ice' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Earthquake', 'The ground shakes violently.', ss.id, d.id, dt.id, at.id, 55, 95, 5, 4, 2, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
-WHERE ss.name = 'AoE' AND d.name = 'D12' AND dt.name = 'Bludgeoning' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Insect Swarm', 'A cloud of biting insects descends.', ss.id, d.id, dt.id, at.id, 20, 75, 2, 2, 1, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
-WHERE ss.name = 'AoE' AND d.name = 'D4' AND dt.name = 'Piercing' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Blinding Flash', 'A brilliant flash blinds all who see it.', ss.id, NULL, NULL, at.id, 15, 70, 2, 1, 0, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.attack_type at
-WHERE ss.name = 'AoE' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Fog of Despair', 'A choking fog that saps morale.', ss.id, NULL, NULL, at.id, 20, 70, 2, 1, 0, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.attack_type at
-WHERE ss.name = 'AoE' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Stun', 'A concussive force that stuns the target.', ss.id, NULL, NULL, at.id, 15, 65, 2, 1, 0, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.attack_type at
-WHERE ss.name = 'CC' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Sleep', 'Puts the target into a magical slumber.', ss.id, dd.id, dt.id, at.id, 15, 60, 1, 0, 0, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.die_type dd, arena_data.damage_type dt, arena_data.attack_type at
-WHERE ss.name = 'CC' AND dd.name = 'D4' AND dt.name = 'Psychic' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Charm Enemy', 'Bends an enemy to your will.', ss.id, NULL, NULL, at.id, 20, 75, 3, 1, 0, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.attack_type at
-WHERE ss.name = 'CC' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Fear', 'Instills overwhelming terror.', ss.id, NULL, NULL, at.id, 20, 70, 2, 1, 0, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.attack_type at
-WHERE ss.name = 'CC' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Taunt', 'Forces an enemy to attack you.', ss.id, NULL, NULL, at.id, 10, 55, 1, 1, 0, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.attack_type at
-WHERE ss.name = 'CC' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Freeze', 'Encases the target in ice.', ss.id, NULL, NULL, at.id, 20, 75, 3, 1, 0, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.attack_type at
-WHERE ss.name = 'CC' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Confuse', 'Makes the target act erratically.', ss.id, NULL, NULL, at.id, 15, 70, 2, 1, 0, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.attack_type at
-WHERE ss.name = 'CC' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Provoke', 'Enrages the target, reducing its defenses.', ss.id, NULL, NULL, at.id, 12, 60, 1, 1, 0, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.attack_type at
-WHERE ss.name = 'CC' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Sacrifice', 'Sacrifice own HP to empower an ally.', ss.id, NULL, NULL, at.id, 0, 50, 2, 1, 0, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.attack_type at
-WHERE ss.name = 'CC' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Blind', 'Robs the target of sight.', ss.id, NULL, NULL, at.id, 12, 65, 2, 1, 0, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.attack_type at
-WHERE ss.name = 'CC' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Root', 'Anchors the target to the ground.', ss.id, NULL, NULL, at.id, 30, 65, 2, 1, 0, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.attack_type at
-WHERE ss.name = 'CC' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Entangle', 'Calls roots from the ground to hold enemies in place.', ss.id, NULL, NULL, at.id, 25, 70, 2, 1, 0, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.attack_type at
-WHERE ss.name = 'CC' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Curse', 'Lays a dark curse on the target, weakening their resolve.', ss.id, NULL, NULL, at.id, 20, 70, 2, 1, 0, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.attack_type at
-WHERE ss.name = 'CC' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Summon Creature', 'Calls a creature to fight for you.', ss.id, NULL, NULL, at.id, 40, 85, 4, 1, 0, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.attack_type at
-WHERE ss.name = 'Other' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Summon: Spirit Wolf', 'Summons a spirit wolf to protect and fight alongside its master.', ss.id, NULL, NULL, at.id, 50, 100, 4, 1, 0, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.attack_type at
-WHERE ss.name = 'Conjuration' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Fireball', 'A blazing orb of fire that explodes on impact.', ss.id, d.id, dt.id, at.id, 50, 90, 3, 3, 2, 0, 'Fire', 2
-FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
-WHERE ss.name = 'Evocation' AND d.name = 'D6' AND dt.name = 'Fire' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Ice Bolt', 'A shard of enchanted ice that pierces and slows.', ss.id, d.id, dt.id, at.id, 35, 80, 2, 2, 2, 0, 'Ice', 1
-FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
-WHERE ss.name = 'Evocation' AND d.name = 'D8' AND dt.name = 'Ice' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Shadow Bolt', 'A bolt of shadow energy that drains vitality.', ss.id, d.id, dt.id, at.id, 35, 70, 2, 2, 1, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
-WHERE ss.name = 'Evocation' AND d.name = 'D6' AND dt.name = 'Shadow' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Smite', 'A powerful holy strike channelled through the caster.', ss.id, d.id, dt.id, at.id, 35, 85, 3, 2, 3, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
-WHERE ss.name = 'Evocation' AND d.name = 'D8' AND dt.name = 'Holy' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Moonfire', 'Sacred moonlight burns unholy enemies and heals allies.', ss.id, d.id, dt.id, at.id, 30, 75, 2, 2, 2, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
-WHERE ss.name = 'Evocation' AND d.name = 'D6' AND dt.name = 'Holy' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Soul Drain', 'Drains the life force of an enemy to restore the caster.', ss.id, d.id, dt.id, at.id, 25, 80, 3, 2, 1, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.damage_type dt, arena_data.attack_type at
-WHERE ss.name = 'Evocation' AND d.name = 'D6' AND dt.name = 'Shadow' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
--- ============================================================
--- HEALING SPELLS
--- ============================================================
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Heal', 'Restores a moderate amount of hit points to a single ally.', ss.id, d.id, NULL, at.id, 25, 70, 2, 2, 0, 4, 'None', 0
-FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.attack_type at
-WHERE ss.name = 'Healing' AND d.name = 'D8' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Mass Heal', 'A wave of holy light restores hit points to all allies.', ss.id, d.id, NULL, at.id, 45, 100, 4, 3, 0, 6, 'None', 0
-FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.attack_type at
-WHERE ss.name = 'Healing' AND d.name = 'D6' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Regeneration', 'Bestows rapid healing over time on a single ally.', ss.id, d.id, NULL, at.id, 30, 85, 3, 2, 0, 2, 'None', 0
-FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.attack_type at
-WHERE ss.name = 'Healing' AND d.name = 'D6' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Restoration', 'Cures all ailments and restores a small amount of health.', ss.id, d.id, NULL, at.id, 25, 80, 3, 1, 0, 8, 'None', 0
-FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.attack_type at
-WHERE ss.name = 'Healing' AND d.name = 'D10' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Prayer of Healing', 'A group heal that calls upon divine favour to mend all allies.', ss.id, d.id, NULL, at.id, 40, 95, 4, 2, 0, 10, 'None', 0
-FROM arena_data.spell_school ss, arena_data.die_type d, arena_data.attack_type at
-WHERE ss.name = 'Healing' AND d.name = 'D8' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
--- ============================================================
--- PROTECTIVE SPELLS (self/ally buffs)
--- ============================================================
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Arcane Ward', 'Wraps the caster in a protective magical barrier that grants magic resistance and increases defense.', ss.id, NULL, NULL, at.id, 20, 75, 2, 1, 0, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.attack_type at
-WHERE ss.name = 'Evocation' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Divine Protection', 'Holy energy shields the target, reducing all incoming damage for a short time.', ss.id, NULL, NULL, at.id, 25, 80, 3, 1, 0, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.attack_type at
-WHERE ss.name = 'Evocation' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-INSERT INTO arena_data.spell (name, description, school_id, damage_die_id, damage_type_id, attack_type_id, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage)
-SELECT 'Stone Skin', 'Hardens the caster''s skin to stone, granting significant damage resistance.', ss.id, NULL, NULL, at.id, 20, 70, 2, 1, 0, 0, 'None', 0
-FROM arena_data.spell_school ss, arena_data.attack_type at
-WHERE ss.name = 'Evocation' AND at.name = 'Spell'
-ON CONFLICT (name) DO NOTHING;
-
-
--- ============================================================
--- SEED: ADDITIONAL WEAPONS
--- ============================================================
-
--- Legendary weapons
-
-INSERT INTO arena_data.weapon (name, description, weapon_type_id, damage_die_id, damage_type_id, attack_type_id, damage_count, hands, gear_quality_id, attack_bonus)
-SELECT src.name, src.description, wt.id, d.id, dt.id, at.id, src.dmg_count, src.hands, gq.id, src.atk_bonus
-FROM (VALUES
-    ('Doomwhisper',
-     'Fashioned from the heartwood of a tree that grew on a battlefield where ten thousand fell. Each arrow sings a different death knell as it flies, and those struck by its shafts feel the cold of the grave seep into their bones.',
-     'Bow', 'D10', 'Piercing', 'Ranged', 1, 2, 'Legendary', 2),
-    ('Worldsplitter',
-     'The hammer of a forgotten earth god, shattered into seven pieces and reforged by mortal hands over seven generations. It remembers the weight of mountains, and when it strikes, the ground trembles in sympathy.',
-     'Hammer', 'D12', 'Bludgeoning', 'Melee', 1, 2, 'Legendary', 2),
-    ('Soulpiercer',
-     'A spear that has tasted the blood of a hundred warlords across three continents. Its tip glows crimson when enemies draw near, and those wounded by it feel their life force drain into the ancient weapon.',
-     'Spear', 'D10', 'Piercing', 'Melee', 1, 2, 'Legendary', 2)
-) AS src(name, description, type_name, die_name, dmg_name, atk_name, dmg_count, hands, quality_name, atk_bonus)
-JOIN arena_data.weapon_type wt ON wt.name = src.type_name
-JOIN arena_data.die_type d ON d.name = src.die_name
-JOIN arena_data.damage_type dt ON dt.name = src.dmg_name
-JOIN arena_data.attack_type at ON at.name = src.atk_name
 JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
+
+
+-- ============================================================
+-- SEED: COMBAT CHARACTERS (for API roster — demo heroes & enemies)
+-- Npc=0 → hero-side, Npc=1 → enemy-side
+-- ============================================================
+
+-- Heroes (Npc=0)
+
+DO $$
+DECLARE
+    v_id INTEGER;
+BEGIN
+    INSERT INTO arena_data.character (race_id, class_id, name, level, sex,
+        strength, dexterity, stamina, intelligence, wisdom, charisma,
+        max_hit_points, current_hit_points, strike_rating, turn_speed, npc, max_mana, biography)
+    SELECT r.id, c.id, 'Kaela Vornskald', 10, 'F',
+        19, 15, 17, 9, 11, 13,
+        100, 100, 15, 6, 0, 0,
+        'A wandering barbarian woman who has felled beasts and bandits across the realm.'
+    FROM arena_data.race r, arena_data.class c
+    WHERE r.name = 'Human' AND c.name = 'Barbarian'
+    RETURNING id INTO v_id;
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'weapon', w.id
+    FROM arena_data.equipment_slot es, arena_data.weapon w
+    WHERE es.name = 'RightHand' AND w.name = 'Great Sword';
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'armor', a.id
+    FROM arena_data.equipment_slot es, arena_data.armor a
+    WHERE es.name = 'Chest' AND a.name = 'Hide Armor';
+END;
+$$;
+
+DO $$
+DECLARE
+    v_id INTEGER;
+BEGIN
+    INSERT INTO arena_data.character (race_id, class_id, name, level, sex,
+        strength, dexterity, stamina, intelligence, wisdom, charisma,
+        max_hit_points, current_hit_points, strike_rating, turn_speed, npc, max_mana, biography)
+    SELECT r.id, c.id, 'Ser Garrick Dawnshield', 12, 'M',
+        18, 11, 15, 11, 13, 17,
+        96, 96, 13, 8, 0, 60,
+        'A towering paladin clad in polished silver plate bearing the sigil of Heaven. He wields the warhammer Judicator.'
+    FROM arena_data.race r, arena_data.class c
+    WHERE r.name = 'Human' AND c.name = 'Paladin'
+    RETURNING id INTO v_id;
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'weapon', w.id
+    FROM arena_data.equipment_slot es, arena_data.weapon w
+    WHERE es.name = 'RightHand' AND w.name = 'War Hammer';
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'armor', a.id
+    FROM arena_data.equipment_slot es, arena_data.armor a
+    WHERE es.name = 'Chest' AND a.name = 'Plate Armor';
+END;
+$$;
+
+DO $$
+DECLARE
+    v_id INTEGER;
+BEGIN
+    INSERT INTO arena_data.character (race_id, class_id, name, level, sex,
+        strength, dexterity, stamina, intelligence, wisdom, charisma,
+        max_hit_points, current_hit_points, strike_rating, turn_speed, npc, max_mana, biography)
+    SELECT r.id, c.id, 'Vaelith Moonveil', 9, 'F',
+        14, 18, 10, 19, 10, 13,
+        45, 45, 15, 8, 0, 90,
+        'An arcane duelist who blends blade mastery with devastating magic. Seeks lost magical artifacts.'
+    FROM arena_data.race r, arena_data.class c
+    WHERE r.name = 'Elf' AND c.name = 'Fighter'
+    RETURNING id INTO v_id;
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'weapon', w.id
+    FROM arena_data.equipment_slot es, arena_data.weapon w
+    WHERE es.name = 'RightHand' AND w.name = 'Long Sword';
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'armor', a.id
+    FROM arena_data.equipment_slot es, arena_data.armor a
+    WHERE es.name = 'Chest' AND a.name = 'Mithril Chain';
+
+    -- Spells: Fireball, Ice Bolt, Shock
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Fireball';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Ice Bolt';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Shock';
+END;
+$$;
+
+DO $$
+DECLARE
+    v_id INTEGER;
+BEGIN
+    INSERT INTO arena_data.character (race_id, class_id, name, level, sex,
+        strength, dexterity, stamina, intelligence, wisdom, charisma,
+        max_hit_points, current_hit_points, strike_rating, turn_speed, npc, max_mana, biography)
+    SELECT r.id, c.id, 'Sister Elira Vane', 7, 'F',
+        11, 13, 15, 13, 18, 15,
+        49, 49, 17, 8, 0, 70,
+        'A soft-spoken cleric of the Moon Temple. Healer and exorcist who tends to the sick and battles shadow spirits.'
+    FROM arena_data.race r, arena_data.class c
+    WHERE r.name = 'Human' AND c.name = 'Priest'
+    RETURNING id INTO v_id;
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'weapon', w.id
+    FROM arena_data.equipment_slot es, arena_data.weapon w
+    WHERE es.name = 'RightHand' AND w.name = 'Mace';
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'armor', a.id
+    FROM arena_data.equipment_slot es, arena_data.armor a
+    WHERE es.name = 'Chest' AND a.name = 'Padded Armor';
+
+    -- Spells: Smite, Heal
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Smite';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Heal';
+END;
+$$;
+
+DO $$
+DECLARE
+    v_id INTEGER;
+BEGIN
+    INSERT INTO arena_data.character (race_id, class_id, name, level, sex,
+        strength, dexterity, stamina, intelligence, wisdom, charisma,
+        max_hit_points, current_hit_points, strike_rating, turn_speed, npc, max_mana, biography)
+    SELECT r.id, c.id, 'Lord Aethor Valeborn', 11, 'M',
+        16, 16, 14, 14, 10, 15,
+        88, 88, 13, 7, 0, 0,
+        'An exiled elven knight who wields the greatsword Winter Oath. He fights with measured precision.'
+    FROM arena_data.race r, arena_data.class c
+    WHERE r.name = 'Elf' AND c.name = 'Knight'
+    RETURNING id INTO v_id;
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'weapon', w.id
+    FROM arena_data.equipment_slot es, arena_data.weapon w
+    WHERE es.name = 'RightHand' AND w.name = 'Great Sword';
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'armor', a.id
+    FROM arena_data.equipment_slot es, arena_data.armor a
+    WHERE es.name = 'Chest' AND a.name = 'Plate Armor';
+END;
+$$;
+
+DO $$
+DECLARE
+    v_id INTEGER;
+BEGIN
+    INSERT INTO arena_data.character (race_id, class_id, name, level, sex,
+        strength, dexterity, stamina, intelligence, wisdom, charisma,
+        max_hit_points, current_hit_points, strike_rating, turn_speed, npc, max_mana, biography)
+    SELECT r.id, c.id, 'Finnick Bramblefoot', 8, 'M',
+        8, 20, 13, 14, 11, 16,
+        40, 40, 17, 12, 0, 0,
+        'A notorious Gladefolk thief known throughout taverns and criminal circles. Charmingly rogue.'
+    FROM arena_data.race r, arena_data.class c
+    WHERE r.name = 'Gladefolk' AND c.name = 'Rogue'
+    RETURNING id INTO v_id;
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'weapon', w.id
+    FROM arena_data.equipment_slot es, arena_data.weapon w
+    WHERE es.name = 'RightHand' AND w.name = 'Dagger';
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'armor', a.id
+    FROM arena_data.equipment_slot es, arena_data.armor a
+    WHERE es.name = 'Chest' AND a.name = 'Studded Leather';
+END;
+$$;
+
+
+-- Enemies (Npc=1)
+
+DO $$
+DECLARE
+    v_id INTEGER;
+BEGIN
+    INSERT INTO arena_data.character (race_id, class_id, name, level, sex,
+        strength, dexterity, stamina, intelligence, wisdom, charisma,
+        max_hit_points, current_hit_points, strike_rating, turn_speed, npc, max_mana, biography)
+    SELECT r.id, c.id, 'Korg Stonefist', 15, 'M',
+        21, 10, 18, 8, 8, 8,
+        165, 165, 14, 6, 1, 0,
+        'A wandering orc berserker who challenges all who cross his path. Wields a massive maul.'
+    FROM arena_data.race r, arena_data.class c
+    WHERE r.name = 'Orc' AND c.name = 'Barbarian'
+    RETURNING id INTO v_id;
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'weapon', w.id
+    FROM arena_data.equipment_slot es, arena_data.weapon w
+    WHERE es.name = 'RightHand' AND w.name = 'Maul';
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'armor', a.id
+    FROM arena_data.equipment_slot es, arena_data.armor a
+    WHERE es.name = 'Chest' AND a.name = 'Chain Mail';
+END;
+$$;
+
+DO $$
+DECLARE
+    v_id INTEGER;
+BEGIN
+    INSERT INTO arena_data.character (race_id, class_id, name, level, sex,
+        strength, dexterity, stamina, intelligence, wisdom, charisma,
+        max_hit_points, current_hit_points, strike_rating, turn_speed, npc, max_mana, biography)
+    SELECT r.id, c.id, 'Graveworm', 9, 'M',
+        17, 10, 14, 11, 8, 6,
+        72, 72, 14, 7, 1, 0,
+        'An undead warlord who commands a legion of skeletons in the Bone Fields. Carries the blade Frostbite.'
+    FROM arena_data.race r, arena_data.class c
+    WHERE r.name = 'Undead' AND c.name = 'Fighter'
+    RETURNING id INTO v_id;
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'weapon', w.id
+    FROM arena_data.equipment_slot es, arena_data.weapon w
+    WHERE es.name = 'RightHand' AND w.name = 'Short Sword';
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'armor', a.id
+    FROM arena_data.equipment_slot es, arena_data.armor a
+    WHERE es.name = 'Chest' AND a.name = 'Chain Mail';
+END;
+$$;
+
+DO $$
+DECLARE
+    v_id INTEGER;
+BEGIN
+    INSERT INTO arena_data.character (race_id, class_id, name, level, sex,
+        strength, dexterity, stamina, intelligence, wisdom, charisma,
+        max_hit_points, current_hit_points, strike_rating, turn_speed, npc, max_mana, biography)
+    SELECT r.id, c.id, 'Shadowmere', 10, 'F',
+        10, 19, 10, 16, 10, 15,
+        40, 40, 16, 12, 1, 0,
+        'A striking female elf rogue and the leader of the Nightblades guild. Deadly with twin daggers.'
+    FROM arena_data.race r, arena_data.class c
+    WHERE r.name = 'Elf' AND c.name = 'Rogue'
+    RETURNING id INTO v_id;
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'weapon', w.id
+    FROM arena_data.equipment_slot es, arena_data.weapon w
+    WHERE es.name = 'RightHand' AND w.name = 'Dagger';
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'armor', a.id
+    FROM arena_data.equipment_slot es, arena_data.armor a
+    WHERE es.name = 'Chest' AND a.name = 'Studded Leather';
+END;
+$$;
+
+
+-- NPC records in the npc table (combat combatants — also tracked as world NPCs)
+
+INSERT INTO arena_data.npc (race_id, class_id, name, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
+SELECT r.id, c.id, 'Kaela Vornskald', 10, 19, 15, 17, 9, 11, 13, FALSE, FALSE, FALSE,
+       'A wandering barbarian woman. She wields a great sword and fears nothing.'
+FROM arena_data.race r, arena_data.class c
+WHERE r.name = 'Human' AND c.name = 'Barbarian';
+
+INSERT INTO arena_data.npc (race_id, class_id, name, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
+SELECT r.id, c.id, 'Ser Garrick Dawnshield', 12, 18, 11, 15, 11, 13, 17, FALSE, FALSE, FALSE,
+       'A paladin of the Silver Basilica who survived the Fall of Black Hollow. Seeks infernal corruption to purge.'
+FROM arena_data.race r, arena_data.class c
+WHERE r.name = 'Human' AND c.name = 'Paladin';
+
+INSERT INTO arena_data.npc (race_id, class_id, name, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
+SELECT r.id, c.id, 'Vaelith Moonveil', 9, 14, 18, 10, 19, 10, 13, FALSE, FALSE, FALSE,
+       'An arcane duelist who combines blade mastery with devastating magical precision. Seeks forgotten magical artifacts.'
+FROM arena_data.race r, arena_data.class c
+WHERE r.name = 'Elf' AND c.name = 'Fighter';
+
+INSERT INTO arena_data.npc (race_id, class_id, name, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
+SELECT r.id, c.id, 'Sister Elira Vane', 7, 11, 13, 15, 13, 18, 15, FALSE, FALSE, FALSE,
+       'A healer and exorcist of the Moon Temple. Tended plague victims during the Ash Fever outbreak.'
+FROM arena_data.race r, arena_data.class c
+WHERE r.name = 'Human' AND c.name = 'Priest';
+
+INSERT INTO arena_data.npc (race_id, class_id, name, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
+SELECT r.id, c.id, 'Lord Aethor Valeborn', 11, 16, 16, 14, 14, 10, 15, FALSE, FALSE, FALSE,
+       'An exiled elven knight who wields the greatsword Winter Oath. Fights with measured precision.'
+FROM arena_data.race r, arena_data.class c
+WHERE r.name = 'Elf' AND c.name = 'Knight';
+
+INSERT INTO arena_data.npc (race_id, class_id, name, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
+SELECT r.id, c.id, 'Finnick Bramblefoot', 8, 8, 20, 13, 14, 11, 16, FALSE, FALSE, FALSE,
+       'A notorious Gladefolk thief. Charming, sarcastic, and impossible to pin down.'
+FROM arena_data.race r, arena_data.class c
+WHERE r.name = 'Gladefolk' AND c.name = 'Rogue';
 
 
 -- Epic weapons
@@ -1416,4 +1348,309 @@ FROM (VALUES
 ) AS src(name, description, type_name, quality_name, effect, value, cursed, curse)
 JOIN arena_data.accessory_type atype ON atype.name = src.type_name
 JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
+
+
+-- ============================================================
+-- SEED: COMBAT CHARACTERS (for API roster — demo heroes & enemies)
+-- Npc=0 → hero-side, Npc=1 → enemy-side
+-- ============================================================
+
+-- Heroes (Npc=0)
+
+DO $$
+DECLARE
+    v_id INTEGER;
+BEGIN
+    INSERT INTO arena_data.character (race_id, class_id, name, level, sex,
+        strength, dexterity, stamina, intelligence, wisdom, charisma,
+        max_hit_points, current_hit_points, strike_rating, turn_speed, npc, max_mana, biography)
+    SELECT r.id, c.id, 'Kaela Vornskald', 10, 'F',
+        19, 15, 17, 9, 11, 13,
+        100, 100, 15, 6, 0, 0,
+        'A wandering barbarian woman who has felled beasts and bandits across the realm.'
+    FROM arena_data.race r, arena_data.class c
+    WHERE r.name = 'Human' AND c.name = 'Barbarian'
+    RETURNING id INTO v_id;
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'weapon', w.id
+    FROM arena_data.equipment_slot es, arena_data.weapon w
+    WHERE es.name = 'RightHand' AND w.name = 'Great Sword';
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'armor', a.id
+    FROM arena_data.equipment_slot es, arena_data.armor a
+    WHERE es.name = 'Chest' AND a.name = 'Hide Armor';
+END;
+$$;
+
+DO $$
+DECLARE
+    v_id INTEGER;
+BEGIN
+    INSERT INTO arena_data.character (race_id, class_id, name, level, sex,
+        strength, dexterity, stamina, intelligence, wisdom, charisma,
+        max_hit_points, current_hit_points, strike_rating, turn_speed, npc, max_mana, biography)
+    SELECT r.id, c.id, 'Ser Garrick Dawnshield', 12, 'M',
+        18, 11, 15, 11, 13, 17,
+        96, 96, 13, 8, 0, 60,
+        'A towering paladin clad in polished silver plate bearing the sigil of Heaven. He wields the warhammer Judicator.'
+    FROM arena_data.race r, arena_data.class c
+    WHERE r.name = 'Human' AND c.name = 'Paladin'
+    RETURNING id INTO v_id;
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'weapon', w.id
+    FROM arena_data.equipment_slot es, arena_data.weapon w
+    WHERE es.name = 'RightHand' AND w.name = 'War Hammer';
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'armor', a.id
+    FROM arena_data.equipment_slot es, arena_data.armor a
+    WHERE es.name = 'Chest' AND a.name = 'Plate Armor';
+END;
+$$;
+
+DO $$
+DECLARE
+    v_id INTEGER;
+BEGIN
+    INSERT INTO arena_data.character (race_id, class_id, name, level, sex,
+        strength, dexterity, stamina, intelligence, wisdom, charisma,
+        max_hit_points, current_hit_points, strike_rating, turn_speed, npc, max_mana, biography)
+    SELECT r.id, c.id, 'Vaelith Moonveil', 9, 'F',
+        14, 18, 10, 19, 10, 13,
+        45, 45, 15, 8, 0, 90,
+        'An arcane duelist who blends blade mastery with devastating magic. Seeks lost magical artifacts.'
+    FROM arena_data.race r, arena_data.class c
+    WHERE r.name = 'Elf' AND c.name = 'Fighter'
+    RETURNING id INTO v_id;
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'weapon', w.id
+    FROM arena_data.equipment_slot es, arena_data.weapon w
+    WHERE es.name = 'RightHand' AND w.name = 'Long Sword';
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'armor', a.id
+    FROM arena_data.equipment_slot es, arena_data.armor a
+    WHERE es.name = 'Chest' AND a.name = 'Mithril Chain';
+
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Fireball';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Ice Bolt';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Shock';
+END;
+$$;
+
+DO $$
+DECLARE
+    v_id INTEGER;
+BEGIN
+    INSERT INTO arena_data.character (race_id, class_id, name, level, sex,
+        strength, dexterity, stamina, intelligence, wisdom, charisma,
+        max_hit_points, current_hit_points, strike_rating, turn_speed, npc, max_mana, biography)
+    SELECT r.id, c.id, 'Sister Elira Vane', 7, 'F',
+        11, 13, 15, 13, 18, 15,
+        49, 49, 17, 8, 0, 70,
+        'A soft-spoken cleric of the Moon Temple. Healer and exorcist who tends to the sick and battles shadow spirits.'
+    FROM arena_data.race r, arena_data.class c
+    WHERE r.name = 'Human' AND c.name = 'Priest'
+    RETURNING id INTO v_id;
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'weapon', w.id
+    FROM arena_data.equipment_slot es, arena_data.weapon w
+    WHERE es.name = 'RightHand' AND w.name = 'Mace';
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'armor', a.id
+    FROM arena_data.equipment_slot es, arena_data.armor a
+    WHERE es.name = 'Chest' AND a.name = 'Padded Armor';
+
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Smite';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Heal';
+END;
+$$;
+
+DO $$
+DECLARE
+    v_id INTEGER;
+BEGIN
+    INSERT INTO arena_data.character (race_id, class_id, name, level, sex,
+        strength, dexterity, stamina, intelligence, wisdom, charisma,
+        max_hit_points, current_hit_points, strike_rating, turn_speed, npc, max_mana, biography)
+    SELECT r.id, c.id, 'Lord Aethor Valeborn', 11, 'M',
+        16, 16, 14, 14, 10, 15,
+        88, 88, 13, 7, 0, 0,
+        'An exiled elven knight who wields the greatsword Winter Oath. He fights with measured precision.'
+    FROM arena_data.race r, arena_data.class c
+    WHERE r.name = 'Elf' AND c.name = 'Knight'
+    RETURNING id INTO v_id;
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'weapon', w.id
+    FROM arena_data.equipment_slot es, arena_data.weapon w
+    WHERE es.name = 'RightHand' AND w.name = 'Great Sword';
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'armor', a.id
+    FROM arena_data.equipment_slot es, arena_data.armor a
+    WHERE es.name = 'Chest' AND a.name = 'Plate Armor';
+END;
+$$;
+
+DO $$
+DECLARE
+    v_id INTEGER;
+BEGIN
+    INSERT INTO arena_data.character (race_id, class_id, name, level, sex,
+        strength, dexterity, stamina, intelligence, wisdom, charisma,
+        max_hit_points, current_hit_points, strike_rating, turn_speed, npc, max_mana, biography)
+    SELECT r.id, c.id, 'Finnick Bramblefoot', 8, 'M',
+        8, 20, 13, 14, 11, 16,
+        40, 40, 17, 12, 0, 0,
+        'A notorious Gladefolk thief known throughout taverns and criminal circles. Charmingly rogue.'
+    FROM arena_data.race r, arena_data.class c
+    WHERE r.name = 'Gladefolk' AND c.name = 'Rogue'
+    RETURNING id INTO v_id;
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'weapon', w.id
+    FROM arena_data.equipment_slot es, arena_data.weapon w
+    WHERE es.name = 'RightHand' AND w.name = 'Dagger';
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'armor', a.id
+    FROM arena_data.equipment_slot es, arena_data.armor a
+    WHERE es.name = 'Chest' AND a.name = 'Studded Leather';
+END;
+$$;
+
+
+-- Enemies (Npc=1)
+
+DO $$
+DECLARE
+    v_id INTEGER;
+BEGIN
+    INSERT INTO arena_data.character (race_id, class_id, name, level, sex,
+        strength, dexterity, stamina, intelligence, wisdom, charisma,
+        max_hit_points, current_hit_points, strike_rating, turn_speed, npc, max_mana, biography)
+    SELECT r.id, c.id, 'Korg Stonefist', 15, 'M',
+        21, 10, 18, 8, 8, 8,
+        165, 165, 14, 6, 1, 0,
+        'A wandering orc berserker who challenges all who cross his path. Wields a massive maul.'
+    FROM arena_data.race r, arena_data.class c
+    WHERE r.name = 'Orc' AND c.name = 'Barbarian'
+    RETURNING id INTO v_id;
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'weapon', w.id
+    FROM arena_data.equipment_slot es, arena_data.weapon w
+    WHERE es.name = 'RightHand' AND w.name = 'Maul';
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'armor', a.id
+    FROM arena_data.equipment_slot es, arena_data.armor a
+    WHERE es.name = 'Chest' AND a.name = 'Chain Mail';
+END;
+$$;
+
+DO $$
+DECLARE
+    v_id INTEGER;
+BEGIN
+    INSERT INTO arena_data.character (race_id, class_id, name, level, sex,
+        strength, dexterity, stamina, intelligence, wisdom, charisma,
+        max_hit_points, current_hit_points, strike_rating, turn_speed, npc, max_mana, biography)
+    SELECT r.id, c.id, 'Graveworm', 9, 'M',
+        17, 10, 14, 11, 8, 6,
+        72, 72, 14, 7, 1, 0,
+        'An undead warlord who commands a legion of skeletons in the Bone Fields.'
+    FROM arena_data.race r, arena_data.class c
+    WHERE r.name = 'Undead' AND c.name = 'Fighter'
+    RETURNING id INTO v_id;
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'weapon', w.id
+    FROM arena_data.equipment_slot es, arena_data.weapon w
+    WHERE es.name = 'RightHand' AND w.name = 'Short Sword';
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'armor', a.id
+    FROM arena_data.equipment_slot es, arena_data.armor a
+    WHERE es.name = 'Chest' AND a.name = 'Chain Mail';
+END;
+$$;
+
+DO $$
+DECLARE
+    v_id INTEGER;
+BEGIN
+    INSERT INTO arena_data.character (race_id, class_id, name, level, sex,
+        strength, dexterity, stamina, intelligence, wisdom, charisma,
+        max_hit_points, current_hit_points, strike_rating, turn_speed, npc, max_mana, biography)
+    SELECT r.id, c.id, 'Shadowmere', 10, 'F',
+        10, 19, 10, 16, 10, 15,
+        40, 40, 16, 12, 1, 0,
+        'A striking female elf rogue and the leader of the Nightblades guild. Deadly with twin daggers.'
+    FROM arena_data.race r, arena_data.class c
+    WHERE r.name = 'Elf' AND c.name = 'Rogue'
+    RETURNING id INTO v_id;
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'weapon', w.id
+    FROM arena_data.equipment_slot es, arena_data.weapon w
+    WHERE es.name = 'RightHand' AND w.name = 'Dagger';
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'armor', a.id
+    FROM arena_data.equipment_slot es, arena_data.armor a
+    WHERE es.name = 'Chest' AND a.name = 'Studded Leather';
+END;
+$$;
+
+
+-- Missing NPC records in the npc table (quest givers / merchants)
+
+INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
+SELECT 'Kaela Vornskald', r.id, c.id, 10, 19, 15, 17, 9, 11, 13, FALSE, FALSE, FALSE,
+       'A wandering barbarian woman. She wields a great sword and fears nothing.'
+FROM arena_data.race r, arena_data.class c WHERE r.name = 'Human' AND c.name = 'Barbarian'
+WHERE NOT EXISTS (SELECT 1 FROM arena_data.npc n WHERE n.name = 'Kaela Vornskald');
+
+INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
+SELECT 'Ser Garrick Dawnshield', r.id, c.id, 12, 18, 11, 15, 11, 13, 17, FALSE, FALSE, FALSE,
+       'A paladin of the Silver Basilica who survived the Fall of Black Hollow. Seeks infernal corruption to purge.'
+FROM arena_data.race r, arena_data.class c WHERE r.name = 'Human' AND c.name = 'Paladin'
+WHERE NOT EXISTS (SELECT 1 FROM arena_data.npc n WHERE n.name = 'Ser Garrick Dawnshield');
+
+INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
+SELECT 'Vaelith Moonveil', r.id, c.id, 9, 14, 18, 10, 19, 10, 13, FALSE, FALSE, FALSE,
+       'An arcane duelist who combines blade mastery with devastating magical precision. Seeks forgotten magical artifacts.'
+FROM arena_data.race r, arena_data.class c WHERE r.name = 'Elf' AND c.name = 'Fighter'
+WHERE NOT EXISTS (SELECT 1 FROM arena_data.npc n WHERE n.name = 'Vaelith Moonveil');
+
+INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
+SELECT 'Sister Elira Vane', r.id, c.id, 7, 11, 13, 15, 13, 18, 15, FALSE, FALSE, FALSE,
+       'A healer and exorcist of the Moon Temple. Tended plague victims during the Ash Fever outbreak.'
+FROM arena_data.race r, arena_data.class c WHERE r.name = 'Human' AND c.name = 'Priest'
+WHERE NOT EXISTS (SELECT 1 FROM arena_data.npc n WHERE n.name = 'Sister Elira Vane');
+
+INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
+SELECT 'Lord Aethor Valeborn', r.id, c.id, 11, 16, 16, 14, 14, 10, 15, FALSE, FALSE, FALSE,
+       'An exiled elven knight who wields the greatsword Winter Oath. Fights with measured precision.'
+FROM arena_data.race r, arena_data.class c WHERE r.name = 'Elf' AND c.name = 'Knight'
+WHERE NOT EXISTS (SELECT 1 FROM arena_data.npc n WHERE n.name = 'Lord Aethor Valeborn');
+
+INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
+SELECT 'Finnick Bramblefoot', r.id, c.id, 8, 8, 20, 13, 14, 11, 16, FALSE, FALSE, FALSE,
+       'A notorious Gladefolk thief. Charming, sarcastic, and impossible to pin down.'
+FROM arena_data.race r, arena_data.class c WHERE r.name = 'Gladefolk' AND c.name = 'Rogue'
+WHERE NOT EXISTS (SELECT 1 FROM arena_data.npc n WHERE n.name = 'Finnick Bramblefoot');
 

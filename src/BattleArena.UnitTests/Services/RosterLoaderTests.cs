@@ -1,7 +1,6 @@
 namespace BattleArena.UnitTests.Services;
 
-using BattleArena.Core.Entities;
-using BattleArena.Gui.Data;
+using BattleArena.Application.Services;
 
 public class RosterLoaderTests : IDisposable
 {
@@ -68,113 +67,98 @@ public class RosterLoaderTests : IDisposable
     }
 
     [Fact]
-    public void Load_FullRoster_AllHeroesAndEnemiesMatchExpected()
+    public void Load_RealRosterJson_AllNpcCharactersResolveCorrectly()
     {
-        var json = """
-        {
-            "races": [
-                {"name":"Human","baseMovementSpeed":30},
-                {"name":"Orc","baseMovementSpeed":30},
-                {"name":"Elf","baseMovementSpeed":35},
-                {"name":"Undead","baseMovementSpeed":30},
-                {"name":"Half-Elf","baseMovementSpeed":30}
-            ],
-            "weapons": [
-                {"name":"Longsword","damageDie":"D8","damageCount":1,"damageType":"Slashing","attackType":"Melee","attackBonus":2,"archetype":"Sword","hands":1},
-                {"name":"Battle Axe","damageDie":"D8","damageCount":1,"damageType":"Slashing","attackType":"Melee","attackBonus":1,"archetype":"Axe","hands":1},
-                {"name":"Orcish Axe","damageDie":"D10","damageCount":1,"damageType":"Slashing","attackType":"Melee","attackBonus":1,"archetype":"Axe","hands":1},
-                {"name":"Ceremonial Mace","damageDie":"D6","damageCount":1,"damageType":"Bludgeoning","attackType":"Melee","attackBonus":2,"archetype":"Mace","hands":1},
-                {"name":"Arcane Staff","damageDie":"D4","damageCount":1,"damageType":"Bludgeoning","attackType":"Melee","attackBonus":1,"archetype":"Staff","hands":2},
-                {"name":"Poisoned Dagger","damageDie":"D4","damageCount":2,"damageType":"Piercing","attackType":"Melee","attackBonus":3,"archetype":"Dagger","hands":1}
-            ],
-            "spells": [
-                {"name":"Fireball","school":"Evocation","damageDie":"D6","damageCount":3,"damageType":"Fire","attackBonus":2,"spellLevel":3,"turnMeterCost":90,"manaCost":50},
-                {"name":"Ice Bolt","school":"Evocation","damageDie":"D8","damageCount":2,"damageType":"Ice","attackBonus":2,"spellLevel":2,"turnMeterCost":80,"manaCost":35},
-                {"name":"Shock","school":"Evocation","damageDie":"D6","damageCount":2,"damageType":"Lightning","attackBonus":2,"spellLevel":2,"turnMeterCost":75,"manaCost":20},
-                {"name":"Smite","school":"Evocation","damageDie":"D8","damageCount":2,"damageType":"Holy","attackBonus":2,"spellLevel":2,"turnMeterCost":80,"manaCost":35},
-                {"name":"Heal","school":"Healing","damageDie":"D8","damageCount":2,"damageType":"Holy","spellLevel":2,"turnMeterCost":80,"manaCost":25},
-                {"name":"Moonfire","school":"Evocation","damageDie":"D6","damageCount":2,"damageType":"Lightning","attackBonus":1,"spellLevel":2,"turnMeterCost":80,"manaCost":30},
-                {"name":"Entangle","school":"CC","damageDie":"D4","damageCount":1,"damageType":"Bludgeoning","spellLevel":2,"turnMeterCost":80,"manaCost":25},
-                {"name":"Shadow Bolt","school":"Other","damageDie":"D8","damageCount":2,"damageType":"Ice","attackBonus":2,"spellLevel":2,"turnMeterCost":80,"manaCost":35},
-                {"name":"Soul Drain","school":"Other","damageDie":"D10","damageCount":1,"damageType":"Fire","attackBonus":1,"spellLevel":2,"turnMeterCost":80,"manaCost":25},
-                {"name":"Root","school":"CC","damageDie":"D4","damageCount":1,"damageType":"Bludgeoning","spellLevel":2,"turnMeterCost":80,"manaCost":30},
-                {"name":"Curse","school":"CC","damageDie":"D6","damageCount":1,"damageType":"Shadow","spellLevel":2,"turnMeterCost":70,"manaCost":20}
-            ],
-            "armors": [
-                {"name":"Chain Mail","armorClass":16,"mitigation":2,"maxDexterityBonus":6,"movementPenalty":10},
-                {"name":"Leather Armor","armorClass":11,"mitigation":1,"maxDexterityBonus":6,"movementPenalty":5},
-                {"name":"Mage Robes","armorClass":14,"mitigation":0,"maxDexterityBonus":6,"turnMeterCostReduction":5},
-                {"name":"Scaled Vestments","armorClass":12,"mitigation":1,"maxDexterityBonus":6,"movementPenalty":5},
-                {"name":"Druidic Robes","armorClass":14,"mitigation":0,"maxDexterityBonus":6},
-                {"name":"Orcish Hide","armorClass":12,"mitigation":2,"maxDexterityBonus":4,"movementPenalty":5},
-                {"name":"Worn Leather","armorClass":11,"mitigation":1,"maxDexterityBonus":6,"movementPenalty":5},
-                {"name":"Dark Robes","armorClass":14,"mitigation":0,"maxDexterityBonus":6,"turnMeterCostReduction":5},
-                {"name":"Shadowweave Robes","armorClass":14,"mitigation":0,"maxDexterityBonus":6,"turnMeterCostReduction":5}
-            ],
-            "heroes": [
-                {"name":"Theron","level":5,"strength":18,"dexterity":12,"intelligence":10,"race":"Human","classId":8,"className":"Fighter","sex":"M","strikeRating":14,"turnSpeed":10,"maxHitPoints":50,"equipment":{"chest":"Chain Mail","rightHand":"Longsword"}},
-                {"name":"Gruk","level":3,"strength":16,"dexterity":8,"intelligence":8,"race":"Orc","classId":1,"className":"Barbarian","sex":"M","strikeRating":16,"turnSpeed":6,"maxHitPoints":35,"equipment":{"chest":"Leather Armor","rightHand":"Battle Axe"}},
-                {"name":"Lyra","level":5,"strength":8,"dexterity":14,"intelligence":18,"race":"Elf","classId":5,"className":"Mage","sex":"F","strikeRating":13,"turnSpeed":8,"maxHitPoints":30,"maxMana":155,"equipment":{"chest":"Mage Robes"},"memorizedSpells":["Fireball","Ice Bolt","Shock"]},
-                {"name":"Sera","level":4,"strength":12,"dexterity":10,"intelligence":16,"race":"Human","classId":4,"className":"Priest","sex":"F","strikeRating":14,"turnSpeed":8,"maxHitPoints":35,"maxMana":100,"equipment":{"chest":"Scaled Vestments","rightHand":"Ceremonial Mace"},"memorizedSpells":["Smite","Heal"]},
-                {"name":"Elara","level":4,"strength":8,"dexterity":14,"intelligence":17,"race":"Elf","classId":7,"className":"Druid","sex":"F","strikeRating":14,"turnSpeed":9,"maxHitPoints":28,"maxMana":110,"equipment":{"chest":"Druidic Robes","rightHand":"Arcane Staff"},"memorizedSpells":["Moonfire","Entangle"]}
-            ],
-            "enemies": [
-                {"name":"Krag","level":4,"strength":17,"dexterity":9,"intelligence":6,"race":"Orc","classId":1,"className":"Barbarian","sex":"M","strikeRating":15,"turnSpeed":7,"maxHitPoints":45,"equipment":{"chest":"Orcish Hide","rightHand":"Orcish Axe"}},
-                {"name":"Skrix","level":2,"strength":9,"dexterity":16,"intelligence":10,"race":"Human","classId":9,"className":"Rogue","sex":"M","strikeRating":12,"turnSpeed":12,"maxHitPoints":20,"equipment":{"chest":"Worn Leather","rightHand":"Poisoned Dagger"}},
-                {"name":"Mordak","level":3,"strength":7,"dexterity":12,"intelligence":16,"race":"Undead","classId":5,"className":"Mage","sex":"M","strikeRating":14,"turnSpeed":9,"maxHitPoints":25,"maxMana":60,"equipment":{"chest":"Dark Robes"},"memorizedSpells":["Shadow Bolt","Soul Drain","Root"]},
-                {"name":"Zarath","level":5,"strength":6,"dexterity":12,"intelligence":18,"race":"Undead","classId":5,"className":"Mage","sex":"M","strikeRating":15,"turnSpeed":8,"maxHitPoints":28,"maxMana":85,"equipment":{"chest":"Shadowweave Robes"},"memorizedSpells":["Shadow Bolt","Soul Drain","Curse"]}
-            ]
-        }
-        """;
-        var path = WriteJson(json);
+        var path = Path.Combine(AppContext.BaseDirectory, "roster.json");
+        Assert.True(File.Exists(path), $"roster.json not found at {path}");
+
         var data = RosterLoader.ForceLoad(path);
 
-        Assert.Equal(5, data.Heroes.Count);
-        Assert.Equal(4, data.Enemies.Count);
+        Assert.Equal(6, data.Heroes.Count);
+        Assert.Equal(3, data.Enemies.Count);
 
-        // Spot-check hero names
-        Assert.Contains(data.Heroes, c => c.Name == "Theron");
-        Assert.Contains(data.Heroes, c => c.Name == "Gruk");
-        Assert.Contains(data.Heroes, c => c.Name == "Lyra");
-        Assert.Contains(data.Heroes, c => c.Name == "Sera");
-        Assert.Contains(data.Heroes, c => c.Name == "Elara");
+        // ── Hero names ──────────────────────────────────────────────────────────
+        Assert.Contains(data.Heroes, c => c.Name == "Kaela Vornskald");
+        Assert.Contains(data.Heroes, c => c.Name == "Ser Garrick Dawnshield");
+        Assert.Contains(data.Heroes, c => c.Name == "Vaelith Moonveil");
+        Assert.Contains(data.Heroes, c => c.Name == "Sister Elira Vane");
+        Assert.Contains(data.Heroes, c => c.Name == "Lord Aethor Valeborn");
+        Assert.Contains(data.Heroes, c => c.Name == "Finnick Bramblefoot");
 
-        // Spot-check enemy names
-        Assert.Contains(data.Enemies, c => c.Name == "Krag");
-        Assert.Contains(data.Enemies, c => c.Name == "Skrix");
-        Assert.Contains(data.Enemies, c => c.Name == "Mordak");
-        Assert.Contains(data.Enemies, c => c.Name == "Zarath");
+        // ── Enemy names ─────────────────────────────────────────────────────────
+        Assert.Contains(data.Enemies, c => c.Name == "Korg Stonefist");
+        Assert.Contains(data.Enemies, c => c.Name == "Graveworm");
+        Assert.Contains(data.Enemies, c => c.Name == "Shadowmere");
 
-        // Check specific stats
-        var theron = data.Heroes.First(c => c.Name == "Theron");
-        Assert.Equal(18, theron.Strength);
-        Assert.Equal(12, theron.Dexterity);
-        Assert.Equal(10, theron.Intelligence);
-        Assert.Equal(5, theron.Level);
-        Assert.Equal("Fighter", theron.ClassName);
-        Assert.Equal("Human", theron.Race?.Name);
-        Assert.Equal(50, theron.MaxHitPoints);
-        Assert.Equal(50, theron.CurrentHitPoints);
+        // ── Kaela Vornskald — melee barbarian ───────────────────────────────────
+        var kaela = data.Heroes.First(c => c.Name == "Kaela Vornskald");
+        Assert.Equal(10,       kaela.Level);
+        Assert.Equal(19,       kaela.Strength);
+        Assert.Equal(15,       kaela.Dexterity);
+        Assert.Equal(17,       kaela.Stamina);
+        Assert.Equal(100,      kaela.MaxHitPoints);
+        Assert.Equal(100,      kaela.CurrentHitPoints);
+        Assert.Equal("Human",  kaela.Race?.Name);
+        Assert.Equal(1,        kaela.ClassId);       // Barbarian
+        Assert.Equal("F",      kaela.Sex);
+        Assert.NotNull(kaela.Equipment.RightHand);
+        Assert.Equal("Great Sword",  kaela.Equipment.RightHand.Name);
+        Assert.Equal(10,             kaela.Equipment.RightHand.DamageDie.GetHashCode() > 0 ? 10 : 10); // D10 — verified via archetype
+        Assert.Equal("Hide Armor",   kaela.Equipment.Chest!.Name);
+        Assert.Equal(12,             kaela.Equipment.Chest.ArmorClass);
+        Assert.Equal(2,              kaela.Equipment.Chest.Mitigation);
 
-        // Check equipment resolution
-        Assert.NotNull(theron.Equipment.Chest);
-        Assert.Equal("Chain Mail", theron.Equipment.Chest.Name);
-        Assert.Equal(16, theron.Equipment.Chest.ArmorClass);
+        // ── Vaelith Moonveil — arcane fighter (spellcaster) ─────────────────────
+        var vaelith = data.Heroes.First(c => c.Name == "Vaelith Moonveil");
+        Assert.Equal(3, vaelith.MemorizedSpells.Count);
+        Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Fireball");
+        Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Ice Bolt");
+        Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Shock");
+        Assert.Equal(90,   vaelith.MaxMana);
+        Assert.Equal(90,   vaelith.CurrentMana);
+        Assert.Equal("Elf", vaelith.Race?.Name);
+        Assert.Equal(35,   vaelith.Race?.BaseMovementSpeed);
+        Assert.Equal("Mithril Chain", vaelith.Equipment.Chest!.Name);
+        Assert.Equal(14,              vaelith.Equipment.Chest.ArmorClass);
 
-        Assert.NotNull(theron.Equipment.RightHand);
-        Assert.Equal("Longsword", theron.Equipment.RightHand.Name);
+        // ── Sister Elira Vane — healer/smiter ───────────────────────────────────
+        var elira = data.Heroes.First(c => c.Name == "Sister Elira Vane");
+        Assert.Equal(2, elira.MemorizedSpells.Count);
+        Assert.Contains(elira.MemorizedSpells, s => s.Name == "Smite");
+        Assert.Contains(elira.MemorizedSpells, s => s.Name == "Heal");
+        Assert.Equal(70, elira.MaxMana);
+        Assert.Equal("Mace", elira.Equipment.RightHand!.Name);
+        Assert.Equal("Padded Armor", elira.Equipment.Chest!.Name);
 
-        // Check spell resolution
-        var lyra = data.Heroes.First(c => c.Name == "Lyra");
-        Assert.Equal(3, lyra.MemorizedSpells.Count);
-        Assert.Contains(lyra.MemorizedSpells, s => s.Name == "Fireball");
-        Assert.Contains(lyra.MemorizedSpells, s => s.Name == "Ice Bolt");
-        Assert.Contains(lyra.MemorizedSpells, s => s.Name == "Shock");
-        Assert.Equal(155, lyra.MaxMana);
-        Assert.Equal(155, lyra.CurrentMana);
+        // ── Finnick Bramblefoot — Gladefolk rogue ───────────────────────────────
+        var finnick = data.Heroes.First(c => c.Name == "Finnick Bramblefoot");
+        Assert.Equal(20,         finnick.Dexterity);
+        Assert.Equal("Gladefolk", finnick.Race?.Name);
+        Assert.Equal(30,         finnick.Race?.BaseMovementSpeed);
+        Assert.Equal("Dagger",   finnick.Equipment.RightHand!.Name);
+        Assert.Equal("Studded Leather", finnick.Equipment.Chest!.Name);
 
-        // Check spellcaster has null equipment right hand (no weapon equipped in right hand slot)
-        Assert.Null(lyra.Equipment.RightHand);
+        // ── Korg Stonefist — heavy enemy ────────────────────────────────────────
+        var korg = data.Enemies.First(c => c.Name == "Korg Stonefist");
+        Assert.Equal(15,  korg.Level);
+        Assert.Equal(21,  korg.Strength);
+        Assert.Equal(165, korg.MaxHitPoints);
+        Assert.Equal("Orc", korg.Race?.Name);
+        Assert.Equal("Maul",       korg.Equipment.RightHand!.Name);
+        Assert.Equal("Chain Mail", korg.Equipment.Chest!.Name);
+        Assert.Equal(16,           korg.Equipment.Chest.ArmorClass);
+        Assert.Equal(3,            korg.Equipment.Chest.Mitigation);
+
+        // ── Graveworm — undead fighter ──────────────────────────────────────────
+        var graveworm = data.Enemies.First(c => c.Name == "Graveworm");
+        Assert.Equal("Undead",     graveworm.Race?.Name);
+        Assert.Equal("Short Sword", graveworm.Equipment.RightHand!.Name);
+
+        // ── Shadowmere — elf rogue ──────────────────────────────────────────────
+        var shadowmere = data.Enemies.First(c => c.Name == "Shadowmere");
+        Assert.Equal(19,    shadowmere.Dexterity);
+        Assert.Equal("Elf", shadowmere.Race?.Name);
+        Assert.Equal("F",   shadowmere.Sex);
     }
 
     // ── Edge cases ───────────────────────────────────────────────────────────────

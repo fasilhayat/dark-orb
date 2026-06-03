@@ -34,4 +34,11 @@
     <ProjectReference Include="..\BattleArena.Gui\BattleArena.Gui.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="..\BattleArena.Demo\roster.json" />
+    <Content Include="..\BattleArena.Demo\roster.json" Link="roster.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
