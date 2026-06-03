@@ -62,6 +62,15 @@ public partial class MainWindow : Window
         {
             _apiClient = null;
         }
+
+        if (_apiClient is not null)
+            _ = CheckApiReachabilityAsync();
+    }
+
+    private async Task CheckApiReachabilityAsync()
+    {
+        var reachable = await _apiClient!.HealthCheckAsync();
+        _vm.IsApiReachable = reachable;
     }
 
     private void OnDuelClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)

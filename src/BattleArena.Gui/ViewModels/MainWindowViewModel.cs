@@ -284,6 +284,18 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         set => SetField(ref _isApiMode, value);
     }
 
+    private bool _isApiReachable = true;
+    public bool IsApiReachable
+    {
+        get => _isApiReachable;
+        set
+        {
+            if (SetField(ref _isApiReachable, value))
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsApiUnreachable)));
+        }
+    }
+    public bool IsApiUnreachable => !IsApiReachable;
+
     private string _fighter1Name = "";
     public string Fighter1Name
     {

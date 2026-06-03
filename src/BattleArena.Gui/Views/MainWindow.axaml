@@ -61,19 +61,6 @@
       <Setter Property="Foreground" Value="#0d0d1a" />
     </Style>
 
-    <!-- Mode toggle (purple accent) -->
-    <Style Selector="Button.toggle-mode:disabled">
-      <Setter Property="Background" Value="#6a3a8a" />
-      <Setter Property="Foreground" Value="#e0d0f0" />
-      <Setter Property="BorderBrush" Value="#8a5aaa" />
-      <Setter Property="BorderThickness" Value="2" />
-      <Setter Property="Opacity" Value="1" />
-    </Style>
-    <Style Selector="Button.toggle-mode:disabled /template/ ContentPresenter">
-      <Setter Property="Background" Value="#6a3a8a" />
-      <Setter Property="Foreground" Value="#e0d0f0" />
-    </Style>
-
     <!-- Compact combat-log list items: strip Fluent default padding/min-height -->
     <Style Selector="ListBoxItem">
       <Setter Property="Padding" Value="0,0" />
@@ -102,8 +89,14 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="24">
           <Button x:Name="DemoButton" Content="DEMO" Click="OnDemoClick"
                   Width="180" Height="60" FontSize="20" />
-          <Button x:Name="ApiModeButton" Content="API VERSION" Click="OnApiModeClick"
-                  Width="180" Height="60" FontSize="20" />
+          <StackPanel VerticalAlignment="Center" Spacing="4">
+            <Button x:Name="ApiModeButton" Content="API VERSION" Click="OnApiModeClick"
+                    Width="180" Height="60" FontSize="20"
+                    IsEnabled="{Binding IsApiReachable}" />
+            <TextBlock Text="API is unreachable" Foreground="#ff6644" FontSize="11"
+                       HorizontalAlignment="Center"
+                       IsVisible="{Binding IsApiUnreachable}" />
+          </StackPanel>
         </StackPanel>
       </StackPanel>
     </Grid>
@@ -268,9 +261,9 @@
 
       <!-- Mode toggle -->
       <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="4" Margin="0,0,0,4">
-        <Button x:Name="TurnBasedButton" Classes="toggle-mode" Content="Turn-based" Click="OnTurnBasedClick"
+        <Button x:Name="TurnBasedButton" Classes="toggle" Content="Turn-based" Click="OnTurnBasedClick"
                 Width="110" Height="28" FontSize="11" />
-        <Button x:Name="AutoModeButton" Classes="toggle-mode" Content="Auto" Click="OnAutoModeClick"
+        <Button x:Name="AutoModeButton" Classes="toggle" Content="Auto" Click="OnAutoModeClick"
                 Width="100" Height="28" FontSize="11" />
       </StackPanel>
 

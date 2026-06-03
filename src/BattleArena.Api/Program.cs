@@ -1,11 +1,11 @@
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using BattleArena.Api;
 using BattleArena.Api.Endpoints;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +21,9 @@ builder.Services.ConfigureHttpJsonOptions(options =>
     options.SerializerOptions.PropertyNameCaseInsensitive = true;
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
+
+builder.Services.AddHealthChecks()
+    .AddCheck("self", () => HealthCheckResult.Healthy("API is running"));
 
 var app = builder.Build();
 
@@ -44,7 +47,8 @@ var apiKeyOptions = app.Services.GetRequiredService<IOptions<ApiKeyOptions>>().V
 
 app.Use(async (context, next) =>
 {
-    if (!context.Request.Path.StartsWithSegments("/swagger"))
+    if (!context.Request.Path.StartsWithSegments("/swagger") &&
+        !context.Request.Path.StartsWithSegments("/api/healthcheck"))
     {
         if (!string.IsNullOrEmpty(apiKeyOptions.BattleArena))
         {
@@ -62,6 +66,7 @@ app.Use(async (context, next) =>
     await next(context);
 });
 
+app.MapHealthEndpoints();
 app.MapCombatEndpoints();
 app.MapCharacterEndpoints();
 app.MapEquipmentEndpoints();

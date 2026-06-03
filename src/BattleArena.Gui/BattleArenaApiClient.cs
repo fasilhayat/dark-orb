@@ -61,6 +61,20 @@ internal sealed class BattleArenaApiClient
     internal sealed record DieRollResponse(string Die, int Result);
     internal sealed record DiceRollResponse(string Dice, int Result);
 
+    public async Task<bool> HealthCheckAsync()
+    {
+        try
+        {
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3));
+            var result = await _http.GetAsync("/api/healthcheck", cts.Token);
+            return result.IsSuccessStatusCode;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
     public async Task<CombatResult> SimulateCombatAsync(
         string heroPartyName, List<int> heroMemberIds,
         string enemyPartyName, List<int> enemyMemberIds,
