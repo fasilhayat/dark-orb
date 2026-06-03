@@ -275,47 +275,65 @@
       <ScrollViewer Grid.Row="4" VerticalScrollBarVisibility="Auto" Margin="0,4">
         <ListBox x:Name="HeroListBox" Background="Transparent" BorderThickness="0"
                  SelectionMode="Single" SelectionChanged="OnHeroSelected">
+          <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+              <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" />
+            </ItemsPanelTemplate>
+          </ListBox.ItemsPanel>
           <ListBox.ItemTemplate>
             <DataTemplate>
-              <Border Background="#1a1a2e" BorderBrush="#333" BorderThickness="1"
-                      CornerRadius="4" Padding="10" Margin="4" Width="220">
-                <StackPanel Spacing="2">
-                  <TextBlock FontWeight="Bold" FontSize="14">
-                    <Run Foreground="#88bbff" Text="{Binding Name}" />
-                    <Run Foreground="#888" Text=" — " />
-                    <Run Foreground="#aaa" Text="{Binding ClassName}" />
-                  </TextBlock>
-                  <TextBlock Foreground="#777" FontSize="10">
-                    <Run Text="Lv " /><Run Text="{Binding Level}" />
-                    <Run Text="  HP " /><Run Text="{Binding MaxHitPoints}" />
-                    <Run Text="  " /><Run Text="{Binding Race.Name}" />
-                  </TextBlock>
-                </StackPanel>
+              <Border Background="#1a1a2e"
+                      BorderBrush="{Binding BorderBrush}"
+                      BorderThickness="{Binding BorderThickness}"
+                      CornerRadius="6" Padding="0" Margin="6" Width="260">
+                <Grid>
+                  <!-- Card content -->
+                  <Grid ColumnDefinitions="80,*">
+                    <Border Grid.Column="0" Width="80" Height="107"
+                            CornerRadius="6,0,0,6" ClipToBounds="True"
+                            Background="#0d0d1a">
+                      <Image Source="{Binding Portrait}" Stretch="UniformToFill" />
+                    </Border>
+                    <StackPanel Grid.Column="1" Margin="10,8" VerticalAlignment="Center" Spacing="3">
+                      <TextBlock Text="{Binding Name}" Foreground="#88bbff" FontSize="14"
+                                 FontWeight="Bold" TextTrimming="CharacterEllipsis" />
+                      <TextBlock Foreground="#aaa" FontSize="11">
+                        <Run Text="{Binding ClassName}" />
+                      </TextBlock>
+                      <StackPanel Orientation="Horizontal" Spacing="10">
+                        <TextBlock Foreground="#777" FontSize="11">
+                          <Run Text="Lv " /><Run Text="{Binding Level}" />
+                        </TextBlock>
+                        <TextBlock Foreground="#777" FontSize="11"
+                                   Text="{Binding RaceName}" />
+                      </StackPanel>
+                      <TextBlock Foreground="#777" FontSize="10">
+                        <Run Text="HP " /><Run Foreground="#44cc44" Text="{Binding MaxHitPoints}" />
+                      </TextBlock>
+                    </StackPanel>
+                  </Grid>
+                  <!-- Selection badge at top center -->
+                  <Border VerticalAlignment="Top" HorizontalAlignment="Center"
+                          Background="{Binding SelectionBadgeColor}" CornerRadius="0,0,4,4"
+                          Padding="12,3" IsVisible="{Binding IsSelected}" Opacity="0.95">
+                    <TextBlock Text="{Binding SelectionLabel}" Foreground="White" FontSize="10"
+                               FontWeight="Bold" />
+                  </Border>
+                </Grid>
               </Border>
             </DataTemplate>
           </ListBox.ItemTemplate>
         </ListBox>
       </ScrollViewer>
 
-      <!-- Selected fighters display -->
-      <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20" Margin="0,4">
-        <Border Background="#1a1a2e" BorderBrush="#4488ff" BorderThickness="1" CornerRadius="4" Padding="8,4" Width="180">
-          <TextBlock HorizontalAlignment="Center">
-            <Run Text="Fighter 1: " Foreground="#888" />
-            <Run Text="{Binding Fighter1Name}" Foreground="#88bbff" FontWeight="Bold" />
-          </TextBlock>
-        </Border>
-        <Border Background="#1a1a2e" BorderBrush="#ff4488" BorderThickness="1" CornerRadius="4" Padding="8,4" Width="180">
-          <TextBlock HorizontalAlignment="Center">
-            <Run Text="Fighter 2: " Foreground="#888" />
-            <Run Text="{Binding Fighter2Name}" Foreground="#ff8888" FontWeight="Bold" />
-          </TextBlock>
-        </Border>
-        <Button x:Name="FightButton" Content="Fight" Click="OnFightClick"
-                Width="120" Height="34" FontSize="14" IsEnabled="{Binding CanStartCombat}" />
-        <Separator Width="1" Background="#444" Margin="4,0" />
+      <!-- Proceed / Back -->
+      <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="14" Margin="0,4">
+        <Button x:Name="ProceedButton" Content="PROCEED" Click="OnFightClick"
+                Width="180" Height="36" FontSize="15"
+                Background="#2a6a2a" BorderBrush="#4a9a4a"
+                IsEnabled="{Binding CanProceed}" />
         <Button x:Name="BackToMainFromSetupButton" Content="Back to Main Menu" Click="OnBackToMainFromSetupClick"
-                Width="140" Height="34" FontSize="11" Background="#5c3a3a" BorderBrush="#755" />
+                Width="140" Height="36" FontSize="11" Background="#5c3a3a" BorderBrush="#755" />
       </StackPanel>
     </Grid>
 

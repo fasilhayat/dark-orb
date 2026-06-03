@@ -12,6 +12,7 @@ using BattleArena.Application.Modifiers;
 using BattleArena.Application.Services;
 using BattleArena.Core.Entities;
 using BattleArena.Gui.Data;
+using BattleArena.Gui.Models;
 using BattleArena.Gui.Presenters;
 using BattleArena.Gui.ViewModels;
 using BattleArena.Presentation;
@@ -26,8 +27,9 @@ public partial class MainWindow : Window
     private CancellationTokenSource? _cts;
     private ManualResetEventSlim? _waitForNext;
     private AvaloniaCombatPresenter? _presenter;
-    private Character? _fighter1;
-    private Character? _fighter2;
+    private readonly List<CharacterDisplayItem?> _team1 = [];
+    private readonly List<CharacterDisplayItem?> _team2 = [];
+    private int _teamSize = 1;
     private bool _useApi;
     private BattleArenaApiClient? _apiClient;
     private List<Character> _apiRoster = [];
@@ -42,9 +44,9 @@ public partial class MainWindow : Window
             if (CombatLogListBox.ItemCount > 0)
                 CombatLogListBox.ScrollIntoView(CombatLogListBox.Items[^1]!);
         };
-        HeroListBox.ItemsSource = Roster.AllHeroes;
+        HeroListBox.ItemsSource = ToDisplayItems(Roster.AllHeroes);
         DuelButton.IsEnabled = false;
-        SelectionHint.Text = "Select Fighter 1";
+        SelectionHint.Text = "Select Team 1 — 0/1";
 
         try
         {
@@ -78,11 +80,8 @@ public partial class MainWindow : Window
         _vm.Scenario = "Duel";
         DuelButton.IsEnabled = false;
         ClashButton.IsEnabled = true;
-        _fighter1 = null;
-        _fighter2 = null;
-        _vm.Fighter1Name = "";
-        _vm.Fighter2Name = "";
-        SelectionHint.Text = "Select Fighter 1";
+        _teamSize = 1;
+        ClearSelection();
     }
 
     private void OnClashClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -90,60 +89,81 @@ public partial class MainWindow : Window
         _vm.Scenario = "Party";
         DuelButton.IsEnabled = true;
         ClashButton.IsEnabled = false;
-        _fighter1 = null;
-        _fighter2 = null;
-        _vm.Fighter1Name = "";
-        _vm.Fighter2Name = "";
-        SelectionHint.Text = "Clash mode — pick two fighters";
+        _teamSize = 1;
+        ClearSelection();
+    }
+
+    private Character? Fighter1 => _team1.Count > 0 ? _team1[0]?.Character : null;
+    private Character? Fighter2 => _team2.Count > 0 ? _team2[0]?.Character : null;
+
+    private void ClearSelection()
+    {
+        foreach (var item in _team1.Concat(_team2))
+        {
+            if (item is not null)
+                item.TeamSlot = 0;
+        }
+        _team1.Clear();
+        _team2.Clear();
+        _vm.CanProceed = false;
+        SelectionHint.Text = $"Select Team 1 — 0/{_teamSize}";
+    }
+
+    private void UpdateSelectionHint()
+    {
+        var team1Full = _team1.Count >= _teamSize;
+        var team2Full = _team2.Count >= _teamSize;
+        _vm.CanProceed = team1Full && team2Full;
+
+        if (!team1Full)
+            SelectionHint.Text = $"Select Team 1 — {_team1.Count}/{_teamSize}";
+        else if (!team2Full)
+            SelectionHint.Text = $"Select Team 2 — {_team2.Count}/{_teamSize}";
+        else
+            SelectionHint.Text = $"All {_teamSize * 2} champions selected!  Press PROCEED.";
     }
 
     private void OnHeroSelected(object? sender, SelectionChangedEventArgs e)
     {
-        if (HeroListBox.SelectedItem is not Character hero) return;
-
-        if (_fighter1?.Name == hero.Name)
-        {
-            _fighter1 = null;
-            _vm.Fighter1Name = "";
-            SelectionHint.Text = "Select Fighter 1";
-        }
-        else if (_fighter2?.Name == hero.Name)
-        {
-            _fighter2 = null;
-            _vm.Fighter2Name = "";
-            SelectionHint.Text = "Select Fighter 2";
-        }
-        else if (_fighter1 is null)
-        {
-            _fighter1 = hero;
-            _vm.Fighter1Name = hero.Name;
-            SelectionHint.Text = _fighter2 is null ? "Select Fighter 2" : "Both fighters selected!";
-        }
-        else if (_fighter2 is null)
-        {
-            _fighter2 = hero;
-            _vm.Fighter2Name = hero.Name;
-            SelectionHint.Text = "Both fighters selected!";
-        }
-        else
-        {
-            _fighter2 = hero;
-            _vm.Fighter2Name = hero.Name;
-        }
-
+        if (HeroListBox.SelectedItem is not CharacterDisplayItem item) return;
         HeroListBox.SelectedItem = null;
+
+        // Clicking a selected card deselects it
+        if (item.IsSelected)
+        {
+            _team1.Remove(item);
+            _team2.Remove(item);
+            item.TeamSlot = 0;
+            UpdateSelectionHint();
+            return;
+        }
+
+        // Assign to first team with room
+        if (_team1.Count < _teamSize)
+        {
+            item.TeamSlot = 1;
+            _team1.Add(item);
+        }
+        else if (_team2.Count < _teamSize)
+        {
+            item.TeamSlot = 2;
+            _team2.Add(item);
+        }
+        else return; // both teams full
+
+        UpdateSelectionHint();
     }
 
     private async void OnFightClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        if (_fighter1 is null || _fighter2 is null) return;
+        if (Fighter1 is null || Fighter2 is null) return;
         await StartCombat();
     }
 
     private async void OnNewCombatClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         NewCombatButton.IsVisible = false;
-        if (_fighter1 is null || _fighter2 is null) return;
+        if (Fighter1 is null || Fighter2 is null) return;
         await StartCombat();
     }
 
@@ -159,11 +179,11 @@ public partial class MainWindow : Window
         _vm.RoundNumber = 0;
         _vm.TickInRound = 0;
 
-        ResetCombatant(_fighter1!);
-        ResetCombatant(_fighter2!);
+        ResetCombatant(Fighter1!);
+        ResetCombatant(Fighter2!);
 
-        var party1 = Party.Solo(_fighter1!, Roster.GetAttackSource(_fighter1!));
-        var party2 = Party.Solo(_fighter2!, Roster.GetAttackSource(_fighter2!));
+        var party1 = Party.Solo(Fighter1!, Roster.GetAttackSource(Fighter1!));
+        var party2 = Party.Solo(Fighter2!, Roster.GetAttackSource(Fighter2!));
 
         await RunCombat(party1, party2);
     }
@@ -203,20 +223,16 @@ public partial class MainWindow : Window
         _vm.CombatLog.Clear();
         _vm.Heroes.Clear();
         _vm.Enemies.Clear();
-        _vm.Fighter1Name = "";
-        _vm.Fighter2Name = "";
         _vm.CombatOver = false;
         _vm.Tick = 0;
         _vm.RoundNumber = 0;
         _vm.TickInRound = 0;
-        _fighter1 = null;
-        _fighter2 = null;
+        ClearSelection();
         DuelButton.IsEnabled = false;
         ClashButton.IsEnabled = true;
         TurnBasedButton.IsEnabled = false;
         AutoModeButton.IsEnabled = true;
-        SelectionHint.Text = "Select Fighter 1";
-        HeroListBox.SelectedItem = null;
+        HeroListBox.ItemsSource = ToDisplayItems(Roster.AllHeroes);
     }
 
     private void OnApiModeClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -271,15 +287,11 @@ public partial class MainWindow : Window
         _useApi = true;
         _vm.Scenario = "Duel";
         _vm.Phase = "Setup";
-        _fighter1 = null;
-        _fighter2 = null;
-        _vm.Fighter1Name = "";
-        _vm.Fighter2Name = "";
+        HeroListBox.ItemsSource = null;
+        HeroListBox.ItemsSource = ToDisplayItems(_apiRoster);
+        ClearSelection();
         DuelButton.IsEnabled = false;
         ClashButton.IsEnabled = true;
-        SelectionHint.Text = "Select Fighter 1";
-        HeroListBox.ItemsSource = null;
-        HeroListBox.ItemsSource = _apiRoster;
     }
 
     private async void OnPartyVsPartyClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -298,15 +310,11 @@ public partial class MainWindow : Window
         _useApi = true;
         _vm.Scenario = "Party";
         _vm.Phase = "Setup";
-        _fighter1 = null;
-        _fighter2 = null;
-        _vm.Fighter1Name = "";
-        _vm.Fighter2Name = "";
+        HeroListBox.ItemsSource = null;
+        HeroListBox.ItemsSource = ToDisplayItems(_apiRoster);
+        ClearSelection();
         DuelButton.IsEnabled = true;
         ClashButton.IsEnabled = false;
-        SelectionHint.Text = "Clash mode — pick two fighters";
-        HeroListBox.ItemsSource = null;
-        HeroListBox.ItemsSource = _apiRoster;
     }
 
     // ── Character Creation Handlers ───────────────────────────
@@ -466,7 +474,9 @@ public partial class MainWindow : Window
         {
             _useApi = false;
             _vm.IsApiMode = false;
-            HeroListBox.ItemsSource = Roster.AllHeroes;
+            _vm.CanProceed = false;
+            HeroListBox.ItemsSource = ToDisplayItems(Roster.AllHeroes);
+            ClearSelection();
         }
     }
 
@@ -500,7 +510,8 @@ public partial class MainWindow : Window
                 Race = pm.Character.Race?.Name ?? "",
                 Hp = pm.Character.MaxHitPoints,
                 Mana = pm.Character.CurrentMana,
-                CurrentWeapon = pm.AttackSource?.Name ?? ""
+                CurrentWeapon = pm.AttackSource?.Name ?? "",
+                Portrait = PortraitResolver.GetPortrait(pm.Character.Name)
             });
         }
         foreach (var pm in party2.Members)
@@ -517,7 +528,8 @@ public partial class MainWindow : Window
                 Race = pm.Character.Race?.Name ?? "",
                 Hp = pm.Character.MaxHitPoints,
                 Mana = pm.Character.CurrentMana,
-                CurrentWeapon = pm.AttackSource?.Name ?? ""
+                CurrentWeapon = pm.AttackSource?.Name ?? "",
+                Portrait = PortraitResolver.GetPortrait(pm.Character.Name)
             });
         }
 
@@ -538,10 +550,10 @@ public partial class MainWindow : Window
         if (_useApi && _apiClient is not null)
         {
             result = await _apiClient.SimulateCombatAsync(
-                _fighter1!.Name,
-                new List<int> { _fighter1!.Id },
-                _fighter2!.Name,
-                new List<int> { _fighter2!.Id },
+                Fighter1!.Name,
+                new List<int> { Fighter1!.Id },
+                Fighter2!.Name,
+                new List<int> { Fighter2!.Id },
                 maxTicks: 500);
         }
         else
@@ -703,4 +715,7 @@ public partial class MainWindow : Window
         if (_presenter is not null)
             _presenter.PacingMultiplier = pacing;
     }
+
+    private static List<CharacterDisplayItem> ToDisplayItems(List<Character> characters) =>
+        characters.ConvertAll(c => new CharacterDisplayItem(c));
 }

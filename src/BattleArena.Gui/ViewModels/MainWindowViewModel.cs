@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using BattleArena.Presentation;
 
 namespace BattleArena.Gui.ViewModels;
@@ -344,29 +346,12 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     }
     public bool IsApiUnreachable => !IsApiReachable;
 
-    private string _fighter1Name = "";
-    public string Fighter1Name
+    private bool _canProceed;
+    public bool CanProceed
     {
-        get => _fighter1Name;
-        set
-        {
-            if (SetField(ref _fighter1Name, value))
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanStartCombat)));
-        }
+        get => _canProceed;
+        set => SetField(ref _canProceed, value);
     }
-
-    private string _fighter2Name = "";
-    public string Fighter2Name
-    {
-        get => _fighter2Name;
-        set
-        {
-            if (SetField(ref _fighter2Name, value))
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanStartCombat)));
-        }
-    }
-
-    public bool CanStartCombat => !string.IsNullOrEmpty(Fighter1Name) && !string.IsNullOrEmpty(Fighter2Name);
 
     public void UpdateFromState(CombatDisplayState state, int tick)
     {
@@ -423,6 +408,10 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
     public string Race { get; init; } = "";
     public string Sex { get; init; } = "";
     public int Level { get; init; }
+    public Bitmap? Portrait { get; init; }
+
+    public bool HasPortrait => Portrait is not null;
+    public bool PortraitIsNull => Portrait is null;
 
     public ObservableCollection<IBrush> TmPipes { get; }
 

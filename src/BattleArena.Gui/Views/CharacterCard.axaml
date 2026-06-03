@@ -15,19 +15,23 @@
 
         <!-- Top row: portrait + name / info -->
         <Grid ColumnDefinitions="82,*">
-          <!-- Portrait placeholder (72×96, 3:4 ratio) -->
+          <!-- Portrait (72×96, 3:4 ratio) -->
           <Border Grid.Column="0" Width="72" Height="96"
                   BorderBrush="{Binding BorderColor}" BorderThickness="1"
-                  CornerRadius="4" Background="#111" Margin="0,0,10,0">
+                  CornerRadius="4" Background="#111" Margin="0,0,10,0"
+                  ClipToBounds="True">
             <Grid>
-              <Border Background="#16162a" CornerRadius="3" />
+              <!-- Fallback: initial letter when no portrait -->
+              <Border Background="#16162a" CornerRadius="3"
+                      IsVisible="{Binding PortraitIsNull}" />
               <TextBlock Text="{Binding PortraitInitial}"
                          HorizontalAlignment="Center" VerticalAlignment="Center"
                          Foreground="{Binding NameColor}" FontSize="32" FontWeight="Bold"
-                         Opacity="0.6" />
-              <TextBlock Text="PORTRAIT" Foreground="#2a2a4a" FontSize="7" FontWeight="Bold"
-                         HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,5"
-                         LetterSpacing="1" />
+                         Opacity="0.6"
+                         IsVisible="{Binding PortraitIsNull}" />
+              <!-- Actual portrait -->
+              <Image Source="{Binding Portrait}" Stretch="UniformToFill"
+                     IsVisible="{Binding HasPortrait}" />
             </Grid>
           </Border>
 
