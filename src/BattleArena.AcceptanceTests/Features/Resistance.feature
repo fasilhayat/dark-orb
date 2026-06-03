@@ -72,3 +72,18 @@ Feature: Resistance System — Effect Infliction
         Given a target with 95 magic resistance
         When a magical effect with 100% application chance is applied 200 times
         Then at least 1 application should have landed
+
+    @resistance
+    # Subrace feats also contribute to computed resistance (e.g. Swamp Kobold Poison 25).
+    Scenario: Subrace feat resistance adds to computed total
+        Given a character with no resistance sources
+        And the character belongs to a subrace granting 25 poison resistance
+        Then the character's computed poison resistance should be 25
+
+    @resistance
+    # Race and subrace resistances of different types are independent.
+    Scenario: Subrace resistance stacks with race resistance for different types
+        Given a character with a racial feat granting 25 magic resistance
+        And the character belongs to a subrace granting 15 fire resistance
+        Then the character's computed magic resistance should be 25
+        And the character's computed fire resistance should be 15

@@ -72,5 +72,6 @@ app.MapCharacterEndpoints();
 app.MapEquipmentEndpoints();
 app.MapAccessoriesEndpoints();
 app.MapNpcEndpoints();
+app.MapLoreEndpoints();
 
 app.Run();

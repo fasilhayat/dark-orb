@@ -32,6 +32,11 @@ public static class AddServices
         services.AddScoped<IWeaponRepository, WeaponRepository>();
         services.AddScoped<IArmorRepository, ArmorRepository>();
         services.AddScoped<IRaceRepository, RaceRepository>();
+        services.AddScoped<IClassRepository, ClassRepository>();
+        services.AddScoped<IDeityRepository, DeityRepository>();
+        services.AddScoped<IPetRepository, PetRepository>();
+        services.AddScoped<ISpellRepository, SpellRepository>();
+        services.AddScoped<IBestiaryRepository, BestiaryRepository>();
         services.AddScoped<IRingRepository, RingRepository>();
         services.AddScoped<IAmuletRepository, AmuletRepository>();
         services.AddScoped<IGirdleRepository, GirdleRepository>();

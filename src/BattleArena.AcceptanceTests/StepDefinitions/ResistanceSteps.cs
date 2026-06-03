@@ -56,6 +56,24 @@ public class ResistanceSteps
         };
     }
 
+    [Given(@"the character belongs to a subrace granting (\d+) poison resistance")]
+    public void GivenTheCharacterBelongsToASubraceGrantingPoisonResistance(int value)
+    {
+        _character.Subrace = new Subrace
+        {
+            Feats = [new Feat { Resistances = [new ResistanceBonus(ResistanceType.Poison, value)] }]
+        };
+    }
+
+    [Given(@"the character belongs to a subrace granting (\d+) fire resistance")]
+    public void GivenTheCharacterBelongsToASubraceGrantingFireResistance(int value)
+    {
+        _character.Subrace = new Subrace
+        {
+            Feats = [new Feat { Resistances = [new ResistanceBonus(ResistanceType.Fire, value)] }]
+        };
+    }
+
     [Given(@"a character wearing armor with (\d+) fire resistance")]
     public void GivenACharacterWearingArmorWithFireResistance(int value)
     {
@@ -175,6 +193,12 @@ public class ResistanceSteps
     public void ThenComputedColdResistanceShouldBe(int expected)
     {
         Assert.Equal(expected, _character.ComputeResistance(ResistanceType.Cold));
+    }
+
+    [Then(@"the character's computed poison resistance should be (\d+)")]
+    public void ThenComputedPoisonResistanceShouldBe(int expected)
+    {
+        Assert.Equal(expected, _character.ComputeResistance(ResistanceType.Poison));
     }
 
     [Then(@"all (\d+) applications should have landed")]

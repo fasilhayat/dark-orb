@@ -85,6 +85,54 @@ public class ResistanceSystemTests
     }
 
     [Fact]
+    public void ComputeResistance_WithSubraceFeat_ReturnsCorrectValue()
+    {
+        var character = new Character
+        {
+            Subrace = new Subrace
+            {
+                Feats = [new Feat { Resistances = [new ResistanceBonus(ResistanceType.Poison, 25)] }]
+            }
+        };
+        Assert.Equal(25, character.ComputeResistance(ResistanceType.Poison));
+    }
+
+    [Fact]
+    public void ComputeResistance_SubraceAndRaceBoth_SumsCorrectly()
+    {
+        var character = new Character
+        {
+            Race = new Race
+            {
+                Feats = [new Feat { Resistances = [new ResistanceBonus(ResistanceType.Magic, 25)] }]
+            },
+            Subrace = new Subrace
+            {
+                Feats = [new Feat { Resistances = [new ResistanceBonus(ResistanceType.Magic, 10)] }]
+            }
+        };
+        Assert.Equal(35, character.ComputeResistance(ResistanceType.Magic));
+    }
+
+    [Fact]
+    public void ComputeResistance_SubraceFeatWrongType_ReturnsRaceOnly()
+    {
+        var character = new Character
+        {
+            Race = new Race
+            {
+                Feats = [new Feat { Resistances = [new ResistanceBonus(ResistanceType.Fire, 15)] }]
+            },
+            Subrace = new Subrace
+            {
+                Feats = [new Feat { Resistances = [new ResistanceBonus(ResistanceType.Poison, 25)] }]
+            }
+        };
+        Assert.Equal(15, character.ComputeResistance(ResistanceType.Fire));
+        Assert.Equal(25, character.ComputeResistance(ResistanceType.Poison));
+    }
+
+    [Fact]
     public void ComputeResistance_SumsAllSources_AndCapsAt95()
     {
         var character = new Character

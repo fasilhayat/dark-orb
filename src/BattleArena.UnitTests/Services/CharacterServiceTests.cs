@@ -19,6 +19,7 @@ public class CharacterServiceTests
         _characterRepo.GetCharacterWeaponsAsync(Arg.Any<int>()).Returns([]);
         _characterRepo.GetCharacterSpellsAsync(Arg.Any<int>()).Returns([]);
         _raceRepo.GetByIdAsync(Arg.Any<int>()).Returns((Race?)null);
+        _raceRepo.GetSubracesByRaceIdAsync(Arg.Any<int>()).Returns([]);
 
         _sut = new CharacterService(_characterRepo, _raceRepo);
     }
@@ -81,6 +82,32 @@ public class CharacterServiceTests
 
         Assert.Equal(42, result);
         await _characterRepo.Received(1).CreateAsync(character);
+    }
+
+    [Fact]
+    public async Task GetCharacterAsync_WhenHasSubrace_EnrichesSubraceWithFeats()
+    {
+        var subraces = new List<Subrace>
+        {
+            new()
+            {
+                Id = 10, RaceId = 1, Name = "Cave Kobold",
+                Feats = [new Feat { Name = "Dark-Dweller", AttackBonus = 2 }]
+            }
+        };
+        _raceRepo.GetSubracesByRaceIdAsync(1).Returns(subraces);
+
+        var character = new Character { Id = 1, Name = "Kriin", RaceId = 1, SubraceId = 10 };
+        _characterRepo.GetByIdAsync(1).Returns(character);
+
+        var result = await _sut.GetCharacterAsync(1);
+
+        Assert.NotNull(result);
+        Assert.NotNull(result.Subrace);
+        Assert.Equal("Cave Kobold", result.Subrace.Name);
+        Assert.Single(result.Subrace.Feats);
+        Assert.Equal("Dark-Dweller", result.Subrace.Feats[0].Name);
+        Assert.Equal(2, result.Subrace.Feats[0].AttackBonus);
     }
 
     [Fact]

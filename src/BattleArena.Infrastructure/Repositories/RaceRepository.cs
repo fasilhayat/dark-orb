@@ -70,6 +70,25 @@ public class RaceRepository : IRaceRepository
         return subraces;
     }
 
+    public async Task<List<Subrace>> GetAllSubracesAsync()
+    {
+        var subraces = await _context.ExecuteQueryAsync("fn_get_subraces", MapSubrace);
+
+        foreach (var subrace in subraces)
+            subrace.Feats = await GetSubraceAbilitiesAsync(subrace.Id);
+
+        return subraces;
+    }
+
+    public async Task<Subrace?> GetSubraceByIdAsync(int subraceId)
+    {
+        var subraces = await _context.ExecuteQueryAsync("fn_get_subraces", MapSubrace);
+        var subrace = subraces.FirstOrDefault(s => s.Id == subraceId);
+        if (subrace is not null)
+            subrace.Feats = await GetSubraceAbilitiesAsync(subrace.Id);
+        return subrace;
+    }
+
     public async Task<List<Feat>> GetSubraceAbilitiesAsync(int subraceId)
     {
         var feats = await _context.ExecuteQueryAsync(
