@@ -241,7 +241,7 @@ public partial class MainWindow : Window
         _vm.Phase = "ApiMenu";
     }
 
-    private void OnCreateCharClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private async void OnCreateCharClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         _vm.Phase = "CharCreation";
         _vm.CharName = "";
@@ -258,6 +258,20 @@ public partial class MainWindow : Window
         ExcStrLabel2.Text = "";
         _vm.CreationStep = 0;
         UpdateCreateButton();
+
+        if (_apiClient is not null)
+        {
+            try
+            {
+                _vm.LoadedRaces = await _apiClient.GetRacesAsync();
+                _vm.LoadedSubraces = await _apiClient.GetSubracesAsync();
+            }
+            catch
+            {
+                _vm.LoadedRaces = [];
+                _vm.LoadedSubraces = [];
+            }
+        }
     }
 
 
@@ -335,27 +349,44 @@ public partial class MainWindow : Window
 
     private void OnRollStatsClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        var race = _vm.SelectedRace;
-        var raceBonuses = MainWindowViewModel.RaceStatBonuses.GetValueOrDefault(race, [0, 0, 0, 0, 0, 0]);
-        var raceMin = MainWindowViewModel.RaceMinStats.GetValueOrDefault(race, [3, 3, 3, 3, 3, 3]);
-        var raceMax = MainWindowViewModel.RaceMaxStats.GetValueOrDefault(race, [18, 18, 18, 18, 18, 18]);
+        var raceName = _vm.SelectedRace;
+
+        var apiRace = _vm.LoadedRaces.FirstOrDefault(r =>
+            r.Name.Equals(raceName, StringComparison.OrdinalIgnoreCase));
+        if (apiRace is null) return;
+
+        int[] raceBonuses = [apiRace.AbilityBonuses.GetValueOrDefault("Strength", 0),
+                             apiRace.AbilityBonuses.GetValueOrDefault("Dexterity", 0),
+                             apiRace.AbilityBonuses.GetValueOrDefault("Stamina", 0),
+                             apiRace.AbilityBonuses.GetValueOrDefault("Intelligence", 0),
+                             apiRace.AbilityBonuses.GetValueOrDefault("Wisdom", 0),
+                             apiRace.AbilityBonuses.GetValueOrDefault("Charisma", 0)];
+        int[] raceMin = [apiRace.StrengthMin, apiRace.DexterityMin, apiRace.StaminaMin,
+                         apiRace.IntelligenceMin, apiRace.WisdomMin, apiRace.CharismaMin];
+        int[] raceMax = [apiRace.StrengthMax, apiRace.DexterityMax, apiRace.StaminaMax,
+                         apiRace.IntelligenceMax, apiRace.WisdomMax, apiRace.CharismaMax];
 
         var subrace = _vm.SelectedSubrace;
-        var subBonuses = subrace is not null && MainWindowViewModel.SubraceStatBonuses.TryGetValue(subrace, out var sb)
-            ? sb : [0, 0, 0, 0, 0, 0];
+        var apiSubrace = subrace is not null
+            ? _vm.LoadedSubraces.FirstOrDefault(s =>
+                s.Name.Equals(subrace, StringComparison.OrdinalIgnoreCase))
+            : null;
+        int[] subBonuses = apiSubrace is not null
+            ? [apiSubrace.StrengthBonus, apiSubrace.DexterityBonus, apiSubrace.StaminaBonus,
+               apiSubrace.IntelligenceBonus, apiSubrace.WisdomBonus, apiSubrace.CharismaBonus]
+            : [0, 0, 0, 0, 0, 0];
 
         var rolls = new[] { Roll4d6DropLowest(), Roll4d6DropLowest(), Roll4d6DropLowest(),
                             Roll4d6DropLowest(), Roll4d6DropLowest(), Roll4d6DropLowest() };
 
-        var strVal = rolls[0] + raceBonuses[0] + subBonuses[0];
-        _vm.CharStr = Clamp(strVal, raceMin[0], raceMax[0]);
+        _vm.CharStr = Clamp(rolls[0] + raceBonuses[0] + subBonuses[0], raceMin[0], raceMax[0]);
         _vm.CharDex = Clamp(rolls[1] + raceBonuses[1] + subBonuses[1], raceMin[1], raceMax[1]);
         _vm.CharSta = Clamp(rolls[2] + raceBonuses[2] + subBonuses[2], raceMin[2], raceMax[2]);
         _vm.CharInt = Clamp(rolls[3] + raceBonuses[3] + subBonuses[3], raceMin[3], raceMax[3]);
         _vm.CharWis = Clamp(rolls[4] + raceBonuses[4] + subBonuses[4], raceMin[4], raceMax[4]);
         _vm.CharCha = Clamp(rolls[5] + raceBonuses[5] + subBonuses[5], raceMin[5], raceMax[5]);
 
-        RollExceptionalStrength(_vm.CharStr, race, subrace);
+        RollExceptionalStrength(_vm.CharStr, raceName, subrace);
         UpdateCreateButton();
     }
 

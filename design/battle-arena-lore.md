@@ -187,8 +187,9 @@ Subraces: Half-High-Elf, Half-Wood-Elf
 | **Druid** | Caster (derived) | D10 | 18 | Guardians of nature who command the elements and beasts. |
 | **Rogue** | Hybrid (base) | D8 | 19 | Cunning infiltrators who strike from the shadows. |
 | **Bard** | Hybrid (derived) | D8 | 19 | Musicians and storytellers who weave magic through performance. |
+| **Ranger** | Martial (derived) | D10 | 20 | Skilled trackers and woodsmen who tame the wilds. |
 
-A higher **StrikeRating** is better. Fighters, Knights, and Paladins are the most accurate (21). Mages are the least accurate (17).
+A higher **StrikeRating** is better. Fighters, Knights, and Paladins are the most accurate (21). Rangers are close behind (20). Mages are the least accurate (17).
 
 ### Class Archetypes
 
@@ -196,7 +197,7 @@ Classes are grouped into three archetypes that determine their progression:
 
 | Archetype | Classes | Description |
 |:---------:|---------|-------------|
-| **Martial** | Barbarian, Fighter, Knight, Paladin | Dedicated combatants; strike rating improves fastest (every 2 levels). Fewer accessory slots — they rely on their weapons and armor. Higher turnmeter level bonus (+Level/3). |
+| **Martial** | Barbarian, Fighter, Knight, Paladin, Ranger | Dedicated combatants; strike rating improves fastest (every 2 levels). Fewer accessory slots — they rely on their weapons and armor. Higher turnmeter level bonus (+Level/3). |
 | **Caster** | Mage, Priest, Druid | Magic-wielders; strike rating improves slowly (every 4 levels). They attune to magical accessories faster and unlock more slots. Lower turnmeter level bonus (+Level/5). |
 | **Hybrid** | Rogue, Bard | Mixed combatants; strike rating improves moderately (every 3 levels). Moderate accessory slot progression. Moderate turnmeter level bonus (+Level/4). |
 

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using BattleArena.Core.Entities;
 using BattleArena.Presentation;
 
 namespace BattleArena.Gui.ViewModels;
@@ -136,7 +137,7 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
 
     public ObservableCollection<string> AvailableClasses { get; } =
     [
-        "Barbarian", "Knight", "Paladin", "Priest", "Mage", "Bard", "Druid", "Fighter", "Rogue"
+        "Barbarian", "Knight", "Paladin", "Priest", "Mage", "Bard", "Druid", "Fighter", "Rogue", "Ranger"
     ];
 
     public ObservableCollection<string> AvailableRaces { get; } = [];
@@ -152,7 +153,8 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         ["Bard"]      = ["Human", "Elf", "Gladefolk"],
         ["Druid"]     = ["Human", "Elf", "Gladefolk", "Lizard"],
         ["Fighter"]   = ["Human", "Elf", "Dwarf", "Lizard", "Kobold", "Orc", "Ogre", "Gladefolk"],
-        ["Rogue"]     = ["Human", "Elf", "Dwarf", "Gladefolk", "Kobold"]
+        ["Rogue"]     = ["Human", "Elf", "Dwarf", "Gladefolk", "Kobold"],
+        ["Ranger"]    = ["Human", "Elf", "Dwarf", "Gladefolk", "Half-Elf"]
     };
 
     private static readonly Dictionary<string, string[]> RaceSubraceLookup = new()
@@ -366,70 +368,6 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     public string CharWisMod => $"({(CharWis - 10) / 2:+#;-#;0})";
     public string CharChaMod => $"({(CharCha - 10) / 2:+#;-#;0})";
 
-    // ── Race stat data (Str, Dex, Sta, Int, Wis, Cha) ──────────
-
-    internal static readonly Dictionary<string, int[]> RaceStatBonuses = new(StringComparer.OrdinalIgnoreCase)
-    {
-        ["Human"]     = [1, 1, 1, 1, 1, 1],
-        ["Elf"]       = [0, 2, 0, 2, 0, 1],
-        ["Dwarf"]     = [2, 0, 2, 0, 1, 0],
-        ["Lizard"]    = [2, 0, 1, 0, 0, 0],
-        ["Kobold"]    = [0, 2, 0, 1, 0, 0],
-        ["Orc"]       = [3, 0, 1, 0, 0, 0],
-        ["Ogre"]      = [3, 0, 2, 0, 0, 0],
-        ["Gladefolk"] = [0, 2, 1, 0, 1, 1],
-        ["Half-Elf"]  = [0, 1, 0, 1, 0, 2],
-    };
-
-    internal static readonly Dictionary<string, int[]> RaceMinStats = new(StringComparer.OrdinalIgnoreCase)
-    {
-        ["Human"]     = [3, 3, 3, 3, 3, 3],
-        ["Elf"]       = [3, 6, 3, 8, 3, 3],
-        ["Dwarf"]     = [6, 3, 8, 3, 3, 3],
-        ["Lizard"]    = [6, 3, 6, 3, 3, 3],
-        ["Kobold"]    = [3, 6, 3, 6, 3, 3],
-        ["Orc"]       = [8, 3, 3, 3, 3, 3],
-        ["Ogre"]      = [10, 3, 3, 3, 3, 3],
-        ["Gladefolk"] = [3, 6, 3, 3, 3, 3],
-        ["Half-Elf"]  = [3, 3, 3, 3, 3, 3],
-    };
-
-    internal static readonly Dictionary<string, int[]> RaceMaxStats = new(StringComparer.OrdinalIgnoreCase)
-    {
-        ["Human"]     = [18, 18, 18, 18, 18, 18],
-        ["Elf"]       = [18, 19, 18, 19, 18, 18],
-        ["Dwarf"]     = [19, 18, 19, 18, 18, 17],
-        ["Lizard"]    = [19, 18, 18, 18, 18, 18],
-        ["Kobold"]    = [17, 19, 18, 18, 18, 18],
-        ["Orc"]       = [20, 18, 19, 17, 17, 17],
-        ["Ogre"]      = [20, 17, 20, 15, 16, 15],
-        ["Gladefolk"] = [17, 19, 18, 18, 18, 18],
-        ["Half-Elf"]  = [18, 18, 18, 18, 18, 18],
-    };
-
-    internal static readonly Dictionary<string, int[]> SubraceStatBonuses = new(StringComparer.OrdinalIgnoreCase)
-    {
-        ["High Elf"]          = [0, 1, 0, 1, 0, 0],
-        ["Dark Elf"]          = [0, 0, 0, 0, 0, 1],
-        ["Forest Elf"]        = [0, 1, 0, 0, 0, 0],
-        ["Mountain Dwarf"]    = [1, 0, 0, 0, 0, 0],
-        ["Hill Dwarf"]        = [0, 0, 1, 0, 1, 0],
-        ["Swamp Lizard"]      = [0, 0, 1, 0, 0, 0],
-        ["Desert Lizard"]     = [1, 0, 0, 0, 0, 0],
-        ["Forest Lizard"]     = [0, 1, 0, 0, 0, 0],
-        ["Green Orc"]         = [0, 1, 0, 0, 0, 0],
-        ["Blue Orc"]          = [1, 0, 0, 0, 0, 0],
-        ["Red Orc"]           = [0, 0, 1, 0, 0, 0],
-        ["Mountain Ogre"]     = [0, 0, 1, 0, 0, 0],
-        ["Hill Ogre"]         = [1, 0, 0, 0, 0, 0],
-        ["Desert Ogre"]       = [0, 0, 1, 0, 0, 0],
-        ["Forest Ogre"]       = [0, 0, 1, 0, 0, 0],
-        ["Forest Gladefolk"]  = [0, 1, 0, 0, 0, 0],
-        ["Hill Gladefolk"]    = [0, 0, 0, 0, 0, 1],
-        ["Half-High-Elf"]     = [0, 0, 0, 1, 0, 0],
-        ["Half-Wood-Elf"]     = [0, 1, 0, 0, 0, 0],
-    };
-
     // ── Character Creation Step Wizard ─────────────────────────
 
     private int _creationStep;
@@ -465,6 +403,9 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         4 => false,
         _ => false,
     };
+
+    public List<Race> LoadedRaces { get; set; } = [];
+    public List<Subrace> LoadedSubraces { get; set; } = [];
 
     private bool _isApiMode;
     public bool IsApiMode

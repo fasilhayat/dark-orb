@@ -34,6 +34,18 @@ internal sealed class BattleArenaApiClient
         return result ?? [];
     }
 
+    public async Task<List<Race>> GetRacesAsync()
+    {
+        var result = await _http.GetFromJsonAsync<List<Race>>("/v1/races", JsonOptions);
+        return result ?? [];
+    }
+
+    public async Task<List<Subrace>> GetSubracesAsync()
+    {
+        var result = await _http.GetFromJsonAsync<List<Subrace>>("/v1/subraces", JsonOptions);
+        return result ?? [];
+    }
+
     public async Task<int> RollDieAsync(DieType dieType)
     {
         var dto = await _http.GetFromJsonAsync<DieRollResponse>($"/v1/roll/{dieType}", JsonOptions);

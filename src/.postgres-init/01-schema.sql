@@ -96,6 +96,18 @@ CREATE TABLE IF NOT EXISTS arena_data.race (
     description TEXT DEFAULT '',
     hit_point_bonus INTEGER NOT NULL DEFAULT 0,
     is_playable BOOLEAN NOT NULL DEFAULT TRUE,
+    strength_min INTEGER NOT NULL DEFAULT 3,
+    dexterity_min INTEGER NOT NULL DEFAULT 3,
+    stamina_min INTEGER NOT NULL DEFAULT 3,
+    intelligence_min INTEGER NOT NULL DEFAULT 3,
+    wisdom_min INTEGER NOT NULL DEFAULT 3,
+    charisma_min INTEGER NOT NULL DEFAULT 3,
+    strength_max INTEGER NOT NULL DEFAULT 18,
+    dexterity_max INTEGER NOT NULL DEFAULT 18,
+    stamina_max INTEGER NOT NULL DEFAULT 18,
+    intelligence_max INTEGER NOT NULL DEFAULT 18,
+    wisdom_max INTEGER NOT NULL DEFAULT 18,
+    charisma_max INTEGER NOT NULL DEFAULT 18,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
@@ -507,7 +519,13 @@ RETURNS TABLE(
     strength_bonus INTEGER, dexterity_bonus INTEGER,
     stamina_bonus INTEGER, intelligence_bonus INTEGER,
     wisdom_bonus INTEGER, charisma_bonus INTEGER,
-    is_playable BOOLEAN
+    is_playable BOOLEAN,
+    strength_min INTEGER, dexterity_min INTEGER,
+    stamina_min INTEGER, intelligence_min INTEGER,
+    wisdom_min INTEGER, charisma_min INTEGER,
+    strength_max INTEGER, dexterity_max INTEGER,
+    stamina_max INTEGER, intelligence_max INTEGER,
+    wisdom_max INTEGER, charisma_max INTEGER
 ) AS $$
 BEGIN
     RETURN QUERY
@@ -515,7 +533,11 @@ BEGIN
            r.base_movement_speed,
            r.strength_bonus, r.dexterity_bonus, r.stamina_bonus,
            r.intelligence_bonus, r.wisdom_bonus, r.charisma_bonus,
-           r.is_playable
+           r.is_playable,
+           r.strength_min, r.dexterity_min, r.stamina_min,
+           r.intelligence_min, r.wisdom_min, r.charisma_min,
+           r.strength_max, r.dexterity_max, r.stamina_max,
+           r.intelligence_max, r.wisdom_max, r.charisma_max
     FROM arena_data.race r
     WHERE (p_id IS NULL OR r.id = p_id)
     ORDER BY r.name;

@@ -84,6 +84,63 @@ INSERT INTO arena_data.race (name, description, base_movement_speed, strength_bo
 UPDATE arena_data.race SET is_playable = FALSE WHERE name IN ('Undead', 'Demon');
 
 
+-- Racial stat minimums and maximums
+UPDATE arena_data.race SET
+    strength_min = 3,  dexterity_min = 3,  stamina_min = 3,  intelligence_min = 3,  wisdom_min = 3,  charisma_min = 3,
+    strength_max = 18, dexterity_max = 18, stamina_max = 18, intelligence_max = 18, wisdom_max = 18, charisma_max = 18
+WHERE name = 'Human';
+
+UPDATE arena_data.race SET
+    strength_min = 3,  dexterity_min = 6,  stamina_min = 3,  intelligence_min = 8,  wisdom_min = 3,  charisma_min = 3,
+    strength_max = 18, dexterity_max = 19, stamina_max = 18, intelligence_max = 19, wisdom_max = 18, charisma_max = 18
+WHERE name = 'Elf';
+
+UPDATE arena_data.race SET
+    strength_min = 6,  dexterity_min = 3,  stamina_min = 8,  intelligence_min = 3,  wisdom_min = 3,  charisma_min = 3,
+    strength_max = 19, dexterity_max = 18, stamina_max = 19, intelligence_max = 18, wisdom_max = 18, charisma_max = 17
+WHERE name = 'Dwarf';
+
+UPDATE arena_data.race SET
+    strength_min = 6,  dexterity_min = 3,  stamina_min = 6,  intelligence_min = 3,  wisdom_min = 3,  charisma_min = 3,
+    strength_max = 19, dexterity_max = 18, stamina_max = 18, intelligence_max = 18, wisdom_max = 18, charisma_max = 18
+WHERE name = 'Lizard';
+
+UPDATE arena_data.race SET
+    strength_min = 3,  dexterity_min = 6,  stamina_min = 3,  intelligence_min = 6,  wisdom_min = 3,  charisma_min = 3,
+    strength_max = 17, dexterity_max = 19, stamina_max = 18, intelligence_max = 18, wisdom_max = 18, charisma_max = 18
+WHERE name = 'Kobold';
+
+UPDATE arena_data.race SET
+    strength_min = 8,  dexterity_min = 3,  stamina_min = 3,  intelligence_min = 3,  wisdom_min = 3,  charisma_min = 3,
+    strength_max = 20, dexterity_max = 18, stamina_max = 19, intelligence_max = 17, wisdom_max = 17, charisma_max = 17
+WHERE name = 'Orc';
+
+UPDATE arena_data.race SET
+    strength_min = 10, dexterity_min = 3,  stamina_min = 3,  intelligence_min = 3,  wisdom_min = 3,  charisma_min = 3,
+    strength_max = 20, dexterity_max = 17, stamina_max = 20, intelligence_max = 15, wisdom_max = 16, charisma_max = 15
+WHERE name = 'Ogre';
+
+UPDATE arena_data.race SET
+    strength_min = 3,  dexterity_min = 6,  stamina_min = 3,  intelligence_min = 3,  wisdom_min = 3,  charisma_min = 3,
+    strength_max = 17, dexterity_max = 19, stamina_max = 18, intelligence_max = 18, wisdom_max = 18, charisma_max = 18
+WHERE name = 'Gladefolk';
+
+UPDATE arena_data.race SET
+    strength_min = 3,  dexterity_min = 3,  stamina_min = 3,  intelligence_min = 3,  wisdom_min = 3,  charisma_min = 3,
+    strength_max = 18, dexterity_max = 18, stamina_max = 18, intelligence_max = 18, wisdom_max = 18, charisma_max = 18
+WHERE name = 'Half-Elf';
+
+UPDATE arena_data.race SET
+    strength_min = 3,  dexterity_min = 3,  stamina_min = 3,  intelligence_min = 3,  wisdom_min = 3,  charisma_min = 3,
+    strength_max = 18, dexterity_max = 18, stamina_max = 18, intelligence_max = 18, wisdom_max = 18, charisma_max = 18
+WHERE name = 'Undead';
+
+UPDATE arena_data.race SET
+    strength_min = 3,  dexterity_min = 3,  stamina_min = 3,  intelligence_min = 3,  wisdom_min = 3,  charisma_min = 3,
+    strength_max = 18, dexterity_max = 18, stamina_max = 18, intelligence_max = 18, wisdom_max = 18, charisma_max = 18
+WHERE name = 'Demon';
+
+
 -- Subraces
 INSERT INTO arena_data.subrace (race_id, name, description)
 SELECT r.id, s.name, s.descr
@@ -264,7 +321,8 @@ INSERT INTO arena_data.class (name, description, movement_bonus, hit_die_id, bas
     ('Bard',      'Musicians and storytellers who weave magic through performance.',   5, 'D6',   6),
     ('Druid',     'Guardians of nature who command the elements and beasts.',         5, 'D8',   7),
     ('Fighter',   'Weapons masters trained in all forms of combat.',                   0, 'D10', 12),
-    ('Rogue',     'Cunning infiltrators who strike from the shadows.',               10, 'D6',   8)
+    ('Rogue',     'Cunning infiltrators who strike from the shadows.',               10, 'D6',   8),
+    ('Ranger',    'Skilled trackers and woodsmen who tame the wilds.',                5, 'D10', 10)
 ) AS src(name, description, movement, die_name, strike_rating)
 JOIN arena_data.die_type d ON d.name = src.die_name;
 
@@ -284,10 +342,11 @@ FROM (VALUES
     ('Fighter',   'Human'), ('Fighter',   'Elf'), ('Fighter',   'Dwarf'), ('Fighter',   'Lizard'),
     ('Fighter',   'Kobold'), ('Fighter',  'Orc'), ('Fighter',   'Ogre'), ('Fighter',   'Gladefolk'),
     ('Rogue',     'Human'), ('Rogue',     'Elf'), ('Rogue',     'Dwarf'), ('Rogue',     'Gladefolk'), ('Rogue', 'Kobold'),
+    ('Ranger',    'Human'), ('Ranger',    'Elf'), ('Ranger',    'Dwarf'), ('Ranger',    'Gladefolk'),
     -- Half-Elf gets all classes (versatile like Humans)
     ('Barbarian', 'Half-Elf'), ('Knight',  'Half-Elf'), ('Paladin',  'Half-Elf'), ('Priest',   'Half-Elf'),
     ('Mage',      'Half-Elf'), ('Bard',    'Half-Elf'), ('Druid',    'Half-Elf'), ('Fighter',  'Half-Elf'),
-    ('Rogue',     'Half-Elf')
+    ('Rogue',     'Half-Elf'), ('Ranger',  'Half-Elf')
 ) AS src(class_name, race_name)
 JOIN arena_data.class c ON c.name = src.class_name
 JOIN arena_data.race r ON r.name = src.race_name;

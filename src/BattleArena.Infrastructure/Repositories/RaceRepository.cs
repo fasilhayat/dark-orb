@@ -132,6 +132,19 @@ public class RaceRepository : IRaceRepository
         if (reader["charisma_bonus"] != DBNull.Value)
             race.AbilityBonuses["Charisma"] = (int)reader["charisma_bonus"];
 
+        if (reader["strength_min"] != DBNull.Value) race.StrengthMin = (int)reader["strength_min"];
+        if (reader["dexterity_min"] != DBNull.Value) race.DexterityMin = (int)reader["dexterity_min"];
+        if (reader["stamina_min"] != DBNull.Value) race.StaminaMin = (int)reader["stamina_min"];
+        if (reader["intelligence_min"] != DBNull.Value) race.IntelligenceMin = (int)reader["intelligence_min"];
+        if (reader["wisdom_min"] != DBNull.Value) race.WisdomMin = (int)reader["wisdom_min"];
+        if (reader["charisma_min"] != DBNull.Value) race.CharismaMin = (int)reader["charisma_min"];
+        if (reader["strength_max"] != DBNull.Value) race.StrengthMax = (int)reader["strength_max"];
+        if (reader["dexterity_max"] != DBNull.Value) race.DexterityMax = (int)reader["dexterity_max"];
+        if (reader["stamina_max"] != DBNull.Value) race.StaminaMax = (int)reader["stamina_max"];
+        if (reader["intelligence_max"] != DBNull.Value) race.IntelligenceMax = (int)reader["intelligence_max"];
+        if (reader["wisdom_max"] != DBNull.Value) race.WisdomMax = (int)reader["wisdom_max"];
+        if (reader["charisma_max"] != DBNull.Value) race.CharismaMax = (int)reader["charisma_max"];
+
         return race;
     }
 
