@@ -255,10 +255,8 @@ public partial class MainWindow : Window
         _vm.CharInt = 0;
         _vm.CharWis = 0;
         _vm.CharCha = 0;
-        ExcStrLabel.Text = "";
-        ClassListBox.SelectedItem = null;
-        RaceListBox.SelectedItem = null;
-        SubraceListBox.SelectedItem = null;
+        ExcStrLabel2.Text = "";
+        _vm.CreationStep = 0;
         UpdateCreateButton();
     }
 
@@ -323,51 +321,7 @@ public partial class MainWindow : Window
     private static readonly Random _charRng = new();
     private static readonly string[] _warriorClasses = ["Barbarian", "Fighter", "Paladin", "Knight", "Ranger"];
 
-    // Race: (strength bonus, max strength after bonus, can have exceptional 18/xx)
-    private static readonly Dictionary<string, (int Bonus, int Max, bool Exceptional)> RaceStrData = new(StringComparer.OrdinalIgnoreCase)
-    {
-        ["Human"]    = ( 1, 18, true),
-        ["Half-Elf"] = ( 0, 18, true),
-        ["Elf"]      = ( 0, 18, false),
-        ["Dwarf"]    = ( 2, 19, false),
-        ["Lizard"]   = ( 2, 19, false),
-        ["Kobold"]   = ( 0, 18, false),
-        ["Orc"]      = ( 3, 20, false),
-        ["Ogre"]     = ( 3, 20, false),
-        ["Gladefolk"]= ( 0, 18, false),
-    };
-
-    private void OnRollStatsClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        var rd = RaceStrData.GetValueOrDefault(_vm.SelectedRace, (0, 18, false));
-        var (strBonus, strMax, canExceptional) = rd;
-
-        var baseStr = Roll4d6DropLowest();
-        _vm.CharStr = Math.Min(baseStr + strBonus, strMax);
-        _vm.CharDex = Roll4d6DropLowest();
-        _vm.CharSta = Roll4d6DropLowest();
-        _vm.CharInt = Roll4d6DropLowest();
-        _vm.CharWis = Roll4d6DropLowest();
-        _vm.CharCha = Roll4d6DropLowest();
-        RollExceptionalStrength(_vm.CharStr, canExceptional);
-        UpdateCreateButton();
-    }
-
-    private void RollExceptionalStrength(int finalStr, bool raceCanExceptional)
-    {
-        var cls = _vm.SelectedClass;
-        if (finalStr == 18 && raceCanExceptional && _warriorClasses.Contains(cls))
-        {
-            _vm.CharStrExceptional = _charRng.Next(1, 101);
-            ExcStrLabel.Text = $"Exceptional strength: 18/{FormatExceptional(_vm.CharStrExceptional)}";
-        }
-        else
-        {
-            _vm.CharStrExceptional = 0;
-            ExcStrLabel.Text = "";
-        }
-    }
-
+    private static int Clamp(int val, int min, int max) => Math.Max(min, Math.Min(max, val));
     private static string FormatExceptional(int pct) => pct == 100 ? "00" : pct.ToString("00");
 
     private static int Roll4d6DropLowest()
@@ -379,39 +333,81 @@ public partial class MainWindow : Window
         return rolls[1] + rolls[2] + rolls[3];
     }
 
-    private void OnCharClassSelected(object? sender, Avalonia.Controls.SelectionChangedEventArgs e)
+    private void OnRollStatsClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        if (ClassListBox.SelectedItem is string cls && _vm.SelectedClassName != cls)
+        var race = _vm.SelectedRace;
+        var raceBonuses = MainWindowViewModel.RaceStatBonuses.GetValueOrDefault(race, [0, 0, 0, 0, 0, 0]);
+        var raceMin = MainWindowViewModel.RaceMinStats.GetValueOrDefault(race, [3, 3, 3, 3, 3, 3]);
+        var raceMax = MainWindowViewModel.RaceMaxStats.GetValueOrDefault(race, [18, 18, 18, 18, 18, 18]);
+
+        var subrace = _vm.SelectedSubrace;
+        var subBonuses = subrace is not null && MainWindowViewModel.SubraceStatBonuses.TryGetValue(subrace, out var sb)
+            ? sb : [0, 0, 0, 0, 0, 0];
+
+        var rolls = new[] { Roll4d6DropLowest(), Roll4d6DropLowest(), Roll4d6DropLowest(),
+                            Roll4d6DropLowest(), Roll4d6DropLowest(), Roll4d6DropLowest() };
+
+        var strVal = rolls[0] + raceBonuses[0] + subBonuses[0];
+        _vm.CharStr = Clamp(strVal, raceMin[0], raceMax[0]);
+        _vm.CharDex = Clamp(rolls[1] + raceBonuses[1] + subBonuses[1], raceMin[1], raceMax[1]);
+        _vm.CharSta = Clamp(rolls[2] + raceBonuses[2] + subBonuses[2], raceMin[2], raceMax[2]);
+        _vm.CharInt = Clamp(rolls[3] + raceBonuses[3] + subBonuses[3], raceMin[3], raceMax[3]);
+        _vm.CharWis = Clamp(rolls[4] + raceBonuses[4] + subBonuses[4], raceMin[4], raceMax[4]);
+        _vm.CharCha = Clamp(rolls[5] + raceBonuses[5] + subBonuses[5], raceMin[5], raceMax[5]);
+
+        RollExceptionalStrength(_vm.CharStr, race, subrace);
+        UpdateCreateButton();
+    }
+
+    private void RollExceptionalStrength(int finalStr, string race, string? subrace)
+    {
+        var cls = _vm.SelectedClass;
+        var canExceptional = race.Equals("Human", StringComparison.OrdinalIgnoreCase)
+                          || race.Equals("Half-Elf", StringComparison.OrdinalIgnoreCase);
+        if (finalStr == 18 && canExceptional && _warriorClasses.Contains(cls))
+        {
+            _vm.CharStrExceptional = _charRng.Next(1, 101);
+            ExcStrLabel2.Text = $"✦ Exceptional Strength: 18/{FormatExceptional(_vm.CharStrExceptional)}";
+        }
+        else
+        {
+            _vm.CharStrExceptional = 0;
+            ExcStrLabel2.Text = "";
+        }
+    }
+
+    private void OnClassButtonClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (sender is Button { Content: string cls })
         {
             _vm.SelectedClassName = cls;
-            RaceListBox.SelectedItem = null;
-            SubraceListBox.SelectedItem = null;
-            UpdateCreateButton();
+            _vm.CreationStep = 2;
         }
     }
 
-    private void OnCharRaceSelected(object? sender, Avalonia.Controls.SelectionChangedEventArgs e)
+    private void OnRaceButtonClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        if (RaceListBox.SelectedItem is string race && _vm.SelectedRaceName != race)
+        if (sender is Button { Content: string race })
         {
-            if (_vm.CharStr > 0)
-            {
-                var rd = RaceStrData.GetValueOrDefault(race, (Bonus: 0, Max: 18, Exceptional: false));
-                RollExceptionalStrength(_vm.CharStr, rd.Exceptional);
-            }
             _vm.SelectedRaceName = race;
-            SubraceListBox.SelectedItem = null;
-            UpdateCreateButton();
+            var subraces = _vm.AvailableSubraces;
+            _vm.CreationStep = subraces.Count > 0 ? 3 : 4;
         }
     }
 
-    private void OnCharSubraceSelected(object? sender, Avalonia.Controls.SelectionChangedEventArgs e)
+    private void OnSubraceButtonClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        if (SubraceListBox.SelectedItem is string sub && _vm.SelectedSubraceName != sub)
+        if (sender is Button { Content: string sub })
         {
             _vm.SelectedSubraceName = sub;
-            UpdateCreateButton();
+            _vm.CreationStep = 4;
         }
+    }
+
+    private void OnSkipSubraceClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        _vm.SelectedSubraceName = null;
+        _vm.CreationStep = 4;
     }
 
     private void OnCharCreateClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -421,21 +417,40 @@ public partial class MainWindow : Window
 
     private void OnCharNameChanged(object? sender, Avalonia.Controls.TextChangedEventArgs e)
     {
-        UpdateCreateButton();
+        // CanGoNext updates automatically via binding
     }
 
-    private void OnCharBackClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private void OnNextStepClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        _vm.Phase = "ApiMenu";
+        var step = _vm.CreationStep;
+        if (step == 0 && !string.IsNullOrWhiteSpace(_vm.CharName))
+            _vm.CreationStep = 1;
+        else if (step == 1 && _vm.SelectedClassName is not null)
+            _vm.CreationStep = 2;
+        else if (step == 2 && _vm.SelectedRaceName is not null)
+        {
+            var subraces = _vm.AvailableSubraces;
+            _vm.CreationStep = subraces.Count > 0 ? 3 : 4;
+        }
+        else if (step == 3)
+            _vm.CreationStep = 4;
+    }
+
+    private void OnBackStepClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var step = _vm.CreationStep;
+        if (step == 4)
+        {
+            var subraces = _vm.AvailableSubraces;
+            _vm.CreationStep = subraces.Count > 0 ? 3 : 2;
+        }
+        else if (step > 0)
+            _vm.CreationStep = step - 1;
     }
 
     private void UpdateCreateButton()
     {
-        CreateCharButton2.IsEnabled =
-            !string.IsNullOrWhiteSpace(_vm.CharName) &&
-            _vm.SelectedClassName is not null &&
-            _vm.SelectedRaceName is not null &&
-            _vm.CharStr > 0;
+        CreateCharButton2.IsEnabled = _vm.CharStr > 0;
     }
 
     private void OnTurnBasedClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)

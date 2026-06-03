@@ -172,7 +172,11 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     public string CharName
     {
         get => _charName;
-        set => SetField(ref _charName, value);
+        set
+        {
+            if (SetField(ref _charName, value))
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanGoNext)));
+        }
     }
 
     private string? _selectedClassName;
@@ -192,11 +196,13 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
                     foreach (var r in races)
                         AvailableRaces.Add(r);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanRollStats)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanGoNext)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharCreationSummary)));
             }
         }
     }
     public string SelectedClass => SelectedClassName ?? "";
-
+ 
     private string? _selectedRaceName;
     public string? SelectedRaceName
     {
@@ -212,11 +218,13 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
                     foreach (var s in subraces)
                         AvailableSubraces.Add(s);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanRollStats)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanGoNext)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharCreationSummary)));
             }
         }
     }
     public string SelectedRace => SelectedRaceName ?? "";
-
+ 
     private string? _selectedSubraceName;
     public string? SelectedSubraceName
     {
@@ -226,12 +234,26 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
             if (SetField(ref _selectedSubraceName, value))
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedSubrace)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharCreationSummary)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanGoNext)));
             }
         }
     }
     public string SelectedSubrace => SelectedSubraceName ?? "";
 
     public bool CanRollStats => SelectedClassName is not null && SelectedRaceName is not null;
+
+    public string CharCreationSummary
+    {
+        get
+        {
+            var cls = SelectedClassName ?? "?";
+            var race = SelectedRaceName ?? "?";
+            var sub = SelectedSubraceName is not null ? $" ({SelectedSubraceName})" : "";
+            var strInfo = CharStrExceptional > 0 ? $"{CharStr}/{CharStrExceptional:00}" : CharStr.ToString();
+            return $"{cls}  ·  {race}{sub}  ·  STR {strInfo}  DEX {CharDex}  STA {CharSta}  INT {CharInt}  WIS {CharWis}  CHA {CharCha}";
+        }
+    }
 
     private int _charStr;
     public int CharStr
@@ -243,6 +265,7 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharStrMod)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharStrDisplay)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharCreationSummary)));
             }
         }
     }
@@ -257,6 +280,7 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharStrDisplay)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharStrMod)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharCreationSummary)));
             }
         }
     }
@@ -272,7 +296,10 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         set
         {
             if (SetField(ref _charDex, value))
+            {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharDexMod)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharCreationSummary)));
+            }
         }
     }
 
@@ -283,7 +310,10 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         set
         {
             if (SetField(ref _charSta, value))
+            {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharStaMod)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharCreationSummary)));
+            }
         }
     }
 
@@ -294,7 +324,10 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         set
         {
             if (SetField(ref _charInt, value))
+            {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharIntMod)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharCreationSummary)));
+            }
         }
     }
 
@@ -305,7 +338,10 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         set
         {
             if (SetField(ref _charWis, value))
+            {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharWisMod)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharCreationSummary)));
+            }
         }
     }
 
@@ -316,7 +352,10 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         set
         {
             if (SetField(ref _charCha, value))
+            {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharChaMod)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharCreationSummary)));
+            }
         }
     }
 
@@ -326,6 +365,106 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     public string CharIntMod => $"({(CharInt - 10) / 2:+#;-#;0})";
     public string CharWisMod => $"({(CharWis - 10) / 2:+#;-#;0})";
     public string CharChaMod => $"({(CharCha - 10) / 2:+#;-#;0})";
+
+    // ── Race stat data (Str, Dex, Sta, Int, Wis, Cha) ──────────
+
+    internal static readonly Dictionary<string, int[]> RaceStatBonuses = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["Human"]     = [1, 1, 1, 1, 1, 1],
+        ["Elf"]       = [0, 2, 0, 2, 0, 1],
+        ["Dwarf"]     = [2, 0, 2, 0, 1, 0],
+        ["Lizard"]    = [2, 0, 1, 0, 0, 0],
+        ["Kobold"]    = [0, 2, 0, 1, 0, 0],
+        ["Orc"]       = [3, 0, 1, 0, 0, 0],
+        ["Ogre"]      = [3, 0, 2, 0, 0, 0],
+        ["Gladefolk"] = [0, 2, 1, 0, 1, 1],
+        ["Half-Elf"]  = [0, 1, 0, 1, 0, 2],
+    };
+
+    internal static readonly Dictionary<string, int[]> RaceMinStats = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["Human"]     = [3, 3, 3, 3, 3, 3],
+        ["Elf"]       = [3, 6, 3, 8, 3, 3],
+        ["Dwarf"]     = [6, 3, 8, 3, 3, 3],
+        ["Lizard"]    = [6, 3, 6, 3, 3, 3],
+        ["Kobold"]    = [3, 6, 3, 6, 3, 3],
+        ["Orc"]       = [8, 3, 3, 3, 3, 3],
+        ["Ogre"]      = [10, 3, 3, 3, 3, 3],
+        ["Gladefolk"] = [3, 6, 3, 3, 3, 3],
+        ["Half-Elf"]  = [3, 3, 3, 3, 3, 3],
+    };
+
+    internal static readonly Dictionary<string, int[]> RaceMaxStats = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["Human"]     = [18, 18, 18, 18, 18, 18],
+        ["Elf"]       = [18, 19, 18, 19, 18, 18],
+        ["Dwarf"]     = [19, 18, 19, 18, 18, 17],
+        ["Lizard"]    = [19, 18, 18, 18, 18, 18],
+        ["Kobold"]    = [17, 19, 18, 18, 18, 18],
+        ["Orc"]       = [20, 18, 19, 17, 17, 17],
+        ["Ogre"]      = [20, 17, 20, 15, 16, 15],
+        ["Gladefolk"] = [17, 19, 18, 18, 18, 18],
+        ["Half-Elf"]  = [18, 18, 18, 18, 18, 18],
+    };
+
+    internal static readonly Dictionary<string, int[]> SubraceStatBonuses = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["High Elf"]          = [0, 1, 0, 1, 0, 0],
+        ["Dark Elf"]          = [0, 0, 0, 0, 0, 1],
+        ["Forest Elf"]        = [0, 1, 0, 0, 0, 0],
+        ["Mountain Dwarf"]    = [1, 0, 0, 0, 0, 0],
+        ["Hill Dwarf"]        = [0, 0, 1, 0, 1, 0],
+        ["Swamp Lizard"]      = [0, 0, 1, 0, 0, 0],
+        ["Desert Lizard"]     = [1, 0, 0, 0, 0, 0],
+        ["Forest Lizard"]     = [0, 1, 0, 0, 0, 0],
+        ["Green Orc"]         = [0, 1, 0, 0, 0, 0],
+        ["Blue Orc"]          = [1, 0, 0, 0, 0, 0],
+        ["Red Orc"]           = [0, 0, 1, 0, 0, 0],
+        ["Mountain Ogre"]     = [0, 0, 1, 0, 0, 0],
+        ["Hill Ogre"]         = [1, 0, 0, 0, 0, 0],
+        ["Desert Ogre"]       = [0, 0, 1, 0, 0, 0],
+        ["Forest Ogre"]       = [0, 0, 1, 0, 0, 0],
+        ["Forest Gladefolk"]  = [0, 1, 0, 0, 0, 0],
+        ["Hill Gladefolk"]    = [0, 0, 0, 0, 0, 1],
+        ["Half-High-Elf"]     = [0, 0, 0, 1, 0, 0],
+        ["Half-Wood-Elf"]     = [0, 1, 0, 0, 0, 0],
+    };
+
+    // ── Character Creation Step Wizard ─────────────────────────
+
+    private int _creationStep;
+    public int CreationStep
+    {
+        get => _creationStep;
+        set
+        {
+            if (SetField(ref _creationStep, value))
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsStepName)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsStepClass)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsStepRace)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsStepSubrace)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsStepStats)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanGoNext)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanGoBack)));
+            }
+        }
+    }
+    public bool IsStepName => _creationStep == 0;
+    public bool IsStepClass => _creationStep == 1;
+    public bool IsStepRace => _creationStep == 2;
+    public bool IsStepSubrace => _creationStep == 3;
+    public bool IsStepStats => _creationStep == 4;
+    public bool CanGoBack => _creationStep > 0 && _creationStep < 4;
+    public bool CanGoNext => _creationStep switch
+    {
+        0 => !string.IsNullOrWhiteSpace(CharName),
+        1 => SelectedClassName is not null,
+        2 => SelectedRaceName is not null,
+        3 => true,
+        4 => false,
+        _ => false,
+    };
 
     private bool _isApiMode;
     public bool IsApiMode
