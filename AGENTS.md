@@ -366,3 +366,33 @@ Two project-scoped skills are registered in `opencode.jsonc`:
 | `combat-mechanics` | `.opencode/skills/combat-mechanics.md` | Combat system changes (attack, damage, TM, effects, resistance, logging) |
 
 Load them explicitly via the skill tool. The combat-mechanics skill contains a `self-update-trigger` for automatic refresh when combat code changes.
+
+---
+
+## 14. Release notes (`release-notes.md`) update protocol
+
+**Do not touch `release-notes.md` unless the user explicitly says "update the release-notes.md".**
+
+When instructed to update it:
+
+1. **Review first.** Read the current `release-notes.md` and assess the project state across all dimensions (combat mechanics, API+DB, tests, maintainability, Big-O, architecture).
+2. **Update the maturity matrix** — re-score each dimension based on current state.
+3. **Update the Next Features table** — re-prioritize based on what's been completed and what gaps remain. Remove done items, add new ones.
+4. **Keep the format** — Markdown table with the same columns. The matrix and Next Features sections are the two required sections.
+
+Format:
+
+```markdown
+# BattleArena — Maturity Assessment
+
+| Dimension | Score | Key Strengths | Key Weaknesses |
+|-----------|-------|---------------|----------------|
+| ... | ... | ... | ... |
+| **Overall** | **X/10** | ... | ... |
+
+## Next Features
+
+| Priority | Feature | Notes |
+|----------|---------|-------|
+| 1 | ... | ... |
+```
