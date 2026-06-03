@@ -29,7 +29,7 @@ public class TurnmeterService : ITurnmeterService
         };
     }
 
-    public TurnmeterState AfterTurn(TurnmeterState state, int cost = 100)
+    public TurnmeterState AfterTurn(TurnmeterState state, int cost = TurnmeterState.TurnThreshold)
     {
         return new TurnmeterState
         {

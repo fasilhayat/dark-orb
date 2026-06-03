@@ -86,17 +86,21 @@ public class Character
     /// <summary>Returns true if this character's class may wield the given weapon (inherits from its archetype).</summary>
     public bool CanEquip(Weapon weapon) => CanEquip(weapon.Archetype);
 
-    private const int _spellTmCostIntFactor = 3;
-    private const int _spellTmCostLevelFactor = 1;
-    private const int _minSpellTmCost = 10;
+    private const int _spellTmCostIntPctPerMod = 3;
+    private const int _spellTmCostLevelPct = 1;
+    private const int _minSpellTmCostPct = 10;
 
+    /// <summary>
+    /// Returns the spell's turn-meter cost as a percentage of a full turn
+    /// (100 = 100 % = one full turn). Reduced by INT, level, and equipment.
+    /// </summary>
     public int ComputeSpellTurnMeterCost(Spell spell)
     {
         var intMod = (Intelligence - 10) / 2;
-        var reduction = intMod * _spellTmCostIntFactor
-                      + Level * _spellTmCostLevelFactor
+        var reduction = intMod * _spellTmCostIntPctPerMod
+                      + Level * _spellTmCostLevelPct
                       + Equipment.TotalTurnMeterCostReduction;
-        return Math.Max(_minSpellTmCost, spell.TurnMeterCost - reduction);
+        return Math.Max(_minSpellTmCostPct, spell.TurnMeterCost - reduction);
     }
 
     /// <summary>

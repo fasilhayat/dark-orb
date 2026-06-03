@@ -90,11 +90,12 @@ public class CharacterTests
     }
 
     // ── ComputeSpellTurnMeterCost ───────────────────────────────────────────
+    // All values are percentages of a full turn (100 = 100% = one full turn).
 
     [Fact]
     public void ComputeSpellTurnMeterCost_AverageStats_ReturnsSpellBaseCost()
     {
-        // INT 10 → intMod 0; Level 1 → level factor 1; reduction = 0*3 + 1*1 = 1; 50 - 1 = 49
+        // INT 10 → intMod 0; Level 1 → 1% reduction; 50% - 1% = 49%
         var character = new Character { Intelligence = 10, Level = 1 };
         var spell = new Spell { TurnMeterCost = 50 };
 
@@ -104,7 +105,7 @@ public class CharacterTests
     [Fact]
     public void ComputeSpellTurnMeterCost_HighIntelligenceAndLevel_ReducesCost()
     {
-        // INT 18 → intMod 4; Level 9 → level factor 9; reduction = 4*3 + 9 = 21; 60 - 21 = 39
+        // INT 18 → intMod 4 → 12% reduction; Level 9 → 9% reduction; 60% - 21% = 39%
         var character = new Character { Intelligence = 18, Level = 9 };
         var spell = new Spell { TurnMeterCost = 60 };
 
@@ -112,9 +113,9 @@ public class CharacterTests
     }
 
     [Fact]
-    public void ComputeSpellTurnMeterCost_LargeReduction_ClampsToMinimumTen()
+    public void ComputeSpellTurnMeterCost_LargeReduction_ClampsToMinimumTenPercent()
     {
-        // INT 20 → intMod 5; Level 10 → level factor 10; reduction = 15 + 10 = 25; 30 - 25 = 5 → clamped to 10
+        // INT 20 → intMod 5 → 15% reduction; Level 10 → 10% reduction; 30% - 25% = 5% → clamped to 10% minimum
         var character = new Character { Intelligence = 20, Level = 10 };
         var spell = new Spell { TurnMeterCost = 30 };
 

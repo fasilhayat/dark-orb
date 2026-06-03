@@ -483,3 +483,220 @@ public class CombatSimulatorHealingTests
         Assert.Empty(healTurns);
     }
 }
+
+// ── Queued-spell TM cost regression ────────────────────────────────────────────
+
+public class CombatSimulatorQueuedSpellTests
+{
+    [Fact]
+    public void Simulate_QueuedSpell_DeductsCorrectTmCostAfterTurn()
+    {
+        var dice = Substitute.For<IDiceService>();
+        dice.Seed.Returns(42);
+        dice.RollIndex(Arg.Any<int>()).Returns(0);
+        dice.Roll(DieType.D20).Returns(15);
+        dice.Roll(DieType.D4).Returns(2);
+        dice.Roll(DieType.D6).Returns(3);
+        dice.Roll(DieType.D8).Returns(4);
+        dice.Roll(DieType.D100).Returns(100);
+
+        var simulator = new CombatSimulator(
+            new CombatService(dice, new CombatStatsService()),
+            new TurnmeterService(),
+            new StatusEffectService(),
+            dice);
+
+        // Spell costing 130% of a turn — more than the character can pay immediately
+        var slowSpell = new Spell
+        {
+            Name = "SlowCast",
+            School = SpellSchool.Evocation,
+            DamageDie = DieType.D8,
+            DamageCount = 1,
+            DamageType = DamageType.Fire,
+            SpellLevel = 1,
+            TurnMeterCost = 130,
+            ManaCost = 10
+        };
+
+        // INT 10 → mod 0; Level 1 → 1% reduction; TM cost = max(10, 130 - 0 - 1) = 129
+        var caster = new Character
+        {
+            Name = "Caster",
+            ClassId = 5,
+            Level = 1,
+            Intelligence = 10,
+            Dexterity = 10,
+            TurnSpeed = 10,
+            StrikeRating = 10,
+            MaxHitPoints = 100,
+            CurrentHitPoints = 100,
+            MaxMana = 100,
+            CurrentMana = 100,
+            MemorizedSpells = [slowSpell]
+        };
+
+        var target = new Character
+        {
+            Name = "Dummy",
+            ClassId = 8,
+            Level = 1,
+            Dexterity = 10,
+            TurnSpeed = 1,
+            StrikeRating = 10,
+            MaxHitPoints = 500,
+            CurrentHitPoints = 500
+        };
+
+        var result = simulator.Simulate(Party.Solo(caster), Party.Solo(target), 30);
+
+        // Confirm the spell was queued (couldn't pay full cost immediately)
+        var queued = result.Log.Where(e => e.EventType == "SpellQueued" && e.ActorName == "Caster").ToList();
+        Assert.NotEmpty(queued);
+
+        // Confirms charging occurred over multiple ticks
+        var charging = result.Log.Where(e => e.EventType == "SpellCharging" && e.ActorName == "Caster").ToList();
+        Assert.NotEmpty(charging);
+
+        // The TurnEnd event shows the TM after deduction
+        var turnEnd = result.Log
+            .Where(e => e.EventType == "TurnEnd" && e.ActorName == "Caster")
+            .OrderByDescending(e => e.Tick)
+            .FirstOrDefault();
+
+        Assert.NotNull(turnEnd);
+
+        // The turn-end TM must reflect the actual spell cost, not the old hardcoded 100.
+        // TM cost = max(10, 130 - (0 + 1 + 0)) = 129.
+        // old AfterTurn(TM, 100) would give TM after = TM - 100 ≈ 30+.
+        // correct AfterTurn(TM, 129) gives TM after = TM - 129 ≈ 1-2.
+        var cost = turnEnd.TurnMeterBefore - turnEnd.TurnMeterAfter;
+        Assert.Equal(129, cost);
+    }
+}
+
+// ── Elemental afterburn DoT tests ───────────────────────────────────────────────
+
+public class CombatSimulatorElementalDoTTests
+{
+    [Fact]
+    public void Simulate_FireSpell_AppliesBurningDoTAndTickDamage()
+    {
+        var (dice, sim) = CreateSim();
+        var caster = MakeCaster("Lyra", MakeFireSpell());
+        var target = MakeTarget("Dummy", turnSpeed: 50);
+
+        var result = sim.Simulate(Party.Solo(caster), Party.Solo(target), 50);
+
+        // Burning must have been applied at least once
+        var applied = result.Log
+            .Where(e => e.EventType == "EffectApplied" && e.StatusEffectName == "Burning")
+            .ToList();
+        Assert.NotEmpty(applied);
+
+        // Burning must tick damage on subsequent turns
+        var ticks = result.Log
+            .Where(e => e.EventType == "DoTTick" && e.StatusEffectName == "Burning")
+            .ToList();
+        Assert.NotEmpty(ticks);
+        Assert.All(ticks, t => Assert.True(t.DamageDealt > 0,
+            $"Burning DoT tick on tick {t.Tick} should deal > 0 damage, got {t.DamageDealt}"));
+
+        // Messages must read e.g. "Dummy suffers 3 Burning damage."
+        Assert.All(ticks, t => Assert.Matches(@"^\w+ suffers \d+ Burning damage\.$", t.Message));
+    }
+
+    [Fact]
+    public void Simulate_NonElementalSpell_DoesNotApplyAfterburn()
+    {
+        var (dice, sim) = CreateSim();
+        var caster = MakeCaster("Lyra", MakePlainSpell());
+        var target = MakeTarget("Dummy");
+
+        var result = sim.Simulate(Party.Solo(caster), Party.Solo(target), 30);
+
+        var applied = result.Log
+            .Where(e => e.EventType == "EffectApplied" && e.StatusEffectName is "Burning" or "Chilled" or "Shocked" or "Poisoned")
+            .ToList();
+        Assert.Empty(applied);
+    }
+
+    // ── helpers ─────────────────────────────────────────────────────────────────
+
+    private static (IDiceService, CombatSimulator) CreateSim()
+    {
+        var dice = Substitute.For<IDiceService>();
+        dice.Seed.Returns(42);
+        dice.RollIndex(Arg.Any<int>()).Returns(0);
+        dice.Roll(DieType.D20).Returns(15);    // hits
+        dice.Roll(DieType.D4).Returns(2);
+        dice.Roll(DieType.D6).Returns(3);
+        dice.Roll(DieType.D8).Returns(4);
+        dice.Roll(DieType.D100).Returns(50);   // passes 60% application chance, no resistance
+
+        return (dice, new CombatSimulator(
+            new CombatService(dice, new CombatStatsService()),
+            new TurnmeterService(),
+            new StatusEffectService(),
+            dice));
+    }
+
+    private static Character MakeCaster(string name, Spell spell) => new()
+    {
+        Name = name,
+        ClassId = 5,
+        Level = 5,
+        Strength = 8,
+        Dexterity = 14,
+        Intelligence = 18,
+        StrikeRating = 13,
+        TurnSpeed = 100,
+        MaxHitPoints = 30,
+        CurrentHitPoints = 30,
+        MaxMana = 300,
+        CurrentMana = 300,
+        MemorizedSpells = [spell]
+    };
+
+    private static Character MakeTarget(string name, int turnSpeed = 1) => new()
+    {
+        Name = name,
+        ClassId = 8,
+        Level = 1,
+        Strength = 10,
+        Dexterity = 10,
+        Intelligence = 10,
+        StrikeRating = 10,
+        TurnSpeed = turnSpeed,
+        MaxHitPoints = 100,
+        CurrentHitPoints = 100
+    };
+
+    private static Spell MakeFireSpell() => new()
+    {
+        Name = "Fireball",
+        School = SpellSchool.Evocation,
+        DamageDie = DieType.D6,
+        DamageCount = 3,
+        DamageType = DamageType.Fire,
+        AttackBonus = 2,
+        SpellLevel = 3,
+        TurnMeterCost = 90,
+        ManaCost = 10,
+        ElementalType = ElementalType.Fire
+    };
+
+    private static Spell MakePlainSpell() => new()
+    {
+        Name = "Magic Dart",
+        School = SpellSchool.Evocation,
+        DamageDie = DieType.D4,
+        DamageCount = 2,
+        DamageType = DamageType.Psychic,
+        AttackBonus = 2,
+        SpellLevel = 1,
+        TurnMeterCost = 60,
+        ManaCost = 5,
+        ElementalType = ElementalType.None
+    };
+}

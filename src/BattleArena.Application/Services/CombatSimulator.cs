@@ -162,7 +162,7 @@ public class CombatSimulator : ICombatSimulator
         return states;
     }
 
-    private CombatLogEntry BuildAfterTurnEntry(CombatantState state, int tick, int tmCost = 100)
+    private CombatLogEntry BuildAfterTurnEntry(CombatantState state, int tick, int tmCost = TurnmeterState.TurnThreshold)
     {
         var before = state.Meter.CurrentValue;
         state.Meter = _turnmeter.AfterTurn(state.Meter, tmCost);
@@ -467,7 +467,7 @@ public class CombatSimulator : ICombatSimulator
         int tick, Character target, Spell spell,
         Func<CombatLogEntry, Task> notify)
     {
-        if (spell.OnHitEffects.Count == 0) return;
+        if (spell.OnHitEffects.Count == 0 && spell.ElementalType == ElementalType.None) return;
 
         foreach (var template in spell.OnHitEffects)
         {
@@ -493,33 +493,99 @@ public class CombatSimulator : ICombatSimulator
                 Source               = spell.Name
             };
 
-            var resistance = target.ComputeResistance(effect.ResistanceType);
-            var appResult = _statusEffect.TryApply(target, effect, resistance, _dice);
+            await TryApplyEffectAsync(tick, target, effect, notify);
+        }
 
-            if (appResult.Applied)
+        if (spell.ElementalType != ElementalType.None)
+            await TryApplyElementalDoTAsync(tick, target, spell, notify);
+    }
+
+    private async Task TryApplyElementalDoTAsync(
+        int tick, Character target, Spell spell,
+        Func<CombatLogEntry, Task> notify)
+    {
+        var dot = CreateElementalDoT(spell.ElementalType, spell.Name);
+        if (dot is null) return;
+
+        var dmgPerTurn = dot.DamagePerTurn;
+        if (dmgPerTurn <= 0 && dot.DoTDamageCount > 0)
+            for (var i = 0; i < dot.DoTDamageCount; i++)
+                dmgPerTurn += RollDie(dot.DoTDamageDie);
+        dot.DamagePerTurn = dmgPerTurn;
+
+        await TryApplyEffectAsync(tick, target, dot, notify);
+    }
+
+    private static StatusEffect? CreateElementalDoT(ElementalType type, string sourceName)
+    {
+        return type switch
+        {
+            ElementalType.Fire => new StatusEffect
             {
-                await notify(new CombatLogEntry
-                {
-                    Tick             = tick,
-                    ActorName        = target.Name,
-                    EventType        = "EffectApplied",
-                    StatusEffectName = effect.Name,
-                    Message          = $"{target.Name} is afflicted with {effect.Name}!"
-                });
-            }
-            else if (appResult.WasResisted)
+                Name = "Burning", Type = StatusEffectType.DamageOverTime,
+                DamagePerTurn = 0, DoTDamageCount = 1, DoTDamageDie = DieType.D6,
+                Duration = 3, ApplicationChance = 60,
+                ResistanceType = ResistanceType.Fire,
+                Source = sourceName
+            },
+            ElementalType.Ice => new StatusEffect
             {
-                await notify(new CombatLogEntry
-                {
-                    Tick             = tick,
-                    ActorName        = target.Name,
-                    EventType        = "EffectResisted",
-                    StatusEffectName = effect.Name,
-                    ResistRoll       = appResult.Roll,
-                    ResistThreshold  = appResult.TotalResistance,
-                    Message          = $"{target.Name} resists {effect.Name}! (rolled {appResult.Roll} vs {appResult.TotalResistance} resistance)"
-                });
-            }
+                Name = "Chilled", Type = StatusEffectType.DamageOverTime,
+                DamagePerTurn = 0, DoTDamageCount = 1, DoTDamageDie = DieType.D4,
+                Duration = 2, ApplicationChance = 50,
+                ResistanceType = ResistanceType.Cold,
+                Source = sourceName
+            },
+            ElementalType.Lightning => new StatusEffect
+            {
+                Name = "Shocked", Type = StatusEffectType.DamageOverTime,
+                DamagePerTurn = 0, DoTDamageCount = 1, DoTDamageDie = DieType.D8,
+                Duration = 2, ApplicationChance = 40,
+                ResistanceType = ResistanceType.Lightning,
+                Source = sourceName
+            },
+            ElementalType.Poison => new StatusEffect
+            {
+                Name = "Poisoned", Type = StatusEffectType.DamageOverTime,
+                DamagePerTurn = 0, DoTDamageCount = 1, DoTDamageDie = DieType.D4,
+                Duration = 3, ApplicationChance = 70,
+                ResistanceType = ResistanceType.Poison,
+                Source = sourceName
+            },
+            _ => null
+        };
+    }
+
+    private async Task TryApplyEffectAsync(
+        int tick, Character target, StatusEffect effect,
+        Func<CombatLogEntry, Task> notify)
+    {
+        var resistance = target.ComputeResistance(effect.ResistanceType);
+        var appResult = _statusEffect.TryApply(target, effect, resistance, _dice);
+
+        if (appResult.Applied)
+        {
+            await notify(new CombatLogEntry
+            {
+                Tick             = tick,
+                ActorName        = target.Name,
+                EventType        = "EffectApplied",
+                StatusEffectName = effect.Name,
+                Message          = $"{target.Name} is afflicted with {effect.Name}!"
+            });
+        }
+        else if (appResult.WasResisted)
+        {
+            await notify(new CombatLogEntry
+            {
+                Tick             = tick,
+                ActorName        = target.Name,
+                EventType        = "EffectResisted",
+                StatusEffectName = effect.Name,
+                ResistRoll       = appResult.Roll,
+                ResistThreshold  = appResult.TotalResistance,
+                Message          = $"{target.Name} resists {effect.Name}! (rolled {appResult.Roll} vs {appResult.TotalResistance} resistance)"
+            });
         }
     }
 
@@ -812,8 +878,9 @@ public class CombatSimulator : ICombatSimulator
             }
         }
 
+        var actualTmCost = actorState.Character.ComputeSpellTurnMeterCost(qs.Spell);
         await DeductManaCostAsync(tick, actorState, qs.Spell, notify);
-        return new ActorSetup(qs.Spell, target, 100, IsSpell: true);
+        return new ActorSetup(qs.Spell, target, actualTmCost, IsSpell: true);
     }
 
     private async Task<ActorSetup?> HandleNewAttackSetupAsync(
@@ -850,7 +917,7 @@ public class CombatSimulator : ICombatSimulator
                 Message   = $"{actorState.Character.Name} skips their turn."
             });
             actorState.Meter.IsActive = false;
-            await notify(BuildAfterTurnEntry(actorState, tick, 100));
+            await notify(BuildAfterTurnEntry(actorState, tick, TurnmeterState.TurnThreshold));
             return null;
         }
 
@@ -873,7 +940,7 @@ public class CombatSimulator : ICombatSimulator
                 Message   = $"{actorState.Character.Name} moves 15 ft ({from} → {actorState.EngagementRange}). Speed: {speed} ft"
             });
             actorState.Meter.IsActive = false;
-            await notify(BuildAfterTurnEntry(actorState, tick, 100));
+            await notify(BuildAfterTurnEntry(actorState, tick, TurnmeterState.TurnThreshold));
             return null;
         }
 
