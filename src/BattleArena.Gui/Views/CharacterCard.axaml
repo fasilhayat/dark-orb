@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:views="clr-namespace:BattleArena.Gui.Views"
              x:Class="BattleArena.Gui.Views.CharacterCard"
-             Width="340" MinHeight="180">
+             Width="380" MinHeight="180">
   <UserControl.Resources>
     <views:DoubleToGridLengthConverter x:Key="GridLengthConv" />
   </UserControl.Resources>
@@ -36,18 +36,19 @@
           </Border>
 
           <!-- Name / weapon / info / stats -->
-          <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Top">
+          <StackPanel Grid.Column="1" Spacing="1" VerticalAlignment="Top">
             <StackPanel Orientation="Horizontal" Spacing="4">
               <TextBlock Text="{Binding ActiveIndicator}" Foreground="#88bbff" FontSize="14" />
               <TextBlock Text="{Binding Name}" Foreground="{Binding NameColor}"
-                         FontWeight="Bold" FontSize="15" />
+                         FontWeight="Bold" FontSize="15"
+                         TextTrimming="CharacterEllipsis" />
             </StackPanel>
-            <TextBlock Text="{Binding CurrentWeapon}" Foreground="#aaa"
+            <TextBlock Text="{Binding CurrentWeapon}" Foreground="White"
                        FontStyle="Italic" FontSize="12" />
-            <TextBlock Text="{Binding InfoLine}" Foreground="#aaa" FontSize="12" />
+            <TextBlock Text="{Binding InfoLine}" Foreground="White" FontSize="12" />
 
             <!-- Stacked combat stats -->
-            <Border Background="#16162a" CornerRadius="3" Padding="0,4" Margin="0,1,0,0">
+            <Border Background="#16162a" CornerRadius="3" Padding="0,2" Margin="0,0,0,0">
               <StackPanel Spacing="1">
                 <TextBlock FontSize="12" Foreground="#888">
                   <Run Text="Armor: "/><Run Text="{Binding ArmorLine}"/>
@@ -75,7 +76,8 @@
                 </DataTemplate>
               </ItemsControl.ItemTemplate>
             </ItemsControl>
-            <TextBlock Text="{Binding TmDisplay}" Foreground="White" FontSize="12" FontWeight="Bold"
+            <TextBlock Text="{Binding TmDisplay}" Foreground="White"
+                       FontSize="12" FontWeight="Bold"
                        HorizontalAlignment="Center" VerticalAlignment="Center" />
           </Grid>
         </Border>
