@@ -61,22 +61,30 @@
           </StackPanel>
         </Grid>
 
-        <!-- TM bar -->
+        <!-- TM bar — piped segments, scaled to fill width -->
         <Border BorderBrush="{Binding TmBorderBrush}" BorderThickness="1" CornerRadius="3" Background="#111" Height="20" ClipToBounds="True">
           <Grid>
-            <Border Background="#111" CornerRadius="2" />
-            <Border Background="{Binding TmBarColor}" CornerRadius="2"
-                    RenderTransformOrigin="0,0.5">
-              <Border.RenderTransform>
-                <ScaleTransform ScaleX="{Binding TmFraction}" />
-              </Border.RenderTransform>
-            </Border>
-            <Border IsVisible="{Binding IsTmLocked}" BorderThickness="1"
-                    BorderBrush="#ccddff" CornerRadius="2" Margin="-1"
-                    Background="#1188ccff" />
+            <Viewbox Stretch="Fill">
+              <ItemsControl ItemsSource="{Binding TmPipes}" Height="20">
+                <ItemsControl.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                  </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <Border Width="3" Margin="0,0,2,0" Background="{Binding}" />
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </Viewbox>
             <TextBlock Text="{Binding TmDisplay}" Foreground="White"
                        FontSize="12" FontWeight="Bold"
                        HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <!-- Frozen overlay when TM locked (stays within bar bounds to avoid layout shift) -->
+            <Border IsVisible="{Binding IsTmLocked}" BorderThickness="1"
+                    BorderBrush="#ccddff" CornerRadius="2"
+                    Background="#1188ccff" />
           </Grid>
         </Border>
 
