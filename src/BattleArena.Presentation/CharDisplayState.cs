@@ -14,5 +14,10 @@ public class CharDisplayState
     public int Mana { get; set; }
     public bool IsAlive { get; set; } = true;
     public string Weapon { get; set; } = "";
+    public string WeaponStats { get; init; } = "";
+    public string ArmorName { get; init; } = "";
+    public int ArmorClass { get; init; }
+    public int StrikeRating { get; init; }
+    public int MagicResistance { get; init; }
     public List<string> ActiveEffects { get; set; } = new();
 }

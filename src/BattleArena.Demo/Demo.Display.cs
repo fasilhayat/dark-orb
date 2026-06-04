@@ -487,7 +487,10 @@ static partial class Demo
                 new Seg(" / ", ConsoleColor.Gray),
                 new Seg(dMaxHpLabel, ConsoleColor.Gray));
 
-            var dLines = new List<List<Seg>> { top, dNameLine, dClassLine };
+            var dStatsStr = BuildCardStatsString(s);
+            var dStatsLine = CL(vb, borderFg, new Seg(dStatsStr, ConsoleColor.Gray));
+
+            var dLines = new List<List<Seg>> { top, dNameLine, dClassLine, dStatsLine };
             if (DisplayConfig.IsFieldEnabled("characterCard", "TurnMeter")) dLines.Add(dTmLine);
             dLines.Add(dManaLine);
             if (DisplayConfig.IsFieldEnabled("characterCard", "CurrentHp") ||
@@ -516,6 +519,10 @@ static partial class Demo
         var sexLabel = s.Sex switch { "F" => "Female", "M" => "Male", _ => "None" };
         var infoStr = $"{sexLabel,-W_SEX}  ·  Lvl {s.Level,2}  {s.Race,-W_RACE}  ·  {s.ClassName,-W_CLASS}";
         var classLine = CL(vb, borderFg, new Seg(infoStr, ConsoleColor.Gray));
+
+        // ── Stats row (Armor, SR, Weapon dice, MR) ─────────────────────────────
+        var statsStr = BuildCardStatsString(s);
+        var statsLine = CL(vb, borderFg, new Seg(statsStr, ConsoleColor.Gray));
 
         // ── TM row ─────────────────────────────────────────────────────────────
         var cappedTm = Math.Min(100, s.Tm);
@@ -557,7 +564,7 @@ static partial class Demo
             new Seg(" / ", ConsoleColor.Gray),
             new Seg(maxHpSuffix, ConsoleColor.Gray));
 
-        var lines = new List<List<Seg>> { top, nameLine, classLine };
+        var lines = new List<List<Seg>> { top, nameLine, classLine, statsLine };
         if (DisplayConfig.IsFieldEnabled("characterCard", "TurnMeter")) lines.Add(tmLine);
         lines.Add(manaLine);
         if (DisplayConfig.IsFieldEnabled("characterCard", "CurrentHp") ||
@@ -565,6 +572,16 @@ static partial class Demo
             lines.Add(hpLine);
         lines.Add(bot);
         return lines;
+    }
+
+    private static string BuildCardStatsString(CharDisplayState s)
+    {
+        var suffix = $"  SR {s.StrikeRating}  {s.WeaponStats}  MR {s.MagicResistance}";
+        var acPart = $"({s.ArmorClass})";
+        var maxArmorLen = CONTENT_W - suffix.Length - acPart.Length;
+        if (maxArmorLen < 3) maxArmorLen = 3;
+        var armorName = s.ArmorName.Length > maxArmorLen ? s.ArmorName[..maxArmorLen] : s.ArmorName;
+        return ($"{armorName}{acPart}{suffix}").PadRight(CONTENT_W);
     }
 
     private static List<Seg> CL(char vb, ConsoleColor borderFg, params Seg[] segs)

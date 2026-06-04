@@ -345,6 +345,11 @@ static partial class Demo
                 Sex = m.Character.Sex,
                 Race = m.Character.Race?.Name ?? "",
                 Weapon = m.AttackSource?.Name ?? "",
+                WeaponStats = FormatWeaponStats(m.AttackSource),
+                ArmorName = m.Character.Equipment.Chest?.Name ?? "None",
+                ArmorClass = m.Character.Equipment.TotalArmorClass,
+                StrikeRating = m.Character.StrikeRating,
+                MagicResistance = m.Character.ComputeResistance(ResistanceType.Magic),
                 MaxMana = m.Character.MaxMana,
                 Mana = m.Character.CurrentMana
             });
@@ -359,6 +364,11 @@ static partial class Demo
                 Sex = m.Character.Sex,
                 Race = m.Character.Race?.Name ?? "",
                 Weapon = m.AttackSource?.Name ?? "",
+                WeaponStats = FormatWeaponStats(m.AttackSource),
+                ArmorName = m.Character.Equipment.Chest?.Name ?? "None",
+                ArmorClass = m.Character.Equipment.TotalArmorClass,
+                StrikeRating = m.Character.StrikeRating,
+                MagicResistance = m.Character.ComputeResistance(ResistanceType.Magic),
                 MaxMana = m.Character.MaxMana,
                 Mana = m.Character.CurrentMana
             });
@@ -386,6 +396,11 @@ static partial class Demo
                 Sex = m.Character.Sex,
                 Race = m.Character.Race?.Name ?? "",
                 Weapon = m.AttackSource?.Name ?? "",
+                WeaponStats = FormatWeaponStats(m.AttackSource),
+                ArmorName = m.Character.Equipment.Chest?.Name ?? "None",
+                ArmorClass = m.Character.Equipment.TotalArmorClass,
+                StrikeRating = m.Character.StrikeRating,
+                MagicResistance = m.Character.ComputeResistance(ResistanceType.Magic),
                 MaxMana = m.Character.MaxMana,
                 Mana = Math.Max(0, m.Character.CurrentMana)
             });
@@ -401,6 +416,11 @@ static partial class Demo
                 Sex = m.Character.Sex,
                 Race = m.Character.Race?.Name ?? "",
                 Weapon = m.AttackSource?.Name ?? "",
+                WeaponStats = FormatWeaponStats(m.AttackSource),
+                ArmorName = m.Character.Equipment.Chest?.Name ?? "None",
+                ArmorClass = m.Character.Equipment.TotalArmorClass,
+                StrikeRating = m.Character.StrikeRating,
+                MagicResistance = m.Character.ComputeResistance(ResistanceType.Magic),
                 MaxMana = m.Character.MaxMana,
                 Mana = Math.Max(0, m.Character.CurrentMana)
             });
@@ -449,6 +469,13 @@ static partial class Demo
         DieType.D20 => 20,
         _ => 0
     };
+
+    internal static string FormatWeaponStats(IAttackSource? source)
+    {
+        if (source is null) return "";
+        var dice = $"{source.DamageCount}d{DieSides(source.DamageDie)}";
+        return source.AttackBonus > 0 ? $"{dice}+{source.AttackBonus}" : dice;
+    }
 
     private static void ConnectApi()
     {
