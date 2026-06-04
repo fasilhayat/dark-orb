@@ -49,12 +49,12 @@
             <!-- Stacked combat stats -->
             <Border Background="#16162a" CornerRadius="3" Padding="0,4" Margin="0,1,0,0">
               <StackPanel Spacing="1">
-                <TextBlock FontSize="12" Foreground="#aaa">
+                <TextBlock FontSize="12" Foreground="#888">
                   <Run Text="Armor: "/><Run Text="{Binding ArmorLine}"/>
                 </TextBlock>
-                <TextBlock Text="{Binding StrikeLine}" FontSize="12" Foreground="#aaa" />
-                <TextBlock Text="{Binding WeaponLine}" FontSize="12" Foreground="#aaa" />
-                <TextBlock Text="{Binding ResistLine}" FontSize="12" Foreground="#aaa" />
+                <TextBlock Text="{Binding StrikeLine}" FontSize="12" Foreground="#888" />
+                <TextBlock Text="{Binding WeaponLine}" FontSize="12" Foreground="#888" />
+                <TextBlock Text="{Binding ResistLine}" FontSize="12" Foreground="#888" />
               </StackPanel>
             </Border>
           </StackPanel>
