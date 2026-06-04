@@ -14,6 +14,7 @@ public class CharDisplayState
     public int Mana { get; set; }
     public bool IsAlive { get; set; } = true;
     public bool IsTmLocked { get; set; }
+    public string? CcStatus { get; set; }
     public string Weapon { get; set; } = "";
     public string WeaponStats { get; init; } = "";
     public string ArmorName { get; init; } = "";

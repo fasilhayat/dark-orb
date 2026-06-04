@@ -56,13 +56,15 @@
                 <TextBlock Text="{Binding StrikeLine}" FontSize="12" Foreground="#888" />
                 <TextBlock Text="{Binding WeaponLine}" FontSize="12" Foreground="#888" />
                 <TextBlock Text="{Binding ResistLine}" FontSize="12" Foreground="#888" />
+                <TextBlock Text="{Binding CcDisplay}" FontSize="12" Foreground="#888"
+                           FontStyle="Italic" IsVisible="{Binding HasCcDisplay}" />
               </StackPanel>
             </Border>
           </StackPanel>
         </Grid>
 
         <!-- TM bar — piped segments -->
-        <Border BorderBrush="#333" BorderThickness="1" CornerRadius="3" Background="#111" Height="20" ClipToBounds="True">
+        <Border BorderBrush="{Binding TmBorderBrush}" BorderThickness="1" CornerRadius="3" Background="#111" Height="20" ClipToBounds="True">
           <Grid>
             <ItemsControl ItemsSource="{Binding TmPipes}">
               <ItemsControl.ItemsPanel>
@@ -79,6 +81,10 @@
             <TextBlock Text="{Binding TmDisplay}" Foreground="White"
                        FontSize="12" FontWeight="Bold"
                        HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <!-- Jagged frozen overlay when TM locked -->
+            <Border IsVisible="{Binding IsTmLocked}" BorderThickness="1"
+                    BorderBrush="#ccddff" CornerRadius="2" Margin="-1"
+                    Background="#1188ccff" />
           </Grid>
         </Border>
 

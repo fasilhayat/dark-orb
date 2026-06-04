@@ -71,6 +71,9 @@ public class CombatLogEntry
     public int? RoundNumber { get; set; }
     public string? SummonedPetName { get; set; }
 
+    // Populated on SkippedTurn events — "stunned", "rooted", "feared"
+    public string? CcLabel { get; set; }
+
     // Snapshot of every living combatant's turn-meter value at the moment this
     // TurnStart was emitted.  Used by PlayTurnBased to display correct TM bars.
     public Dictionary<string, int>? TurnMeterSnapshot { get; set; }

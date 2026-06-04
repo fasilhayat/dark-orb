@@ -268,6 +268,25 @@ ResolutionPriority
 
 Resistance is capped at 95 (always at least 5% infliction chance).
 
+### On-Hit Effect Targeting
+
+Every on-hit status effect carries an `EffectTarget` enum (`Target` or `Caster`):
+- `EffectTarget.Target` (default) → applied to the **defender** via `ProcessOnHitEffectsAsync`. Used for debuffs, stuns, DoTs.
+- `EffectTarget.Caster` → applied to the **spell caster** via `ProcessSelfBuffsAsync`. Used for self-buffs, shields, wards.
+
+This explicit targeting replaced an earlier buggy approach that blindly applied all on-hit effects to the caster. The two processing methods filter by target — no overlap, no ambiguity.
+
+### Reflection
+
+A defender with an active status effect that has `ReflectChance > 0` may redirect incoming on-hit effects (debuffs, damage-over-time) back to the original caster.
+
+1. On a hit that carries on-hit effects, before applying each effect, the simulator checks `defender.ActiveStatusEffects` for any buff with `ReflectChance > 0`. The highest `ReflectChance` value is used.
+2. Roll `D100` ≤ `ReflectChance` → the effect is redirected to the attacker and an `EffectReflected` event is logged.
+3. Otherwise → the effect is applied to the defender normally.
+4. Elemental DoTs (Burning, Chilled, Shocked, Poisoned) are **never** reflected — they always land on the original target.
+
+Reflection is a property of `StatusEffect.ReflectChance` (int, 0–100, default 0). Any buff can grant it. This makes reflection composable — it can come from spells, racial traits, or equipment without changes to the modifier pipeline.
+
 ### Status Effect Categories
 
 | Type | Example | Behavior |
@@ -523,6 +542,7 @@ All combat-log events use `CombatLogEntry` with an `EventType` string:
 | EffectApplied | Status effect landed |
 | EffectResisted | Resistance roll blocked the effect |
 | EffectExpired | Duration reached zero |
+| EffectReflected | On-hit effect redirected back to attacker by reflective shield |
 | DoTDamage | Damage-over-time tick |
 | FumblePenalty | Fumble side-effect applied |
 | Death | HP ≤ -10 |

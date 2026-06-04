@@ -358,6 +358,61 @@ public class CombatDisplayStateTests
     }
 
     [Fact]
+    public void ApplyEvent_SkippedTurn_SetsCcStatus()
+    {
+        var state = new CombatDisplayState([Hero("Alice")], Layout(["Alice"], []));
+
+        state.ApplyEvent(new CombatLogEntry
+        {
+            EventType = "SkippedTurn", ActorName = "Alice", CcLabel = "stunned"
+        });
+
+        Assert.Equal("stunned", state.TryGet("Alice")!.CcStatus);
+    }
+
+    [Fact]
+    public void ApplyEvent_SkippedTurn_NullCcLabel_ClearsCcStatus()
+    {
+        var hero = Hero("Alice");
+        hero.CcStatus = "stunned";
+        var state = new CombatDisplayState([hero], Layout(["Alice"], []));
+
+        state.ApplyEvent(new CombatLogEntry
+        {
+            EventType = "SkippedTurn", ActorName = "Alice", CcLabel = null
+        });
+
+        Assert.Null(state.TryGet("Alice")!.CcStatus);
+    }
+
+    [Fact]
+    public void ApplyEvent_TurnStart_ClearsCcStatus()
+    {
+        var hero = Hero("Alice");
+        hero.CcStatus = "stunned";
+        var state = new CombatDisplayState([hero], Layout(["Alice"], []));
+
+        state.ApplyEvent(new CombatLogEntry
+        {
+            EventType = "TurnStart", ActorName = "Alice", AttackSourceName = "Longsword"
+        });
+
+        Assert.Null(state.TryGet("Alice")!.CcStatus);
+    }
+
+    [Fact]
+    public void ApplyEvent_Death_ClearsCcStatus()
+    {
+        var hero = Hero("Alice");
+        hero.CcStatus = "feared";
+        var state = new CombatDisplayState([hero], Layout(["Alice"], []));
+
+        state.ApplyEvent(new CombatLogEntry { EventType = "Death", ActorName = "Alice" });
+
+        Assert.Null(state.TryGet("Alice")!.CcStatus);
+    }
+
+    [Fact]
     public void ApplyEvent_TurnStart_NullSnapshot_LeavesExistingTmUnchanged()
     {
         var hero = Hero("Alice");

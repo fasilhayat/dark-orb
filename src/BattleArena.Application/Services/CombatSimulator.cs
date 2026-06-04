@@ -343,10 +343,14 @@ public class CombatSimulator : ICombatSimulator
     {
         foreach (var template in spell.OnHitEffects)
         {
+            if (template.Target != EffectTarget.Caster) continue;
+
+
             var effect = new StatusEffect
             {
                 Name                 = template.Name,
                 Type                 = template.Type,
+                Target               = template.Target,
                 ResistanceType       = template.ResistanceType,
                 ResistanceBonuses    = template.ResistanceBonuses,
                 Duration             = template.Duration,
@@ -464,13 +468,33 @@ public class CombatSimulator : ICombatSimulator
     }
 
     private async Task ProcessOnHitEffectsAsync(
-        int tick, Character target, Spell spell,
+        int tick, Character attacker, Character target, Spell spell,
         Func<CombatLogEntry, Task> notify)
     {
         if (spell.OnHitEffects.Count == 0 && spell.ElementalType == ElementalType.None) return;
 
         foreach (var template in spell.OnHitEffects)
         {
+            if (template.Target != EffectTarget.Target) continue;
+
+            // Check for reflection — defender's reflective buff may redirect
+            // the effect back to the original caster.
+            var actualTarget = target;
+            if (TryGetReflectChance(target, out var reflectChance)
+                && _dice.Roll(DieType.D100) <= reflectChance)
+            {
+                actualTarget = attacker;
+                await notify(new CombatLogEntry
+                {
+                    Tick             = tick,
+                    ActorName        = target.Name,
+                    EventType        = "EffectReflected",
+                    StatusEffectName = template.Name,
+                    TargetName       = attacker.Name,
+                    Message          = $"{target.Name}'s reflective shield reflects {template.Name} back to {attacker.Name}!"
+                });
+            }
+
             var dmgPerTurn = template.DamagePerTurn;
             if (dmgPerTurn <= 0 && template.DoTDamageCount > 0)
                 for (var i = 0; i < template.DoTDamageCount; i++)
@@ -480,6 +504,7 @@ public class CombatSimulator : ICombatSimulator
             {
                 Name                 = template.Name,
                 Type                 = template.Type,
+                Target               = template.Target,
                 ResistanceType       = template.ResistanceType,
                 ResistanceBonuses    = template.ResistanceBonuses,
                 Duration             = template.Duration,
@@ -493,11 +518,22 @@ public class CombatSimulator : ICombatSimulator
                 Source               = spell.Name
             };
 
-            await TryApplyEffectAsync(tick, target, effect, notify);
+            await TryApplyEffectAsync(tick, actualTarget, effect, notify);
         }
 
         if (spell.ElementalType != ElementalType.None)
             await TryApplyElementalDoTAsync(tick, target, spell, notify);
+    }
+
+    private static bool TryGetReflectChance(Character character, out int chance)
+    {
+        chance = 0;
+        foreach (var effect in character.ActiveStatusEffects)
+        {
+            if (effect.ReflectChance > 0 && effect.ReflectChance > chance)
+                chance = effect.ReflectChance;
+        }
+        return chance > 0;
     }
 
     private async Task TryApplyElementalDoTAsync(
@@ -722,6 +758,7 @@ public class CombatSimulator : ICombatSimulator
                 Tick      = tick,
                 ActorName = s.Character.Name,
                 EventType = "SkippedTurn",
+                CcLabel   = ccLabel,
                 Message   = $"{s.Character.Name} is {ccLabel} and cannot act!"
             });
         }
@@ -1214,7 +1251,7 @@ public class CombatSimulator : ICombatSimulator
             });
 
         if (setup.Source is Spell hitSpell)
-            await ProcessOnHitEffectsAsync(tick, target, hitSpell, notify);
+            await ProcessOnHitEffectsAsync(tick, actorState.Character, target, hitSpell, notify);
 
         await ProcessSpellDisruptionAsync(tick, setup, result, stateMap, notify);
         await ProcessConcentrationAsync(tick, target, result, stateMap, notify);

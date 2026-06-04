@@ -91,6 +91,11 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
         new() { Name = name, DamageDie = die, DamageCount = count, DamageType = DamageType.Fire,
                 AttackBonus = bonus, School = SpellSchool.Evocation, SpellLevel = 2 };
 
+    static Spell MakeSpell(string name, DieType die, int count, int bonus, StatusEffect onHit) =>
+        new() { Name = name, DamageDie = die, DamageCount = count, DamageType = DamageType.Lightning,
+                AttackBonus = bonus, School = SpellSchool.Evocation, SpellLevel = 2,
+                OnHitEffects = [onHit] };
+
     // ── Log printer ───────────────────────────────────────────────────────────
 
     void PrintLog(CombatResult r)
@@ -425,5 +430,166 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
         // Level 4 has Level*2 = +8  damage, Level/2 = +2 attack scaling.
         // The L4 can still get lucky (crit streak), but the L9 should dominate.
         Assert.True(highWins >= 16, $"High-level should win ≥ 16/20 (won {highWins})");
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // TEST 7 — On-hit stun goes to target, NOT caster (regression for the
+    //          ProcessSelfBuffsAsync bug where all OnHitEffects were blindly
+    //          applied to the caster regardless of EffectTarget).
+    // ─────────────────────────────────────────────────────────────────────────
+
+    [Fact]
+    public void Duel_CasterWithTargetStun_DoesNotStunSelf()
+    {
+        var stun = new StatusEffect
+        {
+            Name = "Stun", Type = StatusEffectType.Stun,
+            Target = EffectTarget.Target, Duration = 3, ApplicationChance = 100
+        };
+        var staticShock = MakeSpell("Static Shock", DieType.D6, 1, 2, stun);
+        var vaelith = MakeCaster("Vaelith", 9, 19, 18, 45, 8, 15, staticShock);
+        var enemy = MakeWarrior("Target", 5, 15, 12, 80, 6, 12, "Chain Mail", "Mace", DieType.D6, 1, 1);
+
+        var result = BuildSim().Simulate(
+            Party.Solo(vaelith, staticShock),
+            Party.Solo(enemy, enemy.Equipment.RightHand!));
+
+        DumpLog(result);
+
+        // The Stun effect must only appear on the enemy, never on Vaelith
+        var stunApplied = result.Log
+            .Where(e => e.EventType == "EffectApplied" && e.StatusEffectName == "Stun")
+            .ToList();
+
+        Assert.Contains(stunApplied, e => e.ActorName == "Target");
+        Assert.DoesNotContain(stunApplied, e => e.ActorName == "Vaelith");
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // TEST 8 — Self-buff spell with EffectTarget.Caster applies to caster,
+    //          demonstrating the pattern works in both directions.
+    // ─────────────────────────────────────────────────────────────────────────
+
+    [Fact]
+    public void Duel_CasterWithSelfBuff_GainsBuffOnSelf()
+    {
+        var ward = new StatusEffect
+        {
+            Name = "Arcane Ward", Type = StatusEffectType.Buff,
+            Target = EffectTarget.Caster, Duration = 3,
+            DefensePowerModifier = 5, ApplicationChance = 100
+        };
+        var wardSpell = MakeSpell("Ward", DieType.D4, 1, 0, ward);
+        var caster = MakeCaster("Lyra", 5, 18, 14, 30, 8, 13, wardSpell);
+        var enemy = MakeWarrior("Krag", 4, 17, 9, 45, 7, 15, "Hide Armor", "Orcish Axe", DieType.D10, 1, 1);
+
+        var result = BuildSim().Simulate(
+            Party.Solo(caster, wardSpell),
+            Party.Solo(enemy, enemy.Equipment.RightHand!));
+
+        DumpLog(result);
+
+        // The buff must be applied to the caster
+        var buffApplied = result.Log
+            .Where(e => e.EventType == "EffectApplied" && e.StatusEffectName == "Arcane Ward")
+            .ToList();
+
+        Assert.Contains(buffApplied, e => e.ActorName == "Lyra");
+        Assert.DoesNotContain(buffApplied, e => e.ActorName == "Krag");
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // TEST 9 — Reflective Shield bounces Stun back to the caster when it procs.
+    //          The defender has a pre-applied reflective buff with 100 % chance;
+    //          the attacker casts Static Shock (on-hit Stun).
+    //          The EffectReflected event must fire and the Stun must land on the
+    //          attacker, not the defender.
+    // ─────────────────────────────────────────────────────────────────────────
+
+    [Fact]
+    public void Duel_ReflectiveShield_ReflectsStunToCaster()
+    {
+        var stun = new StatusEffect
+        {
+            Name = "Stun", Type = StatusEffectType.Stun,
+            Target = EffectTarget.Target, Duration = 2, ApplicationChance = 100
+        };
+        var staticShock = MakeSpell("Static Shock", DieType.D6, 1, 2, stun);
+
+        var caster = MakeCaster("Caster", 7, 18, 16, 40, 8, 14, staticShock);
+        var defender = MakeWarrior("Defender", 5, 15, 12, 60, 6, 8, "Chain Mail", "Mace", DieType.D6, 1, 1);
+
+        // Pre-apply a reflective shield buff with 100 % reflect chance
+        defender.ActiveStatusEffects.Add(new StatusEffect
+        {
+            Name = "Reflective Shield",
+            Type = StatusEffectType.Buff,
+            ReflectChance = 100,
+            Duration = 99,
+            Target = EffectTarget.Caster
+        });
+
+        var result = BuildSim().Simulate(
+            Party.Solo(caster, staticShock),
+            Party.Solo(defender, defender.Equipment.RightHand!));
+
+        DumpLog(result);
+
+        // The reflection must have fired
+        Assert.Contains(result.Log, e => e.EventType == "EffectReflected"
+                                         && e.ActorName == "Defender");
+
+        // The Stun must land on the *caster*, not the defender
+        var stunApplied = result.Log
+            .Where(e => e.EventType == "EffectApplied" && e.StatusEffectName == "Stun")
+            .ToList();
+
+        Assert.Contains(stunApplied, e => e.ActorName == "Caster");
+        Assert.DoesNotContain(stunApplied, e => e.ActorName == "Defender");
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // TEST 10 — Zero reflect chance never reflects (edge case / dice boundary).
+    // ─────────────────────────────────────────────────────────────────────────
+
+    [Fact]
+    public void Duel_ReflectiveShield_ZeroReflect_DoesNotReflect()
+    {
+        var stun = new StatusEffect
+        {
+            Name = "Stun", Type = StatusEffectType.Stun,
+            Target = EffectTarget.Target, Duration = 2, ApplicationChance = 100
+        };
+        var staticShock = MakeSpell("Static Shock", DieType.D6, 1, 2, stun);
+
+        var caster = MakeCaster("Caster", 7, 18, 16, 40, 8, 14, staticShock);
+        var defender = MakeWarrior("Defender", 5, 15, 12, 60, 6, 8, "Chain Mail", "Mace", DieType.D6, 1, 1);
+
+        // Reflective buff with 0 % chance — should never reflect
+        defender.ActiveStatusEffects.Add(new StatusEffect
+        {
+            Name = "Dud Shield",
+            Type = StatusEffectType.Buff,
+            ReflectChance = 0,
+            Duration = 99,
+            Target = EffectTarget.Caster
+        });
+
+        var result = BuildSim().Simulate(
+            Party.Solo(caster, staticShock),
+            Party.Solo(defender, defender.Equipment.RightHand!));
+
+        DumpLog(result);
+
+        // No reflection event
+        Assert.DoesNotContain(result.Log, e => e.EventType == "EffectReflected");
+
+        // Stun lands on the defender as normal
+        var stunApplied = result.Log
+            .Where(e => e.EventType == "EffectApplied" && e.StatusEffectName == "Stun")
+            .ToList();
+
+        Assert.Contains(stunApplied, e => e.ActorName == "Defender");
+        Assert.DoesNotContain(stunApplied, e => e.ActorName == "Caster");
     }
 }

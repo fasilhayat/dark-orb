@@ -71,6 +71,7 @@ public sealed class CombatDisplayState
                 {
                     tsSt.Weapon = e.AttackSourceName ?? tsSt.Weapon;
                     tsSt.IsTmLocked = false;
+                    tsSt.CcStatus = null;
                 }
                 if (e.TurnMeterSnapshot is not null)
                 {
@@ -87,7 +88,10 @@ public sealed class CombatDisplayState
 
             case "SkippedTurn":
                 if (_chars.TryGetValue(e.ActorName, out var skSt))
+                {
                     skSt.IsTmLocked = true;
+                    skSt.CcStatus = e.CcLabel;
+                }
                 break;
 
             case "Damage":
@@ -146,6 +150,7 @@ public sealed class CombatDisplayState
                 if (_chars.TryGetValue(e.ActorName, out var deadSt))
                 {
                     deadSt.IsAlive = false;
+                    deadSt.CcStatus = null;
                     deadSt.ActiveEffects.Clear();
                 }
                 break;

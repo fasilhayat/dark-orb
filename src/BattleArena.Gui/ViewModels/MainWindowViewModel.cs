@@ -611,7 +611,7 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
     private const int TmTotalPipes = 73;
     private static readonly IBrush TmPipeFilled = new SolidColorBrush(Color.Parse("#00bfff"));
     private static readonly IBrush TmPipeEmpty = new SolidColorBrush(Color.Parse("#1a1a2e"));
-    private static readonly IBrush TmPipeLocked = new SolidColorBrush(Color.Parse("#444444"));
+    private static readonly IBrush TmPipeLocked = new SolidColorBrush(Color.Parse("#88ccff"));
 
     public ObservableCollection<IBrush> TmPipes { get; }
 
@@ -675,6 +675,13 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
         set => SetField(ref _isTmLocked, value);
     }
 
+    private string? _ccStatus;
+    public string? CcStatus
+    {
+        get => _ccStatus;
+        set => SetField(ref _ccStatus, value);
+    }
+
     private string _currentWeapon = "";
     public string CurrentWeapon
     {
@@ -692,7 +699,7 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
     // Computed display properties
 
     public bool IsDead => !IsAlive;
-    public string StatusLine => IsDead ? (Hp <= -10 ? "SLAIN" : "UNCONSCIOUS") : ActiveEffects;
+    public string StatusLine => IsDead ? (Hp <= -10 ? "SLAIN" : "UNCONSCIOUS") : "";
     public bool HasStatusOverlay => !string.IsNullOrEmpty(StatusLine);
 
     public double HpFraction => MaxHp > 0 ? Math.Clamp((double)Math.Max(0, Hp) / MaxHp, 0, 1) : 0;
@@ -704,6 +711,7 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
 
     public string HpDisplay => IsDead ? "" : $"{Math.Max(0, Hp)}/{MaxHp}";
     public string TmDisplay => $"{Tm}";
+    public string TmBorderBrush => IsTmLocked ? "#88ccff" : "#333";
     public string ManaDisplay => MaxMana > 0 ? $"{Math.Max(0, Mana)}" : "--";
     public string ActiveIndicator => IsDead ? "  " : "\u25b6 ";
     public string PortraitInitial =>
@@ -715,6 +723,8 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
     public string StrikeLine => $"Strike: {StrikeRating}";
     public string WeaponLine => $"Weapon: {WeaponStats}";
     public string ResistLine => $"Magic Res: {MagicResistance}";
+    public string? CcDisplay => CcStatus is { } s ? $"({s})" : null;
+    public bool HasCcDisplay => CcStatus is not null;
 
     public string BorderColor => IsDead ? "#666" : IsHero ? "#4488ff" : "#ff4488";
     public string NameColor => IsDead ? "#888" : IsHero ? "#88bbff" : "#ff8888";
@@ -741,6 +751,7 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
         Mana = Math.Max(0, s.Mana);
         IsAlive = s.IsAlive;
         IsTmLocked = s.IsTmLocked;
+        CcStatus = s.CcStatus;
         ActiveEffects = s.ActiveEffects.Count > 0 ? string.Join(", ", s.ActiveEffects) : "";
         if (!string.IsNullOrEmpty(s.Weapon))
             CurrentWeapon = s.Weapon;
@@ -795,6 +806,11 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
                 break;
             case nameof(IsTmLocked):
                 UpdateTmPipes();
+                Raise(nameof(TmBorderBrush));
+                break;
+            case nameof(CcStatus):
+                Raise(nameof(CcDisplay));
+                Raise(nameof(HasCcDisplay));
                 break;
         }
 

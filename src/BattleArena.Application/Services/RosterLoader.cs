@@ -101,9 +101,11 @@ public static class RosterLoader
                     {
                         Name              = e.Name,
                         Type              = ParseEnum<StatusEffectType>(e.Type),
+                        Target            = ParseEnum<EffectTarget>(e.Target),
                         ResistanceType    = ParseEnum<ResistanceType>(e.ResistanceType),
                         Duration          = e.Duration,
-                        ApplicationChance = e.ApplicationChance
+                        ApplicationChance = e.ApplicationChance,
+                        ReflectChance     = e.ReflectChance
                     });
                 }
             }
@@ -270,9 +272,11 @@ public static class RosterLoader
     {
         public string Name              { get; init; } = "";
         public string Type              { get; init; } = "";
+        public string Target            { get; init; } = "Target";
         public string ResistanceType    { get; init; } = "Magic";
         public int    Duration          { get; init; } = 1;
         public int    ApplicationChance { get; init; } = 100;
+        public int    ReflectChance     { get; init; }
     }
 
     private sealed class ArmorDto

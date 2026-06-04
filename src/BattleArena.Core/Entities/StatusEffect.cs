@@ -6,6 +6,7 @@ public class StatusEffect
 {
     public string Name { get; set; } = string.Empty;
     public StatusEffectType Type { get; set; }
+    public EffectTarget Target { get; set; } = EffectTarget.Target;
     public TriggerCondition TriggerCondition { get; set; }
     public int Duration { get; set; }
     public StackRule StackRule { get; set; }
@@ -24,4 +25,5 @@ public class StatusEffect
     public int DoTDamageCount { get; set; }
     public DieType DoTDamageDie { get; set; }
     public int MovementModifier { get; set; }
+    public int ReflectChance { get; set; }
 }
