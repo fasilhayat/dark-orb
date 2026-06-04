@@ -257,7 +257,6 @@ public partial class MainWindow : Window
         _vm.CharCha = 0;
         ExcStrLabel2.Text = "";
         _vm.CreationStep = 0;
-        UpdateCreateButton();
 
         if (_apiClient is not null)
         {
@@ -393,7 +392,6 @@ public partial class MainWindow : Window
         _vm.CharCha = Clamp(rolls[5] + raceBonuses[5] + subBonuses[5], raceMin[5], raceMax[5]);
 
         RollExceptionalStrength(_vm.CharStr, raceName, subrace);
-        UpdateCreateButton();
     }
 
     private void RollExceptionalStrength(int finalStr, string race, string? subrace)
@@ -469,8 +467,13 @@ public partial class MainWindow : Window
         }
         else if (step == 2 && _vm.CanGoNext)
             _vm.CreationStep = 3;
-        else if (step == 3 && _vm.CharStr > 0)
+        else if (step == 3 && _vm.CanGoNext)
             _vm.CreationStep = 4;
+    }
+
+    private void OnCreateCharFinishClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        OnBackToMainClick(sender, e);
     }
 
     private void OnBackStepClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -487,11 +490,6 @@ public partial class MainWindow : Window
             _vm.CreationStep = 1;
         else if (step == 1)
             _vm.CreationStep = 0;
-    }
-
-    private void UpdateCreateButton()
-    {
-        CreateCharButton2.IsEnabled = _vm.CharStr > 0;
     }
 
     private void OnTurnBasedClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)

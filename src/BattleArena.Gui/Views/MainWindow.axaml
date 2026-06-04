@@ -800,12 +800,6 @@
                              FontWeight="Bold" HorizontalAlignment="Center" />
                 </StackPanel>
               </Border>
-
-              <!-- Create button -->
-              <Button x:Name="CreateCharButton2" Content="Create Character"
-                      Click="OnCharCreateClick" Width="180" Height="36" FontSize="13"
-                      HorizontalAlignment="Center" Margin="0,4"
-                      IsEnabled="False" />
             </StackPanel>
 
             <!-- ═══ Step 4: Name ═══ -->
@@ -877,14 +871,12 @@
 
                 <!-- Name node -->
                 <StackPanel Orientation="Horizontal" Spacing="4" Margin="10,0"
-                            IsVisible="{Binding CharName, Converter={StaticResource NotNullConverter}}">
+                            IsVisible="{Binding IsStepName}">
                   <Border Width="10" Height="10" CornerRadius="5"
                           Background="{Binding CreationStep, Converter={StaticResource StepBg}, ConverterParameter=4}"
                           VerticalAlignment="Center" />
-                  <TextBlock FontSize="11" FontWeight="Bold" VerticalAlignment="Center"
-                             Foreground="#88bbff">
-                    <Run Text="Name: " /><Run Text="{Binding CharName}" />
-                  </TextBlock>
+                  <TextBlock Text="Name: " FontSize="11" FontWeight="Bold" VerticalAlignment="Center"
+                             Foreground="#88bbff" />
                 </StackPanel>
               </StackPanel>
             </Border>
@@ -900,7 +892,12 @@
                     Background="#5c3a3a" BorderBrush="#755" />
             <Button x:Name="NextStepButton" Content="Next →"
                     Click="OnNextStepClick" Width="100" Height="30" FontSize="12"
-                    IsEnabled="{Binding CanGoNext}" />
+                    IsEnabled="{Binding CanGoNext}"
+                    IsVisible="{Binding ShowNextButton}" />
+            <Button x:Name="CreateCharFinishButton" Content="Create Character"
+                    Click="OnCreateCharFinishClick" Width="140" Height="30" FontSize="12"
+                    IsEnabled="{Binding CanCreate}"
+                    IsVisible="{Binding IsStepName}" />
           </StackPanel>
 
           <!-- Row 4: Bottom actions -->

@@ -177,7 +177,10 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         set
         {
             if (SetField(ref _charName, value))
+            {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanGoNext)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanCreate)));
+            }
         }
     }
 
@@ -324,6 +327,7 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         {
             if (SetField(ref _charStr, value))
             {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanGoNext)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharStrMod)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharStrDisplay)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharCreationSummary)));
@@ -444,6 +448,8 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsStepStats)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanGoNext)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanGoBack)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanCreate)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShowNextButton)));
             }
         }
     }
@@ -464,6 +470,10 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         4 => false,
         _ => false,
     };
+
+    public bool ShowNextButton => _creationStep != 4;
+
+    public bool CanCreate => _creationStep == 4 && !string.IsNullOrWhiteSpace(CharName);
 
     public bool HasSubraces => AvailableSubraces.Count > 0;
 
