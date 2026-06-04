@@ -620,6 +620,11 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
     public string Race { get; init; } = "";
     public string Sex { get; init; } = "";
     public int Level { get; init; }
+    public int StrikeRating { get; init; }
+    public string ArmorName { get; init; } = "";
+    public int ArmorClass { get; init; }
+    public string WeaponStats { get; init; } = "";
+    public int MagicResistance { get; init; }
     public Bitmap? Portrait { get; init; }
 
     public bool HasPortrait => Portrait is not null;
@@ -696,6 +701,11 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
         string.IsNullOrWhiteSpace(Name) ? "?" : Name.TrimStart()[0].ToString().ToUpperInvariant();
 
     public string InfoLine => $"{SexDisplay} \u00b7 Lvl {Level,2} {Race} \u00b7 {ClassName}";
+
+    public string ArmorLine => $"{ArmorName} (AC {ArmorClass})";
+    public string StrikeLine => $"Strike: {StrikeRating}";
+    public string WeaponLine => $"Weapon: {WeaponStats}";
+    public string ResistLine => $"Magic Res: {MagicResistance}";
 
     public string BorderColor => IsDead ? "#666" : IsHero ? "#4488ff" : "#ff4488";
     public string NameColor => IsDead ? "#888" : IsHero ? "#88bbff" : "#ff8888";

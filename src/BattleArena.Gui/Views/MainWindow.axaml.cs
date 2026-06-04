@@ -11,6 +11,7 @@ using BattleArena.Application.Models;
 using BattleArena.Application.Modifiers;
 using BattleArena.Application.Services;
 using BattleArena.Core.Entities;
+using BattleArena.Core.Entities.Enums;
 using BattleArena.Gui.Data;
 using BattleArena.Gui.Models;
 using BattleArena.Gui.Presenters;
@@ -563,6 +564,11 @@ public partial class MainWindow : Window
                 ClassName = pm.Character.ClassName,
                 Sex = pm.Character.Sex,
                 Race = pm.Character.Race?.Name ?? "",
+                StrikeRating = pm.Character.StrikeRating,
+                ArmorName = pm.Character.Equipment.Chest?.Name ?? "None",
+                ArmorClass = pm.Character.Equipment.TotalArmorClass,
+                WeaponStats = FormatWeaponStats(pm.AttackSource),
+                MagicResistance = pm.Character.ComputeResistance(ResistanceType.Magic),
                 Hp = pm.Character.MaxHitPoints,
                 Mana = pm.Character.CurrentMana,
                 CurrentWeapon = pm.AttackSource?.Name ?? "",
@@ -581,6 +587,11 @@ public partial class MainWindow : Window
                 ClassName = pm.Character.ClassName,
                 Sex = pm.Character.Sex,
                 Race = pm.Character.Race?.Name ?? "",
+                StrikeRating = pm.Character.StrikeRating,
+                ArmorName = pm.Character.Equipment.Chest?.Name ?? "None",
+                ArmorClass = pm.Character.Equipment.TotalArmorClass,
+                WeaponStats = FormatWeaponStats(pm.AttackSource),
+                MagicResistance = pm.Character.ComputeResistance(ResistanceType.Magic),
                 Hp = pm.Character.MaxHitPoints,
                 Mana = pm.Character.CurrentMana,
                 CurrentWeapon = pm.AttackSource?.Name ?? "",
@@ -722,6 +733,11 @@ public partial class MainWindow : Window
             ClassName = c.ClassName,
             Sex = c.Sex,
             Race = c.Race,
+            StrikeRating = c.StrikeRating,
+            ArmorName = c.ArmorName,
+            ArmorClass = c.ArmorClass,
+            WeaponStats = c.WeaponStats,
+            MagicResistance = c.MagicResistance,
             MaxMana = c.MaxMana,
             Mana = c.Mana,
             Weapon = c.CurrentWeapon
@@ -769,6 +785,24 @@ public partial class MainWindow : Window
         };
         if (_presenter is not null)
             _presenter.PacingMultiplier = pacing;
+    }
+
+    private static int DieSides(DieType d) => d switch
+    {
+        DieType.D4 => 4,
+        DieType.D6 => 6,
+        DieType.D8 => 8,
+        DieType.D10 => 10,
+        DieType.D12 => 12,
+        DieType.D20 => 20,
+        _ => 0
+    };
+
+    private static string FormatWeaponStats(IAttackSource? source)
+    {
+        if (source is null) return "";
+        var dice = $"{source.DamageCount}d{DieSides(source.DamageDie)}";
+        return source.AttackBonus > 0 ? $"{dice}+{source.AttackBonus}" : dice;
     }
 
     private static List<CharacterDisplayItem> ToDisplayItems(List<Character> characters) =>

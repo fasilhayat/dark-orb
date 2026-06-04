@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:views="clr-namespace:BattleArena.Gui.Views"
              x:Class="BattleArena.Gui.Views.CharacterCard"
-              Width="300" MinHeight="160">
+             Width="340" MinHeight="180">
   <UserControl.Resources>
     <views:DoubleToGridLengthConverter x:Key="GridLengthConv" />
   </UserControl.Resources>
@@ -13,7 +13,7 @@
       <!-- Content layer -->
       <StackPanel Spacing="4">
 
-        <!-- Top row: portrait + name / info -->
+        <!-- Top row: portrait + name / info / stats -->
         <Grid ColumnDefinitions="112,*">
           <!-- Portrait (100×133, 3:4 ratio) -->
           <Border Grid.Column="0" Width="100" Height="133"
@@ -35,21 +35,33 @@
             </Grid>
           </Border>
 
-          <!-- Name / weapon / info -->
+          <!-- Name / weapon / info / stats -->
           <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Top">
             <StackPanel Orientation="Horizontal" Spacing="4">
-              <TextBlock Text="{Binding ActiveIndicator}" Foreground="#88bbff" FontSize="13" />
+              <TextBlock Text="{Binding ActiveIndicator}" Foreground="#88bbff" FontSize="14" />
               <TextBlock Text="{Binding Name}" Foreground="{Binding NameColor}"
-                         FontWeight="Bold" FontSize="14" />
+                         FontWeight="Bold" FontSize="15" />
             </StackPanel>
-            <TextBlock Text="{Binding CurrentWeapon}" Foreground="#888"
-                       FontStyle="Italic" FontSize="11" />
-            <TextBlock Text="{Binding InfoLine}" Foreground="#888" FontSize="11" />
+            <TextBlock Text="{Binding CurrentWeapon}" Foreground="#aaa"
+                       FontStyle="Italic" FontSize="12" />
+            <TextBlock Text="{Binding InfoLine}" Foreground="#aaa" FontSize="12" />
+
+            <!-- Stacked combat stats -->
+            <Border Background="#16162a" CornerRadius="3" Padding="0,4" Margin="0,1,0,0">
+              <StackPanel Spacing="1">
+                <TextBlock FontSize="12" Foreground="#aaa">
+                  <Run Text="Armor: "/><Run Text="{Binding ArmorLine}"/>
+                </TextBlock>
+                <TextBlock Text="{Binding StrikeLine}" FontSize="12" Foreground="#aaa" />
+                <TextBlock Text="{Binding WeaponLine}" FontSize="12" Foreground="#aaa" />
+                <TextBlock Text="{Binding ResistLine}" FontSize="12" Foreground="#aaa" />
+              </StackPanel>
+            </Border>
           </StackPanel>
         </Grid>
 
         <!-- TM bar — piped segments -->
-        <Border BorderBrush="#333" BorderThickness="1" CornerRadius="3" Background="#111" Height="18" ClipToBounds="True">
+        <Border BorderBrush="#333" BorderThickness="1" CornerRadius="3" Background="#111" Height="20" ClipToBounds="True">
           <Grid>
             <ItemsControl ItemsSource="{Binding TmPipes}">
               <ItemsControl.ItemsPanel>
@@ -63,13 +75,13 @@
                 </DataTemplate>
               </ItemsControl.ItemTemplate>
             </ItemsControl>
-            <TextBlock Text="{Binding TmDisplay}" Foreground="White" FontSize="11" FontWeight="Bold"
+            <TextBlock Text="{Binding TmDisplay}" Foreground="White" FontSize="12" FontWeight="Bold"
                        HorizontalAlignment="Center" VerticalAlignment="Center" />
           </Grid>
         </Border>
 
         <!-- Mana bar -->
-        <Border BorderBrush="#333" BorderThickness="1" CornerRadius="3" Background="#111" Height="18">
+        <Border BorderBrush="#333" BorderThickness="1" CornerRadius="3" Background="#111" Height="20">
           <Grid>
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="{Binding ManaFraction, Converter={StaticResource GridLengthConv}}" />
@@ -77,13 +89,13 @@
             </Grid.ColumnDefinitions>
             <Border Grid.Column="0" Background="{Binding ManaBarColor}" CornerRadius="2" />
             <TextBlock Grid.ColumnSpan="2" Text="{Binding ManaDisplay}" Foreground="White"
-                       FontSize="11" FontWeight="Bold"
+                       FontSize="12" FontWeight="Bold"
                        HorizontalAlignment="Center" VerticalAlignment="Center" />
           </Grid>
         </Border>
 
         <!-- HP bar -->
-        <Border BorderBrush="#333" BorderThickness="1" CornerRadius="3" Background="#111" Height="18">
+        <Border BorderBrush="#333" BorderThickness="1" CornerRadius="3" Background="#111" Height="20">
           <Grid>
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="{Binding HpFraction, Converter={StaticResource GridLengthConv}}" />
@@ -91,7 +103,7 @@
             </Grid.ColumnDefinitions>
             <Border Grid.Column="0" Background="{Binding HpBarColor}" CornerRadius="2" />
             <TextBlock Grid.ColumnSpan="2" Text="{Binding HpDisplay}" Foreground="White"
-                       FontSize="11" FontWeight="Bold"
+                       FontSize="12" FontWeight="Bold"
                        HorizontalAlignment="Center" VerticalAlignment="Center" />
           </Grid>
         </Border>
@@ -99,9 +111,9 @@
 
       <!-- Overlay layer: death or status effects -->
       <Border IsVisible="{Binding HasStatusOverlay}" Background="#80000040" CornerRadius="2"
-              VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="24">
+              VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="26">
         <TextBlock Text="{Binding StatusLine}" Foreground="#ff4444" FontWeight="Bold"
-                   FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                   FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" />
       </Border>
     </Grid>
   </Border>
