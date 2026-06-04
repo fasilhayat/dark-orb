@@ -1,0 +1,53 @@
+Use the coordinates as pixel bounds on the sheet image. Each icon occupies one grid cell. Crop with x0,y0,x1,y1.
+If your image editor uses center + size, use center_x, center_y with width=cell and height=cell.
+Grid: 6 columns, 9 rows, 1024x1024 sheet, each cell 170x170 except the last partial row space.
+Order: Races, Sub-races, Classes, Deities.
+01 | Race: Human | row 1, col 1 | x0=0, y0=0, x1=170, y1=170
+02 | Race: Elf | row 1, col 2 | x0=170, y0=0, x1=340, y1=170
+03 | Race: Dwarf | row 1, col 3 | x0=340, y0=0, x1=510, y1=170
+04 | Race: Lizard | row 1, col 4 | x0=510, y0=0, x1=680, y1=170
+05 | Race: Kobold | row 1, col 5 | x0=680, y0=0, x1=850, y1=170
+06 | Race: Demon | row 1, col 6 | x0=850, y0=0, x1=1020, y1=170
+07 | Race: Orc | row 2, col 1 | x0=0, y0=170, x1=170, y1=340
+08 | Race: Ogre | row 2, col 2 | x0=170, y0=170, x1=340, y1=340
+09 | Race: Gladefolk | row 2, col 3 | x0=340, y0=170, x1=510, y1=340
+10 | Race: Half-Elf | row 2, col 4 | x0=510, y0=170, x1=680, y1=340
+11 | Sub-race: High Elf | row 2, col 5 | x0=680, y0=170, x1=850, y1=340
+12 | Sub-race: Dark Elf | row 2, col 6 | x0=850, y0=170, x1=1020, y1=340
+13 | Sub-race: Forest Elf | row 3, col 1 | x0=0, y0=340, x1=170, y1=510
+14 | Sub-race: Mountain Dwarf | row 3, col 2 | x0=170, y0=340, x1=340, y1=510
+15 | Sub-race: Hill Dwarf | row 3, col 3 | x0=340, y0=340, x1=510, y1=510
+16 | Sub-race: Swamp Lizard | row 3, col 4 | x0=510, y0=340, x1=680, y1=510
+17 | Sub-race: Desert Lizard | row 3, col 5 | x0=680, y0=340, x1=850, y1=510
+18 | Sub-race: Forest Lizard | row 3, col 6 | x0=850, y0=340, x1=1020, y1=510
+19 | Sub-race: Fire Demon | row 4, col 1 | x0=0, y0=510, x1=170, y1=680
+20 | Sub-race: Shadow Demon | row 4, col 2 | x0=170, y0=510, x1=340, y1=680
+21 | Sub-race: Green Orc | row 4, col 3 | x0=340, y0=510, x1=510, y1=680
+22 | Sub-race: Blue Orc | row 4, col 4 | x0=510, y0=510, x1=680, y1=680
+23 | Sub-race: Red Orc | row 4, col 5 | x0=680, y0=510, x1=850, y1=680
+24 | Sub-race: Mountain Ogre | row 4, col 6 | x0=850, y0=510, x1=1020, y1=680
+25 | Sub-race: Hill Ogre | row 5, col 1 | x0=0, y0=680, x1=170, y1=850
+26 | Sub-race: Desert Ogre | row 5, col 2 | x0=170, y0=680, x1=340, y1=850
+27 | Sub-race: Forest Ogre | row 5, col 3 | x0=340, y0=680, x1=510, y1=850
+28 | Sub-race: Forest Gladefolk | row 5, col 4 | x0=510, y0=680, x1=680, y1=850
+29 | Sub-race: Hill Gladefolk | row 5, col 5 | x0=680, y0=680, x1=850, y1=850
+30 | Sub-race: Half-High-Elf | row 5, col 6 | x0=850, y0=680, x1=1020, y1=850
+31 | Sub-race: Half-Wood-Elf | row 6, col 1 | x0=0, y0=850, x1=170, y1=1020
+32 | Class: Barbarian | row 6, col 2 | x0=170, y0=850, x1=340, y1=1020
+33 | Class: Knight | row 6, col 3 | x0=340, y0=850, x1=510, y1=1020
+34 | Class: Paladin | row 6, col 4 | x0=510, y0=850, x1=680, y1=1020
+35 | Class: Priest | row 6, col 5 | x0=680, y0=850, x1=850, y1=1020
+36 | Class: Mage | row 6, col 6 | x0=850, y0=850, x1=1020, y1=1020
+37 | Class: Bard | row 7, col 1 | x0=0, y0=1020, x1=170, y1=1190
+38 | Class: Fighter | row 7, col 2 | x0=170, y0=1020, x1=340, y1=1190
+39 | Class: Rogue | row 7, col 3 | x0=340, y0=1020, x1=510, y1=1190
+40 | Class: Druid | row 7, col 4 | x0=510, y0=1020, x1=680, y1=1190
+41 | Class: Ranger | row 7, col 5 | x0=680, y0=1020, x1=850, y1=1190
+42 | Deity: Heaven | row 7, col 6 | x0=850, y0=1020, x1=1020, y1=1190
+43 | Deity: Star | row 8, col 1 | x0=0, y0=1190, x1=170, y1=1360
+44 | Deity: Constellations | row 8, col 2 | x0=170, y0=1190, x1=340, y1=1360
+45 | Deity: Moon | row 8, col 3 | x0=340, y0=1190, x1=510, y1=1360
+46 | Deity: Fire | row 8, col 4 | x0=510, y0=1190, x1=680, y1=1360
+47 | Deity: Darkness | row 8, col 5 | x0=680, y0=1190, x1=850, y1=1360
+48 | Deity: Smoke | row 8, col 6 | x0=850, y0=1190, x1=1020, y1=1360
+49 | Deity: Shadow | row 9, col 1 | x0=0, y0=1360, x1=170, y1=1530
