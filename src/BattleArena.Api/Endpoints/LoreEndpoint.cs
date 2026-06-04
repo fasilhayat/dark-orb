@@ -59,6 +59,13 @@ public static class LoreEndpoint
             return Results.Ok(spells);
         });
 
+        // ── Schools ─────────────────────────────────────────────
+        app.MapGet("/v1/schools", async (ISpellRepository spellRepository) =>
+        {
+            var schools = await spellRepository.GetAllSchoolsAsync();
+            return Results.Ok(schools);
+        });
+
         // ── Bestiary ────────────────────────────────────────────
         app.MapGet("/v1/bestiary", async (string? category, int? level, IBestiaryRepository bestiaryRepository) =>
         {

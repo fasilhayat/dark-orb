@@ -65,4 +65,16 @@ public class SpellRepository : ISpellRepository
         "D100" => DieType.D100,
         _ => DieType.D4
     };
+
+    public async Task<List<SpellSchoolInfo>> GetAllSchoolsAsync()
+    {
+        return await _context.ExecuteQueryAsync("fn_get_spell_schools", MapSchool);
+    }
+
+    private static SpellSchoolInfo MapSchool(NpgsqlDataReader reader) => new()
+    {
+        Id = (int)reader["id"],
+        Name = (string)reader["name"],
+        Description = reader["description"] as string ?? ""
+    };
 }

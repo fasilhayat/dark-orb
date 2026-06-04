@@ -190,13 +190,27 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
             if (SetField(ref _selectedClassName, value))
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedClass)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsMageSelected)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsPriestSelected)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedClassFullInfo)));
                 SelectedRaceName = null;
                 SelectedSubraceName = null;
+                SelectedSchool = null;
+                SelectedDeity = null;
                 AvailableRaces.Clear();
                 AvailableSubraces.Clear();
+                AvailableDeities.Clear();
+                AvailableSchools.Clear();
                 if (value is not null && ClassRaceRestrictions.TryGetValue(value, out var races))
                     foreach (var r in races)
                         AvailableRaces.Add(r);
+                // Populate school/deity options based on class
+                if (value == "Mage")
+                    foreach (var s in LoadedSchools)
+                        AvailableSchools.Add(s.Name);
+                else if (value == "Priest")
+                    foreach (var d in LoadedDeities)
+                        AvailableDeities.Add(d.Name);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanRollStats)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanGoNext)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharCreationSummary)));
@@ -204,6 +218,21 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         }
     }
     public string SelectedClass => SelectedClassName ?? "";
+
+    public bool IsMageSelected => string.Equals(SelectedClassName, "Mage", StringComparison.OrdinalIgnoreCase);
+    public bool IsPriestSelected => string.Equals(SelectedClassName, "Priest", StringComparison.OrdinalIgnoreCase);
+
+    public string SelectedClassFullInfo
+    {
+        get
+        {
+            if (SelectedClassName is null) return "";
+            var pc = LoadedClasses.FirstOrDefault(c =>
+                c.Name.Equals(SelectedClassName, StringComparison.OrdinalIgnoreCase));
+            if (pc is null) return "";
+            return $"{pc.Description}\nHit Die: D{(int)pc.HitDie}  ·  Strike Rating: {pc.BaseStrikeRating}";
+        }
+    }
  
     private string? _selectedRaceName;
     public string? SelectedRaceName
@@ -214,18 +243,33 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
             if (SetField(ref _selectedRaceName, value))
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedRace)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedRaceFullInfo)));
                 SelectedSubraceName = null;
                 AvailableSubraces.Clear();
                 if (value is not null && RaceSubraceLookup.TryGetValue(value, out var subraces))
                     foreach (var s in subraces)
                         AvailableSubraces.Add(s);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasSubraces)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanRollStats)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanGoNext)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanGoBack)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharCreationSummary)));
             }
         }
     }
     public string SelectedRace => SelectedRaceName ?? "";
+
+    public string SelectedRaceFullInfo
+    {
+        get
+        {
+            if (SelectedRaceName is null) return "";
+            var r = LoadedRaces.FirstOrDefault(race =>
+                race.Name.Equals(SelectedRaceName, StringComparison.OrdinalIgnoreCase));
+            if (r is null) return "";
+            return r.Description;
+        }
+    }
  
     private string? _selectedSubraceName;
     public string? SelectedSubraceName
@@ -236,12 +280,25 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
             if (SetField(ref _selectedSubraceName, value))
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedSubrace)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedSubraceFullInfo)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharCreationSummary)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanGoNext)));
             }
         }
     }
     public string SelectedSubrace => SelectedSubraceName ?? "";
+
+    public string SelectedSubraceFullInfo
+    {
+        get
+        {
+            if (SelectedSubraceName is null) return "";
+            var sr = LoadedSubraces.FirstOrDefault(s =>
+                s.Name.Equals(SelectedSubraceName, StringComparison.OrdinalIgnoreCase));
+            if (sr is null) return "";
+            return sr.Description;
+        }
+    }
 
     public bool CanRollStats => SelectedClassName is not null && SelectedRaceName is not null;
 
@@ -250,10 +307,12 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         get
         {
             var cls = SelectedClassName ?? "?";
+            var school = SelectedSchool is not null ? $" [{SelectedSchool}]" : "";
+            var deity = SelectedDeity is not null ? $" [{SelectedDeity}]" : "";
             var race = SelectedRaceName ?? "?";
             var sub = SelectedSubraceName is not null ? $" ({SelectedSubraceName})" : "";
             var strInfo = CharStrExceptional > 0 ? $"{CharStr}/{CharStrExceptional:00}" : CharStr.ToString();
-            return $"{cls}  ·  {race}{sub}  ·  STR {strInfo}  DEX {CharDex}  STA {CharSta}  INT {CharInt}  WIS {CharWis}  CHA {CharCha}";
+            return $"{cls}{school}{deity}  ·  {race}{sub}  ·  STR {strInfo}  DEX {CharDex}  STA {CharSta}  INT {CharInt}  WIS {CharWis}  CHA {CharCha}";
         }
     }
 
@@ -388,24 +447,87 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
             }
         }
     }
-    public bool IsStepName => _creationStep == 0;
-    public bool IsStepClass => _creationStep == 1;
-    public bool IsStepRace => _creationStep == 2;
-    public bool IsStepSubrace => _creationStep == 3;
-    public bool IsStepStats => _creationStep == 4;
-    public bool CanGoBack => _creationStep > 0 && _creationStep < 4;
+    public bool IsStepClass => _creationStep == 0;
+    public bool IsStepRace => _creationStep == 1;
+    public bool IsStepSubrace => _creationStep == 2;
+    public bool IsStepStats => _creationStep == 3;
+    public bool IsStepName => _creationStep == 4;
+    public bool CanGoBack => _creationStep > 0;
     public bool CanGoNext => _creationStep switch
     {
-        0 => !string.IsNullOrWhiteSpace(CharName),
-        1 => SelectedClassName is not null,
-        2 => SelectedRaceName is not null,
-        3 => true,
+        0 => SelectedClassName is not null
+            && (!IsMageSelected || SelectedSchool is not null)
+            && (!IsPriestSelected || SelectedDeity is not null),
+        1 => SelectedRaceName is not null,
+        2 => SelectedSubraceName is not null,
+        3 => CharStr > 0,
         4 => false,
         _ => false,
     };
 
+    public bool HasSubraces => AvailableSubraces.Count > 0;
+
     public List<Race> LoadedRaces { get; set; } = [];
     public List<Subrace> LoadedSubraces { get; set; } = [];
+    public List<PlayerClass> LoadedClasses { get; set; } = [];
+    public List<Deity> LoadedDeities { get; set; } = [];
+    public List<SpellSchoolInfo> LoadedSchools { get; set; } = [];
+
+    public ObservableCollection<string> AvailableDeities { get; } = [];
+    public ObservableCollection<string> AvailableSchools { get; } = [];
+
+    private string? _selectedSchool;
+    public string? SelectedSchool
+    {
+        get => _selectedSchool;
+        set
+        {
+            if (SetField(ref _selectedSchool, value))
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharCreationSummary)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanGoNext)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedSchoolInfo)));
+            }
+        }
+    }
+
+    public string SelectedSchoolInfo
+    {
+        get
+        {
+            if (SelectedSchool is null) return "";
+            var s = LoadedSchools.FirstOrDefault(ss =>
+                ss.Name.Equals(SelectedSchool, StringComparison.OrdinalIgnoreCase));
+            if (s is null) return "";
+            return s.Description;
+        }
+    }
+
+    private string? _selectedDeity;
+    public string? SelectedDeity
+    {
+        get => _selectedDeity;
+        set
+        {
+            if (SetField(ref _selectedDeity, value))
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CharCreationSummary)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanGoNext)));
+            }
+        }
+    }
+
+    public string SelectedDeityInfo
+    {
+        get
+        {
+            if (SelectedDeity is null) return "";
+            var d = LoadedDeities.FirstOrDefault(dd =>
+                dd.Name.Equals(SelectedDeity, StringComparison.OrdinalIgnoreCase));
+            if (d is null) return "";
+            return $"{d.Description}\nDomain: {d.Domain}";
+        }
+    }
 
     private bool _isApiMode;
     public bool IsApiMode

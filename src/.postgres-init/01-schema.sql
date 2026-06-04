@@ -69,7 +69,8 @@ CREATE TABLE IF NOT EXISTS arena_data.deity_alignment (
 
 CREATE TABLE IF NOT EXISTS arena_data.spell_school (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE
+    name VARCHAR(50) NOT NULL UNIQUE,
+    description TEXT NOT NULL DEFAULT ''
 );
 
 
@@ -578,6 +579,17 @@ BEGIN
     FROM arena_data.race_special_ability sa
     WHERE (p_race_id IS NULL OR sa.race_id = p_race_id)
     ORDER BY sa.name;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION arena_data.fn_get_spell_schools()
+RETURNS TABLE(id INTEGER, name VARCHAR, description TEXT) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT ss.id, ss.name::VARCHAR, ss.description::TEXT
+    FROM arena_data.spell_school ss
+    ORDER BY ss.id;
 END;
 $$ LANGUAGE plpgsql;
 

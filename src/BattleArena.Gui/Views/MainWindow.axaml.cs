@@ -265,11 +265,17 @@ public partial class MainWindow : Window
             {
                 _vm.LoadedRaces = await _apiClient.GetRacesAsync();
                 _vm.LoadedSubraces = await _apiClient.GetSubracesAsync();
+                _vm.LoadedClasses = await _apiClient.GetClassesAsync();
+                _vm.LoadedDeities = await _apiClient.GetDeitiesAsync();
+                _vm.LoadedSchools = await _apiClient.GetSchoolsAsync();
             }
             catch
             {
                 _vm.LoadedRaces = [];
                 _vm.LoadedSubraces = [];
+                _vm.LoadedClasses = [];
+                _vm.LoadedDeities = [];
+                _vm.LoadedSchools = [];
             }
         }
     }
@@ -410,35 +416,35 @@ public partial class MainWindow : Window
     private void OnClassButtonClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         if (sender is Button { Content: string cls })
-        {
             _vm.SelectedClassName = cls;
-            _vm.CreationStep = 2;
-        }
     }
 
     private void OnRaceButtonClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         if (sender is Button { Content: string race })
-        {
             _vm.SelectedRaceName = race;
-            var subraces = _vm.AvailableSubraces;
-            _vm.CreationStep = subraces.Count > 0 ? 3 : 4;
+    }
+
+    private void OnSchoolButtonClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (sender is Button { Content: string school })
+        {
+            _vm.SelectedSchool = school;
+        }
+    }
+
+    private void OnDeityButtonClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (sender is Button { Content: string deity })
+        {
+            _vm.SelectedDeity = deity;
         }
     }
 
     private void OnSubraceButtonClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         if (sender is Button { Content: string sub })
-        {
             _vm.SelectedSubraceName = sub;
-            _vm.CreationStep = 4;
-        }
-    }
-
-    private void OnSkipSubraceClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        _vm.SelectedSubraceName = null;
-        _vm.CreationStep = 4;
     }
 
     private void OnCharCreateClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -454,16 +460,16 @@ public partial class MainWindow : Window
     private void OnNextStepClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         var step = _vm.CreationStep;
-        if (step == 0 && !string.IsNullOrWhiteSpace(_vm.CharName))
+        if (step == 0 && _vm.CanGoNext)
             _vm.CreationStep = 1;
-        else if (step == 1 && _vm.SelectedClassName is not null)
-            _vm.CreationStep = 2;
-        else if (step == 2 && _vm.SelectedRaceName is not null)
+        else if (step == 1 && _vm.SelectedRaceName is not null)
         {
             var subraces = _vm.AvailableSubraces;
-            _vm.CreationStep = subraces.Count > 0 ? 3 : 4;
+            _vm.CreationStep = subraces.Count > 0 ? 2 : 3;
         }
-        else if (step == 3)
+        else if (step == 2 && _vm.CanGoNext)
+            _vm.CreationStep = 3;
+        else if (step == 3 && _vm.CharStr > 0)
             _vm.CreationStep = 4;
     }
 
@@ -471,12 +477,16 @@ public partial class MainWindow : Window
     {
         var step = _vm.CreationStep;
         if (step == 4)
+            _vm.CreationStep = 3;
+        else if (step == 3)
         {
             var subraces = _vm.AvailableSubraces;
-            _vm.CreationStep = subraces.Count > 0 ? 3 : 2;
+            _vm.CreationStep = subraces.Count > 0 ? 2 : 1;
         }
-        else if (step > 0)
-            _vm.CreationStep = step - 1;
+        else if (step == 2)
+            _vm.CreationStep = 1;
+        else if (step == 1)
+            _vm.CreationStep = 0;
     }
 
     private void UpdateCreateButton()

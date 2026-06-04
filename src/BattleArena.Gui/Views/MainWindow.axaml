@@ -9,10 +9,14 @@
   <Window.Resources>
     <views:DoubleToWidthConverter x:Key="WidthConv" />
     <views:DoubleToGridLengthConverter x:Key="GridLenConv" />
-    <views:BoolToStepConverter x:Key="BoolToStepBg" />
-    <views:BoolToStepConverter x:Key="BoolToStepBorder" />
-    <views:BoolToStepConverter x:Key="BoolToStepFg" />
-    <views:BoolToStepConverter x:Key="BoolToStepLabel" />
+    <views:StepStateConverter x:Key="StepBg" Mode="Bg" />
+    <views:StepStateConverter x:Key="StepBorder" Mode="Border" />
+    <views:StepStateConverter x:Key="StepFg" Mode="Fg" />
+    <views:StepStateConverter x:Key="StepLabel" Mode="Label" />
+    <views:StepStateConverter x:Key="StepText" Mode="Text" />
+    <views:NotNullConverter x:Key="NotNullConverter" />
+    <views:GreaterThanZeroConverter x:Key="GreaterThanZeroConverter" />
+    <views:SelectedButtonConverter x:Key="SelectedButtonConverter" />
   </Window.Resources>
 
   <Window.Styles>
@@ -81,6 +85,7 @@
   </Window.Styles>
 
   <Grid Margin="8">
+
     <!-- ── MAIN MENU PHASE ── -->
     <Grid IsVisible="{Binding IsMainMenuPhase}" RowDefinitions="*,Auto,Auto,*" Margin="20">
       <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
@@ -361,107 +366,107 @@
 
     <!-- ── CHARACTER CREATION PHASE ── -->
     <Grid IsVisible="{Binding IsCharCreationPhase}" Margin="20">
-      <Border Background="#12121e" CornerRadius="8" Padding="20" MinWidth="580" MaxWidth="700"
+      <Border Background="#12121e" CornerRadius="8" Padding="20" MinWidth="640" MaxWidth="760"
               HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
+        <Grid RowDefinitions="Auto,Auto,*,Auto,Auto">
 
           <!-- Row 0: Title -->
           <TextBlock Grid.Row="0" Text="CHARACTER CREATION"
                      Foreground="#00bfff" FontSize="20" FontWeight="Bold"
                      HorizontalAlignment="Center" Margin="0,0,0,12" />
 
-          <!-- Row 1: Step indicator -->
+          <!-- Row 1: Linear step indicator -->
           <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center"
                       Spacing="0" Margin="0,0,0,16">
-            <!-- Step 0: Name -->
+            <!-- Step 0: Class -->
             <StackPanel Orientation="Horizontal" Spacing="6">
-              <Border Width="24" Height="24" CornerRadius="12"
-                      Background="{Binding IsStepName, Converter={StaticResource BoolToStepBg}}"
-                      BorderBrush="{Binding IsStepName, Converter={StaticResource BoolToStepBorder}}"
+              <Border Width="28" Height="28" CornerRadius="14"
+                      Background="{Binding CreationStep, Converter={StaticResource StepBg}, ConverterParameter=0}"
+                      BorderBrush="{Binding CreationStep, Converter={StaticResource StepBorder}, ConverterParameter=0}"
                       BorderThickness="2" VerticalAlignment="Center">
-                <TextBlock Text="1" Foreground="{Binding IsStepName, Converter={StaticResource BoolToStepFg}}"
+                <TextBlock Text="{Binding CreationStep, Converter={StaticResource StepText}, ConverterParameter=0}"
+                           Foreground="{Binding CreationStep, Converter={StaticResource StepFg}, ConverterParameter=0}"
                            FontSize="12" FontWeight="Bold"
                            HorizontalAlignment="Center" VerticalAlignment="Center" />
               </Border>
-              <TextBlock Text="Name" Foreground="{Binding IsStepName, Converter={StaticResource BoolToStepLabel}}"
+              <TextBlock Text="Class"
+                         Foreground="{Binding CreationStep, Converter={StaticResource StepLabel}, ConverterParameter=0}"
                          FontSize="12" VerticalAlignment="Center" />
             </StackPanel>
             <TextBlock Text="  →  " Foreground="#555" FontSize="12" VerticalAlignment="Center" />
-            <!-- Step 1: Class -->
+            <!-- Step 1: Race -->
             <StackPanel Orientation="Horizontal" Spacing="6">
-              <Border Width="24" Height="24" CornerRadius="12"
-                      Background="{Binding IsStepClass, Converter={StaticResource BoolToStepBg}}"
-                      BorderBrush="{Binding IsStepClass, Converter={StaticResource BoolToStepBorder}}"
+              <Border Width="28" Height="28" CornerRadius="14"
+                      Background="{Binding CreationStep, Converter={StaticResource StepBg}, ConverterParameter=1}"
+                      BorderBrush="{Binding CreationStep, Converter={StaticResource StepBorder}, ConverterParameter=1}"
                       BorderThickness="2" VerticalAlignment="Center">
-                <TextBlock Text="2" Foreground="{Binding IsStepClass, Converter={StaticResource BoolToStepFg}}"
+                <TextBlock Text="{Binding CreationStep, Converter={StaticResource StepText}, ConverterParameter=1}"
+                           Foreground="{Binding CreationStep, Converter={StaticResource StepFg}, ConverterParameter=1}"
                            FontSize="12" FontWeight="Bold"
                            HorizontalAlignment="Center" VerticalAlignment="Center" />
               </Border>
-              <TextBlock Text="Class" Foreground="{Binding IsStepClass, Converter={StaticResource BoolToStepLabel}}"
+              <TextBlock Text="Race"
+                         Foreground="{Binding CreationStep, Converter={StaticResource StepLabel}, ConverterParameter=1}"
                          FontSize="12" VerticalAlignment="Center" />
             </StackPanel>
             <TextBlock Text="  →  " Foreground="#555" FontSize="12" VerticalAlignment="Center" />
-            <!-- Step 2: Race -->
+            <!-- Step 2: Subrace -->
             <StackPanel Orientation="Horizontal" Spacing="6">
-              <Border Width="24" Height="24" CornerRadius="12"
-                      Background="{Binding IsStepRace, Converter={StaticResource BoolToStepBg}}"
-                      BorderBrush="{Binding IsStepRace, Converter={StaticResource BoolToStepBorder}}"
+              <Border Width="28" Height="28" CornerRadius="14"
+                      Background="{Binding CreationStep, Converter={StaticResource StepBg}, ConverterParameter=2}"
+                      BorderBrush="{Binding CreationStep, Converter={StaticResource StepBorder}, ConverterParameter=2}"
                       BorderThickness="2" VerticalAlignment="Center">
-                <TextBlock Text="3" Foreground="{Binding IsStepRace, Converter={StaticResource BoolToStepFg}}"
+                <TextBlock Text="{Binding CreationStep, Converter={StaticResource StepText}, ConverterParameter=2}"
+                           Foreground="{Binding CreationStep, Converter={StaticResource StepFg}, ConverterParameter=2}"
                            FontSize="12" FontWeight="Bold"
                            HorizontalAlignment="Center" VerticalAlignment="Center" />
               </Border>
-              <TextBlock Text="Race" Foreground="{Binding IsStepRace, Converter={StaticResource BoolToStepLabel}}"
+              <TextBlock Text="Subrace"
+                         Foreground="{Binding CreationStep, Converter={StaticResource StepLabel}, ConverterParameter=2}"
                          FontSize="12" VerticalAlignment="Center" />
             </StackPanel>
             <TextBlock Text="  →  " Foreground="#555" FontSize="12" VerticalAlignment="Center" />
-            <!-- Step 3: Subrace -->
+            <!-- Step 3: Stats -->
             <StackPanel Orientation="Horizontal" Spacing="6">
-              <Border Width="24" Height="24" CornerRadius="12"
-                      Background="{Binding IsStepSubrace, Converter={StaticResource BoolToStepBg}}"
-                      BorderBrush="{Binding IsStepSubrace, Converter={StaticResource BoolToStepBorder}}"
+              <Border Width="28" Height="28" CornerRadius="14"
+                      Background="{Binding CreationStep, Converter={StaticResource StepBg}, ConverterParameter=3}"
+                      BorderBrush="{Binding CreationStep, Converter={StaticResource StepBorder}, ConverterParameter=3}"
                       BorderThickness="2" VerticalAlignment="Center">
-                <TextBlock Text="4" Foreground="{Binding IsStepSubrace, Converter={StaticResource BoolToStepFg}}"
+                <TextBlock Text="{Binding CreationStep, Converter={StaticResource StepText}, ConverterParameter=3}"
+                           Foreground="{Binding CreationStep, Converter={StaticResource StepFg}, ConverterParameter=3}"
                            FontSize="12" FontWeight="Bold"
                            HorizontalAlignment="Center" VerticalAlignment="Center" />
               </Border>
-              <TextBlock Text="Subrace" Foreground="{Binding IsStepSubrace, Converter={StaticResource BoolToStepLabel}}"
+              <TextBlock Text="Stats"
+                         Foreground="{Binding CreationStep, Converter={StaticResource StepLabel}, ConverterParameter=3}"
                          FontSize="12" VerticalAlignment="Center" />
             </StackPanel>
             <TextBlock Text="  →  " Foreground="#555" FontSize="12" VerticalAlignment="Center" />
-            <!-- Step 4: Stats -->
+            <!-- Step 4: Name -->
             <StackPanel Orientation="Horizontal" Spacing="6">
-              <Border Width="24" Height="24" CornerRadius="12"
-                      Background="{Binding IsStepStats, Converter={StaticResource BoolToStepBg}}"
-                      BorderBrush="{Binding IsStepStats, Converter={StaticResource BoolToStepBorder}}"
+              <Border Width="28" Height="28" CornerRadius="14"
+                      Background="{Binding CreationStep, Converter={StaticResource StepBg}, ConverterParameter=4}"
+                      BorderBrush="{Binding CreationStep, Converter={StaticResource StepBorder}, ConverterParameter=4}"
                       BorderThickness="2" VerticalAlignment="Center">
-                <TextBlock Text="5" Foreground="{Binding IsStepStats, Converter={StaticResource BoolToStepFg}}"
+                <TextBlock Text="{Binding CreationStep, Converter={StaticResource StepText}, ConverterParameter=4}"
+                           Foreground="{Binding CreationStep, Converter={StaticResource StepFg}, ConverterParameter=4}"
                            FontSize="12" FontWeight="Bold"
                            HorizontalAlignment="Center" VerticalAlignment="Center" />
               </Border>
-              <TextBlock Text="Stats" Foreground="{Binding IsStepStats, Converter={StaticResource BoolToStepLabel}}"
+              <TextBlock Text="Name"
+                         Foreground="{Binding CreationStep, Converter={StaticResource StepLabel}, ConverterParameter=4}"
                          FontSize="12" VerticalAlignment="Center" />
             </StackPanel>
           </StackPanel>
 
-          <!-- Row 2: Step content -->
-          <Grid Grid.Row="2">
+          <!-- Row 2: Step content (fills remaining space, scrolls if needed) -->
+          <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <Grid RowDefinitions="*,Auto">
 
-            <!-- ═══ Step 0: Name ═══ -->
-            <StackPanel IsVisible="{Binding IsStepName}" HorizontalAlignment="Center"
-                        VerticalAlignment="Top" Spacing="10" Margin="0,8">
-              <TextBlock Text="What is your character's name?"
-                         Foreground="#ccc" FontSize="14" HorizontalAlignment="Center" />
-              <TextBox x:Name="CharNameBox" Text="{Binding CharName}" Width="220" Height="28"
-                       FontSize="13" Background="#1a1a2e" Foreground="White"
-                       BorderBrush="#555" BorderThickness="1"
-                       HorizontalAlignment="Center" TextChanged="OnCharNameChanged" />
-            </StackPanel>
-
-            <!-- ═══ Step 1: Class ═══ -->
-            <StackPanel IsVisible="{Binding IsStepClass}" HorizontalAlignment="Center"
-                        VerticalAlignment="Top" Spacing="8" Margin="0,8">
-              <TextBlock Text="Choose your class"
+              <!-- ═══ Step 0: Class ═══ -->
+              <StackPanel IsVisible="{Binding IsStepClass}" HorizontalAlignment="Center"
+                          VerticalAlignment="Top" Spacing="8" Margin="0,8">
+                <TextBlock Text="Choose your class"
                          Foreground="#88bbff" FontSize="14" FontWeight="Bold"
                          HorizontalAlignment="Center" />
               <ItemsControl ItemsSource="{Binding AvailableClasses}">
@@ -474,13 +479,136 @@
                   <DataTemplate>
                     <Button Content="{Binding}" Width="130" Height="34" Margin="4"
                             FontSize="12" Click="OnClassButtonClick"
-                            Background="#1a1a2e" BorderBrush="#555" BorderThickness="1" />
+                            BorderBrush="#555" BorderThickness="1">
+                      <Button.Background>
+                        <MultiBinding Converter="{StaticResource SelectedButtonConverter}">
+                          <Binding Path="." />
+                          <Binding Path="DataContext.SelectedClassName" RelativeSource="{RelativeSource AncestorType=Window}" />
+                        </MultiBinding>
+                      </Button.Background>
+                    </Button>
                   </DataTemplate>
                 </ItemsControl.ItemTemplate>
               </ItemsControl>
+
+              <!-- Class info panel -->
+              <Border Background="#0d0d18" CornerRadius="4" Padding="12,8"
+                      BorderBrush="#333" BorderThickness="1" Margin="0,4,0,0"
+                      IsVisible="{Binding SelectedClassName, Converter={StaticResource NotNullConverter}}"
+                      MaxWidth="450" Height="110" MinHeight="110">
+                <Grid ColumnDefinitions="Auto,*">
+                  <Border Width="80" Height="80" Background="#1a1a2e" BorderBrush="#444"
+                          BorderThickness="1" CornerRadius="4" Margin="0,0,10,0"
+                          VerticalAlignment="Top">
+                    <TextBlock Text="🖼" Foreground="#444" FontSize="28"
+                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  </Border>
+                  <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <TextBlock Text="{Binding SelectedClassFullInfo}" Foreground="#bbb"
+                               FontSize="12" TextWrapping="Wrap" />
+                  </ScrollViewer>
+                </Grid>
+              </Border>
+
+              <!-- School selection (for Mage) -->
+              <StackPanel IsVisible="{Binding IsMageSelected}" Spacing="6"
+                          Margin="0,4,0,0">
+                <TextBlock Text="Choose a school of magic"
+                           Foreground="#d4a017" FontSize="13" FontWeight="Bold"
+                           HorizontalAlignment="Center" />
+                <ItemsControl ItemsSource="{Binding AvailableSchools}">
+                  <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <WrapPanel MaxWidth="420" HorizontalAlignment="Center" />
+                    </ItemsPanelTemplate>
+                  </ItemsControl.ItemsPanel>
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Button Content="{Binding}" Width="140" Height="30" Margin="4"
+                              FontSize="11" Click="OnSchoolButtonClick"
+                              BorderBrush="#886622" BorderThickness="1">
+                        <Button.Background>
+                          <MultiBinding Converter="{StaticResource SelectedButtonConverter}" ConverterParameter="#2a2a3e">
+                            <Binding Path="." />
+                            <Binding Path="DataContext.SelectedSchool" RelativeSource="{RelativeSource AncestorType=Window}" />
+                          </MultiBinding>
+                        </Button.Background>
+                      </Button>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <TextBlock Text="{Binding SelectedSchool, StringFormat='School: {0}'}"
+                           Foreground="#d4a017" FontSize="12" FontWeight="Bold"
+                           HorizontalAlignment="Center" />
+                <!-- School info panel -->
+                <Border Background="#0d0d18" CornerRadius="4" Padding="12,8"
+                        BorderBrush="#333" BorderThickness="1" Margin="0,4,0,0"
+                        IsVisible="{Binding SelectedSchool, Converter={StaticResource NotNullConverter}}"
+                        MaxWidth="450" Height="110" MinHeight="110">
+                  <Grid ColumnDefinitions="Auto,*">
+                    <Border Width="80" Height="80" Background="#1a1a2e" BorderBrush="#444"
+                            BorderThickness="1" CornerRadius="4" Margin="0,0,10,0"
+                            VerticalAlignment="Top">
+                      <TextBlock Text="🖼" Foreground="#444" FontSize="28"
+                                 HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                      <TextBlock Text="{Binding SelectedSchoolInfo}" Foreground="#bbb"
+                                 FontSize="12" TextWrapping="Wrap" />
+                    </ScrollViewer>
+                  </Grid>
+                </Border>
+              </StackPanel>
+
+              <!-- Deity selection (for Priest) -->
+              <StackPanel IsVisible="{Binding IsPriestSelected}" Spacing="6"
+                          Margin="0,4,0,0">
+                <TextBlock Text="Choose your deity"
+                           Foreground="#a0c0ff" FontSize="13" FontWeight="Bold"
+                           HorizontalAlignment="Center" />
+                <ItemsControl ItemsSource="{Binding AvailableDeities}">
+                  <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <WrapPanel MaxWidth="420" HorizontalAlignment="Center" />
+                    </ItemsPanelTemplate>
+                  </ItemsControl.ItemsPanel>
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Button Content="{Binding}" Width="140" Height="30" Margin="4"
+                              FontSize="11" Click="OnDeityButtonClick"
+                              BorderBrush="#5588aa" BorderThickness="1">
+                        <Button.Background>
+                          <MultiBinding Converter="{StaticResource SelectedButtonConverter}" ConverterParameter="#2a2a3e">
+                            <Binding Path="." />
+                            <Binding Path="DataContext.SelectedDeity" RelativeSource="{RelativeSource AncestorType=Window}" />
+                          </MultiBinding>
+                        </Button.Background>
+                      </Button>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <!-- Deity info -->
+                <Border Background="#0d0d18" CornerRadius="4" Padding="12,8"
+                        BorderBrush="#333" BorderThickness="1" Margin="0,4,0,0"
+                        IsVisible="{Binding SelectedDeity, Converter={StaticResource NotNullConverter}}"
+                        MaxWidth="450" Height="110" MinHeight="110">
+                  <Grid ColumnDefinitions="Auto,*">
+                    <Border Width="80" Height="80" Background="#1a1a2e" BorderBrush="#444"
+                            BorderThickness="1" CornerRadius="4" Margin="0,0,10,0"
+                            VerticalAlignment="Top">
+                      <TextBlock Text="🖼" Foreground="#444" FontSize="28"
+                                 HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                      <TextBlock Text="{Binding SelectedDeityInfo}" Foreground="#bbb"
+                                 FontSize="12" TextWrapping="Wrap" />
+                    </ScrollViewer>
+                  </Grid>
+                </Border>
+              </StackPanel>
             </StackPanel>
 
-            <!-- ═══ Step 2: Race ═══ -->
+            <!-- ═══ Step 1: Race ═══ -->
             <StackPanel IsVisible="{Binding IsStepRace}" HorizontalAlignment="Center"
                         VerticalAlignment="Top" Spacing="8" Margin="0,8">
               <TextBlock Text="Choose your race"
@@ -496,16 +624,42 @@
                   <DataTemplate>
                     <Button Content="{Binding}" Width="120" Height="34" Margin="4"
                             FontSize="12" Click="OnRaceButtonClick"
-                            Background="#1a1a2e" BorderBrush="#555" BorderThickness="1" />
+                            BorderBrush="#555" BorderThickness="1">
+                      <Button.Background>
+                        <MultiBinding Converter="{StaticResource SelectedButtonConverter}">
+                          <Binding Path="." />
+                          <Binding Path="DataContext.SelectedRaceName" RelativeSource="{RelativeSource AncestorType=Window}" />
+                        </MultiBinding>
+                      </Button.Background>
+                    </Button>
                   </DataTemplate>
                 </ItemsControl.ItemTemplate>
               </ItemsControl>
+
+              <!-- Race info panel -->
+              <Border Background="#0d0d18" CornerRadius="4" Padding="12,8"
+                      BorderBrush="#333" BorderThickness="1" Margin="0,4,0,0"
+                      IsVisible="{Binding SelectedRaceName, Converter={StaticResource NotNullConverter}}"
+                      MaxWidth="520" Height="110" MinHeight="110">
+                <Grid ColumnDefinitions="Auto,*">
+                  <Border Width="80" Height="80" Background="#1a1a2e" BorderBrush="#444"
+                          BorderThickness="1" CornerRadius="4" Margin="0,0,10,0"
+                          VerticalAlignment="Top">
+                    <TextBlock Text="🖼" Foreground="#444" FontSize="28"
+                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  </Border>
+                  <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <TextBlock Text="{Binding SelectedRaceFullInfo}" Foreground="#bbb"
+                               FontSize="12" TextWrapping="Wrap" />
+                  </ScrollViewer>
+                </Grid>
+              </Border>
             </StackPanel>
 
-            <!-- ═══ Step 3: Subrace ═══ -->
+            <!-- ═══ Step 2: Subrace ═══ -->
             <StackPanel IsVisible="{Binding IsStepSubrace}" HorizontalAlignment="Center"
                         VerticalAlignment="Top" Spacing="8" Margin="0,8">
-              <TextBlock Text="Choose a subrace (optional)"
+              <TextBlock Text="Choose a subrace"
                          Foreground="#88bbff" FontSize="14" FontWeight="Bold"
                          HorizontalAlignment="Center" />
               <ItemsControl ItemsSource="{Binding AvailableSubraces}">
@@ -518,17 +672,39 @@
                   <DataTemplate>
                     <Button Content="{Binding}" Width="130" Height="32" Margin="4"
                             FontSize="11" Click="OnSubraceButtonClick"
-                            Background="#1a1a2e" BorderBrush="#555" BorderThickness="1" />
+                            BorderBrush="#555" BorderThickness="1">
+                      <Button.Background>
+                        <MultiBinding Converter="{StaticResource SelectedButtonConverter}">
+                          <Binding Path="." />
+                          <Binding Path="DataContext.SelectedSubraceName" RelativeSource="{RelativeSource AncestorType=Window}" />
+                        </MultiBinding>
+                      </Button.Background>
+                    </Button>
                   </DataTemplate>
                 </ItemsControl.ItemTemplate>
               </ItemsControl>
-              <Button x:Name="SkipSubraceButton" Content="Skip (no subrace)" Width="160" Height="28"
-                      FontSize="11" Click="OnSkipSubraceClick" Margin="0,8,0,0"
-                      HorizontalAlignment="Center"
-                      Background="#2a2a3e" BorderBrush="#555" BorderThickness="1" />
+
+              <!-- Subrace info panel -->
+              <Border Background="#0d0d18" CornerRadius="4" Padding="12,8"
+                      BorderBrush="#333" BorderThickness="1" Margin="0,4,0,0"
+                      IsVisible="{Binding SelectedSubraceName, Converter={StaticResource NotNullConverter}}"
+                      MaxWidth="450" Height="110" MinHeight="110">
+                <Grid ColumnDefinitions="Auto,*">
+                  <Border Width="80" Height="80" Background="#1a1a2e" BorderBrush="#444"
+                          BorderThickness="1" CornerRadius="4" Margin="0,0,10,0"
+                          VerticalAlignment="Top">
+                    <TextBlock Text="🖼" Foreground="#444" FontSize="28"
+                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  </Border>
+                  <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <TextBlock Text="{Binding SelectedSubraceFullInfo}" Foreground="#bbb"
+                               FontSize="12" TextWrapping="Wrap" />
+                  </ScrollViewer>
+                </Grid>
+              </Border>
             </StackPanel>
 
-            <!-- ═══ Step 4: Stats ═══ -->
+            <!-- ═══ Step 3: Stats ═══ -->
             <StackPanel IsVisible="{Binding IsStepStats}" HorizontalAlignment="Center"
                         VerticalAlignment="Top" Spacing="10" Margin="0,8">
               <TextBlock Text="Ability Scores"
@@ -631,7 +807,89 @@
                       HorizontalAlignment="Center" Margin="0,4"
                       IsEnabled="False" />
             </StackPanel>
+
+            <!-- ═══ Step 4: Name ═══ -->
+            <StackPanel IsVisible="{Binding IsStepName}" HorizontalAlignment="Center"
+                        VerticalAlignment="Top" Spacing="10" Margin="0,8">
+              <TextBlock Text="What is your character's name?"
+                         Foreground="#ccc" FontSize="14" HorizontalAlignment="Center" />
+              <TextBox x:Name="CharNameBox" Text="{Binding CharName}" Width="220" Height="28"
+                       FontSize="13" Background="#1a1a2e" Foreground="White"
+                       BorderBrush="#555" BorderThickness="1"
+                       HorizontalAlignment="Center" TextChanged="OnCharNameChanged" />
+            </StackPanel>
+
+            <!-- ═══ Fishbone visualization of selections ═══ -->
+            <Border Grid.Row="1" Background="#0a0a14" CornerRadius="4" Padding="12,6"
+                    BorderBrush="#2a2a3e" BorderThickness="1" Margin="0,4,0,0">
+              <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <!-- Class node -->
+                <StackPanel Orientation="Horizontal" Spacing="4" Margin="10,0"
+                            IsVisible="{Binding SelectedClassName, Converter={StaticResource NotNullConverter}}">
+                  <Border Width="10" Height="10" CornerRadius="5"
+                          Background="{Binding CreationStep, Converter={StaticResource StepBg}, ConverterParameter=0}"
+                          VerticalAlignment="Center" />
+                  <TextBlock Foreground="#88bbff" FontSize="11" FontWeight="Bold"
+                             VerticalAlignment="Center">
+                    <Run Text="Class: " /><Run Text="{Binding SelectedClass}" />
+                  </TextBlock>
+                  <!-- School/Deity branch -->
+                  <TextBlock Foreground="#d4a017" FontSize="11" FontWeight="Bold"
+                             VerticalAlignment="Center"
+                             IsVisible="{Binding SelectedSchool, Converter={StaticResource NotNullConverter}}">
+                    <Run Text="→ School: " /><Run Text="{Binding SelectedSchool}" />
+                  </TextBlock>
+                  <TextBlock Foreground="#a0c0ff" FontSize="11" FontWeight="Bold"
+                             VerticalAlignment="Center"
+                             IsVisible="{Binding SelectedDeity, Converter={StaticResource NotNullConverter}}">
+                    <Run Text="→ Deity: " /><Run Text="{Binding SelectedDeity}" />
+                  </TextBlock>
+                </StackPanel>
+
+                <!-- Race node -->
+                <StackPanel Orientation="Horizontal" Spacing="4" Margin="10,0"
+                            IsVisible="{Binding SelectedRaceName, Converter={StaticResource NotNullConverter}}">
+                  <Border Width="10" Height="10" CornerRadius="5"
+                          Background="{Binding CreationStep, Converter={StaticResource StepBg}, ConverterParameter=1}"
+                          VerticalAlignment="Center" />
+                  <TextBlock Foreground="#88bbff" FontSize="11" FontWeight="Bold"
+                             VerticalAlignment="Center">
+                    <Run Text="Race: " /><Run Text="{Binding SelectedRace}" />
+                  </TextBlock>
+                  <!-- Subrace branch -->
+                  <TextBlock Foreground="#88bbff" FontSize="11" FontWeight="Bold"
+                             VerticalAlignment="Center"
+                             IsVisible="{Binding SelectedSubraceName, Converter={StaticResource NotNullConverter}}">
+                    <Run Text="→ " /><Run Text="{Binding SelectedSubrace}" />
+                  </TextBlock>
+                </StackPanel>
+
+                <!-- Stats node -->
+                <StackPanel Orientation="Horizontal" Spacing="4" Margin="10,0"
+                            IsVisible="{Binding CharStr, Converter={StaticResource GreaterThanZeroConverter}}">
+                  <Border Width="10" Height="10" CornerRadius="5"
+                          Background="{Binding CreationStep, Converter={StaticResource StepBg}, ConverterParameter=3}"
+                          VerticalAlignment="Center" />
+                  <TextBlock Foreground="#88bbff" FontSize="11" FontWeight="Bold"
+                             VerticalAlignment="Center"
+                             Text="Stats: rolled" />
+                </StackPanel>
+
+                <!-- Name node -->
+                <StackPanel Orientation="Horizontal" Spacing="4" Margin="10,0"
+                            IsVisible="{Binding CharName, Converter={StaticResource NotNullConverter}}">
+                  <Border Width="10" Height="10" CornerRadius="5"
+                          Background="{Binding CreationStep, Converter={StaticResource StepBg}, ConverterParameter=4}"
+                          VerticalAlignment="Center" />
+                  <TextBlock FontSize="11" FontWeight="Bold" VerticalAlignment="Center"
+                             Foreground="#88bbff">
+                    <Run Text="Name: " /><Run Text="{Binding CharName}" />
+                  </TextBlock>
+                </StackPanel>
+              </StackPanel>
+            </Border>
           </Grid>
+            </ScrollViewer>
 
           <!-- Row 3: Navigation buttons -->
           <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center"
@@ -643,6 +901,14 @@
             <Button x:Name="NextStepButton" Content="Next →"
                     Click="OnNextStepClick" Width="100" Height="30" FontSize="12"
                     IsEnabled="{Binding CanGoNext}" />
+          </StackPanel>
+
+          <!-- Row 4: Bottom actions -->
+          <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center"
+                      Spacing="16" Margin="0,4,0,0">
+            <Button x:Name="BackToMainFromCharCreationButton" Content="Back to Main Menu"
+                    Click="OnBackToMainClick" Width="160" Height="30" FontSize="11"
+                    Background="#5c3a3a" BorderBrush="#755" />
           </StackPanel>
         </Grid>
       </Border>

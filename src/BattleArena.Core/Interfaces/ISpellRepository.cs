@@ -6,4 +6,5 @@ public interface ISpellRepository
 {
     Task<List<Spell>> GetAllAsync();
     Task<List<Spell>> GetBySchoolAsync(string? school);
+    Task<List<SpellSchoolInfo>> GetAllSchoolsAsync();
 }

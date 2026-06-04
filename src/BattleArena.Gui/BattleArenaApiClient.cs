@@ -46,6 +46,25 @@ internal sealed class BattleArenaApiClient
         return result ?? [];
     }
 
+    public async Task<List<PlayerClass>> GetClassesAsync()
+    {
+        var result = await _http.GetFromJsonAsync<List<PlayerClass>>("/v1/classes", JsonOptions);
+        return result ?? [];
+    }
+
+    public async Task<List<Deity>> GetDeitiesAsync(string? alignment = null)
+    {
+        var url = alignment is not null ? $"/v1/deities?alignment={alignment}" : "/v1/deities";
+        var result = await _http.GetFromJsonAsync<List<Deity>>(url, JsonOptions);
+        return result ?? [];
+    }
+
+    public async Task<List<SpellSchoolInfo>> GetSchoolsAsync()
+    {
+        var result = await _http.GetFromJsonAsync<List<SpellSchoolInfo>>("/v1/schools", JsonOptions);
+        return result ?? [];
+    }
+
     public async Task<int> RollDieAsync(DieType dieType)
     {
         var dto = await _http.GetFromJsonAsync<DieRollResponse>($"/v1/roll/{dieType}", JsonOptions);

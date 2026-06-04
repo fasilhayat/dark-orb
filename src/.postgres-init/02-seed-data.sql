@@ -50,8 +50,13 @@ INSERT INTO arena_data.deity_alignment (name) VALUES
 ON CONFLICT (name) DO NOTHING;
 
 
-INSERT INTO arena_data.spell_school (name) VALUES
-    ('AoE'), ('CC'), ('Other'), ('Evocation'), ('Conjuration'), ('Healing')
+INSERT INTO arena_data.spell_school (name, description) VALUES
+    ('AoE', 'Spells that affect multiple targets in an area.'),
+    ('CC', 'Crowd-control spells that impair or disable enemies.'),
+    ('Other', 'Miscellaneous magical effects that do not fit other categories.'),
+    ('Evocation', 'Raw elemental magic — fire, ice, lightning, and force.'),
+    ('Conjuration', 'Summoning creatures, objects, and magical barriers.'),
+    ('Healing', 'Restorative magic that mends wounds and cures ailments.')
 ON CONFLICT (name) DO NOTHING;
 
 
