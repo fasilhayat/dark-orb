@@ -18,6 +18,8 @@ internal sealed class ConsoleCombatPresenter : ICombatPresenter
         ["Damage"] = 1100,
         ["TurnEnd"] = 300,
         ["DoTTick"] = 700,
+        ["HoTTick"] = 700,
+        ["Healed"] = 800,
         ["EffectApplied"] = 700,
         ["EffectResisted"] = 700,
         ["EffectExpired"] = 500,
@@ -175,6 +177,26 @@ internal sealed class ConsoleCombatPresenter : ICombatPresenter
         Console.WriteLine();
     }
 
+    private static void HandleHoTTick(CombatLogEntry entry, CombatDisplayState _)
+    {
+        Demo.CW("  ↑ ", ConsoleColor.Green);
+        Demo.CW(entry.ActorName, Demo.CharColor(entry.ActorName, entry.ActiveActorName));
+        Demo.CW("  recovers  ");
+        Demo.CW($"{entry.DamageDealt}", ConsoleColor.Green);
+        Demo.CW($"  HP from {entry.StatusEffectName ?? "HoT"}", ConsoleColor.Green);
+        Console.WriteLine();
+    }
+
+    private static void HandleHealed(CombatLogEntry entry, CombatDisplayState _)
+    {
+        Demo.CW("  ♥ ", ConsoleColor.Green);
+        Demo.CW(entry.ActorName, Demo.CharColor(entry.ActorName, entry.ActiveActorName));
+        Demo.CW("  healed for  ");
+        Demo.CW($"{entry.DamageDealt}", ConsoleColor.Green);
+        Demo.CW($"  HP by {entry.AttackSourceName ?? "spell"}", ConsoleColor.Green);
+        Console.WriteLine();
+    }
+
     private static void HandleEffectApplied(CombatLogEntry entry, CombatDisplayState _)
     {
         Demo.CW("  ★ ", ConsoleColor.Yellow);
@@ -274,6 +296,8 @@ internal sealed class ConsoleCombatPresenter : ICombatPresenter
         ["Damage"] = HandleDamage,
         ["FumblePenalty"] = HandleFumblePenalty,
         ["DoTTick"] = HandleDoTTick,
+        ["HoTTick"] = HandleHoTTick,
+        ["Healed"] = HandleHealed,
         ["EffectApplied"] = HandleEffectApplied,
         ["EffectResisted"] = HandleEffectResisted,
         ["EffectExpired"] = HandleEffectExpired,

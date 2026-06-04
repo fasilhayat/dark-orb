@@ -104,6 +104,16 @@ public sealed class CombatDisplayState
                     dotSt.Hp = e.TargetHpAfter ?? Math.Max(dotSt.Hp - (e.DamageDealt ?? 0), -10);
                 break;
 
+            case "HoTTick":
+                if (_chars.TryGetValue(e.ActorName, out var hotSt))
+                    hotSt.Hp = e.TargetHpAfter ?? Math.Min(hotSt.MaxHp, hotSt.Hp + (e.DamageDealt ?? 0));
+                break;
+
+            case "Healed":
+                if (_chars.TryGetValue(e.ActorName, out var healSt))
+                    healSt.Hp = e.TargetHpAfter ?? Math.Min(healSt.MaxHp, healSt.Hp + (e.DamageDealt ?? 0));
+                break;
+
             case "ManaDeduct":
             case "ManaRegen":
                 if (_chars.TryGetValue(e.ActorName, out var manaSt) && e.ManaAfter.HasValue)

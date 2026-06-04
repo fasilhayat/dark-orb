@@ -1,5 +1,5 @@
 {
-  "version": "1.6",
+  "version": "1.7",
   "description": "Defines which data fields the BattleArena combat GUI must display. Placement and exact phrasing are left to the GUI implementation — only field presence and correctness matter. Set 'enabled' to false on any screen or field to suppress it from the console output.",
   "screens": {
     "characterCard": {
@@ -149,6 +149,28 @@
         { "enabled": true,  "field": "DamageDealt",    "source": "CombatLogEntry.DamageDealt",    "description": "HP lost in this event" },
         { "enabled": true,  "field": "TargetHpBefore", "source": "CombatLogEntry.TargetHpBefore", "description": "HP before taking damage" },
         { "enabled": true,  "field": "TargetHpAfter",  "source": "CombatLogEntry.TargetHpAfter",  "description": "HP after taking damage" }
+      ]
+    },
+    "hotTick": {
+      "enabled": true,
+      "description": "Displayed each tick a heal-over-time effect restores HP (CombatLogEntry with EventType = HoTTick). ActorName is the character being healed.",
+      "requiredFields": [
+        { "enabled": true,  "field": "ActorName",        "source": "CombatLogEntry.ActorName",        "description": "Name of the character being healed" },
+        { "enabled": true,  "field": "HealingDealt",     "source": "CombatLogEntry.DamageDealt",      "description": "HP restored this tick (stored in DamageDealt field)" },
+        { "enabled": true,  "field": "TargetHpBefore",   "source": "CombatLogEntry.TargetHpBefore",   "description": "HP before the HoT tick" },
+        { "enabled": true,  "field": "TargetHpAfter",    "source": "CombatLogEntry.TargetHpAfter",    "description": "HP after the HoT tick (capped at MaxHp)" },
+        { "enabled": true,  "field": "StatusEffectName", "source": "CombatLogEntry.StatusEffectName", "description": "Name of the HoT status effect" }
+      ]
+    },
+    "healedEvent": {
+      "enabled": true,
+      "description": "Displayed when a healing spell restores HP to a target (CombatLogEntry with EventType = Healed). ActorName is the character being healed.",
+      "requiredFields": [
+        { "enabled": true,  "field": "ActorName",        "source": "CombatLogEntry.ActorName",        "description": "Name of the character being healed" },
+        { "enabled": true,  "field": "HealingDealt",     "source": "CombatLogEntry.DamageDealt",      "description": "HP restored by the spell (stored in DamageDealt field)" },
+        { "enabled": true,  "field": "TargetHpBefore",   "source": "CombatLogEntry.TargetHpBefore",   "description": "HP before the heal" },
+        { "enabled": true,  "field": "TargetHpAfter",    "source": "CombatLogEntry.TargetHpAfter",    "description": "HP after the heal (capped at MaxHp)" },
+        { "enabled": true,  "field": "AttackSourceName", "source": "CombatLogEntry.AttackSourceName", "description": "Name of the healing spell used" }
       ]
     },
     "combatSummary": {

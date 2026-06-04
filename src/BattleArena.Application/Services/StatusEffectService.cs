@@ -74,6 +74,7 @@ public class StatusEffectService : IStatusEffectService
         var total = 0;
         foreach (var effect in target.ActiveStatusEffects
             .Where(e => e.Type == StatusEffectType.DamageOverTime && e.DamagePerTurn > 0)
+            .OrderBy(e => e.ResolutionPriority)
             .ToList())
         {
             target.CurrentHitPoints -= effect.DamagePerTurn;
@@ -87,6 +88,7 @@ public class StatusEffectService : IStatusEffectService
         var total = 0;
         foreach (var effect in target.ActiveStatusEffects
             .Where(e => e.Type == StatusEffectType.HealOverTime && e.HealingPerTurn > 0)
+            .OrderBy(e => e.ResolutionPriority)
             .ToList())
         {
             var before = target.CurrentHitPoints;

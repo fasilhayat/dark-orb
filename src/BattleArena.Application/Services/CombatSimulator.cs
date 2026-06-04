@@ -409,9 +409,11 @@ public class CombatSimulator : ICombatSimulator
         List<CombatLogEntry> log,
         Func<CombatLogEntry, Task> notify)
     {
-        foreach (var dotEffect in actorState.Character.ActiveStatusEffects)
+        foreach (var dotEffect in actorState.Character.ActiveStatusEffects
+            .Where(e => e.Type == StatusEffectType.DamageOverTime && e.DamagePerTurn > 0)
+            .OrderBy(e => e.ResolutionPriority)
+            .ToList())
         {
-            if (dotEffect.Type != StatusEffectType.DamageOverTime || dotEffect.DamagePerTurn <= 0) continue;
             var dotName = dotEffect.Name;
             var dotDmg  = dotEffect.DamagePerTurn;
             actorState.Character.CurrentHitPoints -= dotDmg;
@@ -443,9 +445,11 @@ public class CombatSimulator : ICombatSimulator
         int tick, CombatantState actorState,
         Func<CombatLogEntry, Task> notify)
     {
-        foreach (var hotEffect in actorState.Character.ActiveStatusEffects)
+        foreach (var hotEffect in actorState.Character.ActiveStatusEffects
+            .Where(e => e.Type == StatusEffectType.HealOverTime && e.HealingPerTurn > 0)
+            .OrderBy(e => e.ResolutionPriority)
+            .ToList())
         {
-            if (hotEffect.Type != StatusEffectType.HealOverTime || hotEffect.HealingPerTurn <= 0) continue;
             var hotName = hotEffect.Name;
             var hotHeal = hotEffect.HealingPerTurn;
             var hpBefore = actorState.Character.CurrentHitPoints;

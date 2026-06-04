@@ -4,6 +4,7 @@ using System.Threading;
 using Avalonia.Media;
 using Avalonia.Threading;
 using BattleArena.Application.Models;
+using BattleArena.Application.Services;
 using BattleArena.Gui.ViewModels;
 using BattleArena.Presentation;
 
@@ -40,7 +41,8 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     private static readonly Dictionary<string, int> _delays = new()
     {
         ["TurnStart"] = 600, ["Attack"] = 600, ["Damage"] = 800,
-        ["DoTTick"] = 500, ["EffectApplied"] = 500, ["EffectResisted"] = 500,
+        ["DoTTick"] = 500, ["HoTTick"] = 500, ["Healed"] = 600,
+        ["EffectApplied"] = 500, ["EffectResisted"] = 500,
         ["EffectExpired"] = 400, ["PetSummoned"] = 500, ["PetExpired"] = 500,
         ["RoundStart"] = 500, ["RoundEnd"] = 400, ["SkippedTurn"] = 600,
         ["FumblePenalty"] = 500, ["Death"] = 1200, ["KnockedOut"] = 1200,
@@ -145,6 +147,8 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             "Attack"             => BuildAttackRows(e, state),
             "Damage"             => [BuildDamageRow(e)],
             "DoTTick"            => [BuildDoTTickRow(e, state)],
+            "HoTTick"            => [BuildHoTTickRow(e, state)],
+            "Healed"             => [BuildHealedRow(e, state)],
             "EffectApplied"      => [BuildEffectAppliedRow(e, state)],
             "EffectResisted"     => [BuildEffectResistedRow(e, state)],
             "EffectExpired"      => [BuildEffectExpiredRow(e, state)],
@@ -233,7 +237,8 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             else if (e.IsHit == true)
             {
                 var dmg = e.DamageDealt ?? 0;
-                var label = DamageLabel(dmg);
+                var targetMaxHp = state.TryGet(e.TargetName)?.MaxHp ?? 1;
+                var label = CombatHitLabelService.GetLabel(dmg, targetMaxHp);
                 var labelColor = label switch
                 {
                     "CRUSHING HIT" => Magenta,
@@ -423,14 +428,31 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         Seg(e.Message.ToUpper(), Yellow),
     ];
 
-    private static string DamageLabel(int damage) => damage switch
+    private static List<LogSegment> BuildHoTTickRow(CombatLogEntry e, CombatDisplayState state)
     {
-        < 3  => "GRAZE",
-        < 8  => "GLANCING HIT",
-        < 15 => "SOLID HIT",
-        < 25 => "HEAVY HIT",
-        _    => "CRUSHING HIT"
-    };
+        var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
+        return
+        [
+            Seg("  \u2191 ", Green),
+            Seg(e.ActorName, actorColor),
+            Seg("  recovers  ", Gray),
+            Seg($"{e.DamageDealt}", Green),
+            Seg($"  HP from {e.StatusEffectName ?? "HoT"}", Green),
+        ];
+    }
+
+    private static List<LogSegment> BuildHealedRow(CombatLogEntry e, CombatDisplayState state)
+    {
+        var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
+        return
+        [
+            Seg("  \u2665 ", Green),
+            Seg(e.ActorName, actorColor),
+            Seg("  healed for  ", Gray),
+            Seg($"{e.DamageDealt}", Green),
+            Seg($"  HP by {e.AttackSourceName ?? "spell"}", Green),
+        ];
+    }
 
     private static IBrush NameBrush(bool isHero, string? name, IBrush? fallback)
     {

@@ -31,9 +31,14 @@ public sealed class GuiDisplayConfig
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
         }
 
-        Register("characterCard", contract.Screens?.CharacterCard);
-        Register("attackEvent", contract.Screens?.AttackEvent);
-        Register("damageEvent", contract.Screens?.DamageEvent);
+        Register("characterCard",  contract.Screens?.CharacterCard);
+        Register("startupSheets", contract.Screens?.StartupSheets);
+        Register("roundBar",      contract.Screens?.RoundBar);
+        Register("attackEvent",   contract.Screens?.AttackEvent);
+        Register("manaEvent",     contract.Screens?.ManaEvent);
+        Register("damageEvent",   contract.Screens?.DamageEvent);
+        Register("hotTick",       contract.Screens?.HotTick);
+        Register("healedEvent",   contract.Screens?.HealedEvent);
         Register("combatSummary", contract.Screens?.CombatSummary);
     }
 
@@ -74,10 +79,15 @@ public sealed class GuiDisplayConfig
         [property: JsonPropertyName("screens")] GuiScreensModel? Screens);
 
     private sealed record GuiScreensModel(
-        [property: JsonPropertyName("characterCard")] GuiScreenModel? CharacterCard,
-        [property: JsonPropertyName("attackEvent")] GuiScreenModel? AttackEvent,
-        [property: JsonPropertyName("damageEvent")] GuiScreenModel? DamageEvent,
-        [property: JsonPropertyName("combatSummary")] GuiScreenModel? CombatSummary);
+        [property: JsonPropertyName("characterCard")]  GuiScreenModel? CharacterCard,
+        [property: JsonPropertyName("startupSheets")]  GuiScreenModel? StartupSheets,
+        [property: JsonPropertyName("roundBar")]       GuiScreenModel? RoundBar,
+        [property: JsonPropertyName("attackEvent")]    GuiScreenModel? AttackEvent,
+        [property: JsonPropertyName("manaEvent")]      GuiScreenModel? ManaEvent,
+        [property: JsonPropertyName("damageEvent")]    GuiScreenModel? DamageEvent,
+        [property: JsonPropertyName("hotTick")]        GuiScreenModel? HotTick,
+        [property: JsonPropertyName("healedEvent")]    GuiScreenModel? HealedEvent,
+        [property: JsonPropertyName("combatSummary")]  GuiScreenModel? CombatSummary);
 
     private sealed record GuiScreenModel(
         [property: JsonPropertyName("enabled")] bool? Enabled,
