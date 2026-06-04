@@ -3,9 +3,7 @@
              xmlns:views="clr-namespace:BattleArena.Gui.Views"
              x:Class="BattleArena.Gui.Views.CharacterCard"
              Width="380" MinHeight="180">
-  <UserControl.Resources>
-    <views:DoubleToGridLengthConverter x:Key="GridLengthConv" />
-  </UserControl.Resources>
+  
 
   <Border BorderBrush="{Binding BorderColor}" BorderThickness="2" CornerRadius="4"
           Background="#1a1a2e" Padding="8" MinHeight="0">
@@ -63,54 +61,52 @@
           </StackPanel>
         </Grid>
 
-        <!-- TM bar — piped segments -->
+        <!-- TM bar -->
         <Border BorderBrush="{Binding TmBorderBrush}" BorderThickness="1" CornerRadius="3" Background="#111" Height="20" ClipToBounds="True">
           <Grid>
-            <ItemsControl ItemsSource="{Binding TmPipes}">
-              <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                  <VirtualizingStackPanel Orientation="Horizontal" />
-                </ItemsPanelTemplate>
-              </ItemsControl.ItemsPanel>
-              <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                  <Border Width="3" Margin="0,0,2,0" Background="{Binding}" />
-                </DataTemplate>
-              </ItemsControl.ItemTemplate>
-            </ItemsControl>
-            <TextBlock Text="{Binding TmDisplay}" Foreground="White"
-                       FontSize="12" FontWeight="Bold"
-                       HorizontalAlignment="Center" VerticalAlignment="Center" />
-            <!-- Jagged frozen overlay when TM locked -->
+            <Border Background="#111" CornerRadius="2" />
+            <Border Background="{Binding TmBarColor}" CornerRadius="2"
+                    RenderTransformOrigin="0,0.5">
+              <Border.RenderTransform>
+                <ScaleTransform ScaleX="{Binding TmFraction}" />
+              </Border.RenderTransform>
+            </Border>
             <Border IsVisible="{Binding IsTmLocked}" BorderThickness="1"
                     BorderBrush="#ccddff" CornerRadius="2" Margin="-1"
                     Background="#1188ccff" />
+            <TextBlock Text="{Binding TmDisplay}" Foreground="White"
+                       FontSize="12" FontWeight="Bold"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" />
           </Grid>
         </Border>
 
         <!-- Mana bar -->
-        <Border BorderBrush="#333" BorderThickness="1" CornerRadius="3" Background="#111" Height="20">
+        <Border BorderBrush="#333" BorderThickness="1" CornerRadius="3" Background="#111" Height="20" ClipToBounds="True">
           <Grid>
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="{Binding ManaFraction, Converter={StaticResource GridLengthConv}}" />
-              <ColumnDefinition Width="{Binding ManaEmptyFraction, Converter={StaticResource GridLengthConv}}" />
-            </Grid.ColumnDefinitions>
-            <Border Grid.Column="0" Background="{Binding ManaBarColor}" CornerRadius="2" />
-            <TextBlock Grid.ColumnSpan="2" Text="{Binding ManaDisplay}" Foreground="White"
+            <Border Background="#111" CornerRadius="2" />
+            <Border Background="{Binding ManaBarColor}" CornerRadius="2"
+                    RenderTransformOrigin="0,0.5">
+              <Border.RenderTransform>
+                <ScaleTransform ScaleX="{Binding ManaFraction}" />
+              </Border.RenderTransform>
+            </Border>
+            <TextBlock Text="{Binding ManaDisplay}" Foreground="White"
                        FontSize="12" FontWeight="Bold"
                        HorizontalAlignment="Center" VerticalAlignment="Center" />
           </Grid>
         </Border>
 
         <!-- HP bar -->
-        <Border BorderBrush="#333" BorderThickness="1" CornerRadius="3" Background="#111" Height="20">
+        <Border BorderBrush="#333" BorderThickness="1" CornerRadius="3" Background="#111" Height="20" ClipToBounds="True">
           <Grid>
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="{Binding HpFraction, Converter={StaticResource GridLengthConv}}" />
-              <ColumnDefinition Width="{Binding HpEmptyFraction, Converter={StaticResource GridLengthConv}}" />
-            </Grid.ColumnDefinitions>
-            <Border Grid.Column="0" Background="{Binding HpBarColor}" CornerRadius="2" />
-            <TextBlock Grid.ColumnSpan="2" Text="{Binding HpDisplay}" Foreground="White"
+            <Border Background="#111" CornerRadius="2" />
+            <Border Background="{Binding HpBarColor}" CornerRadius="2"
+                    RenderTransformOrigin="0,0.5">
+              <Border.RenderTransform>
+                <ScaleTransform ScaleX="{Binding HpFraction}" />
+              </Border.RenderTransform>
+            </Border>
+            <TextBlock Text="{Binding HpDisplay}" Foreground="White"
                        FontSize="12" FontWeight="Bold"
                        HorizontalAlignment="Center" VerticalAlignment="Center" />
           </Grid>

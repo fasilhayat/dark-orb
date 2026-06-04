@@ -608,13 +608,6 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
 
 public sealed class CharCardViewModel : INotifyPropertyChanged
 {
-    private const int TmTotalPipes = 73;
-    private static readonly IBrush TmPipeFilled = new SolidColorBrush(Color.Parse("#00bfff"));
-    private static readonly IBrush TmPipeEmpty = new SolidColorBrush(Color.Parse("#1a1a2e"));
-    private static readonly IBrush TmPipeLocked = new SolidColorBrush(Color.Parse("#88ccff"));
-
-    public ObservableCollection<IBrush> TmPipes { get; }
-
     public string Name { get; init; } = "";
     public bool IsHero { get; init; }
     public int MaxHp { get; init; }
@@ -633,12 +626,7 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
     public bool HasPortrait => Portrait is not null;
     public bool PortraitIsNull => Portrait is null;
 
-    public CharCardViewModel()
-    {
-        TmPipes = new ObservableCollection<IBrush>();
-        for (var i = 0; i < TmTotalPipes; i++)
-            TmPipes.Add(TmPipeEmpty);
-    }
+    public CharCardViewModel() { }
 
     private int _hp;
     public int Hp
@@ -703,15 +691,13 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
     public bool HasStatusOverlay => !string.IsNullOrEmpty(StatusLine);
 
     public double HpFraction => MaxHp > 0 ? Math.Clamp((double)Math.Max(0, Hp) / MaxHp, 0, 1) : 0;
-    public double HpEmptyFraction => 1.0 - HpFraction;
     public double TmFraction => Math.Clamp((double)Tm / 100, 0, 1);
-    public double TmEmptyFraction => 1.0 - TmFraction;
     public double ManaFraction => MaxMana > 0 ? Math.Clamp((double)Math.Max(0, Mana) / MaxMana, 0, 1) : 0;
-    public double ManaEmptyFraction => 1.0 - ManaFraction;
 
     public string HpDisplay => IsDead ? "" : $"{Math.Max(0, Hp)}/{MaxHp}";
     public string TmDisplay => $"{Tm}";
     public string TmBorderBrush => IsTmLocked ? "#88ccff" : "#333";
+    public string TmBarColor => IsTmLocked ? "#4488cc" : "#00bfff";
     public string ManaDisplay => MaxMana > 0 ? $"{Math.Max(0, Mana)}" : "--";
     public string ActiveIndicator => IsDead ? "  " : "\u25b6 ";
     public string PortraitInitial =>
@@ -773,19 +759,15 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
         {
             case nameof(Hp):
                 Raise(nameof(HpFraction));
-                Raise(nameof(HpEmptyFraction));
                 Raise(nameof(HpDisplay));
                 Raise(nameof(HpBarColor));
                 break;
             case nameof(Tm):
                 Raise(nameof(TmFraction));
-                Raise(nameof(TmEmptyFraction));
                 Raise(nameof(TmDisplay));
-                UpdateTmPipes();
                 break;
             case nameof(Mana):
                 Raise(nameof(ManaFraction));
-                Raise(nameof(ManaEmptyFraction));
                 Raise(nameof(ManaDisplay));
                 break;
             case nameof(IsAlive):
@@ -805,8 +787,8 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
             case nameof(CurrentWeapon):
                 break;
             case nameof(IsTmLocked):
-                UpdateTmPipes();
                 Raise(nameof(TmBorderBrush));
+                Raise(nameof(TmBarColor));
                 break;
             case nameof(CcStatus):
                 Raise(nameof(CcDisplay));
@@ -815,18 +797,6 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
         }
 
         void Raise(string n) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(n));
-    }
-
-    private void UpdateTmPipes()
-    {
-        var fillCount = (int)Math.Round(TmFraction * TmTotalPipes);
-        for (var i = 0; i < TmTotalPipes; i++)
-        {
-            var brush = IsTmLocked ? TmPipeLocked
-                : i < fillCount ? TmPipeFilled : TmPipeEmpty;
-            if (!ReferenceEquals(TmPipes[i], brush))
-                TmPipes[i] = brush;
-        }
     }
 
 }

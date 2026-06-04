@@ -263,6 +263,14 @@ Lore entries must match what is seeded in the database:
 - **Async**: use `async`/`await` throughout the demo display pipeline; the simulator itself is synchronous.
 - **Collections**: use `List<T>` for mutable, `IReadOnlyList<T>` for returned collections.
 - **Cyclomatic complexity**: ≤ 10 per method (modified McCabe — counts each `&&`/`||` as +1). Extract private helpers rather than letting any method exceed this limit. Values of 11–12 are acceptable only where splitting would add parameters without reducing real complexity.
+- **Namespace before usings**: in hand-written code only, declare the file-scoped namespace first, then `using` statements beneath it:
+  ```csharp
+  namespace BattleArena.Gui.Views;
+
+  using Avalonia.Data.Converters;
+  using System.Globalization;
+  ```
+  Never put `using` statements before the namespace declaration. Do not rearrange auto-generated files (`.feature.cs`, designer files, etc.).
 
 ---
 
