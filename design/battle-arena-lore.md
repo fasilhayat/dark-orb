@@ -535,6 +535,7 @@ Dwarf and Gladefolk Priests cannot bond with a Dragon (Human/Elf only). Instead,
 | Smite | A powerful holy strike channelled through the caster. | 2D8 Holy | 8 |
 | Moonfire | Sacred moonlight burns unholy enemies and heals allies. | 2D6 Holy | 6 |
 | Soul Drain | Drains the life force of an enemy to restore the caster. | 2D6 Shadow | 7 |
+| Static Shock | A focused lightning charge that stuns the target for a short duration. | 1D6 Lightning | 8 |
 | Arcane Ward | Wraps the caster in a protective magical barrier that grants magic resistance and increases defense. | — | 8 |
 | Divine Protection | Holy energy shields the target, reducing all incoming damage for a short time. | — | 10 |
 | Stone Skin | Hardens the caster's skin to stone, granting significant damage resistance. | — | 7 |

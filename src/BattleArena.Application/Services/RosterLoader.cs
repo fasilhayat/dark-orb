@@ -81,18 +81,33 @@ public static class RosterLoader
         var result = new Dictionary<string, Spell>(StringComparer.OrdinalIgnoreCase);
         foreach (var d in dtos)
         {
-            result[d.Name] = new Spell
+            var spell = new Spell
             {
-                Name         = d.Name,
-                School       = ParseEnum<SpellSchool>(d.School),
-                DamageDie    = ParseEnum<DieType>(d.DamageDie),
-                DamageCount  = d.DamageCount,
-                DamageType   = ParseEnum<DamageType>(d.DamageType),
-                AttackBonus  = d.AttackBonus,
-                SpellLevel   = d.SpellLevel,
+                Name          = d.Name,
+                School        = ParseEnum<SpellSchool>(d.School),
+                DamageDie     = ParseEnum<DieType>(d.DamageDie),
+                DamageCount   = d.DamageCount,
+                DamageType    = ParseEnum<DamageType>(d.DamageType),
+                AttackBonus   = d.AttackBonus,
+                SpellLevel    = d.SpellLevel,
                 TurnMeterCost = d.TurnMeterCost,
-                ManaCost     = d.ManaCost
+                ManaCost      = d.ManaCost
             };
+            if (d.OnHitEffects is { Count: > 0 })
+            {
+                foreach (var e in d.OnHitEffects)
+                {
+                    spell.OnHitEffects.Add(new StatusEffect
+                    {
+                        Name              = e.Name,
+                        Type              = ParseEnum<StatusEffectType>(e.Type),
+                        ResistanceType    = ParseEnum<ResistanceType>(e.ResistanceType),
+                        Duration          = e.Duration,
+                        ApplicationChance = e.ApplicationChance
+                    });
+                }
+            }
+            result[d.Name] = spell;
         }
         return result;
     }
@@ -239,15 +254,25 @@ public static class RosterLoader
 
     private sealed class SpellDto
     {
-        public string Name         { get; init; } = "";
-        public string School       { get; init; } = "Other";
-        public string DamageDie    { get; init; } = "D4";
-        public int    DamageCount  { get; init; } = 1;
-        public string DamageType   { get; init; } = "Bludgeoning";
-        public int    AttackBonus  { get; init; }
-        public int    SpellLevel   { get; init; }
+        public string Name          { get; init; } = "";
+        public string School        { get; init; } = "Other";
+        public string DamageDie     { get; init; } = "D4";
+        public int    DamageCount   { get; init; } = 1;
+        public string DamageType    { get; init; } = "Bludgeoning";
+        public int    AttackBonus   { get; init; }
+        public int    SpellLevel    { get; init; }
         public int    TurnMeterCost { get; init; } = 100;
-        public int    ManaCost     { get; init; }
+        public int    ManaCost      { get; init; }
+        public List<StatusEffectDto>? OnHitEffects { get; init; }
+    }
+
+    private sealed class StatusEffectDto
+    {
+        public string Name              { get; init; } = "";
+        public string Type              { get; init; } = "";
+        public string ResistanceType    { get; init; } = "Magic";
+        public int    Duration          { get; init; } = 1;
+        public int    ApplicationChance { get; init; } = 100;
     }
 
     private sealed class ArmorDto

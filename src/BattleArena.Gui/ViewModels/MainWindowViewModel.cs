@@ -611,6 +611,7 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
     private const int TmTotalPipes = 73;
     private static readonly IBrush TmPipeFilled = new SolidColorBrush(Color.Parse("#00bfff"));
     private static readonly IBrush TmPipeEmpty = new SolidColorBrush(Color.Parse("#1a1a2e"));
+    private static readonly IBrush TmPipeLocked = new SolidColorBrush(Color.Parse("#444444"));
 
     public ObservableCollection<IBrush> TmPipes { get; }
 
@@ -665,6 +666,13 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
     {
         get => _isAlive;
         set => SetField(ref _isAlive, value);
+    }
+
+    private bool _isTmLocked;
+    public bool IsTmLocked
+    {
+        get => _isTmLocked;
+        set => SetField(ref _isTmLocked, value);
     }
 
     private string _currentWeapon = "";
@@ -732,6 +740,7 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
         Tm = Math.Min(100, s.Tm);
         Mana = Math.Max(0, s.Mana);
         IsAlive = s.IsAlive;
+        IsTmLocked = s.IsTmLocked;
         ActiveEffects = s.ActiveEffects.Count > 0 ? string.Join(", ", s.ActiveEffects) : "";
         if (!string.IsNullOrEmpty(s.Weapon))
             CurrentWeapon = s.Weapon;
@@ -784,6 +793,9 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
                 break;
             case nameof(CurrentWeapon):
                 break;
+            case nameof(IsTmLocked):
+                UpdateTmPipes();
+                break;
         }
 
         void Raise(string n) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(n));
@@ -794,7 +806,8 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
         var fillCount = (int)Math.Round(TmFraction * TmTotalPipes);
         for (var i = 0; i < TmTotalPipes; i++)
         {
-            var brush = i < fillCount ? TmPipeFilled : TmPipeEmpty;
+            var brush = IsTmLocked ? TmPipeLocked
+                : i < fillCount ? TmPipeFilled : TmPipeEmpty;
             if (!ReferenceEquals(TmPipes[i], brush))
                 TmPipes[i] = brush;
         }

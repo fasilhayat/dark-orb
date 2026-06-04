@@ -68,7 +68,10 @@ public sealed class CombatDisplayState
 
             case "TurnStart":
                 if (_chars.TryGetValue(e.ActorName, out var tsSt))
+                {
                     tsSt.Weapon = e.AttackSourceName ?? tsSt.Weapon;
+                    tsSt.IsTmLocked = false;
+                }
                 if (e.TurnMeterSnapshot is not null)
                 {
                     foreach (var (name, tm) in e.TurnMeterSnapshot)
@@ -80,6 +83,11 @@ public sealed class CombatDisplayState
             case "TurnEnd":
                 if (_chars.TryGetValue(e.ActorName, out var teSt))
                     teSt.Tm = e.TurnMeterAfter ?? teSt.Tm;
+                break;
+
+            case "SkippedTurn":
+                if (_chars.TryGetValue(e.ActorName, out var skSt))
+                    skSt.IsTmLocked = true;
                 break;
 
             case "Damage":

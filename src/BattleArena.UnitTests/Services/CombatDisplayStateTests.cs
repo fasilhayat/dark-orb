@@ -327,6 +327,36 @@ public class CombatDisplayStateTests
 
     // ── TurnMeterSnapshot backward-compat ────────────────────────────────────────
 
+    // ── IsTmLocked ───────────────────────────────────────────────────────────────
+
+    [Fact]
+    public void ApplyEvent_SkippedTurn_SetsIsTmLocked()
+    {
+        var state = new CombatDisplayState([Hero("Alice")], Layout(["Alice"], []));
+
+        state.ApplyEvent(new CombatLogEntry
+        {
+            EventType = "SkippedTurn", ActorName = "Alice"
+        });
+
+        Assert.True(state.TryGet("Alice")!.IsTmLocked);
+    }
+
+    [Fact]
+    public void ApplyEvent_TurnStart_ClearsIsTmLocked()
+    {
+        var hero = Hero("Alice");
+        hero.IsTmLocked = true;
+        var state = new CombatDisplayState([hero], Layout(["Alice"], []));
+
+        state.ApplyEvent(new CombatLogEntry
+        {
+            EventType = "TurnStart", ActorName = "Alice", AttackSourceName = "Longsword"
+        });
+
+        Assert.False(state.TryGet("Alice")!.IsTmLocked);
+    }
+
     [Fact]
     public void ApplyEvent_TurnStart_NullSnapshot_LeavesExistingTmUnchanged()
     {

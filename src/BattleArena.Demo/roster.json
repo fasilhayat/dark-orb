@@ -72,6 +72,15 @@
       "spellLevel": 2, "turnMeterCost": 75, "manaCost": 20
     },
     {
+      "name": "Static Shock",
+      "school": "Evocation", "damageDie": "D6", "damageCount": 1,
+      "damageType": "Lightning", "attackBonus": 2,
+      "spellLevel": 2, "turnMeterCost": 80, "manaCost": 30,
+      "onHitEffects": [
+        { "name": "Stun", "type": "Stun", "duration": 2, "applicationChance": 100, "resistanceType": "Magic" }
+      ]
+    },
+    {
       "name": "Smite",
       "school": "Evocation", "damageDie": "D8", "damageCount": 2,
       "damageType": "Holy", "attackBonus": 2,
@@ -118,7 +127,7 @@
       "strikeRating": 15, "turnSpeed": 8,
       "maxHitPoints": 45, "maxMana": 90,
       "equipment": { "chest": "Mithril Chain", "rightHand": "Long Sword" },
-      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock"]
+      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Static Shock"]
     },
     {
       "name": "Sister Elira Vane", "level": 7,
