@@ -562,6 +562,34 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         set => SetField(ref _overlayScale, value);
     }
 
+    private double _overlayTrailScale1;
+    public double OverlayTrailScale1
+    {
+        get => _overlayTrailScale1;
+        set => SetField(ref _overlayTrailScale1, value);
+    }
+
+    private double _overlayTrailOpacity1;
+    public double OverlayTrailOpacity1
+    {
+        get => _overlayTrailOpacity1;
+        set => SetField(ref _overlayTrailOpacity1, value);
+    }
+
+    private double _overlayTrailScale2;
+    public double OverlayTrailScale2
+    {
+        get => _overlayTrailScale2;
+        set => SetField(ref _overlayTrailScale2, value);
+    }
+
+    private double _overlayTrailOpacity2;
+    public double OverlayTrailOpacity2
+    {
+        get => _overlayTrailOpacity2;
+        set => SetField(ref _overlayTrailOpacity2, value);
+    }
+
     public bool HasOverlay => !string.IsNullOrEmpty(OverlayText);
 
     public void TriggerOverlay(string text)
@@ -569,6 +597,10 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         OverlayText = text;
         OverlayOpacity = 1.0;
         OverlayScale = 0.5;
+        OverlayTrailScale1 = 0.4;
+        OverlayTrailOpacity1 = 0.4;
+        OverlayTrailScale2 = 0.3;
+        OverlayTrailOpacity2 = 0.2;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasOverlay)));
     }
 
@@ -577,6 +609,10 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         OverlayText = "";
         OverlayOpacity = 0;
         OverlayScale = 1.0;
+        OverlayTrailScale1 = 0;
+        OverlayTrailOpacity1 = 0;
+        OverlayTrailScale2 = 0;
+        OverlayTrailOpacity2 = 0;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasOverlay)));
     }
 

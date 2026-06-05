@@ -205,28 +205,28 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
         Task.Run(async () =>
         {
-            // Zoom in phase: 0 → 500ms (scale 0.5 → 1.2)
-            for (var i = 0; i < steps / 3; i++)
+            for (var i = 0; i < steps; i++)
             {
                 await Task.Delay(intervalMs);
                 elapsed += intervalMs;
                 var t = (double)elapsed / durationMs;
+                // Ease-out: fast start, slow end (quadratic)
+                var eased = 1.0 - (1.0 - t) * (1.0 - t);
                 _dispatcher.Post(() =>
                 {
-                    _vm.OverlayScale = 0.5 + t * 2.0; // 0.5 → 2.0 over full duration
-                    _vm.OverlayOpacity = 1.0;
-                });
-            }
-            // Hold + dissolve phase: 500ms → 1500ms (scale 1.2 → 2.0, opacity 1 → 0)
-            for (var i = steps / 3; i < steps; i++)
-            {
-                await Task.Delay(intervalMs);
-                elapsed += intervalMs;
-                var t = (double)elapsed / durationMs;
-                _dispatcher.Post(() =>
-                {
-                    _vm.OverlayScale = 0.5 + t * 2.0;
-                    _vm.OverlayOpacity = 1.0 - Math.Max(0, (t - 0.33) / 0.67);
+                    // Main text: zoom from center towards viewer, fading throughout
+                    var mainScale = 0.25 + eased * 1.95;
+                    var mainOpacity = Math.Max(0, 1.0 - (eased - 0.08) / 0.92);
+                    _vm.OverlayScale = mainScale;
+                    _vm.OverlayOpacity = mainOpacity;
+
+                    // Trail 1: ghost at ~80 % scale of main, lower opacity
+                    _vm.OverlayTrailScale1 = mainScale * 0.78;
+                    _vm.OverlayTrailOpacity1 = mainOpacity * 0.35;
+
+                    // Trail 2: ghost at ~60 % scale, even lower opacity
+                    _vm.OverlayTrailScale2 = mainScale * 0.56;
+                    _vm.OverlayTrailOpacity2 = mainOpacity * 0.15;
                 });
             }
             _dispatcher.Post(() => _vm.ClearOverlay());

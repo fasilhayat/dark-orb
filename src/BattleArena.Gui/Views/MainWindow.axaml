@@ -150,6 +150,38 @@
 
       <!-- Row 2: Character cards side by side -->
       <Grid Grid.Row="2" Margin="0,4">
+        <!-- Overlay text renders behind character cards so card borders stay fully visible -->
+        <TextBlock Text="{Binding OverlayText}" Foreground="#22aa22" FontSize="42"
+                   FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Opacity="{Binding OverlayTrailOpacity2}"
+                   IsVisible="{Binding HasOverlay}"
+                   TextTrimming="CharacterEllipsis" MaxWidth="600"
+                   RenderTransformOrigin="0.5,0.5">
+          <TextBlock.RenderTransform>
+            <ScaleTransform ScaleX="{Binding OverlayTrailScale2}" ScaleY="{Binding OverlayTrailScale2}" />
+          </TextBlock.RenderTransform>
+        </TextBlock>
+        <TextBlock Text="{Binding OverlayText}" Foreground="#33cc33" FontSize="42"
+                   FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Opacity="{Binding OverlayTrailOpacity1}"
+                   IsVisible="{Binding HasOverlay}"
+                   TextTrimming="CharacterEllipsis" MaxWidth="600"
+                   RenderTransformOrigin="0.5,0.5">
+          <TextBlock.RenderTransform>
+            <ScaleTransform ScaleX="{Binding OverlayTrailScale1}" ScaleY="{Binding OverlayTrailScale1}" />
+          </TextBlock.RenderTransform>
+        </TextBlock>
+        <TextBlock Text="{Binding OverlayText}" Foreground="#44ff44" FontSize="42"
+                   FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Opacity="{Binding OverlayOpacity}"
+                   IsVisible="{Binding HasOverlay}"
+                   TextTrimming="CharacterEllipsis" MaxWidth="600"
+                   RenderTransformOrigin="0.5,0.5">
+          <TextBlock.RenderTransform>
+            <ScaleTransform ScaleX="{Binding OverlayScale}" ScaleY="{Binding OverlayScale}" />
+          </TextBlock.RenderTransform>
+        </TextBlock>
+
         <Grid ColumnDefinitions="*,Auto,*">
           <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding Heroes}">
@@ -183,18 +215,6 @@
             </ItemsControl>
           </ScrollViewer>
         </Grid>
-
-        <!-- Overlay text: centered zoom + dissolve -->
-        <TextBlock Text="{Binding OverlayText}" Foreground="#44ff44" FontSize="42"
-                   FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"
-                   Opacity="{Binding OverlayOpacity}"
-                   IsVisible="{Binding HasOverlay}"
-                   TextTrimming="CharacterEllipsis" MaxWidth="600"
-                   RenderTransformOrigin="0.5,0.5">
-          <TextBlock.RenderTransform>
-            <ScaleTransform ScaleX="{Binding OverlayScale}" ScaleY="{Binding OverlayScale}" />
-          </TextBlock.RenderTransform>
-        </TextBlock>
       </Grid>
 
       <!-- Row 3: Combat log -->
