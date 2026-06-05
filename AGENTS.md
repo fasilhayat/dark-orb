@@ -404,3 +404,33 @@ Format:
 |----------|---------|-------|
 | 1 | ... | ... |
 ```
+
+---
+
+## 15. Tech debt — EventType string literals
+
+`CombatLogEntry.EventType` is a plain `string`, and every consumer compares it against hard-coded string literals (`"Death"`, `"Attack"`, `"EffectApplied"`, etc.).
+
+**Why this is risky:**
+- A typo in a string literal (e.g. `"Atack"` instead of `"Attack"`) compiles silently — no type-safety.
+- Adding a new event type requires updating every switch/match across the stack, with no compiler help to find missed sites.
+- Refactoring (renaming an event type) is a manual grep-and-replace.
+
+**Planned fix:**
+Replace `CombatLogEntry.EventType` with a proper enum (e.g. `CombatEventType`). All consumers switch on the enum instead of string literals. This change touches:
+
+| File | Role |
+|------|------|
+| `Core/CombatEventType.cs` | New enum (all known event types) |
+| `Application/Models/CombatLogEntry.cs` | Change `EventType` to the enum |
+| `Application/Services/CombatSimulator.cs` | All places that assign `EventType = "..."` |
+| `Application/Services/CombatLogWriter.cs` | All switch/if on `EventType` |
+| `Application/Services/LevelingService.cs` | `EventType == "Attack"` comparisons |
+| `Presentation/CombatPlaybackEngine.cs` | `EventType is "..."` patterns + `EmitVisualEvents` switch |
+| `Presentation/CombatDisplayState.cs` | `ApplyEvent` switch |
+| `Presentation/CombatLogMerger.cs` | `_insertBeforePriority` array |
+| `Gui/Presenters/AvaloniaCombatPresenter.cs` | Delay map + display-row builders |
+| `Demo/CombatLogWriter.cs` (if any) | Comparisons |
+| All unit test files | Test data that sets `EventType = "..."` |
+
+Do not attempt this refactoring in a normal task — it is a dedicated tech-debt item. The `release-notes.md` maturity matrix includes an "EventType enum" row under **Maintainability**.
