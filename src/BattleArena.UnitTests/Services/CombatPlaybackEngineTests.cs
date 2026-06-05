@@ -380,6 +380,37 @@ public class CombatPlaybackEngineTests
         Assert.Equal(100, presenter.TmSnapshotsAtRefresh[1]["Goblin"]);
     }
 
+    // ── Persistent effect visual-event regression ───────────────────────────────
+    //
+    // Bug: EffectExpired entries have no TargetName, only ActorName. The ClearPersistent
+    // handler in AvaloniaCombatPresenter now falls back to ActorName. This test verifies
+    // the visual event is emitted at all — the consumer-side fix is in the presenter.
+    [Fact]
+    public void PlayTurnBased_PersistentEffectExpired_EmitClearPersistentVisualEvent()
+    {
+        var state = MakeState("Hero", "Enemy");
+        var spy = new SpyPresenter();
+        var visualEvents = new List<VisualEvent>();
+        spy.VisualEventBus.NormalEventPublished += visualEvents.Add;
+
+        var log = new List<CombatLogEntry>
+        {
+            new() { Tick = 1, EventType = "TurnStart", ActorName = "Hero", TargetName = "Enemy" },
+            new() { Tick = 1, EventType = "EffectApplied", ActorName = "Hero",
+                    StatusEffectName = "Burning" },
+            new() { Tick = 1, EventType = "Attack", ActorName = "Hero", TargetName = "Enemy" },
+            new() { Tick = 1, EventType = "EffectExpired", ActorName = "Hero",
+                    StatusEffectName = "Burning" },
+        };
+        var result = MakeResult(log);
+
+        CombatPlaybackEngine.PlayTurnBased(result, state, spy);
+
+        var clear = visualEvents.FirstOrDefault(v => v.EffectName == "ClearPersistent");
+        Assert.NotNull(clear);
+        Assert.Equal("Hero", clear.ActorName);
+    }
+
     // ── Helpers ───────────────────────────────────────────────────────────────────
 
     private sealed class CapturingPresenter : ICombatPresenter
