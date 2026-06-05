@@ -195,12 +195,12 @@ static partial class Demo
                 if (mode == 'T')
                 {
                     var observer = new CombatConsoleObserver(Paced);
-                    Result = simulator.SimulateAsync(HeroParty, EnemyParty, 500, observer)
+                    Result = simulator.SimulateAsync(HeroParty, EnemyParty, CombatSimulator.DefaultMaxTicks, observer)
                         .GetAwaiter().GetResult();
                 }
                 else
                 {
-                    Result = simulator.Simulate(HeroParty, EnemyParty, 500);
+                    Result = simulator.Simulate(HeroParty, EnemyParty, CombatSimulator.DefaultMaxTicks);
                 }
 
                 Result.DiceLog = _diceService?.DiceLog;

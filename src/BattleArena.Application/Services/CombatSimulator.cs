@@ -16,6 +16,8 @@ using Core.Entities.Enums;
 //   7. Every event is recorded in a CombatLogEntry with full detail.
 public class CombatSimulator : ICombatSimulator
 {
+    public const int DefaultMaxTicks = 1000;
+
     private readonly ICombatService       _combat;
     private readonly ITurnmeterService    _turnmeter;
     private readonly IStatusEffectService _statusEffect;
@@ -52,7 +54,7 @@ public class CombatSimulator : ICombatSimulator
     // CancellationToken allows forfeiting or time-out from the caller.
     public async Task<CombatResult> SimulateAsync(
         Party heroParty, Party enemyParty,
-        int maxTicks = 1000,
+        int maxTicks = DefaultMaxTicks,
         ICombatObserver? observer = null,
         CancellationToken ct = default,
         TerrainType terrain = TerrainType.Plains)
@@ -127,7 +129,7 @@ public class CombatSimulator : ICombatSimulator
     public Task<CombatResult> SimulateAsync(
         Character fighter,  IAttackSource? fighterAttack,
         Character opponent, IAttackSource? opponentAttack,
-        int maxTicks = 1000,
+        int maxTicks = DefaultMaxTicks,
         ICombatObserver? observer = null,
         CancellationToken ct = default,
         TerrainType terrain = TerrainType.Plains) =>
@@ -138,14 +140,14 @@ public class CombatSimulator : ICombatSimulator
 
     // Sync wrappers — safe for console/test contexts (no sync context).
     // Do not call from a UI thread.
-    public CombatResult Simulate(Party heroParty, Party enemyParty, int maxTicks = 1000,
+    public CombatResult Simulate(Party heroParty, Party enemyParty, int maxTicks = DefaultMaxTicks,
         TerrainType terrain = TerrainType.Plains) =>
         SimulateAsync(heroParty, enemyParty, maxTicks, terrain: terrain).GetAwaiter().GetResult();
 
     public CombatResult Simulate(
         Character fighter,  IAttackSource? fighterAttack,
         Character opponent, IAttackSource? opponentAttack,
-        int maxTicks = 1000,
+        int maxTicks = DefaultMaxTicks,
         TerrainType terrain = TerrainType.Plains) =>
         SimulateAsync(fighter, fighterAttack, opponent, opponentAttack, maxTicks, terrain: terrain)
             .GetAwaiter().GetResult();

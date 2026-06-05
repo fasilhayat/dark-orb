@@ -137,7 +137,7 @@ public record CombatSimulateByMembersRequest(
     List<int> HeroPartyMemberIds,
     string EnemyPartyName,
     List<int> EnemyPartyMemberIds,
-    int MaxTicks = 500,
+    int MaxTicks = CombatSimulator.DefaultMaxTicks,
     string HeroTargetStrategy = "lowestHp",
     string EnemyTargetStrategy = "lowestHp"
 );

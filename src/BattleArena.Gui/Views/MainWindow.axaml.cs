@@ -625,7 +625,7 @@ public partial class MainWindow : Window
                 new List<int> { Fighter1!.Id },
                 Fighter2!.Name,
                 new List<int> { Fighter2!.Id },
-                maxTicks: 500);
+                maxTicks: CombatSimulator.DefaultMaxTicks);
         }
         else
         {
@@ -639,7 +639,7 @@ public partial class MainWindow : Window
                 new LowestHpTargetSelector(), new LowestHpTargetSelector(),
                 new AutoActionDecisionSource(diceService), new AutoActionDecisionSource(diceService));
 
-            result = await Task.Run(() => simulator.Simulate(party1, party2, 200), _cts.Token);
+            result = await Task.Run(() => simulator.Simulate(party1, party2, CombatSimulator.DefaultMaxTicks), _cts.Token);
 
             result.DiceLog = diceService.DiceLog;
             result.Log = CombatLogMerger.Merge(result.Log, result.DiceLog);

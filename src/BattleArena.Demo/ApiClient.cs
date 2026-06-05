@@ -1,6 +1,7 @@
 namespace BattleArena;
 
 using Application.Models;
+using Application.Services;
 using Core.Entities;
 using Core.Entities.Enums;
 using System.Net.Http.Json;
@@ -120,7 +121,7 @@ internal sealed class BattleArenaApiClient
     public async Task<CombatResult> SimulateCombatAsync(
         string heroPartyName, List<int> heroMemberIds,
         string enemyPartyName, List<int> enemyMemberIds,
-        int maxTicks = 500,
+        int maxTicks = CombatSimulator.DefaultMaxTicks,
         string heroTargetStrategy = "lowestHp",
         string enemyTargetStrategy = "lowestHp")
     {
@@ -142,7 +143,7 @@ public record CombatSimulateByMembersRequest(
     List<int> HeroPartyMemberIds,
     string EnemyPartyName,
     List<int> EnemyPartyMemberIds,
-    int MaxTicks = 500,
+    int MaxTicks = CombatSimulator.DefaultMaxTicks,
     string HeroTargetStrategy = "lowestHp",
     string EnemyTargetStrategy = "lowestHp"
 );
