@@ -102,6 +102,8 @@ internal sealed class ConsoleCombatPresenter : ICombatPresenter
         _paced(300);
     }
 
+    public void ClearAllPersistentEffects() { }
+
     public void ShowCombatEventOverlay(string actorName, string? targetName, string effectType)
     {
         var color = effectType switch

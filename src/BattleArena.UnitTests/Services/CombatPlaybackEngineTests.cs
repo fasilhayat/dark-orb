@@ -30,6 +30,7 @@ public class CombatPlaybackEngineTests
 
         public int GetEventDelayMs(string eventType) => 0;
         public void Wait(int ms) { }
+        public void ClearAllPersistentEffects() => Calls.Add("ClearAllPersistentEffects");
     }
 
     private static CombatResult MakeResult(IEnumerable<CombatLogEntry> log) => new()
@@ -430,6 +431,7 @@ public class CombatPlaybackEngineTests
         public int GetEventDelayMs(string eventType) => 0;
         public void Wait(int milliseconds) { }
         public void ShowCombatEventOverlay(string actor, string? target, string type) { }
+        public void ClearAllPersistentEffects() { }
     }
 
     /// <summary>
@@ -455,5 +457,6 @@ public class CombatPlaybackEngineTests
         public int GetEventDelayMs(string eventType) => 0;
         public void Wait(int ms) { }
         public void ShowCombatEventOverlay(string actor, string? target, string type) { }
+        public void ClearAllPersistentEffects() { }
     }
 }
