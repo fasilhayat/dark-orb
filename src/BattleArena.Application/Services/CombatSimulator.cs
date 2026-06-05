@@ -783,6 +783,10 @@ public class CombatSimulator : ICombatSimulator
 
         actorState.Meter.IsActive = true;
         setActiveActor(actorState.Character.Name);
+
+        // Set remaining attacks for multi-attack support
+        actorState.AttacksRemaining = setup.IsSpell ? 1 : actorState.Character.AttacksPerTurn;
+
         await notify(new CombatLogEntry
         {
             Tick               = tick,
@@ -832,26 +836,68 @@ public class CombatSimulator : ICombatSimulator
             return healResult;
         }
 
-        var result = _combat.ResolveAttack(actorState.Character, setup.Target, setup.Source, actorState.EngagementRange, terrain);
-        await notify(BuildAttackEntry(tick, actorState.Character.Name, setup.Source.Name, setup.IsSpell, setup.Target.Name, result, setup.Source.DamageType));
+        // ── Multi-attack loop ──────────────────────────────────────────────
+        CombatResult? multiAttackOutcome = null;
+        while (actorState.AttacksRemaining > 0)
+        {
+            actorState.AttacksRemaining--;
 
-        var outcome = await ResolveAttackOutcomeAsync(
-            tick, actorState, setup, result, states, stateMap, lastAttackerOf,
-            heroParty, enemyParty, log, notify);
-        if (outcome is not null)
+            var attackNum = actorState.Character.AttacksPerTurn - actorState.AttacksRemaining;
+            if (attackNum > 1)
+            {
+                await notify(new CombatLogEntry
+                {
+                    Tick      = tick,
+                    ActorName = actorState.Character.Name,
+                    EventType = "ExtraAttack",
+                    Message   = $"{actorState.Character.Name} strikes again! (attack {attackNum} of {actorState.Character.AttacksPerTurn})"
+                });
+            }
+
+            var result = _combat.ResolveAttack(actorState.Character, setup.Target, setup.Source, actorState.EngagementRange, terrain);
+            await notify(BuildAttackEntry(tick, actorState.Character.Name, setup.Source.Name, setup.IsSpell, setup.Target.Name, result, setup.Source.DamageType));
+
+            var outcome = await ResolveAttackOutcomeAsync(
+                tick, actorState, setup, result, states, stateMap, lastAttackerOf,
+                heroParty, enemyParty, log, notify);
+            if (outcome is not null)
+            {
+                multiAttackOutcome = outcome;
+                break;
+            }
+
+            await ApplyDefenderTmBoostAsync(tick, actorState, setup.Target, result, stateMap, notify);
+            await ApplyFumblePenaltyAsync(tick, actorState, result, notify);
+
+            // ── Self-buffs from protective spells ──────────────────────────
+            if (setup.Source is Spell spellWithBuffs && spellWithBuffs.OnHitEffects.Count > 0)
+                await ProcessSelfBuffsAsync(tick, actorState.Character, spellWithBuffs, notify);
+
+            // If target died, re-select for remaining attacks
+            if (!setup.Target.IsAlive && actorState.AttacksRemaining > 0)
+            {
+                var liveEnemies = states
+                    .Where(s => s.PartyIndex != actorState.PartyIndex && s.Character.IsAlive)
+                    .ToList();
+                if (liveEnemies.Count == 0)
+                {
+                    multiAttackOutcome = null;
+                    break;
+                }
+                var selector = actorState.PartyIndex == 0 ? _heroTargetSelector : _enemyTargetSelector;
+                var newTarget = await selector.SelectTargetAsync(
+                    actorState.Character, liveEnemies.Select(s => s.Character), ct);
+                setup = new ActorSetup(setup.Source, newTarget, setup.TmCost, setup.IsSpell);
+            }
+        }
+
+        if (multiAttackOutcome is not null)
         {
             setActiveActor(null);
             actorState.Meter.IsActive = false;
             await notify(BuildAfterTurnEntry(actorState, tick, setup.TmCost));
-            return outcome;
+            return multiAttackOutcome;
         }
-
-        await ApplyDefenderTmBoostAsync(tick, actorState, setup.Target, result, stateMap, notify);
-        await ApplyFumblePenaltyAsync(tick, actorState, result, notify);
-
-        // ── Self-buffs from protective spells ────────────────────────────
-        if (setup.Source is Spell spellWithBuffs && spellWithBuffs.OnHitEffects.Count > 0)
-            await ProcessSelfBuffsAsync(tick, actorState.Character, spellWithBuffs, notify);
 
         setActiveActor(null);
         actorState.Meter.IsActive = false;
@@ -1414,6 +1460,8 @@ public class CombatSimulator : ICombatSimulator
         public Character?        SummonedBy        { get; set; }
         public int               SummonExpiryRound { get; set; }
         public bool              IsSummoned        => SummonedBy is not null;
+        /// <summary>Attacks remaining this turn for multi-attack support.</summary>
+        public int               AttacksRemaining  { get; set; }
 
         /// <summary>
         /// Distance to the current target. Defaults to <see cref="EngagementRange.Melee"/>.

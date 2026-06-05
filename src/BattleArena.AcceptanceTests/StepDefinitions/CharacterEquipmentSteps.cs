@@ -22,6 +22,29 @@ public class CharacterEquipmentSteps
         };
     }
 
+    [Given(@"a (\w+) with strength (\d+)")]
+    public void GivenAClassWithStrength(string className, int strength)
+    {
+        _character = new Character
+        {
+            Strength = strength,
+            ClassId = className switch
+            {
+                "Fighter" => 8,
+                "Barbarian" => 1,
+                "Knight" => 2,
+                "Paladin" => 3,
+                "Priest" => 4,
+                "Mage" => 5,
+                "Bard" => 6,
+                "Druid" => 7,
+                "Rogue" => 9,
+                "Ranger" => 10,
+                _ => 0
+            }
+        };
+    }
+
     [Given(@"the character wears ""([^""]+)"" with armor class (\d+) and mitigation (\d+)")]
     public void GivenTheCharacterWearsArmor(string armorName, int armorClass, int mitigation)
     {
@@ -30,7 +53,8 @@ public class CharacterEquipmentSteps
             Name = armorName,
             ArmorClass = armorClass,
             Mitigation = mitigation,
-            MaxDexterityBonus = 10
+            MaxDexterityBonus = 10,
+            Category = LookupArmorCategory(armorName)
         };
     }
 
@@ -48,26 +72,78 @@ public class CharacterEquipmentSteps
 
     private void AddArmorPiece(string armorName, int armorClass, int mitigation)
     {
+        var piece = new Armor
+        {
+            Name = armorName,
+            ArmorClass = armorClass,
+            Mitigation = mitigation,
+            MaxDexterityBonus = 10,
+            Category = LookupArmorCategory(armorName)
+        };
         if (_character.Equipment.Head is null)
         {
-            _character.Equipment.Head = new Armor
-            {
-                Name = armorName,
-                ArmorClass = armorClass,
-                Mitigation = mitigation,
-                MaxDexterityBonus = 10
-            };
+            _character.Equipment.Head = piece;
         }
         else if (_character.Equipment.Boots is null)
         {
-            _character.Equipment.Boots = new Armor
-            {
-                Name = armorName,
-                ArmorClass = armorClass,
-                Mitigation = mitigation,
-                MaxDexterityBonus = 10
-            };
+            _character.Equipment.Boots = piece;
         }
+    }
+
+    [Given(@"the character wields a ""([^""]+)"" two-handed sword in their right hand")]
+    public void GivenCharacterWieldsTwoHandedSword(string weaponName)
+    {
+        _character.Equipment.RightHand = new Weapon
+        {
+            Name = weaponName,
+            Archetype = ArchetypeWeapon.TwoHandedSword,
+            Hands = 2,
+            DamageDie = DieType.D10,
+            DamageCount = 1,
+            DamageType = DamageType.Slashing,
+            AttackType = AttackType.Melee,
+            AttackBonus = 0
+        };
+    }
+
+    [Given(@"the character wields a ""([^""]+)"" in their left hand dealing (\d+)d(\d+) (\w+) damage with attack bonus (\d+)")]
+    public void GivenCharacterWieldsLeftHandWeapon(string weaponName, int dieCount, int dieSides, string damageTypeName, int attackBonus)
+    {
+        _character.Equipment.LeftHand = new Weapon
+        {
+            Name = weaponName,
+            Archetype = weaponName switch
+            {
+                "Dagger" => ArchetypeWeapon.Dagger,
+                "Shortsword" => ArchetypeWeapon.ShortSword,
+                "Longsword" => ArchetypeWeapon.Sword,
+                _ => ArchetypeWeapon.Sword
+            },
+            Hands = 1,
+            DamageDie = ParseDieType(dieSides),
+            DamageCount = dieCount,
+            DamageType = ParseDamageType(damageTypeName),
+            AttackType = AttackType.Melee,
+            AttackBonus = attackBonus
+        };
+    }
+
+    [Given(@"the character wears a ""([^""]+)"" that grants \+(\d+) Strength")]
+    public void GivenCharacterWearsStrengthGear(string itemName, int strengthBonus)
+    {
+        _character.Equipment.Waist = new Armor
+        {
+            Name = itemName,
+            StrengthBonus = strengthBonus,
+            Category = "Light"
+        };
+    }
+
+    [Given(@"the ""([^""]+)"" is categorized as ""([^""]+)""")]
+    public void GivenArmorIsCategorizedAs(string armorName, string category)
+    {
+        if (_character.Equipment.Chest?.Name == armorName)
+            _character.Equipment.Chest.Category = category;
     }
 
     [Given(@"the character wields a ""([^""]+)"" in their right hand dealing (\d+)d(\d+) (\w+) damage with attack bonus (\d+)")]
@@ -169,6 +245,52 @@ public class CharacterEquipmentSteps
         Assert.Equal(expectedName, _character.Equipment.RightHand.Name);
     }
 
+    // ── New restriction assertions ─────────────────────────────────────────────
+
+    [Then(@"the character should be able to equip the weapon")]
+    public void ThenCharacterCanEquipWeapon()
+    {
+        Assert.NotNull(_character.Equipment.RightHand);
+        Assert.True(_character.CanEquip(_character.Equipment.RightHand));
+    }
+
+    [Then(@"the character should not be able to equip the weapon")]
+    public void ThenCharacterCannotEquipWeapon()
+    {
+        Assert.NotNull(_character.Equipment.RightHand);
+        Assert.False(_character.CanEquip(_character.Equipment.RightHand));
+    }
+
+    [Then(@"the character's two-handed weapon bonus should be (\d+)")]
+    public void ThenTwoHandedWeaponBonusShouldBe(int expected)
+    {
+        Assert.Equal(expected, _character.TwoHandedWeaponBonus);
+    }
+
+    [Then(@"the character should be able to dual-wield")]
+    public void ThenCharacterCanDualWield()
+    {
+        Assert.True(_character.CanDualWield);
+    }
+
+    [Then(@"the character should not be able to dual-wield")]
+    public void ThenCharacterCannotDualWield()
+    {
+        Assert.False(_character.CanDualWield);
+    }
+
+    [Then(@"the character should have an armor violation")]
+    public void ThenCharacterHasArmorViolation()
+    {
+        Assert.True(_character.HasArmorViolation);
+    }
+
+    [Then(@"the character should not have an armor violation")]
+    public void ThenCharacterHasNoArmorViolation()
+    {
+        Assert.False(_character.HasArmorViolation);
+    }
+
     // ── Helpers ────────────────────────────────────────────────────────────────
 
     private static DieType ParseDieType(int sides) => sides switch
@@ -196,5 +318,14 @@ public class CharacterEquipmentSteps
         "Holy"         => DamageType.Holy,
         "Acid"         => DamageType.Acid,
         _              => throw new ArgumentOutOfRangeException(nameof(name), $"Unknown damage type: {name}")
+    };
+
+    private static string LookupArmorCategory(string armorName) => armorName switch
+    {
+        "Padded Armor"    or "Leather Armor" or "Studded Leather" or "Robes" => "Light",
+        "Hide Armor"      or "Chain Shirt"   or "Scale Mail"      or "Breastplate" or "Half Plate" or "Mithril Chain" or "Dragon Scale Mail" => "Medium",
+        "Ring Mail"       or "Chain Mail"    or "Splint Armor"    or "Plate Armor" or "Plate Mail"
+            or "Knight's Honor" or "Titan Plate" or "Battlesworn Plate" or "Aegis of the Fallen King" => "Heavy",
+        _                                                                     => "Light",
     };
 }

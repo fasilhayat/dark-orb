@@ -12,12 +12,20 @@ public class CombatStatsService : ICombatStatsService
         var buffModifiers = AccumulateAttackBuffs(attacker);
         var abilityScore  = ResolveAttackerAbilityScore(attacker, source);
 
+        var classBonus = source.AttackType == AttackType.Ranged
+            ? attacker.RangedAttackBonus
+            : 0;
+
+        var twoHandedBonus = attacker.TwoHandedWeaponBonus;
+        var shieldBonus = attacker.ShieldBonusDamage;
+        var elvenRangerBonus = attacker.ElvenRangerDexBonus;
+
         return new CombatantStats
         {
             ClassAccuracyBase = attacker.StrikeRating,
             LevelScaling      = attacker.Level / 2,
             AttributeModifier = CalculateAbilityModifier(abilityScore),
-            WeaponAttackBonus = source.AttackBonus,
+            WeaponAttackBonus = source.AttackBonus + classBonus + twoHandedBonus + shieldBonus + elvenRangerBonus,
             SkillModifiers    = attacker.Feats.Sum(f => f.AttackBonus),
             BuffModifiers     = buffModifiers,
             RacialModifiers   = attacker.Race?.Feats.Sum(f => f.AttackBonus) ?? 0,

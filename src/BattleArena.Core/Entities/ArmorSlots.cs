@@ -11,23 +11,30 @@ public class ArmorSlots
     public Armor? Boots { get; set; }
     public Armor? Neck { get; set; }
     public Armor? Back { get; set; }
+    public Armor? LeftRing { get; set; }
+    public Armor? RightRing { get; set; }
+    public Armor? Ornament { get; set; }
     public Shield? Shield { get; set; }
     public Weapon? RightHand { get; set; }
     public Weapon? LeftHand { get; set; }
 
-    public int TotalArmorClass => SumSlots(armor => armor.ArmorClass, Head, Chest, Hands, Waist, Boots, Neck, Back);
-    public int TotalMitigation => SumSlots(armor => armor.Mitigation, Head, Chest, Hands, Waist, Boots, Neck, Back);
-    public int TotalTurnMeterPenalty => SumSlots(armor => armor.TurnMeterPenalty, Head, Chest, Hands, Waist, Boots, Neck, Back);
-    public int TotalTurnMeterCostReduction => SumSlots(armor => armor.TurnMeterCostReduction, Head, Chest, Hands, Waist, Boots, Neck, Back);
-    public int TotalManaRegenBonus => SumSlots(armor => armor.ManaRegenBonus, Head, Chest, Hands, Waist, Boots, Neck, Back);
-    public int TotalMaxManaBonus => SumSlots(armor => armor.MaxManaBonus, Head, Chest, Hands, Waist, Boots, Neck, Back);
-    public int TotalSpellSlotsBonus => SumSlots(armor => armor.SpellSlotsBonus, Head, Neck, Back, Hands);
+    private Armor?[] AllSlots => [Head, Chest, Hands, Waist, Boots, Neck, Back, LeftRing, RightRing, Ornament];
+    private Armor?[] GearSlots => [Head, Chest, Hands, Waist, Boots, Neck, Back];
 
-    public int TotalMovementPenalty => SumSlots(armor => armor.MovementPenalty, Head, Chest, Hands, Waist, Boots, Neck, Back);
+    public int TotalArmorClass => SumSlots(a => a.ArmorClass, GearSlots);
+    public int TotalMitigation => SumSlots(a => a.Mitigation, GearSlots);
+    public int TotalTurnMeterPenalty => SumSlots(a => a.TurnMeterPenalty, GearSlots);
+    public int TotalTurnMeterCostReduction => SumSlots(a => a.TurnMeterCostReduction, GearSlots);
+    public int TotalManaRegenBonus => SumSlots(a => a.ManaRegenBonus, AllSlots);
+    public int TotalStrengthBonus => SumSlots(a => a.StrengthBonus, AllSlots);
+    public int TotalMaxManaBonus => SumSlots(a => a.MaxManaBonus, AllSlots);
+    public int TotalSpellSlotsBonus => SumSlots(a => a.SpellSlotsBonus, Head, Neck, Back, Hands);
+
+    public int TotalMovementPenalty => SumSlots(a => a.MovementPenalty, GearSlots);
 
     public int TotalResistance(ResistanceType type) =>
         SumSlots(a => a.Resistances.Where(r => r.Type == type).Sum(r => r.Value),
-            Head, Chest, Hands, Waist, Boots, Neck, Back);
+            GearSlots);
 
     private static int SumSlots(Func<Armor, int> selector, params Armor?[] slots)
     {

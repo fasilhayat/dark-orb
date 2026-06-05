@@ -75,3 +75,87 @@ Feature: Character Combat Readiness
         And the character should have an attack source named "Longsword"
         And the character's shield defense bonus should be 2
         And the character's right hand weapon should be "Longsword"
+
+    @equipment @restrictions
+    # A Fighter (class 8) can equip a two-handed sword with sufficient Strength.
+    Scenario: Fighter with STR 16 can equip two-handed sword
+        Given a Fighter with strength 16
+        And the character wields a "Greatsword" two-handed sword in their right hand
+        Then the character should be able to equip the weapon
+        And the character's two-handed weapon bonus should be 0
+
+    @equipment @restrictions
+    # A Fighter cannot equip a two-handed sword with insufficient Strength.
+    Scenario: Fighter with STR 15 cannot equip two-handed sword
+        Given a Fighter with strength 15
+        And the character wields a "Greatsword" two-handed sword in their right hand
+        Then the character should not be able to equip the weapon
+
+    @equipment @restrictions
+    # A Mage (class 5) cannot equip a two-handed sword regardless of Strength.
+    Scenario: Mage cannot equip two-handed sword due to class restriction
+        Given a Mage with strength 18
+        And the character wields a "Greatsword" two-handed sword in their right hand
+        Then the character should not be able to equip the weapon
+
+    @equipment @restrictions
+    # A character with low base Strength but a Strength-boosting belt can equip a two-handed weapon.
+    Scenario: Strength-boosting gear allows two-handed weapon use
+        Given a Fighter with strength 14
+        And the character wears a "Belt of Giant Strength" that grants +4 Strength
+        And the character wields a "Greatsword" two-handed sword in their right hand
+        Then the character should be able to equip the weapon
+
+    @equipment @restrictions
+    # A Fighter with STR 15 can dual-wield two short swords.
+    Scenario: Fighter with STR 15 can dual-wield
+        Given a Fighter with strength 15
+        And the character wields a "Shortsword" in their right hand dealing 1d6 Piercing damage with attack bonus 0
+        And the character wields a "Shortsword" in their left hand dealing 1d6 Piercing damage with attack bonus 0
+        Then the character should be able to dual-wield
+
+    @equipment @restrictions
+    # A Fighter with STR 14 cannot dual-wield.
+    Scenario: Fighter with STR 14 cannot dual-wield
+        Given a Fighter with strength 14
+        And the character wields a "Shortsword" in their right hand dealing 1d6 Piercing damage with attack bonus 0
+        And the character wields a "Shortsword" in their left hand dealing 1d6 Piercing damage with attack bonus 0
+        Then the character should not be able to dual-wield
+
+    @equipment @restrictions
+    # A Rogue can dual-wield short sword and dagger.
+    Scenario: Rogue with STR 15 can dual-wield short sword and dagger
+        Given a Rogue with strength 15
+        And the character wields a "Shortsword" in their right hand dealing 1d6 Piercing damage with attack bonus 0
+        And the character wields a "Dagger" in their left hand dealing 1d4 Piercing damage with attack bonus 0
+        Then the character should be able to dual-wield
+
+    @equipment @restrictions
+    # A Rogue cannot dual-wield two long swords (class restriction).
+    Scenario: Rogue with STR 15 cannot dual-wield two long swords
+        Given a Rogue with strength 15
+        And the character wields a "Longsword" in their right hand dealing 1d8 Slashing damage with attack bonus 0
+        And the character wields a "Longsword" in their left hand dealing 1d8 Slashing damage with attack bonus 0
+        Then the character should not be able to dual-wield
+
+    @equipment @restrictions
+    # A Knight cannot dual-wield at all.
+    Scenario: Knight with STR 16 cannot dual-wield
+        Given a Knight with strength 16
+        And the character wields a "Longsword" in their right hand dealing 1d8 Slashing damage with attack bonus 0
+        And the character wields a "Longsword" in their left hand dealing 1d8 Slashing damage with attack bonus 0
+        Then the character should not be able to dual-wield
+
+    @equipment @restrictions
+    # A Barbarian wearing heavy armor violates class restrictions.
+    Scenario: Barbarian with heavy armor has armor violation
+        Given a Barbarian with strength 16
+        And the character wears "Chain Mail" with armor class 5 and mitigation 2
+        Then the character should have an armor violation
+
+    @equipment @restrictions
+    # A Barbarian wearing light armor has no violation.
+    Scenario: Barbarian with light armor has no armor violation
+        Given a Barbarian with strength 16
+        And the character wears "Leather Armor" with armor class 2 and mitigation 1
+        Then the character should not have an armor violation

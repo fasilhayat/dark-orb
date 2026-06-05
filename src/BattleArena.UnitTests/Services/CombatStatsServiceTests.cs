@@ -49,6 +49,120 @@ public class CombatStatsServiceTests
     }
 
     [Fact]
+    public void ComputeAttackerStats_BarbarianWithTwoHandedSword_IncludesTwoHandedBonus()
+    {
+        var attacker = new Character
+        {
+            ClassId = 1,
+            Level = 5,
+            Strength = 18,
+            StrikeRating = 14,
+            Equipment = new ArmorSlots
+            {
+                RightHand = new Weapon
+                {
+                    Archetype = ArchetypeWeapon.TwoHandedSword,
+                    Hands = 2,
+                    AttackType = AttackType.Melee,
+                    AttackBonus = 3
+                }
+            }
+        };
+        var weapon = attacker.Equipment.RightHand!;
+
+        var result = _sut.ComputeAttackerStats(attacker, weapon);
+
+        // WeaponAttackBonus = AttackBonus(3) + classBonus(0) + twoHandedBonus(2) + shieldBonus(0) + elvenRangerBonus(0)
+        Assert.Equal(5, result.WeaponAttackBonus);
+    }
+
+    [Fact]
+    public void ComputeAttackerStats_KnightWithShield_IncludesShieldBonus()
+    {
+        var attacker = new Character
+        {
+            ClassId = 2,
+            Level = 5,
+            Strength = 16,
+            StrikeRating = 14,
+            Equipment = new ArmorSlots
+            {
+                RightHand = new Weapon
+                {
+                    Archetype = ArchetypeWeapon.Sword,
+                    Hands = 1,
+                    AttackType = AttackType.Melee,
+                    AttackBonus = 2
+                },
+                Shield = new Shield { DefenseBonus = 2 }
+            }
+        };
+        var weapon = attacker.Equipment.RightHand!;
+
+        var result = _sut.ComputeAttackerStats(attacker, weapon);
+
+        // WeaponAttackBonus = AttackBonus(2) + classBonus(0) + twoHandedBonus(0) + shieldBonus(2) + elvenRangerBonus(0)
+        Assert.Equal(4, result.WeaponAttackBonus);
+    }
+
+    [Fact]
+    public void ComputeAttackerStats_RangerWithBow_IncludesRangedBonus()
+    {
+        var attacker = new Character
+        {
+            ClassId = 10,
+            Level = 5,
+            Dexterity = 18,
+            StrikeRating = 14,
+            Equipment = new ArmorSlots
+            {
+                RightHand = new Weapon
+                {
+                    Archetype = ArchetypeWeapon.Bow,
+                    Hands = 2,
+                    AttackType = AttackType.Ranged,
+                    AttackBonus = 2
+                }
+            }
+        };
+        var weapon = attacker.Equipment.RightHand!;
+
+        var result = _sut.ComputeAttackerStats(attacker, weapon);
+
+        // WeaponAttackBonus = AttackBonus(2) + classBonus(+1 Ranger) + twoHandedBonus(0) + shieldBonus(0) + elvenRangerBonus(0)
+        Assert.Equal(3, result.WeaponAttackBonus);
+    }
+
+    [Fact]
+    public void ComputeAttackerStats_ElfRangerWithBow_IncludesElvenDexBonus()
+    {
+        var attacker = new Character
+        {
+            ClassId = 10,
+            Level = 5,
+            Dexterity = 18,
+            StrikeRating = 14,
+            Race = new Race { Name = "Elf" },
+            Equipment = new ArmorSlots
+            {
+                RightHand = new Weapon
+                {
+                    Archetype = ArchetypeWeapon.Bow,
+                    Hands = 2,
+                    AttackType = AttackType.Ranged,
+                    AttackBonus = 2
+                }
+            }
+        };
+        var weapon = attacker.Equipment.RightHand!;
+
+        var result = _sut.ComputeAttackerStats(attacker, weapon);
+
+        // WeaponAttackBonus = AttackBonus(2) + classBonus(+1 Ranger) + twoHandedBonus(0) + shieldBonus(0) + elvenRangerDexBonus(4)
+        Assert.Equal(7, result.WeaponAttackBonus);
+    }
+
+    [Fact]
     public void ComputeDefenderStats_AppliesArmorDexCapShieldBuffsAndDefenseBonuses()
     {
         var defender = new Character

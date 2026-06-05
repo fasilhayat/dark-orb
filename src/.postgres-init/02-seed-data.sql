@@ -315,20 +315,26 @@ AND NOT EXISTS (SELECT 1 FROM arena_data.feat_resistance fr WHERE fr.feat_id = r
 -- SEED: CLASSES
 -- ============================================================
 
-INSERT INTO arena_data.class (name, description, movement_bonus, hit_die_id, base_strike_rating)
-	SELECT src.name, src.description, src.movement, d.id, src.strike_rating
+INSERT INTO arena_data.class (name, description, movement_bonus, hit_die_id, base_strike_rating,
+    attack_count, bow_attack_count, armor_restriction, can_dual_wield, weapon_switch_cost,
+    two_handed_bonus, shield_bonus_damage, ranged_attack_bonus)
+	SELECT src.name, src.description, src.movement, d.id, src.strike_rating,
+        src.attacks, src.bow_attacks, src.armor, src.dual_wield, src.switch_cost,
+        src.th_bonus, src.shield_bonus, src.ranged_bonus
 	FROM (VALUES
-    ('Barbarian', 'Fierce warriors who channel rage into devastating attacks.',       5, 'D12', 12),
-    ('Knight',    'Armored cavaliers and champions of noble causes.',                 0, 'D10', 11),
-    ('Paladin',   'Holy warriors blessed by the gods with divine power.',             0, 'D10',  9),
-    ('Priest',    'Devoted servants who channel divine magic to heal and protect.',    5, 'D8',   6),
-    ('Mage',      'Masters of the arcane who wield devastating spells.',              0, 'D4',   4),
-    ('Bard',      'Musicians and storytellers who weave magic through performance.',   5, 'D6',   6),
-    ('Druid',     'Guardians of nature who command the elements and beasts.',         5, 'D8',   7),
-    ('Fighter',   'Weapons masters trained in all forms of combat.',                   0, 'D10', 12),
-    ('Rogue',     'Cunning infiltrators who strike from the shadows.',               10, 'D6',   8),
-    ('Ranger',    'Skilled trackers and woodsmen who tame the wilds.',                5, 'D10', 10)
-) AS src(name, description, movement, die_name, strike_rating)
+    ('Barbarian', 'Fierce warriors who channel rage into devastating attacks.',       5, 'D12', 12, 3, 0, 'Light', FALSE, 0.0, 2, 0, 0),
+    ('Knight',    'Armored cavaliers and champions of noble causes.',                 0, 'D10', 11, 2, 0, NULL,    FALSE, 0.5, 0, 2, 0),
+    ('Paladin',   'Holy warriors blessed by the gods with divine power.',             0, 'D10',  9, 2, 0, NULL,    FALSE, 0.5, 2, 0, 0),
+    ('Priest',    'Devoted servants who channel divine magic to heal and protect.',    5, 'D8',   6, 1, 0, NULL,    FALSE, 1.0, 0, 0, 0),
+    ('Mage',      'Masters of the arcane who wield devastating spells.',              0, 'D4',   4, 1, 0, NULL,    FALSE, 1.0, 0, 0, 0),
+    ('Bard',      'Musicians and storytellers who weave magic through performance.',   5, 'D6',   6, 1, 0, NULL,    FALSE, 1.0, 0, 0, 0),
+    ('Druid',     'Guardians of nature who command the elements and beasts.',         5, 'D8',   7, 1, 0, NULL,    FALSE, 1.0, 0, 0, 0),
+    ('Fighter',   'Weapons masters trained in all forms of combat.',                   0, 'D10', 12, 2, 0, NULL,    TRUE,  0.5, 0, 0, 0),
+    ('Rogue',     'Cunning infiltrators who strike from the shadows.',               10, 'D6',   8, 1, 0, NULL,    TRUE,  1.0, 0, 0, 0),
+    ('Ranger',    'Skilled trackers and woodsmen who tame the wilds.',                5, 'D10', 10, 2, 3, NULL,    TRUE,  0.0, 0, 0, 1)
+) AS src(name, description, movement, die_name, strike_rating,
+    attacks, bow_attacks, armor, dual_wield, switch_cost,
+    th_bonus, shield_bonus, ranged_bonus)
 JOIN arena_data.die_type d ON d.name = src.die_name;
 
 
@@ -432,7 +438,10 @@ INSERT INTO arena_data.weapon_type (name, description) VALUES
     ('Mace',       'A blunt one-handed club with a heavy head.'),
     ('MorningStar','A spiked ball on a chain attached to a handle.'),
     ('Lance',      'A long spear used from horseback.'),
-    ('Spear',      'A versatile polearm for thrusting or throwing.')
+    ('Spear',      'A versatile polearm for thrusting or throwing.'),
+    ('TwoHandedSword',     'A massive blade requiring both hands and immense strength.'),
+    ('TwoHandedBattleAxe', 'A devastating two-handed axe that cleaves through armor.'),
+    ('TwoHandedWarhammer', 'A colossal hammer wielded in both hands, crushing all before it.')
 ON CONFLICT (name) DO NOTHING;
 
 
@@ -486,7 +495,15 @@ FROM (VALUES
     ('Bard','Crossbow'),      ('Fighter','Crossbow'), ('Rogue','Crossbow'),
     -- Sling: all except Mage
     ('Barbarian','Sling'), ('Knight','Sling'), ('Paladin','Sling'), ('Priest','Sling'),
-    ('Bard','Sling'),      ('Druid','Sling'),  ('Fighter','Sling'), ('Rogue','Sling')
+    ('Bard','Sling'),      ('Druid','Sling'),  ('Fighter','Sling'), ('Rogue','Sling'),
+    -- Two-handed swords: warrior classes only
+    ('Barbarian','TwoHandedSword'), ('Knight','TwoHandedSword'), ('Paladin','TwoHandedSword'), ('Fighter','TwoHandedSword'),
+    -- Two-handed battle-axes: warrior classes only
+    ('Barbarian','TwoHandedBattleAxe'), ('Knight','TwoHandedBattleAxe'), ('Paladin','TwoHandedBattleAxe'), ('Fighter','TwoHandedBattleAxe'),
+    -- Two-handed warhammers: warriors + Priest
+    ('Barbarian','TwoHandedWarhammer'), ('Knight','TwoHandedWarhammer'), ('Paladin','TwoHandedWarhammer'), ('Priest','TwoHandedWarhammer'), ('Fighter','TwoHandedWarhammer'),
+    -- Ranger: bows, crossbows, short swords, daggers, spears
+    ('Ranger','Bow'), ('Ranger','Crossbow'), ('Ranger','ShortSword'), ('Ranger','Dagger'), ('Ranger','Spear')
 ) AS src(class_name, wt_name)
 JOIN arena_data.class       c  ON c.name  = src.class_name
 JOIN arena_data.weapon_type wt ON wt.name = src.wt_name
@@ -543,11 +560,32 @@ JOIN arena_data.gear_quality gq ON gq.name = src.quality_name;
 
 
 -- Set attack bonuses
+-- Set minimum strength for two-handed weapons (STR 16 required)
+UPDATE arena_data.weapon SET minimum_strength = 16 WHERE name IN (
+    'Great Sword', 'Battle Axe', 'Maul',
+    'Great Sword of the North', 'Barbarian''s Cleaver', 'Judgment Hammer',
+    'Winter Oath', 'Dragon Tooth', 'Templar''s Verdict',
+    'Soul Reaver', 'Dragon''s Fury', 'Stormbringer'
+);
+
 UPDATE arena_data.weapon SET attack_bonus = 3 WHERE name = 'Soul Reaver';
 
-UPDATE arena_data.weapon SET attack_bonus = 2 WHERE name IN ('Stormbringer', 'Dragon''s Fury', 'Shadow Sting', 'Frostbite', 'Sun''s Wrath');
+UPDATE arena_data.weapon SET attack_bonus = 2 WHERE name IN ('Stormbringer', 'Dragon''s Fury', 'Shadow Sting', 'Frostbite', 'Sun''s Wrath', 'Winter Oath', 'Dragon Tooth', 'Templar''s Verdict');
 
-UPDATE arena_data.weapon SET attack_bonus = 1 WHERE name IN ('Bone Crusher', 'Wind Cutter', 'Viper Fang');
+UPDATE arena_data.weapon SET attack_bonus = 1 WHERE name IN ('Bone Crusher', 'Wind Cutter', 'Viper Fang', 'Longbow of the Wilds');
+
+-- Migrate two-handed weapons to new archetype types
+UPDATE arena_data.weapon SET weapon_type_id = (SELECT id FROM arena_data.weapon_type WHERE name = 'TwoHandedSword')
+WHERE name IN ('Great Sword', 'Great Sword of the North', 'Winter Oath', 'Soul Reaver')
+AND weapon_type_id != (SELECT id FROM arena_data.weapon_type WHERE name = 'TwoHandedSword');
+
+UPDATE arena_data.weapon SET weapon_type_id = (SELECT id FROM arena_data.weapon_type WHERE name = 'TwoHandedBattleAxe')
+WHERE name IN ('Battle Axe', 'Barbarian''s Cleaver', 'Dragon Tooth', 'Dragon''s Fury')
+AND weapon_type_id != (SELECT id FROM arena_data.weapon_type WHERE name = 'TwoHandedBattleAxe');
+
+UPDATE arena_data.weapon SET weapon_type_id = (SELECT id FROM arena_data.weapon_type WHERE name = 'TwoHandedWarhammer')
+WHERE name IN ('Maul', 'Judgment Hammer', 'Templar''s Verdict')
+AND weapon_type_id != (SELECT id FROM arena_data.weapon_type WHERE name = 'TwoHandedWarhammer');
 
 
 -- ============================================================
@@ -591,7 +629,27 @@ FROM (VALUES
     ('Barrow Bow',        'A short bow carved from the root of a tree that grew through an ancient barrow. The wood remembers the dead and guides arrows toward the vital spots of the living.',
                                                                                         'Bow',   'D6', 'Piercing', 'Ranged', 1, 2, 'Rare', 1),
     ('Final Toll',        'A hand axe carried by the bell-ringer of the Temple of Passing. He used it to defend the temple during the Sack of Eldergard. The axe still rings like a bell when it strikes.',
-                                                                                        'Axe',   'D6', 'Slashing', 'Melee', 1, 1, 'Uncommon', 0)
+                                                                                        'Axe',   'D6', 'Slashing', 'Melee', 1, 1, 'Uncommon', 0),
+    -- Two-handed weapons
+    ('Great Sword of the North', 'A massive blade forged in the permafrost of the Frozen Wastes. Its edge is honed to split both shield and shield-bearer.',
+                                                                                        'TwoHandedSword', 'D10', 'Slashing', 'Melee', 1, 2, 'Common', 0),
+    ('Barbarian''s Cleaver',     'A crude but terrifying two-handed axe that has tasted blood in a hundred tribal skirmishes. The haft is wrapped in the hide of the first beast its owner slew.',
+                                                                                        'TwoHandedBattleAxe', 'D10', 'Slashing', 'Melee', 1, 2, 'Common', 0),
+    ('Judgment Hammer',          'A towering warhammer of black iron, etched with holy scripture. Its head is shaped like a fist, and it falls with the weight of divine judgment.',
+                                                                                        'TwoHandedWarhammer', 'D10', 'Bludgeoning', 'Melee', 1, 2, 'Common', 0),
+    ('Winter Oath',              'A legendary greatsword of ice-blue steel that never dulls. Bound to the oath of the knight who swore to defend the realm from the frozen north.',
+                                                                                        'TwoHandedSword', 'D12', 'Ice', 'Melee', 1, 2, 'Legendary', 2),
+    ('Dragon Tooth',             'A colossal axe carved from the fang of a primordial dragon. It hums with draconic fury and sets the air ablaze with every swing.',
+                                                                                        'TwoHandedBattleAxe', 'D12', 'Fire', 'Melee', 1, 2, 'Legendary', 2),
+    ('Templar''s Verdict',       'A sacred warhammer that once belonged to the High Templar of the Silver City. It glows with holy light when undead draw near.',
+                                                                                        'TwoHandedWarhammer', 'D12', 'Holy', 'Melee', 1, 2, 'Legendary', 2),
+    -- Ranger weapons
+    ('Ranger''s Short Bow',      'A compact yew bow reinforced with horn and sinew. Crafted for quick shots from forest cover.',
+                                                                                        'Bow', 'D6', 'Piercing', 'Ranged', 1, 2, 'Common', 0),
+    ('Longbow of the Wilds',     'A massive longbow strung with the sinew of a forest giant. Only the strongest rangers can draw it to full extension.',
+                                                                                        'Bow', 'D8', 'Piercing', 'Ranged', 1, 2, 'Rare', 1),
+    ('Twin Fangs',               'Matched short swords balanced for dual-wielding. The pair together are lighter than a single long sword.',
+                                                                                        'ShortSword', 'D6', 'Piercing', 'Melee', 1, 1, 'Uncommon', 0)
 ) AS src(name, description, type_name, die_name, dmg_name, atk_name, dmg_count, hands, quality_name, atk_bonus)
 JOIN arena_data.weapon_type wt ON wt.name = src.type_name
 JOIN arena_data.die_type d ON d.name = src.die_name
@@ -1332,6 +1390,75 @@ END;
 $$;
 
 
+-- Ranger Hero
+DO $$
+DECLARE
+    v_id INTEGER;
+BEGIN
+    INSERT INTO arena_data.character (race_id, class_id, name, level, sex,
+        strength, dexterity, stamina, intelligence, wisdom, charisma,
+        max_hit_points, current_hit_points, strike_rating, turn_speed, npc, max_mana, biography)
+    SELECT r.id, c.id, 'Lyra Swiftarrow', 8, 'F',
+        12, 18, 14, 11, 15, 13,
+        60, 60, 16, 10, 0, 0,
+        'An elven ranger of the Greenwood who has never missed a shot she intended to take. Her twin short swords are as quick as her bow.'
+    FROM arena_data.race r, arena_data.class c
+    WHERE r.name = 'Elf' AND c.name = 'Ranger'
+    RETURNING id INTO v_id;
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'weapon', w.id
+    FROM arena_data.equipment_slot es, arena_data.weapon w
+    WHERE es.name = 'RightHand' AND w.name = 'Ranger''s Short Bow';
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'armor', a.id
+    FROM arena_data.equipment_slot es, arena_data.armor a
+    WHERE es.name = 'Chest' AND a.name = 'Studded Leather';
+END;
+$$;
+
+-- Update existing characters for the new weapon system
+-- Kaela Vornskald: Barbarian stays with Great Sword (two-handed) and Hide Armor (light only)
+-- Lord Aethor Valeborn: Knight gets a shield for shield bonus
+DO $$
+DECLARE
+    v_shield_id INTEGER;
+    v_knight_id INTEGER;
+BEGIN
+    SELECT id INTO v_shield_id FROM arena_data.armor WHERE name = 'Shield';
+    SELECT id INTO v_knight_id FROM arena_data.character WHERE name = 'Lord Aethor Valeborn';
+
+    IF v_knight_id IS NOT NULL AND v_shield_id IS NOT NULL THEN
+        INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+        SELECT v_knight_id, es.id, 'armor', v_shield_id
+        FROM arena_data.equipment_slot es
+        WHERE es.name = 'LeftHand'
+        AND NOT EXISTS (
+            SELECT 1 FROM arena_data.character_equipment ce
+            WHERE ce.character_id = v_knight_id AND ce.slot_id = es.id
+        );
+    END IF;
+END;
+$$;
+
+-- Update Ser Garrick Dawnshield to use Judgment Hammer (two-handed warhammer)
+DO $$
+DECLARE
+    v_paladin_id INTEGER;
+    v_hammer_id INTEGER;
+BEGIN
+    SELECT id INTO v_paladin_id FROM arena_data.character WHERE name = 'Ser Garrick Dawnshield';
+    SELECT id INTO v_hammer_id FROM arena_data.weapon WHERE name = 'Judgment Hammer';
+
+    IF v_paladin_id IS NOT NULL AND v_hammer_id IS NOT NULL THEN
+        UPDATE arena_data.character_equipment
+        SET item_id = v_hammer_id
+        WHERE character_id = v_paladin_id AND slot_id = (SELECT id FROM arena_data.equipment_slot WHERE name = 'RightHand');
+    END IF;
+END;
+$$;
+
 -- Enemies (Npc=1)
 
 DO $$
@@ -1416,6 +1543,34 @@ END;
 $$;
 
 
+-- Ranger Enemy
+DO $$
+DECLARE
+    v_id INTEGER;
+BEGIN
+    INSERT INTO arena_data.character (race_id, class_id, name, level, sex,
+        strength, dexterity, stamina, intelligence, wisdom, charisma,
+        max_hit_points, current_hit_points, strike_rating, turn_speed, npc, max_mana, biography)
+    SELECT r.id, c.id, 'Sylas Thornwood', 10, 'M',
+        14, 20, 14, 12, 16, 12,
+        75, 75, 15, 10, 1, 0,
+        'An elven ranger who patrols the Deepwood. His arrows never miss their mark.'
+    FROM arena_data.race r, arena_data.class c
+    WHERE r.name = 'Elf' AND c.name = 'Ranger'
+    RETURNING id INTO v_id;
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'weapon', w.id
+    FROM arena_data.equipment_slot es, arena_data.weapon w
+    WHERE es.name = 'RightHand' AND w.name = 'Longbow of the Wilds';
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'armor', a.id
+    FROM arena_data.equipment_slot es, arena_data.armor a
+    WHERE es.name = 'Chest' AND a.name = 'Studded Leather';
+END;
+$$;
+
 -- Missing NPC records in the npc table (quest givers / merchants)
 
 INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
@@ -1453,4 +1608,10 @@ SELECT 'Finnick Bramblefoot', r.id, c.id, 8, 8, 20, 13, 14, 11, 16, FALSE, FALSE
        'A notorious Gladefolk thief. Charming, sarcastic, and impossible to pin down.'
 FROM arena_data.race r, arena_data.class c WHERE r.name = 'Gladefolk' AND c.name = 'Rogue'
 AND NOT EXISTS (SELECT 1 FROM arena_data.npc n WHERE n.name = 'Finnick Bramblefoot');
+
+INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)
+SELECT 'Lyra Swiftarrow', r.id, c.id, 8, 12, 18, 14, 11, 15, 13, FALSE, FALSE, FALSE,
+       'An elven ranger of the Greenwood. Master archer and twin-blade duelist.'
+FROM arena_data.race r, arena_data.class c WHERE r.name = 'Elf' AND c.name = 'Ranger'
+AND NOT EXISTS (SELECT 1 FROM arena_data.npc n WHERE n.name = 'Lyra Swiftarrow');
 

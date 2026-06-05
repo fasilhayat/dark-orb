@@ -160,4 +160,534 @@ public class CharacterTests
 
         Assert.Equal(fighter.CanEquip(ArchetypeWeapon.Axe), fighter.CanEquip(new Weapon { Archetype = ArchetypeWeapon.Axe }));
     }
+
+    // ── HasSufficientStrength ──────────────────────────────────────────────────
+
+    [Fact]
+    public void HasSufficientStrength_TwoHandedSwordWithStr16_ReturnsTrue()
+    {
+        var fighter = new Character { ClassId = 8, Strength = 16 };
+        var weapon = new Weapon { Archetype = ArchetypeWeapon.TwoHandedSword, Hands = 2 };
+
+        Assert.True(fighter.HasSufficientStrength(weapon));
+    }
+
+    [Fact]
+    public void HasSufficientStrength_TwoHandedSwordWithStr15_ReturnsFalse()
+    {
+        var fighter = new Character { ClassId = 8, Strength = 15 };
+        var weapon = new Weapon { Archetype = ArchetypeWeapon.TwoHandedSword, Hands = 2 };
+
+        Assert.False(fighter.HasSufficientStrength(weapon));
+    }
+
+    [Fact]
+    public void HasSufficientStrength_TwoHandedWeaponWithGearBonus_ReturnsTrue()
+    {
+        // STR 14 base + Girdle of Giant Strength (+18) = Effective 32 >= 16
+        var fighter = new Character
+        {
+            ClassId = 8,
+            Strength = 14,
+            Equipment = new ArmorSlots
+            {
+                Waist = new Armor { StrengthBonus = 18 }
+            }
+        };
+        var weapon = new Weapon { Archetype = ArchetypeWeapon.TwoHandedSword, Hands = 2 };
+
+        Assert.True(fighter.HasSufficientStrength(weapon));
+    }
+
+    [Fact]
+    public void HasSufficientStrength_OneHandedWeaponWithStr8_ReturnsTrue()
+    {
+        // One-handed weapons have no STR requirement
+        var fighter = new Character { ClassId = 8, Strength = 8 };
+        var weapon = new Weapon { Archetype = ArchetypeWeapon.Sword, Hands = 1 };
+
+        Assert.True(fighter.HasSufficientStrength(weapon));
+    }
+
+    // ── CanEquip with STR check ─────────────────────────────────────────────────
+
+    [Fact]
+    public void CanEquip_FighterWithTwoHandedSwordAndStr16_ReturnsTrue()
+    {
+        var fighter = new Character { ClassId = 8, Strength = 16 };
+        var weapon = new Weapon { Archetype = ArchetypeWeapon.TwoHandedSword, Hands = 2 };
+
+        Assert.True(fighter.CanEquip(weapon));
+    }
+
+    [Fact]
+    public void CanEquip_FighterWithTwoHandedSwordAndStr15_ReturnsFalse()
+    {
+        // Fighter can equip archetype, but STR 15 < 16 requirement
+        var fighter = new Character { ClassId = 8, Strength = 15 };
+        var weapon = new Weapon { Archetype = ArchetypeWeapon.TwoHandedSword, Hands = 2 };
+
+        Assert.False(fighter.CanEquip(weapon));
+    }
+
+    [Fact]
+    public void CanEquip_RogueWithDaggerAndStr10_ReturnsTrue()
+    {
+        // Dagger has no STR requirement
+        var rogue = new Character { ClassId = 9, Strength = 10 };
+        var dagger = new Weapon { Archetype = ArchetypeWeapon.Dagger, Hands = 1 };
+
+        Assert.True(rogue.CanEquip(dagger));
+    }
+
+    // ── CanDualWield ───────────────────────────────────────────────────────────
+
+    [Fact]
+    public void CanDualWield_FighterStr15_TwoShortSwords_ReturnsTrue()
+    {
+        var fighter = new Character
+        {
+            ClassId = 8,
+            Strength = 15,
+            Equipment = new ArmorSlots
+            {
+                RightHand = new Weapon { Archetype = ArchetypeWeapon.ShortSword, Hands = 1 },
+                LeftHand = new Weapon { Archetype = ArchetypeWeapon.ShortSword, Hands = 1 }
+            }
+        };
+
+        Assert.True(fighter.CanDualWield);
+    }
+
+    [Fact]
+    public void CanDualWield_FighterStr14_TwoShortSwords_ReturnsFalse()
+    {
+        var fighter = new Character
+        {
+            ClassId = 8,
+            Strength = 14,
+            Equipment = new ArmorSlots
+            {
+                RightHand = new Weapon { Archetype = ArchetypeWeapon.ShortSword, Hands = 1 },
+                LeftHand = new Weapon { Archetype = ArchetypeWeapon.ShortSword, Hands = 1 }
+            }
+        };
+
+        Assert.False(fighter.CanDualWield);
+    }
+
+    [Fact]
+    public void CanDualWield_FighterStr13WithGearBonus_ReturnsTrue()
+    {
+        // STR 13 base + 2 from belt = Effective 15 >= 15
+        var fighter = new Character
+        {
+            ClassId = 8,
+            Strength = 13,
+            Equipment = new ArmorSlots
+            {
+                Waist = new Armor { StrengthBonus = 2 },
+                RightHand = new Weapon { Archetype = ArchetypeWeapon.ShortSword, Hands = 1 },
+                LeftHand = new Weapon { Archetype = ArchetypeWeapon.ShortSword, Hands = 1 }
+            }
+        };
+
+        Assert.True(fighter.CanDualWield);
+    }
+
+    [Fact]
+    public void CanDualWield_RogueStr15_DaggerAndShortSword_ReturnsTrue()
+    {
+        var rogue = new Character
+        {
+            ClassId = 9,
+            Strength = 15,
+            Equipment = new ArmorSlots
+            {
+                RightHand = new Weapon { Archetype = ArchetypeWeapon.ShortSword, Hands = 1 },
+                LeftHand = new Weapon { Archetype = ArchetypeWeapon.Dagger, Hands = 1 }
+            }
+        };
+
+        Assert.True(rogue.CanDualWield);
+    }
+
+    [Fact]
+    public void CanDualWield_RogueStr15_TwoLongSwords_ReturnsFalse()
+    {
+        // Rogues can only dual-wield shortsword+dagger or 2 daggers
+        var rogue = new Character
+        {
+            ClassId = 9,
+            Strength = 15,
+            Equipment = new ArmorSlots
+            {
+                RightHand = new Weapon { Archetype = ArchetypeWeapon.Sword, Hands = 1 },
+                LeftHand = new Weapon { Archetype = ArchetypeWeapon.Sword, Hands = 1 }
+            }
+        };
+
+        Assert.False(rogue.CanDualWield);
+    }
+
+    [Fact]
+    public void CanDualWield_RangerStr15_TwoShortSwords_ReturnsTrue()
+    {
+        var ranger = new Character
+        {
+            ClassId = 10,
+            Strength = 15,
+            Equipment = new ArmorSlots
+            {
+                RightHand = new Weapon { Archetype = ArchetypeWeapon.ShortSword, Hands = 1 },
+                LeftHand = new Weapon { Archetype = ArchetypeWeapon.ShortSword, Hands = 1 }
+            }
+        };
+
+        Assert.True(ranger.CanDualWield);
+    }
+
+    [Fact]
+    public void CanDualWield_KnightWithShield_ReturnsFalse()
+    {
+        // Knights cannot dual-wield
+        var knight = new Character
+        {
+            ClassId = 2,
+            Strength = 16,
+            Equipment = new ArmorSlots
+            {
+                RightHand = new Weapon { Archetype = ArchetypeWeapon.Sword, Hands = 1 },
+                LeftHand = new Weapon { Archetype = ArchetypeWeapon.Sword, Hands = 1 }
+            }
+        };
+
+        Assert.False(knight.CanDualWield);
+    }
+
+    // ── AttacksPerTurn ─────────────────────────────────────────────────────────
+
+    [Fact]
+    public void AttacksPerTurn_Barbarian_ReturnsThree()
+    {
+        var barbarian = new Character { ClassId = 1 };
+
+        Assert.Equal(3, barbarian.AttacksPerTurn);
+    }
+
+    [Fact]
+    public void AttacksPerTurn_RangerWithBow_ReturnsThree()
+    {
+        var ranger = new Character
+        {
+            ClassId = 10,
+            Equipment = new ArmorSlots
+            {
+                RightHand = new Weapon { Archetype = ArchetypeWeapon.Bow, AttackType = AttackType.Ranged }
+            }
+        };
+
+        Assert.Equal(3, ranger.AttacksPerTurn);
+    }
+
+    [Fact]
+    public void AttacksPerTurn_RangerWithoutBow_ReturnsTwo()
+    {
+        var ranger = new Character
+        {
+            ClassId = 10,
+            Equipment = new ArmorSlots
+            {
+                RightHand = new Weapon { Archetype = ArchetypeWeapon.Sword, AttackType = AttackType.Melee }
+            }
+        };
+
+        Assert.Equal(2, ranger.AttacksPerTurn);
+    }
+
+    // ── WeaponSwitchTurnMeterCost ──────────────────────────────────────────────
+
+    [Fact]
+    public void WeaponSwitchTurnMeterCost_Barbarian_ReturnsZero()
+    {
+        var barbarian = new Character { ClassId = 1 };
+
+        Assert.Equal(0, barbarian.WeaponSwitchTurnMeterCost);
+    }
+
+    [Fact]
+    public void WeaponSwitchTurnMeterCost_Fighter_ReturnsFifty()
+    {
+        var fighter = new Character { ClassId = 8 };
+
+        Assert.Equal(50, fighter.WeaponSwitchTurnMeterCost);
+    }
+
+    [Fact]
+    public void WeaponSwitchTurnMeterCost_Mage_ReturnsOneHundred()
+    {
+        var mage = new Character { ClassId = 5 };
+
+        Assert.Equal(100, mage.WeaponSwitchTurnMeterCost);
+    }
+
+    // ── TwoHandedWeaponBonus ────────────────────────────────────────────────────
+
+    [Fact]
+    public void TwoHandedWeaponBonus_BarbarianWithTwoHandedSword_ReturnsBonus()
+    {
+        var barbarian = new Character
+        {
+            ClassId = 1,
+            Equipment = new ArmorSlots
+            {
+                RightHand = new Weapon { Archetype = ArchetypeWeapon.TwoHandedSword, Hands = 2 }
+            }
+        };
+
+        Assert.Equal(2, barbarian.TwoHandedWeaponBonus);
+    }
+
+    [Fact]
+    public void TwoHandedWeaponBonus_BarbarianWithOneHandedWeapon_ReturnsZero()
+    {
+        var barbarian = new Character
+        {
+            ClassId = 1,
+            Equipment = new ArmorSlots
+            {
+                RightHand = new Weapon { Archetype = ArchetypeWeapon.Sword, Hands = 1 }
+            }
+        };
+
+        Assert.Equal(0, barbarian.TwoHandedWeaponBonus);
+    }
+
+    [Fact]
+    public void TwoHandedWeaponBonus_KnightWithTwoHandedSword_ReturnsZero()
+    {
+        var knight = new Character
+        {
+            ClassId = 2,
+            Equipment = new ArmorSlots
+            {
+                RightHand = new Weapon { Archetype = ArchetypeWeapon.TwoHandedSword, Hands = 2 }
+            }
+        };
+
+        Assert.Equal(0, knight.TwoHandedWeaponBonus);
+    }
+
+    // ── ShieldBonusDamage ───────────────────────────────────────────────────────
+
+    [Fact]
+    public void ShieldBonusDamage_KnightWithShield_ReturnsBonus()
+    {
+        var knight = new Character
+        {
+            ClassId = 2,
+            Equipment = new ArmorSlots
+            {
+                Shield = new Shield { DefenseBonus = 2 }
+            }
+        };
+
+        Assert.Equal(2, knight.ShieldBonusDamage);
+    }
+
+    [Fact]
+    public void ShieldBonusDamage_KnightWithoutShield_ReturnsZero()
+    {
+        var knight = new Character { ClassId = 2 };
+
+        Assert.Equal(0, knight.ShieldBonusDamage);
+    }
+
+    [Fact]
+    public void ShieldBonusDamage_BarbarianWithShield_ReturnsZero()
+    {
+        var barbarian = new Character
+        {
+            ClassId = 1,
+            Equipment = new ArmorSlots
+            {
+                Shield = new Shield { DefenseBonus = 2 }
+            }
+        };
+
+        Assert.Equal(0, barbarian.ShieldBonusDamage);
+    }
+
+    // ── RangedAttackBonus ──────────────────────────────────────────────────────
+
+    [Fact]
+    public void RangedAttackBonus_RangerWithBow_ReturnsBonus()
+    {
+        var ranger = new Character
+        {
+            ClassId = 10,
+            Equipment = new ArmorSlots
+            {
+                RightHand = new Weapon { Archetype = ArchetypeWeapon.Bow, AttackType = AttackType.Ranged }
+            }
+        };
+
+        Assert.Equal(1, ranger.RangedAttackBonus);
+    }
+
+    [Fact]
+    public void RangedAttackBonus_RangerWithSword_ReturnsZero()
+    {
+        var ranger = new Character
+        {
+            ClassId = 10,
+            Equipment = new ArmorSlots
+            {
+                RightHand = new Weapon { Archetype = ArchetypeWeapon.Sword, AttackType = AttackType.Melee }
+            }
+        };
+
+        Assert.Equal(0, ranger.RangedAttackBonus);
+    }
+
+    [Fact]
+    public void RangedAttackBonus_FighterWithBow_ReturnsZero()
+    {
+        var fighter = new Character
+        {
+            ClassId = 8,
+            Equipment = new ArmorSlots
+            {
+                RightHand = new Weapon { Archetype = ArchetypeWeapon.Bow, AttackType = AttackType.Ranged }
+            }
+        };
+
+        Assert.Equal(0, fighter.RangedAttackBonus);
+    }
+
+    // ── ElvenRangerDexBonus ────────────────────────────────────────────────────
+
+    [Fact]
+    public void ElvenRangerDexBonus_ElfRangerWithBow_ReturnsDexMod()
+    {
+        var ranger = new Character
+        {
+            ClassId = 10,
+            Dexterity = 18,
+            Race = new Race { Name = "Elf" },
+            Equipment = new ArmorSlots
+            {
+                RightHand = new Weapon { Archetype = ArchetypeWeapon.Bow, AttackType = AttackType.Ranged }
+            }
+        };
+
+        Assert.Equal(4, ranger.ElvenRangerDexBonus);
+    }
+
+    [Fact]
+    public void ElvenRangerDexBonus_HumanRangerWithBow_ReturnsZero()
+    {
+        var ranger = new Character
+        {
+            ClassId = 10,
+            Dexterity = 18,
+            Race = new Race { Name = "Human" },
+            Equipment = new ArmorSlots
+            {
+                RightHand = new Weapon { Archetype = ArchetypeWeapon.Bow, AttackType = AttackType.Ranged }
+            }
+        };
+
+        Assert.Equal(0, ranger.ElvenRangerDexBonus);
+    }
+
+    [Fact]
+    public void ElvenRangerDexBonus_ElfRangerWithSword_ReturnsZero()
+    {
+        var ranger = new Character
+        {
+            ClassId = 10,
+            Dexterity = 18,
+            Race = new Race { Name = "Elf" },
+            Equipment = new ArmorSlots
+            {
+                RightHand = new Weapon { Archetype = ArchetypeWeapon.Sword, AttackType = AttackType.Melee }
+            }
+        };
+
+        Assert.Equal(0, ranger.ElvenRangerDexBonus);
+    }
+
+    // ── HasArmorViolation ──────────────────────────────────────────────────────
+
+    [Fact]
+    public void HasArmorViolation_BarbarianWithLeatherArmor_ReturnsFalse()
+    {
+        var barbarian = new Character
+        {
+            ClassId = 1,
+            Equipment = new ArmorSlots
+            {
+                Chest = new Armor { Category = "Light", ArmorClass = 2 }
+            }
+        };
+
+        Assert.False(barbarian.HasArmorViolation);
+    }
+
+    [Fact]
+    public void HasArmorViolation_BarbarianWithChainMail_ReturnsTrue()
+    {
+        var barbarian = new Character
+        {
+            ClassId = 1,
+            Equipment = new ArmorSlots
+            {
+                Chest = new Armor { Category = "Medium", ArmorClass = 5 }
+            }
+        };
+
+        Assert.True(barbarian.HasArmorViolation);
+    }
+
+    [Fact]
+    public void HasArmorViolation_KnightWithPlateMail_ReturnsFalse()
+    {
+        var knight = new Character
+        {
+            ClassId = 2,
+            Equipment = new ArmorSlots
+            {
+                Chest = new Armor { Category = "Heavy", ArmorClass = 8 }
+            }
+        };
+
+        Assert.False(knight.HasArmorViolation);
+    }
+
+    // ── EffectiveStrength ──────────────────────────────────────────────────────
+
+    [Fact]
+    public void EffectiveStrength_NoEquipment_EqualsBaseStrength()
+    {
+        var character = new Character { Strength = 14 };
+
+        Assert.Equal(14, character.EffectiveStrength);
+    }
+
+    [Fact]
+    public void EffectiveStrength_WithGearBonuses_SumsCorrectly()
+    {
+        var character = new Character
+        {
+            Strength = 14,
+            Equipment = new ArmorSlots
+            {
+                Waist = new Armor { StrengthBonus = 4 },
+                LeftRing = new Armor { StrengthBonus = 2 }
+            }
+        };
+
+        Assert.Equal(20, character.EffectiveStrength);
+    }
 }

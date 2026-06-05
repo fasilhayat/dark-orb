@@ -179,4 +179,63 @@ public class ArmorSlotsTests
 
         Assert.Equal(0, slots.TotalResistance(ResistanceType.Magic));
     }
+
+    // ── TotalStrengthBonus ──────────────────────────────────────────────────
+
+    [Fact]
+    public void TotalStrengthBonus_EmptySlots_ReturnsZero()
+    {
+        Assert.Equal(0, new ArmorSlots().TotalStrengthBonus);
+    }
+
+    [Fact]
+    public void TotalStrengthBonus_ArmorSlot_ContributesBonus()
+    {
+        var slots = new ArmorSlots
+        {
+            Chest = new Armor { StrengthBonus = 2 }
+        };
+
+        Assert.Equal(2, slots.TotalStrengthBonus);
+    }
+
+    [Fact]
+    public void TotalStrengthBonus_MultipleSlots_SumsCorrectly()
+    {
+        var slots = new ArmorSlots
+        {
+            Chest = new Armor { StrengthBonus = 2 },
+            Waist = new Armor { StrengthBonus = 4 },
+            Neck = new Armor { StrengthBonus = 1 }
+        };
+
+        Assert.Equal(7, slots.TotalStrengthBonus);
+    }
+
+    [Fact]
+    public void TotalStrengthBonus_AccessorySlots_ContributeBonus()
+    {
+        var slots = new ArmorSlots
+        {
+            LeftRing = new Armor { StrengthBonus = 2 },
+            RightRing = new Armor { StrengthBonus = 3 },
+            Ornament = new Armor { StrengthBonus = 1 }
+        };
+
+        Assert.Equal(6, slots.TotalStrengthBonus);
+    }
+
+    [Fact]
+    public void TotalStrengthBonus_GearAndAccessorySlots_AllSummed()
+    {
+        var slots = new ArmorSlots
+        {
+            Chest = new Armor { StrengthBonus = 2 },
+            Waist = new Armor { StrengthBonus = 4 },
+            LeftRing = new Armor { StrengthBonus = 1 },
+            RightRing = new Armor { StrengthBonus = 1 }
+        };
+
+        Assert.Equal(8, slots.TotalStrengthBonus);
+    }
 }

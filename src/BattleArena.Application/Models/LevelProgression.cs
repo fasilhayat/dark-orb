@@ -20,7 +20,7 @@ public static class LevelProgression
 
     public static ClassArchetype Archetype(string className) => className switch
     {
-        "Barbarian" or "Fighter" or "Knight" or "Paladin" => ClassArchetype.Martial,
+        "Barbarian" or "Fighter" or "Knight" or "Paladin" or "Ranger" => ClassArchetype.Martial,
         "Mage" or "Priest" or "Druid" => ClassArchetype.Caster,
         "Rogue" or "Bard" => ClassArchetype.Hybrid,
         _ => ClassArchetype.Martial
@@ -28,7 +28,7 @@ public static class LevelProgression
 
     public static ClassArchetype Archetype(int classId) => classId switch
     {
-        1 or 2 or 3 or 8 => ClassArchetype.Martial,
+        1 or 2 or 3 or 8 or 10 => ClassArchetype.Martial,
         4 or 5 or 7 => ClassArchetype.Caster,
         6 or 9 => ClassArchetype.Hybrid,
         _ => ClassArchetype.Martial
@@ -161,4 +161,156 @@ public static class LevelProgression
         12 => DieType.D12,
         _ => DieType.D8
     };
+
+    // ── Class combat data (mirrors PlayerClass DB values) ─────────────────────
+
+    /// <summary>Base attacks per turn for each class (indexed by ClassId).</summary>
+    private static readonly int[] _attacksPerTurn =
+        [1,  // 0 unused
+         3,  // 1 Barbarian
+         2,  // 2 Knight
+         2,  // 3 Paladin
+         1,  // 4 Priest
+         1,  // 5 Mage
+         1,  // 6 Bard
+         1,  // 7 Druid
+         2,  // 8 Fighter
+         1,  // 9 Rogue
+         2,  // 10 Ranger
+        ];
+
+    /// <summary>Bow attacks per turn (0 = no special bonus).</summary>
+    private static readonly int[] _bowAttacksPerTurn =
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  // 0-9
+         3,  // 10 Ranger (3 attacks with bow)
+        ];
+
+    /// <summary>
+    /// Armor restrictions: null = unrestricted, "Light" = light only.
+    /// </summary>
+    private static readonly string?[] _armorRestrictions =
+        [null,
+         "Light",   // 1 Barbarian
+         null,      // 2 Knight
+         null,      // 3 Paladin
+         null,      // 4 Priest
+         null,      // 5 Mage
+         null,      // 6 Bard
+         null,      // 7 Druid
+         null,      // 8 Fighter
+         null,      // 9 Rogue
+         null,      // 10 Ranger
+        ];
+
+    /// <summary>Whether each class can dual-wield.</summary>
+    private static readonly bool[] _canDualWield =
+        [false,
+         false,  // 1 Barbarian (two-handers only)
+         false,  // 2 Knight (shield specialist)
+         false,  // 3 Paladin (two-handers or shield)
+         false,  // 4 Priest
+         false,  // 5 Mage
+         false,  // 6 Bard
+         false,  // 7 Druid
+         true,   // 8 Fighter
+         true,   // 9 Rogue (short sword + dagger or 2 daggers)
+         true,   // 10 Ranger (2 shortswords or shortsword + dagger)
+        ];
+
+    /// <summary>
+    /// Weapon switch turnmeter cost multiplier.
+    /// 0 = no cost, 1 = full cost, 0.5 = half cost.
+    /// </summary>
+    private static readonly double[] _weaponSwitchCostMultiplier =
+        [1.0,
+         0.0,  // 1 Barbarian (no cost — restricted to melee)
+         0.5,  // 2 Knight (half cost)
+         0.5,  // 3 Paladin (half cost)
+         1.0,  // 4 Priest
+         1.0,  // 5 Mage
+         1.0,  // 6 Bard
+         1.0,  // 7 Druid
+         0.5,  // 8 Fighter (half cost)
+         1.0,  // 9 Rogue
+         0.0,  // 10 Ranger (no cost)
+        ];
+
+    /// <summary>Two-handed weapon attack bonus by class.</summary>
+    private static readonly int[] _twoHandedWeaponBonus =
+        [0,
+         2,  // 1 Barbarian (+2 bonus)
+         0,  // 2 Knight
+         2,  // 3 Paladin (+2 bonus for two-handed sword/warhammer)
+         0,  // 4 Priest
+         0,  // 5 Mage
+         0,  // 6 Bard
+         0,  // 7 Druid
+         0,  // 8 Fighter
+         0,  // 9 Rogue
+         0,  // 10 Ranger
+        ];
+
+    /// <summary>Shield bonus damage by class.</summary>
+    private static readonly int[] _shieldBonusDamage =
+        [0,
+         0,  // 1 Barbarian
+         2,  // 2 Knight (+2 bonus with shield)
+         0,  // 3 Paladin
+         0,  // 4 Priest
+         0,  // 5 Mage
+         0,  // 6 Bard
+         0,  // 7 Druid
+         0,  // 8 Fighter
+         0,  // 9 Rogue
+         0,  // 10 Ranger
+        ];
+
+    /// <summary>Ranged attack bonus by class.</summary>
+    private static readonly int[] _rangedAttackBonus =
+        [0,
+         0,  // 1 Barbarian
+         0,  // 2 Knight
+         0,  // 3 Paladin
+         0,  // 4 Priest
+         0,  // 5 Mage
+         0,  // 6 Bard
+         0,  // 7 Druid
+         0,  // 8 Fighter
+         0,  // 9 Rogue
+         1,  // 10 Ranger (+1 ranged bonus)
+        ];
+
+    public static int AttacksPerTurn(int classId) =>
+        classId >= 0 && classId < _attacksPerTurn.Length ? _attacksPerTurn[classId] : 1;
+
+    public static int BowAttacksPerTurn(int classId) =>
+        classId >= 0 && classId < _bowAttacksPerTurn.Length ? _bowAttacksPerTurn[classId] : 0;
+
+    public static string? ArmorRestriction(int classId) =>
+        classId >= 0 && classId < _armorRestrictions.Length ? _armorRestrictions[classId] : null;
+
+    public static bool CanDualWield(int classId) =>
+        classId >= 0 && classId < _canDualWield.Length && _canDualWield[classId];
+
+    public static double WeaponSwitchCostMultiplier(int classId) =>
+        classId >= 0 && classId < _weaponSwitchCostMultiplier.Length ? _weaponSwitchCostMultiplier[classId] : 1.0;
+
+    public static int TwoHandedWeaponBonus(int classId) =>
+        classId >= 0 && classId < _twoHandedWeaponBonus.Length ? _twoHandedWeaponBonus[classId] : 0;
+
+    public static int ShieldBonusDamage(int classId) =>
+        classId >= 0 && classId < _shieldBonusDamage.Length ? _shieldBonusDamage[classId] : 0;
+
+    public static int RangedAttackBonus(int classId) =>
+        classId >= 0 && classId < _rangedAttackBonus.Length ? _rangedAttackBonus[classId] : 0;
+
+    /// <summary>Returns true if the given weapon archetype is a two-handed weapon.</summary>
+    public static bool IsTwoHandedArchetype(ArchetypeWeapon archetype) =>
+        archetype is ArchetypeWeapon.TwoHandedSword
+            or ArchetypeWeapon.TwoHandedBattleAxe
+            or ArchetypeWeapon.TwoHandedWarhammer;
+
+    /// <summary>Returns true if the given weapon archetype is a ranged bow.</summary>
+    public static bool IsBowArchetype(ArchetypeWeapon archetype) =>
+        archetype is ArchetypeWeapon.Bow;
 }

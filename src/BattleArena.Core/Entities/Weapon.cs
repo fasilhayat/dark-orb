@@ -15,6 +15,7 @@ public class Weapon : IAttackSource
     public int Hands { get; set; } = 1;
     public GearQuality Quality { get; set; } = GearQuality.Common;
     public int AttackBonus { get; set; }
+    public int MinimumStrength { get; set; }
     public int ElementalDamage { get; set; }
     public ElementalType ElementalType { get; set; } = ElementalType.None;
     public int FlatDamageBonus { get; set; }

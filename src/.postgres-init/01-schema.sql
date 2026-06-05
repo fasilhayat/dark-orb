@@ -179,7 +179,15 @@ CREATE TABLE IF NOT EXISTS arena_data.class (
     name VARCHAR(50) NOT NULL UNIQUE,
     base_strike_rating INTEGER NOT NULL DEFAULT 20,
     movement_bonus INTEGER NOT NULL DEFAULT 0,
-    description TEXT DEFAULT ''
+    description TEXT DEFAULT '',
+    attack_count INTEGER NOT NULL DEFAULT 1,
+    bow_attack_count INTEGER NOT NULL DEFAULT 0,
+    armor_restriction VARCHAR(20),
+    can_dual_wield BOOLEAN NOT NULL DEFAULT FALSE,
+    weapon_switch_cost NUMERIC(3,2) NOT NULL DEFAULT 1.0,
+    two_handed_bonus INTEGER NOT NULL DEFAULT 0,
+    shield_bonus_damage INTEGER NOT NULL DEFAULT 0,
+    ranged_attack_bonus INTEGER NOT NULL DEFAULT 0
 );
 
 
@@ -267,6 +275,7 @@ CREATE TABLE IF NOT EXISTS arena_data.weapon (
     name VARCHAR(100) NOT NULL,
     damage_count INTEGER NOT NULL DEFAULT 1,
     hands INTEGER NOT NULL DEFAULT 1,
+    minimum_strength INTEGER NOT NULL DEFAULT 0,
     attack_bonus INTEGER NOT NULL DEFAULT 0,
     cursed BOOLEAN NOT NULL DEFAULT FALSE,
     description TEXT DEFAULT '',
