@@ -1,8 +1,7 @@
-using System;
-using System.Globalization;
-using Avalonia.Data.Converters;
-
 namespace BattleArena.Gui.Views;
+
+using Avalonia.Data.Converters;
+using System.Globalization;
 
 internal sealed class NotNullConverter : IValueConverter
 {

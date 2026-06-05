@@ -3,8 +3,15 @@ namespace BattleArena.Api.Endpoints;
 using Application.Interfaces;
 using Core.Entities;
 
+/// <summary>
+/// CharacterEndpoint is a class that defines the API endpoints for character-related operations in the Battle Arena application.
+/// </summary>
 public static class CharacterEndpoint
 {
+    /// <summary>
+    /// Maps the character-related API endpoints to the provided IEndpointRouteBuilder.
+    /// </summary>
+    /// <param name="app">Named parameter of type IEndpointRouteBuilder used to define the API routes for character operations.</param>
     public static void MapCharacterEndpoints(this WebApplication app)
     {
         app.MapGet("/v1/characters", async (ICharacterService characterService) =>

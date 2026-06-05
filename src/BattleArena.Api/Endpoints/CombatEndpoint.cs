@@ -1,14 +1,23 @@
 namespace BattleArena.Api.Endpoints;
 
 using Application.Interfaces;
-using Application.Models;
 using Application.Services;
 using Core.Entities;
 using Core.Entities.Enums;
 using Core.Interfaces;
 
+/// <summary>
+/// CombatEndpoint is a class that defines the API endpoints for combat-related operations in the Battle Arena application. 
+/// It uses the ICombatService to handle combat logic and the IPlayerRepository to access player data. 
+/// The endpoints include starting a combat, performing an attack, and using an amulet during combat. 
+/// Each endpoint validates the input parameters and returns appropriate responses based on the success or failure of the operations.
+/// </summary>
 public static class CombatEndpoint
 {
+    /// <summary>
+    /// Maps the combat-related API endpoints to the provided IEndpointRouteBuilder.
+    /// </summary>
+    /// <param name="app">Named parameter of type IEndpointRouteBuilder used to define the API routes for combat operations.</param>
     public static void MapCombatEndpoints(this WebApplication app)
     {
         app.MapGet("/v1/roll/{dieType}", (DieType dieType, IDiceService dice) =>
@@ -89,8 +98,8 @@ public static class CombatEndpoint
         });
     }
 
-    private static async Task<List<PartyMember>> BuildPartyMembers(
-        List<int> characterIds, ICharacterService characterService)
+    // Helper method to create a defender character with the specified AC.
+    private static async Task<List<PartyMember>> BuildPartyMembers(List<int> characterIds, ICharacterService characterService)
     {
         var members = new List<PartyMember>();
         foreach (var id in characterIds)
@@ -106,9 +115,19 @@ public static class CombatEndpoint
         return members;
     }
 
-    private static IAttackSource ResolveAttackSource(Character character) =>
-        CharacterAttackResolver.Resolve(character);
+    /// <summary>
+    /// Resolves the attack source for a given character. 
+    /// This is a placeholder implementation and should be replaced with actual logic to determine the attack source based on the character's attributes, equipment, or other factors.
+    /// </summary>
+    /// <param name="character">Character for which to resolve the attack source.</param>
+    /// <returns>Returns an AttackSource object that represents the source of attacks for the given character.</returns>
+    private static IAttackSource ResolveAttackSource(Character character) => CharacterAttackResolver.Resolve(character);
 
+    /// <summary>
+    /// Creates a defender character with the specified Armor Class (AC).
+    /// </summary>
+    /// <param name="strategy">Strategy for selecting the target, which can influence the defender's attributes.</param>
+    /// <returns>Returns a Character object representing the defender with the specified AC.</returns>
     private static ITargetSelector CreateSelector(string strategy) => strategy.ToLowerInvariant() switch
     {
         "random" => new RandomTargetSelector(),
@@ -116,6 +135,11 @@ public static class CombatEndpoint
         _ => new LowestHpTargetSelector()
     };
 
+    /// <summary>
+    /// Defines a defender character with the specified Armor Class (AC) and other attributes.
+    /// </summary>
+    /// <param name="targetAc">Target Armor Class (AC) for the defender character.</param>
+    /// <returns>Returns a Character object representing the defender with the specified AC and other attributes.</returns>
     private static Character CreateDefender(int targetAc)
     {
         return new Character

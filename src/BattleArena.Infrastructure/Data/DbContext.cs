@@ -2,10 +2,21 @@ namespace BattleArena.Infrastructure.Data;
 
 using Npgsql;
 
+/// <summary>
+/// A simple implementation of IDbContext that uses Npgsql to interact with a PostgreSQL database. It provides methods to execute scalar functions, query functions, and stored procedures. The connection string is provided through the constructor, and connections are created as needed for each operation. 
+/// The WithParens method ensures that function and procedure names are correctly formatted when constructing SQL commands.
+/// </summary>
 public class DbContext : IDbContext
 {
+    /// <summary>
+    /// The connection string used to connect to the PostgreSQL database. It is provided through the constructor and stored as a private readonly field.
+    /// </summary>
     private readonly string _connectionString;
 
+    /// <summary>
+    /// The constructor for the DbContext class, which takes a connection string as a parameter and assigns it to the private field.
+    /// </summary>
+    /// <param name="connectionString">The connection string for the PostgreSQL database.</param>
     public DbContext(string connectionString)
     {
         _connectionString = connectionString;
