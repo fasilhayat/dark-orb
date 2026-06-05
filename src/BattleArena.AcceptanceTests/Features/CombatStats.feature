@@ -62,27 +62,27 @@ Feature: Combat — AttackPower and DefensePower Derivation
         Then the total attack power should be 25
 
     @combat-stats
-    # EffectiveAC = 5. No shield, no dex modifier, no buffs.
-    # DefensePower = 5.
+    # EffectiveAC = 10 (floor of 10). No shield, no dex modifier, no buffs.
+    # DefensePower = 10.
     Scenario: Defense power converts raw armor class to effective armor class
         Given a stats defender with dexterity 10
-        And the stats defender wears chest armor with class 5 and max dex bonus 10
+        And the stats defender wears chest armor with class 10 and max dex bonus 10
         When defense power is computed
-        # EffectiveAC = 5, no LevelDefenseBonus, total = 5
-        Then the total defense power should be 5
+        # EffectiveAC = 10, no LevelDefenseBonus, total = 10
+        Then the total defense power should be 10
 
     @combat-stats
     # Heavy armor caps the dexterity bonus even when DEX is very high.
-    # TotalArmorClass = 6 + 2 = 8 → EffectiveAC = 8.
+    # TotalArmorClass = 12 + 4 = 16 → EffectiveAC = 16.
     # DEX 18 → raw +4, capped to min(2 + 1) = 3 by armor.
         # Shield +3. No LevelDefenseBonus.
-        # DefensePower = 8 + 3 (dex capped) + 3 (shield) = 14.
+        # DefensePower = 16 + 3 (dex capped) + 3 (shield) = 22.
     Scenario: Dexterity bonus is capped by the most restrictive armor piece
         Given a stats defender with dexterity 18
-        And the stats defender wears chest armor with class 6 and max dex bonus 2
-        And the stats defender wears head armor with class 2 and max dex bonus 1
+        And the stats defender wears chest armor with class 12 and max dex bonus 2
+        And the stats defender wears head armor with class 4 and max dex bonus 1
         And the stats defender carries a shield with +3 defense bonus
         When defense power is computed
-        Then the computed effective armor class should be 8
+        Then the computed effective armor class should be 16
         And the computed dexterity modifier should be 3
-        And the total defense power should be 14
+        And the total defense power should be 22

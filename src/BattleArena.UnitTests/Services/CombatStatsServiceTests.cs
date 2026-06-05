@@ -175,8 +175,8 @@ public class CombatStatsServiceTests
             },
             Equipment = new ArmorSlots
             {
-                Chest = new Armor { ArmorClass = 6, MaxDexterityBonus = 2 },
-                Head = new Armor { ArmorClass = 2, MaxDexterityBonus = 1 },
+                Chest = new Armor { ArmorClass = 12, MaxDexterityBonus = 2 },
+                Head = new Armor { ArmorClass = 4, MaxDexterityBonus = 1 },
                 Shield = new Shield { DefenseBonus = 3 }
             },
             ActiveStatusEffects = new List<StatusEffect>
@@ -190,11 +190,11 @@ public class CombatStatsServiceTests
 
         var result = _sut.ComputeDefenderStats(defender);
 
-        Assert.Equal(8, result.EffectiveAC);
+        Assert.Equal(16, result.EffectiveAC);
         Assert.Equal(3, result.DexterityModifier);
         Assert.Equal(3, result.ShieldBonus);
         Assert.Equal(3, result.DefensiveBuffs);
         Assert.Equal(3, result.DefenseRacialModifiers);
-        Assert.Equal(20, result.DefensePower);
+        Assert.Equal(28, result.DefensePower);
     }
 }

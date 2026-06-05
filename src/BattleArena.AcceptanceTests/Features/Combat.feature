@@ -35,14 +35,14 @@ Feature: Combat — Core Attack Resolution
         Then the modifier should be 5
 
     @attack
-    # AttackPower = 5 (background). Roll 12 + 5 = 17 >= DefensePower 6 (AC=5 + Level 1). Hit.
+    # AttackPower = 4 (SR 2 + STR 14). Roll 16 + 4 = 20 >= DefensePower 10 (AC floor 10). Hit.
     # Damage = d8(5) + STR mod(2) + Level/2(0) = 7.
     Scenario: Successful melee attack hits and deals damage with strength bonus
-        Given the D20 roll is 12
+        Given the D20 roll is 16
         And the damage die roll is 5
-        When the character attacks a target with armor class 5
+        When the character attacks a target with armor class 10
         Then the attack should hit
-        And the hit roll should be 12
+        And the hit roll should be 16
         And the damage should be 7
         And the weapon used should be "Longsword"
 

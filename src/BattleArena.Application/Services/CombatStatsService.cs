@@ -112,7 +112,7 @@ public class CombatStatsService : ICombatStatsService
 
         return new CombatantStats
         {
-            EffectiveAC            = defender.Equipment.TotalArmorClass,
+            EffectiveAC            = Math.Max(10, defender.Equipment.TotalArmorClass),
             DexterityModifier      = dexterityModifier,
             ShieldBonus            = defender.Equipment.Shield?.DefenseBonus ?? 0,
             DefensiveBuffs         = positiveBuffTotal + negativeDebuffs,

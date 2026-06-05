@@ -36,7 +36,7 @@ Feature: Modern D&D System — THAC0 Regression Guard
             | sr | ac | min_hits | max_hits |
             | 17 | 12 |      600 |      850 |
             |  4 | 12 |      130 |      320 |
-            | 10 |  6 |      550 |      800 |
+            | 10 |  6 |      400 |      600 |
             | 10 | 18 |       30 |      320 |
 
     @modern-dnd

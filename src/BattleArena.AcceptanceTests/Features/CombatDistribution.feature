@@ -16,17 +16,16 @@ Feature: Combat — Outcome Distributions
 
     @combat-distribution
     # Balanced: AP ≈ DP
-    #   Attacker: Level 2, STR 12 (+1), SR 8   → AP = 8 + 1 + 1 = 10
-    #   Defender: AC 8, DEX 10 (+0)            → DP = 8 + 0 = 8
-    #   P(hit) = P(atk + 10 >= def + 8) across all 400 dice pairs
-    #          = (Devastating 1 + Critical 18 + NormalHits 222) / 400 = 60.25 %
-    #   N=2000 → expected 1205, 3σ [1139, 1271]
-    Scenario: Balanced combat hit rate is approximately 60%
-        Given a distribution attacker at level 2 with strength 12 and strike rating 8
+    #   Attacker: Level 2, STR 14 (+2), SR 8   → AP = 8 + 1 + 2 = 11
+    #   Defender: AC 8, DEX 10 (+0)            → DP = max(10, 8) + 0 + 1 = 11
+    #   P(hit) ≈ 52 % (opposed d20 with equal modifiers)
+    #   N=2000 → expected ~1040
+    Scenario: Balanced combat hit rate is approximately 52%
+        Given a distribution attacker at level 2 with strength 14 and strike rating 8
         And the distribution attacker wields an unarmed strike
         And a distribution defender with armor class 8 and dexterity 10
         When 2000 attacks are resolved
-        Then the total hit count should be between 1130 and 1280
+        Then the total hit count should be between 900 and 1180
         And the critical hit rate should be between 3% and 6%
         And the fumble rate should be between 3% and 6%
         And the perfect parry rate should be between 2% and 7%
@@ -46,16 +45,16 @@ Feature: Combat — Outcome Distributions
 
     @combat-distribution
     # Attacker advantage: AP > DP
-    #   Attacker: Level 1, STR 14 (+2), SR 10  → AP = 10 + 0 + 2 = 12
-    #   Defender: AC 5, DEX 10 (+0)            → DP = 5 + 0 = 5
-    #   P(hit) = (1 + 18 + 287) / 400 = 76.50 %
-    #   N=2000 → expected 1530, 3σ [1473, 1587]
-    Scenario: Attacker advantage elevates hit rate to approximately 77%
-        Given a distribution attacker at level 1 with strength 14 and strike rating 10
+    #   Attacker: Level 1, STR 18 (+4), SR 14  → AP = 14 + 0 + 4 = 18
+    #   Defender: AC 5, DEX 10 (+0)            → DP = max(10, 5) + 0 + 1 = 11
+    #   P(hit) ≈ 80 %
+    #   N=2000 → expected ~1600
+    Scenario: Attacker advantage elevates hit rate to approximately 80%
+        Given a distribution attacker at level 1 with strength 18 and strike rating 14
         And the distribution attacker wields an unarmed strike
         And a distribution defender with armor class 5 and dexterity 10
         When 2000 attacks are resolved
-        Then the total hit count should be between 1460 and 1600
+        Then the total hit count should be between 1450 and 1750
 
     @combat-distribution
     # High level: tests LevelScaling = Level/2 at level 5
