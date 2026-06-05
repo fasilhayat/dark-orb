@@ -54,7 +54,28 @@ public static class RosterLoader
     {
         var result = new Dictionary<string, Race>(StringComparer.OrdinalIgnoreCase);
         foreach (var d in dtos)
-            result[d.Name] = new Race { Name = d.Name, BaseMovementSpeed = d.BaseMovementSpeed };
+        {
+            var feats = new List<Feat>();
+            if (d.Feats is { Count: > 0 })
+            {
+                foreach (var fd in d.Feats)
+                {
+                    var resistances = new List<ResistanceBonus>();
+                    if (fd.Resistances is { Count: > 0 })
+                    {
+                        foreach (var r in fd.Resistances)
+                            resistances.Add(new ResistanceBonus(ParseEnum<ResistanceType>(r.Type), r.Value));
+                    }
+                    feats.Add(new Feat { Name = fd.Name, Resistances = resistances });
+                }
+            }
+            result[d.Name] = new Race
+            {
+                Name = d.Name,
+                BaseMovementSpeed = d.BaseMovementSpeed,
+                Feats = feats
+            };
+        }
         return result;
     }
 
@@ -123,6 +144,12 @@ public static class RosterLoader
         var result = new Dictionary<string, Armor>(StringComparer.OrdinalIgnoreCase);
         foreach (var d in dtos)
         {
+            var resistances = new List<ResistanceBonus>();
+            if (d.Resistances is { Count: > 0 })
+            {
+                foreach (var r in d.Resistances)
+                    resistances.Add(new ResistanceBonus(ParseEnum<ResistanceType>(r.Type), r.Value));
+            }
             result[d.Name] = new Armor
             {
                 Name                  = d.Name,
@@ -130,7 +157,8 @@ public static class RosterLoader
                 Mitigation            = d.Mitigation,
                 MaxDexterityBonus     = d.MaxDexterityBonus,
                 MovementPenalty       = d.MovementPenalty,
-                TurnMeterCostReduction = d.TurnMeterCostReduction
+                TurnMeterCostReduction = d.TurnMeterCostReduction,
+                Resistances           = resistances
             };
         }
         return result;
@@ -241,10 +269,23 @@ public static class RosterLoader
         public List<CharacterDto> Dummies { get; init; } = [];
     }
 
+    private sealed class FeatDto
+    {
+        public string Name                        { get; init; } = "";
+        public List<ResistanceBonusDto>? Resistances { get; init; }
+    }
+
+    private sealed class ResistanceBonusDto
+    {
+        public string Type  { get; init; } = "";
+        public int    Value { get; init; }
+    }
+
     private sealed class RaceDto
     {
-        public string Name              { get; init; } = "";
-        public int    BaseMovementSpeed { get; init; } = 30;
+        public string              Name              { get; init; } = "";
+        public int                 BaseMovementSpeed { get; init; } = 30;
+        public List<FeatDto>?      Feats             { get; init; }
     }
 
     private static ElementalType InferElementalType(DamageType damageType) => damageType switch
@@ -298,12 +339,13 @@ public static class RosterLoader
 
     private sealed class ArmorDto
     {
-        public string Name                  { get; init; } = "";
-        public int    ArmorClass            { get; init; }
-        public int    Mitigation            { get; init; }
-        public int    MaxDexterityBonus     { get; init; }
-        public int    MovementPenalty       { get; init; }
-        public int    TurnMeterCostReduction { get; init; }
+        public string                           Name                   { get; init; } = "";
+        public int                              ArmorClass             { get; init; }
+        public int                              Mitigation             { get; init; }
+        public int                              MaxDexterityBonus      { get; init; }
+        public int                              MovementPenalty        { get; init; }
+        public int                              TurnMeterCostReduction { get; init; }
+        public List<ResistanceBonusDto>?        Resistances            { get; init; }
     }
 
     private sealed class CharacterDto

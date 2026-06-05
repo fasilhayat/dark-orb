@@ -2,10 +2,10 @@
   "races": [
     { "name": "Human",     "baseMovementSpeed": 30 },
     { "name": "Orc",       "baseMovementSpeed": 30 },
-    { "name": "Elf",       "baseMovementSpeed": 35 },
+    { "name": "Elf",       "baseMovementSpeed": 35, "feats": [ { "name": "Magic Resistance", "resistances": [ { "type": "Magic", "value": 20 } ] } ] },
     { "name": "Undead",    "baseMovementSpeed": 30 },
     { "name": "Gladefolk", "baseMovementSpeed": 30 },
-    { "name": "Dwarf",     "baseMovementSpeed": 25 }
+    { "name": "Dwarf",     "baseMovementSpeed": 25, "feats": [ { "name": "Poison Resistance", "resistances": [ { "type": "Poison", "value": 20 } ] } ] }
   ],
 
   "weapons": [
@@ -98,7 +98,7 @@
   "armors": [
     { "name": "Hide Armor",      "armorClass": 12, "mitigation": 2, "maxDexterityBonus": 2, "movementPenalty": 5 },
     { "name": "Plate Armor",     "armorClass": 18, "mitigation": 5, "maxDexterityBonus": 0, "movementPenalty": 15 },
-    { "name": "Mithril Chain",   "armorClass": 14, "mitigation": 2, "maxDexterityBonus": 6, "movementPenalty": 0 },
+    { "name": "Mithril Chain",   "armorClass": 14, "mitigation": 2, "maxDexterityBonus": 6, "movementPenalty": 0, "resistances": [ { "type": "Magic", "value": 5 } ] },
     { "name": "Padded Armor",    "armorClass": 11, "mitigation": 1, "maxDexterityBonus": 6, "movementPenalty": 0 },
     { "name": "Studded Leather", "armorClass": 12, "mitigation": 1, "maxDexterityBonus": 6, "movementPenalty": 5 },
     { "name": "Chain Mail",      "armorClass": 16, "mitigation": 3, "maxDexterityBonus": 6, "movementPenalty": 10 }
