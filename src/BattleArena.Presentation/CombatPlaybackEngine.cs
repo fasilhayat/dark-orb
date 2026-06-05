@@ -222,7 +222,7 @@ public static class CombatPlaybackEngine
         "Frozen" => "#44ccff",
         "Freeze" => "#44ccff",
         "Shocked" => "#ffff44",
-        "Stun" => "#ffcc00",
+        "Stun" => "#aa66ff",
         "Sleep" => "#aa44ff",
         "Fear" => "#8822aa",
         "Petrify" => "#888888",

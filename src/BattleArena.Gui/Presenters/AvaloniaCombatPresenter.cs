@@ -82,9 +82,11 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                 return;
             }
 
-            if (ev.EffectName == "ClearPersistent" && ev.TargetName is not null)
+            if (ev.EffectName == "ClearPersistent")
             {
-                StopPersistentEffect(ev.TargetName);
+                var target = ev.TargetName ?? ev.ActorName;
+                if (!string.IsNullOrEmpty(target))
+                    StopPersistentEffect(target);
                 return;
             }
 
@@ -267,37 +269,46 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         if (card is null) return;
 
         var darkColor = DarkenColor(color);
-        var isFlicker = effectName switch
-        {
-            "Burning" => true,
-            "Frozen" => true,
-            "Freeze" => true,
-            "Shocked" => true,
-            _ => false,
-        };
 
-        if (isFlicker)
+        switch (effectName)
         {
-            card.PersistentBorderColor = color;
-            var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
-            timer.Tick += (_, _) =>
+            case "Burning":
+            case "Frozen":
+            case "Freeze":
+            case "Shocked":
+                // Fast flicker (300ms) for elemental effects
+                card.PersistentBorderColor = color;
+                StartFlickerTimer(characterName, color, darkColor, 300);
+                break;
+
+            case "Stun":
+                // Slow pulse (800ms) for stun — distinct from elemental flicker
+                card.PersistentBorderColor = color;
+                StartFlickerTimer(characterName, color, darkColor, 800);
+                break;
+
+            default:
+                card.PersistentBorderColor = color;
+                break;
+        }
+    }
+
+    private void StartFlickerTimer(string characterName, string color, string darkColor, int intervalMs)
+    {
+        var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(intervalMs) };
+        timer.Tick += (_, _) =>
+        {
+            var c = FindCard(characterName);
+            if (c is null)
             {
-                var c = FindCard(characterName);
-                if (c is null)
-                {
-                    timer.Stop();
-                    _effectFlickerTimers.Remove(characterName);
-                    return;
-                }
-                c.PersistentBorderColor = c.PersistentBorderColor == color ? darkColor : color;
-            };
-            timer.Start();
-            _effectFlickerTimers[characterName] = timer;
-        }
-        else
-        {
-            card.PersistentBorderColor = color;
-        }
+                timer.Stop();
+                _effectFlickerTimers.Remove(characterName);
+                return;
+            }
+            c.PersistentBorderColor = c.PersistentBorderColor == color ? darkColor : color;
+        };
+        timer.Start();
+        _effectFlickerTimers[characterName] = timer;
     }
 
     private void StopPersistentEffect(string characterName)

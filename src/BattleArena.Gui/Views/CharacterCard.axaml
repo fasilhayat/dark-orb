@@ -46,9 +46,9 @@
             <Grid ColumnDefinitions="*,Auto">
               <TextBlock Grid.Column="0" Text="{Binding InfoLine}" Foreground="White"
                          FontSize="12" VerticalAlignment="Center" />
-              <TextBlock Grid.Column="1" Text="{Binding CcDisplay}" FontSize="12"
+              <TextBlock Grid.Column="1" Text="{Binding EffectsDisplay}" FontSize="12"
                          Foreground="#88ccff" FontStyle="Italic"
-                         IsVisible="{Binding HasCcDisplay}"
+                         IsVisible="{Binding HasEffectsDisplay}"
                          VerticalAlignment="Center" Margin="8,0,0,0" />
             </Grid>
 

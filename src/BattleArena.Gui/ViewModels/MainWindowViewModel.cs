@@ -800,8 +800,18 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
     public string StrikeLine => $"Strike: {StrikeRating}";
     public string WeaponLine => $"Weapon: {WeaponStats}";
     public string ResistLine => $"Magic Res: {MagicResistance}";
-    public string? CcDisplay => CcStatus is { } s ? $"({s})" : null;
-    public bool HasCcDisplay => CcStatus is not null;
+    public string? EffectsDisplay
+    {
+        get
+        {
+            if (!string.IsNullOrEmpty(ActiveEffects))
+                return $"({ActiveEffects})";
+            if (CcStatus is { } s)
+                return $"({s})";
+            return null;
+        }
+    }
+    public bool HasEffectsDisplay => EffectsDisplay is not null;
 
     private string? _borderFlashColor;
     public string? BorderFlashColor
@@ -908,8 +918,8 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
                 Raise(nameof(TmBorderBrush));
                 break;
             case nameof(ActiveEffects):
-                Raise(nameof(StatusLine));
-                Raise(nameof(HasStatusOverlay));
+                Raise(nameof(EffectsDisplay));
+                Raise(nameof(HasEffectsDisplay));
                 break;
             case nameof(CurrentWeapon):
                 break;
@@ -919,8 +929,8 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
                 UpdateTmPipes();
                 break;
             case nameof(CcStatus):
-                Raise(nameof(CcDisplay));
-                Raise(nameof(HasCcDisplay));
+                Raise(nameof(EffectsDisplay));
+                Raise(nameof(HasEffectsDisplay));
                 break;
         }
 
