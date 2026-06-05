@@ -95,8 +95,12 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                 var card = FindCard(ev.TargetName);
                 if (card is not null)
                 {
-                    var healFraction = (double)Math.Min(ev.HealAmount, card.MaxHp) / Math.Max(1, card.MaxHp);
-                    AnimateHealGlow(card, healFraction);
+                    var maxHp = Math.Max(1, card.MaxHp);
+                    var healAmount = Math.Min(ev.HealAmount, card.MaxHp);
+                    var preHealHp = Math.Max(0, card.Hp - healAmount);
+                    var start = (double)preHealHp / maxHp;
+                    var width = (double)healAmount / maxHp;
+                    AnimateHealGlow(card, start, width);
                 }
             }
 
@@ -336,10 +340,11 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             card.PersistentBorderColor = null;
     }
 
-    private void AnimateHealGlow(CharCardViewModel card, double healFraction)
+    private void AnimateHealGlow(CharCardViewModel card, double start, double width)
     {
         card.HealGlowOpacity = 0.7;
-        card.HealGlowFraction = healFraction;
+        card.HealGlowStart = start;
+        card.HealGlowFraction = width;
 
         const int durationMs = 800;
         const int intervalMs = 30;
@@ -360,6 +365,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             _dispatcher.Post(() =>
             {
                 card.HealGlowOpacity = 0;
+                card.HealGlowStart = 0;
                 card.HealGlowFraction = 0;
             });
         });

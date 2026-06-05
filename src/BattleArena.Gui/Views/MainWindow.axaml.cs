@@ -218,6 +218,7 @@ public partial class MainWindow : Window
         NextButton.IsEnabled = false;
         AutoButton.IsEnabled = false;
         NewCombatButton.IsVisible = false;
+        ClearSelection();
     }
 
     private void OnDemoClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
