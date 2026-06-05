@@ -27,4 +27,10 @@ public interface ICombatPresenter
     void ShowTurnHeader(int turnNumber, string actorName, string? targetName, bool isHero);
     void WaitForNextTurn(bool combatOver);
     void ShowQuietTicksSummary(int fromTick, int toTick);
+
+    /// <summary>
+    /// Stop all persistent-effect timers (flicker borders, etc.) and clear their visual state.
+    /// Called by the playback engine after combat ends.
+    /// </summary>
+    void ClearAllPersistentEffects();
 }

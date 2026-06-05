@@ -46,9 +46,6 @@ public static class CombatPlaybackEngine
             inTurn = false;
         }
 
-        var combatOver = turnEvents.Any(e => e.EventType is "Death" or "KnockedOut");
-        presenter.WaitForNextTurn(combatOver);
-
         PreSeedTurnMeters(result, state);
 
         presenter.ShowInitialScreen(state, 0);
@@ -108,6 +105,10 @@ public static class CombatPlaybackEngine
             turnEvents.InsertRange(0, pendingMessages);
 
         FlushTurn();
+
+        presenter.ClearAllPersistentEffects();
+        var combatOver = result.Log.Any(e => e.EventType is "Death" or "KnockedOut");
+        presenter.WaitForNextTurn(combatOver);
     }
 
     public static void PlayRealTime(
@@ -190,6 +191,8 @@ public static class CombatPlaybackEngine
         }
 
         FlushQuiet();
+
+        presenter.ClearAllPersistentEffects();
 
         if (result.Log.Any(e => e.EventType is "Death" or "KnockedOut"))
         {
@@ -331,6 +334,17 @@ public static class CombatPlaybackEngine
                         Color = "#ffffff",
                     });
                 }
+                break;
+
+            case "Death":
+            case "KnockedOut":
+                bus.PublishNormal(new VisualEvent
+                {
+                    EventType = "ClearPersistent",
+                    ActorName = entry.ActorName,
+                    TargetName = entry.TargetName,
+                    EffectName = "ClearPersistent",
+                });
                 break;
 
             case "IncredibleEvent":

@@ -311,6 +311,18 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         _effectFlickerTimers[characterName] = timer;
     }
 
+    public void ClearAllPersistentEffects()
+    {
+        foreach (var kvp in _effectFlickerTimers)
+        {
+            kvp.Value.Stop();
+            var card = FindCard(kvp.Key);
+            if (card is not null)
+                card.PersistentBorderColor = null;
+        }
+        _effectFlickerTimers.Clear();
+    }
+
     private void StopPersistentEffect(string characterName)
     {
         if (_effectFlickerTimers.TryGetValue(characterName, out var timer))
