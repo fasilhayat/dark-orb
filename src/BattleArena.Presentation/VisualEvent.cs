@@ -13,4 +13,5 @@ public sealed class VisualEvent
     public bool IsPersistent { get; init; }
     public int HealAmount { get; init; }
     public int TargetMaxHp { get; init; }
+    public int HpBefore { get; init; }
 }

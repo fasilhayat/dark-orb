@@ -841,7 +841,31 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
     public double HealGlowFraction
     {
         get => _healGlowFraction;
-        set => SetField(ref _healGlowFraction, value);
+        set
+        {
+            var changed = !_healGlowFraction.Equals(value);
+            SetField(ref _healGlowFraction, value);
+            if (changed) RaiseHealGlowRemainder();
+        }
+    }
+
+    private double _healGlowStart;
+    public double HealGlowStart
+    {
+        get => _healGlowStart;
+        set
+        {
+            var changed = !_healGlowStart.Equals(value);
+            SetField(ref _healGlowStart, value);
+            if (changed) RaiseHealGlowRemainder();
+        }
+    }
+
+    public double HealGlowRemainder => 1.0 - _healGlowStart - _healGlowFraction;
+
+    private void RaiseHealGlowRemainder()
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HealGlowRemainder)));
     }
 
     public string HpBarColor
