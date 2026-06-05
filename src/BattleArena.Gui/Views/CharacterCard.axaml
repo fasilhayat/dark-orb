@@ -118,6 +118,13 @@
                 <ScaleTransform ScaleX="{Binding HpFraction}" />
               </Border.RenderTransform>
             </Border>
+            <!-- Heal glow overlay: white bar that fades out -->
+            <Border Background="#ffffff" CornerRadius="2" Opacity="{Binding HealGlowOpacity}"
+                    RenderTransformOrigin="0,0.5">
+              <Border.RenderTransform>
+                <ScaleTransform ScaleX="{Binding HealGlowFraction}" />
+              </Border.RenderTransform>
+            </Border>
             <TextBlock Text="{Binding HpDisplay}" Foreground="White"
                        FontSize="12" FontWeight="Bold"
                        HorizontalAlignment="Center" VerticalAlignment="Center" />

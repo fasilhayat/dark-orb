@@ -787,7 +787,7 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
 
     public string HpDisplay => IsDead ? "" : $"{Math.Max(0, Hp)}/{MaxHp}";
     public string TmDisplay => $"{Tm}";
-    public string TmBorderBrush => IsTmLocked ? "#88ccff" : "#333";
+    public string TmBorderBrush => PersistentBorderColor ?? (IsTmLocked ? "#88ccff" : "#333");
 
     public string ManaDisplay => MaxMana > 0 ? $"{Math.Max(0, Mana)}" : "--";
     public string ActiveIndicator => IsDead ? "  " : "\u25b6 ";
@@ -810,8 +810,29 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
         set => SetField(ref _borderFlashColor, value);
     }
 
-    public string BorderColor => BorderFlashColor ?? (IsTmLocked ? "#88ccff" : IsDead ? "#666" : IsHero ? "#4488ff" : "#ff4488");
+    private string? _persistentBorderColor;
+    public string? PersistentBorderColor
+    {
+        get => _persistentBorderColor;
+        set => SetField(ref _persistentBorderColor, value);
+    }
+
+    public string BorderColor => BorderFlashColor ?? PersistentBorderColor ?? (IsTmLocked ? "#88ccff" : IsDead ? "#666" : IsHero ? "#4488ff" : "#ff4488");
     public string NameColor => IsDead ? "#888" : IsHero ? "#88bbff" : "#ff8888";
+
+    private double _healGlowOpacity;
+    public double HealGlowOpacity
+    {
+        get => _healGlowOpacity;
+        set => SetField(ref _healGlowOpacity, value);
+    }
+
+    private double _healGlowFraction;
+    public double HealGlowFraction
+    {
+        get => _healGlowFraction;
+        set => SetField(ref _healGlowFraction, value);
+    }
 
     public string HpBarColor
     {
@@ -881,6 +902,10 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
                 break;
             case nameof(BorderFlashColor):
                 Raise(nameof(BorderColor));
+                break;
+            case nameof(PersistentBorderColor):
+                Raise(nameof(BorderColor));
+                Raise(nameof(TmBorderBrush));
                 break;
             case nameof(ActiveEffects):
                 Raise(nameof(StatusLine));

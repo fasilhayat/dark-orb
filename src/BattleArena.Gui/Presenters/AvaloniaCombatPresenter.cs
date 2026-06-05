@@ -20,6 +20,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     private readonly Dispatcher _dispatcher;
 
     private readonly VisualEventBus _visualEventBus = new();
+    private readonly Dictionary<string, DispatcherTimer> _effectFlickerTimers = new();
 
     private static readonly IBrush Gray = MakeBrush("#888");
     private static readonly IBrush DarkGray = MakeBrush("#666");
@@ -74,6 +75,29 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     {
         _dispatcher.Post(() =>
         {
+            if (ev.IsPersistent && ev.EffectName is not null)
+            {
+                var target = ev.TargetName ?? ev.ActorName;
+                StartPersistentEffect(target, ev.EffectName, ev.Color);
+                return;
+            }
+
+            if (ev.EffectName == "ClearPersistent" && ev.TargetName is not null)
+            {
+                StopPersistentEffect(ev.TargetName);
+                return;
+            }
+
+            if (ev.HealAmount > 0 && ev.TargetName is not null)
+            {
+                var card = FindCard(ev.TargetName);
+                if (card is not null)
+                {
+                    var healFraction = (double)Math.Min(ev.HealAmount, card.MaxHp) / Math.Max(1, card.MaxHp);
+                    AnimateHealGlow(card, healFraction);
+                }
+            }
+
             FlashBorder(ev.ActorName, ev.Color);
             if (ev.TargetName is not null)
                 FlashBorder(ev.TargetName, ev.Color);
@@ -233,6 +257,95 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         {
             _dispatcher.Post(() => card.BorderFlashColor = null);
         });
+    }
+
+    private void StartPersistentEffect(string characterName, string effectName, string color)
+    {
+        StopPersistentEffect(characterName);
+
+        var card = FindCard(characterName);
+        if (card is null) return;
+
+        var darkColor = DarkenColor(color);
+        var isFlicker = effectName switch
+        {
+            "Burning" => true,
+            "Frozen" => true,
+            "Freeze" => true,
+            "Shocked" => true,
+            _ => false,
+        };
+
+        if (isFlicker)
+        {
+            card.PersistentBorderColor = color;
+            var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
+            timer.Tick += (_, _) =>
+            {
+                var c = FindCard(characterName);
+                if (c is null)
+                {
+                    timer.Stop();
+                    _effectFlickerTimers.Remove(characterName);
+                    return;
+                }
+                c.PersistentBorderColor = c.PersistentBorderColor == color ? darkColor : color;
+            };
+            timer.Start();
+            _effectFlickerTimers[characterName] = timer;
+        }
+        else
+        {
+            card.PersistentBorderColor = color;
+        }
+    }
+
+    private void StopPersistentEffect(string characterName)
+    {
+        if (_effectFlickerTimers.TryGetValue(characterName, out var timer))
+        {
+            timer.Stop();
+            _effectFlickerTimers.Remove(characterName);
+        }
+
+        var card = FindCard(characterName);
+        if (card is not null)
+            card.PersistentBorderColor = null;
+    }
+
+    private void AnimateHealGlow(CharCardViewModel card, double healFraction)
+    {
+        card.HealGlowOpacity = 0.7;
+        card.HealGlowFraction = healFraction;
+
+        const int durationMs = 800;
+        const int intervalMs = 30;
+        var steps = durationMs / intervalMs;
+
+        Task.Run(async () =>
+        {
+            for (var i = 0; i < steps; i++)
+            {
+                await Task.Delay(intervalMs);
+                var t = (double)(i + 1) / steps;
+                var opacity = 0.7 * (1.0 - t * t);
+                _dispatcher.Post(() =>
+                {
+                    card.HealGlowOpacity = opacity;
+                });
+            }
+            _dispatcher.Post(() =>
+            {
+                card.HealGlowOpacity = 0;
+                card.HealGlowFraction = 0;
+            });
+        });
+    }
+
+    private static string DarkenColor(string hex)
+    {
+        var c = Color.Parse(hex);
+        return $"#{(byte)(c.R * 0.5):x2}{(byte)(c.G * 0.5):x2}{(byte)(c.B * 0.5):x2}";
     }
 
     private void AnimateOverlay()

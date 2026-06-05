@@ -209,6 +209,28 @@ public static class CombatPlaybackEngine
         }
     }
 
+    private static readonly HashSet<string> PersistentEffectNames =
+    [
+        "Burning", "Ignite", "Frozen", "Freeze", "Shocked", "Stun",
+        "Sleep", "Fear", "Petrify", "Poisoned", "Bleeding"
+    ];
+
+    private static string GetPersistentColor(string effectName) => effectName switch
+    {
+        "Burning" => "#ff6600",
+        "Ignite" => "#ff4400",
+        "Frozen" => "#44ccff",
+        "Freeze" => "#44ccff",
+        "Shocked" => "#ffff44",
+        "Stun" => "#ffcc00",
+        "Sleep" => "#aa44ff",
+        "Fear" => "#8822aa",
+        "Petrify" => "#888888",
+        "Poisoned" => "#44ff44",
+        "Bleeding" => "#ff4444",
+        _ => "#44ff44",
+    };
+
     private static void EmitVisualEvents(VisualEventBus bus, CombatLogEntry entry)
     {
         switch (entry.EventType)
@@ -268,6 +290,45 @@ public static class CombatPlaybackEngine
                         OverlayText = entry.CcLabel,
                         Color = "#ff8844",
                         DurationMs = 1000
+                    });
+                }
+                if (entry.StatusEffectName is not null && PersistentEffectNames.Contains(entry.StatusEffectName))
+                {
+                    bus.PublishNormal(new VisualEvent
+                    {
+                        EventType = entry.EventType,
+                        ActorName = entry.ActorName,
+                        TargetName = entry.TargetName,
+                        EffectName = entry.StatusEffectName,
+                        IsPersistent = true,
+                        Color = GetPersistentColor(entry.StatusEffectName),
+                    });
+                }
+                break;
+
+            case "EffectExpired":
+                if (entry.StatusEffectName is not null && PersistentEffectNames.Contains(entry.StatusEffectName))
+                {
+                    bus.PublishNormal(new VisualEvent
+                    {
+                        EventType = entry.EventType,
+                        ActorName = entry.ActorName,
+                        TargetName = entry.TargetName,
+                        EffectName = "ClearPersistent",
+                    });
+                }
+                break;
+
+            case "Healed":
+                if (entry.TargetName is not null && (entry.DamageDealt ?? 0) > 0)
+                {
+                    bus.PublishNormal(new VisualEvent
+                    {
+                        EventType = entry.EventType,
+                        ActorName = entry.ActorName,
+                        TargetName = entry.TargetName,
+                        HealAmount = entry.DamageDealt ?? 0,
+                        Color = "#ffffff",
                     });
                 }
                 break;
