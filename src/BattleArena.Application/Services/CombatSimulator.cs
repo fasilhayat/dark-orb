@@ -300,6 +300,7 @@ public class CombatSimulator : ICombatSimulator
                 {
                     Tick            = tick,
                     ActorName       = ally.Character.Name,
+                    TargetName      = ally.Character.Name,
                     EventType       = "Healed",
                     DamageDealt     = healAmount,
                     TargetHpBefore  = hpBefore,
@@ -326,6 +327,7 @@ public class CombatSimulator : ICombatSimulator
         {
             Tick            = tick,
             ActorName       = target.Character.Name,
+            TargetName      = target.Character.Name,
             EventType       = "Healed",
             DamageDealt     = heal,
             TargetHpBefore  = hpB,

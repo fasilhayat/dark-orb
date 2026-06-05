@@ -309,6 +309,21 @@ public static class CombatPlaybackEngine
                 }
                 break;
 
+            case "HoTTick":
+                if ((entry.DamageDealt ?? 0) > 0)
+                {
+                    var targetName = entry.TargetName ?? entry.ActorName;
+                    bus.PublishNormal(new VisualEvent
+                    {
+                        EventType = entry.EventType,
+                        ActorName = entry.ActorName,
+                        TargetName = targetName,
+                        HealAmount = entry.DamageDealt ?? 0,
+                        Color = "#ffffff",
+                    });
+                }
+                break;
+
             case "EffectExpired":
                 if (entry.StatusEffectName is not null && PersistentEffectNames.Contains(entry.StatusEffectName))
                 {
@@ -323,13 +338,14 @@ public static class CombatPlaybackEngine
                 break;
 
             case "Healed":
-                if (entry.TargetName is not null && (entry.DamageDealt ?? 0) > 0)
+                if ((entry.DamageDealt ?? 0) > 0)
                 {
+                    var targetName = entry.TargetName ?? entry.ActorName;
                     bus.PublishNormal(new VisualEvent
                     {
                         EventType = entry.EventType,
                         ActorName = entry.ActorName,
-                        TargetName = entry.TargetName,
+                        TargetName = targetName,
                         HealAmount = entry.DamageDealt ?? 0,
                         Color = "#ffffff",
                     });
