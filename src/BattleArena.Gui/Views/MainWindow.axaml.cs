@@ -46,6 +46,7 @@ public partial class MainWindow : Window
                 CombatLogListBox.ScrollIntoView(CombatLogListBox.Items[^1]!);
         };
         HeroListBox.ItemsSource = ToDisplayItems(Roster.AllHeroes);
+        DummyListBox.ItemsSource = ToDisplayItems(Roster.AllDummies);
         DuelButton.IsEnabled = false;
         SelectionHint.Text = "Select Team 1 — 0/1";
 
@@ -126,8 +127,9 @@ public partial class MainWindow : Window
 
     private void OnHeroSelected(object? sender, SelectionChangedEventArgs e)
     {
-        if (HeroListBox.SelectedItem is not CharacterDisplayItem item) return;
-        HeroListBox.SelectedItem = null;
+        if (sender is not ListBox listBox) return;
+        if (listBox.SelectedItem is not CharacterDisplayItem item) return;
+        listBox.SelectedItem = null;
 
         // Clicking a selected card deselects it
         if (item.IsSelected)
@@ -235,6 +237,7 @@ public partial class MainWindow : Window
         TurnBasedButton.IsEnabled = false;
         AutoModeButton.IsEnabled = true;
         HeroListBox.ItemsSource = ToDisplayItems(Roster.AllHeroes);
+        DummyListBox.ItemsSource = ToDisplayItems(Roster.AllDummies);
     }
 
     private void OnApiModeClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -308,6 +311,7 @@ public partial class MainWindow : Window
         _vm.Phase = "Setup";
         HeroListBox.ItemsSource = null;
         HeroListBox.ItemsSource = ToDisplayItems(_apiRoster);
+        DummyListBox.ItemsSource = ToDisplayItems(Roster.AllDummies);
         ClearSelection();
         DuelButton.IsEnabled = false;
         ClashButton.IsEnabled = true;
@@ -331,6 +335,7 @@ public partial class MainWindow : Window
         _vm.Phase = "Setup";
         HeroListBox.ItemsSource = null;
         HeroListBox.ItemsSource = ToDisplayItems(_apiRoster);
+        DummyListBox.ItemsSource = ToDisplayItems(Roster.AllDummies);
         ClearSelection();
         DuelButton.IsEnabled = true;
         ClashButton.IsEnabled = false;

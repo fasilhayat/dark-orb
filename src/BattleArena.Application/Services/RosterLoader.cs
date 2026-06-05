@@ -6,8 +6,9 @@ namespace BattleArena.Application.Services;
 
 public sealed class RosterData
 {
-    public List<Character> Heroes { get; init; } = [];
+    public List<Character> Heroes  { get; init; } = [];
     public List<Character> Enemies { get; init; } = [];
+    public List<Character> Dummies { get; init; } = [];
 }
 
 public static class RosterLoader
@@ -43,8 +44,9 @@ public static class RosterLoader
 
         var heroes  = BuildCharacters(dto.Heroes, races, weapons, spells, armors);
         var enemies = BuildCharacters(dto.Enemies, races, weapons, spells, armors);
+        var dummies = BuildCharacters(dto.Dummies, races, weapons, spells, armors);
 
-        _cached = new RosterData { Heroes = heroes, Enemies = enemies };
+        _cached = new RosterData { Heroes = heroes, Enemies = enemies, Dummies = dummies };
         return _cached;
     }
 
@@ -236,6 +238,7 @@ public static class RosterLoader
         public List<ArmorDto>     Armors  { get; init; } = [];
         public List<CharacterDto> Heroes  { get; init; } = [];
         public List<CharacterDto> Enemies { get; init; } = [];
+        public List<CharacterDto> Dummies { get; init; } = [];
     }
 
     private sealed class RaceDto

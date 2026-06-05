@@ -8,8 +8,9 @@ internal static class Roster
     private static RosterData? _data;
     private static readonly object _lock = new();
 
-    internal static List<Character> AllHeroes => EnsureLoaded().Heroes;
+    internal static List<Character> AllHeroes  => EnsureLoaded().Heroes;
     internal static List<Character> AllEnemies => EnsureLoaded().Enemies;
+    internal static List<Character> AllDummies => EnsureLoaded().Dummies;
 
     private static RosterData EnsureLoaded()
     {

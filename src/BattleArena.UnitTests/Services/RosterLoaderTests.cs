@@ -75,7 +75,8 @@ public class RosterLoaderTests : IDisposable
         var data = RosterLoader.ForceLoad(path);
 
         Assert.Equal(6, data.Heroes.Count);
-        Assert.Equal(5, data.Enemies.Count);
+        Assert.Equal(3, data.Enemies.Count);
+        Assert.Equal(2, data.Dummies.Count);
 
         // ── Hero names ──────────────────────────────────────────────────────────
         Assert.Contains(data.Heroes, c => c.Name == "Kaela Vornskald");
@@ -89,8 +90,10 @@ public class RosterLoaderTests : IDisposable
         Assert.Contains(data.Enemies, c => c.Name == "Korg Stonefist");
         Assert.Contains(data.Enemies, c => c.Name == "Graveworm");
         Assert.Contains(data.Enemies, c => c.Name == "Shadowmere");
-        Assert.Contains(data.Enemies, c => c.Name == "Target Golem");
-        Assert.Contains(data.Enemies, c => c.Name == "Practice Dummy");
+
+        // ── Dummy names ─────────────────────────────────────────────────────────
+        Assert.Contains(data.Dummies, c => c.Name == "Target Golem");
+        Assert.Contains(data.Dummies, c => c.Name == "Practice Dummy");
 
         // ── Kaela Vornskald — melee barbarian ───────────────────────────────────
         var kaela = data.Heroes.First(c => c.Name == "Kaela Vornskald");
@@ -164,7 +167,7 @@ public class RosterLoaderTests : IDisposable
         Assert.Equal("F",   shadowmere.Sex);
 
         // ── Target Golem — test dummy ────────────────────────────────────────────
-        var golem = data.Enemies.First(c => c.Name == "Target Golem");
+        var golem = data.Dummies.First(c => c.Name == "Target Golem");
         Assert.Equal(10,   golem.Level);
         Assert.Equal(300,  golem.MaxHitPoints);
         Assert.Equal(100,  golem.MaxMana);
@@ -182,7 +185,7 @@ public class RosterLoaderTests : IDisposable
         Assert.Contains(golem.MemorizedSpells, s => s.Name == "Smite");
 
         // ── Practice Dummy — pure damage sponge ──────────────────────────────────
-        var dummy = data.Enemies.First(c => c.Name == "Practice Dummy");
+        var dummy = data.Dummies.First(c => c.Name == "Practice Dummy");
         Assert.Equal(10,   dummy.Level);
         Assert.Equal(500,  dummy.MaxHitPoints);
         Assert.Equal(1,    dummy.StrikeRating);

@@ -180,7 +180,9 @@
       "strikeRating": 16, "turnSpeed": 12,
       "maxHitPoints": 40,
       "equipment": { "chest": "Studded Leather", "rightHand": "Dagger" }
-    },
+    }
+  ],
+  "dummies": [
     {
       "name": "Target Golem", "level": 10,
       "strength": 16, "dexterity": 10, "stamina": 18, "intelligence": 14, "wisdom": 10, "charisma": 8,
