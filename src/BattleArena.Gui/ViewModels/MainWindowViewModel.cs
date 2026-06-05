@@ -810,7 +810,7 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
         set => SetField(ref _borderFlashColor, value);
     }
 
-    public string BorderColor => BorderFlashColor ?? (IsDead ? "#666" : IsHero ? "#4488ff" : "#ff4488");
+    public string BorderColor => BorderFlashColor ?? (IsTmLocked ? "#88ccff" : IsDead ? "#666" : IsHero ? "#4488ff" : "#ff4488");
     public string NameColor => IsDead ? "#888" : IsHero ? "#88bbff" : "#ff8888";
 
     public string HpBarColor
@@ -890,6 +890,7 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
                 break;
             case nameof(IsTmLocked):
                 Raise(nameof(TmBorderBrush));
+                Raise(nameof(BorderColor));
                 UpdateTmPipes();
                 break;
             case nameof(CcStatus):

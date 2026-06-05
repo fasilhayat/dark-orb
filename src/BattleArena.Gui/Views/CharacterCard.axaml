@@ -43,9 +43,14 @@
             </StackPanel>
             <TextBlock Text="{Binding CurrentWeapon}" Foreground="White"
                        FontStyle="Italic" FontSize="12" />
-            <TextBlock Text="{Binding InfoLine}" Foreground="White" FontSize="12" />
-            <TextBlock Text="{Binding CcDisplay}" FontSize="12" Foreground="#ff8888"
-                       FontStyle="Italic" IsVisible="{Binding HasCcDisplay}" />
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Grid.Column="0" Text="{Binding InfoLine}" Foreground="White"
+                         FontSize="12" VerticalAlignment="Center" />
+              <TextBlock Grid.Column="1" Text="{Binding CcDisplay}" FontSize="12"
+                         Foreground="#88ccff" FontStyle="Italic"
+                         IsVisible="{Binding HasCcDisplay}"
+                         VerticalAlignment="Center" Margin="8,0,0,0" />
+            </Grid>
 
             <!-- Stacked combat stats -->
             <Border Background="#16162a" CornerRadius="3" Padding="0,2" Margin="0,0,0,0">
