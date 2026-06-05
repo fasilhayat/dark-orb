@@ -596,11 +596,11 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     {
         OverlayText = text;
         OverlayOpacity = 1.0;
-        OverlayScale = 0.5;
-        OverlayTrailScale1 = 0.4;
-        OverlayTrailOpacity1 = 0.4;
-        OverlayTrailScale2 = 0.3;
-        OverlayTrailOpacity2 = 0.2;
+        OverlayScale = 0.25;
+        OverlayTrailScale1 = 0.2;
+        OverlayTrailOpacity1 = 0.35;
+        OverlayTrailScale2 = 0.14;
+        OverlayTrailOpacity2 = 0.15;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasOverlay)));
     }
 
