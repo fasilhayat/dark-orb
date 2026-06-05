@@ -5,6 +5,8 @@ using BattleArena.Presentation;
 
 internal sealed class ConsoleCombatPresenter : ICombatPresenter
 {
+    public VisualEventBus VisualEventBus { get; } = new();
+
     private readonly GuiDisplayConfig _config;
     private readonly IReadOnlyDictionary<string, int> _maxHp;
     private readonly Action<CombatDisplayState, int, string?> _drawScreen;

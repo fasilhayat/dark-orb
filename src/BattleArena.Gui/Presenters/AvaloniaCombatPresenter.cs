@@ -19,6 +19,8 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     private readonly ManualResetEventSlim _waitHandle;
     private readonly Dispatcher _dispatcher;
 
+    private readonly VisualEventBus _visualEventBus = new();
+
     private static readonly IBrush Gray = MakeBrush("#888");
     private static readonly IBrush DarkGray = MakeBrush("#666");
     private static readonly IBrush White = MakeBrush("#fff");
@@ -38,6 +40,8 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         get => _pacingMultiplier;
         set => _pacingMultiplier = Math.Max(0.1, value);
     }
+
+    VisualEventBus ICombatPresenter.VisualEventBus => _visualEventBus;
 
     private static readonly Dictionary<string, int> _delays = new()
     {
@@ -61,6 +65,41 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         _waitHandle = waitHandle;
         _dispatcher = dispatcher;
         _pacingMultiplier = 1.0;
+
+        _visualEventBus.NormalEventPublished += OnNormalVisualEvent;
+        _visualEventBus.IncredibleEventPublished += OnIncredibleVisualEvent;
+    }
+
+    private void OnNormalVisualEvent(VisualEvent ev)
+    {
+        _dispatcher.Post(() =>
+        {
+            FlashBorder(ev.ActorName, ev.Color);
+            if (ev.TargetName is not null)
+                FlashBorder(ev.TargetName, ev.Color);
+
+            _vm.TriggerOverlay(ev.OverlayText);
+            AnimateOverlay();
+        });
+    }
+
+    private void OnIncredibleVisualEvent(VisualEvent ev)
+    {
+        _dispatcher.Post(() =>
+        {
+            FlashBorder(ev.ActorName, ev.Color);
+            if (ev.TargetName is not null)
+                FlashBorder(ev.TargetName, ev.Color);
+
+            _vm.TriggerOverlay(ev.OverlayText);
+            AnimateOverlay();
+        });
+
+        var adjusted = (int)(ev.DurationMs * _pacingMultiplier);
+        if (adjusted > 0)
+            Thread.Sleep(adjusted);
+
+        _visualEventBus.SignalIncredibleComplete();
     }
 
     public void ShowInitialScreen(CombatDisplayState state, int tick)

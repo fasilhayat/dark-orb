@@ -2,7 +2,7 @@
 name: combat-mechanics
 description: Use when implementing or modifying combat mechanics — attack resolution, damage formula, turn meter, status effects, resistance, dice rolls, or combat logging. Also use when writing combat-related tests.
 self-update: true
-self-update-trigger: Any change to files under BattleArena.Core/Entities/, BattleArena.Application/Services/, BattleArena.Application/Models/, or BattleArena.Application/Interfaces/
+self-update-trigger: Any change to files under BattleArena.Core/Entities/, BattleArena.Application/Services/, BattleArena.Application/Models/, BattleArena.Application/Interfaces/, or BattleArena.Presentation/
 self-update-action: After modifying combat mechanic code, update this file to reflect the current behaviour.
 ---
 
@@ -149,6 +149,63 @@ The `TerrainModifier` (band 20, AttackRoll phase) applies racial AP/DP adjustmen
 
 `SimulateAsync` accepts a `TerrainType` parameter (defaults to `Plains`).
 
+## Visual Event Pipeline
+
+The `VisualEventBus` (in `BattleArena.Presentation`) is a subscription-based pipeline that decouples combat events from their visual rendering. The GUI subscribes to the bus; the `CombatPlaybackEngine` emits events through it.
+
+### Architecture
+
+```
+CombatPlaybackEngine (background thread)
+  │
+  ├─ PublishNormal(VisualEvent) ──→ VisualEventBus ──→ AvaloniaCombatPresenter
+  │                                   (event)            │
+  │                                                       ├─ FlashBorder (UI thread, fire-and-forget)
+  │                                                       └─ TriggerOverlay + AnimateOverlay (parallel)
+  │
+  └─ PublishIncredible(VisualEvent) ──→ VisualEventBus ──→ AvaloniaCombatPresenter
+                                          (event)            │
+                                                              ├─ FlashBorder (UI thread)
+                                                              ├─ TriggerOverlay + AnimateOverlay
+                                                              └─ Thread.Sleep(duration) → SignalIncredibleComplete (blocks engine)
+```
+
+### Two visual event types
+
+| Type | Bus method | Behavior | Used for |
+|------|-----------|----------|----------|
+| **Normal** | `PublishNormal` | Fire-and-forget — visual runs in parallel, engine continues immediately | PerfectParry, DevastatingStrike, TotalReversal, FumblePenalty, CC labels (Stunned, Frozen, Shocked, Sleep, Fear) |
+| **Incredible** | `PublishIncredible` | Blocking — engine pauses until the visual animation completes | Cinematic moments (future: new `IncredibleEvent` log entry type) |
+
+### VisualEvent model (`VisualEvent.cs`)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `EventType` | string | Source event type (e.g. `"PerfectParry"`, `"Stunned"`) |
+| `ActorName` | string | Name of the character to flash a border on |
+| `TargetName` | string? | Optional second character to flash |
+| `OverlayText` | string | Text displayed in the center overlay (e.g. `"PERFECT PARRY"`) |
+| `Color` | string | Hex color for border flash and overlay text |
+| `DurationMs` | int | How long the visual effect lasts (default 1500ms) |
+
+### Emitted visual events
+
+| CombatLogEntry EventType | VisualEvent generated | Normal/Incredible | OverlayText | Color |
+|--------------------------|----------------------|-------------------|-------------|-------|
+| `PerfectParry` | PerfectParry | Normal | `"PERFECT PARRY"` | `#44ff44` |
+| `DevastatingStrike` | DevastatingStrike | Normal | `"DEVASTATING STRIKE"` | `#ff44ff` |
+| `TotalReversal` | TotalReversal | Normal | `"TOTAL REVERSAL"` | `#ffff44` |
+| `FumblePenalty` | FumblePenalty | Normal | `"FUMBLE"` | `#ff6644` |
+| `EffectApplied` (with CcLabel) | CcLabel value | Normal | same as CcLabel | `#ff8844` |
+| `IncredibleEvent` | IncredibleEvent | Incredible | entry.Message | `#ffdd00` |
+
+### Adding new visual events
+
+1. Add a `case` to `EmitVisualEvents` in `CombatPlaybackEngine.cs` for the source `EventType`
+2. Create a `VisualEvent` with the desired overlay text, color, and duration
+3. Call `bus.PublishNormal(...)` for parallel or `bus.PublishIncredible(...)` for blocking
+4. The `AvaloniaCombatPresenter` already subscribes — no changes needed unless you want custom rendering
+
 ## Event Types
 
 | EventType | Meaning |
@@ -240,6 +297,7 @@ When you modify any of the following files, **immediately** update this skill to
 | Healing Formula | `CombatService.ResolveHealing` | `ResolveHealing` dice + INT mod + flat bonus + modifier pipeline |
 | Modifier Pipeline | `CombatService` modifier-loop in each phase | All `CombatPhase` values wired, priority ordering |
 | Terrain System | `TerrainModifier.Apply` | Race-terrain lookup table, AttackRoll-phase wiring |
+| Visual Event Pipeline | `CombatPlaybackEngine.EmitVisualEvents` | Every event type that emits a `VisualEvent`, normal vs incredible classification, overlay text and color |
 
 The `design/combat-design.md` file is the human-facing design spec — it should also be updated when you change formulas here, but this skill file is the **AI's source of truth** and must always match the code exactly.
 
@@ -308,11 +366,11 @@ Purpose: absorbs any incoming damage (melee, ranged, spell) without fighting bac
 
 ### GUI & demo availability
 
-Both characters are registered in `BattleArena.Gui/PortraitResolver.cs` with existing portraits:
+Both characters are registered in `BattleArena.Gui/PortraitResolver.cs` with existing portraits, and appear in a dedicated **"TEST DUMMIES"** section in the character-selection screen:
 
 | Character | Portrait file | Selectable in |
 |-----------|---------------|--------------|
-| Target Golem | `Assets/Portraits/target-golem.png` | Demo offline PickFighter (duel), demo party combat (auto-enemy), GUI API-mode roster |
+| Target Golem | `Assets/Portraits/target-golem.png` | GUI DEMO mode (TEST DUMMIES section), GUI API mode (TEST DUMMIES section via local JSON fallback) |
 | Practice Dummy | `Assets/Portraits/practice-dummy.png` | Same as above |
 
-In the GUI, `ToDisplayItems` filters to `PortraitResolver.HasPortrait(name)`, so registering them is sufficient for roster visibility. The demo shows all characters from the loaded roster (both heroes and enemies) with no portrait filter.
+In the GUI, dummies are loaded from the `"dummies"` array in `roster.json` via `Roster.AllDummies` and displayed in a separate `DummyListBox` under a gold-colored `"— TEST DUMMIES —"` header. Both `HeroListBox` and `DummyListBox` share the same `OnHeroSelected` handler so dummy selection works identically to hero selection. In API mode, dummies are merged from the local JSON fallback since they are not seeded in the database.

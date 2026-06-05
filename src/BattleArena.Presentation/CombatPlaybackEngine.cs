@@ -2,11 +2,6 @@ namespace BattleArena.Presentation;
 
 using BattleArena.Application.Models;
 
-/// <summary>
-/// Drives turn-based and real-time combat playback.
-/// Manages event ordering and state transitions; delegates all rendering
-/// to the provided <see cref="ICombatPresenter"/> implementation.
-/// </summary>
 public static class CombatPlaybackEngine
 {
     public static void PlayTurnBased(
@@ -20,10 +15,8 @@ public static class CombatPlaybackEngine
         var inTurn = false;
         var turnCount = 0;
         var turnTick = 0;
+        var bus = presenter.VisualEventBus;
 
-        // Apply TurnStart snapshot first so RefreshScreen shows correct TM for
-        // this turn, then apply every other event just before it is rendered so
-        // HP / mana / effect updates reach the screen at the right moment.
         void FlushTurn()
         {
             if (!inTurn || turnEvents.Count == 0) return;
@@ -42,8 +35,7 @@ public static class CombatPlaybackEngine
 
                 presenter.ShowCombatEvent(entry, state);
 
-                if (entry.EventType is "PerfectParry" or "TotalReversal" or "DevastatingStrike")
-                    presenter.ShowCombatEventOverlay(entry.ActorName, entry.TargetName, entry.EventType);
+                EmitVisualEvents(bus, entry);
 
                 var delay = presenter.GetEventDelayMs(entry.EventType);
                 if (delay > 0)
@@ -56,7 +48,7 @@ public static class CombatPlaybackEngine
 
         var combatOver = turnEvents.Any(e => e.EventType is "Death" or "KnockedOut");
         presenter.WaitForNextTurn(combatOver);
-        
+
         PreSeedTurnMeters(result, state);
 
         presenter.ShowInitialScreen(state, 0);
@@ -70,8 +62,6 @@ public static class CombatPlaybackEngine
             {
                 case "TurnMeterGain":
                 case "TurnEnd":
-                    // Skipped in turn-based mode — TM is displayed via the
-                    // TurnMeterSnapshot on each TurnStart event.
                     break;
 
                 case "TurnStart":
@@ -129,6 +119,7 @@ public static class CombatPlaybackEngine
         var byTick = result.Log.GroupBy(e => e.Tick).OrderBy(g => g.Key).ToList();
         var quietStart = -1;
         var quietEnd = -1;
+        var bus = presenter.VisualEventBus;
 
         void FlushQuiet()
         {
@@ -187,6 +178,9 @@ public static class CombatPlaybackEngine
                 }
 
                 presenter.ShowCombatEvent(entry, state);
+
+                EmitVisualEvents(bus, entry);
+
                 var delay = presenter.GetEventDelayMs(entry.EventType);
                 if (delay > 0)
                     presenter.Wait(delay);
@@ -204,10 +198,6 @@ public static class CombatPlaybackEngine
         }
     }
 
-    /// <summary>
-    /// Apply all TurnMeterGain events before the first TurnStart so the
-    /// opening screen shows accumulated TM rather than zero bars.
-    /// </summary>
     public static void PreSeedTurnMeters(CombatResult result, CombatDisplayState state)
     {
         foreach (var entry in result.Log)
@@ -216,6 +206,83 @@ public static class CombatPlaybackEngine
                 break;
             if (entry.EventType == "TurnMeterGain")
                 state.ApplyEvent(entry);
+        }
+    }
+
+    private static void EmitVisualEvents(VisualEventBus bus, CombatLogEntry entry)
+    {
+        switch (entry.EventType)
+        {
+            case "PerfectParry":
+                bus.PublishNormal(new VisualEvent
+                {
+                    EventType = entry.EventType,
+                    ActorName = entry.ActorName,
+                    TargetName = entry.TargetName,
+                    OverlayText = "PERFECT PARRY",
+                    Color = "#44ff44"
+                });
+                break;
+
+            case "DevastatingStrike":
+                bus.PublishNormal(new VisualEvent
+                {
+                    EventType = entry.EventType,
+                    ActorName = entry.ActorName,
+                    TargetName = entry.TargetName,
+                    OverlayText = "DEVASTATING STRIKE",
+                    Color = "#ff44ff"
+                });
+                break;
+
+            case "TotalReversal":
+                bus.PublishNormal(new VisualEvent
+                {
+                    EventType = entry.EventType,
+                    ActorName = entry.ActorName,
+                    TargetName = entry.TargetName,
+                    OverlayText = "TOTAL REVERSAL",
+                    Color = "#ffff44"
+                });
+                break;
+
+            case "FumblePenalty":
+                bus.PublishNormal(new VisualEvent
+                {
+                    EventType = entry.EventType,
+                    ActorName = entry.ActorName,
+                    TargetName = entry.TargetName,
+                    OverlayText = "FUMBLE",
+                    Color = "#ff6644",
+                    DurationMs = 1000
+                });
+                break;
+
+            case "EffectApplied":
+                if (entry.CcLabel is not null)
+                {
+                    bus.PublishNormal(new VisualEvent
+                    {
+                        EventType = entry.CcLabel,
+                        ActorName = entry.TargetName ?? entry.ActorName,
+                        OverlayText = entry.CcLabel,
+                        Color = "#ff8844",
+                        DurationMs = 1000
+                    });
+                }
+                break;
+
+            case "IncredibleEvent":
+                bus.PublishIncredible(new VisualEvent
+                {
+                    EventType = entry.EventType,
+                    ActorName = entry.ActorName,
+                    TargetName = entry.TargetName,
+                    OverlayText = entry.Message,
+                    Color = "#ffdd00",
+                    DurationMs = 2500
+                });
+                break;
         }
     }
 }

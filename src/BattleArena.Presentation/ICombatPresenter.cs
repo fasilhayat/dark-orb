@@ -15,6 +15,8 @@ using BattleArena.Application.Models;
 /// </summary>
 public interface ICombatPresenter
 {
+    VisualEventBus VisualEventBus { get; }
+
     void ShowInitialScreen(CombatDisplayState state, int tick);
     void WaitForCombatStart();
     void RefreshScreen(CombatDisplayState state, int tick, string? activeActorName);
