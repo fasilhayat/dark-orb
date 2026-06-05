@@ -44,6 +44,8 @@
             <TextBlock Text="{Binding CurrentWeapon}" Foreground="White"
                        FontStyle="Italic" FontSize="12" />
             <TextBlock Text="{Binding InfoLine}" Foreground="White" FontSize="12" />
+            <TextBlock Text="{Binding CcDisplay}" FontSize="12" Foreground="#ff8888"
+                       FontStyle="Italic" IsVisible="{Binding HasCcDisplay}" />
 
             <!-- Stacked combat stats -->
             <Border Background="#16162a" CornerRadius="3" Padding="0,2" Margin="0,0,0,0">
@@ -54,8 +56,6 @@
                 <TextBlock Text="{Binding StrikeLine}" FontSize="12" Foreground="#888" />
                 <TextBlock Text="{Binding WeaponLine}" FontSize="12" Foreground="#888" />
                 <TextBlock Text="{Binding ResistLine}" FontSize="12" Foreground="#888" />
-                <TextBlock Text="{Binding CcDisplay}" FontSize="12" Foreground="#888"
-                           FontStyle="Italic" IsVisible="{Binding HasCcDisplay}" />
               </StackPanel>
             </Border>
           </StackPanel>
@@ -81,10 +81,9 @@
             <TextBlock Text="{Binding TmDisplay}" Foreground="White"
                        FontSize="12" FontWeight="Bold"
                        HorizontalAlignment="Center" VerticalAlignment="Center" />
-            <!-- Frozen overlay when TM locked (stays within bar bounds to avoid layout shift) -->
-            <Border IsVisible="{Binding IsTmLocked}" BorderThickness="1"
-                    BorderBrush="#ccddff" CornerRadius="2"
-                    Background="#1188ccff" />
+            <!-- Frozen overlay when TM locked — semi-transparent tint, no border thickness to avoid shifting sibling bars -->
+            <Border IsVisible="{Binding IsTmLocked}" Background="#2288ccff"
+                    CornerRadius="2" />
           </Grid>
         </Border>
 

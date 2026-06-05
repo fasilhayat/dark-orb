@@ -41,6 +41,10 @@ public static class CombatPlaybackEngine
                     state.ApplyEvent(entry);
 
                 presenter.ShowCombatEvent(entry, state);
+
+                if (entry.EventType is "PerfectParry" or "TotalReversal" or "DevastatingStrike")
+                    presenter.ShowCombatEventOverlay(entry.ActorName, entry.TargetName, entry.EventType);
+
                 var delay = presenter.GetEventDelayMs(entry.EventType);
                 if (delay > 0)
                     presenter.Wait(delay);

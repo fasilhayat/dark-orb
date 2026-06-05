@@ -539,6 +539,49 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         }
     }
 
+    // ── Overlay animation state ──────────────────────────────
+
+    private string _overlayText = "";
+    public string OverlayText
+    {
+        get => _overlayText;
+        set => SetField(ref _overlayText, value);
+    }
+
+    private double _overlayOpacity;
+    public double OverlayOpacity
+    {
+        get => _overlayOpacity;
+        set => SetField(ref _overlayOpacity, value);
+    }
+
+    private double _overlayScale = 1.0;
+    public double OverlayScale
+    {
+        get => _overlayScale;
+        set => SetField(ref _overlayScale, value);
+    }
+
+    public bool HasOverlay => !string.IsNullOrEmpty(OverlayText);
+
+    public void TriggerOverlay(string text)
+    {
+        OverlayText = text;
+        OverlayOpacity = 1.0;
+        OverlayScale = 0.5;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasOverlay)));
+    }
+
+    public void ClearOverlay()
+    {
+        OverlayText = "";
+        OverlayOpacity = 0;
+        OverlayScale = 1.0;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasOverlay)));
+    }
+
+    // ── API mode ─────────────────────────────────────────────
+
     private bool _isApiMode;
     public bool IsApiMode
     {
@@ -724,7 +767,14 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
     public string? CcDisplay => CcStatus is { } s ? $"({s})" : null;
     public bool HasCcDisplay => CcStatus is not null;
 
-    public string BorderColor => IsDead ? "#666" : IsHero ? "#4488ff" : "#ff4488";
+    private string? _borderFlashColor;
+    public string? BorderFlashColor
+    {
+        get => _borderFlashColor;
+        set => SetField(ref _borderFlashColor, value);
+    }
+
+    public string BorderColor => BorderFlashColor ?? (IsDead ? "#666" : IsHero ? "#4488ff" : "#ff4488");
     public string NameColor => IsDead ? "#888" : IsHero ? "#88bbff" : "#ff8888";
 
     public string HpBarColor
@@ -792,6 +842,9 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
                 Raise(nameof(HpDisplay));
                 Raise(nameof(StatusLine));
                 Raise(nameof(HasStatusOverlay));
+                break;
+            case nameof(BorderFlashColor):
+                Raise(nameof(BorderColor));
                 break;
             case nameof(ActiveEffects):
                 Raise(nameof(StatusLine));

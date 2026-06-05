@@ -1401,6 +1401,7 @@ public class CombatSimulator : ICombatSimulator
         {
             Tick            = tick,
             ActorName       = target.Name,
+            TargetName      = actorState.Character.Name,
             EventType       = eventType,
             TurnMeterBefore = tmBefore,
             TurnMeterAfter  = defenderState.Meter.CurrentValue,

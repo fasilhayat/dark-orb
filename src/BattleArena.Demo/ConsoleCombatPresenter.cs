@@ -100,6 +100,21 @@ internal sealed class ConsoleCombatPresenter : ICombatPresenter
         _paced(300);
     }
 
+    public void ShowCombatEventOverlay(string actorName, string? targetName, string effectType)
+    {
+        var color = effectType switch
+        {
+            "PerfectParry"      => ConsoleColor.Green,
+            "DevastatingStrike" => ConsoleColor.Magenta,
+            "TotalReversal"     => ConsoleColor.Yellow,
+            _                   => ConsoleColor.White,
+        };
+        Console.WriteLine();
+        Demo.CWL($"  \u2726 {effectType.ToUpper()} \u2726", color);
+        Console.WriteLine($"    {actorName}  \u2194  {targetName ?? "?"}");
+        Console.ResetColor();
+    }
+
     private void HandleRoundStart(CombatLogEntry entry, CombatDisplayState _)
     {
         Console.WriteLine();

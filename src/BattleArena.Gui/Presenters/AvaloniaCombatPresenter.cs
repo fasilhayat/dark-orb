@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using Avalonia.Media;
 using Avalonia.Threading;
 using BattleArena.Application.Models;
@@ -140,6 +141,98 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             _vm.AddLogEntry([Seg($"  ... {toTick - fromTick + 1} quiet ticks (TM building)", Dim)]));
     }
 
+    public void ShowCombatEventOverlay(string actorName, string? targetName, string effectType)
+    {
+        _dispatcher.Post(() =>
+        {
+            var color = effectType switch
+            {
+                "PerfectParry"      => "#44ff44",
+                "DevastatingStrike" => "#ff44ff",
+                "TotalReversal"     => "#ffff44",
+                _                   => "#ffffff",
+            };
+            var text = effectType switch
+            {
+                "PerfectParry"      => "PERFECT PARRY!",
+                "DevastatingStrike" => "DEVASTATING STRIKE!",
+                "TotalReversal"     => "TOTAL REVERSAL!",
+                _                   => effectType,
+            };
+
+            // Flash borders on both characters
+            FlashBorder(actorName, color);
+            if (targetName is not null)
+                FlashBorder(targetName, color);
+
+            // Show centered overlay text with zoom+dissolve
+            _vm.TriggerOverlay(text);
+            AnimateOverlay();
+        });
+    }
+
+    private void FlashBorder(string characterName, string color)
+    {
+        var card = FindCard(characterName);
+        if (card is null) return;
+        card.BorderFlashColor = color;
+        StartBorderResetTimer(card);
+    }
+
+    private CharCardViewModel? FindCard(string name)
+    {
+        foreach (var h in _vm.Heroes)
+            if (h.Name == name) return h;
+        foreach (var e in _vm.Enemies)
+            if (e.Name == name) return e;
+        return null;
+    }
+
+    private void StartBorderResetTimer(CharCardViewModel card)
+    {
+        Task.Delay(1800).ContinueWith(_ =>
+        {
+            _dispatcher.Post(() => card.BorderFlashColor = null);
+        });
+    }
+
+    private void AnimateOverlay()
+    {
+        const int durationMs = 1500;
+        const int intervalMs = 30;
+        var steps = durationMs / intervalMs;
+        var elapsed = 0;
+
+        Task.Run(async () =>
+        {
+            // Zoom in phase: 0 → 500ms (scale 0.5 → 1.2)
+            for (var i = 0; i < steps / 3; i++)
+            {
+                await Task.Delay(intervalMs);
+                elapsed += intervalMs;
+                var t = (double)elapsed / durationMs;
+                _dispatcher.Post(() =>
+                {
+                    _vm.OverlayScale = 0.5 + t * 2.0; // 0.5 → 2.0 over full duration
+                    _vm.OverlayOpacity = 1.0;
+                });
+            }
+            // Hold + dissolve phase: 500ms → 1500ms (scale 1.2 → 2.0, opacity 1 → 0)
+            for (var i = steps / 3; i < steps; i++)
+            {
+                await Task.Delay(intervalMs);
+                elapsed += intervalMs;
+                var t = (double)elapsed / durationMs;
+                _dispatcher.Post(() =>
+                {
+                    _vm.OverlayScale = 0.5 + t * 2.0;
+                    _vm.OverlayOpacity = 1.0 - Math.Max(0, (t - 0.33) / 0.67);
+                });
+            }
+            _dispatcher.Post(() => _vm.ClearOverlay());
+        });
+    }
+
     private IReadOnlyList<List<LogSegment>> BuildRows(CombatLogEntry e, CombatDisplayState state) =>
         e.EventType switch
         {
@@ -237,7 +330,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             else if (e.IsHit == true)
             {
                 var dmg = e.DamageDealt ?? 0;
-                var targetMaxHp = state.TryGet(e.TargetName)?.MaxHp ?? 1;
+                var targetMaxHp = e.TargetName is not null ? state.TryGet(e.TargetName)?.MaxHp ?? 1 : 1;
                 var label = CombatHitLabelService.GetLabel(dmg, targetMaxHp);
                 var labelColor = label switch
                 {

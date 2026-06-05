@@ -23,6 +23,9 @@ public class CombatPlaybackEngineTests
             RenderedEvents.Add(entry);
         }
 
+        public void ShowCombatEventOverlay(string actor, string? target, string type) =>
+            Calls.Add($"ShowOverlay:{actor}:{type}");
+
         public int GetEventDelayMs(string eventType) => 0;
         public void Wait(int ms) { }
     }
@@ -392,6 +395,7 @@ public class CombatPlaybackEngineTests
         public void ShowCombatEvent(CombatLogEntry entry, CombatDisplayState state) => _onEvent(entry);
         public int GetEventDelayMs(string eventType) => 0;
         public void Wait(int milliseconds) { }
+        public void ShowCombatEventOverlay(string actor, string? target, string type) { }
     }
 
     /// <summary>
@@ -415,5 +419,6 @@ public class CombatPlaybackEngineTests
         public void ShowCombatEvent(CombatLogEntry entry, CombatDisplayState state) { }
         public int GetEventDelayMs(string eventType) => 0;
         public void Wait(int ms) { }
+        public void ShowCombatEventOverlay(string actor, string? target, string type) { }
     }
 }

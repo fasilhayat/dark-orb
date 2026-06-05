@@ -19,6 +19,7 @@ public interface ICombatPresenter
     void WaitForCombatStart();
     void RefreshScreen(CombatDisplayState state, int tick, string? activeActorName);
     void ShowCombatEvent(CombatLogEntry entry, CombatDisplayState state);
+    void ShowCombatEventOverlay(string actorName, string? targetName, string effectType);
     int GetEventDelayMs(string eventType);
     void Wait(int milliseconds);
     void ShowTurnHeader(int turnNumber, string actorName, string? targetName, bool isHero);
