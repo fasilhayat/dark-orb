@@ -242,3 +242,77 @@ When you modify any of the following files, **immediately** update this skill to
 | Terrain System | `TerrainModifier.Apply` | Race-terrain lookup table, AttackRoll-phase wiring |
 
 The `design/combat-design.md` file is the human-facing design spec — it should also be updated when you change formulas here, but this skill file is the **AI's source of truth** and must always match the code exactly.
+
+---
+
+## Test Dummy Reference Characters
+
+Two dedicated test-dummy NPCs are defined in both `BattleArena.Demo/roster.json` and `BattleArena.Gui/Data/roster.json` with portraits at `Assets/Portraits/target-golem.png` and `Assets/Portraits/practice-dummy.png`.
+
+### Target Golem — Equipped, self-sufficient combatant
+
+Purpose: validates perfect parry, fumble, devastating strike, and the full spell/afterburn pipeline against a capable opponent that fights back.
+
+| Stat | Value | Notes |
+|------|-------|-------|
+| Level | 10 | |
+| Class | Fighter (id=8) | 2 attacks/turn, can dual-wield |
+| Race | Human | No innate magic resistance |
+| STR / DEX / STA / INT / WIS / CHA | 16 / 10 / 18 / 14 / 10 / 8 | |
+| HP | 300 | Survives ~8–10 rounds vs typical attackers |
+| Mana | 100 | Can cast 5 spells |
+| StrikeRating | 14 | Moderate hit chance → enables parry/crit/fumble test coverage |
+| TurnSpeed | 6 | Acts after most heroes (tests delayed responses) |
+| Chest | Plate Armor | AC 18, Mitigation 5 |
+| RightHand | Long Sword | 1d8 Slashing, AttackBonus +1, 1H |
+| **Memorized spells** | | |
+| Fireball | 3d6 Fire, L3 | ElementalType Fire → afterburn **Burning** (1d6/turn, 3 turns, 60 % app, resisted by Fire) |
+| Ice Bolt | 2d8 Ice, L2 | ElementalType Ice → afterburn **Chilled** (1d4/turn, 2 turns, 50 % app, resisted by Cold) |
+| Shock | 2d6 Lightning, L2 | ElementalType Lightning → afterburn **Shocked** (1d8/turn, 2 turns, 40 % app, resisted by Lightning) |
+| Static Shock | 1d6 Lightning, L2 | onHit **Stun** (100 % app, 2 turns, resisted by Magic) + afterburn **Shocked** |
+| Smite | 2d8 Holy, L2 | ElementalType Holy → no afterburn (Holy has no DoT) |
+
+**What to test against this target:**
+- Perfect Parry (both roll 20) — possible because golem attacks back with d20 + 14 + 1 + (STRmod) vs defender's d20 + DP
+- Devastating Strike / TotalReversal / Fumble / Critical hit / Clash — all special outcomes are reachable
+- Afterburn (Burning, Chilled, Shocked) application chance & tick damage
+- Stun from Static Shock — resisted by Magic resistance
+- Multiple resistance types in play: Magic (Stun), Fire (Burning), Cold (Chilled), Lightning (Shocked)
+
+### Practice Dummy — Pure damage sponge
+
+Purpose: absorbs any incoming damage (melee, ranged, spell) without fighting back. Use to measure raw DPS, status-effect application rates, and afterburn tick accumulation over a long combat.
+
+| Stat | Value | Notes |
+|------|-------|-------|
+| Level | 10 | |
+| Class | Fighter (id=8) | |
+| Race | Human | No innate magic resistance |
+| All stats | 10 | Flat, no ability modifiers |
+| HP | 500 | Lasts 10+ rounds vs typical attackers |
+| Mana | 0 | Cannot cast spells |
+| StrikeRating | 1 | Cannot meaningfully attack (no weapon either) |
+| TurnSpeed | 1 | Barely gains TM — mostly a stationary target |
+| Chest | Studded Leather | AC 12, Mitigation 1 — low, so most damage gets through |
+| RightHand | *none* | No melee weapon → cannot attack back |
+| MemorizedSpells | *none* | No spellcasting |
+
+**What to test against this target:**
+- Raw damage output per round (melee, ranged, spell)
+- Afterburn accumulation (stacking multiple Burning/Chilled/Shocked from different casters)
+- Status-effect application rates (Stun, Fear, Root, Silence) over many trials
+- Damage-over-time tick damage total over a full combat
+- Knockout threshold (HP -9 to 0) and Death threshold (HP ≤ -10)
+- Heal-over-time and external healing throughput
+- Mana-based constraints (dummy has 0 mana — verifies no mana-drain edge case)
+
+### GUI & demo availability
+
+Both characters are registered in `BattleArena.Gui/PortraitResolver.cs` with existing portraits:
+
+| Character | Portrait file | Selectable in |
+|-----------|---------------|--------------|
+| Target Golem | `Assets/Portraits/target-golem.png` | Demo offline PickFighter (duel), demo party combat (auto-enemy), GUI API-mode roster |
+| Practice Dummy | `Assets/Portraits/practice-dummy.png` | Same as above |
+
+In the GUI, `ToDisplayItems` filters to `PortraitResolver.HasPortrait(name)`, so registering them is sufficient for roster visibility. The demo shows all characters from the loaded roster (both heroes and enemies) with no portrait filter.

@@ -241,6 +241,23 @@
       "strikeRating": 16, "turnSpeed": 12,
       "maxHitPoints": 40,
       "equipment": { "chest": "Studded Leather", "rightHand": "Dagger" }
+    },
+    {
+      "name": "Target Golem", "level": 10,
+      "strength": 16, "dexterity": 10, "stamina": 18, "intelligence": 14, "wisdom": 10, "charisma": 8,
+      "race": "Human", "classId": 8, "className": "Fighter", "sex": "N",
+      "strikeRating": 14, "turnSpeed": 6,
+      "maxHitPoints": 300, "maxMana": 100,
+      "equipment": { "chest": "Plate Armor", "rightHand": "Long Sword" },
+      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Static Shock", "Smite"]
+    },
+    {
+      "name": "Practice Dummy", "level": 10,
+      "strength": 10, "dexterity": 10, "stamina": 10, "intelligence": 10, "wisdom": 10, "charisma": 10,
+      "race": "Human", "classId": 8, "className": "Fighter", "sex": "N",
+      "strikeRating": 1, "turnSpeed": 1,
+      "maxHitPoints": 500,
+      "equipment": { "chest": "Studded Leather" }
     }
   ]
 }

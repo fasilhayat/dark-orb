@@ -23,6 +23,8 @@ internal static class PortraitResolver
         ["Lysander the Bard"] = "lysander-the-bard.png",
         ["Elder Treant"] = "elder-treant.png",
         ["Infernal Commander Maleth"] = "infernal-commander-maleth.png",
+        ["Target Golem"] = "target-golem.png",
+        ["Practice Dummy"] = "practice-dummy.png",
     };
 
     private static readonly string PortraitDir = Path.Combine(AppContext.BaseDirectory, "Assets", "Portraits");

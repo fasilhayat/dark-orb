@@ -75,7 +75,7 @@ public class RosterLoaderTests : IDisposable
         var data = RosterLoader.ForceLoad(path);
 
         Assert.Equal(6, data.Heroes.Count);
-        Assert.Equal(3, data.Enemies.Count);
+        Assert.Equal(5, data.Enemies.Count);
 
         // ── Hero names ──────────────────────────────────────────────────────────
         Assert.Contains(data.Heroes, c => c.Name == "Kaela Vornskald");
@@ -89,6 +89,8 @@ public class RosterLoaderTests : IDisposable
         Assert.Contains(data.Enemies, c => c.Name == "Korg Stonefist");
         Assert.Contains(data.Enemies, c => c.Name == "Graveworm");
         Assert.Contains(data.Enemies, c => c.Name == "Shadowmere");
+        Assert.Contains(data.Enemies, c => c.Name == "Target Golem");
+        Assert.Contains(data.Enemies, c => c.Name == "Practice Dummy");
 
         // ── Kaela Vornskald — melee barbarian ───────────────────────────────────
         var kaela = data.Heroes.First(c => c.Name == "Kaela Vornskald");
@@ -160,6 +162,34 @@ public class RosterLoaderTests : IDisposable
         Assert.Equal(19,    shadowmere.Dexterity);
         Assert.Equal("Elf", shadowmere.Race?.Name);
         Assert.Equal("F",   shadowmere.Sex);
+
+        // ── Target Golem — test dummy ────────────────────────────────────────────
+        var golem = data.Enemies.First(c => c.Name == "Target Golem");
+        Assert.Equal(10,   golem.Level);
+        Assert.Equal(300,  golem.MaxHitPoints);
+        Assert.Equal(100,  golem.MaxMana);
+        Assert.Equal(16,   golem.Strength);
+        Assert.Equal(10,   golem.Dexterity);
+        Assert.Equal("Human",  golem.Race?.Name);
+        Assert.Equal(8,    golem.ClassId);          // Fighter
+        Assert.Equal("N",  golem.Sex);
+        Assert.Equal("Plate Armor", golem.Equipment.Chest!.Name);
+        Assert.Equal("Long Sword",  golem.Equipment.RightHand!.Name);
+        Assert.Contains(golem.MemorizedSpells, s => s.Name == "Fireball");
+        Assert.Contains(golem.MemorizedSpells, s => s.Name == "Static Shock");
+        Assert.Contains(golem.MemorizedSpells, s => s.Name == "Ice Bolt");
+        Assert.Contains(golem.MemorizedSpells, s => s.Name == "Shock");
+        Assert.Contains(golem.MemorizedSpells, s => s.Name == "Smite");
+
+        // ── Practice Dummy — pure damage sponge ──────────────────────────────────
+        var dummy = data.Enemies.First(c => c.Name == "Practice Dummy");
+        Assert.Equal(10,   dummy.Level);
+        Assert.Equal(500,  dummy.MaxHitPoints);
+        Assert.Equal(1,    dummy.StrikeRating);
+        Assert.Equal(1,    dummy.TurnSpeed);
+        Assert.Equal("Studded Leather", dummy.Equipment.Chest!.Name);
+        Assert.Null(dummy.Equipment.RightHand);
+        Assert.Empty(dummy.MemorizedSpells);
     }
 
     // ── Edge cases ───────────────────────────────────────────────────────────────

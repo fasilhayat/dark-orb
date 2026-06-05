@@ -81,13 +81,15 @@ public static class RosterLoader
         var result = new Dictionary<string, Spell>(StringComparer.OrdinalIgnoreCase);
         foreach (var d in dtos)
         {
+            var damageType = ParseEnum<DamageType>(d.DamageType);
             var spell = new Spell
             {
                 Name          = d.Name,
                 School        = ParseEnum<SpellSchool>(d.School),
                 DamageDie     = ParseEnum<DieType>(d.DamageDie),
                 DamageCount   = d.DamageCount,
-                DamageType    = ParseEnum<DamageType>(d.DamageType),
+                DamageType    = damageType,
+                ElementalType = InferElementalType(damageType),
                 AttackBonus   = d.AttackBonus,
                 SpellLevel    = d.SpellLevel,
                 TurnMeterCost = d.TurnMeterCost,
@@ -241,6 +243,18 @@ public static class RosterLoader
         public string Name              { get; init; } = "";
         public int    BaseMovementSpeed { get; init; } = 30;
     }
+
+    private static ElementalType InferElementalType(DamageType damageType) => damageType switch
+    {
+        DamageType.Fire      => ElementalType.Fire,
+        DamageType.Ice       => ElementalType.Ice,
+        DamageType.Lightning => ElementalType.Lightning,
+        DamageType.Poison    => ElementalType.Poison,
+        DamageType.Holy      => ElementalType.Holy,
+        DamageType.Shadow    => ElementalType.Shadow,
+        DamageType.Acid      => ElementalType.Acid,
+        _ => ElementalType.None
+    };
 
     private sealed class WeaponDto
     {
