@@ -456,7 +456,7 @@ public static class CombatPlaybackEngine
                         EventType = entry.EventType,
                         ActorName = entry.ActorName,
                         TargetName = entry.TargetName,
-                        EffectName = "ClearPersistent",
+                        EffectName = entry.StatusEffectName,
                     });
                 }
                 break;

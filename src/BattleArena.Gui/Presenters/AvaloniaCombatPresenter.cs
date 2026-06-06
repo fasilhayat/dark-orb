@@ -24,6 +24,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
     private readonly VisualEventBus _visualEventBus = new();
     private readonly Dictionary<string, DispatcherTimer> _effectFlickerTimers = new();
+    private readonly Dictionary<string, List<(string EffectName, string Color)>> _effectOrder = new();
 
     private static readonly IBrush Gray = MakeBrush("#888");
     private static readonly IBrush DarkGray = MakeBrush("#666");
@@ -110,11 +111,11 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                 return;
             }
 
-            if (ev.EffectName == "ClearPersistent")
+            if (ev.EventType == "EffectExpired" && ev.EffectName is not null)
             {
                 var target = ev.TargetName ?? ev.ActorName;
                 if (!string.IsNullOrEmpty(target))
-                    StopPersistentEffect(target);
+                    RemovePersistentEffect(target, ev.EffectName);
                 return;
             }
 
@@ -308,12 +309,22 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
     private void StartPersistentEffect(string characterName, string effectName, string color)
     {
-        StopPersistentEffect(characterName);
-
         var card = FindCard(characterName);
         if (card is null) return;
 
+        // Track application order
+        if (!_effectOrder.TryGetValue(characterName, out var list))
+        {
+            list = new List<(string, string)>();
+            _effectOrder[characterName] = list;
+        }
+        list.Add((effectName, color));
+
+        // Stop any existing timer before setting new effect
+        StopFlickerTimer(characterName);
+
         var darkColor = DarkenColor(color);
+        card.PersistentBorderColor = color;
 
         switch (effectName)
         {
@@ -321,21 +332,50 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             case "Frozen":
             case "Freeze":
             case "Shocked":
-                // Fast flicker (300ms) for elemental effects
-                card.PersistentBorderColor = color;
                 StartFlickerTimer(characterName, color, darkColor, 300);
                 break;
 
             case "Stun":
-                // Slow pulse (800ms) for stun — distinct from elemental flicker
-                card.PersistentBorderColor = color;
                 StartFlickerTimer(characterName, color, darkColor, 800);
                 break;
-
-            default:
-                card.PersistentBorderColor = color;
-                break;
         }
+    }
+
+    private void RemovePersistentEffect(string characterName, string expiredEffectName)
+    {
+        if (_effectOrder.TryGetValue(characterName, out var list))
+        {
+            list.RemoveAll(e => e.EffectName == expiredEffectName);
+
+            if (list.Count > 0)
+            {
+                var (lastEffect, lastColor) = list[^1];
+                var card = FindCard(characterName);
+                if (card is not null)
+                {
+                    StopFlickerTimer(characterName);
+                    var darkColor = DarkenColor(lastColor);
+                    card.PersistentBorderColor = lastColor;
+                    switch (lastEffect)
+                    {
+                        case "Burning":
+                        case "Frozen":
+                        case "Freeze":
+                        case "Shocked":
+                            StartFlickerTimer(characterName, lastColor, darkColor, 300);
+                            break;
+                        case "Stun":
+                            StartFlickerTimer(characterName, lastColor, darkColor, 800);
+                            break;
+                    }
+                }
+                return;
+            }
+
+            _effectOrder.Remove(characterName);
+        }
+
+        StopPersistentEffect(characterName);
     }
 
     private void StartFlickerTimer(string characterName, string color, string darkColor, int intervalMs)
@@ -366,15 +406,22 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                 card.PersistentBorderColor = null;
         }
         _effectFlickerTimers.Clear();
+        _effectOrder.Clear();
     }
 
-    private void StopPersistentEffect(string characterName)
+    private void StopFlickerTimer(string characterName)
     {
         if (_effectFlickerTimers.TryGetValue(characterName, out var timer))
         {
             timer.Stop();
             _effectFlickerTimers.Remove(characterName);
         }
+    }
+
+    private void StopPersistentEffect(string characterName)
+    {
+        StopFlickerTimer(characterName);
+        _effectOrder.Remove(characterName);
 
         var card = FindCard(characterName);
         if (card is not null)

@@ -407,7 +407,7 @@ public class CombatPlaybackEngineTests
 
         CombatPlaybackEngine.PlayTurnBased(result, state, spy);
 
-        var clear = visualEvents.FirstOrDefault(v => v.EffectName == "ClearPersistent");
+        var clear = visualEvents.FirstOrDefault(v => v.EffectName == "Burning");
         Assert.NotNull(clear);
         Assert.Equal("Hero", clear.ActorName);
     }
