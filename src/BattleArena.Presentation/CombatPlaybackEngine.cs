@@ -275,13 +275,6 @@ public static class CombatPlaybackEngine
             case "Attack":
                 if (entry.IsCritical == true)
                     bus.PublishSound(new SoundEvent { SoundId = CombatSoundRegistry.GetCriticalHitSoundId() });
-                else if (entry.IsSpell)
-                    bus.PublishSound(new SoundEvent { SoundId = CombatSoundRegistry.GetSpellCastSoundId() });
-                break;
-
-            case "Healed":
-                if (entry.IsSpell)
-                    bus.PublishSound(new SoundEvent { SoundId = CombatSoundRegistry.GetHealCastSoundId() });
                 break;
 
             case "EffectApplied":

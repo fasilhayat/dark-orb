@@ -35,7 +35,6 @@ public partial class MainWindow : Window
     private BattleArenaApiClient? _apiClient;
     private List<Character> _apiRoster = [];
     private readonly ISoundPlayer? _soundPlayer;
-    private readonly BackgroundMusicPlayer? _backgroundMusic;
 
     public MainWindow()
     {
@@ -76,11 +75,6 @@ public partial class MainWindow : Window
         _soundPlayer = Directory.Exists(soundsDir)
             ? new AvaloniaSoundPlayer(soundsDir)
             : null;
-
-        _backgroundMusic = new BackgroundMusicPlayer(soundsDir);
-        _backgroundMusic.Play();
-
-        Closing += (_, _) => _backgroundMusic?.Dispose();
     }
 
     private async Task CheckApiReachabilityAsync()
