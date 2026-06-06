@@ -214,6 +214,28 @@ public static class CombatPlaybackEngine
         }
     }
 
+    private static string SpellOverlayColor(string spellName)
+    {
+        var lower = spellName.ToLowerInvariant();
+        if (lower.Contains("fire") || lower.Contains("flame") || lower.Contains("burn") || lower.Contains("inferno"))
+            return "#ff6600";
+        if (lower.Contains("ice") || lower.Contains("frost") || lower.Contains("freeze") || lower.Contains("cold"))
+            return "#44ccff";
+        if (lower.Contains("shock") || lower.Contains("lightning") || lower.Contains("thunder") || lower.Contains("spark"))
+            return "#ffff44";
+        if (lower.Contains("heal") || lower.Contains("cure") || lower.Contains("bless") || lower.Contains("restore"))
+            return "#44cc44";
+        if (lower.Contains("stun") || lower.Contains("sleep") || lower.Contains("fear") || lower.Contains("charm"))
+            return "#cc44cc";
+        if (lower.Contains("poison") || lower.Contains("acid"))
+            return "#44ff44";
+        if (lower.Contains("arcane") || lower.Contains("magic") || lower.Contains("mystic"))
+            return "#cc88ff";
+        if (lower.Contains("shield") || lower.Contains("armor") || lower.Contains("ward") || lower.Contains("protect"))
+            return "#88aaff";
+        return "#ffffff";
+    }
+
     private static readonly HashSet<string> PersistentEffectNames =
     [
         "Burning", "Ignite", "Frozen", "Freeze", "Shocked", "Stun",
@@ -253,6 +275,13 @@ public static class CombatPlaybackEngine
             case "Attack":
                 if (entry.IsCritical == true)
                     bus.PublishSound(new SoundEvent { SoundId = CombatSoundRegistry.GetCriticalHitSoundId() });
+                else if (entry.IsSpell)
+                    bus.PublishSound(new SoundEvent { SoundId = CombatSoundRegistry.GetSpellCastSoundId() });
+                break;
+
+            case "Healed":
+                if (entry.IsSpell)
+                    bus.PublishSound(new SoundEvent { SoundId = CombatSoundRegistry.GetHealCastSoundId() });
                 break;
 
             case "EffectApplied":
@@ -291,6 +320,21 @@ public static class CombatPlaybackEngine
     {
         switch (entry.EventType)
         {
+            case "Attack":
+                if (entry.IsSpell && !string.IsNullOrEmpty(entry.AttackSourceName))
+                {
+                    bus.PublishNormal(new VisualEvent
+                    {
+                        EventType = entry.EventType,
+                        ActorName = entry.ActorName,
+                        TargetName = entry.TargetName,
+                        OverlayText = entry.AttackSourceName!.ToUpperInvariant(),
+                        Color = SpellOverlayColor(entry.AttackSourceName),
+                        DurationMs = 1200,
+                    });
+                }
+                break;
+
             case "PerfectParry":
                 bus.PublishNormal(new VisualEvent
                 {
@@ -349,6 +393,31 @@ public static class CombatPlaybackEngine
                         DurationMs = 1000
                     });
                 }
+                else if (entry.StatusEffectName is not null && CcVisualConfig.IsCcEffect(entry.StatusEffectName))
+                {
+                    var label = CcVisualConfig.GetLabel(entry.StatusEffectName);
+                    var ccColor = CcVisualConfig.GetColor(entry.StatusEffectName);
+                    bus.PublishNormal(new VisualEvent
+                    {
+                        EventType = entry.StatusEffectName,
+                        ActorName = entry.TargetName ?? entry.ActorName,
+                        OverlayText = label,
+                        Color = ccColor,
+                        DurationMs = 1000,
+                    });
+                }
+                else if (entry.IsBuff == true && !string.IsNullOrEmpty(entry.AttackSourceName))
+                {
+                    bus.PublishNormal(new VisualEvent
+                    {
+                        EventType = entry.EventType,
+                        ActorName = entry.ActorName,
+                        TargetName = entry.TargetName,
+                        OverlayText = entry.AttackSourceName.ToUpperInvariant(),
+                        Color = SpellOverlayColor(entry.AttackSourceName),
+                        DurationMs = 1000,
+                    });
+                }
                 if (entry.StatusEffectName is not null && PersistentEffectNames.Contains(entry.StatusEffectName))
                 {
                     bus.PublishNormal(new VisualEvent
@@ -395,13 +464,17 @@ public static class CombatPlaybackEngine
                 if ((entry.DamageDealt ?? 0) > 0)
                 {
                     var targetName = entry.TargetName ?? entry.ActorName;
+                    var overlay = entry.IsSpell && !string.IsNullOrEmpty(entry.AttackSourceName)
+                        ? entry.AttackSourceName.ToUpperInvariant()
+                        : $"HEALED +{entry.DamageDealt}";
                     bus.PublishNormal(new VisualEvent
                     {
                         EventType = entry.EventType,
                         ActorName = entry.ActorName,
                         TargetName = targetName,
+                        OverlayText = overlay,
                         HealAmount = entry.DamageDealt ?? 0,
-                        Color = "#ffffff",
+                        Color = "#44cc44",
                     });
                 }
                 break;

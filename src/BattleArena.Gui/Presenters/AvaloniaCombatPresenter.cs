@@ -82,7 +82,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     {
         if (_pacingMultiplier < 0.3)
             return;
-        _soundPlayer?.Play(e.SoundId);
+        _dispatcher.Post(() => _soundPlayer?.Play(e.SoundId));
     }
 
     /// <summary>

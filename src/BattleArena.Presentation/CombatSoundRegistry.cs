@@ -24,7 +24,13 @@ public static class CombatSoundRegistry
         ["KillingBlow"]       = "KillingBlow",
         ["Death"]             = "KillingBlow",
         ["Resurrection"]      = "Resurrection",
+        ["SpellCast"]         = "SpellCast",
+        ["HealCast"]          = "HealCast",
     };
+
+    public static string GetSpellCastSoundId() => "SpellCast";
+
+    public static string GetHealCastSoundId() => "HealCast";
 
     public static string GetEffectSoundId(string effectName) =>
         _effectSounds.GetValueOrDefault(effectName) ?? string.Empty;

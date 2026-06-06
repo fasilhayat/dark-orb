@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Media;
 
@@ -14,22 +15,45 @@ internal sealed class BackgroundMusicPlayer : IDisposable
         var bgDir = Path.Combine(soundsAssetsDir, "Background");
         _wavPath = Path.Combine(bgDir, "dark-orb-bgsound.wav");
 
-        var mp3Path = Path.Combine(bgDir, "dark-orb-bgsound.mp3");
+        Directory.CreateDirectory(bgDir);
 
-        if (!File.Exists(_wavPath) && File.Exists(mp3Path))
+        if (!File.Exists(_wavPath))
         {
             GenerateAmbientWav(_wavPath);
+        }
+
+        var spellCastPath = Path.Combine(soundsAssetsDir, "SpellCast.wav");
+        if (!File.Exists(spellCastPath))
+        {
+            GenerateSpellCastWav(spellCastPath);
+        }
+
+        var healCastPath = Path.Combine(soundsAssetsDir, "HealCast.wav");
+        if (!File.Exists(healCastPath))
+        {
+            GenerateHealCastWav(healCastPath);
         }
     }
 
     public void Play()
     {
         if (!File.Exists(_wavPath))
+        {
+            Debug.WriteLine("[BGM] WAV not found: " + _wavPath);
             return;
+        }
 
-        _player = new SoundPlayer(_wavPath);
-        _player.Load();
-        _player.PlayLooping();
+        try
+        {
+            _player = new SoundPlayer(_wavPath);
+            _player.Load();
+            _player.PlayLooping();
+            Debug.WriteLine("[BGM] Playing: " + _wavPath);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"[BGM] Playback failed: {ex.Message}");
+        }
     }
 
     public void Stop()
@@ -62,6 +86,49 @@ internal sealed class BackgroundMusicPlayer : IDisposable
             else if (t > durationSeconds - 5) envelope = (durationSeconds - t) / 5;
             sample *= envelope * 0.5;
 
+            samples[i] = (short)(sample * short.MaxValue);
+        }
+
+        WriteWav(path, samples, sampleRate);
+    }
+
+    private static void GenerateSpellCastWav(string path)
+    {
+        var sampleRate = 22050;
+        var durationSeconds = 0.5;
+        var totalSamples = (int)(sampleRate * durationSeconds);
+        var samples = new short[totalSamples];
+
+        for (var i = 0; i < totalSamples; i++)
+        {
+            var t = (double)i / sampleRate;
+            var freq = 300 + t * 1200;
+            var envelope = t < 0.05 ? t / 0.05 : (t > 0.35 ? 1.0 - (t - 0.35) / 0.15 : 1.0);
+            var sample = 0.4 * Math.Sin(2 * Math.PI * freq * t)
+                       + 0.15 * Math.Sin(2 * Math.PI * freq * 1.5 * t);
+            sample *= envelope;
+            samples[i] = (short)(sample * short.MaxValue);
+        }
+
+        WriteWav(path, samples, sampleRate);
+    }
+
+    private static void GenerateHealCastWav(string path)
+    {
+        var sampleRate = 22050;
+        var durationSeconds = 0.6;
+        var totalSamples = (int)(sampleRate * durationSeconds);
+        var samples = new short[totalSamples];
+
+        for (var i = 0; i < totalSamples; i++)
+        {
+            var t = (double)i / sampleRate;
+            var progress = t / durationSeconds;
+            var freq = 523 + progress * 400;
+            var envelope = progress < 0.1 ? progress / 0.1 : (progress > 0.7 ? 1.0 - (progress - 0.7) / 0.3 : 1.0);
+            var sample = 0.35 * Math.Sin(2 * Math.PI * freq * t)
+                       + 0.15 * Math.Sin(2 * Math.PI * freq * 2.0 * t);
+            sample *= envelope;
             samples[i] = (short)(sample * short.MaxValue);
         }
 
