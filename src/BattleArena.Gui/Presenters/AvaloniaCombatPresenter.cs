@@ -82,11 +82,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     {
         if (_pacingMultiplier < 0.3)
             return;
-        _dispatcher.Post(() =>
-        {
-            _soundPlayer?.Play(e.SoundId);
-            _vm.AddLogEntry([Seg($"  \u266a {e.Description ?? "Played: " + e.SoundId}", Gray)]);
-        });
+        _dispatcher.Post(() => _soundPlayer?.Play(e.SoundId));
     }
 
     /// <summary>
@@ -461,8 +457,9 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         });
     }
 
-    private IReadOnlyList<List<LogSegment>> BuildRows(CombatLogEntry e, CombatDisplayState state) =>
-        e.EventType switch
+    private List<List<LogSegment>> BuildRows(CombatLogEntry e, CombatDisplayState state)
+    {
+        var rows = e.EventType switch
         {
             "TurnStart"          => [BuildTurnStartRow(e, state)],
             "Attack"             => BuildAttackRows(e, state),
@@ -484,6 +481,12 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             "ApiCall"            => [[Seg("  \u26a1 ", Cyan), Seg(e.Message, DarkGray)]],
             _                    => [[Seg($"  [{e.EventType}] {e.Message}", Gray)]]
         };
+
+        if (e.SoundDescription is not null && rows.Count > 0 && rows[0].Count > 0)
+            rows[0].Add(Seg($"  \u266a {e.SoundDescription}", Gray));
+
+        return rows;
+    }
 
     private static List<LogSegment> BuildTurnStartRow(CombatLogEntry e, CombatDisplayState state)
     {

@@ -33,10 +33,10 @@ public static class CombatPlaybackEngine
                 if (!ReferenceEquals(entry, turnStart))
                     state.ApplyEvent(entry);
 
-                presenter.ShowCombatEvent(entry, state);
-
                 EmitVisualEvents(bus, entry);
                 EmitCombatSounds(bus, entry);
+
+                presenter.ShowCombatEvent(entry, state);
 
                 var delay = presenter.GetEventDelayMs(entry.EventType);
                 if (delay > 0)
@@ -179,10 +179,10 @@ public static class CombatPlaybackEngine
                     state.ApplyEvent(entry);
                 }
 
-                presenter.ShowCombatEvent(entry, state);
-
                 EmitVisualEvents(bus, entry);
                 EmitCombatSounds(bus, entry);
+
+                presenter.ShowCombatEvent(entry, state);
 
                 var delay = presenter.GetEventDelayMs(entry.EventType);
                 if (delay > 0)
@@ -313,6 +313,7 @@ public static class CombatPlaybackEngine
             return;
 
         var desc = CombatSoundRegistry.GetSoundDescription(soundId);
+        entry.SoundDescription = desc;
         bus.PublishSound(new SoundEvent { SoundId = soundId, Description = desc });
     }
 

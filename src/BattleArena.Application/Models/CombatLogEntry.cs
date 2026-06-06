@@ -74,6 +74,10 @@ public class CombatLogEntry
     // Populated on SkippedTurn events — "stunned", "rooted", "feared"
     public string? CcLabel { get; set; }
 
+    // Populated during combat playback by EmitCombatSounds.
+    // Null unless the event triggered a sound effect.
+    public string? SoundDescription { get; set; }
+
     // Snapshot of every living combatant's turn-meter value at the moment this
     // TurnStart was emitted.  Used by PlayTurnBased to display correct TM bars.
     public Dictionary<string, int>? TurnMeterSnapshot { get; set; }

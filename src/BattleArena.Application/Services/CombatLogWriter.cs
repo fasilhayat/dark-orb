@@ -272,6 +272,9 @@ public static class CombatLogWriter
                     break;
 
             }
+
+            if (e.SoundDescription is not null)
+                sb.AppendLine($"                      \u266a {e.SoundDescription}");
         }
 
         // ── Summary ──────────────────────────────────────────────────────────────
