@@ -1,291 +1,186 @@
-# BattleArena — AI Assistant Instructions
+# BattleArena — AI Assistant Instructions (GitHub Copilot)
 
-> **Canonical source.** This file (`AGENTS.md`) is the single source of truth for project rules.
-> It is read by **OpenCode** automatically.
-> The copy at `.github/copilot-instructions.md` is read by **GitHub Copilot**.
-> Edit only this file, then run `make sync-instructions` to propagate changes.
-
-These rules apply to every coding task in this repository.
-Follow them without being asked.
+> **Mirrored file.** The canonical source is `AGENTS.md` at the repository root (read by OpenCode).
+> This copy exists solely because GitHub Copilot reads `.github/copilot-instructions.md`.
+> Edit `AGENTS.md`, then run `make sync-instructions` to update this file.
 
 ---
 
-## 1. The absolute rule — never commit without approval
+## 1. Never commit without approval
 
-**Do not create git commits or push branches unless the user explicitly says so.**
-Always stop after making file changes and let the user review the diff before committing.
+**Do not create commits or push branches unless the user explicitly says so.**
 
 ---
 
-## 2. Project vocabulary
+## 2. Test-failure analysis
+
+**When a test fails, do NOT blindly modify it to make it pass.** First understand what contract it asserts, then re-read your implementation. Fix the implementation if it violated the contract. Only update the test if it is genuinely stale (testing wrong behaviour, referencing removed feature).
+
+---
+
+## 3. Project vocabulary
 
 | Term | Meaning | Example |
 |------|---------|---------|
-| **Combat** | A single simulated encounter between two parties | `CombatSimulator`, `CombatResult`, `CombatLogEntry` |
-| **Battle** | A higher-level campaign concept (multiple combats, a war) | Reserved — not yet implemented |
-| **BattleArena** | The overarching project / namespace name | Never rename this |
+| **Combat** | A single simulated encounter | `CombatSimulator`, `CombatResult`, `CombatLogEntry` |
+| **Battle** | Higher-level campaign concept (multiple combats) | Reserved — not yet implemented |
+| **BattleArena** | Overarching namespace | Never rename this |
 
-**Rules:**
-- Use **Combat** for anything inside the simulation engine (classes, variables, comments, log messages, test names).
-- Never rename `BattleArena.*` namespace or project names.
-- When a feature refers to "a fight", call it a **combat**, not a battle.
+Use **Combat** for simulation engine code. Never call a fight a "battle" in code.
 
 ---
 
-## 3. Solution structure
+## 4. Solution structure
 
 ```
-BattleArena.Core            — Domain entities, enums, interfaces (no dependencies)
-BattleArena.Application     — Services, interfaces, models (depends on Core only)
-BattleArena.Infrastructure  — Repositories, DbContext (depends on Core + Application)
-BattleArena.Api             — ASP.NET endpoints (depends on Application + Infrastructure)
-BattleArena.Demo            — Console demo (depends on Application + Core)
-BattleArena.UnitTests       — xUnit unit tests (NSubstitute for mocks)
-BattleArena.AcceptanceTests — Reqnroll BDD acceptance tests
+Core               — Domain entities, enums, interfaces (no dependencies)
+Application        — Services, interfaces, models (depends on Core only)
+Infrastructure     — Repositories, DbContext (depends on Core only)
+Api                — ASP.NET endpoints (depends on Application + Infrastructure)
+Demo               — Console demo (depends on Application + Core + Presentation)
+Presentation       — GUI-agnostic playback engine, ICombatPresenter (depends on Core + Application)
+Gui                — Avalonia bridge GUI (depends on Application + Core + Presentation)
+UnitTests          — xUnit + NSubstitute
+AcceptanceTests    — Reqnroll BDD
 ```
 
-**Do not add project references that violate these dependency arrows.**
-Core must not reference Application; Application must not reference Infrastructure.
+**Do not violate dependency arrows.** Core must not reference Application; Application must not reference Infrastructure.
 
 ---
 
-## 4. Testing rules
+## 5. Testing
 
-### 4.1 When tests are required
+### Required tests per change
 
-| Work done | Required test(s) |
-|-----------|-----------------|
-| New service method or class | Unit test covering happy path + key edge cases |
+| Change | Test |
+|--------|------|
+| New service method | Unit test (happy path + edge cases) |
 | New status-effect behaviour | Unit test for `TryApply` / `TickAll` + acceptance scenario |
 | New resistance source | Unit test for `ComputeResistance` with that source |
-| New combat mechanic | Diagnostic test in `CombatDiagnosticTests` running a live sim |
-| New API endpoint | At minimum one acceptance test or integration smoke test |
-| Bug fix | A regression test that fails before the fix and passes after |
+| New combat mechanic | Diagnostic test in `CombatDiagnosticTests` (live sim) |
+| New API endpoint | Acceptance or integration smoke test |
+| Bug fix | Regression test that fails before fix, passes after |
 
-All tests must pass (`dotnet test BattleArena.sln`) before the task is considered done.
-If a test count drops, investigate before proceeding.
+All tests must pass (`dotnet test BattleArena.sln` from `src/`). If test count drops, investigate.
 
-### 4.2 Unit tests — `BattleArena.UnitTests`
+### Unit test rules
 
-Location rules:
-- Service logic → `Services/<ServiceName>Tests.cs`
-- Simulation diagnostics (live dice, full sim) → `Diagnostics/CombatDiagnosticTests.cs`
-- No other top-level folders.
+- Service tests → `Services/<Name>Tests.cs`. Diagnostics → `Diagnostics/CombatDiagnosticTests.cs`.
+- **Always** mock `IDiceService` when testing methods that roll dice (`NSubstitute`).
+- **Never** mock `CombatSimulator` — wire full real stack for diagnostics.
+- Naming: `MethodName_Condition_ExpectedOutcome`.
 
-Mocking rules:
-- **Always** mock `IDiceService` when testing methods that roll dice (use `NSubstitute`).
-- **Never** mock `CombatSimulator`; wire up the full real service stack for diagnostic tests.
-- Use `Substitute.For<IDiceService>()` and `.Returns(value1, value2, ...)` to control roll sequences.
+### Acceptance test rules (Reqnroll)
 
-Naming convention: `MethodName_Condition_ExpectedOutcome`
-Examples:
-- `TryApply_ZeroResistance_AlwaysAppliesWhenChancePasses`
-- `ComputeResistance_WrongResistanceType_ReturnsZero`
-- `TickAll_EffectAtDurationOne_RemovesEffectAndReturnsName`
+- Features → `Features/<Name>.feature`. Steps → `StepDefinitions/<Name>Steps.cs`.
+- `*.feature.cs` is auto-generated — never edit manually.
+- Namespace: `BattleArena.ReqnrollTests.StepDefinitions`.
+- Use real services unless scenario tests isolation.
+- Dice-based scenarios use conservative bounds (p=0.8 with 100 trials → assert ≥ 60).
 
-### 4.3 Acceptance tests — `BattleArena.AcceptanceTests`
+### Coverage
 
-Framework: **Reqnroll** (BDD / Gherkin).
-
-Location rules:
-- Feature files → `Features/<FeatureName>.feature`
-- Step definitions → `StepDefinitions/<FeatureName>Steps.cs`
-- Auto-generated `*.feature.cs` files are **never edited manually** (regenerated on build).
-
-Scenario rules:
-- Each feature file covers one cohesive concern (e.g., `StatusEffects.feature`, `Resistance.feature`).
-- Scenario names must be plain English, readable by a non-developer.
-- Probabilistic scenarios (dice-based) must use conservative bounds:
-  - With p=0.8 resistance and 100 trials → assert **≥ 60** resisted (not ≥ 80).
-  - With p=0 resistance and 20 trials → assert **all 20** landed.
-
-Step definition rules:
-- Namespace: `BattleArena.ReqnrollTests.StepDefinitions`
-- Use real services (`DiceService`, `StatusEffectService`, etc.) unless the scenario specifically tests isolation.
-- Shared character-setup steps must match the same Gherkin pattern across all feature files.
-
-### 4.4 Coverage expectations
-
-| Project | Target |
-|---------|--------|
-| `BattleArena.Application/Services` | ≥ 80 % line coverage |
-| `BattleArena.Core/Entities` | Key methods (e.g., `ComputeResistance`) must have ≥ 1 dedicated test per source |
-| `BattleArena.Application/Interfaces` | Every interface must have ≥ 1 test exercising its contract |
-
-Run coverage locally with:
 ```bash
 dotnet test BattleArena.sln --collect:"XPlat Code Coverage" --results-directory coverage
 ```
 
----
-
-## 5. Resistance system rules
-
-When adding or changing the resistance system:
-
-1. `Character.ComputeResistance(ResistanceType)` is the **single source of truth**.  
-   It sums: race feats + equipped armor + active status-effect buffs. Do not duplicate this logic elsewhere.
-
-2. Resistance is **capped at 95** (always at least 5 % infliction chance).
-
-3. `StatusEffectService.TryApply` is the **only** place where the two-phase infliction roll happens:  
-   - Phase 1: `D100 > ApplicationChance` → quiet miss (no log event)  
-   - Phase 2: `D100 ≤ resistance` → `EffectResisted` log event  
-   - Otherwise: `Apply()` → `EffectApplied` log event
-
-4. New status effects must declare `ResistanceType` explicitly (do not rely on the Magic default for elemental effects).
-
-5. Protective spell buffs that grant resistance must set `ResistanceBonuses` on the `StatusEffect`, not hard-code values in the simulator.
+Targets: Application/Services ≥ 80 %, Core/Entities key methods ≥ 1 dedicated test per source, every interface tested.
 
 ---
 
-## 6. Combat system model — modern D&D opposed-roll, NOT THAC0
+## 6. Combat system — modern D&D opposed-roll, NOT THAC0
 
-> **This is the authoritative rule. It overrides any older references to THAC0 or AD&D-style subtraction.**
+**This is the single most important domain rule.** BattleArena uses modern opposed-roll D&D:
 
-BattleArena uses the **modern opposed-roll D&D model**. The old THAC0 system has been fully retired.
+| Concept | Correct | Wrong (THAC0 — never use) |
+|---------|---------|---------------------------|
+| Formula | `d20 + AttackPower ≥ d20 + DefensePower` | single roll ≥ `THAC0 - AC` |
+| StrikeRating | Higher = better attacker | lower was better |
+| ArmorClass | Higher = more defensive | lower was better |
 
-### What this means in practice
-
-| Concept | Modern (current) | THAC0 (retired — do NOT use) |
-|---------|-----------------|-------------------------------|
-| Formula | `d20 + AttackPower ≥ d20 + DefensePower` (both sides roll) | single roll ≥ `THAC0 - AC` |
-| StrikeRating | **Higher = better attacker** (`ClassAccuracyBase = StrikeRating`) | lower was better |
-| ArmorClass | **Higher = more defensive** (`EffectiveAC = TotalArmorClass`) | lower was better |
-| Level scaling | `LevelScaling = Level / 2` (attacker), `LevelDefenseBonus = Level` (defender) | single flat modifier |
-
-### Hard rules — violations must be flagged and corrected
-
-1. `ClassAccuracyBase` is always `attacker.StrikeRating` — **never** `20 - StrikeRating`.
-2. `EffectiveAC` is always `equipment.TotalArmorClass` — **never** `20 - ArmorClass`.
-3. "Higher StrikeRating = better attacker." Test names, comments, and design docs must use this framing.
-4. "Higher ArmorClass value = more defensive." Plate Armor (AC 18) gives `EffectiveAC 18`, which is good.
-5. `LevelingService.EffectiveStrikeRating` returns `StrikeRating + levelGain` — SR increases with level. "SR improved" means the value went **up**, not down.
-6. Any code or document that says "lower SR is better", "20 - StrikeRating", or "20 - AC" is a THAC0 remnant and must be corrected immediately.
+Hard rules:
+- `ClassAccuracyBase = attacker.StrikeRating` — never `20 - StrikeRating`.
+- `EffectiveAC = equipment.TotalArmorClass` — never `20 - AC`.
+- `LevelingService.EffectiveStrikeRating` returns `StrikeRating + levelGain`.
+- Any code/document saying "lower SR is better" or using `20 - X` is a THAC0 remnant — flag and fix.
 
 ---
 
-## 6b. Combat simulator rules
+## 7. Combat engine rules
 
-- `CombatSimulator` depends on `ICombatService`, `ITurnmeterService`, `IStatusEffectService`, `IDiceService`.
-- All combat-log events use `CombatLogEntry` with an `EventType` string field. Stick to the established event types:
+### Event types (`CombatLogEntry.EventType` — plain string, no enum yet)
 
-| EventType | Meaning |
-|-----------|---------|
-| `TurnMeterGain` | TM increased this tick |
-| `TurnStart` | Actor begins their turn |
-| `Attack` | Hit or miss resolved |
-| `Damage` | HP reduced |
-| `SkippedTurn` | CC'd actor cannot act |
-| `EffectApplied` | Status effect landed |
-| `EffectResisted` | Resistance roll blocked the effect |
-| `EffectExpired` | Duration reached zero |
-| `DoTDamage` | Damage-over-time tick |
-| `FumblePenalty` | Fumble side-effect applied |
-| `Death` | HP ≤ -10 |
-| `KnockedOut` | HP in range -9 to 0 |
-| `PerfectParry` | Defender deflects attack, gains TM bonus |
-| `Clash` | Mutual weapon collision, both take reduced damage |
-| `DevastatingStrike` | Triple-damage hit |
-| `TotalReversal` | Fumble flipped; defender gains TM, attacker penalised harder |
+`TurnMeterGain`, `TurnStart`, `Attack`, `Damage`, `SkippedTurn`, `EffectApplied`, `EffectResisted`, `EffectExpired`, `DoTDamage`, `FumblePenalty`, `Death` (HP ≤ -10), `KnockedOut` (HP -9–0), `PerfectParry`, `DevastatingStrike`, `TotalReversal`.
 
-- **Never add game logic to `BattleArena.Demo`**. The demo may read game state and render it; it must not compute combat outcomes.
-- **API combat endpoint**: `POST /v1/combat/simulate` accepts `{ heroParty, enemyParty, maxTicks, heroTargetStrategy, enemyTargetStrategy }` and returns a `CombatResult`. The demo calls this endpoint when `UseApiRoster && ApiClient is not null` — the entire simulation runs server-side.
-- **IAttackSource** must use `[JsonDerivedType]` for polymorphic serialization (`weapon`, `spell`, `unarmed` discriminators) — required by the combat simulate endpoint.
-- **Combat modifier pipeline**: `ICombatModifier` implementations are registered at DI startup and applied by `CombatService.ResolveAttack`. Priority bands: 10 = positional/range, 20 = environmental, 30 = item/set bonuses. Context carries `AttackPowerDelta` and `DefensePowerDelta`. Add new modifiers by implementing `ICombatModifier` — no changes to `CombatService` needed.
-- **Diagnostic test armor**: armor values used in `CombatDiagnosticTests` must come from `BattleArena.UnitTests.TestData.ArmorCatalog`, which mirrors `02-seed-data.sql`. Update `ArmorCatalog.cs` when SQL seed values change.
+### Key constraints
+
+- **Never add game logic to `Demo`.** It may read state and render; it must not compute outcomes.
+- **IAttackSource** needs `[JsonDerivedType]` discriminators (`weapon`, `spell`, `unarmed`) for the `POST /v1/combat/simulate` endpoint.
+- **Combat modifier pipeline**: implement `ICombatModifier` and register at DI. Priority bands: 10 = positional/range, 20 = environmental, 30 = item/set. No changes to `CombatService` needed.
+- **Diagnostic test armor** must come from `UnitTests.TestData.ArmorCatalog` (mirrors `02-seed-data.sql`). Update both in sync.
+
+### Resistance system
+
+- `Character.ComputeResistance(ResistanceType)` is the single source of truth (race feats + armor + buffs).
+- Capped at 95 (always ≥ 5 % infliction chance).
+- `StatusEffectService.TryApply` is the only two-phase infliction roll: (1) D100 > ApplicationChance → quiet miss, (2) D100 ≤ resistance → `EffectResisted`, else `EffectApplied`.
+- New effects must declare `ResistanceType` explicitly. Buffs granting resistance use `ResistanceBonuses` on the effect, not hard-coded values in the simulator.
 
 ---
 
-## 7. README.md update obligations
+## 8. GUI is a pure renderer
 
-Update **`README.md`** when any of the following changes:
+The GUI (`BattleArena.Gui` — Avalonia bridge) must never contain combat logic. All simulation, dice rolling, damage, status effects, and turn management stay in `Application` and `Core`. The production target is Unity; Avalonia is bridgework.
 
-| Change | Section to update |
-|--------|-------------------|
-| New project added to solution | `## Solution overview → Projects` |
-| New API endpoint group | `## API surface` |
-| New DB table or stored function | `## Database model` and the Mermaid ER diagram |
-| New run command or Makefile target | `## Running the solution locally` |
-| New Docker service | `## Running the solution locally → Option 1` |
-| Test count or framework changes | `## Testing` |
-
-The Mermaid ER diagram must stay in sync with `src/.postgres-init/01-schema.sql`.
-If you add a table to the SQL file you must add the entity and its relationships to the diagram.
+`ICombatPresenter` (in `Presentation`) is the only rendering contract. `BattleArena.Presentation` contains the playback engine, display state, and JSON-driven field visibility — these survive the Avalonia→Unity migration unchanged.
 
 ---
 
-## 8. Lore update obligations (`design/battle-arena-lore.md`)
+## 9. Code style (non-obvious conventions)
 
-Update **`design/battle-arena-lore.md`** when any of the following are added to the SQL seed or game data:
+- **Namespace before usings** — in hand-written code only:
+  ```csharp
+  namespace BattleArena.Foo;
 
-| Added content | Lore section |
-|---------------|-------------|
-| New race or subrace | `## 1. Races` (add stat block, flavour text, available classes, special abilities) |
-| New class | `## 2. Classes` |
-| New deity | `## 3. Deities` |
-| New pet | `## 4. Pets` |
-| New weapon (any quality) | Matching quality section (§5–9) |
-| New armor piece | Matching quality section (§10–14) |
-| New ring / amulet / girdle | `## 15–17` |
-| New item set | `## 18. Item Sets` |
-| New NPC | `## 19. NPCs` |
-| New spell | `## 20. Spells` |
-| New subrace | `## 21. Subraces & Special Abilities` |
-| XP formula or levelling change | `## 22. Leveling & Experience` |
-
-Lore entries must match what is seeded in the database:
-- Stat bonuses in the table must match `race.*_bonus` columns.
-- Special abilities must match `race_special_ability` rows.
-- Spell descriptions must match `spell.description` in the DB.
+  using System.Globalization;
+  ```
+- **Cyclomatic complexity** ≤ 10 per method (modified McCabe — `&&`/`||` counts as +1). 11–12 acceptable only where splitting would add parameters without reducing real complexity.
+- **One public type per file** (partial classes like `Demo.*` are the exception).
+- **No magic numbers** — named constants or enums.
+- Simulator itself is synchronous; `async`/`await` is for display pipeline only.
+- `IReadOnlyList<T>` for returned collections.
 
 ---
 
-## 9. Code style
+## 10. Skills
 
-- **Comments**: only when the code is non-obvious. Do not restate what the code already says.
-- **Naming**: PascalCase for types/methods, camelCase for locals/fields, `_camelCase` for private fields.
-- **File-per-type**: one public type per file. Partial classes (like `Demo.*`) are the exception.
-- **No magic numbers**: extract named constants or use enum values.
-- **Async**: use `async`/`await` throughout the demo display pipeline; the simulator itself is synchronous.
-- **Collections**: use `List<T>` for mutable, `IReadOnlyList<T>` for returned collections.
-- **Cyclomatic complexity**: ≤ 10 per method (modified McCabe — counts each `&&`/`||` as +1). Extract private helpers rather than letting any method exceed this limit. Values of 11–12 are acceptable only where splitting would add parameters without reducing real complexity.
-
----
-
-## 10. Demo partial class structure
-
-The demo (`BattleArena.Demo`) is split into:
-
-| File | Responsibility |
-|------|---------------|
-| `Demo.Main.cs` | Entry point, top-level menu |
-| `Demo.Menus.cs` | Mode selection, option prompts |
-| `Demo.Combat.cs` | Wiring up simulator runs, event subscriptions |
-| `Demo.Display.cs` | Rendering helpers (colours, banners, character cards) |
-| `Demo.Data.cs` | Hardcoded character/weapon/spell data |
-
-**Do not add rendering logic to `Demo.Combat.cs`.**
-**Do not add combat wiring to `Demo.Display.cs`.**
-
----
-
-## 11. Docker rules
-
-- The `battle-arena-demo` service uses `profiles: [demo]` — it does not start with a plain `docker compose up`.
-- Use `make up-dev` to build and run everything (DB + API + demo) in Docker.
-- Use `make up-local` to start only DB + API (demo runs on host via `make demo-local`).
-- Do not run docker commands without the user's explicit instruction.
-
----
-
-## 12. Project skills (opencode.jsonc)
-
-Two project-scoped skills are registered in `opencode.jsonc`:
+Project-scoped skills live in `.opencode/skills/` and are auto-discovered:
 
 | Skill | File | When to load |
 |-------|------|-------------|
-| `makefile-orchestration` | `.opencode/skills/makefile-orchestration.md` | Docker builds, demo runs, test execution, container management |
-| `combat-mechanics` | `.opencode/skills/combat-mechanics.md` | Combat system changes (attack, damage, TM, effects, resistance, logging) |
+| `makefile-orchestration` | `.opencode/skills/makefile-orchestration.md` | Docker, demo runs, tests, container mgmt |
+| `combat-mechanics` | `.opencode/skills/combat-mechanics.md` | Changes to attack, damage, TM, effects, resistance, logging |
 
-Load them explicitly via the skill tool. The combat-mechanics skill contains a `self-update-trigger` for automatic refresh when combat code changes.
+Load via OpenCode's skill tool. `combat-mechanics` has `self-update: true` — it auto-refreshes when combat code changes.
+
+---
+
+## 11. Docker quick reference (from `src/`)
+
+| Command | What starts |
+|---------|-------------|
+| `make up-local` | DB + API in Docker (ports 5432, 8585). Demo on host via `make demo-local` |
+| `make up-dev` | Everything in Docker (interactive demo container) |
+| `make test` | `dotnet test BattleArena.sln` |
+| `make test-coverage` | Tests with OpenCover format |
+| `make sync-instructions` | Copy AGENTS.md → `.github/copilot-instructions.md` |
+
+`battle-arena-demo` uses `profiles: [demo]` — not started by plain `docker compose up`.
+
+---
+
+## 12. Doc update obligations
+
+- **README.md**: update when new project, API endpoint, DB table, Makefile target, Docker service, or test framework change. Keep Mermaid ER diagram in sync with `01-schema.sql`.
+- **design/battle-arena-lore.md**: update when SQL seed adds races, classes, deities, pets, weapons, armor, accessories, item sets, NPCs, spells, subraces, or XP formula changes. Entries must match the DB exactly.
+- **release-notes.md**: do NOT touch unless the user explicitly asks. The file is managed manually and has its own maturity-assessment format.

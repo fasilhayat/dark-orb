@@ -34,6 +34,7 @@ public partial class MainWindow : Window
     private bool _useApi;
     private BattleArenaApiClient? _apiClient;
     private List<Character> _apiRoster = [];
+    private readonly ISoundPlayer? _soundPlayer;
 
     public MainWindow()
     {
@@ -69,6 +70,11 @@ public partial class MainWindow : Window
 
         if (_apiClient is not null)
             _ = CheckApiReachabilityAsync();
+
+        var soundsDir = Path.Combine(AppContext.BaseDirectory, "Assets", "Sounds");
+        _soundPlayer = Directory.Exists(soundsDir)
+            ? new AvaloniaSoundPlayer(soundsDir)
+            : null;
     }
 
     private async Task CheckApiReachabilityAsync()
@@ -167,6 +173,7 @@ public partial class MainWindow : Window
     {
         NewCombatButton.IsVisible = false;
         if (Fighter1 is null || Fighter2 is null) return;
+        _presenter?.Stop();
         await StartCombat();
     }
 
@@ -199,6 +206,7 @@ public partial class MainWindow : Window
 
     private void OnBackToSetupClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
+        _presenter?.Stop();
         _presenter = null;
         _cts?.Cancel();
         _cts?.Dispose();
@@ -287,7 +295,19 @@ public partial class MainWindow : Window
 
     private void OnBackToMainClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
+        _presenter?.Stop();
+        _presenter = null;
+        _cts?.Cancel();
+        _cts?.Dispose();
+        _waitForNext?.Dispose();
+        _cts = null;
+        _waitForNext = null;
+
         _vm.Phase = "MainMenu";
+        _vm.CombatLog.Clear();
+        _vm.Heroes.Clear();
+        _vm.Enemies.Clear();
+        _vm.IsRunning = false;
         _vm.CombatOver = false;
         _vm.Tick = 0;
         _vm.RoundNumber = 0;
@@ -515,6 +535,7 @@ public partial class MainWindow : Window
 
     private void OnBackToMainFromSetupClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
+        _presenter?.Stop();
         _presenter = null;
         _cts?.Cancel();
         _cts?.Dispose();
@@ -551,6 +572,7 @@ public partial class MainWindow : Window
         _cts = new CancellationTokenSource();
         _waitForNext = new ManualResetEventSlim(false);
 
+        _presenter?.Stop();
         _presenter = null;
         _vm.IsRunning = true;
         NextButton.IsEnabled = true;
@@ -648,7 +670,7 @@ public partial class MainWindow : Window
 
         _waitForNext.Reset();
 
-        _presenter = new AvaloniaCombatPresenter(_vm, _displayConfig, _waitForNext, Dispatcher.UIThread)
+        _presenter = new AvaloniaCombatPresenter(_vm, _displayConfig, _waitForNext, Dispatcher.UIThread, _soundPlayer)
         {
             PacingMultiplier = SpeedSlider.Value,
             AutoMode = _vm.Mode == "Auto"

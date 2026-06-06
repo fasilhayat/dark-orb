@@ -412,6 +412,273 @@ public class CombatPlaybackEngineTests
         Assert.Equal("Hero", clear.ActorName);
     }
 
+    // ── EmitCombatSounds ──────────────────────────────────────────────────────────
+
+    [Fact]
+    public void PlayTurnBased_DoTTickWithKnownEffect_PublishesEffectSound()
+    {
+        var state = MakeState("Hero", "Enemy");
+        var spy = new SpyPresenter();
+        var sounds = new List<SoundEvent>();
+        spy.VisualEventBus.SoundRequested += sounds.Add;
+
+        var log = new List<CombatLogEntry>
+        {
+            E(1, "TurnStart"),
+            new() { Tick = 1, EventType = "DoTTick", ActorName = "Enemy",
+                    StatusEffectName = "Burning", DamageDealt = 5 },
+        };
+        CombatPlaybackEngine.PlayTurnBased(MakeResult(log), state, spy);
+
+        Assert.Contains(sounds, s => s.SoundId == "BurnTick");
+    }
+
+    [Fact]
+    public void PlayTurnBased_DoTTickWithUnknownEffect_DoesNotPublishSound()
+    {
+        var state = MakeState("Hero", "Enemy");
+        var spy = new SpyPresenter();
+        var sounds = new List<SoundEvent>();
+        spy.VisualEventBus.SoundRequested += sounds.Add;
+
+        var log = new List<CombatLogEntry>
+        {
+            E(1, "TurnStart"),
+            new() { Tick = 1, EventType = "DoTTick", ActorName = "Enemy",
+                    StatusEffectName = "Stun", DamageDealt = 5 },
+        };
+        CombatPlaybackEngine.PlayTurnBased(MakeResult(log), state, spy);
+
+        Assert.Empty(sounds);
+    }
+
+    [Fact]
+    public void PlayTurnBased_AttackWithCriticalHit_PublishesCriticalHitSound()
+    {
+        var state = MakeState("Hero", "Enemy");
+        var spy = new SpyPresenter();
+        var sounds = new List<SoundEvent>();
+        spy.VisualEventBus.SoundRequested += sounds.Add;
+
+        var log = new List<CombatLogEntry>
+        {
+            E(1, "TurnStart"),
+            new() { Tick = 1, EventType = "Attack", ActorName = "Hero", TargetName = "Enemy",
+                    IsCritical = true, DamageDealt = 15 },
+        };
+        CombatPlaybackEngine.PlayTurnBased(MakeResult(log), state, spy);
+
+        Assert.Contains(sounds, s => s.SoundId == "CriticalHit");
+    }
+
+    [Fact]
+    public void PlayTurnBased_AttackWithoutCriticalHit_DoesNotPublishSound()
+    {
+        var state = MakeState("Hero", "Enemy");
+        var spy = new SpyPresenter();
+        var sounds = new List<SoundEvent>();
+        spy.VisualEventBus.SoundRequested += sounds.Add;
+
+        var log = new List<CombatLogEntry>
+        {
+            E(1, "TurnStart"),
+            new() { Tick = 1, EventType = "Attack", ActorName = "Hero", TargetName = "Enemy",
+                    IsCritical = false, DamageDealt = 8 },
+        };
+        CombatPlaybackEngine.PlayTurnBased(MakeResult(log), state, spy);
+
+        Assert.Empty(sounds);
+    }
+
+    [Fact]
+    public void PlayTurnBased_EffectAppliedWithKnownEffect_PublishesEffectSound()
+    {
+        var state = MakeState("Hero", "Enemy");
+        var spy = new SpyPresenter();
+        var sounds = new List<SoundEvent>();
+        spy.VisualEventBus.SoundRequested += sounds.Add;
+
+        var log = new List<CombatLogEntry>
+        {
+            E(1, "TurnStart"),
+            new() { Tick = 1, EventType = "EffectApplied", ActorName = "Hero",
+                    TargetName = "Enemy", StatusEffectName = "Burning" },
+        };
+        CombatPlaybackEngine.PlayTurnBased(MakeResult(log), state, spy);
+
+        Assert.Contains(sounds, s => s.SoundId == "BurnTick");
+    }
+
+    [Fact]
+    public void PlayTurnBased_EffectAppliedWithUnknownEffect_DoesNotPublishSound()
+    {
+        var state = MakeState("Hero", "Enemy");
+        var spy = new SpyPresenter();
+        var sounds = new List<SoundEvent>();
+        spy.VisualEventBus.SoundRequested += sounds.Add;
+
+        var log = new List<CombatLogEntry>
+        {
+            E(1, "TurnStart"),
+            new() { Tick = 1, EventType = "EffectApplied", ActorName = "Hero",
+                    TargetName = "Enemy", StatusEffectName = "Regen" },
+        };
+        CombatPlaybackEngine.PlayTurnBased(MakeResult(log), state, spy);
+
+        Assert.Empty(sounds);
+    }
+
+    [Fact]
+    public void PlayTurnBased_PerfectParry_PublishesPerfectParrySound()
+    {
+        var state = MakeState("Hero", "Enemy");
+        var spy = new SpyPresenter();
+        var sounds = new List<SoundEvent>();
+        spy.VisualEventBus.SoundRequested += sounds.Add;
+
+        var log = new List<CombatLogEntry>
+        {
+            E(1, "TurnStart"),
+            new() { Tick = 1, EventType = "PerfectParry", ActorName = "Hero", TargetName = "Enemy" },
+        };
+        CombatPlaybackEngine.PlayTurnBased(MakeResult(log), state, spy);
+
+        Assert.Contains(sounds, s => s.SoundId == "PerfectParry");
+    }
+
+    [Fact]
+    public void PlayTurnBased_DevastatingStrike_PublishesCriticalHitSound()
+    {
+        var state = MakeState("Hero", "Enemy");
+        var spy = new SpyPresenter();
+        var sounds = new List<SoundEvent>();
+        spy.VisualEventBus.SoundRequested += sounds.Add;
+
+        var log = new List<CombatLogEntry>
+        {
+            E(1, "TurnStart"),
+            new() { Tick = 1, EventType = "DevastatingStrike", ActorName = "Hero",
+                    TargetName = "Enemy", DamageDealt = 25 },
+        };
+        CombatPlaybackEngine.PlayTurnBased(MakeResult(log), state, spy);
+
+        Assert.Contains(sounds, s => s.SoundId == "CriticalHit");
+    }
+
+    [Fact]
+    public void PlayTurnBased_FumblePenalty_PublishesFumbleSound()
+    {
+        var state = MakeState("Hero", "Enemy");
+        var spy = new SpyPresenter();
+        var sounds = new List<SoundEvent>();
+        spy.VisualEventBus.SoundRequested += sounds.Add;
+
+        var log = new List<CombatLogEntry>
+        {
+            E(1, "TurnStart"),
+            new() { Tick = 1, EventType = "FumblePenalty", ActorName = "Hero" },
+        };
+        CombatPlaybackEngine.PlayTurnBased(MakeResult(log), state, spy);
+
+        Assert.Contains(sounds, s => s.SoundId == "Fumble");
+    }
+
+    [Fact]
+    public void PlayTurnBased_TotalReversal_PublishesFumbleSound()
+    {
+        var state = MakeState("Hero", "Enemy");
+        var spy = new SpyPresenter();
+        var sounds = new List<SoundEvent>();
+        spy.VisualEventBus.SoundRequested += sounds.Add;
+
+        var log = new List<CombatLogEntry>
+        {
+            E(1, "TurnStart"),
+            new() { Tick = 1, EventType = "TotalReversal", ActorName = "Hero" },
+        };
+        CombatPlaybackEngine.PlayTurnBased(MakeResult(log), state, spy);
+
+        Assert.Contains(sounds, s => s.SoundId == "Fumble");
+    }
+
+    [Fact]
+    public void PlayTurnBased_Death_PublishesKillingBlowSound()
+    {
+        var state = MakeState("Hero", "Enemy");
+        var spy = new SpyPresenter();
+        var sounds = new List<SoundEvent>();
+        spy.VisualEventBus.SoundRequested += sounds.Add;
+
+        var log = new List<CombatLogEntry>
+        {
+            E(1, "TurnStart"),
+            new() { Tick = 1, EventType = "Death", ActorName = "Enemy", TargetHpAfter = -15 },
+        };
+        CombatPlaybackEngine.PlayTurnBased(MakeResult(log), state, spy);
+
+        Assert.Contains(sounds, s => s.SoundId == "KillingBlow");
+    }
+
+    [Fact]
+    public void PlayTurnBased_Resurrection_PublishesResurrectionSound()
+    {
+        var state = MakeState("Hero", "Enemy");
+        var spy = new SpyPresenter();
+        var sounds = new List<SoundEvent>();
+        spy.VisualEventBus.SoundRequested += sounds.Add;
+
+        var log = new List<CombatLogEntry>
+        {
+            E(1, "TurnStart"),
+            new() { Tick = 1, EventType = "Resurrection", ActorName = "Enemy" },
+        };
+        CombatPlaybackEngine.PlayTurnBased(MakeResult(log), state, spy);
+
+        Assert.Contains(sounds, s => s.SoundId == "Resurrection");
+    }
+
+    [Fact]
+    public void PlayTurnBased_AttackWithoutCritical_DoesNotPublishAnySound()
+    {
+        var state = MakeState("Hero", "Enemy");
+        var spy = new SpyPresenter();
+        var sounds = new List<SoundEvent>();
+        spy.VisualEventBus.SoundRequested += sounds.Add;
+
+        var log = new List<CombatLogEntry>
+        {
+            E(1, "TurnStart"),
+            new() { Tick = 1, EventType = "Attack", ActorName = "Hero", TargetName = "Enemy",
+                    DamageDealt = 8 },
+        };
+        CombatPlaybackEngine.PlayTurnBased(MakeResult(log), state, spy);
+
+        Assert.Empty(sounds);
+    }
+
+    [Fact]
+    public void PlayRealTime_DoTTickWithKnownEffect_PublishesEffectSound()
+    {
+        var state = MakeState("Hero", "Enemy");
+        var spy = new SpyPresenter();
+        var sounds = new List<SoundEvent>();
+        spy.VisualEventBus.SoundRequested += sounds.Add;
+
+        var log = new List<CombatLogEntry>
+        {
+            E(1, "TurnMeterGain"),
+            E(2, "TurnStart"),
+            new() { Tick = 2, EventType = "DoTTick", ActorName = "Enemy",
+                    StatusEffectName = "Poisoned", DamageDealt = 4 },
+        };
+        log[0].TurnMeterAfter = 50;
+        log[1].TurnMeterSnapshot = new() { ["Hero"] = 100, ["Enemy"] = 60 };
+
+        CombatPlaybackEngine.PlayRealTime(MakeResult(log), state, spy);
+
+        Assert.Contains(sounds, s => s.SoundId == "PoisonTick");
+    }
+
     // ── Helpers ───────────────────────────────────────────────────────────────────
 
     private sealed class CapturingPresenter : ICombatPresenter

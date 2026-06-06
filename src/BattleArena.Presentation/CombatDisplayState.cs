@@ -144,6 +144,11 @@ public sealed class CombatDisplayState
                 {
                     if (!applySt.ActiveEffects.Contains(e.StatusEffectName))
                         applySt.ActiveEffects.Add(e.StatusEffectName);
+                    if (CcVisualConfig.IsCcEffect(e.StatusEffectName))
+                    {
+                        applySt.IsTmLocked = true;
+                        applySt.CcStatus = e.StatusEffectName.ToLowerInvariant();
+                    }
                 }
                 break;
 
@@ -152,6 +157,12 @@ public sealed class CombatDisplayState
                     && _chars.TryGetValue(e.ActorName, out var expSt))
                 {
                     expSt.ActiveEffects.Remove(e.StatusEffectName);
+                    if (CcVisualConfig.IsCcEffect(e.StatusEffectName)
+                        && !expSt.ActiveEffects.Any(CcVisualConfig.IsCcEffect))
+                    {
+                        expSt.IsTmLocked = false;
+                        expSt.CcStatus = null;
+                    }
                 }
                 break;
 

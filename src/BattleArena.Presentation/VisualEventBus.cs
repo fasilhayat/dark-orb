@@ -6,6 +6,7 @@ public sealed class VisualEventBus
 
     public event Action<VisualEvent>? NormalEventPublished;
     public event Action<VisualEvent>? IncredibleEventPublished;
+    public event Action<SoundEvent>? SoundRequested;
 
     public void PublishNormal(VisualEvent visualEvent)
     {
@@ -17,6 +18,11 @@ public sealed class VisualEventBus
         _incredibleWait.Reset();
         IncredibleEventPublished?.Invoke(visualEvent);
         _incredibleWait.Wait();
+    }
+
+    public void PublishSound(SoundEvent soundEvent)
+    {
+        SoundRequested?.Invoke(soundEvent);
     }
 
     public void SignalIncredibleComplete()

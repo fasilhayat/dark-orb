@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Media;
 using Avalonia.Threading;
+using BattleArena.Application.Interfaces;
 using BattleArena.Application.Models;
 using BattleArena.Application.Services;
 using BattleArena.Gui.ViewModels;
@@ -18,6 +19,8 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     private double _pacingMultiplier;
     private readonly ManualResetEventSlim _waitHandle;
     private readonly Dispatcher _dispatcher;
+    private readonly ISoundPlayer? _soundPlayer;
+    private volatile bool _stopped;
 
     private readonly VisualEventBus _visualEventBus = new();
     private readonly Dictionary<string, DispatcherTimer> _effectFlickerTimers = new();
@@ -59,16 +62,38 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         MainWindowViewModel vm,
         GuiDisplayConfig config,
         ManualResetEventSlim waitHandle,
-        Dispatcher dispatcher)
+        Dispatcher dispatcher,
+        ISoundPlayer? soundPlayer = null)
     {
         _vm = vm;
         _config = config;
         _waitHandle = waitHandle;
         _dispatcher = dispatcher;
+        _soundPlayer = soundPlayer;
         _pacingMultiplier = 1.0;
 
         _visualEventBus.NormalEventPublished += OnNormalVisualEvent;
         _visualEventBus.IncredibleEventPublished += OnIncredibleVisualEvent;
+        if (_soundPlayer is not null)
+            _visualEventBus.SoundRequested += OnSoundRequested;
+    }
+
+    private void OnSoundRequested(SoundEvent e)
+    {
+        _soundPlayer?.Play(e.SoundId);
+    }
+
+    /// <summary>
+    /// Stop all active timers, animations, and event subscriptions.
+    /// Called when the user navigates away from combat.
+    /// </summary>
+    public void Stop()
+    {
+        _stopped = true;
+        ClearAllPersistentEffects();
+        _visualEventBus.NormalEventPublished -= OnNormalVisualEvent;
+        _visualEventBus.IncredibleEventPublished -= OnIncredibleVisualEvent;
+        _visualEventBus.SoundRequested -= OnSoundRequested;
     }
 
     private void OnNormalVisualEvent(VisualEvent ev)
@@ -261,6 +286,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     {
         Task.Delay(1800).ContinueWith(_ =>
         {
+            if (_stopped) return;
             _dispatcher.Post(() => card.BorderFlashColor = null);
         });
     }
@@ -352,22 +378,27 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
         Task.Run(async () =>
         {
-            for (var i = 0; i < steps; i++)
+            for (var i = 0; i < steps && !_stopped; i++)
             {
                 await Task.Delay(intervalMs);
+                if (_stopped) return;
                 var t = (double)(i + 1) / steps;
                 var opacity = 0.7 * (1.0 - t * t);
                 _dispatcher.Post(() =>
                 {
+                    if (_stopped) return;
                     card.HealGlowOpacity = opacity;
                 });
             }
-            _dispatcher.Post(() =>
+            if (!_stopped)
             {
-                card.HealGlowOpacity = 0;
-                card.HealGlowStart = 0;
-                card.HealGlowFraction = 0;
-            });
+                _dispatcher.Post(() =>
+                {
+                    card.HealGlowOpacity = 0;
+                    card.HealGlowStart = 0;
+                    card.HealGlowFraction = 0;
+                });
+            }
         });
     }
 
@@ -386,31 +417,28 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
         Task.Run(async () =>
         {
-            for (var i = 0; i < steps; i++)
+            for (var i = 0; i < steps && !_stopped; i++)
             {
                 await Task.Delay(intervalMs);
+                if (_stopped) return;
                 elapsed += intervalMs;
                 var t = (double)elapsed / durationMs;
-                // Ease-out: fast start, slow end (quadratic)
                 var eased = 1.0 - (1.0 - t) * (1.0 - t);
+                var mainScale = 0.25 + eased * 1.95;
+                var mainOpacity = Math.Max(0, 1.0 - (eased - 0.08) / 0.92);
                 _dispatcher.Post(() =>
                 {
-                    // Main text: zoom from center towards viewer, fading throughout
-                    var mainScale = 0.25 + eased * 1.95;
-                    var mainOpacity = Math.Max(0, 1.0 - (eased - 0.08) / 0.92);
+                    if (_stopped) return;
                     _vm.OverlayScale = mainScale;
                     _vm.OverlayOpacity = mainOpacity;
-
-                    // Trail 1: ghost at ~80 % scale of main, lower opacity
                     _vm.OverlayTrailScale1 = mainScale * 0.78;
                     _vm.OverlayTrailOpacity1 = mainOpacity * 0.35;
-
-                    // Trail 2: ghost at ~60 % scale, even lower opacity
                     _vm.OverlayTrailScale2 = mainScale * 0.56;
                     _vm.OverlayTrailOpacity2 = mainOpacity * 0.15;
                 });
             }
-            _dispatcher.Post(() => _vm.ClearOverlay());
+            if (!_stopped)
+                _dispatcher.Post(() => _vm.ClearOverlay());
         });
     }
 

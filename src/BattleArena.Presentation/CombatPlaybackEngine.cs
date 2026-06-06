@@ -36,6 +36,7 @@ public static class CombatPlaybackEngine
                 presenter.ShowCombatEvent(entry, state);
 
                 EmitVisualEvents(bus, entry);
+                EmitCombatSounds(bus, entry);
 
                 var delay = presenter.GetEventDelayMs(entry.EventType);
                 if (delay > 0)
@@ -181,6 +182,7 @@ public static class CombatPlaybackEngine
                 presenter.ShowCombatEvent(entry, state);
 
                 EmitVisualEvents(bus, entry);
+                EmitCombatSounds(bus, entry);
 
                 var delay = presenter.GetEventDelayMs(entry.EventType);
                 if (delay > 0)
@@ -218,21 +220,72 @@ public static class CombatPlaybackEngine
         "Sleep", "Fear", "Petrify", "Poisoned", "Bleeding"
     ];
 
-    private static string GetPersistentColor(string effectName) => effectName switch
+    private static string GetPersistentColor(string effectName)
     {
-        "Burning" => "#ff6600",
-        "Ignite" => "#ff4400",
-        "Frozen" => "#44ccff",
-        "Freeze" => "#44ccff",
-        "Shocked" => "#ffff44",
-        "Stun" => "#aa66ff",
-        "Sleep" => "#aa44ff",
-        "Fear" => "#8822aa",
-        "Petrify" => "#888888",
-        "Poisoned" => "#44ff44",
-        "Bleeding" => "#ff4444",
-        _ => "#44ff44",
-    };
+        if (CcVisualConfig.IsCcEffect(effectName))
+            return CcVisualConfig.GetColor(effectName);
+        return effectName switch
+        {
+            "Burning" => "#ff6600",
+            "Ignite" => "#ff4400",
+            "Frozen" => "#44ccff",
+            "Freeze" => "#44ccff",
+            "Shocked" => "#ffff44",
+            "Poisoned" => "#44ff44",
+            "Bleeding" => "#ff4444",
+            _ => "#44ff44",
+        };
+    }
+
+    private static void EmitCombatSounds(VisualEventBus bus, CombatLogEntry entry)
+    {
+        switch (entry.EventType)
+        {
+            case "DoTTick":
+                if (entry.StatusEffectName is not null)
+                {
+                    var soundId = CombatSoundRegistry.GetEffectSoundId(entry.StatusEffectName);
+                    if (!string.IsNullOrEmpty(soundId))
+                        bus.PublishSound(new SoundEvent { SoundId = soundId });
+                }
+                break;
+
+            case "Attack":
+                if (entry.IsCritical == true)
+                    bus.PublishSound(new SoundEvent { SoundId = CombatSoundRegistry.GetCriticalHitSoundId() });
+                break;
+
+            case "EffectApplied":
+                if (entry.StatusEffectName is not null)
+                {
+                    var soundId = CombatSoundRegistry.GetEffectSoundId(entry.StatusEffectName);
+                    if (!string.IsNullOrEmpty(soundId))
+                        bus.PublishSound(new SoundEvent { SoundId = soundId });
+                }
+                break;
+
+            case "PerfectParry":
+                bus.PublishSound(new SoundEvent { SoundId = CombatSoundRegistry.GetEventSoundId("PerfectParry") });
+                break;
+
+            case "DevastatingStrike":
+                bus.PublishSound(new SoundEvent { SoundId = CombatSoundRegistry.GetCriticalHitSoundId() });
+                break;
+
+            case "FumblePenalty":
+            case "TotalReversal":
+                bus.PublishSound(new SoundEvent { SoundId = CombatSoundRegistry.GetEventSoundId("FumblePenalty") });
+                break;
+
+            case "Death":
+                bus.PublishSound(new SoundEvent { SoundId = CombatSoundRegistry.GetEventSoundId("Death") });
+                break;
+
+            case "Resurrection":
+                bus.PublishSound(new SoundEvent { SoundId = CombatSoundRegistry.GetEventSoundId("Resurrection") });
+                break;
+        }
+    }
 
     private static void EmitVisualEvents(VisualEventBus bus, CombatLogEntry entry)
     {
@@ -286,12 +339,13 @@ public static class CombatPlaybackEngine
             case "EffectApplied":
                 if (entry.CcLabel is not null)
                 {
+                    var ccColor = CcVisualConfig.GetColor(entry.CcLabel);
                     bus.PublishNormal(new VisualEvent
                     {
                         EventType = entry.CcLabel,
                         ActorName = entry.TargetName ?? entry.ActorName,
-                        OverlayText = entry.CcLabel,
-                        Color = "#ff8844",
+                        OverlayText = entry.CcLabel.ToUpperInvariant(),
+                        Color = ccColor,
                         DurationMs = 1000
                     });
                 }

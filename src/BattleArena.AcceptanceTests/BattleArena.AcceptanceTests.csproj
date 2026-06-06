@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BattleArena.Application\BattleArena.Application.csproj" />
     <ProjectReference Include="..\BattleArena.Core\BattleArena.Core.csproj" />
+    <ProjectReference Include="..\BattleArena.Presentation\BattleArena.Presentation.csproj" />
   </ItemGroup>
 
 </Project>
