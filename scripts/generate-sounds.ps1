@@ -18,7 +18,9 @@ $sounds = @(
     @("PerfectDodge",   900,   0.20, 0.4),
     @("CounterAttack",  770,   0.30, 0.6),
     @("KillingBlow",    550,   0.80, 0.9),
-    @("Resurrection",   440,   1.00, 0.6)
+    @("Resurrection",   440,   1.00, 0.6),
+    @("SpellCast",      770,   0.35, 0.7),
+    @("HealCast",       523,   0.50, 0.6)
 )
 
 function New-WavFile {
