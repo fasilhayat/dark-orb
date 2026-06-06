@@ -36,17 +36,25 @@ Mages begin with a broad **Common Core** so that early arcane play feels flexibl
 
 ### Priest access rules
 
+Priests are **deity-aligned casters** — their magic originates from a patron deity, not a spell school. Schools remain secondary metadata for legacy grouping but do not drive progression or identity.
+
 Priests gain early class identity through blessings, command effects, healing, warding, and curse interaction.[web:6] Their progression should stay broad within divine identity, with late-game access opening stronger battlefield miracles and barriers rather than turning them into elemental specialists.[web:6][web:73]
 
 ### Druid access rules
+
+Druids are **deity-aligned casters** — their primal magic is tied to nature deities. Schools remain secondary metadata; identity and progression are deity-driven.
 
 Druids gain early access to roots, nature utility, beast interaction, and natural healing before expanding into storms, swarms, terrain control, and primal summoning.[web:6] Their list should remain distinct from priests by controlling the battlefield through natural force and environment.[web:6]
 
 ### Paladin access rules
 
+Paladins are **deity-aligned casters** — their magic is channelled through a patron deity. Schools are secondary.
+
 In Dark Orb, paladins start spell use around level 6 as a custom rule, even though AD&D 2e canon places paladin priest spellcasting later.[web:34][web:68] Their list is restricted to protection, self and companion buffs, cleansing, courage, healing-lite support, and defensive wards, with very little offensive magic.[web:34]
 
 ### Knight access rules
+
+Knights are **deity-aligned casters** — their command magic flows from divine authority. Schools are secondary.
 
 Knights begin magical support around level 9 and focus on warcries, morale, formation integrity, TM uplift, fear control, and Magic Resistance support.[web:47][web:48] They should feel like martial leaders using command magic, not priests with a renamed spell list.[web:47]
 
@@ -77,6 +85,88 @@ Mirage handles illusion, invisibility, mirror images, deception, confusion, stea
 ### Dominion
 
 Dominion governs command, blessing, morale, discipline, fear resistance, divine authority, and battle momentum.[web:6][web:47] It is the natural school for warcries, prayer effects, teamwide TM uplift, panic control, and leadership magic.[web:6][web:47]
+
+## Deity system (divine casters)
+
+A subset of classes derive their power from deities rather than spell schools. This system runs alongside the school system — it does not replace it.
+
+### Divine caster classes
+
+The following classes are **deity-aligned**:
+
+| Class | Role | Magic access |
+|-------|------|--------------|
+| Priest | Full divine caster | Level 1 |
+| Druid | Full divine caster | Level 1 |
+| Paladin | Limited divine caster | Level 6 |
+| Knight | Command magic caster | Level 9 |
+
+These classes **do not** use spell schools as their primary identity system. Schools remain valid for legacy classification and mechanical grouping but do not drive progression or identity logic.
+
+### Canonical deities
+
+Deities are defined in `design/assets/deities_names-alignment.md`. The authoritative list:
+
+#### Good deities (Sky / Heaven aligned)
+
+| Deity | Title | Domain |
+|-------|-------|--------|
+| **Aethelion** | The radiant father of light | Heaven, Light |
+| **Astrara** | The guiding star mother | Stars, Fate |
+| **Celestara** | The weaver of destiny | Destiny, Time |
+| **Lunara** | The silver moon goddess | Moon, Magic, Tides |
+
+#### Evil deities (Elemental / Shadow aligned)
+
+| Deity | Title | Domain |
+|-------|-------|--------|
+| **Ignaroth** | The burning destroyer | Fire, Destruction |
+| **Umbraex** | The void lord | Darkness, Secrets |
+| **Veparix** | The deceptive mist | Deception, Illusion |
+| **Noctivane** | The shadow assassin god | Shadow, Stealth |
+
+### Deity spell metadata
+
+Every divine spell includes the following conceptual fields:
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `PrimaryDeity` | Yes | The deity granting the spell |
+| `DeityAlignment` | Yes | Good or Evil |
+| `DeitySource` | Yes | Power origin identifier |
+| `FallbackDeity` | Yes | `DEITY_UNBOUND` (see below) |
+
+### Placeholder: DEITY_UNBOUND
+
+Used when no specific deity is assigned:
+
+- Meaning: Generic divine power source, temporary fallback
+- Used until explicit deity binding is defined
+- Prevents system gaps during incomplete mappings
+
+### School / deity boundary
+
+| System | Used by | Drives |
+|--------|---------|--------|
+| Spell schools | Arcane casters, fire/frost/shadow/nature users | Progression, identity, spell access |
+| Deity system | Priest, Druid, Paladin, Knight | Progression, identity, spell access |
+
+Both systems coexist. Schools remain fully intact and functional for non-divine casters.
+
+### Smite
+
+- **Deity-channelled divine attack spell**
+- Restricted to: Paladin (Level 6+), Knight (Level 6+)
+- Must be associated with a valid deity
+- Cannot be used outside the listed divine caster archetypes
+
+### Chasten
+
+- Divine counterpart to Smite for non-martial casters
+- Available to: Priest (Level 1+), Druid (Level 1+)
+- Default bound to Good deities
+- Supports `DEITY_UNBOUND` fallback
+- Mirrors Smite progression structure
 
 ## Impact system
 
@@ -135,7 +225,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 | Command | Dominion | 1 | Class Core | Early | Priest 1 | One-word forced action disrupting the target briefly.[web:6] | TM disruption and action loss for the victim.[web:6] | Priest, Paladin [web:6] | None/Control [web:6] | No.[web:6] | CC |
 | Cure Light Wounds | Dominion / Verdancy | 1 | Class Core | Early | Priest 1 | Basic divine healing.[web:6] | HP restoration.[web:6] | Priest, Druid, Paladin [web:6] | Healing [web:6] | No direct after-effect beyond restored HP.[web:6] | Healing |
 | Protection from Evil | Aegis | 1 | Class Core | Early | Priest 1 | Defensive ward against evil influence and attacks.[web:6] | Armor Class improvement and defensive resistance versus evil threats.[web:6] | Priest, Paladin [web:6] | None [web:6] | No.[web:6] | Defensive, Buff |
-| Chasten | Dominion | 1 | Core | Early | 1 | Weakens sinful/hostile targets | TM loss / debuff | Priest | Radiant | No | Debuff |
+| Chasten | Deity | 1 | Core | Early | 1 | Weakens sinful/hostile targets | TM loss / debuff | Priest | Radiant | No | Debuff |
 | Sanctuary | Aegis / Dominion | 1 | Class Core | Early | Priest 1 | Makes hostile creatures less likely or unable to attack the protected subject directly.[web:6] | Defensive targeting denial and effective survivability increase.[web:6] | Priest, Paladin [web:6] | None [web:6] | Yes, duration shield-state.[web:6] | Defensive |
 | Aid | Dominion / Aegis | 2 | Class Core | Early | Priest 3 | Supportive blessing that improves staying power.[web:6] | Effective HP increase and morale support.[web:6] | Priest, Paladin [web:6] | None [web:6] | Yes, duration support buff.[web:6] | Buff |
 | Chant | Dominion | 2 | Class Core | Early | Priest 3 | Battlefield prayer that aids allies and hinders enemies.[web:6] | Ally TM support, enemy TM drag, and battle momentum shift.[web:6] | Priest [web:6] | None [web:6] | Yes, duration aura.[web:6] | Buff, Debuff |
@@ -182,7 +272,7 @@ Paladins begin magical access around level 6 in Dark Orb and remain a narrow sup
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | Bless | Dominion | 1 | Class Core | Early | Paladin 6 | Improves ally morale and combat readiness.[web:6] | TM uplift and combat support.
 [web:6] | Paladin [web:6] | None [web:6] | Yes, duration buff.[web:6] | Buff, AoE |
-| Smite | Dominion | 1 | Core | Early | 1 | Divine strike vs enemies | HP dmg | Priest | Radiant | No | Offensive |
+| Smite | Deity | 1 | Class Core | Early | Paladin 6 | Divine strike vs enemies | HP dmg | Paladin | Radiant | No | Offensive |
 | Cure Light Wounds | Dominion / Verdancy | 1 | Class Core | Early | Paladin 6 | Basic holy healing.[web:6] | HP restoration.[web:6] | Paladin [web:6] | Healing [web:6] | No.[web:6] | Healing |
 | Remove Fear | Dominion | 1 | Class Core | Early | Paladin 6 | Clears fear and bolsters courage.[web:6] | TM stabilization and panic protection.[web:6] | Paladin [web:6] | None [web:6] | No major after-effect beyond morale protection.[web:6] | Buff, Cleanse |
 | Protection from Evil | Aegis | 1 | Class Core | Early | Paladin 6 | Defensive ward against evil influence and attacks.[web:6] | Armor Class support and defensive resistance.[web:6] | Paladin [web:6] | None [web:6] | No.[web:6] | Defensive |
@@ -204,7 +294,7 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 | Spell | School | Spell Level | Access Layer | Access Tier | Minimum Level | Effect | Impact | Class | Damage Type | Afterburn | Tags |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | War Cry | Dominion | 1 | Class Core | Early | Knight 9 | Battle shout that shocks enemies or steels allies.[web:47] | Offensive version causes TM disruption and panic in enemies; support version grants TM gain and fear resistance to allies.[web:47] | Knight, Paladin [web:47] | Sonic/Morale | Short-duration momentum effect.[web:47] | CC or Buff, Variant |
-| Smite | Dominion | 1 | Core | Early | 1 | Divine strike vs enemies | HP dmg | Priest | Radiant | No | Offensive |
+| Smite | Deity | 1 | Class Core | Early | Knight 6 | Divine strike vs enemies | HP dmg | Knight | Radiant | No | Offensive |
 | Rallying Cry | Dominion | 1 | Class Core | Early | Knight 9 | Calls allies back into formation.[web:47] | TM increase and morale restoration for companions.[web:47] | Knight [web:47] | Sonic/Morale | Short aura duration.[web:47] | Buff, Variant |
 | Steadfast Line | Dominion / Aegis | 2 | Class Core | Early | Knight 10 | Reinforces discipline and formation stability.[web:47][web:48] | Movement resistance to forced displacement and TM stabilization.[web:47][web:48] | Knight | None | Yes, short formation aura.[web:47][web:48] | Buff, Variant |
 | Banner of Resolve | Dominion | 2 | Class Core | Early | Knight 10 | Banner magic that hardens allied will.[web:47][web:48] | Fear resistance, TM uplift, and morale support.[web:47][web:48] | Knight | None | Yes, aura duration.[web:47][web:48] | Buff, Variant |

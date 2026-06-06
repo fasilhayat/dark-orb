@@ -265,12 +265,24 @@ Clearly separate:
 
 # Acceptance Criteria
 
-* [ ] Spellbook updated with deity system section
-* [ ] Canonical deity list included from asset file
-* [ ] Priest/Paladin/Knight/Druid marked as deity-based casters
-* [ ] Schools remain intact for non-divine systems
-* [ ] DEITY_UNBOUND placeholder defined
-* [ ] Smite updated with level 6 restriction
-* [ ] Chasten added with level 1 access
-* [ ] No gameplay or database assumptions introduced
-* [ ] No removal of existing systems
+* [x] Spellbook updated with deity system section
+* [x] Canonical deity list included from asset file
+* [x] Priest/Paladin/Knight/Druid marked as deity-based casters
+* [x] Schools remain intact for non-divine systems
+* [x] DEITY_UNBOUND placeholder defined
+* [x] Smite updated with level 6 restriction (Paladin 6, Knight 6)
+* [x] Chasten added with level 1 access (Priest 1, Druid 1)
+* [x] No gameplay or database assumptions introduced
+* [x] No removal of existing systems
+
+## Fix Applied
+
+Updated `design/dark-orb-master-spellbook.md`:
+- Added Deity System section with canonical deity list (Aethelion, Astrara, Celestara, Lunara for Good; Ignaroth, Umbraex, Veparix, Noctivane for Evil)
+- Added DEITY_UNBOUND placeholder rules for incomplete mappings
+- Marked Priest, Druid, Paladin, Knight as deity-aligned casters in class access rules
+- Added school/deity boundary table separating the two systems
+- Added Chasten to Priest spell table (Deity school, level 1, TM loss/debuff)
+- Updated Smite entries: Paladin 6+ in Paladin table, Knight 6+ in Knight table
+- Changed school column from "Dominion" to "Deity" for divine spells (Smite, Chasten)
+- All existing school systems left intact for non-divine casters

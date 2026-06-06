@@ -6,7 +6,8 @@ description: Load this skill at the start of any session to find pending bug fix
 # Work Intake
 
 Pending tasks are listed in `bugs-features/` at the repository root.
-Each numbered file (`01-*.md`, `02-*.md`, ...) describes a discrete set of bugs or features to implement.
+Numbered files (`01-*.md`, `02-*.md`, ...) indicate priority order — always process them in sequence.
+Unnumbered files have no implied order; prompt the user for which to start with.
 
 ## Workflow
 
