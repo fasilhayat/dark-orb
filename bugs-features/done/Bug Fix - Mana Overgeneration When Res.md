@@ -91,11 +91,11 @@ Additionally:
 
 ## Validation Checklist
 
-* [ ] Mana does not increase at full capacity
-* [ ] Mana increases correctly when below cap
-* [ ] No overflow beyond max mana occurs
-* [ ] No delayed tick-based mana accumulation exists
-* [ ] UI consistently reflects actual mana value
+* [x] Mana does not increase at full capacity
+* [x] Mana increases correctly when below cap
+* [x] No overflow beyond max mana occurs
+* [x] No delayed tick-based mana accumulation exists
+* [x] UI consistently reflects actual mana value
 
 ---
 

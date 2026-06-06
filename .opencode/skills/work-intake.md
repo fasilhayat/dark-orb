@@ -14,8 +14,9 @@ Each numbered file (`01-*.md`, `02-*.md`, ...) describes a discrete set of bugs 
 2. Investigate the codebase to understand the affected systems.
 3. Implement fixes/features as described.
 4. Run `dotnet test BattleArena.sln` from `src/` to verify nothing is broken.
-5. Move the completed file to `bugs-features/done/`.
-6. Proceed to the next numbered file (if any).
+5. **Update the task file:** Replace all unchecked `[ ]` with `[x]` in the file before moving it.
+6. Move the completed file to `bugs-features/done/`.
+7. Proceed to the next numbered file (if any).
 
 ## Rule
 

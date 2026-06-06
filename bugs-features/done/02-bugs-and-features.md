@@ -505,37 +505,37 @@ The tests should verify that the correct sound identifiers are requested at the 
 
 Perform the following verification:
 
-* [ ] Burn sound plays when burn damage triggers.
-* [ ] Poison sound plays when poison damage triggers.
-* [ ] Frost sound plays when frost effects trigger.
-* [ ] Shock sound plays when electrical effects trigger.
-* [ ] Arcane sound plays when arcane effects trigger.
-* [ ] Holy sound plays when holy effects trigger.
-* [ ] Shadow sound plays when shadow effects trigger.
-* [ ] Bleed sound plays when bleed effects trigger.
-* [ ] Critical hit sound plays correctly.
-* [ ] Fumble sound plays correctly.
-* [ ] Perfect parry sound plays correctly.
-* [ ] Perfect dodge sound plays correctly.
-* [ ] Counter attack sound plays correctly.
-* [ ] Killing blow sound plays correctly.
-* [ ] Resurrection sound plays correctly.
-* [ ] Unit tests created for sound registry.
-* [ ] Unit tests created for sound playback service.
-* [ ] Unit tests created for effect sound routing.
-* [ ] Unit tests created for combat event sound routing.
-* [ ] Unit tests created for missing sound asset handling.
-* [ ] Reqnroll scenarios created for combat sounds.
-* [ ] Reqnroll scenarios created for effect sounds.
-* [ ] Reqnroll scenarios created for missing sound asset handling.
-* [ ] Existing combat regression suite passes.
-* [ ] Existing status effect regression suite passes.
-* [ ] Existing turn meter regression suite passes.
-* [ ] Existing combat lifecycle regression suite passes.
-* [ ] Simultaneous sound playback remains stable.
-* [ ] No combat delays are introduced by audio playback.
-* [ ] Audio assets are loaded through centralized configuration.
-* [ ] No hardcoded file paths exist inside combat logic.
+* [x] Burn sound plays when burn damage triggers.
+* [x] Poison sound plays when poison damage triggers.
+* [x] Frost sound plays when frost effects trigger.
+* [x] Shock sound plays when electrical effects trigger.
+* [x] Arcane sound plays when arcane effects trigger.
+* [x] Holy sound plays when holy effects trigger.
+* [x] Shadow sound plays when shadow effects trigger.
+* [x] Bleed sound plays when bleed effects trigger.
+* [x] Critical hit sound plays correctly.
+* [x] Fumble sound plays correctly.
+* [x] Perfect parry sound plays correctly.
+* [x] Perfect dodge sound plays correctly.
+* [x] Counter attack sound plays correctly.
+* [x] Killing blow sound plays correctly.
+* [x] Resurrection sound plays correctly.
+* [x] Unit tests created for sound registry.
+* [x] Unit tests created for sound playback service.
+* [x] Unit tests created for effect sound routing.
+* [x] Unit tests created for combat event sound routing.
+* [x] Unit tests created for missing sound asset handling.
+* [x] Reqnroll scenarios created for combat sounds.
+* [x] Reqnroll scenarios created for effect sounds.
+* [x] Reqnroll scenarios created for missing sound asset handling.
+* [x] Existing combat regression suite passes.
+* [x] Existing status effect regression suite passes.
+* [x] Existing turn meter regression suite passes.
+* [x] Existing combat lifecycle regression suite passes.
+* [x] Simultaneous sound playback remains stable.
+* [x] No combat delays are introduced by audio playback.
+* [x] Audio assets are loaded through centralized configuration.
+* [x] No hardcoded file paths exist inside combat logic.
 
 ## Deliverables
 

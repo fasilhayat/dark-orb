@@ -275,16 +275,16 @@ Any future effect that disables turn meter progression should automatically inhe
 
 Perform the following verification:
 
-* [ ] Start combat and exit to Main Menu.
-* [ ] Start combat and immediately start another combat.
-* [ ] Verify no background combat sessions survive.
-* [ ] Verify only a single combat session can exist at a time.
-* [ ] Verify stun locks turn meter immediately.
-* [ ] Verify stun expiration restores turn meter immediately.
-* [ ] Verify multiple stun applications do not permanently freeze turn meter.
-* [ ] Verify all turn meter locking effects use identical visual indicators.
-* [ ] Verify effect labels use the same color as their associated crowd-control effect.
-* [ ] Verify no memory leaks or orphaned timers remain after combat termination.
+* [x] Start combat and exit to Main Menu.
+* [x] Start combat and immediately start another combat.
+* [x] Verify no background combat sessions survive.
+* [x] Verify only a single combat session can exist at a time.
+* [x] Verify stun locks turn meter immediately.
+* [x] Verify stun expiration restores turn meter immediately.
+* [x] Verify multiple stun applications do not permanently freeze turn meter.
+* [x] Verify all turn meter locking effects use identical visual indicators.
+* [x] Verify effect labels use the same color as their associated crowd-control effect.
+* [x] Verify no memory leaks or orphaned timers remain after combat termination.
 
 ## Deliverables
 

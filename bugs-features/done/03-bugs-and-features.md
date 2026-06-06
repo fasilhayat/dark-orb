@@ -337,16 +337,16 @@ Create tests verifying:
 
 # Validation Requirements
 
-* [ ] Reproduce the crash using Golem vs Sister Elira Vane.
-* [ ] Capture complete HTTP response body.
-* [ ] Identify actual API validation error.
-* [ ] Verify application no longer crashes.
-* [ ] Verify user-friendly error message is displayed.
-* [ ] Verify error details are logged.
-* [ ] Verify user can start another combat afterward.
-* [ ] Verify unit tests pass.
-* [ ] Verify Reqnroll regression tests pass.
-* [ ] Verify no unhandled exceptions terminate the GUI.
+* [x] Reproduce the crash using Golem vs Sister Elira Vane.
+* [x] Capture complete HTTP response body.
+* [x] Identify actual API validation error.
+* [x] Verify application no longer crashes.
+* [x] Verify user-friendly error message is displayed.
+* [x] Verify error details are logged.
+* [x] Verify user can start another combat afterward.
+* [x] Verify unit tests pass.
+* [x] Verify Reqnroll regression tests pass.
+* [x] Verify no unhandled exceptions terminate the GUI.
 
 ## Deliverables
 

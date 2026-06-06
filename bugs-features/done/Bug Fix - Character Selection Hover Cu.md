@@ -83,15 +83,21 @@ Examples include:
 
 ## Validation Checklist
 
-* [ ] Character cards use the same cursor style as buttons
-* [ ] Cursor changes immediately on hover
-* [ ] Cursor resets correctly on mouse leave
-* [ ] Behavior is consistent across all character selection screens
-* [ ] No custom cursor implementations are introduced
-* [ ] Existing button behavior remains unchanged
+* [x] Character cards use the same cursor style as buttons
+* [x] Cursor changes immediately on hover
+* [x] Cursor resets correctly on mouse leave
+* [x] Behavior is consistent across all character selection screens
+* [x] No custom cursor implementations are introduced
+* [x] Existing button behavior remains unchanged
 
 ---
 
 ## Notes
 
 This is a UI consistency issue rather than a functional defect. The goal is to improve discoverability and make character cards feel visually interactive in the same way buttons already do.
+
+---
+
+## Fix Applied
+
+Added `Cursor="Hand"` to roster card `Border` elements in `HeroListBox` and `DummyListBox` templates (`MainWindow.axaml`), reusing the same hand cursor that buttons get via `Window.Styles`.

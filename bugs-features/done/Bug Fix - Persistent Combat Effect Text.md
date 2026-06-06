@@ -106,12 +106,12 @@ No combat UI element may persist beyond the lifecycle of:
 
 ## Validation Checklist
 
-* [ ] Combat end clears all floating text immediately
-* [ ] UI does not leak between scenes
-* [ ] No persistent spell effect text exists outside combat
-* [ ] New combat starts with clean UI state
-* [ ] Navigation away from combat triggers full UI teardown
-* [ ] No delayed animations reintroduce old UI elements
+* [x] Combat end clears all floating text immediately
+* [x] UI does not leak between scenes
+* [x] No persistent spell effect text exists outside combat
+* [x] New combat starts with clean UI state
+* [x] Navigation away from combat triggers full UI teardown
+* [x] No delayed animations reintroduce old UI elements
 
 ---
 

@@ -334,6 +334,33 @@ public static class CombatPlaybackEngine
                         DurationMs = 1200,
                     });
                 }
+                else if (entry.IsCritical == true)
+                {
+                    bus.PublishNormal(new VisualEvent
+                    {
+                        EventType = entry.EventType,
+                        ActorName = entry.ActorName,
+                        TargetName = entry.TargetName,
+                        OverlayText = "CRITICAL HIT!",
+                        Color = "#ff44ff",
+                        DurationMs = 1200,
+                    });
+                }
+                break;
+
+            case "DoTTick":
+                if (entry.StatusEffectName is not null)
+                {
+                    var targetName = entry.TargetName ?? entry.ActorName;
+                    bus.PublishNormal(new VisualEvent
+                    {
+                        EventType = entry.EventType,
+                        ActorName = entry.ActorName,
+                        TargetName = targetName,
+                        OverlayText = entry.StatusEffectName.ToUpperInvariant(),
+                        Color = GetPersistentColor(entry.StatusEffectName),
+                    });
+                }
                 break;
 
             case "PerfectParry":
@@ -488,6 +515,27 @@ public static class CombatPlaybackEngine
                     ActorName = entry.ActorName,
                     TargetName = entry.TargetName,
                     EffectName = "ClearPersistent",
+                });
+                bus.PublishNormal(new VisualEvent
+                {
+                    EventType = entry.EventType,
+                    ActorName = entry.ActorName,
+                    TargetName = entry.TargetName,
+                    OverlayText = entry.EventType == "Death" ? "SLAIN" : "KNOCKED OUT",
+                    Color = "#ff4444",
+                    DurationMs = 2000,
+                });
+                break;
+
+            case "Resurrection":
+                bus.PublishNormal(new VisualEvent
+                {
+                    EventType = entry.EventType,
+                    ActorName = entry.ActorName,
+                    TargetName = entry.TargetName,
+                    OverlayText = "RESURRECTION",
+                    Color = "#44cc44",
+                    DurationMs = 2000,
                 });
                 break;
 

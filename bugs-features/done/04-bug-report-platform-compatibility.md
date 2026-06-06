@@ -213,14 +213,14 @@ Affects:
 
 # Validation Requirements
 
-* [ ] Build completes with zero CA1416 warnings
-* [ ] No direct usage of System.Media.SoundPlayer remains in GUI
-* [ ] Sound system runs without platform exceptions
-* [ ] Audio abstraction is testable via mocks
-* [ ] Combat sound events remain functional
-* [ ] Unit tests updated for ISoundPlayer abstraction
-* [ ] Reqnroll tests unaffected by audio implementation change
-* [ ] No performance regression in combat event processing
+* [x] Build completes with zero CA1416 warnings
+* [x] No direct usage of System.Media.SoundPlayer remains in GUI
+* [x] Sound system runs without platform exceptions
+* [x] Audio abstraction is testable via mocks
+* [x] Combat sound events remain functional
+* [x] Unit tests updated for ISoundPlayer abstraction
+* [x] Reqnroll tests unaffected by audio implementation change
+* [x] No performance regression in combat event processing
 
 ---
 

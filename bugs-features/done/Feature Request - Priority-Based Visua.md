@@ -188,13 +188,13 @@ The resolver should become the single source of truth for character card visual 
 
 ## Validation Checklist
 
-* [ ] Status effects continue stacking mechanically
-* [ ] Only one effect controls border visuals at a time
-* [ ] Most recently applied effect always wins visual ownership
-* [ ] Expired visual owners correctly transfer ownership
-* [ ] Border updates immediately on ownership changes
-* [ ] No visual flickering occurs
-* [ ] Default border is restored when no effects remain
+* [x] Status effects continue stacking mechanically
+* [x] Only one effect controls border visuals at a time
+* [x] Most recently applied effect always wins visual ownership
+* [x] Expired visual owners correctly transfer ownership
+* [x] Border updates immediately on ownership changes
+* [x] No visual flickering occurs
+* [x] Default border is restored when no effects remain
 
 ---
 

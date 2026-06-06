@@ -249,17 +249,17 @@ Examples:
 
 ## Validation Checklist
 
-* [ ] Every sound-producing combat event displays a label
-* [ ] Every spell displays its name when activated
-* [ ] Audio and visual feedback occur together
-* [ ] No orphaned audio events exist
-* [ ] Spell sounds display spell names
-* [ ] Status effect sounds display effect names
-* [ ] Defensive reactions display labels
-* [ ] Passive ability activations display labels
-* [ ] Resource-related sounds display labels
-* [ ] Newly added spells automatically inherit this behavior
-* [ ] Existing combat labels continue functioning correctly
+* [x] Every sound-producing combat event displays a label
+* [x] Every spell displays its name when activated
+* [x] Audio and visual feedback occur together
+* [x] No orphaned audio events exist
+* [x] Spell sounds display spell names
+* [x] Status effect sounds display effect names
+* [x] Defensive reactions display labels
+* [x] Passive ability activations display labels
+* [x] Resource-related sounds display labels
+* [x] Newly added spells automatically inherit this behavior
+* [x] Existing combat labels continue functioning correctly
 
 ---
 
@@ -274,3 +274,9 @@ Additionally:
 > Every spell cast in Dark Orb must generate visible combat feedback, regardless of spell type, outcome, or implementation path.
 
 Audio and visual combat feedback should always remain synchronized to improve combat readability and player understanding.
+
+---
+
+## Fix Applied
+
+Added missing `VisualEvent` emissions in `CombatPlaybackEngine.EmitVisualEvents` for four orphaned cases that played sounds without overlay text: `DoTTick` (effect name overlay), `Attack` critical hits (`"CRITICAL HIT!"`), `Death`/`KnockedOut` (`"SLAIN"`/`"KNOCKED OUT"`), and `Resurrection` (`"RESURRECTION"`).

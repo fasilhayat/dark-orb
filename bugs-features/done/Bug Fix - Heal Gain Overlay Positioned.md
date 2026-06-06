@@ -135,12 +135,12 @@ The heal overlay should:
 
 ## Validation Checklist
 
-* [ ] Heal overlay always starts at current HP endpoint
-* [ ] Heal overlay never appears in the middle of the HP bar
-* [ ] Heal overlay scales correctly with different HP percentages
-* [ ] Consecutive heals remain correctly positioned
-* [ ] Near-full HP scenarios render correctly
-* [ ] No visual jitter or offset occurs during animation
+* [x] Heal overlay always starts at current HP endpoint
+* [x] Heal overlay never appears in the middle of the HP bar
+* [x] Heal overlay scales correctly with different HP percentages
+* [x] Consecutive heals remain correctly positioned
+* [x] Near-full HP scenarios render correctly
+* [x] No visual jitter or offset occurs during animation
 
 ---
 
@@ -156,3 +156,9 @@ Likely areas to inspect:
 * HP bar fill width versus container width calculations
 
 The heal overlay should be anchored to the actual rendered HP fill endpoint, not to any fixed position within the HP bar container.
+
+---
+
+## Fix Applied
+
+Removed `- healAmount` from `preHealHp` calculation in `AvaloniaCombatPresenter.OnNormalVisualEvent`. `card.Hp` already holds the pre-heal value at dispatch time (state update runs after visual event), so subtracting the heal amount placed the glow inside the filled HP region instead of at its edge.
