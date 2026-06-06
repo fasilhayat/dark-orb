@@ -596,11 +596,11 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     {
         OverlayText = text;
         OverlayOpacity = 1.0;
-        OverlayScale = 0.5;
-        OverlayTrailScale1 = 0.4;
-        OverlayTrailOpacity1 = 0.4;
-        OverlayTrailScale2 = 0.3;
-        OverlayTrailOpacity2 = 0.2;
+        OverlayScale = 0.25;
+        OverlayTrailScale1 = 0.2;
+        OverlayTrailOpacity1 = 0.35;
+        OverlayTrailScale2 = 0.14;
+        OverlayTrailOpacity2 = 0.15;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasOverlay)));
     }
 
@@ -690,7 +690,23 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
     private const int TmTotalPipes = 73;
     private static readonly IBrush TmPipeFilled = new SolidColorBrush(Color.Parse("#00bfff"));
     private static readonly IBrush TmPipeEmpty = new SolidColorBrush(Color.Parse("#1a1a2e"));
-    private static readonly IBrush TmPipeLocked = new SolidColorBrush(Color.Parse("#88ccff"));
+    private static readonly IBrush TmPipeLocked = new SolidColorBrush(Color.Parse("#ffffff"));
+
+    private static string GetEffectColor(string name) => name switch
+    {
+        "Burning"  => "#ff6600",
+        "Ignite"   => "#ff4400",
+        "Frozen"   => "#44ccff",
+        "Freeze"   => "#44ccff",
+        "Shocked"  => "#ffff44",
+        "Stun"     => "#aa66ff",
+        "Sleep"    => "#aa44ff",
+        "Fear"     => "#8822aa",
+        "Petrify"  => "#888888",
+        "Poisoned" => "#44ff44",
+        "Bleeding" => "#ff4444",
+        _          => "#88ccff",
+    };
 
     public ObservableCollection<IBrush> TmPipes { get; }
 
@@ -787,7 +803,7 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
 
     public string HpDisplay => IsDead ? "" : $"{Math.Max(0, Hp)}/{MaxHp}";
     public string TmDisplay => $"{Tm}";
-    public string TmBorderBrush => PersistentBorderColor ?? (IsTmLocked ? "#88ccff" : "#333");
+    public string TmBorderBrush => PersistentBorderColor ?? (IsTmLocked ? "#ffffff" : "#333");
 
     public string ManaDisplay => MaxMana > 0 ? $"{Math.Max(0, Mana)}" : "--";
     public string ActiveIndicator => IsDead ? "  " : "\u25b6 ";
@@ -812,6 +828,18 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
         }
     }
     public bool HasEffectsDisplay => EffectsDisplay is not null;
+
+    public string EffectsColor
+    {
+        get
+        {
+            if (!string.IsNullOrEmpty(ActiveEffects))
+                return GetEffectColor(ActiveEffects.Split(',')[0].Trim());
+            if (CcStatus is { } s)
+                return GetEffectColor(s);
+            return "#88ccff";
+        }
+    }
 
     private string? _borderFlashColor;
     public string? BorderFlashColor
@@ -944,6 +972,7 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
             case nameof(ActiveEffects):
                 Raise(nameof(EffectsDisplay));
                 Raise(nameof(HasEffectsDisplay));
+                Raise(nameof(EffectsColor));
                 break;
             case nameof(CurrentWeapon):
                 break;
@@ -955,6 +984,7 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
             case nameof(CcStatus):
                 Raise(nameof(EffectsDisplay));
                 Raise(nameof(HasEffectsDisplay));
+                Raise(nameof(EffectsColor));
                 break;
         }
 

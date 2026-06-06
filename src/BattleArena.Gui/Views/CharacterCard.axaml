@@ -47,7 +47,7 @@
               <TextBlock Grid.Column="0" Text="{Binding InfoLine}" Foreground="White"
                          FontSize="12" VerticalAlignment="Center" />
               <TextBlock Grid.Column="1" Text="{Binding EffectsDisplay}" FontSize="12"
-                         Foreground="#88ccff" FontStyle="Italic"
+                         Foreground="{Binding EffectsColor}" FontStyle="Italic"
                          IsVisible="{Binding HasEffectsDisplay}"
                          VerticalAlignment="Center" Margin="8,0,0,0" />
             </Grid>
@@ -86,9 +86,6 @@
             <TextBlock Text="{Binding TmDisplay}" Foreground="White"
                        FontSize="12" FontWeight="Bold"
                        HorizontalAlignment="Center" VerticalAlignment="Center" />
-            <!-- Frozen overlay when TM locked — semi-transparent tint, no border thickness to avoid shifting sibling bars -->
-            <Border IsVisible="{Binding IsTmLocked}" Background="#2288ccff"
-                    CornerRadius="2" />
           </Grid>
         </Border>
 
