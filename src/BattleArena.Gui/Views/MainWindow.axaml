@@ -349,7 +349,8 @@
                 <Border Background="#1a1a2e"
                         BorderBrush="{Binding BorderBrush}"
                         BorderThickness="{Binding BorderThickness}"
-                        CornerRadius="6" Padding="0" Margin="6" Width="260">
+                        CornerRadius="6" Padding="0" Margin="6" Width="260"
+                        Cursor="Hand">
                   <Grid>
                     <Grid ColumnDefinitions="80,*">
                       <Border Grid.Column="0" Width="80" Height="107"
@@ -402,7 +403,8 @@
                 <Border Background="#1a1a2e"
                         BorderBrush="{Binding BorderBrush}"
                         BorderThickness="{Binding BorderThickness}"
-                        CornerRadius="6" Padding="0" Margin="6" Width="260">
+                        CornerRadius="6" Padding="0" Margin="6" Width="260"
+                        Cursor="Hand">
                   <Grid>
                     <Grid ColumnDefinitions="80,*">
                       <Border Grid.Column="0" Width="80" Height="107"
