@@ -91,6 +91,12 @@
       "school": "Healing", "damageDie": "D8", "damageCount": 2,
       "damageType": "Holy", "attackBonus": 0,
       "spellLevel": 2, "turnMeterCost": 80, "manaCost": 25
+    },
+    {
+      "name": "Mass Heal",
+      "school": "Healing", "damageDie": "D6", "damageCount": 3,
+      "damageType": "Holy", "attackBonus": 0,
+      "spellLevel": 4, "turnMeterCost": 100, "manaCost": 50
     }
   ],
 
@@ -190,15 +196,16 @@
       "strikeRating": 14, "turnSpeed": 6,
       "maxHitPoints": 300, "maxMana": 100,
       "equipment": { "chest": "Plate Armor", "rightHand": "Long Sword" },
-      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Static Shock", "Smite"]
+      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Static Shock", "Smite", "Heal", "Mass Heal"]
     },
     {
       "name": "Practice Dummy", "level": 10,
-      "strength": 10, "dexterity": 10, "stamina": 10, "intelligence": 10, "wisdom": 10, "charisma": 10,
+      "strength": 10, "dexterity": 10, "stamina": 10, "intelligence": 14, "wisdom": 10, "charisma": 10,
       "race": "Human", "classId": 8, "className": "Fighter", "sex": "N",
-      "strikeRating": 1, "turnSpeed": 1,
-      "maxHitPoints": 500,
-      "equipment": { "chest": "Studded Leather" }
+      "strikeRating": 1, "turnSpeed": 4,
+      "maxHitPoints": 500, "maxMana": 100,
+      "equipment": { "chest": "Studded Leather" },
+      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Heal", "Mass Heal"]
     }
   ]
 }

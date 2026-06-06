@@ -20,7 +20,13 @@ $sounds = @(
     @("KillingBlow",    550,   0.80, 0.9),
     @("Resurrection",   440,   1.00, 0.6),
     @("SpellCast",      770,   0.35, 0.7),
-    @("HealCast",       523,   0.50, 0.6)
+    @("HealCast",       523,   0.50, 0.6),
+    @("Fireball",       330,   0.50, 0.8),
+    @("IceBolt",        1200,  0.30, 0.6),
+    @("ShockSpell",     1500,  0.20, 0.5),
+    @("StaticShock",    1400,  0.25, 0.6),
+    @("SmiteCast",      880,   0.40, 0.7),
+    @("MassHeal",       660,   0.60, 0.5)
 )
 
 function New-WavFile {
@@ -47,12 +53,12 @@ function New-WavFile {
         # fmt chunk
         $writer.Write([char[]]'fmt ')
         $writer.Write([int]16)           # chunk size
-        $writer.Write([short]1)          # PCM format
-        $writer.Write([short]$Channels)
+        $writer.Write([int16]1)          # PCM format
+        $writer.Write([int16]$Channels)
         $writer.Write([int]$SampleRate)
         $writer.Write([int]$byteRate)
-        $writer.Write([short]$blockAlign)
-        $writer.Write([short]$bitsPerSample)
+        $writer.Write([int16]$blockAlign)
+        $writer.Write([int16]$bitsPerSample)
 
         # data chunk
         $writer.Write([char[]]'data')
@@ -78,10 +84,10 @@ function New-WavFile {
             $sample = [Math]::Max(-32768, [Math]::Min(32767, $sample))
 
             if ($Channels -eq 1) {
-                $writer.Write([short]$sample)
+                $writer.Write([int16]$sample)
             } else {
-                $writer.Write([short]$sample)
-                $writer.Write([short]$sample)
+                $writer.Write([int16]$sample)
+                $writer.Write([int16]$sample)
             }
         }
     }
@@ -103,4 +109,4 @@ foreach ($s in $sounds) {
     Write-Host "  Created: $id.wav ($freq Hz, $dur`s)"
 }
 
-Write-Host "Done — $($sounds.Count) WAV files generated."
+Write-Host ("Done - " + $sounds.Count + " WAV files generated.")

@@ -24,8 +24,17 @@ public static class CombatSoundRegistry
         ["KillingBlow"]       = "KillingBlow",
         ["Death"]             = "KillingBlow",
         ["Resurrection"]      = "Resurrection",
-        ["SpellCast"]         = "SpellCast",
-        ["HealCast"]          = "HealCast",
+    };
+
+    private static readonly Dictionary<string, string> _spellSounds = new()
+    {
+        ["Fireball"]     = "Fireball",
+        ["Ice Bolt"]     = "IceBolt",
+        ["Shock"]        = "ShockSpell",
+        ["Static Shock"] = "StaticShock",
+        ["Smite"]        = "SmiteCast",
+        ["Heal"]         = "HealCast",
+        ["Mass Heal"]    = "MassHeal",
     };
 
     public static string GetEffectSoundId(string effectName) =>
@@ -34,9 +43,11 @@ public static class CombatSoundRegistry
     public static string GetEventSoundId(string eventType) =>
         _eventSounds.GetValueOrDefault(eventType) ?? string.Empty;
 
-    public static string GetSpellCastSoundId() => "SpellCast";
+    public static string GetSpellCastSoundId(string? spellName = null) =>
+        spellName is not null && _spellSounds.TryGetValue(spellName, out var id) ? id : "SpellCast";
 
-    public static string GetHealCastSoundId() => "HealCast";
+    public static string GetHealCastSoundId(string? spellName = null) =>
+        spellName is not null && _spellSounds.TryGetValue(spellName, out var id) ? id : "HealCast";
 
     public static string GetCriticalHitSoundId() => "CriticalHit";
 
@@ -56,6 +67,12 @@ public static class CombatSoundRegistry
         "Resurrection"  => "Gentle flowing melody of renewal",
         "SpellCast"     => "Rumbling roar of arcane power",
         "HealCast"      => "Soft warm chime of healing energy",
+        "Fireball"      => "Explosive roar of a fireball",
+        "IceBolt"       => "Sharp crack of shattering ice",
+        "ShockSpell"    => "Crackling surge of electrical energy",
+        "StaticShock"   => "Snapping discharge of static electricity",
+        "SmiteCast"     => "Resonant ring of holy power",
+        "MassHeal"      => "Warm wave of soothing restoration",
         _               => string.Empty,
     };
 

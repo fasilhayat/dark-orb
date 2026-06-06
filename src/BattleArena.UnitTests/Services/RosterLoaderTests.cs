@@ -184,15 +184,21 @@ public class RosterLoaderTests : IDisposable
         Assert.Contains(golem.MemorizedSpells, s => s.Name == "Shock");
         Assert.Contains(golem.MemorizedSpells, s => s.Name == "Smite");
 
-        // ── Practice Dummy — pure damage sponge ──────────────────────────────────
+        // ── Practice Dummy — resilient caster target ──────────────────────────────
         var dummy = data.Dummies.First(c => c.Name == "Practice Dummy");
         Assert.Equal(10,   dummy.Level);
         Assert.Equal(500,  dummy.MaxHitPoints);
+        Assert.Equal(100,  dummy.MaxMana);
         Assert.Equal(1,    dummy.StrikeRating);
-        Assert.Equal(1,    dummy.TurnSpeed);
+        Assert.Equal(4,    dummy.TurnSpeed);
+        Assert.Equal(14,   dummy.Intelligence);
         Assert.Equal("Studded Leather", dummy.Equipment.Chest!.Name);
         Assert.Null(dummy.Equipment.RightHand);
-        Assert.Empty(dummy.MemorizedSpells);
+        Assert.Contains(dummy.MemorizedSpells, s => s.Name == "Fireball");
+        Assert.Contains(dummy.MemorizedSpells, s => s.Name == "Ice Bolt");
+        Assert.Contains(dummy.MemorizedSpells, s => s.Name == "Shock");
+        Assert.Contains(dummy.MemorizedSpells, s => s.Name == "Heal");
+        Assert.Contains(dummy.MemorizedSpells, s => s.Name == "Mass Heal");
     }
 
     // ── Edge cases ───────────────────────────────────────────────────────────────

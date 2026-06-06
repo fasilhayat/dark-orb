@@ -274,12 +274,12 @@ public static class CombatPlaybackEngine
                 if (entry.IsCritical == true)
                     soundId = CombatSoundRegistry.GetCriticalHitSoundId();
                 else if (entry.IsSpell)
-                    soundId = CombatSoundRegistry.GetSpellCastSoundId();
+                    soundId = CombatSoundRegistry.GetSpellCastSoundId(entry.AttackSourceName);
                 break;
 
             case "Healed":
                 if (entry.IsSpell)
-                    soundId = CombatSoundRegistry.GetHealCastSoundId();
+                    soundId = CombatSoundRegistry.GetHealCastSoundId(entry.AttackSourceName);
                 break;
 
             case "EffectApplied":
