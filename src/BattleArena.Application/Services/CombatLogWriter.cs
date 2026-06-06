@@ -270,6 +270,7 @@ public static class CombatLogWriter
                     sb.AppendLine($"  [{e.Tick,5}]  HEALED {e.ActorName,-12}  +{e.DamageDealt} HP  ({e.TargetHpBefore} → {e.TargetHpAfter})  [{e.AttackSourceName}]");
                     lastTick = e.Tick;
                     break;
+
             }
         }
 

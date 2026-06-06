@@ -261,59 +261,59 @@ public static class CombatPlaybackEngine
 
     private static void EmitCombatSounds(VisualEventBus bus, CombatLogEntry entry)
     {
+        string? soundId = null;
+
         switch (entry.EventType)
         {
             case "DoTTick":
                 if (entry.StatusEffectName is not null)
-                {
-                    var soundId = CombatSoundRegistry.GetEffectSoundId(entry.StatusEffectName);
-                    if (!string.IsNullOrEmpty(soundId))
-                        bus.PublishSound(new SoundEvent { SoundId = soundId });
-                }
+                    soundId = CombatSoundRegistry.GetEffectSoundId(entry.StatusEffectName);
                 break;
 
             case "Attack":
                 if (entry.IsCritical == true)
-                    bus.PublishSound(new SoundEvent { SoundId = CombatSoundRegistry.GetCriticalHitSoundId() });
+                    soundId = CombatSoundRegistry.GetCriticalHitSoundId();
                 else if (entry.IsSpell)
-                    bus.PublishSound(new SoundEvent { SoundId = CombatSoundRegistry.GetSpellCastSoundId() });
+                    soundId = CombatSoundRegistry.GetSpellCastSoundId();
                 break;
 
             case "Healed":
                 if (entry.IsSpell)
-                    bus.PublishSound(new SoundEvent { SoundId = CombatSoundRegistry.GetHealCastSoundId() });
+                    soundId = CombatSoundRegistry.GetHealCastSoundId();
                 break;
 
             case "EffectApplied":
                 if (entry.StatusEffectName is not null)
-                {
-                    var soundId = CombatSoundRegistry.GetEffectSoundId(entry.StatusEffectName);
-                    if (!string.IsNullOrEmpty(soundId))
-                        bus.PublishSound(new SoundEvent { SoundId = soundId });
-                }
+                    soundId = CombatSoundRegistry.GetEffectSoundId(entry.StatusEffectName);
                 break;
 
             case "PerfectParry":
-                bus.PublishSound(new SoundEvent { SoundId = CombatSoundRegistry.GetEventSoundId("PerfectParry") });
+                soundId = CombatSoundRegistry.GetEventSoundId("PerfectParry");
                 break;
 
             case "DevastatingStrike":
-                bus.PublishSound(new SoundEvent { SoundId = CombatSoundRegistry.GetCriticalHitSoundId() });
+                soundId = CombatSoundRegistry.GetCriticalHitSoundId();
                 break;
 
             case "FumblePenalty":
             case "TotalReversal":
-                bus.PublishSound(new SoundEvent { SoundId = CombatSoundRegistry.GetEventSoundId("FumblePenalty") });
+                soundId = CombatSoundRegistry.GetEventSoundId("FumblePenalty");
                 break;
 
             case "Death":
-                bus.PublishSound(new SoundEvent { SoundId = CombatSoundRegistry.GetEventSoundId("Death") });
+                soundId = CombatSoundRegistry.GetEventSoundId("Death");
                 break;
 
             case "Resurrection":
-                bus.PublishSound(new SoundEvent { SoundId = CombatSoundRegistry.GetEventSoundId("Resurrection") });
+                soundId = CombatSoundRegistry.GetEventSoundId("Resurrection");
                 break;
         }
+
+        if (string.IsNullOrEmpty(soundId))
+            return;
+
+        var desc = CombatSoundRegistry.GetSoundDescription(soundId);
+        bus.PublishSound(new SoundEvent { SoundId = soundId, Description = desc });
     }
 
     private static void EmitVisualEvents(VisualEventBus bus, CombatLogEntry entry)

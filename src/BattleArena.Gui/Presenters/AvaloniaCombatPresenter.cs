@@ -82,7 +82,11 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     {
         if (_pacingMultiplier < 0.3)
             return;
-        _dispatcher.Post(() => _soundPlayer?.Play(e.SoundId));
+        _dispatcher.Post(() =>
+        {
+            _soundPlayer?.Play(e.SoundId);
+            _vm.AddLogEntry([Seg($"  \u266a {e.Description ?? "Played: " + e.SoundId}", Gray)]);
+        });
     }
 
     /// <summary>
@@ -93,6 +97,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     {
         _stopped = true;
         ClearAllPersistentEffects();
+        _dispatcher.Post(() => _vm.ClearOverlay());
         _visualEventBus.NormalEventPublished -= OnNormalVisualEvent;
         _visualEventBus.IncredibleEventPublished -= OnIncredibleVisualEvent;
         _visualEventBus.SoundRequested -= OnSoundRequested;
@@ -477,12 +482,6 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             "ManaRegen"          => [BuildManaRegenRow(e, state)],
             "ManaDeduct"         => [BuildManaDeductRow(e, state)],
             "ApiCall"            => [[Seg("  \u26a1 ", Cyan), Seg(e.Message, DarkGray)]],
-            "PerfectParry"       => [BuildPerfectParryRow(e, state)],
-            "DevastatingStrike"  => [BuildDevastatingStrikeRow(e, state)],
-            "TotalReversal"      => [BuildTotalReversalRow(e, state)],
-            "Death"              => [BuildDeathRow(e)],
-            "KnockedOut"         => [BuildKnockedOutRow(e)],
-            "TurnEnd"            => [],
             _                    => [[Seg($"  [{e.EventType}] {e.Message}", Gray)]]
         };
 

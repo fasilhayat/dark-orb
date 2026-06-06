@@ -715,7 +715,7 @@ public class CombatSimulator : ICombatSimulator
             s.Meter = _turnmeter.Tick(s.Character, s.Meter);
             await notify(BuildTurnMeterGainEntry(tick, s));
 
-            if (s.Character.MaxMana > 0)
+            if (s.Character.MaxMana > 0 && s.Character.CurrentMana < s.Character.EffectiveMaxMana)
             {
                 var regen      = s.Character.ManaRegenPerTick;
                 var manaBefore = s.Character.CurrentMana;

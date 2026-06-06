@@ -40,6 +40,25 @@ public static class CombatSoundRegistry
 
     public static string GetCriticalHitSoundId() => "CriticalHit";
 
+    public static string GetSoundDescription(string soundId) => soundId switch
+    {
+        "BurnTick"      => "Crackling sound of searing flames",
+        "PoisonTick"    => "Sizzling hiss of bubbling poison",
+        "FrostTick"     => "Crystalline crackle of freezing ice",
+        "ShockTick"     => "Sharp crack of arcing lightning",
+        "BleedTick"     => "Dripping sound of fresh blood",
+        "CriticalHit"   => "Resounding impact of a devastating critical hit",
+        "Fumble"        => "Clumsy clatter of a fumbled attack",
+        "PerfectParry"  => "Clear ringing tone of a perfectly timed parry",
+        "PerfectDodge"  => "Whooshing sound of a near miss",
+        "CounterAttack" => "Swift whistling sound of a counter-attack",
+        "KillingBlow"   => "Echoing finality of a killing blow",
+        "Resurrection"  => "Gentle flowing melody of renewal",
+        "SpellCast"     => "Rumbling roar of arcane power",
+        "HealCast"      => "Soft warm chime of healing energy",
+        _               => string.Empty,
+    };
+
     public static IEnumerable<string> AllKnownSoundIds
     {
         get

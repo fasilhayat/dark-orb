@@ -199,6 +199,69 @@ CombatPlaybackEngine (background thread)
 | `EffectApplied` (with CcLabel) | CcLabel value | Normal | same as CcLabel | `#ff8844` |
 | `IncredibleEvent` | IncredibleEvent | Incredible | entry.Message | `#ffdd00` |
 
+## Sound Event Pipeline
+
+Sound effects follow the same `VisualEventBus` pub/sub model as visual events, but use the `SoundRequested` event and `SoundEvent` DTO instead.
+
+### Architecture
+
+```
+CombatPlaybackEngine.EmitCombatSounds() (background thread)
+  │
+  └─ bus.PublishSound(SoundEvent) ──→ VisualEventBus.SoundRequested
+                                           │
+                              AvaloniaCombatPresenter.OnSoundRequested()
+                                           │
+                              if (pacingMultiplier >= 0.3)
+                                           │
+                              _dispatcher.Post(() => _soundPlayer.Play(soundId))
+                                           │
+                              AvaloniaSoundPlayer.Play(soundId)
+                                           │
+                              System.Media.SoundPlayer.PlaySync() (async via Task.Run)
+```
+
+### Sound-to-event mappings
+
+**Effect sounds** (played on `DoTTick` and `EffectApplied`):
+
+| Effect name | Sound ID | WAV file |
+|-------------|----------|----------|
+| `Burning`, `Ignite` | `BurnTick` | `BurnTick.wav` |
+| `Poisoned` | `PoisonTick` | `PoisonTick.wav` |
+| `Bleeding` | `BleedTick` | `BleedTick.wav` |
+| `Frozen`, `Freeze` | `FrostTick` | `FrostTick.wav` |
+| `Shocked` | `ShockTick` | `ShockTick.wav` |
+
+**Event sounds** (played on matching `EventType`):
+
+| EventType | Condition | Sound ID | WAV file |
+|-----------|-----------|----------|----------|
+| `Attack` | `IsCritical == true` | `CriticalHit` | `CriticalHit.wav` |
+| `Attack` | `IsSpell == true` (non-critical) | `SpellCast` | `SpellCast.wav` |
+| `Healed` | `IsSpell == true` | `HealCast` | `HealCast.wav` |
+| `PerfectParry` | — | `PerfectParry` | `PerfectParry.wav` |
+| `DevastatingStrike` | — | `CriticalHit` | `CriticalHit.wav` |
+| `FumblePenalty` / `TotalReversal` | — | `Fumble` | `Fumble.wav` |
+| `Death` | — | `KillingBlow` | `KillingBlow.wav` |
+| `Resurrection` | — | `Resurrection` | `Resurrection.wav` |
+
+### Implementation
+
+- Source event type + condition is matched in `CombatPlaybackEngine.EmitCombatSounds()` (`CombatPlaybackEngine.cs:262`)
+- Sound-to-WAV mapping is in `CombatSoundRegistry` (`BattleArena.Presentation/CombatSoundRegistry.cs`)
+- WAV files live in `BattleArena.Gui/Assets/Sounds/` and are copied to output by `*.wav` glob in `.csproj`
+- Missing WAVs can be regenerated via `scripts/generate-sounds.ps1`
+- No change to `AvaloniaCombatPresenter` or `VisualEventBus` is needed when adding new sound IDs — just add an `EmitCombatSounds` case and a WAV file
+
+### Migration to Unity
+
+The `VisualEventBus`, `SoundEvent`, `CombatSoundRegistry`, and `CombatPlaybackEngine.EmitCombatSounds` all live in `BattleArena.Presentation` (no GUI framework dependency). When replacing the Avalonia layer with Unity:
+
+1. Write `UnitySoundPlayer : ISoundPlayer` using Unity's `AudioSource`
+2. Write `UnityCombatPresenter : ICombatPresenter` subscribing to `VisualEventBus.SoundRequested`
+3. The bus, registry, and emit logic remain untouched
+
 ### Adding new visual events
 
 1. Add a `case` to `EmitVisualEvents` in `CombatPlaybackEngine.cs` for the source `EventType`

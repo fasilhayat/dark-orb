@@ -983,6 +983,7 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
             case nameof(PersistentBorderColor):
                 Raise(nameof(BorderColor));
                 Raise(nameof(TmBorderBrush));
+                UpdateTmPipes();
                 break;
             case nameof(ActiveEffects):
                 Raise(nameof(EffectsDisplay));
@@ -1009,10 +1010,22 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
     private void UpdateTmPipes()
     {
         var fillCount = (int)Math.Round(TmFraction * TmTotalPipes);
+        IBrush? lockFill = PersistentBorderColor is not null
+            ? new SolidColorBrush(Color.Parse(PersistentBorderColor))
+            : null;
+
         for (var i = 0; i < TmTotalPipes; i++)
         {
-            var brush = IsTmLocked ? TmPipeLocked
-                : i < fillCount ? TmPipeFilled : TmPipeEmpty;
+            IBrush brush;
+            if (IsTmLocked && i < fillCount)
+                brush = lockFill ?? TmPipeLocked;
+            else if (IsTmLocked)
+                brush = TmPipeEmpty;
+            else if (i < fillCount)
+                brush = TmPipeFilled;
+            else
+                brush = TmPipeEmpty;
+
             if (!ReferenceEquals(TmPipes[i], brush))
                 TmPipes[i] = brush;
         }
