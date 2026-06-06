@@ -62,6 +62,11 @@ public class CombatSimulator : ICombatSimulator
         const int RoundLength = 10;
 
         var states         = BuildCombatantStates(heroParty, enemyParty);
+        foreach (var s in states)
+        {
+            var gain = _turnmeter.ComputeGainPerTick(s.Character);
+            s.Meter.CurrentValue = Math.Min(gain * RoundLength, TurnmeterState.TurnThreshold);
+        }
         var stateMap       = states.ToDictionary(s => s.Character);
         var currentRound   = 0;
         var lastAttackerOf = new Dictionary<Character, Character>();

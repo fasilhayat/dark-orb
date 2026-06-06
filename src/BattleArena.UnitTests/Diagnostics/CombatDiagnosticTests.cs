@@ -439,14 +439,14 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
     // ─────────────────────────────────────────────────────────────────────────
 
     [Fact]
-    public void Duel_CasterWithTargetStun_DoesNotStunSelf()
+    public void Duel_CasterWithTargetShock_DoesNotShockSelf()
     {
-        var stun = new StatusEffect
+        var shock = new StatusEffect
         {
-            Name = "Stun", Type = StatusEffectType.Stun,
+            Name = "Shock", Type = StatusEffectType.Shock,
             Target = EffectTarget.Target, Duration = 3, ApplicationChance = 100
         };
-        var staticShock = MakeSpell("Static Shock", DieType.D6, 1, 2, stun);
+        var staticShock = MakeSpell("Static Shock", DieType.D6, 1, 2, shock);
         var vaelith = MakeCaster("Vaelith", 9, 19, 18, 45, 8, 15, staticShock);
         var enemy = MakeWarrior("Target", 5, 15, 12, 80, 6, 12, "Chain Mail", "Mace", DieType.D6, 1, 1);
 
@@ -456,13 +456,13 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
 
         DumpLog(result);
 
-        // The Stun effect must only appear on the enemy, never on Vaelith
-        var stunApplied = result.Log
-            .Where(e => e.EventType == "EffectApplied" && e.StatusEffectName == "Stun")
+        // The Shock effect must only appear on the enemy, never on Vaelith
+        var shockApplied = result.Log
+            .Where(e => e.EventType == "EffectApplied" && e.StatusEffectName == "Shock")
             .ToList();
 
-        Assert.Contains(stunApplied, e => e.ActorName == "Target");
-        Assert.DoesNotContain(stunApplied, e => e.ActorName == "Vaelith");
+        Assert.Contains(shockApplied, e => e.ActorName == "Target");
+        Assert.DoesNotContain(shockApplied, e => e.ActorName == "Vaelith");
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -499,22 +499,22 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // TEST 9 — Reflective Shield bounces Stun back to the caster when it procs.
+    // TEST 9 — Reflective Shield bounces Shock back to the caster when it procs.
     //          The defender has a pre-applied reflective buff with 100 % chance;
-    //          the attacker casts Static Shock (on-hit Stun).
-    //          The EffectReflected event must fire and the Stun must land on the
+    //          the attacker casts Static Shock (on-hit Shock).
+    //          The EffectReflected event must fire and the Shock must land on the
     //          attacker, not the defender.
     // ─────────────────────────────────────────────────────────────────────────
 
     [Fact]
-    public void Duel_ReflectiveShield_ReflectsStunToCaster()
+    public void Duel_ReflectiveShield_ReflectsShockToCaster()
     {
-        var stun = new StatusEffect
+        var shock = new StatusEffect
         {
-            Name = "Stun", Type = StatusEffectType.Stun,
+            Name = "Shock", Type = StatusEffectType.Shock,
             Target = EffectTarget.Target, Duration = 2, ApplicationChance = 100
         };
-        var staticShock = MakeSpell("Static Shock", DieType.D6, 1, 2, stun);
+        var staticShock = MakeSpell("Static Shock", DieType.D6, 1, 2, shock);
 
         var caster = MakeCaster("Caster", 7, 18, 16, 40, 8, 14, staticShock);
         var defender = MakeWarrior("Defender", 5, 15, 12, 60, 6, 8, "Chain Mail", "Mace", DieType.D6, 1, 1);
@@ -539,13 +539,13 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
         Assert.Contains(result.Log, e => e.EventType == "EffectReflected"
                                          && e.ActorName == "Defender");
 
-        // The Stun must land on the *caster*, not the defender
-        var stunApplied = result.Log
-            .Where(e => e.EventType == "EffectApplied" && e.StatusEffectName == "Stun")
+        // The Shock must land on the *caster*, not the defender
+        var shockApplied = result.Log
+            .Where(e => e.EventType == "EffectApplied" && e.StatusEffectName == "Shock")
             .ToList();
 
-        Assert.Contains(stunApplied, e => e.ActorName == "Caster");
-        Assert.DoesNotContain(stunApplied, e => e.ActorName == "Defender");
+        Assert.Contains(shockApplied, e => e.ActorName == "Caster");
+        Assert.DoesNotContain(shockApplied, e => e.ActorName == "Defender");
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -555,12 +555,12 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
     [Fact]
     public void Duel_ReflectiveShield_ZeroReflect_DoesNotReflect()
     {
-        var stun = new StatusEffect
+        var shock = new StatusEffect
         {
-            Name = "Stun", Type = StatusEffectType.Stun,
+            Name = "Shock", Type = StatusEffectType.Shock,
             Target = EffectTarget.Target, Duration = 2, ApplicationChance = 100
         };
-        var staticShock = MakeSpell("Static Shock", DieType.D6, 1, 2, stun);
+        var staticShock = MakeSpell("Static Shock", DieType.D6, 1, 2, shock);
 
         var caster = MakeCaster("Caster", 7, 18, 16, 40, 8, 14, staticShock);
         var defender = MakeWarrior("Defender", 5, 15, 12, 60, 6, 8, "Chain Mail", "Mace", DieType.D6, 1, 1);
@@ -584,12 +584,12 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
         // No reflection event
         Assert.DoesNotContain(result.Log, e => e.EventType == "EffectReflected");
 
-        // Stun lands on the defender as normal
-        var stunApplied = result.Log
-            .Where(e => e.EventType == "EffectApplied" && e.StatusEffectName == "Stun")
+        // Shock lands on the defender as normal
+        var shockApplied = result.Log
+            .Where(e => e.EventType == "EffectApplied" && e.StatusEffectName == "Shock")
             .ToList();
 
-        Assert.Contains(stunApplied, e => e.ActorName == "Defender");
-        Assert.DoesNotContain(stunApplied, e => e.ActorName == "Caster");
+        Assert.Contains(shockApplied, e => e.ActorName == "Defender");
+        Assert.DoesNotContain(shockApplied, e => e.ActorName == "Caster");
     }
 }

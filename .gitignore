@@ -47,5 +47,4 @@ src/BattleArena.UnitTests/TestResults/FAMH_B32JZOVHSNEV6AO_2026-05-31_12_47_47_n
 src/BattleArena.UnitTests/TestResults/**
 src/logs/api-calls.log
 /combat-logs
-/bugs-features
 /src/BattleArena.Gui/Assets/Sounds/Background/*.mp3

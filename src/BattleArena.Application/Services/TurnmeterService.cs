@@ -3,6 +3,7 @@ namespace BattleArena.Application.Services;
 using Application.Interfaces;
 using Application.Models;
 using Core.Entities;
+using Core.Entities.Enums;
 
 public class TurnmeterService : ITurnmeterService
 {
@@ -15,7 +16,12 @@ public class TurnmeterService : ITurnmeterService
         var buffMod      = 0;
         foreach (var e in character.ActiveStatusEffects)
             buffMod += e.TurnMeterModifier;
-        return Math.Max(1, character.TurnSpeed + dexMod + levelBonus + buffMod - armorPenalty);
+        var gain = Math.Max(1, character.TurnSpeed + dexMod + levelBonus + buffMod - armorPenalty);
+
+        if (character.ActiveStatusEffects.Any(e => e.Type == StatusEffectType.Shock))
+            gain = Math.Max(1, gain / 2);
+
+        return gain;
     }
 
     public TurnmeterState Tick(Character character, TurnmeterState currentState)

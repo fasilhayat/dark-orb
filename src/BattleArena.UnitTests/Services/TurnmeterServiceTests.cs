@@ -51,6 +51,26 @@ public class TurnmeterServiceTests
     }
 
     [Fact]
+    public void ComputeGainPerTick_ShockEffect_HalvesGain()
+    {
+        var character = new Character
+        {
+            Dexterity = 10,
+            TurnSpeed = 10,
+            ClassId = 8,
+            Level = 6,
+            ActiveStatusEffects = new List<StatusEffect>
+            {
+                new() { Name = "Shock", Type = StatusEffectType.Shock, Duration = 2 }
+            }
+        };
+
+        // gain = max(1, 10 + 0 + 2 + 0 - 0) = 12, then halved = 6
+        var result = _sut.ComputeGainPerTick(character);
+        Assert.Equal(6, result);
+    }
+
+    [Fact]
     public void Tick_AddsGainAndEnablesDualActionWhenOverTwoHundred()
     {
         var character = new Character

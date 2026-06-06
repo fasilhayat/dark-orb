@@ -9,5 +9,6 @@ public enum StatusEffectType
     Root,
     Silence,
     Fear,
-    HealOverTime
+    HealOverTime,
+    Shock
 }
