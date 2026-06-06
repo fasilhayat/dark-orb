@@ -126,8 +126,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                 {
                     var maxHp = Math.Max(1, card.MaxHp);
                     var healAmount = Math.Min(ev.HealAmount, card.MaxHp);
-                    var preHealHp = Math.Max(0, card.Hp - healAmount);
-                    var start = (double)preHealHp / maxHp;
+                    var start = (double)Math.Max(0, card.Hp) / maxHp;
                     var width = (double)healAmount / maxHp;
                     AnimateHealGlow(card, start, width);
                 }
