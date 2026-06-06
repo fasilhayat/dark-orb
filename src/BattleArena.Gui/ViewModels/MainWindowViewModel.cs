@@ -637,6 +637,20 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     }
     public bool IsApiUnreachable => !IsApiReachable;
 
+    private string _errorMessage = "";
+    public string ErrorMessage
+    {
+        get => _errorMessage;
+        set
+        {
+            if (SetField(ref _errorMessage, value))
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasError)));
+            }
+        }
+    }
+    public bool HasError => !string.IsNullOrEmpty(ErrorMessage);
+
     private bool _canProceed;
     public bool CanProceed
     {

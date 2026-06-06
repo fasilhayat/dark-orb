@@ -1571,6 +1571,56 @@ BEGIN
 END;
 $$;
 
+-- Test Dummies (Npc=0, hero-side)
+DO $$
+DECLARE
+    v_id INTEGER;
+BEGIN
+    INSERT INTO arena_data.character (race_id, class_id, name, level, sex,
+        strength, dexterity, stamina, intelligence, wisdom, charisma,
+        max_hit_points, current_hit_points, strike_rating, turn_speed, npc, max_mana, biography)
+    SELECT r.id, c.id, 'Target Golem', 10, 'N',
+        16, 10, 18, 14, 10, 8,
+        300, 300, 14, 6, 0, 100,
+        'A hulking construct of stone and metal used for combat training. Withstands tremendous punishment.'
+    FROM arena_data.race r, arena_data.class c
+    WHERE r.name = 'Human' AND c.name = 'Fighter'
+    RETURNING id INTO v_id;
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'weapon', w.id
+    FROM arena_data.equipment_slot es, arena_data.weapon w
+    WHERE es.name = 'RightHand' AND w.name = 'Long Sword';
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'armor', a.id
+    FROM arena_data.equipment_slot es, arena_data.armor a
+    WHERE es.name = 'Chest' AND a.name = 'Plate Armor';
+END;
+$$;
+
+DO $$
+DECLARE
+    v_id INTEGER;
+BEGIN
+    INSERT INTO arena_data.character (race_id, class_id, name, level, sex,
+        strength, dexterity, stamina, intelligence, wisdom, charisma,
+        max_hit_points, current_hit_points, strike_rating, turn_speed, npc, max_mana, biography)
+    SELECT r.id, c.id, 'Practice Dummy', 10, 'N',
+        10, 10, 10, 10, 10, 10,
+        500, 500, 1, 1, 0, 0,
+        'A simple training target made of straw and cloth. Does not fight back.'
+    FROM arena_data.race r, arena_data.class c
+    WHERE r.name = 'Human' AND c.name = 'Fighter'
+    RETURNING id INTO v_id;
+
+    INSERT INTO arena_data.character_equipment (character_id, slot_id, item_type, item_id)
+    SELECT v_id, es.id, 'armor', a.id
+    FROM arena_data.equipment_slot es, arena_data.armor a
+    WHERE es.name = 'Chest' AND a.name = 'Studded Leather';
+END;
+$$;
+
 -- Missing NPC records in the npc table (quest givers / merchants)
 
 INSERT INTO arena_data.npc (name, race_id, class_id, level, strength, dexterity, stamina, intelligence, wisdom, charisma, is_merchant, is_quest_giver, is_hostile, biography)

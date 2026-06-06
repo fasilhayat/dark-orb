@@ -163,6 +163,11 @@ public partial class MainWindow : Window
         UpdateSelectionHint();
     }
 
+    private void OnDismissErrorClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        _vm.ErrorMessage = "";
+    }
+
     private async void OnFightClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         if (Fighter1 is null || Fighter2 is null) return;
@@ -179,6 +184,7 @@ public partial class MainWindow : Window
 
     private async Task StartCombat()
     {
+        _vm.ErrorMessage = "";
         SpeedSlider.Value = 1;
         _vm.Phase = "Combat";
         _vm.CombatLog.Clear();
@@ -247,6 +253,8 @@ public partial class MainWindow : Window
         AutoModeButton.IsEnabled = true;
         HeroListBox.ItemsSource = ToDisplayItems(Roster.AllHeroes);
         DummyListBox.ItemsSource = ToDisplayItems(Roster.AllDummies);
+        DummyListBox.IsVisible = true;
+        DummyHeader.IsVisible = true;
     }
 
     private void OnApiModeClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -332,7 +340,8 @@ public partial class MainWindow : Window
         _vm.Phase = "Setup";
         HeroListBox.ItemsSource = null;
         HeroListBox.ItemsSource = ToDisplayItems(_apiRoster);
-        DummyListBox.ItemsSource = ToDisplayItems(Roster.AllDummies);
+        DummyListBox.IsVisible = false;
+        DummyHeader.IsVisible = false;
         ClearSelection();
         DuelButton.IsEnabled = false;
         ClashButton.IsEnabled = true;
@@ -643,12 +652,22 @@ public partial class MainWindow : Window
         CombatResult result;
         if (_useApi && _apiClient is not null)
         {
-            result = await _apiClient.SimulateCombatAsync(
-                Fighter1!.Name,
-                new List<int> { Fighter1!.Id },
-                Fighter2!.Name,
-                new List<int> { Fighter2!.Id },
-                maxTicks: CombatSimulator.DefaultMaxTicks);
+            try
+            {
+                result = await _apiClient.SimulateCombatAsync(
+                    Fighter1!.Name,
+                    new List<int> { Fighter1!.Id },
+                    Fighter2!.Name,
+                    new List<int> { Fighter2!.Id },
+                    maxTicks: CombatSimulator.DefaultMaxTicks);
+            }
+            catch (Exception ex)
+            {
+                _vm.ErrorMessage = $"API combat failed: {ex.Message}";
+                _vm.Phase = "Setup";
+                _vm.IsRunning = false;
+                return;
+            }
         }
         else
         {

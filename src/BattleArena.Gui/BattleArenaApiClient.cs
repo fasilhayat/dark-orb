@@ -29,6 +29,11 @@ internal sealed class BattleArenaApiClient
             _http.DefaultRequestHeaders.Add("X-Api-Key", apiKey);
     }
 
+    internal BattleArenaApiClient(HttpClient http)
+    {
+        _http = http;
+    }
+
     public async Task<List<Character>> GetCharactersAsync()
     {
         var result = await _http.GetFromJsonAsync<List<Character>>("/v1/characters", JsonOptions);
@@ -119,9 +124,23 @@ internal sealed class BattleArenaApiClient
             enemyPartyName, enemyMemberIds,
             maxTicks, heroTargetStrategy, enemyTargetStrategy);
         var resp = await _http.PostAsJsonAsync("/v1/combat/simulate", req, JsonOptions);
-        resp.EnsureSuccessStatusCode();
+        if (!resp.IsSuccessStatusCode)
+        {
+            var body = await resp.Content.ReadAsStringAsync();
+            throw new ApiException(
+                (int)resp.StatusCode,
+                $"API returned {(int)resp.StatusCode} ({resp.ReasonPhrase}) for combat simulation. Body: {body}",
+                body);
+        }
         return await resp.Content.ReadFromJsonAsync<CombatResult>(JsonOptions) ?? new CombatResult();
     }
+}
+
+public sealed class ApiException(int statusCode, string message, string body)
+    : Exception(message)
+{
+    public int StatusCode { get; } = statusCode;
+    public string Body { get; } = body;
 }
 
 public record CombatSimulateByMembersRequest(
