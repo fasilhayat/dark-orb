@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Media;
 using System.Threading.Tasks;
@@ -19,6 +20,12 @@ internal sealed class AvaloniaSoundPlayer : ISoundPlayer
 
     public void Play(string soundId)
     {
+        if (!OperatingSystem.IsWindows())
+        {
+            Debug.WriteLine($"[Sound] Playback skipped (non-Windows): {soundId}");
+            return;
+        }
+
         if (string.IsNullOrEmpty(soundId)) return;
 
         if (!_players.TryGetValue(soundId, out var player))
@@ -26,7 +33,7 @@ internal sealed class AvaloniaSoundPlayer : ISoundPlayer
             var path = Path.Combine(_soundsDir, $"{soundId}.wav");
             if (!File.Exists(path))
             {
-                System.Diagnostics.Debug.WriteLine($"[Sound] WAV not found: {path}");
+                Debug.WriteLine($"[Sound] WAV not found: {path}");
                 _players[soundId] = null!;
                 return;
             }
@@ -42,7 +49,7 @@ internal sealed class AvaloniaSoundPlayer : ISoundPlayer
             try { player.PlaySync(); }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[Sound] Playback failed for '{soundId}': {ex.Message}");
+                Debug.WriteLine($"[Sound] Playback failed for '{soundId}': {ex.Message}");
             }
         });
     }

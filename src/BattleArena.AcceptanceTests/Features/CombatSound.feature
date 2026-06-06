@@ -45,7 +45,9 @@ Feature: Combat — Sound Event Contract
 
     @sound
     # A full combat between a strong warrior and a weak goblin must end
-    # with a Death event, which maps to the "KillingBlow" sound ID.
+    # with a Death or KnockedOut event, which maps to the "KillingBlow" sound ID.
+    # Both outcomes are valid since 1d12+5 damage can KO (6-11 dmg → -5 to -10 HP)
+    # or kill (12-17 dmg → ≤ -11 HP) the 1-HP goblin.
     Scenario: Death event in full combat maps to KillingBlow sound
         Given a sound combatant named "Hero" with level 10, strength 18, dexterity 14, strike rating 19, turn speed 12, and 100 hit points
         And sound combatant "Hero" wields a "Greatsword" dealing 1d12 Slashing damage with attack bonus 5
@@ -53,7 +55,7 @@ Feature: Combat — Sound Event Contract
         And sound combatant "Goblin" wields a "Dagger" dealing 1d4 Piercing damage with attack bonus 0
         When the sound combat is simulated with a maximum of 500 ticks
         Then the sound combat should have ended before the tick limit
-        And the sound combat log contains "Death"
+        And the sound combat log contains "Death" or "KnockedOut"
 
     @sound
     # CombatSoundRegistry sound ID mappings must be correct for all known

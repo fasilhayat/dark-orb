@@ -240,7 +240,7 @@
                   HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                   Background="#3a5c3a" BorderBrush="#575" />
           <TextBlock Text="Speed:" Foreground="#999" VerticalAlignment="Center" FontSize="12" />
-          <Slider x:Name="SpeedSlider" Width="120" Minimum="0" Maximum="2"
+          <Slider x:Name="SpeedSlider" Width="120" Minimum="0" Maximum="3"
                   Value="1" TickFrequency="1" IsSnapToTickEnabled="True"
                   VerticalAlignment="Center" ValueChanged="OnSpeedChanged" />
           <TextBlock x:Name="SpeedLabel" Text="Normal" Foreground="#88bbff" FontSize="12"

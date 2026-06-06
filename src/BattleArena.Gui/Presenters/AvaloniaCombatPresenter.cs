@@ -80,6 +80,8 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
     private void OnSoundRequested(SoundEvent e)
     {
+        if (_pacingMultiplier < 0.3)
+            return;
         _soundPlayer?.Play(e.SoundId);
     }
 
@@ -159,6 +161,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
     public void ShowInitialScreen(CombatDisplayState state, int tick)
     {
+        if (_stopped) return;
         _dispatcher.Post(() =>
         {
             _vm.IsApiMode = state.IsApiMode;
@@ -167,10 +170,15 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         });
     }
 
-    public void WaitForCombatStart() => Thread.Sleep(500);
+    public void WaitForCombatStart()
+    {
+        if (_stopped) return;
+        Thread.Sleep(500);
+    }
 
     public void RefreshScreen(CombatDisplayState state, int tick, string? activeActorName)
     {
+        if (_stopped) return;
         _dispatcher.Post(() =>
         {
             _vm.ActiveActorName = activeActorName ?? "";
@@ -180,6 +188,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
     public void ShowCombatEvent(CombatLogEntry entry, CombatDisplayState state)
     {
+        if (_stopped) return;
         var rows = BuildRows(entry, state);
         if (rows.Count == 0) return;
 
@@ -193,16 +202,18 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     }
 
     public int GetEventDelayMs(string eventType) =>
-        (int)(_delays.GetValueOrDefault(eventType, 300) * _pacingMultiplier);
+        _delays.GetValueOrDefault(eventType, 300);
 
     public void Wait(int milliseconds)
     {
+        if (_stopped) return;
         var adjusted = (int)(milliseconds * _pacingMultiplier);
         if (adjusted > 0) Thread.Sleep(adjusted);
     }
 
     public void ShowTurnHeader(int turnNumber, string actorName, string? targetName, bool isHero)
     {
+        if (_stopped) return;
         _dispatcher.Post(() =>
         {
             var nameColor = NameBrush(isHero, actorName, null);
@@ -219,6 +230,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
     public void WaitForNextTurn(bool combatOver)
     {
+        if (_stopped) return;
         _dispatcher.Post(() => _vm.CombatOver = combatOver);
         if (AutoMode)
             Thread.Sleep((int)(600 * PacingMultiplier));
@@ -231,12 +243,14 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
     public void ShowQuietTicksSummary(int fromTick, int toTick)
     {
+        if (_stopped) return;
         _dispatcher.Post(() =>
             _vm.AddLogEntry([Seg($"  ... {toTick - fromTick + 1} quiet ticks (TM building)", Dim)]));
     }
 
     public void ShowCombatEventOverlay(string actorName, string? targetName, string effectType)
     {
+        if (_stopped) return;
         _dispatcher.Post(() =>
         {
             var color = effectType switch

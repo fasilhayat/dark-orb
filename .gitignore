@@ -48,4 +48,4 @@ src/BattleArena.UnitTests/TestResults/**
 src/logs/api-calls.log
 /combat-logs
 /bugs-features
-/src/BattleArena.Gui/Assets/Sounds/Background
+/src/BattleArena.Gui/Assets/Sounds/Background/*.mp3

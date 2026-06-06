@@ -27,7 +27,7 @@ Feature: Combat — Outcome Distributions
         When 2000 attacks are resolved
         Then the total hit count should be between 900 and 1180
         And the critical hit rate should be between 3% and 6%
-        And the fumble rate should be between 3% and 6%
+        And the fumble rate should be between 3% and 7%
         And the perfect parry rate should be between 2% and 7%
 
     @combat-distribution

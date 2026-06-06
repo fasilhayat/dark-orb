@@ -35,6 +35,7 @@ public partial class MainWindow : Window
     private BattleArenaApiClient? _apiClient;
     private List<Character> _apiRoster = [];
     private readonly ISoundPlayer? _soundPlayer;
+    private readonly BackgroundMusicPlayer? _backgroundMusic;
 
     public MainWindow()
     {
@@ -75,6 +76,11 @@ public partial class MainWindow : Window
         _soundPlayer = Directory.Exists(soundsDir)
             ? new AvaloniaSoundPlayer(soundsDir)
             : null;
+
+        _backgroundMusic = new BackgroundMusicPlayer(soundsDir);
+        _backgroundMusic.Play();
+
+        Closing += (_, _) => _backgroundMusic?.Dispose();
     }
 
     private async Task CheckApiReachabilityAsync()
@@ -215,8 +221,9 @@ public partial class MainWindow : Window
         _presenter?.Stop();
         _presenter = null;
         _cts?.Cancel();
-        _cts?.Dispose();
+        _waitForNext?.Set();
         _waitForNext?.Dispose();
+        _cts?.Dispose();
         _cts = null;
         _waitForNext = null;
 
@@ -306,8 +313,9 @@ public partial class MainWindow : Window
         _presenter?.Stop();
         _presenter = null;
         _cts?.Cancel();
-        _cts?.Dispose();
+        _waitForNext?.Set();
         _waitForNext?.Dispose();
+        _cts?.Dispose();
         _cts = null;
         _waitForNext = null;
 
@@ -547,8 +555,9 @@ public partial class MainWindow : Window
         _presenter?.Stop();
         _presenter = null;
         _cts?.Cancel();
-        _cts?.Dispose();
+        _waitForNext?.Set();
         _waitForNext?.Dispose();
+        _cts?.Dispose();
         _cts = null;
         _waitForNext = null;
 
@@ -574,15 +583,15 @@ public partial class MainWindow : Window
 
     private async Task RunCombat(Party party1, Party party2)
     {
+        _presenter?.Stop();
+        _presenter = null;
         _cts?.Cancel();
-        _cts?.Dispose();
+        _waitForNext?.Set();
         _waitForNext?.Dispose();
+        _cts?.Dispose();
 
         _cts = new CancellationTokenSource();
         _waitForNext = new ManualResetEventSlim(false);
-
-        _presenter?.Stop();
-        _presenter = null;
         _vm.IsRunning = true;
         NextButton.IsEnabled = true;
         AutoButton.IsEnabled = true;
@@ -695,6 +704,7 @@ public partial class MainWindow : Window
             AutoMode = _vm.Mode == "Auto"
         };
 
+        var playbackToken = _cts.Token;
         _ = Task.Run(() =>
         {
             try
@@ -712,16 +722,19 @@ public partial class MainWindow : Window
             {
                 DumpCombatLogFiles(result);
 
-                Dispatcher.UIThread.Post(() =>
+                if (!playbackToken.IsCancellationRequested)
                 {
-                    _vm.IsRunning = false;
-                    _vm.CombatOver = true;
-                    NextButton.IsEnabled = false;
-                    AutoButton.IsEnabled = false;
-                    NewCombatButton.IsVisible = true;
-                });
+                    Dispatcher.UIThread.Post(() =>
+                    {
+                        _vm.IsRunning = false;
+                        _vm.CombatOver = true;
+                        NextButton.IsEnabled = false;
+                        AutoButton.IsEnabled = false;
+                        NewCombatButton.IsVisible = true;
+                    });
+                }
             }
-        }, _cts.Token);
+        }, playbackToken);
     }
 
     private void DumpCombatLogFiles(CombatResult result)
@@ -821,14 +834,17 @@ public partial class MainWindow : Window
         {
             0 => 2.0,
             1 => 1.0,
-            2 => 0.1,
+            2 => 0.5,
+            3 => 0.1,
             _ => 1.0
         };
-        SpeedLabel.Text = pacing switch
+        SpeedLabel.Text = sliderVal switch
         {
-            >= 1.5 => "Slow",
-            >= 0.75 => "Normal",
-            _ => "Fast"
+            0 => "Slow",
+            1 => "Normal",
+            2 => "Fast",
+            3 => "Turbo",
+            _ => "Normal"
         };
         if (_presenter is not null)
             _presenter.PacingMultiplier = pacing;

@@ -211,11 +211,14 @@ public class CombatSoundSteps
             $"Combat did not finish within the tick limit. Log:\n{_combatResult.FormatLog()}");
     }
 
-    [Then(@"the sound combat log contains ""([^""]+)""")]
-    public void ThenSoundCombatLogContains(string eventType)
+    [Then(@"the sound combat log contains ""([^""]+)""(?: or ""([^""]+)"")?")]
+    public void ThenSoundCombatLogContains(string eventType, string? eventType2 = null)
     {
         Assert.NotNull(_combatResult);
-        Assert.Contains(_combatResult.Log, e => e.EventType == eventType);
+        var found = _combatResult.Log.Any(e =>
+            e.EventType == eventType || (eventType2 is not null && e.EventType == eventType2));
+        Assert.True(found, $"Expected log to contain '{eventType}'" +
+            (eventType2 is not null ? $" or '{eventType2}'" : ""));
     }
 
     // ── CombatSoundRegistry scenarios ──────────────────────────────────────────
