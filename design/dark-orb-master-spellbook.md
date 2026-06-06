@@ -135,6 +135,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 | Command | Dominion | 1 | Class Core | Early | Priest 1 | One-word forced action disrupting the target briefly.[web:6] | TM disruption and action loss for the victim.[web:6] | Priest, Paladin [web:6] | None/Control [web:6] | No.[web:6] | CC |
 | Cure Light Wounds | Dominion / Verdancy | 1 | Class Core | Early | Priest 1 | Basic divine healing.[web:6] | HP restoration.[web:6] | Priest, Druid, Paladin [web:6] | Healing [web:6] | No direct after-effect beyond restored HP.[web:6] | Healing |
 | Protection from Evil | Aegis | 1 | Class Core | Early | Priest 1 | Defensive ward against evil influence and attacks.[web:6] | Armor Class improvement and defensive resistance versus evil threats.[web:6] | Priest, Paladin [web:6] | None [web:6] | No.[web:6] | Defensive, Buff |
+| Chasten | Dominion | 1 | Core | Early | 1 | Weakens sinful/hostile targets | TM loss / debuff | Priest | Radiant | No | Debuff |
 | Sanctuary | Aegis / Dominion | 1 | Class Core | Early | Priest 1 | Makes hostile creatures less likely or unable to attack the protected subject directly.[web:6] | Defensive targeting denial and effective survivability increase.[web:6] | Priest, Paladin [web:6] | None [web:6] | Yes, duration shield-state.[web:6] | Defensive |
 | Aid | Dominion / Aegis | 2 | Class Core | Early | Priest 3 | Supportive blessing that improves staying power.[web:6] | Effective HP increase and morale support.[web:6] | Priest, Paladin [web:6] | None [web:6] | Yes, duration support buff.[web:6] | Buff |
 | Chant | Dominion | 2 | Class Core | Early | Priest 3 | Battlefield prayer that aids allies and hinders enemies.[web:6] | Ally TM support, enemy TM drag, and battle momentum shift.[web:6] | Priest [web:6] | None [web:6] | Yes, duration aura.[web:6] | Buff, Debuff |
@@ -179,7 +180,9 @@ Paladins begin magical access around level 6 in Dark Orb and remain a narrow sup
 
 | Spell | School | Spell Level | Access Layer | Access Tier | Minimum Level | Effect | Impact | Class | Damage Type | Afterburn | Tags |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| Bless | Dominion | 1 | Class Core | Early | Paladin 6 | Improves ally morale and combat readiness.[web:6] | TM uplift and combat support.[web:6] | Paladin [web:6] | None [web:6] | Yes, duration buff.[web:6] | Buff, AoE |
+| Bless | Dominion | 1 | Class Core | Early | Paladin 6 | Improves ally morale and combat readiness.[web:6] | TM uplift and combat support.
+[web:6] | Paladin [web:6] | None [web:6] | Yes, duration buff.[web:6] | Buff, AoE |
+| Smite | Dominion | 1 | Core | Early | 1 | Divine strike vs enemies | HP dmg | Priest | Radiant | No | Offensive |
 | Cure Light Wounds | Dominion / Verdancy | 1 | Class Core | Early | Paladin 6 | Basic holy healing.[web:6] | HP restoration.[web:6] | Paladin [web:6] | Healing [web:6] | No.[web:6] | Healing |
 | Remove Fear | Dominion | 1 | Class Core | Early | Paladin 6 | Clears fear and bolsters courage.[web:6] | TM stabilization and panic protection.[web:6] | Paladin [web:6] | None [web:6] | No major after-effect beyond morale protection.[web:6] | Buff, Cleanse |
 | Protection from Evil | Aegis | 1 | Class Core | Early | Paladin 6 | Defensive ward against evil influence and attacks.[web:6] | Armor Class support and defensive resistance.[web:6] | Paladin [web:6] | None [web:6] | No.[web:6] | Defensive |
@@ -201,6 +204,7 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 | Spell | School | Spell Level | Access Layer | Access Tier | Minimum Level | Effect | Impact | Class | Damage Type | Afterburn | Tags |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | War Cry | Dominion | 1 | Class Core | Early | Knight 9 | Battle shout that shocks enemies or steels allies.[web:47] | Offensive version causes TM disruption and panic in enemies; support version grants TM gain and fear resistance to allies.[web:47] | Knight, Paladin [web:47] | Sonic/Morale | Short-duration momentum effect.[web:47] | CC or Buff, Variant |
+| Smite | Dominion | 1 | Core | Early | 1 | Divine strike vs enemies | HP dmg | Priest | Radiant | No | Offensive |
 | Rallying Cry | Dominion | 1 | Class Core | Early | Knight 9 | Calls allies back into formation.[web:47] | TM increase and morale restoration for companions.[web:47] | Knight [web:47] | Sonic/Morale | Short aura duration.[web:47] | Buff, Variant |
 | Steadfast Line | Dominion / Aegis | 2 | Class Core | Early | Knight 10 | Reinforces discipline and formation stability.[web:47][web:48] | Movement resistance to forced displacement and TM stabilization.[web:47][web:48] | Knight | None | Yes, short formation aura.[web:47][web:48] | Buff, Variant |
 | Banner of Resolve | Dominion | 2 | Class Core | Early | Knight 10 | Banner magic that hardens allied will.[web:47][web:48] | Fear resistance, TM uplift, and morale support.[web:47][web:48] | Knight | None | Yes, aura duration.[web:47][web:48] | Buff, Variant |
