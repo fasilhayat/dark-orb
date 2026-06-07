@@ -195,7 +195,8 @@ Load via OpenCode's skill tool. `combat-mechanics` has `self-update: true` — i
 - **No `opencode.json`** — This repo has no OpenCode config file. Instructions come solely from `AGENTS.md`.
 - **API requires `X-Api-Key` header** — All endpoints except `/swagger` and `/api/healthcheck` require an API key. Default: `BA-DEV-2024-SECRET`. 500 errors return JSON `{"error":"..."}`.
 - **Swagger only in Development/LocalDev** — `app.UseSwagger()` is gated on `IsDevelopment() || IsEnvironment("LocalDev")`.
-- **`design/`** — Contains game design docs: `battle-arena-lore.md`, `combat-design.md`, `dark-orb-game-design.md`, `bestiary.md`, `leveling-plan.md`, etc. Keep in sync with SQL seed data.
+- **SQL init files** — `.postgres-init/` contains: `01-schema.sql`, `02-seed-data.sql`, `03-characters.sql`, `04-bestiary.sql`. Keep seed data in sync with design docs.
+- **`design/`** — Contains game design docs: `battle-arena-lore.md`, `combat-design.md`, `dark-orb-game-design.md`, `bestiary.md`, `leveling-plan.md`, `dark-orb-master-spellbook.md`. Keep in sync with SQL seed data.
 - **`bugs-features/`** — Numbered files represent pending work. Process them in ascending numeric order, moving to `bugs-features/done/` when complete. Load the `work-intake` skill for the full workflow.
 
 ---
