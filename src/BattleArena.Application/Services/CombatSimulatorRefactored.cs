@@ -11,7 +11,7 @@ using Core.Entities.Enums;
 /// Orchestrates turn-based combat simulation by coordinating specialized processors.
 /// Refactored from the original monolithic CombatSimulator (1578 lines) into focused components.
 /// </summary>
-public class CombatSimulatorRefactored : ICombatSimulator
+internal class CombatSimulatorRefactored : ICombatSimulator
 {
     public const int DefaultMaxTicks = 1000;
     private const int RoundLength = 10;

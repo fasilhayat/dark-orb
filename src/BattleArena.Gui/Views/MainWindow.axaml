@@ -251,38 +251,54 @@
 
     </Grid>
 
-    <!-- OVERLAY: root-level layer, truly centered in the window, on top of everything -->
-    <Grid IsVisible="{Binding HasOverlay}"
-          HorizontalAlignment="Center" VerticalAlignment="Center"
-          IsHitTestVisible="False">
-      <TextBlock Text="{Binding OverlayText}" Foreground="#22aa22" FontSize="42"
-                 FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"
-                 Opacity="{Binding OverlayTrailOpacity2}"
-                 TextTrimming="CharacterEllipsis" MaxWidth="600"
-                 RenderTransformOrigin="0.5,0.5">
-        <TextBlock.RenderTransform>
-          <ScaleTransform ScaleX="{Binding OverlayTrailScale2}" ScaleY="{Binding OverlayTrailScale2}" />
-        </TextBlock.RenderTransform>
-      </TextBlock>
-      <TextBlock Text="{Binding OverlayText}" Foreground="#33cc33" FontSize="42"
-                 FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"
-                 Opacity="{Binding OverlayTrailOpacity1}"
-                 TextTrimming="CharacterEllipsis" MaxWidth="600"
-                 RenderTransformOrigin="0.5,0.5">
-        <TextBlock.RenderTransform>
-          <ScaleTransform ScaleX="{Binding OverlayTrailScale1}" ScaleY="{Binding OverlayTrailScale1}" />
-        </TextBlock.RenderTransform>
-      </TextBlock>
-      <TextBlock Text="{Binding OverlayText}" Foreground="#44ff44" FontSize="42"
-                 FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"
-                 Opacity="{Binding OverlayOpacity}"
-                 TextTrimming="CharacterEllipsis" MaxWidth="600"
-                 RenderTransformOrigin="0.5,0.5">
-        <TextBlock.RenderTransform>
-          <ScaleTransform ScaleX="{Binding OverlayScale}" ScaleY="{Binding OverlayScale}" />
-        </TextBlock.RenderTransform>
-      </TextBlock>
-    </Grid>
+    <!-- FLOATING OVERLAY MESSAGES: each message at a random position, animates independently -->
+    <ItemsControl ItemsSource="{Binding OverlayMessages}"
+                  IsHitTestVisible="False"
+                  ClipToBounds="False"
+                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+      <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+          <Grid ClipToBounds="False" />
+        </ItemsPanelTemplate>
+      </ItemsControl.ItemsPanel>
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Grid HorizontalAlignment="Center" VerticalAlignment="Center"
+                RenderTransformOrigin="0.5,0.5">
+            <Grid.RenderTransform>
+              <TranslateTransform X="{Binding OffsetX}" Y="{Binding OffsetY}" />
+            </Grid.RenderTransform>
+            <!-- Trail layer 2 (farthest) -->
+            <TextBlock Text="{Binding Text}" Foreground="{Binding Color}" FontSize="28"
+                       FontWeight="Bold" Opacity="{Binding TrailOpacity2}"
+                       TextWrapping="NoWrap"
+                       RenderTransformOrigin="0.5,0.5">
+              <TextBlock.RenderTransform>
+                <ScaleTransform ScaleX="{Binding TrailScale2}" ScaleY="{Binding TrailScale2}" />
+              </TextBlock.RenderTransform>
+            </TextBlock>
+            <!-- Trail layer 1 -->
+            <TextBlock Text="{Binding Text}" Foreground="{Binding Color}" FontSize="28"
+                       FontWeight="Bold" Opacity="{Binding TrailOpacity1}"
+                       TextWrapping="NoWrap"
+                       RenderTransformOrigin="0.5,0.5">
+              <TextBlock.RenderTransform>
+                <ScaleTransform ScaleX="{Binding TrailScale1}" ScaleY="{Binding TrailScale1}" />
+              </TextBlock.RenderTransform>
+            </TextBlock>
+            <!-- Main layer -->
+            <TextBlock Text="{Binding Text}" Foreground="White" FontSize="28"
+                       FontWeight="Bold" Opacity="{Binding Opacity}"
+                       TextWrapping="NoWrap"
+                       RenderTransformOrigin="0.5,0.5">
+              <TextBlock.RenderTransform>
+                <ScaleTransform ScaleX="{Binding Scale}" ScaleY="{Binding Scale}" />
+              </TextBlock.RenderTransform>
+            </TextBlock>
+          </Grid>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
 
     <!-- ── SETUP PHASE ── -->
     <Grid IsVisible="{Binding IsSetupPhase}" RowDefinitions="Auto,Auto,Auto,Auto,Auto,*,Auto" Margin="20">

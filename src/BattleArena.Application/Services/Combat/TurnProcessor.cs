@@ -10,7 +10,7 @@ using System.Linq;
 /// <summary>
 /// Handles turn execution, action decisions, and target selection.
 /// </summary>
-public class TurnProcessor
+internal class TurnProcessor
 {
     private readonly IDiceService _dice;
     private readonly IActionDecisionSource _heroActionSource;

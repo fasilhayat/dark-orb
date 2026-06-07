@@ -9,7 +9,7 @@ using Core.Entities.Enums;
 /// <summary>
 /// Handles attack resolution, damage calculation, and combat outcomes.
 /// </summary>
-public class AttackResolver
+internal class AttackResolver
 {
     private readonly ICombatService _combatService;
     private readonly IDiceService _dice;

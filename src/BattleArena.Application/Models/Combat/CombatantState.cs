@@ -6,7 +6,7 @@ using Core.Entities.Enums;
 /// <summary>
 /// Tracks per-combatant state during a combat simulation run.
 /// </summary>
-public class CombatantState
+internal class CombatantState
 {
     public Character         Character         { get; }
     public IAttackSource?    AttackSource      { get; }

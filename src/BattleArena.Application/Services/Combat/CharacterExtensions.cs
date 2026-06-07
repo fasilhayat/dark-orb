@@ -42,6 +42,22 @@ public static class CharacterExtensions
         return null;
     }
     
+    public static string? TryGetCrowdControlLabel(this Character character)
+    {
+        foreach (var e in character.ActiveStatusEffects)
+        {
+            if (e.Type is StatusEffectType.Stun or StatusEffectType.Root or StatusEffectType.Fear)
+                return e.Type switch
+                {
+                    StatusEffectType.Stun => "stunned",
+                    StatusEffectType.Root => "rooted",
+                    StatusEffectType.Fear => "feared",
+                    _                     => "crowd-controlled"
+                };
+        }
+        return null;
+    }
+
     public static void TickStatusEffects(this Character character)
     {
         foreach (var effect in character.ActiveStatusEffects)

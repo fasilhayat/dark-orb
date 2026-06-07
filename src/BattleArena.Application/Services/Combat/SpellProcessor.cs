@@ -9,7 +9,7 @@ using Core.Entities.Enums;
 /// <summary>
 /// Handles all spell-related combat mechanics including casting, mana, and concentration.
 /// </summary>
-public class SpellProcessor
+internal class SpellProcessor
 {
     private readonly ICombatService _combatService;
     private readonly IDiceService _dice;

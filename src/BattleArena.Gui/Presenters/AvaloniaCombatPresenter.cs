@@ -97,7 +97,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     {
         _stopped = true;
         ClearAllPersistentEffects();
-        _dispatcher.Post(() => _vm.ClearOverlay());
+        _dispatcher.Post(() => _vm.ClearAllOverlays());
         _visualEventBus.NormalEventPublished -= OnNormalVisualEvent;
         _visualEventBus.MajorEventPublished -= OnMajorVisualEvent;
         _visualEventBus.IncredibleEventPublished -= OnIncredibleVisualEvent;
@@ -108,83 +108,12 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     {
         _dispatcher.Post(() =>
         {
-            if (ev.IsPersistent && ev.EffectName is not null)
-            {
-                var target = ev.TargetName ?? ev.ActorName;
-                StartPersistentEffect(target, ev.EffectName, ev.Color);
-                return;
-            }
-
-            if (ev.EventType == "EffectExpired" && ev.EffectName is not null)
-            {
-                var target = ev.TargetName ?? ev.ActorName;
-                if (!string.IsNullOrEmpty(target))
-                    RemovePersistentEffect(target, ev.EffectName);
-                return;
-            }
-
-            if (ev.HealAmount > 0 && ev.TargetName is not null)
-            {
-                var card = FindCard(ev.TargetName);
-                if (card is not null)
-                {
-                    var maxHp = Math.Max(1, card.MaxHp);
-                    var currentHp = Math.Max(0, card.Hp);
-                    var healAmount = Math.Min(ev.HealAmount, maxHp - currentHp);
-                    var start = (double)currentHp / maxHp;
-                    var width = (double)healAmount / maxHp;
-                    AnimateHealGlow(card, start, width);
-                }
-            }
-
-            if (ev.DamagePreviewAmount > 0 && ev.TargetName is not null)
-            {
-                var card = FindCard(ev.TargetName);
-                if (card is not null)
-                {
-                    var maxHp = Math.Max(1, ev.TargetMaxHp);
-                    var previewAmount = Math.Min(ev.DamagePreviewAmount, Math.Max(0, ev.HpBefore));
-                    var start = (double)Math.Max(0, ev.HpBefore - previewAmount) / maxHp;
-                    var width = (double)previewAmount / maxHp;
-                    AnimateDamagePreview(card, start, width);
-                }
-            }
-
-            if (ev.LeechAmount > 0)
-            {
-                // Mana gain on the caster's mana bar
-                if (ev.LeechCasterName is not null && ev.LeechResourceType == "Mana")
-                {
-                    var casterCard = FindCard(ev.LeechCasterName);
-                    if (casterCard is not null && casterCard.MaxMana > 0)
-                    {
-                        var gainAmount = Math.Min(ev.LeechAmount, casterCard.MaxMana - Math.Max(0, casterCard.Mana));
-                        var start = (double)Math.Max(0, casterCard.Mana) / casterCard.MaxMana;
-                        var width = (double)gainAmount / casterCard.MaxMana;
-                        AnimateManaGain(casterCard, start, width);
-                    }
-                }
-
-                // Mana drain on the target's mana bar
-                if (ev.LeechResourceType == "Mana")
-                {
-                    var targetCard = FindCard(ev.ActorName);
-                    if (targetCard is not null && targetCard.MaxMana > 0)
-                    {
-                        var drained = Math.Min(ev.LeechAmount, Math.Max(0, targetCard.Mana));
-                        var start = (double)Math.Max(0, targetCard.Mana - drained) / targetCard.MaxMana;
-                        var width = (double)drained / targetCard.MaxMana;
-                        AnimateManaDrain(targetCard, start, width);
-                    }
-                }
-            }
-
             FlashBorder(ev.ActorName, ev.Color);
             if (ev.TargetName is not null)
                 FlashBorder(ev.TargetName, ev.Color);
 
-            _vm.TriggerOverlay(ev.OverlayText);
-            AnimateOverlay();
+            if (!string.IsNullOrEmpty(ev.OverlayText))
+                _vm.AddOverlayMessage(ev.OverlayText, ev.Color);
         });
     }
 
@@ -196,8 +125,8 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             if (ev.TargetName is not null)
                 FlashBorder(ev.TargetName, ev.Color);
 
-            _vm.TriggerOverlay(ev.OverlayText);
-            AnimateMajorOverlay();
+            if (!string.IsNullOrEmpty(ev.OverlayText))
+                _vm.AddOverlayMessage(ev.OverlayText, ev.Color);
         });
     }
 
@@ -209,8 +138,8 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             if (ev.TargetName is not null)
                 FlashBorder(ev.TargetName, ev.Color);
 
-            _vm.TriggerOverlay(ev.OverlayText);
-            AnimateOverlay();
+            if (!string.IsNullOrEmpty(ev.OverlayText))
+                _vm.AddOverlayMessage(ev.OverlayText, ev.Color);
         });
 
         var adjusted = (int)(ev.DurationMs * _pacingMultiplier);
@@ -348,9 +277,8 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             if (targetName is not null)
                 FlashBorder(targetName, color);
 
-            // Show centered overlay text with zoom+dissolve
-            _vm.TriggerOverlay(text);
-            AnimateOverlay();
+            // Show floating overlay message at random position
+            _vm.AddOverlayMessage(text, color);
         });
     }
 
@@ -615,74 +543,6 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     {
         var c = Color.Parse(hex);
         return $"#{(byte)(c.R * 0.5):x2}{(byte)(c.G * 0.5):x2}{(byte)(c.B * 0.5):x2}";
-    }
-
-    private void AnimateMajorOverlay()
-    {
-        const int durationMs = 1800;
-        const int intervalMs = 30;
-        var steps = durationMs / intervalMs;
-        var elapsed = 0;
-
-        Task.Run(async () =>
-        {
-            for (var i = 0; i < steps && !_stopped; i++)
-            {
-                await Task.Delay(intervalMs);
-                if (_stopped) return;
-                elapsed += intervalMs;
-                var t = (double)elapsed / durationMs;
-                var eased = 1.0 - (1.0 - t) * (1.0 - t);
-                var mainScale = 0.40 + eased * 2.60;
-                var mainOpacity = Math.Max(0, 1.0 - (eased - 0.12) / 0.88);
-                _dispatcher.Post(() =>
-                {
-                    if (_stopped) return;
-                    _vm.OverlayScale = mainScale;
-                    _vm.OverlayOpacity = mainOpacity;
-                    _vm.OverlayTrailScale1 = mainScale * 0.78;
-                    _vm.OverlayTrailOpacity1 = mainOpacity * 0.35;
-                    _vm.OverlayTrailScale2 = mainScale * 0.56;
-                    _vm.OverlayTrailOpacity2 = mainOpacity * 0.15;
-                });
-            }
-            if (!_stopped)
-                _dispatcher.Post(() => _vm.ClearOverlay());
-        });
-    }
-
-    private void AnimateOverlay()
-    {
-        const int durationMs = 1500;
-        const int intervalMs = 30;
-        var steps = durationMs / intervalMs;
-        var elapsed = 0;
-
-        Task.Run(async () =>
-        {
-            for (var i = 0; i < steps && !_stopped; i++)
-            {
-                await Task.Delay(intervalMs);
-                if (_stopped) return;
-                elapsed += intervalMs;
-                var t = (double)elapsed / durationMs;
-                var eased = 1.0 - (1.0 - t) * (1.0 - t);
-                var mainScale = 0.25 + eased * 1.95;
-                var mainOpacity = Math.Max(0, 1.0 - (eased - 0.08) / 0.92);
-                _dispatcher.Post(() =>
-                {
-                    if (_stopped) return;
-                    _vm.OverlayScale = mainScale;
-                    _vm.OverlayOpacity = mainOpacity;
-                    _vm.OverlayTrailScale1 = mainScale * 0.78;
-                    _vm.OverlayTrailOpacity1 = mainOpacity * 0.35;
-                    _vm.OverlayTrailScale2 = mainScale * 0.56;
-                    _vm.OverlayTrailOpacity2 = mainOpacity * 0.15;
-                });
-            }
-            if (!_stopped)
-                _dispatcher.Post(() => _vm.ClearOverlay());
-        });
     }
 
     private List<List<LogSegment>> BuildRows(CombatLogEntry e, CombatDisplayState state)

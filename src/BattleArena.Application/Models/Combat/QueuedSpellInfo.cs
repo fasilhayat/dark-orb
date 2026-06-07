@@ -5,7 +5,7 @@ using Core.Entities;
 /// <summary>
 /// Tracks a spell being charged over multiple ticks during combat.
 /// </summary>
-public class QueuedSpellInfo
+internal class QueuedSpellInfo
 {
     public Spell     Spell         { get; }
     public Character Target        { get; set; }

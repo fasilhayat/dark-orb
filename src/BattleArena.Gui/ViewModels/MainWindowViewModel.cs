@@ -539,81 +539,29 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         }
     }
 
-    // ── Overlay animation state ──────────────────────────────
+    // ── Floating overlay messages ────────────────────────────
 
-    private string _overlayText = "";
-    public string OverlayText
+    public ObservableCollection<OverlayMessageViewModel> OverlayMessages { get; } = [];
+    private CancellationTokenSource? _overlayCts;
+
+    public void AddOverlayMessage(string text, string color)
     {
-        get => _overlayText;
-        set => SetField(ref _overlayText, value);
+        _overlayCts ??= new CancellationTokenSource();
+        var msg = new OverlayMessageViewModel(text, color);
+        OverlayMessages.Add(msg);
+        msg.Animate(OnOverlayCompleted, _overlayCts.Token);
     }
 
-    private double _overlayOpacity;
-    public double OverlayOpacity
+    private void OnOverlayCompleted(OverlayMessageViewModel msg)
     {
-        get => _overlayOpacity;
-        set => SetField(ref _overlayOpacity, value);
+        OverlayMessages.Remove(msg);
     }
 
-    private double _overlayScale = 1.0;
-    public double OverlayScale
+    public void ClearAllOverlays()
     {
-        get => _overlayScale;
-        set => SetField(ref _overlayScale, value);
-    }
-
-    private double _overlayTrailScale1;
-    public double OverlayTrailScale1
-    {
-        get => _overlayTrailScale1;
-        set => SetField(ref _overlayTrailScale1, value);
-    }
-
-    private double _overlayTrailOpacity1;
-    public double OverlayTrailOpacity1
-    {
-        get => _overlayTrailOpacity1;
-        set => SetField(ref _overlayTrailOpacity1, value);
-    }
-
-    private double _overlayTrailScale2;
-    public double OverlayTrailScale2
-    {
-        get => _overlayTrailScale2;
-        set => SetField(ref _overlayTrailScale2, value);
-    }
-
-    private double _overlayTrailOpacity2;
-    public double OverlayTrailOpacity2
-    {
-        get => _overlayTrailOpacity2;
-        set => SetField(ref _overlayTrailOpacity2, value);
-    }
-
-    public bool HasOverlay => !string.IsNullOrEmpty(OverlayText);
-
-    public void TriggerOverlay(string text)
-    {
-        OverlayText = text;
-        OverlayOpacity = 1.0;
-        OverlayScale = 0.25;
-        OverlayTrailScale1 = 0.2;
-        OverlayTrailOpacity1 = 0.35;
-        OverlayTrailScale2 = 0.14;
-        OverlayTrailOpacity2 = 0.15;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasOverlay)));
-    }
-
-    public void ClearOverlay()
-    {
-        OverlayText = "";
-        OverlayOpacity = 0;
-        OverlayScale = 1.0;
-        OverlayTrailScale1 = 0;
-        OverlayTrailOpacity1 = 0;
-        OverlayTrailScale2 = 0;
-        OverlayTrailOpacity2 = 0;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasOverlay)));
+        _overlayCts?.Cancel();
+        _overlayCts = null;
+        OverlayMessages.Clear();
     }
 
     // ── API mode ─────────────────────────────────────────────

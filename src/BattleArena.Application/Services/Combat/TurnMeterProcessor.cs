@@ -8,7 +8,7 @@ using Core.Entities;
 /// <summary>
 /// Handles turn meter calculations, updates, and mana regeneration.
 /// </summary>
-public class TurnMeterProcessor
+internal class TurnMeterProcessor
 {
     private readonly ITurnmeterService _turnmeterService;
     private readonly CombatLogger _logger;

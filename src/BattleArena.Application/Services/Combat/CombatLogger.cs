@@ -150,6 +150,6 @@ public class CombatLogger
     };
 
     // Convenience overload — accepts the model CombatantState (for refactored processors).
-    public CombatLogEntry BuildTurnMeterGainEntry(int tick, CombatantState s) =>
+    internal CombatLogEntry BuildTurnMeterGainEntry(int tick, CombatantState s) =>
         BuildTurnMeterGainEntry(tick, s.Character.Name, s.PrevMeter, s.Meter.CurrentValue, s.Meter.IsReady, s.Meter.IsActive);
 }

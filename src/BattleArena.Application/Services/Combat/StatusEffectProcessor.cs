@@ -9,7 +9,7 @@ using Core.Entities.Enums;
 /// <summary>
 /// Handles status effect application, ticking, and expiration.
 /// </summary>
-public class StatusEffectProcessor
+internal class StatusEffectProcessor
 {
     private readonly IStatusEffectService _statusEffectService;
     private readonly IDiceService _dice;
