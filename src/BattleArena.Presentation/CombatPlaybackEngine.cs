@@ -79,6 +79,32 @@ public static class CombatPlaybackEngine
                         }
                     }
 
+                    if (entry.EventType == "ManaDeduct" && (entry.ManaCost ?? 0) > 0)
+                    {
+                        var casterState = state.TryGet(entry.ActorName);
+                        if (casterState is not null && casterState.MaxMana > 0)
+                        {
+                            var cost = Math.Min(entry.ManaCost ?? 0, Math.Max(0, casterState.Mana));
+                            var start = (double)Math.Max(0, casterState.Mana - cost) / casterState.MaxMana;
+                            var width = (double)cost / casterState.MaxMana;
+                            bus.PublishNormal(new VisualEvent
+                            {
+                                EventType = "ManaPreview",
+                                ActorName = entry.ActorName,
+                                OverlayText = $"MANA -{cost}",
+                                Color = "#aa66ff",
+                                DurationMs = 600,
+                                ManaCost = cost,
+                                ManaBefore = casterState.Mana,
+                                ManaPreviewStart = start,
+                                ManaPreviewWidth = width,
+                            });
+                            var previewDelay = presenter.GetEventDelayMs("ManaPreview");
+                            if (previewDelay > 0)
+                                presenter.Wait(previewDelay);
+                        }
+                    }
+
                     state.ApplyEvent(entry);
                 }
 
@@ -225,6 +251,33 @@ public static class CombatPlaybackEngine
                 if (!ReferenceEquals(entry, turnStart))
                 {
                     prepareEventState?.Invoke(entry, state);
+
+                    if (entry.EventType == "ManaDeduct" && (entry.ManaCost ?? 0) > 0)
+                    {
+                        var casterState = state.TryGet(entry.ActorName);
+                        if (casterState is not null && casterState.MaxMana > 0)
+                        {
+                            var cost = Math.Min(entry.ManaCost ?? 0, Math.Max(0, casterState.Mana));
+                            var start = (double)Math.Max(0, casterState.Mana - cost) / casterState.MaxMana;
+                            var width = (double)cost / casterState.MaxMana;
+                            bus.PublishNormal(new VisualEvent
+                            {
+                                EventType = "ManaPreview",
+                                ActorName = entry.ActorName,
+                                OverlayText = $"MANA -{cost}",
+                                Color = "#aa66ff",
+                                DurationMs = 600,
+                                ManaCost = cost,
+                                ManaBefore = casterState.Mana,
+                                ManaPreviewStart = start,
+                                ManaPreviewWidth = width,
+                            });
+                            var previewDelay = presenter.GetEventDelayMs("ManaPreview");
+                            if (previewDelay > 0)
+                                presenter.Wait(previewDelay);
+                        }
+                    }
+
                     state.ApplyEvent(entry);
                 }
 
@@ -632,22 +685,6 @@ public static class CombatPlaybackEngine
                     Color = "#44cc44",
                     DurationMs = 2000,
                 });
-                break;
-
-            case "ManaPreview":
-                if (entry.ManaCost > 0)
-                {
-                    bus.PublishNormal(new VisualEvent
-                    {
-                        EventType = entry.EventType,
-                        ActorName = entry.ActorName,
-                        OverlayText = $"MANA -{entry.ManaCost}",
-                        Color = "#aa66ff",
-                        DurationMs = 600,
-                        ManaCost = entry.ManaCost ?? 0,
-                        ManaBefore = entry.ManaAfter ?? 0,
-                    });
-                }
                 break;
 
             case "IncredibleEvent":

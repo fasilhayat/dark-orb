@@ -24,4 +24,8 @@ public sealed class VisualEvent
     // Mana cost preview
     public int ManaCost { get; init; }
     public int ManaBefore { get; init; }
+
+    // Pre-computed bar fractions for mana cost preview (computed by playback engine)
+    public double ManaPreviewStart { get; init; }
+    public double ManaPreviewWidth { get; init; }
 }

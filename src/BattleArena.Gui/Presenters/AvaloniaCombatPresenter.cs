@@ -185,9 +185,10 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                 var card = FindCard(ev.ActorName);
                 if (card is not null && card.MaxMana > 0)
                 {
-                    var cost = Math.Min(ev.ManaCost, Math.Max(0, card.Mana));
-                    var start = (double)Math.Max(0, card.Mana - cost) / card.MaxMana;
-                    var width = (double)cost / card.MaxMana;
+                    var start = ev.ManaPreviewWidth > 0 ? ev.ManaPreviewStart
+                        : (double)Math.Max(0, card.Mana - ev.ManaCost) / card.MaxMana;
+                    var width = ev.ManaPreviewWidth > 0 ? ev.ManaPreviewWidth
+                        : (double)Math.Min(ev.ManaCost, Math.Max(0, card.Mana)) / card.MaxMana;
                     AnimateManaCostPreview(card, start, width);
                 }
             }
@@ -706,7 +707,6 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             "RoundEnd"           => [],
             "ManaRegen"          => [BuildManaRegenRow(e, state)],
             "ManaDeduct"         => [BuildManaDeductRow(e, state)],
-            "ManaPreview"        => [BuildManaPreviewRow(e, state)],
             "ApiCall"            => [[Seg("  \u26a1 ", Cyan), Seg(e.Message, DarkGray)]],
             _                    => [[Seg($"  [{e.EventType}] {e.Message}", Gray)]]
         };
@@ -927,19 +927,6 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             Seg("  casts  ", Gray),
             Seg(e.AttackSourceName ?? "unknown", Magenta),
             Seg($"  (-{e.ManaCost} mana)", Magenta),
-        ];
-    }
-
-    private static List<LogSegment> BuildManaPreviewRow(CombatLogEntry e, CombatDisplayState state)
-    {
-        var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
-        return
-        [
-            Seg("  \u25c6 ", Dim),
-            Seg(e.ActorName, actorColor),
-            Seg("  prepares  ", Gray),
-            Seg(e.AttackSourceName ?? "unknown", Magenta),
-            Seg($"  (reserving {e.ManaCost} mana)", Dim),
         ];
     }
 

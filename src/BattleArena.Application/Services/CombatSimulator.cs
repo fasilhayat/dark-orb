@@ -1214,19 +1214,6 @@ public class CombatSimulator : ICombatSimulator
     {
         if (spell is null || spell.ManaCost <= 0) return;
         var before = actorState.Character.CurrentMana;
-
-        // Emit preview BEFORE mutation so the UI can show the reserved segment
-        await notify(new CombatLogEntry
-        {
-            Tick             = tick,
-            ActorName        = actorState.Character.Name,
-            EventType        = "ManaPreview",
-            ManaCost         = spell.ManaCost,
-            ManaAfter        = before,
-            AttackSourceName = spell.Name,
-            Message          = $"{actorState.Character.Name} prepares to spend {spell.ManaCost} mana on {spell.Name}. (current: {before})"
-        });
-
         actorState.Character.CurrentMana = Math.Max(0, before - spell.ManaCost);
         await notify(new CombatLogEntry
         {
