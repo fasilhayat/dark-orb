@@ -73,7 +73,7 @@ public class CombatSimulatorTests
         Assert.Equal("Attacker", petTurn.TargetName);
     }
 
-    private static (IDiceService Dice, CombatSimulator Simulator) CreateSimulator(
+    private static (IDiceService Dice, ICombatSimulator Simulator) CreateSimulator(
         ITargetSelector? heroTargetSelector = null,
         ITargetSelector? enemyTargetSelector = null)
     {
@@ -188,7 +188,7 @@ public class CombatSimulatorSpellcasterTests
 {
     // ── helpers ───────────────────────────────────────────────────────────────
 
-    private static (IDiceService Dice, CombatSimulator Simulator) CreateSimulator()
+    private static (IDiceService Dice, ICombatSimulator Simulator) CreateSimulator()
     {
         var dice = Substitute.For<IDiceService>();
         dice.Seed.Returns(99);
@@ -308,7 +308,7 @@ public class CombatSimulatorHealingTests
 {
     // ── helpers ───────────────────────────────────────────────────────────────
 
-    private static (IDiceService Dice, CombatSimulator Simulator) CreateSimulator()
+    private static (IDiceService Dice, ICombatSimulator Simulator) CreateSimulator()
     {
         var dice = Substitute.For<IDiceService>();
         dice.Seed.Returns(42);
@@ -623,7 +623,7 @@ public class CombatSimulatorElementalDoTTests
 
     // ── helpers ─────────────────────────────────────────────────────────────────
 
-    private static (IDiceService, CombatSimulator) CreateSim()
+    private static (IDiceService, ICombatSimulator) CreateSim()
     {
         var dice = Substitute.For<IDiceService>();
         dice.Seed.Returns(42);
@@ -700,3 +700,9 @@ public class CombatSimulatorElementalDoTTests
         ElementalType = ElementalType.None
     };
 }
+
+
+
+
+
+
