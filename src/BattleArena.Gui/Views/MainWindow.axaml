@@ -97,8 +97,8 @@
                    HorizontalAlignment="Center" Margin="0,0,0,20" />
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="24">
           <Button x:Name="DemoButton" Content="DEMO" Click="OnDemoClick"
-                  Width="180" Height="60" FontSize="20" />
-          <StackPanel VerticalAlignment="Center" Spacing="4">
+                  Width="180" Height="60" FontSize="20" VerticalAlignment="Top" />
+          <StackPanel VerticalAlignment="Top" Spacing="4">
             <Button x:Name="ApiModeButton" Content="API VERSION" Click="OnApiModeClick"
                     Width="180" Height="60" FontSize="20"
                     IsEnabled="{Binding IsApiReachable}" />

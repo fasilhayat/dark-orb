@@ -79,6 +79,8 @@ public class TurnMeterProcessor
 
     public CombatLogEntry BuildAfterTurnEntry(CombatantState state, int tick, int tmCost = TurnmeterState.TurnThreshold)
     {
-        return _logger.BuildAfterTurnEntry(state, tick, tmCost, _turnmeterService);
+        var before = state.Meter.CurrentValue;
+        state.Meter = _turnmeterService.AfterTurn(state.Meter, tmCost);
+        return _logger.BuildAfterTurnEntry(tick, state.Character.Name, before, state.Meter.CurrentValue, tmCost);
     }
 }

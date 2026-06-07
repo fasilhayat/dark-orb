@@ -55,9 +55,8 @@ public class AttackResolver
         
         // Log the attack
         await notify(_logger.BuildAttackEntry(
-            tick, actorName, targetName, source.Name, isSpell, 
-            result, result.HitRoll, result.DefenseRoll, result.AttackPower, result.DefensePower,
-            source.DamageType, spellLevel, casterLevel, 0));
+            tick, actorName, source.Name, isSpell, targetName, result,
+            source.DamageType, spellLevel, casterLevel));
         
         // Handle miss outcomes
         if (!result.IsHit && !result.IsClash)

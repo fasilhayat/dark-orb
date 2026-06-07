@@ -2,6 +2,7 @@ namespace BattleArena.Application.Services;
 
 using Application.Interfaces;
 using Application.Models;
+using Application.Services.Combat;
 using Core.Entities;
 using Core.Entities.Enums;
 
@@ -26,6 +27,7 @@ public class CombatSimulator : ICombatSimulator
     private readonly ITargetSelector      _enemyTargetSelector;
     private readonly IActionDecisionSource      _heroActionSource;
     private readonly IActionDecisionSource      _enemyActionSource;
+    private readonly CombatLogger         _logger;
 
     public CombatSimulator(
         ICombatService combat,
@@ -41,6 +43,7 @@ public class CombatSimulator : ICombatSimulator
         _turnmeter           = turnmeter;
         _statusEffect        = statusEffect;
         _dice                = dice;
+        _logger              = new CombatLogger();
         _heroTargetSelector  = heroTargetSelector  ?? new RandomTargetSelector();
         _enemyTargetSelector = enemyTargetSelector ?? new RandomTargetSelector();
         _heroActionSource    = heroActionSource    ?? new AutoActionDecisionSource(dice);
@@ -173,119 +176,22 @@ public class CombatSimulator : ICombatSimulator
     {
         var before = state.Meter.CurrentValue;
         state.Meter = _turnmeter.AfterTurn(state.Meter, tmCost);
-        return new CombatLogEntry
-        {
-            Tick            = tick,
-            ActorName       = state.Character.Name,
-            EventType       = "TurnEnd",
-            TurnMeterBefore = before,
-            TurnMeterAfter  = state.Meter.CurrentValue,
-            IsReady         = state.Meter.IsReady,
-            IsActive        = false,
-            Message         = $"{state.Character.Name} ends turn.  TM: {before} -> {state.Meter.CurrentValue} (cost: {tmCost})"
-        };
+        return _logger.BuildAfterTurnEntry(tick, state.Character.Name, before, state.Meter.CurrentValue, tmCost);
     }
 
-    private static CombatLogEntry BuildTurnMeterGainEntry(int tick, CombatantState s)
-    {
-        var before = s.PrevMeter;
-        return new CombatLogEntry
-        {
-            Tick            = tick,
-            ActorName       = s.Character.Name,
-            EventType       = "TurnMeterGain",
-            TurnMeterBefore = before,
-            TurnMeterAfter  = s.Meter.CurrentValue,
-            IsReady         = s.Meter.IsReady,
-            IsActive        = s.Meter.IsActive,
-            Message         = $"{s.Character.Name}  TM: {before} -> {s.Meter.CurrentValue}  (+{s.Meter.CurrentValue - before})"
-        };
-    }
-
-    private static CombatLogEntry BuildDefeatEntry(int tick, Character target) => new()
-    {
-        Tick      = tick,
-        ActorName = target.Name,
-        EventType = target.IsDead ? "Death" : "KnockedOut",
-        Message   = target.IsDead
-            ? $"[DEAD] {target.Name} has been slain! (HP: {target.CurrentHitPoints})"
-            : $"{target.Name} is unconscious! (HP: {target.CurrentHitPoints})"
-    };
+    private CombatLogEntry BuildDefeatEntry(int tick, Character target) =>
+        _logger.BuildDefeatEntry(tick, target);
 
     private CombatLogEntry BuildAttackEntry(
         int tick, string actorName, string attackSourceName, bool isSpell,
         string targetName, AttackResult result, DamageType damageType = DamageType.Slashing,
-        int? spellLevel = null, int? casterLevel = null)
-    {
-        var outcome = GetOutcomeTag(result);
-        var msg = $"{actorName} [{attackSourceName}] -> {targetName}: " +
-                  $"d20_atk={result.HitRoll} d20_def={result.DefenseRoll} + AP={result.AttackPower} " +
-                  $"vs DP={result.DefensePower} -> {outcome}";
+        int? spellLevel = null, int? casterLevel = null) =>
+        _logger.BuildAttackEntry(tick, actorName, attackSourceName, isSpell, targetName, result,
+            damageType, spellLevel, casterLevel, _dice.RollIndex);
 
-        if (result.IsHit && result.DamageContext is { } dc)
-        {
-            var critTag = GetCritTag(result);
-            msg += $" | Dmg: roll({dc.WeaponDiceRoll}) + attr({dc.AttributeModifier}) + flat({dc.FlatBonuses}) + lvl({dc.LevelScaling})" +
-                   $" = {dc.BaseDamage}{critTag} x{dc.TypeMultiplier:0.0} - mit({dc.ArmorMitigation}) + elem({dc.ElementalModifiers}) = {result.Damage}";
-        }
-
-        var ctx    = CombatNarrator.GetContext(
-            result.HitRoll, result.HitRoll + result.AttackPower, result.DefensePower, result.DefenseRoll,
-            result.IsHit || result.IsCriticalHit, result.IsCriticalHit, result.IsFumble);
-        var phrase = CombatNarrator.GetPhrase(actorName, targetName, ctx, isSpell, damageType, rollIndex: _dice.RollIndex);
-
-        return new CombatLogEntry
-        {
-            Tick                = tick,
-            ActorName           = actorName,
-            EventType           = "Attack",
-            DieRoll             = result.HitRoll,
-            DefenseRoll         = result.DefenseRoll,
-            AttackPower         = result.AttackPower,
-            DefensePower        = result.DefensePower,
-            IsHit               = result.IsHit,
-            IsCritical          = result.IsCriticalHit,
-            IsFumble            = result.IsFumble,
-            IsPerfectParry      = result.IsPerfectParry  ? true : null,
-            IsClash             = result.IsClash         ? true : null,
-            IsDevastatingStrike = result.IsDevastatingStrike ? true : null,
-            IsTotalReversal     = result.IsTotalReversal ? true : null,
-            DamageDealt         = result.Damage,
-            AttackSourceName    = attackSourceName,
-            IsSpell             = isSpell,
-            TargetName          = targetName,
-            SpellLevel          = spellLevel,
-            CasterLevel         = casterLevel,
-            Phrase              = phrase,
-            Message             = msg
-        };
-    }
-
-    private static string GetOutcomeTag(AttackResult result) =>
-        result.IsDevastatingStrike ? "DEVASTATING STRIKE!!!" :
-        result.IsTotalReversal     ? "TOTAL REVERSAL!"       :
-        result.IsClash             ? "CLASH!"                :
-        result.IsPerfectParry      ? "PERFECT PARRY!"        :
-        result.IsCriticalHit       ? "CRITICAL HIT!"         :
-        result.IsFumble            ? "FUMBLE!"               :
-        result.IsHit               ? "HIT"                   : "MISS";
-
-    private static string GetCritTag(AttackResult result) =>
-        result.IsCriticalHit       ? " [x2 CRIT]"    :
-        result.IsDevastatingStrike ? " [x3 DEVAS]"   :
-        result.IsClash             ? " [x0.5 CLASH]" : "";
-
-    private static CombatLogEntry BuildDamageEntry(
-        int tick, string targetName, int damage, int hpBefore, int hpAfter) => new()
-    {
-        Tick           = tick,
-        ActorName      = targetName,
-        EventType      = "Damage",
-        DamageDealt    = damage,
-        TargetHpBefore = hpBefore,
-        TargetHpAfter  = hpAfter,
-        Message        = $"{targetName} takes {damage} damage.  HP: {hpBefore} -> {hpAfter}"
-    };
+    private CombatLogEntry BuildDamageEntry(
+        int tick, string targetName, int damage, int hpBefore, int hpAfter) =>
+        _logger.BuildDamageEntry(tick, targetName, damage, hpBefore, hpAfter);
 
     // ── Healing helpers ────────────────────────────────────────────────────────
 
@@ -767,7 +673,7 @@ public class CombatSimulator : ICombatSimulator
 
             s.SnapshotMeter();
             s.Meter = _turnmeter.Tick(s.Character, s.Meter);
-            await notify(BuildTurnMeterGainEntry(tick, s));
+            await notify(_logger.BuildTurnMeterGainEntry(tick, s.Character.Name, s.PrevMeter, s.Meter.CurrentValue, s.Meter.IsReady, s.Meter.IsActive));
 
             if (s.Character.MaxMana > 0 && s.Character.CurrentMana < s.Character.EffectiveMaxMana)
             {
