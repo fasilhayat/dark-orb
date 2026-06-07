@@ -13,7 +13,9 @@ internal sealed class ApiDiceService : IDiceService
     public int Seed => 0;
 
     public int CurrentTick { get; set; }
+    public string? CurrentActorName { get; set; }
 
+    /// <summary>All dice calls made during the simulation, in order.</summary>
     public List<CombatLogEntry> DiceLog { get; } = new();
 
     private void AddEntry(string endpoint, int result)

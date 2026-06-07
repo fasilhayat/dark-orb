@@ -32,6 +32,7 @@ public class CombatSimulator : ICombatSimulator
     private readonly VictoryEvaluator           _victoryEvaluator;
     private readonly StatusEffectProcessor      _statusEffectProcessor;
     private readonly TurnMeterProcessor          _turnMeterProcessor;
+    private readonly SpellProcessor              _spellProcessor;
 
     public CombatSimulator(
         ICombatService combat,
@@ -51,6 +52,7 @@ public class CombatSimulator : ICombatSimulator
         _victoryEvaluator    = new VictoryEvaluator(dice);
         _statusEffectProcessor = new StatusEffectProcessor(statusEffect, dice, _logger);
         _turnMeterProcessor   = new TurnMeterProcessor(turnmeter, _logger);
+        _spellProcessor       = new SpellProcessor(combat, dice, _logger, _statusEffectProcessor);
         _heroTargetSelector  = heroTargetSelector ?? new RandomTargetSelector();
         _enemyTargetSelector = enemyTargetSelector ?? new RandomTargetSelector();
         _heroActionSource    = heroActionSource    ?? new AutoActionDecisionSource(dice);
@@ -71,7 +73,7 @@ public class CombatSimulator : ICombatSimulator
     {
         const int RoundLength = 10;
 
-        var states         = BuildCombatantStates(heroParty, enemyParty);
+        var states         = CombatSimulatorHelpers.BuildCombatantStates(heroParty, enemyParty);
         foreach (var s in states)
         {
             var gain = _turnmeter.ComputeGainPerTick(s.Character);
@@ -98,6 +100,7 @@ public class CombatSimulator : ICombatSimulator
         {
             ct.ThrowIfCancellationRequested();
             _dice.CurrentTick = tick;
+            _dice.CurrentActorName = null;
 
             if ((tick - 1) % RoundLength == 0)
             {
@@ -114,9 +117,10 @@ public class CombatSimulator : ICombatSimulator
             await ProcessTickMeterAndManaAsync(tick, states, Notify);
             await ProcessCrowdControlledActorsAsync(tick, states, Notify);
 
-            foreach (var actorState in GetActingOrder(states))
+            foreach (var actorState in CombatSimulatorHelpers.GetActingOrder(states))
             {
                 if (!actorState.Character.IsAlive) continue;
+                _dice.CurrentActorName = actorState.Character.Name;
                 var turnResult = await ProcessActingActorAsync(
                     tick, currentRound, actorState, states, stateMap, lastAttackerOf,
                     heroParty, enemyParty, log, Notify, name => { activeActorName = name; }, ct, terrain);
@@ -125,7 +129,7 @@ public class CombatSimulator : ICombatSimulator
 
             if (tick % RoundLength == 0)
             {
-                await ExpireSummonedPetsAsync(tick, currentRound, states, Notify);
+                await _statusEffectProcessor.ExpireSummonedPetsAsync(tick, currentRound, states, Notify);
 
                 await Notify(new CombatLogEntry
                 {
@@ -169,16 +173,6 @@ public class CombatSimulator : ICombatSimulator
 
     // ── Private helpers ────────────────────────────────────────────────────────
 
-    private static List<CombatantState> BuildCombatantStates(Party heroParty, Party enemyParty)
-    {
-        var states = new List<CombatantState>();
-        foreach (var m in heroParty.Members)
-            states.Add(new CombatantState(m.Character, m.AttackSource, partyIndex: 0));
-        foreach (var m in enemyParty.Members)
-            states.Add(new CombatantState(m.Character, m.AttackSource, partyIndex: 1));
-        return states;
-    }
-
     private CombatLogEntry BuildAfterTurnEntry(CombatantState state, int tick, int tmCost = TurnmeterState.TurnThreshold)
     {
         var before = state.Meter.CurrentValue;
@@ -202,112 +196,7 @@ public class CombatSimulator : ICombatSimulator
 
     // ── Healing helpers ────────────────────────────────────────────────────────
 
-    private async Task<CombatResult?> ProcessHealingSpellAsync(
-        int tick, CombatantState actorState, ActorSetup setup, Spell spell,
-        List<CombatantState> states, Func<CombatLogEntry, Task> notify, TerrainType terrain)
-    {
-        if (spell.IsGroupHeal)
-        {
-            var allies = states
-                .Where(s => s.PartyIndex == actorState.PartyIndex && s.Character.IsAlive && s.Character.CurrentHitPoints < s.Character.MaxHitPoints)
-                .ToList();
-
-            foreach (var ally in allies)
-            {
-                var healAmount = _combat.ResolveHealing(actorState.Character, ally.Character, spell, terrain);
-                var hpBefore = ally.Character.CurrentHitPoints;
-                ally.Character.CurrentHitPoints = Math.Min(ally.Character.MaxHitPoints, hpBefore + healAmount);
-                await notify(new CombatLogEntry
-                {
-                    Tick            = tick,
-                    ActorName       = ally.Character.Name,
-                    TargetName      = ally.Character.Name,
-                    EventType       = "Healed",
-                    DamageDealt     = healAmount,
-                    TargetHpBefore  = hpBefore,
-                    TargetHpAfter   = ally.Character.CurrentHitPoints,
-                    AttackSourceName = spell.Name,
-                    IsSpell         = true,
-                    Message         = $"{ally.Character.Name} is healed for {healAmount} by {spell.Name}.  HP: {hpBefore} -> {ally.Character.CurrentHitPoints}"
-                });
-            }
-            return null;
-        }
-
-        // Single-target heal: pick the ally with the lowest HP.
-        var target = states
-            .Where(s => s.PartyIndex == actorState.PartyIndex && s.Character.IsAlive && s.Character.CurrentHitPoints < s.Character.MaxHitPoints)
-            .MinBy(s => s.Character.CurrentHitPoints);
-
-        if (target is null) return null;
-
-        var heal = _combat.ResolveHealing(actorState.Character, target.Character, spell, terrain);
-        var hpB = target.Character.CurrentHitPoints;
-        target.Character.CurrentHitPoints = Math.Min(target.Character.MaxHitPoints, hpB + heal);
-        await notify(new CombatLogEntry
-        {
-            Tick            = tick,
-            ActorName       = target.Character.Name,
-            TargetName      = target.Character.Name,
-            EventType       = "Healed",
-            DamageDealt     = heal,
-            TargetHpBefore  = hpB,
-            TargetHpAfter   = target.Character.CurrentHitPoints,
-            AttackSourceName = spell.Name,
-            IsSpell         = true,
-            Message         = $"{target.Character.Name} is healed for {heal} by {spell.Name}.  HP: {hpB} -> {target.Character.CurrentHitPoints}"
-        });
-        return null;
-    }
-
-    private static async Task NotifyExpiredEffectsAsync(
-        int tick, Character character,
-        IReadOnlyList<string> expired,
-        Func<CombatLogEntry, Task> notify)
-    {
-        foreach (var name in expired)
-        {
-            await notify(new CombatLogEntry
-            {
-                Tick             = tick,
-                ActorName        = character.Name,
-                EventType        = "EffectExpired",
-                StatusEffectName = name,
-                Message          = $"{name} has worn off {character.Name}."
-            });
-        }
-    }
-
-    private static async Task ExpireSummonedPetsAsync(
-        int tick,
-        int currentRound,
-        List<CombatantState> states,
-        Func<CombatLogEntry, Task> notify)
-    {
-        foreach (var s in states)
-        {
-            if (!s.IsSummoned || !s.Character.IsAlive || s.SummonExpiryRound <= 0 || s.SummonExpiryRound > currentRound)
-                continue;
-            s.Character.CurrentHitPoints = -999;
-            await notify(new CombatLogEntry
-            {
-                Tick = tick,
-                EventType = "PetExpired",
-                ActorName = s.Character.Name,
-                SummonedPetName = s.Character.Name,
-                RoundNumber = currentRound,
-                Message = $"{s.Character.Name} fades away as the summoning ends."
-            });
-        }
-    }
-
     // ── Tick-level orchestration ────────────────────────────────────────────────
-
-    private List<CombatantState> GetActingOrder(List<CombatantState> states) =>
-        states
-            .Where(s => s.Character.IsAlive && s.Meter.IsReady && s.Character.TryGetCrowdControlLabel() is null)
-            .OrderByDescending(s => s.Meter.CurrentValue)
-            .ToList();
 
     private async Task ProcessTickMeterAndManaAsync(
         int tick, List<CombatantState> states, Func<CombatLogEntry, Task> notify)
@@ -389,7 +278,7 @@ public class CombatSimulator : ICombatSimulator
             if (ccLabel is null) continue;
 
             var expired = _statusEffect.TickAll(s.Character);
-            await NotifyExpiredEffectsAsync(tick, s.Character, expired, notify);
+            await StatusEffectProcessor.NotifyExpiredEffectsAsync(tick, s.Character, expired, notify);
 
             if (s.QueuedSpell is not null)
             {
@@ -453,7 +342,7 @@ public class CombatSimulator : ICombatSimulator
             Message            = $"{actorState.Character.Name} takes their turn  (TM: {actorState.Meter.CurrentValue})"
         });
 
-        if (await TryHandlePetSummonAsync(tick, actorState, setup, states, stateMap, currentRound, notify))
+        if (await _spellProcessor.TryHandlePetSummonAsync(tick, actorState, setup, states, stateMap, currentRound, notify))
         {
             setActiveActor(null);
             actorState.Meter.IsActive = false;
@@ -478,12 +367,12 @@ public class CombatSimulator : ICombatSimulator
         }
 
         var expired = _statusEffect.TickAll(actorState.Character);
-        await NotifyExpiredEffectsAsync(tick, actorState.Character, expired, notify);
+        await StatusEffectProcessor.NotifyExpiredEffectsAsync(tick, actorState.Character, expired, notify);
 
         // ── Healing spells take a different path ──────────────────────────
         if (setup.Source is Spell castSpell && castSpell.IsHealing)
         {
-            var healResult = await ProcessHealingSpellAsync(tick, actorState, setup, castSpell, states, notify, terrain);
+            var healResult = await _spellProcessor.ProcessHealingSpellAsync(tick, actorState, setup, castSpell, states, notify, terrain);
             setActiveActor(null);
             actorState.Meter.IsActive = false;
             await notify(BuildAfterTurnEntry(actorState, tick, setup.TmCost));
@@ -620,7 +509,7 @@ public class CombatSimulator : ICombatSimulator
         }
 
         var actualTmCost = actorState.Character.ComputeSpellTurnMeterCost(qs.Spell);
-        await DeductManaCostAsync(tick, actorState, qs.Spell, notify);
+        await _spellProcessor.DeductManaCostAsync(tick, actorState, qs.Spell, notify);
         return new ActorSetup(qs.Spell, target, actualTmCost, IsSpell: true);
     }
 
@@ -700,7 +589,7 @@ public class CombatSimulator : ICombatSimulator
 
         if (isSpell && meterNow < tmCost)
         {
-            await QueueSpellAsync(tick, actorState, (Spell)attackSource, enemies, allies, tmCost, meterNow, notify, ct);
+            await _spellProcessor.QueueSpellAsync(tick, actorState, (Spell)attackSource, enemies, allies, tmCost, meterNow, notify, ct, _heroTargetSelector, _enemyTargetSelector);
             return null;
         }
 
@@ -717,7 +606,7 @@ public class CombatSimulator : ICombatSimulator
         {
             target = await SelectActorTargetAsync(actorState, enemies, lastAttackerOf, ct);
         }
-        await DeductManaCostAsync(tick, actorState, isSpell ? (Spell)attackSource : null, notify);
+        await _spellProcessor.DeductManaCostAsync(tick, actorState, isSpell ? (Spell)attackSource : null, notify);
         return new ActorSetup(attackSource, target, tmCost, isSpell);
     }
 
@@ -736,120 +625,7 @@ public class CombatSimulator : ICombatSimulator
         return await selector.SelectTargetAsync(actorState.Character, enemies.Select(s => s.Character), ct);
     }
 
-    private async Task QueueSpellAsync(
-        int tick, CombatantState actorState, Spell spell,
-        List<CombatantState> enemies, List<Character> allies, int tmCost, int meterNow,
-        Func<CombatLogEntry, Task> notify, CancellationToken ct)
-    {
-        Character target;
-        if (spell.IsHealing)
-        {
-            var healTarget = allies
-                .Where(a => a.CurrentHitPoints < a.MaxHitPoints)
-                .MinBy(a => a.CurrentHitPoints);
-            target = healTarget ?? actorState.Character;
-        }
-        else
-        {
-            var selector = actorState.PartyIndex == 0 ? _heroTargetSelector : _enemyTargetSelector;
-            target = await selector.SelectTargetAsync(
-                actorState.Character, enemies.Select(s => s.Character), ct);
-        }
-        actorState.QueuedSpell = new QueuedSpellInfo(spell, target, tmCost - meterNow);
-        await notify(new CombatLogEntry
-        {
-            Tick             = tick,
-            ActorName        = actorState.Character.Name,
-            EventType        = "SpellQueued",
-            AttackSourceName = spell.Name,
-            TargetName       = target.Name,
-            TurnMeterBefore  = meterNow,
-            IsSpell          = true,
-            Message          = $"{actorState.Character.Name} begins charging {spell.Name} on {target.Name}  (need {tmCost - meterNow} more TM)"
-        });
-    }
-
-    private async Task DeductManaCostAsync(
-        int tick, CombatantState actorState, Spell? spell,
-        Func<CombatLogEntry, Task> notify)
-    {
-        if (spell is null || spell.ManaCost <= 0) return;
-        var before = actorState.Character.CurrentMana;
-        actorState.Character.CurrentMana = Math.Max(0, before - spell.ManaCost);
-        await notify(new CombatLogEntry
-        {
-            Tick             = tick,
-            ActorName        = actorState.Character.Name,
-            EventType        = "ManaDeduct",
-            ManaCost         = spell.ManaCost,
-            ManaAfter        = actorState.Character.CurrentMana,
-            AttackSourceName = spell.Name,
-            Message          = $"{actorState.Character.Name} spends {spell.ManaCost} mana to cast {spell.Name}. ({before} -> {actorState.Character.CurrentMana})"
-        });
-    }
-
     // ── Pet summoning ────────────────────────────────────────────────────────────
-
-    private async Task<bool> TryHandlePetSummonAsync(
-        int tick, CombatantState actorState, ActorSetup setup,
-        List<CombatantState> states, Dictionary<Character, CombatantState> stateMap, int currentRound,
-        Func<CombatLogEntry, Task> notify)
-    {
-        if (!setup.IsSpell || setup.Source is not Spell castSpell || castSpell.SummonedPet is null)
-            return false;
-
-        var pet         = castSpell.SummonedPet;
-        var expiryRound = pet.SummonDurationRounds > 0 ? currentRound + pet.SummonDurationRounds : 0;
-
-        var petChar = new Character
-        {
-            Name             = pet.Name,
-            MaxHitPoints     = pet.MaxHitPoints,
-            CurrentHitPoints = pet.MaxHitPoints,
-            StrikeRating     = pet.StrikeRating,
-            TurnSpeed        = pet.TurnSpeed,
-            Strength         = pet.Strength,
-            Level            = 1,
-            ClassId          = 8,
-            Equipment        = new ArmorSlots
-            {
-                Chest = new Armor
-                {
-                    Name              = $"{pet.Name} Hide",
-                    ArmorClass        = pet.ArmorClass,
-                    MaxDexterityBonus = 6
-                }
-            }
-        };
-        var petWeapon = new Weapon
-        {
-            Name        = $"{pet.Name}'s Attack",
-            DamageDie   = pet.DamageDie,
-            DamageCount = pet.DamageCount,
-            AttackBonus = pet.AttackBonus,
-            DamageType  = pet.DamageType,
-            AttackType  = AttackType.Melee,
-        };
-        var newState = new CombatantState(petChar, petWeapon, actorState.PartyIndex)
-        {
-            SummonedBy        = actorState.Character,
-            SummonExpiryRound = expiryRound,
-        };
-        states.Add(newState);
-        stateMap[petChar] = newState;
-
-        await notify(new CombatLogEntry
-        {
-            Tick            = tick,
-            ActorName       = actorState.Character.Name,
-            EventType       = "PetSummoned",
-            SummonedPetName = pet.Name,
-            RoundNumber     = currentRound,
-            Message         = $"{actorState.Character.Name} summons {pet.Name}!" +
-                              (expiryRound > 0 ? $"  (lasts until end of round {expiryRound})" : "  (until slain)")
-        });
-        return true;
-    }
 
     // ── Attack outcome dispatch ──────────────────────────────────────────────────
 
@@ -957,8 +733,8 @@ public class CombatSimulator : ICombatSimulator
         if (setup.Source is Spell hitSpell)
             await _statusEffectProcessor.ProcessOnHitEffectsAsync(tick, actorState.Character, target, hitSpell, notify);
 
-        await ProcessSpellDisruptionAsync(tick, setup, result, stateMap, notify);
-        await ProcessConcentrationAsync(tick, target, result, stateMap, notify);
+        await _spellProcessor.ProcessSpellDisruptionAsync(tick, setup, result, stateMap, notify);
+            await _spellProcessor.ProcessConcentrationAsync(tick, target, result, stateMap, notify);
 
         if (target.CurrentHitPoints > 0) return null;
 
@@ -972,69 +748,6 @@ public class CombatSimulator : ICombatSimulator
             return defResult;
         }
         return null;
-    }
-
-    private async Task ProcessSpellDisruptionAsync(
-        int tick, ActorSetup setup, AttackResult result,
-        Dictionary<Character, CombatantState> stateMap, Func<CombatLogEntry, Task> notify)
-    {
-        if (setup.Source.AttackType != AttackType.Melee) return;
-        if (result.Damage <= 0 || setup.Target.MemorizedSpells.Count == 0) return;
-        var targetState = stateMap[setup.Target];
-        await TryApplySpellDisruptionAsync(tick, targetState, notify);
-    }
-
-    private async Task TryApplySpellDisruptionAsync(
-        int tick, CombatantState targetState, Func<CombatLogEntry, Task> notify)
-    {
-        if (targetState.Meter.CurrentValue <= 0) return;
-        if (_dice.Roll(DieType.D100) > 20) return;
-        var tmLoss = Math.Min(25, targetState.Meter.CurrentValue);
-        var before = targetState.Meter.CurrentValue;
-        targetState.Meter.CurrentValue -= tmLoss;
-        await notify(new CombatLogEntry
-        {
-            Tick            = tick,
-            ActorName       = targetState.Character.Name,
-            EventType       = "SpellDisrupted",
-            TurnMeterBefore = before,
-            TurnMeterAfter  = targetState.Meter.CurrentValue,
-            Message         = $"{targetState.Character.Name}'s spellcasting is disrupted! TM reduced by {tmLoss}."
-        });
-    }
-
-    private async Task ProcessConcentrationAsync(
-        int tick, Character target, AttackResult result,
-        Dictionary<Character, CombatantState> stateMap, Func<CombatLogEntry, Task> notify)
-    {
-        if (result.Damage <= 0) return;
-        var concState = stateMap.GetValueOrDefault(target);
-        if (concState?.QueuedSpell is null) return;
-        var dc   = Math.Max(10, result.Damage / 2);
-        var roll = _dice.Roll(DieType.D20) + concState.Character.Level;
-        if (roll < dc)
-        {
-            await notify(new CombatLogEntry
-            {
-                Tick             = tick,
-                ActorName        = target.Name,
-                EventType        = "SpellLost",
-                AttackSourceName = concState.QueuedSpell.Spell.Name,
-                Message          = $"{target.Name} loses concentration on {concState.QueuedSpell.Spell.Name}! (rolled {roll} vs DC {dc})"
-            });
-            concState.QueuedSpell = null;
-        }
-        else
-        {
-            await notify(new CombatLogEntry
-            {
-                Tick             = tick,
-                ActorName        = target.Name,
-                EventType        = "ConcentrationPass",
-                AttackSourceName = concState.QueuedSpell.Spell.Name,
-                Message          = $"{target.Name} maintains concentration on {concState.QueuedSpell.Spell.Name}. (rolled {roll} vs DC {dc})"
-            });
-        }
     }
 
 }

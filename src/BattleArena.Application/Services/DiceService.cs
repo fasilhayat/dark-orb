@@ -27,6 +27,7 @@ public class DiceService : IDiceService
     // Not used by the local DiceService (no external logging needed).
     // Present for interface compatibility with ApiDiceService.
     public int CurrentTick { get; set; }
+    public string? CurrentActorName { get; set; }
 
     public List<CombatLogEntry> DiceLog { get; } = new();
 

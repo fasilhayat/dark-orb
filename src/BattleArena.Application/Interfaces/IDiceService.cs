@@ -12,6 +12,9 @@ public interface IDiceService
     // their entries with the tick they were rolled on.
     int CurrentTick { get; set; }
 
+    // Set by CombatSimulator before rolls so dice-log entries can show who rolled.
+    string? CurrentActorName { get; set; }
+
     int Roll(DieType dieType);
     int Roll(int count, int sides);
     int RollWithAdvantage(DieType dieType);

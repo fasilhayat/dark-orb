@@ -25,16 +25,23 @@ internal sealed class LoggingDiceService : IDiceService
         set => _inner.CurrentTick = value;
     }
 
+    public string? CurrentActorName
+    {
+        get => _inner.CurrentActorName;
+        set => _inner.CurrentActorName = value;
+    }
+
     public List<CombatLogEntry> DiceLog { get; } = new();
 
     private void Log(string label, int result)
     {
+        var who = CurrentActorName is { Length: > 0 } ? $"{CurrentActorName} " : "";
         DiceLog.Add(new CombatLogEntry
         {
             Tick      = CurrentTick,
             EventType = "ApiCall",
-            ActorName = "dice",
-            Message   = $"{label} → {result}"
+            ActorName = CurrentActorName ?? "dice",
+            Message   = $"{who}{label} → {result}"
         });
     }
 

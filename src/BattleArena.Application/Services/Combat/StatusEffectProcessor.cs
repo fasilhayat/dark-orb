@@ -498,6 +498,24 @@ internal class StatusEffectProcessor
         };
     }
 
+    public static async Task NotifyExpiredEffectsAsync(
+        int tick, Character character,
+        IReadOnlyList<string> expired,
+        Func<CombatLogEntry, Task> notify)
+    {
+        foreach (var name in expired)
+        {
+            await notify(new CombatLogEntry
+            {
+                Tick             = tick,
+                ActorName        = character.Name,
+                EventType        = "EffectExpired",
+                StatusEffectName = name,
+                Message          = $"{name} has worn off {character.Name}."
+            });
+        }
+    }
+
     public async Task ExpireSummonedPetsAsync(
         int tick, int currentRound, List<CombatantState> states,
         Func<CombatLogEntry, Task> notify)

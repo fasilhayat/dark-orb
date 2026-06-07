@@ -19,6 +19,7 @@ internal sealed class ApiDiceService : IDiceService
 
     // Set by CombatSimulator each tick so entries are stamped with the correct tick.
     public int CurrentTick { get; set; }
+    public string? CurrentActorName { get; set; }
 
     /// <summary>All dice calls made during the simulation, in order.</summary>
     public List<CombatLogEntry> DiceLog { get; } = new();
