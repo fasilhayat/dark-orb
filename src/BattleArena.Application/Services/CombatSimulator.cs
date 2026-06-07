@@ -63,9 +63,6 @@ public class CombatSimulator : ICombatSimulator
         _attackResolver       = new AttackResolver(combat, dice, _logger, _victoryEvaluator, _turnMeterProcessor, _statusEffectProcessor, _spellProcessor);
     }
 
-    // ── Public API ─────────────────────────────────────────────────────────────
-
-    // Party-vs-party async entry point — supports 1v1, 1vN, NvN (hero side max 6).
     // Observer receives every event in real time (use for GUI animation).
     // CancellationToken allows forfeiting or time-out from the caller.
     public async Task<CombatResult> SimulateAsync(
@@ -175,17 +172,12 @@ public class CombatSimulator : ICombatSimulator
         SimulateAsync(fighter, fighterAttack, opponent, opponentAttack, maxTicks, terrain: terrain)
             .GetAwaiter().GetResult();
 
-    // ── Private helpers ────────────────────────────────────────────────────────
-
     private CombatLogEntry BuildAfterTurnEntry(CombatantState state, int tick, int tmCost = TurnmeterState.TurnThreshold)
     {
         var before = state.Meter.CurrentValue;
         state.Meter = _turnmeter.AfterTurn(state.Meter, tmCost);
         return _logger.BuildAfterTurnEntry(tick, state.Character.Name, before, state.Meter.CurrentValue, tmCost);
     }
-
-    private CombatLogEntry BuildDefeatEntry(int tick, Character target) =>
-        _logger.BuildDefeatEntry(tick, target);
 
     private CombatLogEntry BuildAttackEntry(
         int tick, string actorName, string attackSourceName, bool isSpell,
@@ -194,15 +186,59 @@ public class CombatSimulator : ICombatSimulator
         _logger.BuildAttackEntry(tick, actorName, attackSourceName, isSpell, targetName, result,
             damageType, spellLevel, casterLevel, _dice.RollIndex);
 
-    private CombatLogEntry BuildDamageEntry(
-        int tick, string targetName, int damage, int hpBefore, int hpAfter) =>
-        _logger.BuildDamageEntry(tick, targetName, damage, hpBefore, hpAfter);
+    private async Task<CombatResult?> ProcessMultiAttackAsync(
+        int tick, CombatantState actorState, ActorSetup setup,
+        List<CombatantState> states, Dictionary<Character, CombatantState> stateMap,
+        Dictionary<Character, Character> lastAttackerOf,
+        Party heroParty, Party enemyParty, List<CombatLogEntry> log,
+        Func<CombatLogEntry, Task> notify, Action<string?> setActiveActor,
+        CancellationToken ct, TerrainType terrain)
+    {
+        while (actorState.AttacksRemaining > 0)
+        {
+            actorState.AttacksRemaining--;
+            var attackNum = actorState.Character.AttacksPerTurn - actorState.AttacksRemaining;
+            if (attackNum > 1)
+                await notify(new CombatLogEntry
+                {
+                    Tick = tick, ActorName = actorState.Character.Name,
+                    EventType = "ExtraAttack",
+                    Message = $"{actorState.Character.Name} strikes again! (attack {attackNum} of {actorState.Character.AttacksPerTurn})"
+                });
 
-    // ── Healing helpers ────────────────────────────────────────────────────────
+            var result = _combat.ResolveAttack(actorState.Character, setup.Target, setup.Source, actorState.EngagementRange, terrain);
+            var spellLevel = setup.IsSpell && setup.Source is Spell attackSpell ? attackSpell.SpellLevel : (int?)null;
+            await notify(BuildAttackEntry(tick, actorState.Character.Name, setup.Source.Name, setup.IsSpell, setup.Target.Name, result, setup.Source.DamageType, spellLevel, actorState.Character.Level));
 
-    // ── Tick-level orchestration ────────────────────────────────────────────────
+            var outcome = await _attackResolver.ResolveAttackOutcomeAsync(
+                tick, actorState, setup, result, states, stateMap, lastAttackerOf,
+                heroParty, enemyParty, log, notify);
+            if (outcome is not null)
+            {
+                setActiveActor(null);
+                actorState.Meter.IsActive = false;
+                await notify(BuildAfterTurnEntry(actorState, tick, setup.TmCost));
+                return outcome;
+            }
 
-    // ── Per-actor turn orchestration ────────────────────────────────────────────
+            await _turnMeterProcessor.ApplyDefenderTmBoostAsync(tick, actorState, setup.Target, result, stateMap, notify);
+            await _statusEffectProcessor.ApplyFumblePenaltyAsync(tick, actorState, result, notify);
+
+            if (setup.Source is Spell spellWithBuffs && spellWithBuffs.OnHitEffects.Count > 0)
+                await _statusEffectProcessor.ProcessSelfBuffsAsync(tick, actorState.Character, spellWithBuffs, notify);
+
+            if (setup.Target.IsAlive || actorState.AttacksRemaining <= 0) continue;
+
+            var liveEnemies = states
+                .Where(s => s.PartyIndex != actorState.PartyIndex && s.Character.IsAlive).ToList();
+            if (liveEnemies.Count == 0) break;
+            var selector = actorState.PartyIndex == 0 ? _heroTargetSelector : _enemyTargetSelector;
+            var newTarget = await selector.SelectTargetAsync(
+                actorState.Character, liveEnemies.Select(s => s.Character), ct);
+            setup = new ActorSetup(setup.Source, newTarget, setup.TmCost, setup.IsSpell);
+        }
+        return null;
+    }
 
     private async Task<CombatResult?> ProcessActingActorAsync(
         int tick, int currentRound, CombatantState actorState,
@@ -277,81 +313,13 @@ public class CombatSimulator : ICombatSimulator
             return healResult;
         }
 
-        // ── Multi-attack loop ──────────────────────────────────────────────
-        CombatResult? multiAttackOutcome = null;
-        while (actorState.AttacksRemaining > 0)
-        {
-            actorState.AttacksRemaining--;
-
-            var attackNum = actorState.Character.AttacksPerTurn - actorState.AttacksRemaining;
-            if (attackNum > 1)
-            {
-                await notify(new CombatLogEntry
-                {
-                    Tick      = tick,
-                    ActorName = actorState.Character.Name,
-                    EventType = "ExtraAttack",
-                    Message   = $"{actorState.Character.Name} strikes again! (attack {attackNum} of {actorState.Character.AttacksPerTurn})"
-                });
-            }
-
-            var result = _combat.ResolveAttack(actorState.Character, setup.Target, setup.Source, actorState.EngagementRange, terrain);
-
-            var spellLevel = setup.IsSpell && setup.Source is Spell attackSpell ? attackSpell.SpellLevel : (int?)null;
-            await notify(BuildAttackEntry(tick, actorState.Character.Name, setup.Source.Name, setup.IsSpell, setup.Target.Name, result, setup.Source.DamageType, spellLevel, actorState.Character.Level));
-
-            var outcome = await _attackResolver.ResolveAttackOutcomeAsync(
-                tick, actorState, setup, result, states, stateMap, lastAttackerOf,
-                heroParty, enemyParty, log, notify);
-            if (outcome is not null)
-            {
-                multiAttackOutcome = outcome;
-                break;
-            }
-
-            await _turnMeterProcessor.ApplyDefenderTmBoostAsync(tick, actorState, setup.Target, result, stateMap, notify);
-            await _statusEffectProcessor.ApplyFumblePenaltyAsync(tick, actorState, result, notify);
-
-            // ── Self-buffs from protective spells ──────────────────────────
-            if (setup.Source is Spell spellWithBuffs && spellWithBuffs.OnHitEffects.Count > 0)
-                await _statusEffectProcessor.ProcessSelfBuffsAsync(tick, actorState.Character, spellWithBuffs, notify);
-
-            // If target died, re-select for remaining attacks
-            if (!setup.Target.IsAlive && actorState.AttacksRemaining > 0)
-            {
-                var liveEnemies = states
-                    .Where(s => s.PartyIndex != actorState.PartyIndex && s.Character.IsAlive)
-                    .ToList();
-                if (liveEnemies.Count == 0)
-                {
-                    multiAttackOutcome = null;
-                    break;
-                }
-                var selector = actorState.PartyIndex == 0 ? _heroTargetSelector : _enemyTargetSelector;
-                var newTarget = await selector.SelectTargetAsync(
-                    actorState.Character, liveEnemies.Select(s => s.Character), ct);
-                setup = new ActorSetup(setup.Source, newTarget, setup.TmCost, setup.IsSpell);
-            }
-        }
-
-        if (multiAttackOutcome is not null)
-        {
-            setActiveActor(null);
-            actorState.Meter.IsActive = false;
-            await notify(BuildAfterTurnEntry(actorState, tick, setup.TmCost));
-            return multiAttackOutcome;
-        }
+        if (await ProcessMultiAttackAsync(tick, actorState, setup, states, stateMap, lastAttackerOf,
+                heroParty, enemyParty, log, notify, setActiveActor, ct, terrain) is { } outcome)
+            return outcome;
 
         setActiveActor(null);
         actorState.Meter.IsActive = false;
         await notify(BuildAfterTurnEntry(actorState, tick, setup.TmCost));
         return null;
     }
-
-    // ── Attack setup (queued-spell path vs new-attack path) ─────────────────────
-
-    // ── Pet summoning ────────────────────────────────────────────────────────────
-
-    // ── Attack outcome dispatch ──────────────────────────────────────────────────
-
 }
