@@ -81,10 +81,13 @@ All tests must pass (`dotnet test BattleArena.sln` from `src/`). If test count d
 ### Coverage
 
 ```bash
-make test-coverage    # from src/ — uses coverlet.runsettings (OpenCover format, excludes Program/AddServices)
+make test-coverage    # from src/ — inline coverlet properties (OpenCover format). Pass --settings coverlet.runsettings to get exclusions.
 ```
 
 Alternative: `dotnet test BattleArena.sln /p:CollectCoverage=true /p:CoverletOutputFormat=opencover`
+
+Single test project: `dotnet test BattleArena.sln --project BattleArena.UnitTests/BattleArena.UnitTests.csproj`
+Single test: `dotnet test BattleArena.sln --filter "FullyQualifiedName~TestMethodName"`
 
 Targets: Application/Services ≥ 80 %, Core/Entities key methods ≥ 1 dedicated test per source, every interface tested.
 
@@ -175,16 +178,22 @@ Load via OpenCode's skill tool. `combat-mechanics` has `self-update: true` — i
 | Command | What starts |
 |---------|-------------|
 | `make up-local` | DB + API in Docker (ports 5432, 8585). Demo on host via `make demo-local` |
-| `make up-dev` | Everything in Docker (interactive demo container) |
+| `make up-dev` | Build demo in Release, start DB + API + demo (interactive `run --rm`) |
+| `make dev-up` | Alias for `up-dev` (build, start, run demo) |
+| `make run-dev` | Re-run demo container only (DB + API must already be up) |
 | `make test` | `dotnet test BattleArena.sln` |
 | `make test-coverage` | Tests with OpenCover format |
-| `make gui-local` | Run Avalonia GUI standalone (requires DB + API) |
+| `make gui-local` | Run Avalonia GUI standalone (no DB required) |
 | `make install` | Full cycle: clean Docker → test → up-local → demo |
+| `make install-dev` | Full dev setup: clean + dotnet clean + test + dev-up |
+| `make clean-logs` | Delete generated `combat-logs/` files |
 | `make sync-instructions` | Copy AGENTS.md → `.github/copilot-instructions.md` |
 
 `battle-arena-demo` uses `profiles: [demo]` — not started by plain `docker compose up`.
 
 **Docker build strategy**: `dotnet publish` runs on the host, then Docker `COPY`s the pre-built output. No NuGet restore inside containers. Do NOT add `dotnet restore`/`dotnet build` steps to the Dockerfile.
+
+**Dev demo** (`docker-compose.dev.yml`) mounts `combat-logs/` from the repo root into the demo container — logs survive container teardown.
 
 ---
 
@@ -198,6 +207,8 @@ Load via OpenCode's skill tool. `combat-mechanics` has `self-update: true` — i
 - **SQL init files** — `.postgres-init/` contains: `01-schema.sql`, `02-seed-data.sql`, `03-characters.sql`, `04-bestiary.sql`. Keep seed data in sync with design docs.
 - **`design/`** — Contains game design docs: `battle-arena-lore.md`, `combat-design.md`, `dark-orb-game-design.md`, `bestiary.md`, `leveling-plan.md`, `dark-orb-master-spellbook.md`. Keep in sync with SQL seed data.
 - **`bugs-features/`** — Numbered files represent pending work. Process them in ascending numeric order, moving to `bugs-features/done/` when complete. Load the `work-intake` skill for the full workflow.
+- **`scripts/generate-sounds.ps1`** — Generates placeholder WAV files for GUI combat sound effects (installed in `BattleArena.Gui/Assets/Sounds/`).
+- **No `Directory.Build.props`** — Each `.csproj` sets its own SDK version, nullable, ImplicitUsings. No central package management.
 
 ---
 
