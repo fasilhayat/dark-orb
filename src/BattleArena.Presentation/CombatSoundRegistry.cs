@@ -48,6 +48,9 @@ public static class CombatSoundRegistry
     public static string GetSpellCastSoundId(string? spellName = null) =>
         spellName is not null && _spellSounds.TryGetValue(spellName, out var id) ? id : "SpellCast";
 
+    public static string GetSpellUpgradeSoundId(string? spellName = null) =>
+        spellName is not null && _spellSounds.TryGetValue(spellName, out var id) ? id : "SpellUpgrade";
+
     public static string GetHealCastSoundId(string? spellName = null) =>
         spellName is not null && _spellSounds.TryGetValue(spellName, out var id) ? id : "HealCast";
 

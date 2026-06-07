@@ -418,9 +418,7 @@ public static class CombatPlaybackEngine
                         EventType = entry.EventType,
                         ActorName = entry.ActorName,
                         TargetName = entry.TargetName,
-                        OverlayText = isUpgraded
-                            ? $"{entry.AttackSourceName!.ToUpperInvariant()} \u2726"
-                            : entry.AttackSourceName!.ToUpperInvariant(),
+                        OverlayText = entry.AttackSourceName!.ToUpperInvariant(),
                         Color = isUpgraded ? "#ffdd44" : SpellOverlayColor(entry.AttackSourceName),
                         DurationMs = isUpgraded ? 1800 : 1200,
                     };
