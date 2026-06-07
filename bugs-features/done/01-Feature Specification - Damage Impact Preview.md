@@ -206,13 +206,13 @@ Add configurable UI parameters:
 
 # Acceptance Criteria
 
-* [ ] Critical hits trigger pre-damage white preview
-* [ ] High damage triggers preview effect
-* [ ] HP is NOT updated before preview completes
-* [ ] Final HP update occurs after preview
-* [ ] Heal and damage visuals are symmetrical
-* [ ] Multi-hit attacks handled correctly
-* [ ] No modification to combat logic layer
-* [ ] Deterministic rendering from log data
-* [ ] Overkill damage handled correctly
-* [ ] Works with existing combat log format
+* [x] Critical hits trigger pre-damage white preview
+* [x] High damage triggers preview effect
+* [x] HP is NOT updated before preview completes
+* [x] Final HP update occurs after preview
+* [x] Heal and damage visuals are symmetrical
+* [x] Multi-hit attacks handled correctly
+* [x] No modification to combat logic layer
+* [x] Deterministic rendering from log data
+* [x] Overkill damage handled correctly
+* [x] Works with existing combat log format

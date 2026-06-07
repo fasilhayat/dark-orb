@@ -81,8 +81,10 @@ All tests must pass (`dotnet test BattleArena.sln` from `src/`). If test count d
 ### Coverage
 
 ```bash
-dotnet test BattleArena.sln --collect:"XPlat Code Coverage" --results-directory coverage
+make test-coverage    # from src/ — uses coverlet.runsettings (OpenCover format, excludes Program/AddServices)
 ```
+
+Alternative: `dotnet test BattleArena.sln /p:CollectCoverage=true /p:CoverletOutputFormat=opencover`
 
 Targets: Application/Services ≥ 80 %, Core/Entities key methods ≥ 1 dedicated test per source, every interface tested.
 
@@ -177,6 +179,7 @@ Load via OpenCode's skill tool. `combat-mechanics` has `self-update: true` — i
 | `make test` | `dotnet test BattleArena.sln` |
 | `make test-coverage` | Tests with OpenCover format |
 | `make gui-local` | Run Avalonia GUI standalone (requires DB + API) |
+| `make install` | Full cycle: clean Docker → test → up-local → demo |
 | `make sync-instructions` | Copy AGENTS.md → `.github/copilot-instructions.md` |
 
 `battle-arena-demo` uses `profiles: [demo]` — not started by plain `docker compose up`.
@@ -189,6 +192,10 @@ Load via OpenCode's skill tool. `combat-mechanics` has `self-update: true` — i
 
 - **No EF Core** — Data access uses raw Npgsql + a custom `DbContext` wrapper. Do not write Entity Framework code.
 - **No CI configured** — `.github/workflows/` is empty. The agent must not rely on CI to catch issues; run `dotnet test` locally.
+- **No `opencode.json`** — This repo has no OpenCode config file. Instructions come solely from `AGENTS.md`.
+- **API requires `X-Api-Key` header** — All endpoints except `/swagger` and `/api/healthcheck` require an API key. Default: `BA-DEV-2024-SECRET`. 500 errors return JSON `{"error":"..."}`.
+- **Swagger only in Development/LocalDev** — `app.UseSwagger()` is gated on `IsDevelopment() || IsEnvironment("LocalDev")`.
+- **`design/`** — Contains game design docs: `battle-arena-lore.md`, `combat-design.md`, `dark-orb-game-design.md`, `bestiary.md`, `leveling-plan.md`, etc. Keep in sync with SQL seed data.
 - **`bugs-features/`** — Numbered files represent pending work. Process them in ascending numeric order, moving to `bugs-features/done/` when complete. Load the `work-intake` skill for the full workflow.
 
 ---
