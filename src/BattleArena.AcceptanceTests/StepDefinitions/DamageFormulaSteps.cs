@@ -21,13 +21,25 @@ public class DamageFormulaSteps
     private readonly ICombatService _combat;
     private Character _attacker = new();
     private Character _defender = new();
-    private Weapon _weapon = new() { DamageDie = DieType.D8, DamageType = DamageType.Slashing };
+    private DieType _weaponDie = DieType.D8;
+    private DamageType _weaponDamageType = DamageType.Slashing;
+    private int _flatDamageBonus;
+    private int _elementalDamage;
     private DamageContext? _result;
 
     public DamageFormulaSteps()
     {
         _combat = new CombatService(_dice, new CombatStatsService());
     }
+
+    private Weapon BuildWeapon() => new()
+    {
+        DamageDie = _weaponDie,
+        DamageType = _weaponDamageType,
+        AttackType = AttackType.Melee,
+        FlatDamageBonus = _flatDamageBonus,
+        ElementalDamage = _elementalDamage
+    };
 
     [Given(@"a damage formula attacker with strength (\d+)")]
     public void GivenADamageFormulaAttackerWithStrength(int strength)
@@ -38,24 +50,22 @@ public class DamageFormulaSteps
     [Given(@"a (\w+) damage weapon with (\w+) die")]
     public void GivenADamageTypeWeaponWithDie(string damageType, string dieName)
     {
-        _weapon = new Weapon
-        {
-            DamageDie = ParseDieType(dieName),
-            DamageType = Enum.Parse<DamageType>(damageType),
-            AttackType = AttackType.Melee
-        };
+        _weaponDie = ParseDieType(dieName);
+        _weaponDamageType = Enum.Parse<DamageType>(damageType);
+        _elementalDamage = 0;
+        _flatDamageBonus = 0;
     }
 
     [Given(@"the weapon has a flat damage bonus of (\d+)")]
     public void GivenTheWeaponHasAFlatDamageBonusOf(int bonus)
     {
-        _weapon.FlatDamageBonus = bonus;
+        _flatDamageBonus = bonus;
     }
 
     [Given(@"the weapon deals (\d+) elemental bonus damage")]
     public void GivenTheWeaponDealsElementalBonusDamage(int elemental)
     {
-        _weapon.ElementalDamage = elemental;
+        _elementalDamage = elemental;
     }
 
     [Given(@"a damage formula target with no modifiers")]
@@ -91,7 +101,7 @@ public class DamageFormulaSteps
     [When(@"damage is resolved against the target")]
     public void WhenDamageIsResolvedAgainstTheTarget()
     {
-        _result = _combat.ResolveDamage(_attacker, _defender, _weapon);
+        _result = _combat.ResolveDamage(_attacker, _defender, BuildWeapon());
     }
 
     [Then(@"the base damage should be (\d+)")]

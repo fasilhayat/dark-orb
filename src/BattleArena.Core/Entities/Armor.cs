@@ -4,24 +4,24 @@ using Core.Entities.Enums;
 
 public class Armor
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
-    public int ArmorClass { get; set; }
-    public string Category { get; set; } = string.Empty;
+    public int Id { get; init; }
+    public string Name { get; init; } = string.Empty;
+    public string Description { get; init; } = string.Empty;
+    public int ArmorClass { get; init; }
+    public string Category { get; init; } = string.Empty;
     public string CategoryName => Category;
-    public int MaxDexterityBonus { get; set; }
-    public bool StealthDisadvantage { get; set; }
-    public int StrengthRequirement { get; set; }
-    public GearQuality Quality { get; set; } = GearQuality.Common;
-    public int ArmorClassBonus { get; set; }
-    public int Mitigation { get; set; }
-    public int TurnMeterPenalty { get; set; }
-    public int TurnMeterCostReduction { get; set; }
-    public int StrengthBonus { get; set; }
-    public int ManaRegenBonus { get; set; }
-    public int MaxManaBonus { get; set; }
-    public int SpellSlotsBonus { get; set; }
-    public int MovementPenalty { get; set; }
-    public List<ResistanceBonus> Resistances { get; set; } = new();
+    public int MaxDexterityBonus { get; init; }
+    public bool StealthDisadvantage { get; init; }
+    public int StrengthRequirement { get; init; }
+    public GearQuality Quality { get; init; } = GearQuality.Common;
+    public int ArmorClassBonus { get; init; }
+    public int Mitigation { get; init; }
+    public int TurnMeterPenalty { get; init; }
+    public int TurnMeterCostReduction { get; init; }
+    public int StrengthBonus { get; init; }
+    public int ManaRegenBonus { get; init; }
+    public int MaxManaBonus { get; init; }
+    public int SpellSlotsBonus { get; init; }
+    public int MovementPenalty { get; init; }
+    public List<ResistanceBonus> Resistances { get; init; } = new();
 }

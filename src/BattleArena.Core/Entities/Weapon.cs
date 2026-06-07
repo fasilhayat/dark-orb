@@ -4,20 +4,20 @@ using Core.Entities.Enums;
 
 public class Weapon : IAttackSource
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
-    public ArchetypeWeapon Archetype { get; set; }
-    public DieType DamageDie { get; set; }
-    public DamageType DamageType { get; set; }
-    public AttackType AttackType { get; set; }
-    public int DamageCount { get; set; } = 1;
-    public int Hands { get; set; } = 1;
-    public GearQuality Quality { get; set; } = GearQuality.Common;
-    public int AttackBonus { get; set; }
-    public int MinimumStrength { get; set; }
-    public int ElementalDamage { get; set; }
-    public ElementalType ElementalType { get; set; } = ElementalType.None;
-    public int FlatDamageBonus { get; set; }
+    public int Id { get; init; }
+    public string Name { get; init; } = string.Empty;
+    public string Description { get; init; } = string.Empty;
+    public ArchetypeWeapon Archetype { get; init; }
+    public DieType DamageDie { get; init; }
+    public DamageType DamageType { get; init; }
+    public AttackType AttackType { get; init; }
+    public int DamageCount { get; init; } = 1;
+    public int Hands { get; init; } = 1;
+    public GearQuality Quality { get; init; } = GearQuality.Common;
+    public int AttackBonus { get; init; }
+    public int MinimumStrength { get; init; }
+    public int ElementalDamage { get; init; }
+    public ElementalType ElementalType { get; init; } = ElementalType.None;
+    public int FlatDamageBonus { get; init; }
     public bool UsesIntelligence => false;
 }

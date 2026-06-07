@@ -443,7 +443,7 @@ Maleth was once an angel of the Silver Basilica who fell during the First Sunder
 | 2 | Greta Ironhand | Dwarf | Fighter | 12 | Merchant | 19 | 10 | 18 | 10 | 13 | 8 | 120 | 14 | 13 |
 | 3 | Shadowmere | Elf | Rogue | 10 | Quest Giver | 10 | 19 | 10 | 16 | 10 | 15 | 40 | 12 | 16 |
 | 4 | Merchant Vex | Kobold | Rogue | 6 | Merchant | 8 | 17 | 10 | 14 | 10 | 14 | 24 | 11 | 18 |
-| 5 | Kaela Vornskald | Human | Barbarian | 10 | Wanderer | 19 | 15 | 17 | 9 | 11 | 13 | 100 | 12 | 15 |
+| 5 | Kaela Vornskald | Human | Barbarian | 10 | Wanderer | 19 | 15 | 17 | 9 | 11 | 13 | 100 | 18 | 15 |
 | 6 | High Priestess Luna | Human | Priest | 14 | Quest Giver | 9 | 11 | 13 | 15 | 19 | 17 | 84 | 11 | 16 |
 | 7 | Lysander the Bard | Gladefolk | Bard | 7 | Quest Giver | 8 | 18 | 13 | 14 | 11 | 18 | 35 | 12 | 17 |
 | 8 | Elder Treant | Elf | Druid | 20 | Quest Giver | 14 | 12 | 16 | 16 | 20 | 15 | 160 | 13 | 15 |
@@ -452,6 +452,6 @@ Maleth was once an angel of the Silver Basilica who fell during the First Sunder
 | 11 | Sister Elira Vane | Human | Cleric | 7 | Healer | 11 | 13 | 15 | 13 | 18 | 15 | 49 | 11 | 17 |
 | 12 | Lord Aethor Valeborn | Elf | Knight | 11 | Duelist | 16 | 16 | 14 | 14 | 10 | 15 | 88 | 16 | 13 |
 | 13 | Finnick Bramblefoot | Gladefolk | Rogue | 8 | Scout/Thief | 8 | 20 | 13 | 14 | 11 | 16 | 40 | 12 | 17 |
-| 14 | Korg Stonefist | Orc | Barbarian | 15 | Hostile | 21 | 10 | 18 | 8 | 8 | 8 | 165 | 16 | 14 |
+| 14 | Korg Stonefist | Orc | Barbarian | 15 | Hostile | 21 | 10 | 18 | 8 | 8 | 8 | 165 | 18 | 14 |
 | 15 | Graveworm | Undead | Fighter | 9 | Hostile | 17 | 10 | 14 | 11 | 8 | 6 | 72 | 16 | 14 |
 | 16 | Infernal Cmdr Maleth | Demon | Knight | 18 | Boss | 22 | 12 | 19 | 15 | 10 | 17 | 180 | 16 | 12 |

@@ -143,7 +143,15 @@ public class CharacterEquipmentSteps
     public void GivenArmorIsCategorizedAs(string armorName, string category)
     {
         if (_character.Equipment.Chest?.Name == armorName)
-            _character.Equipment.Chest.Category = category;
+            _character.Equipment.Chest = new Armor
+            {
+                Name = _character.Equipment.Chest.Name,
+                Category = category,
+                ArmorClass = _character.Equipment.Chest.ArmorClass,
+                Mitigation = _character.Equipment.Chest.Mitigation,
+                MaxDexterityBonus = _character.Equipment.Chest.MaxDexterityBonus,
+                MovementPenalty = _character.Equipment.Chest.MovementPenalty
+            };
     }
 
     [Given(@"the character wields a ""([^""]+)"" in their right hand dealing (\d+)d(\d+) (\w+) damage with attack bonus (\d+)")]

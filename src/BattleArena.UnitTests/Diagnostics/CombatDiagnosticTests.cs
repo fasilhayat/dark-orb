@@ -604,8 +604,11 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
     {
         // Level 11 caster with a level 1 spell → qualifies as upgraded
         // (casterLevel 11 >= spellLevel 1 + UpgradeThreshold 5 = 6)
-        var magicMissile = MakeSpell("Magic Missile", DieType.D4, 3, 2);
-        magicMissile.SpellLevel = 1;
+        var magicMissile = new Spell
+        {
+            Name = "Magic Missile", DamageDie = DieType.D4, DamageCount = 3,
+            AttackBonus = 2, School = SpellSchool.Stormcraft, SpellLevel = 1
+        };
 
         var caster = MakeCaster("Archmage", 11, 18, 14, 50, 8, 15, magicMissile);
         caster.MaxMana = 200;
