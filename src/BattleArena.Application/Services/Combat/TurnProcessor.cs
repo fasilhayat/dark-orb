@@ -38,8 +38,6 @@ internal class TurnProcessor
         _logger = logger;
     }
 
-    public sealed record ActorSetup(IAttackSource Source, Character Target, int TmCost, bool IsSpell);
-
     public async Task<CombatResult?> ProcessCrowdControlledActorsAsync(
         int tick, List<CombatantState> states,
         Func<CombatLogEntry, Task> notify)

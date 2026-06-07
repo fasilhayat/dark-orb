@@ -228,7 +228,7 @@ internal class CombatSimulatorRefactored : ICombatSimulator
             // Check spell reflection
             if (_spellProcessor.ShouldReflectSpell(setup.Target))
             {
-                setup = new TurnProcessor.ActorSetup(setup.Source, actorState.Character, setup.TmCost, true);
+                setup = new ActorSetup(setup.Source, actorState.Character, setup.TmCost, true);
                 await notify(new CombatLogEntry
                 {
                     Tick      = tick,

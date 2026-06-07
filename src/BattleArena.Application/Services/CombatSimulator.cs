@@ -28,8 +28,10 @@ public class CombatSimulator : ICombatSimulator
     private readonly ITargetSelector      _enemyTargetSelector;
     private readonly IActionDecisionSource      _heroActionSource;
     private readonly IActionDecisionSource      _enemyActionSource;
-    private readonly CombatLogger         _logger;
-    private readonly VictoryEvaluator      _victoryEvaluator;
+    private readonly CombatLogger              _logger;
+    private readonly VictoryEvaluator           _victoryEvaluator;
+    private readonly StatusEffectProcessor      _statusEffectProcessor;
+    private readonly TurnMeterProcessor          _turnMeterProcessor;
 
     public CombatSimulator(
         ICombatService combat,
@@ -47,7 +49,9 @@ public class CombatSimulator : ICombatSimulator
         _dice                = dice;
         _logger              = new CombatLogger();
         _victoryEvaluator    = new VictoryEvaluator(dice);
-        _heroTargetSelector  = heroTargetSelector  ?? new RandomTargetSelector();
+        _statusEffectProcessor = new StatusEffectProcessor(statusEffect, dice, _logger);
+        _turnMeterProcessor   = new TurnMeterProcessor(turnmeter, _logger);
+        _heroTargetSelector  = heroTargetSelector ?? new RandomTargetSelector();
         _enemyTargetSelector = enemyTargetSelector ?? new RandomTargetSelector();
         _heroActionSource    = heroActionSource    ?? new AutoActionDecisionSource(dice);
         _enemyActionSource   = enemyActionSource   ?? new AutoActionDecisionSource(dice);
@@ -256,328 +260,6 @@ public class CombatSimulator : ICombatSimulator
         return null;
     }
 
-    // ── Self-buff helpers ─────────────────────────────────────────────────────
-
-    private async Task ProcessSelfBuffsAsync(
-        int tick, Character caster, Spell spell,
-        Func<CombatLogEntry, Task> notify)
-    {
-        foreach (var template in spell.OnHitEffects)
-        {
-            if (template.Target != EffectTarget.Caster) continue;
-
-
-            var effect = new StatusEffect
-            {
-                Name                 = template.Name,
-                Type                 = template.Type,
-                Target               = template.Target,
-                ResistanceType       = template.ResistanceType,
-                ResistanceBonuses    = template.ResistanceBonuses,
-                Duration             = template.Duration,
-                DamagePerTurn        = template.DamagePerTurn,
-                HealingPerTurn       = template.HealingPerTurn,
-                AttackPowerModifier  = template.AttackPowerModifier,
-                DefensePowerModifier = template.DefensePowerModifier,
-                TurnMeterModifier    = template.TurnMeterModifier,
-                ManaRegenModifier    = template.ManaRegenModifier,
-                StackRule            = template.StackRule,
-                ApplicationChance    = template.ApplicationChance,
-                Source               = spell.Name,
-                LeechPerTurn         = template.LeechPerTurn,
-                LeechResourceType    = template.LeechResourceType ?? "HP",
-                CasterName           = template.Type == StatusEffectType.Leech ? caster.Name : string.Empty
-            };
-
-            _statusEffect.Apply(caster, effect);
-            await notify(new CombatLogEntry
-            {
-                Tick             = tick,
-                ActorName        = caster.Name,
-                EventType        = "EffectApplied",
-                StatusEffectName = effect.Name,
-                AttackSourceName = spell.Name,
-                IsBuff           = true,
-                Message          = $"{caster.Name} gains {effect.Name} from {spell.Name}!"
-            });
-        }
-    }
-
-    // ── Status effect helpers ─────────────────────────────────────────────────
-
-    private int RollDie(DieType die) => _dice.Roll(die);
-
-    // ── Extracted acting-loop helpers ───────────────────────────────────────
-
-    private async Task ProcessActorLeechAsync(
-        int tick, CombatantState actorState,
-        List<CombatantState> states,
-        Func<CombatLogEntry, Task> notify)
-    {
-        foreach (var leechEffect in actorState.Character.ActiveStatusEffects
-            .Where(e => e.Type == StatusEffectType.Leech && e.LeechPerTurn > 0 && e.LeechResourceType == "HP")
-            .OrderBy(e => e.ResolutionPriority)
-            .ToList())
-        {
-            var casterName = leechEffect.CasterName;
-            var casterState = states.FirstOrDefault(s => s.Character.Name == casterName);
-            if (casterState is null || !casterState.Character.IsAlive) continue;
-
-            var leechAmount = leechEffect.LeechPerTurn;
-
-            var targetHpBefore = actorState.Character.CurrentHitPoints;
-            actorState.Character.CurrentHitPoints -= leechAmount;
-
-            var casterHpBefore = casterState.Character.CurrentHitPoints;
-            casterState.Character.CurrentHitPoints = Math.Min(
-                casterState.Character.MaxHitPoints,
-                casterHpBefore + leechAmount);
-
-            await notify(new CombatLogEntry
-            {
-                Tick               = tick,
-                ActorName          = actorState.Character.Name,
-                EventType          = "LeechTick",
-                LeechAmount        = leechAmount,
-                LeechCasterName    = casterName,
-                LeechResourceType  = "HP",
-                LeechTargetAfter   = actorState.Character.CurrentHitPoints,
-                LeechCasterAfter   = casterState.Character.CurrentHitPoints,
-                StatusEffectName   = leechEffect.Name,
-                Message            = $"{actorState.Character.Name} loses {leechAmount} HP to {casterName}'s {leechEffect.Name}.  {casterName} gains {leechAmount} HP."
-            });
-        }
-    }
-
-    private async Task<CombatResult?> ProcessActorDoTAsync(
-        int tick, CombatantState actorState,
-        Party heroParty, Party enemyParty,
-        List<CombatLogEntry> log,
-        Func<CombatLogEntry, Task> notify)
-    {
-        foreach (var dotEffect in actorState.Character.ActiveStatusEffects
-            .Where(e => e.Type == StatusEffectType.DamageOverTime && e.DamagePerTurn > 0)
-            .OrderBy(e => e.ResolutionPriority)
-            .ToList())
-        {
-            var dotName = dotEffect.Name;
-            var dotDmg  = dotEffect.DamagePerTurn;
-            actorState.Character.CurrentHitPoints -= dotDmg;
-
-            await notify(new CombatLogEntry
-            {
-                Tick             = tick,
-                ActorName        = actorState.Character.Name,
-                EventType        = "DoTTick",
-                DamageDealt      = dotDmg,
-                TargetHpAfter    = actorState.Character.CurrentHitPoints,
-                StatusEffectName = dotName,
-                Message          = $"{actorState.Character.Name} suffers {dotDmg} {dotName} damage."
-            });
-
-            if (actorState.Character.CurrentHitPoints <= 0)
-            {
-                await notify(BuildDefeatEntry(tick, actorState.Character));
-                var defResult = _victoryEvaluator.BuildDefeatResult(
-                    tick, actorState.PartyIndex, actorState.Character,
-                    heroParty, enemyParty, log);
-                if (defResult is not null) return defResult;
-            }
-        }
-        return null;
-    }
-
-    private async Task ProcessActorHoTAsync(
-        int tick, CombatantState actorState,
-        Func<CombatLogEntry, Task> notify)
-    {
-        foreach (var hotEffect in actorState.Character.ActiveStatusEffects
-            .Where(e => e.Type == StatusEffectType.HealOverTime && e.HealingPerTurn > 0)
-            .OrderBy(e => e.ResolutionPriority)
-            .ToList())
-        {
-            var hotName = hotEffect.Name;
-            var hotHeal = hotEffect.HealingPerTurn;
-            var hpBefore = actorState.Character.CurrentHitPoints;
-            actorState.Character.CurrentHitPoints = Math.Min(
-                actorState.Character.MaxHitPoints,
-                hpBefore + hotHeal);
-
-            await notify(new CombatLogEntry
-            {
-                Tick             = tick,
-                ActorName        = actorState.Character.Name,
-                EventType        = "HoTTick",
-                DamageDealt      = hotHeal,
-                TargetHpBefore   = hpBefore,
-                TargetHpAfter    = actorState.Character.CurrentHitPoints,
-                StatusEffectName = hotName,
-                Message          = $"{actorState.Character.Name} recovers {hotHeal} HP from {hotName}.  HP: {hpBefore} -> {actorState.Character.CurrentHitPoints}"
-            });
-        }
-    }
-
-    private async Task ProcessOnHitEffectsAsync(
-        int tick, Character attacker, Character target, Spell spell,
-        Func<CombatLogEntry, Task> notify)
-    {
-        if (spell.OnHitEffects.Count == 0 && spell.ElementalType == ElementalType.None) return;
-
-        foreach (var template in spell.OnHitEffects)
-        {
-            if (template.Target != EffectTarget.Target) continue;
-
-            // Check for reflection — defender's reflective buff may redirect
-            // the effect back to the original caster.
-            var actualTarget = target;
-            if (TryGetReflectChance(target, out var reflectChance)
-                && _dice.Roll(DieType.D100) <= reflectChance)
-            {
-                actualTarget = attacker;
-                await notify(new CombatLogEntry
-                {
-                    Tick             = tick,
-                    ActorName        = target.Name,
-                    EventType        = "EffectReflected",
-                    StatusEffectName = template.Name,
-                    TargetName       = attacker.Name,
-                    Message          = $"{target.Name}'s reflective shield reflects {template.Name} back to {attacker.Name}!"
-                });
-            }
-
-            var dmgPerTurn = template.DamagePerTurn;
-            if (dmgPerTurn <= 0 && template.DoTDamageCount > 0)
-                for (var i = 0; i < template.DoTDamageCount; i++)
-                    dmgPerTurn += RollDie(template.DoTDamageDie);
-
-            var effect = new StatusEffect
-            {
-                Name                 = template.Name,
-                Type                 = template.Type,
-                Target               = template.Target,
-                ResistanceType       = template.ResistanceType,
-                ResistanceBonuses    = template.ResistanceBonuses,
-                Duration             = template.Duration,
-                DamagePerTurn        = dmgPerTurn,
-                HealingPerTurn       = template.HealingPerTurn,
-                AttackPowerModifier  = template.AttackPowerModifier,
-                DefensePowerModifier = template.DefensePowerModifier,
-                TurnMeterModifier    = template.TurnMeterModifier,
-                StackRule            = template.StackRule,
-                ApplicationChance    = template.ApplicationChance,
-                Source               = spell.Name,
-                LeechPerTurn         = template.LeechPerTurn,
-                LeechResourceType    = template.LeechResourceType ?? "HP",
-                CasterName           = template.Type == StatusEffectType.Leech ? attacker.Name : string.Empty
-            };
-
-            await TryApplyEffectAsync(tick, actualTarget, effect, notify);
-        }
-
-        if (spell.ElementalType != ElementalType.None)
-            await TryApplyElementalDoTAsync(tick, target, spell, notify);
-    }
-
-    private static bool TryGetReflectChance(Character character, out int chance)
-    {
-        chance = 0;
-        foreach (var effect in character.ActiveStatusEffects)
-        {
-            if (effect.ReflectChance > 0 && effect.ReflectChance > chance)
-                chance = effect.ReflectChance;
-        }
-        return chance > 0;
-    }
-
-    private async Task TryApplyElementalDoTAsync(
-        int tick, Character target, Spell spell,
-        Func<CombatLogEntry, Task> notify)
-    {
-        var dot = CreateElementalDoT(spell.ElementalType, spell.Name);
-        if (dot is null) return;
-
-        var dmgPerTurn = dot.DamagePerTurn;
-        if (dmgPerTurn <= 0 && dot.DoTDamageCount > 0)
-            for (var i = 0; i < dot.DoTDamageCount; i++)
-                dmgPerTurn += RollDie(dot.DoTDamageDie);
-        dot.DamagePerTurn = dmgPerTurn;
-
-        await TryApplyEffectAsync(tick, target, dot, notify);
-    }
-
-    private static StatusEffect? CreateElementalDoT(ElementalType type, string sourceName)
-    {
-        return type switch
-        {
-            ElementalType.Fire => new StatusEffect
-            {
-                Name = "Burning", Type = StatusEffectType.DamageOverTime,
-                DamagePerTurn = 0, DoTDamageCount = 1, DoTDamageDie = DieType.D6,
-                Duration = 3, ApplicationChance = 60,
-                ResistanceType = ResistanceType.Fire,
-                Source = sourceName
-            },
-            ElementalType.Ice => new StatusEffect
-            {
-                Name = "Chilled", Type = StatusEffectType.DamageOverTime,
-                DamagePerTurn = 0, DoTDamageCount = 1, DoTDamageDie = DieType.D4,
-                Duration = 2, ApplicationChance = 50,
-                ResistanceType = ResistanceType.Cold,
-                Source = sourceName
-            },
-            ElementalType.Lightning => new StatusEffect
-            {
-                Name = "Shocked", Type = StatusEffectType.DamageOverTime,
-                DamagePerTurn = 0, DoTDamageCount = 1, DoTDamageDie = DieType.D8,
-                Duration = 2, ApplicationChance = 40,
-                ResistanceType = ResistanceType.Lightning,
-                Source = sourceName
-            },
-            ElementalType.Poison => new StatusEffect
-            {
-                Name = "Poisoned", Type = StatusEffectType.DamageOverTime,
-                DamagePerTurn = 0, DoTDamageCount = 1, DoTDamageDie = DieType.D4,
-                Duration = 3, ApplicationChance = 70,
-                ResistanceType = ResistanceType.Poison,
-                Source = sourceName
-            },
-            _ => null
-        };
-    }
-
-    private async Task TryApplyEffectAsync(
-        int tick, Character target, StatusEffect effect,
-        Func<CombatLogEntry, Task> notify)
-    {
-        var resistance = target.ComputeResistance(effect.ResistanceType);
-        var appResult = _statusEffect.TryApply(target, effect, resistance, _dice);
-
-        if (appResult.Applied)
-        {
-            await notify(new CombatLogEntry
-            {
-                Tick             = tick,
-                ActorName        = target.Name,
-                EventType        = "EffectApplied",
-                StatusEffectName = effect.Name,
-                Message          = $"{target.Name} is afflicted with {effect.Name}!"
-            });
-        }
-        else if (appResult.WasResisted)
-        {
-            await notify(new CombatLogEntry
-            {
-                Tick             = tick,
-                ActorName        = target.Name,
-                EventType        = "EffectResisted",
-                StatusEffectName = effect.Name,
-                ResistRoll       = appResult.Roll,
-                ResistThreshold  = appResult.TotalResistance,
-                Message          = $"{target.Name} resists {effect.Name}! (rolled {appResult.Roll} vs {appResult.TotalResistance} resistance)"
-            });
-        }
-    }
-
     private static async Task NotifyExpiredEffectsAsync(
         int tick, Character character,
         IReadOnlyList<string> expired,
@@ -779,17 +461,20 @@ public class CombatSimulator : ICombatSimulator
             return null;
         }
 
-        await ProcessActorHoTAsync(tick, actorState, notify);
+        await _statusEffectProcessor.ProcessActorHoTAsync(tick, actorState, notify);
 
-        await ProcessActorLeechAsync(tick, actorState, states, notify);
+        await _statusEffectProcessor.ProcessActorLeechAsync(tick, actorState, states, notify);
 
-        var dotResult = await ProcessActorDoTAsync(tick, actorState, heroParty, enemyParty, log, notify);
-        if (dotResult is not null)
+        var dotDefeated = await _statusEffectProcessor.ProcessActorDoTAsync(tick, actorState, notify);
+        if (dotDefeated)
         {
+            var dotResult = _victoryEvaluator.BuildDefeatResult(
+                tick, actorState.PartyIndex, actorState.Character,
+                heroParty, enemyParty, log);
             setActiveActor(null);
             actorState.Meter.IsActive = false;
             await notify(BuildAfterTurnEntry(actorState, tick, setup.TmCost));
-            return dotResult;
+            if (dotResult is not null) return dotResult;
         }
 
         var expired = _statusEffect.TickAll(actorState.Character);
@@ -837,12 +522,12 @@ public class CombatSimulator : ICombatSimulator
                 break;
             }
 
-            await ApplyDefenderTmBoostAsync(tick, actorState, setup.Target, result, stateMap, notify);
-            await ApplyFumblePenaltyAsync(tick, actorState, result, notify);
+            await _turnMeterProcessor.ApplyDefenderTmBoostAsync(tick, actorState, setup.Target, result, stateMap, notify);
+            await _statusEffectProcessor.ApplyFumblePenaltyAsync(tick, actorState, result, notify);
 
             // ── Self-buffs from protective spells ──────────────────────────
             if (setup.Source is Spell spellWithBuffs && spellWithBuffs.OnHitEffects.Count > 0)
-                await ProcessSelfBuffsAsync(tick, actorState.Character, spellWithBuffs, notify);
+                await _statusEffectProcessor.ProcessSelfBuffsAsync(tick, actorState.Character, spellWithBuffs, notify);
 
             // If target died, re-select for remaining attacks
             if (!setup.Target.IsAlive && actorState.AttacksRemaining > 0)
@@ -877,8 +562,6 @@ public class CombatSimulator : ICombatSimulator
     }
 
     // ── Attack setup (queued-spell path vs new-attack path) ─────────────────────
-
-    private sealed record ActorSetup(IAttackSource Source, Character Target, int TmCost, bool IsSpell);
 
     private async Task<ActorSetup?> SetupActorAttackAsync(
         int tick, CombatantState actorState,
@@ -1272,7 +955,7 @@ public class CombatSimulator : ICombatSimulator
             });
 
         if (setup.Source is Spell hitSpell)
-            await ProcessOnHitEffectsAsync(tick, actorState.Character, target, hitSpell, notify);
+            await _statusEffectProcessor.ProcessOnHitEffectsAsync(tick, actorState.Character, target, hitSpell, notify);
 
         await ProcessSpellDisruptionAsync(tick, setup, result, stateMap, notify);
         await ProcessConcentrationAsync(tick, target, result, stateMap, notify);
@@ -1352,57 +1035,6 @@ public class CombatSimulator : ICombatSimulator
                 Message          = $"{target.Name} maintains concentration on {concState.QueuedSpell.Spell.Name}. (rolled {roll} vs DC {dc})"
             });
         }
-    }
-
-    // ── Miss consequences ────────────────────────────────────────────────────────
-
-    private async Task ApplyDefenderTmBoostAsync(
-        int tick, CombatantState actorState, Character target, AttackResult result,
-        Dictionary<Character, CombatantState> stateMap, Func<CombatLogEntry, Task> notify)
-    {
-        if (!result.IsPerfectParry && !result.IsTotalReversal) return;
-        var defenderState = stateMap[target];
-        var tmBefore      = defenderState.Meter.CurrentValue;
-        defenderState.Meter.CurrentValue += result.DefenderTmBonus;
-        var eventType = result.IsTotalReversal ? "TotalReversal" : "PerfectParry";
-        var msg       = result.IsTotalReversal
-            ? $"[TOTAL REVERSAL] {target.Name} capitalises on {actorState.Character.Name}'s fumble! +{result.DefenderTmBonus} TM. ({tmBefore} -> {defenderState.Meter.CurrentValue})"
-            : $"[PERFECT PARRY] {target.Name} deflects {actorState.Character.Name}'s attack! +{result.DefenderTmBonus} TM. ({tmBefore} -> {defenderState.Meter.CurrentValue})";
-        await notify(new CombatLogEntry
-        {
-            Tick            = tick,
-            ActorName       = target.Name,
-            TargetName      = actorState.Character.Name,
-            EventType       = eventType,
-            TurnMeterBefore = tmBefore,
-            TurnMeterAfter  = defenderState.Meter.CurrentValue,
-            Message         = msg
-        });
-    }
-
-    private async Task ApplyFumblePenaltyAsync(
-        int tick, CombatantState actorState, AttackResult result,
-        Func<CombatLogEntry, Task> notify)
-    {
-        if (!result.IsFumble) return;
-        var penaltyName = result.IsTotalReversal ? "Total Reversal Penalty" : "Fumble Penalty";
-        _statusEffect.Apply(actorState.Character, new StatusEffect
-        {
-            Name                = penaltyName,
-            Type                = StatusEffectType.Debuff,
-            AttackPowerModifier = result.AttackPowerPenalty,
-            Duration            = 1,
-            StackRule           = StackRule.NoStack,
-            Source              = "Fumble"
-        });
-        if (result.IsTotalReversal) return;
-        await notify(new CombatLogEntry
-        {
-            Tick      = tick,
-            ActorName = actorState.Character.Name,
-            EventType = "FumblePenalty",
-            Message   = $"[FUMBLE] {actorState.Character.Name} fumbles! -2 AttackPower applied for next turn."
-        });
     }
 
 }
