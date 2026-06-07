@@ -10,6 +10,7 @@ public enum ArchetypeWeapon
     TwoHandedBattleAxe,
     Mace,
     TwoHandedWarhammer,
+    TwoHandedMace,
     MorningStar,
     Hammer,
     Lance,

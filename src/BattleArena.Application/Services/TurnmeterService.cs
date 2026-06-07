@@ -19,7 +19,7 @@ public class TurnmeterService : ITurnmeterService
         var gain = Math.Max(1, character.TurnSpeed + dexMod + levelBonus + buffMod - armorPenalty);
 
         if (character.ActiveStatusEffects.Any(e => e.Type == StatusEffectType.Shock))
-            gain = Math.Max(1, gain / 2);
+            gain = Math.Max(1, gain - gain / 3);
 
         return gain;
     }

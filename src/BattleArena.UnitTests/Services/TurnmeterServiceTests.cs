@@ -65,9 +65,9 @@ public class TurnmeterServiceTests
             }
         };
 
-        // gain = max(1, 10 + 0 + 2 + 0 - 0) = 12, then halved = 6
+        // gain = max(1, 10 + 0 + 2 + 0 - 0) = 12, then reduced by 33% = 8
         var result = _sut.ComputeGainPerTick(character);
-        Assert.Equal(6, result);
+        Assert.Equal(8, result);
     }
 
     [Fact]

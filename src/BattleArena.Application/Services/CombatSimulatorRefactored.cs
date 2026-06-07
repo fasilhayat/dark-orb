@@ -170,16 +170,11 @@ public class CombatSimulatorRefactored : ICombatSimulator
         Party heroParty, Party enemyParty, List<CombatLogEntry> log,
         Func<CombatLogEntry, Task> notify, CancellationToken ct, TerrainType terrain)
     {
-        // Process status effects first
-        var defeatedByEffects = await ProcessActorStatusEffectsAsync(
-            tick, actorState, states, stateMap, heroParty, enemyParty, log, notify);
-        if (defeatedByEffects != null) return defeatedByEffects;
-
         // Check if still alive and can act
         if (!actorState.Character.IsAlive || TryGetCrowdControlLabel(actorState.Character) != null)
             return null;
 
-        // Log turn start
+        // Log turn start (must come before status effects so PlayTurnBased has inTurn=true)
         await notify(new CombatLogEntry
         {
             Tick      = tick,
@@ -188,6 +183,11 @@ public class CombatSimulatorRefactored : ICombatSimulator
             IsActive  = true,
             Message   = $"══ {actorState.Character.Name}'s turn ══"
         });
+
+        // Process status effects (leech, DoT, HoT, TickAll) after TurnStart
+        var defeatedByEffects = await ProcessActorStatusEffectsAsync(
+            tick, actorState, states, stateMap, heroParty, enemyParty, log, notify);
+        if (defeatedByEffects != null) return defeatedByEffects;
 
         // Setup attack
         var setup = await _turnProcessor.SetupActorAttackAsync(

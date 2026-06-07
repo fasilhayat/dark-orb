@@ -46,6 +46,12 @@
       "attackBonus": 0, "archetype": "Hammer", "hands": 2
     },
     {
+      "name": "Great Mace",
+      "damageDie": "D10", "damageCount": 1,
+      "damageType": "Bludgeoning", "attackType": "Melee",
+      "attackBonus": 1, "archetype": "TwoHandedMace", "hands": 2
+    },
+    {
       "name": "Short Sword",
       "damageDie": "D6", "damageCount": 1,
       "damageType": "Piercing", "attackType": "Melee",
@@ -215,11 +221,11 @@
     },
     {
       "name": "High Priestess Luna", "level": 12,
-      "strength": 13, "dexterity": 12, "stamina": 14, "intelligence": 14, "wisdom": 19, "charisma": 17,
+      "strength": 16, "dexterity": 12, "stamina": 14, "intelligence": 14, "wisdom": 19, "charisma": 17,
       "race": "Human", "classId": 4, "className": "Priest", "sex": "F",
       "strikeRating": 17, "turnSpeed": 8,
       "maxHitPoints": 70, "maxMana": 120,
-      "equipment": { "chest": "Chain Mail", "rightHand": "War Hammer" },
+      "equipment": { "chest": "Plate Armor", "rightHand": "Great Mace" },
       "memorizedSpells": ["Smite", "Flame Strike", "Heal", "Mass Heal", "Bless", "Chasten"]
     },
     {

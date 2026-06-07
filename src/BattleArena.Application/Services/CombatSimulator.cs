@@ -376,7 +376,7 @@ public class CombatSimulator : ICombatSimulator
                 ApplicationChance    = template.ApplicationChance,
                 Source               = spell.Name,
                 LeechPerTurn         = template.LeechPerTurn,
-                LeechResourceType    = template.LeechResourceType,
+                LeechResourceType    = template.LeechResourceType ?? "HP",
                 CasterName           = template.Type == StatusEffectType.Leech ? caster.Name : string.Empty
             };
 
@@ -424,7 +424,7 @@ public class CombatSimulator : ICombatSimulator
         Func<CombatLogEntry, Task> notify)
     {
         foreach (var leechEffect in actorState.Character.ActiveStatusEffects
-            .Where(e => e.Type == StatusEffectType.Leech && e.LeechPerTurn > 0)
+            .Where(e => e.Type == StatusEffectType.Leech && e.LeechPerTurn > 0 && e.LeechResourceType == "HP")
             .OrderBy(e => e.ResolutionPriority)
             .ToList())
         {
@@ -433,57 +433,28 @@ public class CombatSimulator : ICombatSimulator
             if (casterState is null || !casterState.Character.IsAlive) continue;
 
             var leechAmount = leechEffect.LeechPerTurn;
-            var resourceType = leechEffect.LeechResourceType;
 
-            if (resourceType == "HP")
+            var targetHpBefore = actorState.Character.CurrentHitPoints;
+            actorState.Character.CurrentHitPoints -= leechAmount;
+
+            var casterHpBefore = casterState.Character.CurrentHitPoints;
+            casterState.Character.CurrentHitPoints = Math.Min(
+                casterState.Character.MaxHitPoints,
+                casterHpBefore + leechAmount);
+
+            await notify(new CombatLogEntry
             {
-                var targetHpBefore = actorState.Character.CurrentHitPoints;
-                actorState.Character.CurrentHitPoints -= leechAmount;
-
-                var casterHpBefore = casterState.Character.CurrentHitPoints;
-                casterState.Character.CurrentHitPoints = Math.Min(
-                    casterState.Character.MaxHitPoints,
-                    casterHpBefore + leechAmount);
-
-                await notify(new CombatLogEntry
-                {
-                    Tick               = tick,
-                    ActorName          = actorState.Character.Name,
-                    EventType          = "LeechTick",
-                    LeechAmount        = leechAmount,
-                    LeechCasterName    = casterName,
-                    LeechResourceType  = "HP",
-                    LeechTargetAfter   = actorState.Character.CurrentHitPoints,
-                    LeechCasterAfter   = casterState.Character.CurrentHitPoints,
-                    StatusEffectName   = leechEffect.Name,
-                    Message            = $"{actorState.Character.Name} loses {leechAmount} HP to {casterName}'s {leechEffect.Name}.  {casterName} gains {leechAmount} HP."
-                });
-            }
-            else if (resourceType == "Mana")
-            {
-                var targetManaBefore = actorState.Character.CurrentMana;
-                actorState.Character.CurrentMana = Math.Max(0, targetManaBefore - leechAmount);
-                var actualDrain = targetManaBefore - actorState.Character.CurrentMana;
-
-                var casterManaBefore = casterState.Character.CurrentMana;
-                casterState.Character.CurrentMana = Math.Min(
-                    casterState.Character.EffectiveMaxMana,
-                    casterManaBefore + actualDrain);
-
-                await notify(new CombatLogEntry
-                {
-                    Tick               = tick,
-                    ActorName          = actorState.Character.Name,
-                    EventType          = "LeechTick",
-                    LeechAmount        = actualDrain,
-                    LeechCasterName    = casterName,
-                    LeechResourceType  = "Mana",
-                    LeechTargetAfter   = actorState.Character.CurrentMana,
-                    LeechCasterAfter   = casterState.Character.CurrentMana,
-                    StatusEffectName   = leechEffect.Name,
-                    Message            = $"{actorState.Character.Name} loses {actualDrain} mana to {casterName}'s {leechEffect.Name}.  {casterName} gains {actualDrain} mana."
-                });
-            }
+                Tick               = tick,
+                ActorName          = actorState.Character.Name,
+                EventType          = "LeechTick",
+                LeechAmount        = leechAmount,
+                LeechCasterName    = casterName,
+                LeechResourceType  = "HP",
+                LeechTargetAfter   = actorState.Character.CurrentHitPoints,
+                LeechCasterAfter   = casterState.Character.CurrentHitPoints,
+                StatusEffectName   = leechEffect.Name,
+                Message            = $"{actorState.Character.Name} loses {leechAmount} HP to {casterName}'s {leechEffect.Name}.  {casterName} gains {leechAmount} HP."
+            });
         }
     }
 
@@ -605,7 +576,7 @@ public class CombatSimulator : ICombatSimulator
                 ApplicationChance    = template.ApplicationChance,
                 Source               = spell.Name,
                 LeechPerTurn         = template.LeechPerTurn,
-                LeechResourceType    = template.LeechResourceType,
+                LeechResourceType    = template.LeechResourceType ?? "HP",
                 CasterName           = template.Type == StatusEffectType.Leech ? attacker.Name : string.Empty
             };
 
@@ -800,7 +771,45 @@ public class CombatSimulator : ICombatSimulator
 
             if (s.Character.MaxMana > 0 && s.Character.CurrentMana < s.Character.EffectiveMaxMana)
             {
-                var regen      = s.Character.ManaRegenPerTick;
+                var regen = s.Character.ManaRegenPerTick;
+
+                // Check for mana leech — redirect regen to caster instead
+                var leech = s.Character.ActiveStatusEffects
+                    .FirstOrDefault(e => e.Type == StatusEffectType.Leech
+                        && e.LeechPerTurn > 0
+                        && e.LeechResourceType == "Mana"
+                        && !string.IsNullOrEmpty(e.CasterName));
+
+                if (leech is not null)
+                {
+                    // Redirect regen to leech caster (capped by LeechPerTurn)
+                    var redirectAmount = Math.Min(regen, leech.LeechPerTurn);
+                    var leechCaster = states.FirstOrDefault(cs => cs.Character.Name == leech.CasterName);
+                    if (leechCaster?.Character.IsAlive == true)
+                    {
+                        var casterManaBefore = leechCaster.Character.CurrentMana;
+                        leechCaster.Character.CurrentMana = Math.Min(
+                            leechCaster.Character.EffectiveMaxMana,
+                            casterManaBefore + redirectAmount);
+
+                        await notify(new CombatLogEntry
+                        {
+                            Tick               = tick,
+                            ActorName          = s.Character.Name,
+                            EventType          = "LeechTick",
+                            LeechAmount        = redirectAmount,
+                            LeechCasterName    = leech.CasterName,
+                            LeechResourceType  = "Mana",
+                            LeechTargetAfter   = s.Character.CurrentMana,
+                            LeechCasterAfter   = leechCaster.Character.CurrentMana,
+                            StatusEffectName   = leech.Name,
+                            Message            = $"{s.Character.Name}'s mana regen ({regen}) redirected to {leech.CasterName} by {leech.Name}.  {leech.CasterName} gains {redirectAmount} mana."
+                        });
+                        continue; // Skip normal regen notification
+                    }
+                }
+
+                // Normal regen (no leech or caster dead)
                 var manaBefore = s.Character.CurrentMana;
                 s.Character.CurrentMana = Math.Min(s.Character.EffectiveMaxMana, manaBefore + regen);
                 await notify(new CombatLogEntry

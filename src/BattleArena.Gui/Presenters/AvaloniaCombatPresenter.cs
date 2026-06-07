@@ -525,7 +525,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             () => { card.ManaDrainOpacity = 0.7; card.ManaDrainStart = start; card.ManaDrainFraction = width; },
             o => card.ManaDrainOpacity = o,
             () => { card.ManaDrainOpacity = 0; card.ManaDrainStart = 0; card.ManaDrainFraction = 0; },
-            800);
+            300);
     }
 
     private void AnimateManaGain(CharCardViewModel card, double start, double width)
@@ -1002,11 +1002,12 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     {
         var targetColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         var casterColor = NameBrush(state.IsHeroSide(e.LeechCasterName), e.LeechCasterName, targetColor);
-        var leechSymbol = e.LeechResourceType == "Mana" ? "\u2666" : "\uD83E\uDE78";
-        var leechColor  = e.LeechResourceType == "Mana" ? Magenta : Red;
+        var effectName = e.StatusEffectName ?? (e.LeechResourceType == "Mana" ? "LeechMana" : "Leech");
+        var config = TransferEffectRegistry.GetConfig(effectName);
+        var leechColor = MakeBrush(config.TransferColor);
         return
         [
-            Seg($"  {leechSymbol} ", leechColor),
+            Seg($"  {config.OverlayLabel} ", leechColor),
             Seg($"{e.ActorName}", targetColor),
             Seg("  loses  ", Gray),
             Seg($"{e.LeechAmount} {e.LeechResourceType}", leechColor),

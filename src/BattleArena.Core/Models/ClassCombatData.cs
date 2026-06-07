@@ -140,7 +140,8 @@ public static class ClassCombatData
     public static bool IsTwoHandedArchetype(ArchetypeWeapon archetype) =>
         archetype is ArchetypeWeapon.TwoHandedSword
             or ArchetypeWeapon.TwoHandedBattleAxe
-            or ArchetypeWeapon.TwoHandedWarhammer;
+            or ArchetypeWeapon.TwoHandedWarhammer
+            or ArchetypeWeapon.TwoHandedMace;
 
     public static bool IsBowArchetype(ArchetypeWeapon archetype) =>
         archetype is ArchetypeWeapon.Bow;

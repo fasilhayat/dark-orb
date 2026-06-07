@@ -76,22 +76,18 @@ public class AutoActionDecisionSourceTests
     public async Task ChooseAttack_AllyBelowHalfHp_PrefersHealing()
     {
         var dice = Substitute.For<IDiceService>();
-        // RollIndex(10) returns 0 → takes heal branch (0 < 7)
         dice.RollIndex(Arg.Any<int>()).Returns(0);
         var sut = CreateSut(dice);
-
+        // Ally is at 38% HP (19/50), below the 40% heal threshold → heals
         var actor = MakeActor("Sera", hp: 20, maxHp: 50,
             MakeHeal(),
             MakeDamage());
-
-        var allies = new[] { MakeAlly("Sera", hp: 20, maxHp: 50) };
+        var allies = new[] { MakeAlly("Sera", hp: 19, maxHp: 50) };
         var enemies = new[] { MakeAlly("Gruk", hp: 50) };
-
         var result = await sut.ChooseAttackAsync(actor, null, enemies, allies, 0, default);
-
         Assert.NotNull(result);
         Assert.True(result is Spell s && s.IsHealing,
-            $"Expected a healing spell when ally is below 50% HP, got {result.Name}");
+            $"Expected a healing spell when ally is below 40% HP, got {result.Name}");
     }
 
     [Fact]
@@ -167,19 +163,16 @@ public class AutoActionDecisionSourceTests
         dice.RollIndex(Arg.Any<int>()).Returns(0);
         var sut = CreateSut(dice);
 
+        // Ally is at 30% HP (15/50), below the 40% heal threshold → always heals
         var actor = MakeActor("Sera", hp: 30, maxHp: 50,
             MakeHeal(),
             MakeDamage());
-
-        var allies = new[] { MakeAlly("Sera", hp: 30, maxHp: 50) };
+        var allies = new[] { MakeAlly("Sera", hp: 15, maxHp: 50) };
         var enemies = new[] { MakeAlly("Gruk", hp: 50) };
-
-        // Ally is at 60% HP, below 70% threshold → always heals
         var result = await sut.ChooseAttackAsync(actor, null, enemies, allies, 0, default);
-
         Assert.NotNull(result);
         Assert.True(result is Spell s && s.IsHealing,
-            $"Expected a healing spell when ally is below 70% HP, got {result.Name}");
+            $"Expected a healing spell when ally is below 40% HP, got {result.Name}");
     }
 
     [Fact]

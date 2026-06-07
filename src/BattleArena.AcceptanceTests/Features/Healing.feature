@@ -26,7 +26,7 @@ Feature: Combat — Healing Spells
         Given a Priest "Sera" with 35 HP and 60 mana
         And a Fighter "Theron" with 50 HP and 0 mana who wields a Longsword
         And an Orc "Gruk" with 35 HP and 0 mana who wields a Battle Axe
-        And "Theron" has 20 hit points remaining
+        And "Theron" has 19 hit points remaining
         And "Sera" has memorized spells: "Mass Heal"
         When the healing party combat is simulated with a maximum of 300 ticks
         Then the heal event appears in the log

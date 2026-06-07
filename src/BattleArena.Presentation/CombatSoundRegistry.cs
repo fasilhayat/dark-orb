@@ -45,6 +45,18 @@ public static class CombatSoundRegistry
     public static string GetEventSoundId(string eventType) =>
         _eventSounds.GetValueOrDefault(eventType) ?? string.Empty;
 
+    /// <summary>
+    /// Look up a sound ID for a transfer effect using its config.
+    /// Falls back to event-based lookup if the config has no sound.
+    /// </summary>
+    public static string GetTransferSoundId(string effectName, string eventType)
+    {
+        var config = TransferEffectRegistry.GetConfig(effectName);
+        if (!string.IsNullOrEmpty(config.SoundId))
+            return config.SoundId;
+        return GetEventSoundId(eventType);
+    }
+
     public static string GetSpellCastSoundId(string? spellName = null) =>
         spellName is not null && _spellSounds.TryGetValue(spellName, out var id) ? id : "SpellCast";
 

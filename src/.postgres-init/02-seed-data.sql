@@ -561,7 +561,8 @@ INSERT INTO arena_data.weapon_type (name, description) VALUES
     ('Spear',      'A versatile polearm for thrusting or throwing.'),
     ('TwoHandedSword',     'A massive blade requiring both hands and immense strength.'),
     ('TwoHandedBattleAxe', 'A devastating two-handed axe that cleaves through armor.'),
-    ('TwoHandedWarhammer', 'A colossal hammer wielded in both hands, crushing all before it.')
+    ('TwoHandedWarhammer', 'A colossal hammer wielded in both hands, crushing all before it.'),
+    ('TwoHandedMace',      'A massive two-handed mace that crushes armor and bone with equal ease.')
 ON CONFLICT (name) DO NOTHING;
 
 
@@ -757,6 +758,8 @@ FROM (VALUES
                                                                                         'TwoHandedBattleAxe', 'D10', 'Slashing', 'Melee', 1, 2, 'Common', 0),
     ('Judgment Hammer',          'A towering warhammer of black iron, etched with holy scripture. Its head is shaped like a fist, and it falls with the weight of divine judgment.',
                                                                                         'TwoHandedWarhammer', 'D10', 'Bludgeoning', 'Melee', 1, 2, 'Common', 0),
+    ('Great Mace',                'A massive two-handed mace crafted from solid steel. Its flanged head can crush plate armor like tin, and its weight demands strength few can muster.',
+                                                                                        'TwoHandedMace', 'D10', 'Bludgeoning', 'Melee', 1, 2, 'Common', 1),
     ('Winter Oath',              'A legendary greatsword of ice-blue steel that never dulls. Bound to the oath of the knight who swore to defend the realm from the frozen north.',
                                                                                         'TwoHandedSword', 'D12', 'Ice', 'Melee', 1, 2, 'Legendary', 2),
     ('Dragon Tooth',             'A colossal axe carved from the fang of a primordial dragon. It hums with draconic fury and sets the air ablaze with every swing.',

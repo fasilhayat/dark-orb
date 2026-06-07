@@ -85,7 +85,14 @@ public static class CombatPlaybackEngine
                 EmitVisualEvents(bus, entry);
                 EmitCombatSounds(bus, entry);
 
-                presenter.ShowCombatEvent(entry, state);
+                try
+                {
+                    presenter.ShowCombatEvent(entry, state);
+                }
+                catch
+                {
+                    // Swallow rendering exceptions to prevent playback from halting
+                }
 
                 var delay = presenter.GetEventDelayMs(entry.EventType);
                 if (delay > 0)
@@ -312,7 +319,7 @@ public static class CombatPlaybackEngine
     private static readonly HashSet<string> PersistentEffectNames =
     [
         "Burning", "Ignite", "Frozen", "Freeze", "Shocked", "Stun",
-        "Sleep", "Fear", "Petrify", "Poisoned", "Bleeding", "Leech"
+        "Sleep", "Fear", "Petrify", "Poisoned", "Bleeding", "Leech", "LeechMana"
     ];
 
     private static string GetPersistentColor(string effectName)
@@ -328,9 +335,14 @@ public static class CombatPlaybackEngine
             "Shocked" => "#ffff44",
             "Poisoned" => "#44ff44",
             "Bleeding" => "#ff4444",
-            "Leech" => "#cc44ff",
-            _ => "#44ff44",
+            _ => TryGetTransferColor(effectName),
         };
+    }
+
+    private static string TryGetTransferColor(string effectName)
+    {
+        var config = TransferEffectRegistry.GetConfig(effectName);
+        return config.TransferColor;
     }
 
     private static void EmitCombatSounds(VisualEventBus bus, CombatLogEntry entry)
@@ -364,7 +376,8 @@ public static class CombatPlaybackEngine
                 break;
 
             case "LeechTick":
-                soundId = CombatSoundRegistry.GetEventSoundId("LeechTick");
+                soundId = CombatSoundRegistry.GetTransferSoundId(
+                    entry.StatusEffectName ?? "Leech", entry.EventType);
                 break;
 
             case "PerfectParry":
@@ -647,18 +660,22 @@ public static class CombatPlaybackEngine
             case "LeechTick":
                 if (entry.LeechAmount > 0 && entry.LeechCasterName is not null)
                 {
+                    var effectName = entry.StatusEffectName ?? "Leech";
                     var resourceLabel = entry.LeechResourceType == "Mana" ? "MANA" : "HP";
+                    var config = TransferEffectRegistry.GetConfig(
+                        entry.LeechResourceType == "Mana" ? "LeechMana" : effectName);
                     bus.PublishNormal(new VisualEvent
                     {
                         EventType = entry.EventType,
                         ActorName = entry.ActorName,
                         TargetName = entry.LeechCasterName,
-                        OverlayText = $"{resourceLabel} LEECH",
-                        Color = entry.LeechResourceType == "Mana" ? "#cc44ff" : "#ff6644",
-                        DurationMs = 1000,
+                        OverlayText = $"{resourceLabel} {config.OverlayLabel}",
+                        Color = config.TransferColor,
+                        DurationMs = config.DurationMs,
                         LeechAmount = entry.LeechAmount ?? 0,
                         LeechCasterName = entry.LeechCasterName,
                         LeechResourceType = entry.LeechResourceType ?? "HP",
+                        EffectName = effectName
                     });
                 }
                 break;

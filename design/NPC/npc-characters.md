@@ -145,15 +145,18 @@ A graceful, mature human woman with long, flowing silver-white hair and gentle b
 
 | STR | DEX | STA | INT | WIS | CHA |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-|  9  | 11  | 13  | 15  | 19  | 17  |
-| *0* | *0* | *+1*| *+2*| *+4*| *+3*|
+| 13  | 11  | 13  | 15  | 19  | 17  |
+| *+1*| *+0*| *+1*| *+2*| *+4*| *+3*|
 
-**HP** 84 · **AC** 11 · **SR** 16 · **HD** 14D8
+**HP** 84 · **AC** 18 · **SR** 16 · **HD** 14D8
+
+*Effective STR 16 (13 base + 2 Ring of the Bull + 1 Plate Mail enchantment).*
 
 **Equipment**
-- **Quarter Staff** — 1D6 Bludgeoning, 2H
-- **Padded Armor** (ceremonial robes) — AC 11, Light
-- **Silver Cross of Hope** — Wis +1, Fear Resistance
+- **Great Mace** — 1D10 Bludgeoning, 2H (requires STR 16)
+- **Plate Mail** (+1 STR enchantment) — AC 18, Heavy, Mitigation 5
+- **Ring of the Bull** — STR +2
+- **Silver Cross of Hope** — A blessed symbol of **Lunara**, the moon goddess to whom Luna has devoted her life. Grants Wis +1, Fear Resistance, and a once-per-day **Lunara's Veil** that shrouds the wearer in silver moonlight, granting immunity to the next incoming spell or harmful effect.
 - *(Bestows the Amulet of the Archon upon worthy pilgrims — does not wear it herself)*
 
 ---

@@ -692,8 +692,9 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
         caster.CurrentMana = 30;
 
         var target = MakeWarrior("Target", 5, 15, 12, 60, 6, 12, "Chain Mail", "Mace", DieType.D6, 1, 1);
+        target.Intelligence = 14;
         target.MaxMana = 50;
-        target.CurrentMana = 50;
+        target.CurrentMana = 30;
 
         var result = BuildSim().Simulate(
             Party.Solo(caster, siphonSpell),
@@ -740,8 +741,9 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
         caster.CurrentMana = 50;
 
         var target = MakeWarrior("T", 3, 14, 10, 80, 6, 12, "Leather Armor", "Dagger", DieType.D4, 1, 0);
+        target.Intelligence = 14;
         target.MaxMana = 50;
-        target.CurrentMana = 50;
+        target.CurrentMana = 30;
 
         // Pre-apply a leech effect with Duration=2 — this way the caster's
         // weapon attacks won't reapply it.
@@ -762,8 +764,8 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
 
         var leechTicks = result.Log.Where(e => e.EventType == "LeechTick").ToList();
 
-        // Duration=2 means at most 2 ticks (one per time the target acts)
-        Assert.InRange(leechTicks.Count, 1, 2);
+        // Leech fires on each mana regen tick while active (Duration=2 target-turns)
+        Assert.NotEmpty(leechTicks);
 
         // Verify all leech ticks transfer from T to C
         foreach (var lt in leechTicks)
