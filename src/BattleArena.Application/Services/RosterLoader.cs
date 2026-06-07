@@ -124,13 +124,21 @@ public static class RosterLoader
                 {
                     spell.OnHitEffects.Add(new StatusEffect
                     {
-                        Name              = e.Name,
-                        Type              = ParseEnum<StatusEffectType>(e.Type),
-                        Target            = ParseEnum<EffectTarget>(e.Target),
-                        ResistanceType    = ParseEnum<ResistanceType>(e.ResistanceType),
-                        Duration          = e.Duration,
-                        ApplicationChance = e.ApplicationChance,
-                        ReflectChance     = e.ReflectChance
+                        Name                 = e.Name,
+                        Type                 = ParseEnum<StatusEffectType>(e.Type),
+                        Target               = ParseEnum<EffectTarget>(e.Target),
+                        ResistanceType       = ParseEnum<ResistanceType>(e.ResistanceType),
+                        Duration             = e.Duration,
+                        ApplicationChance    = e.ApplicationChance,
+                        ReflectChance        = e.ReflectChance,
+                        DamagePerTurn        = e.DamagePerTurn,
+                        HealingPerTurn       = e.HealingPerTurn,
+                        LeechPerTurn         = e.LeechPerTurn,
+                        LeechResourceType    = e.LeechResourceType,
+                        AttackPowerModifier  = e.AttackPowerModifier,
+                        DefensePowerModifier = e.DefensePowerModifier,
+                        TurnMeterModifier    = e.TurnMeterModifier,
+                        ManaRegenModifier    = e.ManaRegenModifier
                     });
                 }
             }
@@ -335,6 +343,14 @@ public static class RosterLoader
         public int    Duration          { get; init; } = 1;
         public int    ApplicationChance { get; init; } = 100;
         public int    ReflectChance     { get; init; }
+        public int    DamagePerTurn     { get; init; }
+        public int    HealingPerTurn    { get; init; }
+        public int    LeechPerTurn      { get; init; }
+        public string LeechResourceType { get; init; } = "HP";
+        public int    AttackPowerModifier  { get; init; }
+        public int    DefensePowerModifier { get; init; }
+        public int    TurnMeterModifier    { get; init; }
+        public int    ManaRegenModifier    { get; init; }
     }
 
     private sealed class ArmorDto

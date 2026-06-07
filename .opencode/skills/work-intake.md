@@ -16,7 +16,8 @@ Unnumbered files have no implied order; prompt the user for which to start with.
 3. Implement fixes/features as described.
 4. Run `dotnet test BattleArena.sln` from `src/` to verify nothing is broken.
 5. **Update the task file:** Replace all unchecked `[ ]` with `[x]` in the file before moving it.
-6. Move the completed file to `bugs-features/done/`.
+6. **Append an implementation summary** at the end of the task file describing what was built (key files changed, patterns used, test results).
+7. Move the completed file to `bugs-features/done/`.
 7. Proceed to the next numbered file (if any).
 
 ## Rule

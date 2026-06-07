@@ -15,4 +15,9 @@ public sealed class VisualEvent
     public int DamagePreviewAmount { get; init; }
     public int TargetMaxHp { get; init; }
     public int HpBefore { get; init; }
+
+    // Leech transfer visualization
+    public int LeechAmount { get; init; }
+    public string? LeechCasterName { get; init; }
+    public string LeechResourceType { get; init; } = "HP";
 }

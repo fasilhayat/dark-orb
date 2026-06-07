@@ -2,6 +2,7 @@ namespace BattleArena.Application.Services;
 
 using Application.Interfaces;
 using Core.Entities;
+using Core.Entities.Enums;
 
 public class AutoActionDecisionSource : IActionDecisionSource
 {
@@ -14,6 +15,20 @@ public class AutoActionDecisionSource : IActionDecisionSource
         _dice = dice;
     }
 
+    private static bool IsUsefulLeech(Spell spell, Character actor)
+    {
+        foreach (var eff in spell.OnHitEffects)
+        {
+            if (eff.Type != StatusEffectType.Leech || eff.LeechPerTurn <= 0)
+                continue;
+            if (eff.LeechResourceType == "Mana" && actor.CurrentMana >= actor.EffectiveMaxMana)
+                return false;
+            if (eff.LeechResourceType == "HP" && actor.CurrentHitPoints >= actor.MaxHitPoints)
+                return false;
+        }
+        return true;
+    }
+
     public Task<IAttackSource?> ChooseAttackAsync(
         Character actor,
         IAttackSource? defaultAttack,
@@ -22,7 +37,7 @@ public class AutoActionDecisionSource : IActionDecisionSource
         int currentTick,
         CancellationToken ct)
     {
-        var spells = actor.MemorizedSpells.Where(s => actor.CanCast(s)).ToList();
+        var spells = actor.MemorizedSpells.Where(s => actor.CanCast(s) && IsUsefulLeech(s, actor)).ToList();
 
         if (spells.Count > 0)
         {

@@ -81,4 +81,19 @@ public class CombatLogEntry
     // Snapshot of every living combatant's turn-meter value at the moment this
     // TurnStart was emitted.  Used by PlayTurnBased to display correct TM bars.
     public Dictionary<string, int>? TurnMeterSnapshot { get; set; }
+
+    // Populated on LeechTick events — amount drained from target
+    public int? LeechAmount { get; set; }
+
+    // Populated on LeechTick events — who receives the drained resource
+    public string? LeechCasterName { get; set; }
+
+    // Populated on LeechTick events — "HP" or "Mana"
+    public string? LeechResourceType { get; set; }
+
+    // Populated on LeechTick events — target's resource value after drain
+    public int? LeechTargetAfter { get; set; }
+
+    // Populated on LeechTick events — caster's resource value after gain
+    public int? LeechCasterAfter { get; set; }
 }

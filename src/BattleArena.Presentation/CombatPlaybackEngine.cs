@@ -312,7 +312,7 @@ public static class CombatPlaybackEngine
     private static readonly HashSet<string> PersistentEffectNames =
     [
         "Burning", "Ignite", "Frozen", "Freeze", "Shocked", "Stun",
-        "Sleep", "Fear", "Petrify", "Poisoned", "Bleeding"
+        "Sleep", "Fear", "Petrify", "Poisoned", "Bleeding", "Leech"
     ];
 
     private static string GetPersistentColor(string effectName)
@@ -328,6 +328,7 @@ public static class CombatPlaybackEngine
             "Shocked" => "#ffff44",
             "Poisoned" => "#44ff44",
             "Bleeding" => "#ff4444",
+            "Leech" => "#cc44ff",
             _ => "#44ff44",
         };
     }
@@ -358,6 +359,10 @@ public static class CombatPlaybackEngine
             case "EffectApplied":
                 if (entry.StatusEffectName is not null)
                     soundId = CombatSoundRegistry.GetEffectSoundId(entry.StatusEffectName);
+                break;
+
+            case "LeechTick":
+                soundId = CombatSoundRegistry.GetEventSoundId("LeechTick");
                 break;
 
             case "PerfectParry":
@@ -622,6 +627,25 @@ public static class CombatPlaybackEngine
                     Color = "#ffdd00",
                     DurationMs = 2500
                 });
+                break;
+
+            case "LeechTick":
+                if (entry.LeechAmount > 0 && entry.LeechCasterName is not null)
+                {
+                    var resourceLabel = entry.LeechResourceType == "Mana" ? "MANA" : "HP";
+                    bus.PublishNormal(new VisualEvent
+                    {
+                        EventType = entry.EventType,
+                        ActorName = entry.ActorName,
+                        TargetName = entry.LeechCasterName,
+                        OverlayText = $"{resourceLabel} LEECH",
+                        Color = entry.LeechResourceType == "Mana" ? "#cc44ff" : "#ff6644",
+                        DurationMs = 1000,
+                        LeechAmount = entry.LeechAmount ?? 0,
+                        LeechCasterName = entry.LeechCasterName,
+                        LeechResourceType = entry.LeechResourceType ?? "HP",
+                    });
+                }
                 break;
         }
     }

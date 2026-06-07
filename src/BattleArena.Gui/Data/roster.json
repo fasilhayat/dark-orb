@@ -98,6 +98,15 @@
       "school": "Healing", "damageDie": "D6", "damageCount": 3,
       "damageType": "Healing", "attackBonus": 0,
       "spellLevel": 4, "turnMeterCost": 100, "manaCost": 50
+    },
+    {
+      "name": "Mind Siphon",
+      "school": "Umbramancy", "damageDie": "D4", "damageCount": 1,
+      "damageType": "Shadow", "attackBonus": 0,
+      "spellLevel": 3, "turnMeterCost": 85, "manaCost": 30,
+      "onHitEffects": [
+        { "name": "Leech", "type": "Leech", "target": "Target", "duration": 3, "applicationChance": 80, "resistanceType": "Shadow", "leechPerTurn": 6, "leechResourceType": "Mana" }
+      ]
     }
   ],
 
@@ -134,7 +143,7 @@
       "strikeRating": 15, "turnSpeed": 8,
       "maxHitPoints": 45, "maxMana": 90,
       "equipment": { "chest": "Mithril Chain", "rightHand": "Long Sword" },
-      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Static Shock"]
+      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Static Shock", "Mind Siphon"]
     },
     {
       "name": "Sister Elira Vane", "level": 7,
@@ -168,7 +177,7 @@
       "strikeRating": 14, "turnSpeed": 7,
       "maxHitPoints": 55, "maxMana": 100,
       "equipment": { "chest": "Padded Armor", "rightHand": "Long Sword" },
-      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock"]
+      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Mind Siphon"]
     },
     {
       "name": "Greta Ironhand", "level": 9,

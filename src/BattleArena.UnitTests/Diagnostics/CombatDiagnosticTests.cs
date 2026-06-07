@@ -592,4 +592,112 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
         Assert.Contains(shockApplied, e => e.ActorName == "Defender");
         Assert.DoesNotContain(shockApplied, e => e.ActorName == "Caster");
     }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // TEST 10 — Mana Leech: caster's on-hit leech effect drains mana from target
+    //           and transfers it to caster each turn the target acts.
+    // ─────────────────────────────────────────────────────────────────────────
+
+    [Fact]
+    public void Duel_ManaLeech_DrainsTargetAndGrantsCaster()
+    {
+        var mindLeech = new StatusEffect
+        {
+            Name = "Mind Leech", Type = StatusEffectType.Leech,
+            Target = EffectTarget.Target, Duration = 3,
+            LeechPerTurn = 5, LeechResourceType = "Mana",
+            ApplicationChance = 100, ResistanceType = ResistanceType.Magic
+        };
+        var siphonSpell = MakeSpell("Mind Siphon", DieType.D4, 1, 2, mindLeech);
+        var caster = MakeCaster("Siphoner", 7, 18, 14, 35, 8, 14, siphonSpell);
+        caster.MaxMana = 100;
+        caster.CurrentMana = 30;
+
+        var target = MakeWarrior("Target", 5, 15, 12, 60, 6, 12, "Chain Mail", "Mace", DieType.D6, 1, 1);
+        target.MaxMana = 50;
+        target.CurrentMana = 50;
+
+        var result = BuildSim().Simulate(
+            Party.Solo(caster, siphonSpell),
+            Party.Solo(target, target.Equipment.RightHand!));
+
+        DumpLog(result);
+
+        var leechTicks = result.Log.Where(e => e.EventType == "LeechTick").ToList();
+
+        // LeechTick events must exist
+        Assert.NotEmpty(leechTicks);
+
+        // Every leech tick must involve the caster and target
+        foreach (var lt in leechTicks)
+        {
+            Assert.Equal("Mana", lt.LeechResourceType);
+            Assert.Equal("Siphoner", lt.LeechCasterName);
+            Assert.Equal("Target", lt.ActorName);
+            Assert.True(lt.LeechAmount > 0);
+
+            // Target mana must decrease
+            if (lt.LeechTargetAfter.HasValue)
+                Assert.True(lt.LeechTargetAfter.Value >= 0);
+
+            // Caster mana must not exceed max
+            if (lt.LeechCasterAfter.HasValue)
+                Assert.True(lt.LeechCasterAfter.Value <= caster.EffectiveMaxMana);
+        }
+
+        AssertLogIntegrity(result);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // TEST 11 — Leech expiration: pre-applied leech effect expires cleanly
+    //            after its Duration runs out.  Caster uses a weapon so no
+    //            on-hit effect reapplies the leech.
+    // ─────────────────────────────────────────────────────────────────────────
+
+    [Fact]
+    public void StatusEffect_Leech_ExpiresCleanly()
+    {
+        var caster = MakeWarrior("C", 9, 18, 14, 100, 8, 15, "Plate Armor", "Mace", DieType.D6, 1, 2);
+        caster.MaxMana = 100;
+        caster.CurrentMana = 50;
+
+        var target = MakeWarrior("T", 3, 14, 10, 80, 6, 12, "Leather Armor", "Dagger", DieType.D4, 1, 0);
+        target.MaxMana = 50;
+        target.CurrentMana = 50;
+
+        // Pre-apply a leech effect with Duration=2 — this way the caster's
+        // weapon attacks won't reapply it.
+        target.ActiveStatusEffects.Add(new StatusEffect
+        {
+            Name = "Mind Leech", Type = StatusEffectType.Leech,
+            Duration = 2, LeechPerTurn = 3,
+            LeechResourceType = "Mana",
+            ApplicationChance = 100,
+            CasterName = "C"
+        });
+
+        var result = BuildSim().Simulate(
+            Party.Solo(caster, caster.Equipment.RightHand!),
+            Party.Solo(target, target.Equipment.RightHand!));
+
+        DumpLog(result);
+
+        var leechTicks = result.Log.Where(e => e.EventType == "LeechTick").ToList();
+
+        // Duration=2 means at most 2 ticks (one per time the target acts)
+        Assert.InRange(leechTicks.Count, 1, 2);
+
+        // Verify all leech ticks transfer from T to C
+        foreach (var lt in leechTicks)
+        {
+            Assert.Equal("Mana", lt.LeechResourceType);
+            Assert.Equal("C", lt.LeechCasterName);
+            Assert.Equal("T", lt.ActorName);
+        }
+
+        // Effect must eventually expire
+        Assert.NotEmpty(result.Log.Where(e => e.EventType == "EffectExpired" && e.StatusEffectName == "Mind Leech"));
+
+        AssertLogIntegrity(result);
+    }
 }

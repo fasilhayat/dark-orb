@@ -115,7 +115,7 @@ public class RosterLoaderTests : IDisposable
 
         // ── Vaelith Moonveil — arcane fighter (spellcaster) ─────────────────────
         var vaelith = data.Heroes.First(c => c.Name == "Vaelith Moonveil");
-        Assert.Equal(10, vaelith.MemorizedSpells.Count);
+        Assert.Equal(11, vaelith.MemorizedSpells.Count);
         Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Fireball");
         Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Ice Bolt");
         Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Shock");
@@ -126,6 +126,7 @@ public class RosterLoaderTests : IDisposable
         Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Blink");
         Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Lightning Bolt");
         Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Invisibility");
+        Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Mind Siphon");
         Assert.Equal(90,   vaelith.MaxMana);
         Assert.Equal(90,   vaelith.CurrentMana);
         Assert.Equal("Elf", vaelith.Race?.Name);

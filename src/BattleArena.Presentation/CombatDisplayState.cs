@@ -120,6 +120,23 @@ public sealed class CombatDisplayState
                     manaSt.Mana = e.ManaAfter.Value;
                 break;
 
+            case "LeechTick":
+                if (_chars.TryGetValue(e.ActorName, out var leechTargetSt))
+                {
+                    if (e.LeechResourceType == "HP" && e.LeechTargetAfter.HasValue)
+                        leechTargetSt.Hp = e.LeechTargetAfter.Value;
+                    else if (e.LeechResourceType == "Mana" && e.LeechTargetAfter.HasValue)
+                        leechTargetSt.Mana = e.LeechTargetAfter.Value;
+                }
+                if (e.LeechCasterName is not null && _chars.TryGetValue(e.LeechCasterName, out var leechCasterSt))
+                {
+                    if (e.LeechResourceType == "HP" && e.LeechCasterAfter.HasValue)
+                        leechCasterSt.Hp = e.LeechCasterAfter.Value;
+                    else if (e.LeechResourceType == "Mana" && e.LeechCasterAfter.HasValue)
+                        leechCasterSt.Mana = e.LeechCasterAfter.Value;
+                }
+                break;
+
             case "PetSummoned":
                 if (!string.IsNullOrWhiteSpace(e.SummonedPetName)
                     && _chars.TryGetValue(e.SummonedPetName, out var summonedPet))

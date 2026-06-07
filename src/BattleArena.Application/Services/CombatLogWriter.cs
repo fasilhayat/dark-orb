@@ -267,7 +267,13 @@ public static class CombatLogWriter
                     break;
 
                 case "Healed":
-                    sb.AppendLine($"  [{e.Tick,5}]  HEALED {e.ActorName,-12}  +{e.DamageDealt} HP  ({e.TargetHpBefore} → {e.TargetHpAfter})  [{e.AttackSourceName}]");
+                    sb.AppendLine($"  [{e.Tick,5}]  HEALED {e.ActorName,-12}  +{e.DamageDealt} HP  ({e.TargetHpBefore} \u2192 {e.TargetHpAfter})  [{e.AttackSourceName}]");
+                    lastTick = e.Tick;
+                    break;
+
+                case "LeechTick":
+                    var leechSymbol = e.LeechResourceType == "Mana" ? "\u2666" : "\uD83E\uDE78";
+                    sb.AppendLine($"  [{e.Tick,5}]  LEECH {e.ActorName,-12}  {leechSymbol} -{e.LeechAmount} {e.LeechResourceType}  \u2192  {e.LeechCasterName}  {leechSymbol} +{e.LeechAmount}  [{e.StatusEffectName}]");
                     lastTick = e.Tick;
                     break;
 

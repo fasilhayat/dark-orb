@@ -26,4 +26,13 @@ public class StatusEffect
     public DieType DoTDamageDie { get; set; }
     public int MovementModifier { get; set; }
     public int ReflectChance { get; set; }
+
+    // Leech-specific: amount drained from target per tick (HP or mana)
+    public int LeechPerTurn { get; set; }
+
+    // "HP" or "Mana" — which resource is drained
+    public string LeechResourceType { get; set; } = "HP";
+
+    // Name of the character who cast the leech (receives the drained resource)
+    public string CasterName { get; set; } = string.Empty;
 }

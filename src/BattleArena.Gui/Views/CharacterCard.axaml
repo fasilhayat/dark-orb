@@ -99,6 +99,26 @@
                 <ScaleTransform ScaleX="{Binding ManaFraction}" />
               </Border.RenderTransform>
             </Border>
+            <!-- Mana drain overlay: light red bar showing mana being leeched (on target) -->
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding ManaDrainStart, Converter={StaticResource GridLenConv}}" />
+                <ColumnDefinition Width="{Binding ManaDrainFraction, Converter={StaticResource GridLenConv}}" />
+                <ColumnDefinition Width="{Binding ManaDrainRemainder, Converter={StaticResource GridLenConv}}" />
+              </Grid.ColumnDefinitions>
+              <Border Grid.Column="1" Background="#ff6666" CornerRadius="2"
+                      Opacity="{Binding ManaDrainOpacity}" />
+            </Grid>
+            <!-- Mana gain glow: light purple bar that fades into the mana bar color (on leech caster) -->
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding ManaGainStart, Converter={StaticResource GridLenConv}}" />
+                <ColumnDefinition Width="{Binding ManaGainFraction, Converter={StaticResource GridLenConv}}" />
+                <ColumnDefinition Width="{Binding ManaGainRemainder, Converter={StaticResource GridLenConv}}" />
+              </Grid.ColumnDefinitions>
+              <Border Grid.Column="1" Background="{Binding ManaGainColor}" CornerRadius="2"
+                      Opacity="1" />
+            </Grid>
             <TextBlock Text="{Binding ManaDisplay}" Foreground="White"
                        FontSize="12" FontWeight="Bold"
                        HorizontalAlignment="Center" VerticalAlignment="Center" />

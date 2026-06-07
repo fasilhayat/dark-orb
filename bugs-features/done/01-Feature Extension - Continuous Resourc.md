@@ -212,10 +212,51 @@ These systems must NOT be unified.
 
 ## Acceptance Criteria
 
-* [ ] Leech creates persistent visual link between caster and target
-* [ ] Mana transfer is continuously animated during effect duration
-* [ ] Per-tick delta is visually correct and deterministic
-* [ ] No HP damage FX system is reused for Leech
-* [ ] No desync between caster gain and target loss visuals
-* [ ] Smooth interpolation between ticks implemented
-* [ ] Effect terminates cleanly when Leech ends
+* [x] Leech creates persistent visual link between caster and target
+* [x] Mana transfer is continuously animated during effect duration
+* [x] Per-tick delta is visually correct and deterministic
+* [x] No HP damage FX system is reused for Leech
+* [x] No desync between caster gain and target loss visuals
+* [x] Smooth interpolation between ticks implemented
+* [x] Effect terminates cleanly when Leech ends
+
+---
+
+## Implementation Summary
+
+### Core gameplay mechanic (general Leech behaviour, not spell-specific)
+- **`StatusEffectType.Leech`** — new enum value for generic leech behaviour
+- **`StatusEffect.LeechPerTurn`** — amount drained per tick
+- **`StatusEffect.LeechResourceType`** — `"HP"` or `"Mana"` (per-spell configurable via JSON)
+- **`StatusEffect.CasterName`** — tracks who receives the drained resource (only set for `Type == Leech`)
+- **`CombatLogEntry`** — added `LeechAmount`, `LeechCasterName`, `LeechResourceType`, `LeechTargetAfter`, `LeechCasterAfter` fields
+
+### Combat simulation
+- **`CombatSimulator.ProcessActorLeechAsync`** — processes leech effects during a character's turn; drains HP/Mana from target, transfers to caster (capped at max)
+- Integrated into `ProcessActingActorAsync` after HoT, before DoT
+- **`RosterLoader.StatusEffectDto`** — extended with `LeechPerTurn`, `LeechResourceType`, and other effect fields for JSON deserialization
+- **`AutoActionDecisionSource`** — filters out leech spells when caster's resource is already full (no wasteful casts)
+
+### Presentation / GUI
+- **`CombatDisplayState.ApplyEvent`** — handles `LeechTick` to update both target and caster HP/Mana
+- **`CombatPlaybackEngine`** — emits visual events and sounds for `LeechTick`; leech added to persistent effect names with purple border flicker
+- **`VisualEvent`** — added `LeechAmount`, `LeechCasterName`, `LeechResourceType` fields
+- **`CombatSoundRegistry`** — `LeechTick` sound mapping ("Eerie whisper of draining energy")
+
+### Avalonia GUI
+- **`CharacterCard.axaml`** — mana bar has light red drain overlay (`#ff6666`) and light purple gain glow (`background` animated via `ManaGainColor`)
+- **`CharCardViewModel`** — added `ManaDrainOpacity/Start/Fraction/Remainder` and `ManaGainOpacity/Start/Fraction/Remainder` + `ManaGainColor` (animates light purple → mana bar purple)
+- **`AvaloniaCombatPresenter`** — `AnimateManaDrain` (opacity fade, 800ms) and `AnimateManaGain` (color lerp from `#cc88ff` → `#cc44cc`, 800ms); `BuildLeechTickRow` for GUI log; `LeechTick` routing in `ShowCombatEvent`
+
+### Combat log output
+- **`CombatLogWriter`** — `LeechTick` rendered as `🩸 -<amt> HP → <caster> +<amt>` (or `♦` for mana)
+- **GUI log** — same symbols with colored segments (red for HP, magenta for mana)
+
+### Roster data
+- Added `"Mind Siphon"` spell (Umbramancy, mana leech) to both `BattleArena.Gui/Data/roster.json` and `BattleArena.Demo/roster.json`
+- Given to `Vaelith Moonveil` and `Old Man Kael`
+
+### Tests
+- **`Duel_ManaLeech_DrainsTargetAndGrantsCaster`** — verifies mana transfer via `LeechTick` events
+- **`StatusEffect_Leech_ExpiresCleanly`** — verifies leech duration expiration
+- All **702 tests pass** (582 unit + 120 acceptance)

@@ -148,6 +148,35 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                 }
             }
 
+            if (ev.LeechAmount > 0)
+            {
+                // Mana gain on the caster's mana bar
+                if (ev.LeechCasterName is not null && ev.LeechResourceType == "Mana")
+                {
+                    var casterCard = FindCard(ev.LeechCasterName);
+                    if (casterCard is not null && casterCard.MaxMana > 0)
+                    {
+                        var gainAmount = Math.Min(ev.LeechAmount, casterCard.MaxMana - Math.Max(0, casterCard.Mana));
+                        var start = (double)Math.Max(0, casterCard.Mana) / casterCard.MaxMana;
+                        var width = (double)gainAmount / casterCard.MaxMana;
+                        AnimateManaGain(casterCard, start, width);
+                    }
+                }
+
+                // Mana drain on the target's mana bar
+                if (ev.LeechResourceType == "Mana")
+                {
+                    var targetCard = FindCard(ev.ActorName);
+                    if (targetCard is not null && targetCard.MaxMana > 0)
+                    {
+                        var drained = Math.Min(ev.LeechAmount, Math.Max(0, targetCard.Mana));
+                        var start = (double)Math.Max(0, targetCard.Mana - drained) / targetCard.MaxMana;
+                        var width = (double)drained / targetCard.MaxMana;
+                        AnimateManaDrain(targetCard, start, width);
+                    }
+                }
+            }
+
             FlashBorder(ev.ActorName, ev.Color);
             if (ev.TargetName is not null)
                 FlashBorder(ev.TargetName, ev.Color);
@@ -461,6 +490,59 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             700);
     }
 
+    private void AnimateManaDrain(CharCardViewModel card, double start, double width)
+    {
+        AnimateGlow(
+            () => { card.ManaDrainOpacity = 0.7; card.ManaDrainStart = start; card.ManaDrainFraction = width; },
+            o => card.ManaDrainOpacity = o,
+            () => { card.ManaDrainOpacity = 0; card.ManaDrainStart = 0; card.ManaDrainFraction = 0; },
+            800);
+    }
+
+    private void AnimateManaGain(CharCardViewModel card, double start, double width)
+    {
+        const string lightPurple = "#cc88ff";
+        const string manaBarPurple = "#cc44cc";
+
+        // Parse endpoint colors once
+        var from = Avalonia.Media.Color.Parse(lightPurple);
+        var to = Avalonia.Media.Color.Parse(manaBarPurple);
+
+        card.ManaGainStart = start;
+        card.ManaGainFraction = width;
+        card.ManaGainColor = lightPurple;
+
+        const int durationMs = 800;
+        const int intervalMs = 30;
+        var steps = durationMs / intervalMs;
+
+        Task.Run(async () =>
+        {
+            for (var i = 0; i < steps && !_stopped; i++)
+            {
+                await Task.Delay(intervalMs);
+                if (_stopped) return;
+                var t = (double)(i + 1) / steps;
+                var r = (byte)(from.R + (to.R - from.R) * t);
+                var g = (byte)(from.G + (to.G - from.G) * t);
+                var b = (byte)(from.B + (to.B - from.B) * t);
+                var color = $"#{r:x2}{g:x2}{b:x2}";
+                _dispatcher.Post(() =>
+                {
+                    if (_stopped) return;
+                    card.ManaGainColor = color;
+                });
+            }
+            if (!_stopped)
+                _dispatcher.Post(() =>
+                {
+                    card.ManaGainColor = manaBarPurple;
+                    card.ManaGainFraction = 0;
+                    card.ManaGainStart = 0;
+                });
+        });
+    }
+
     private void AnimateGlow(
         Action setInitial,
         Action<double> setOpacity,
@@ -540,6 +622,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             "Damage"             => [BuildDamageRow(e)],
             "DoTTick"            => [BuildDoTTickRow(e, state)],
             "HoTTick"            => [BuildHoTTickRow(e, state)],
+            "LeechTick"          => [BuildLeechTickRow(e, state)],
             "Healed"             => [BuildHealedRow(e, state)],
             "EffectApplied"      => [BuildEffectAppliedRow(e, state)],
             "EffectResisted"     => [BuildEffectResistedRow(e, state)],
@@ -841,6 +924,26 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         }
         list.Add(Seg($"  from {e.StatusEffectName ?? "HoT"}", Green));
         return list;
+    }
+
+    private static List<LogSegment> BuildLeechTickRow(CombatLogEntry e, CombatDisplayState state)
+    {
+        var targetColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
+        var casterColor = NameBrush(state.IsHeroSide(e.LeechCasterName), e.LeechCasterName, targetColor);
+        var leechSymbol = e.LeechResourceType == "Mana" ? "\u2666" : "\uD83E\uDE78";
+        var leechColor  = e.LeechResourceType == "Mana" ? Magenta : Red;
+        return
+        [
+            Seg($"  {leechSymbol} ", leechColor),
+            Seg($"{e.ActorName}", targetColor),
+            Seg("  loses  ", Gray),
+            Seg($"{e.LeechAmount} {e.LeechResourceType}", leechColor),
+            Seg("  \u2192  ", Gray),
+            Seg($"{e.LeechCasterName}", casterColor),
+            Seg("  gains  ", Gray),
+            Seg($"{e.LeechAmount}", leechColor),
+            Seg($"  [{e.StatusEffectName}]", leechColor),
+        ];
     }
 
     private static List<LogSegment> BuildHealedRow(CombatLogEntry e, CombatDisplayState state)

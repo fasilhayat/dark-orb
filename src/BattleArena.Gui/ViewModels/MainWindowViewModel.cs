@@ -911,6 +911,94 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HealGlowRemainder)));
     }
 
+    // ── Mana Drain Overlay (leech target) ──────────────────
+
+    private double _manaDrainOpacity;
+    public double ManaDrainOpacity
+    {
+        get => _manaDrainOpacity;
+        set => SetField(ref _manaDrainOpacity, value);
+    }
+
+    private double _manaDrainFraction;
+    public double ManaDrainFraction
+    {
+        get => _manaDrainFraction;
+        set
+        {
+            var changed = !_manaDrainFraction.Equals(value);
+            SetField(ref _manaDrainFraction, value);
+            if (changed) RaiseManaDrainRemainder();
+        }
+    }
+
+    private double _manaDrainStart;
+    public double ManaDrainStart
+    {
+        get => _manaDrainStart;
+        set
+        {
+            var changed = !_manaDrainStart.Equals(value);
+            SetField(ref _manaDrainStart, value);
+            if (changed) RaiseManaDrainRemainder();
+        }
+    }
+
+    public double ManaDrainRemainder => 1.0 - _manaDrainStart - _manaDrainFraction;
+
+    private void RaiseManaDrainRemainder()
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ManaDrainRemainder)));
+    }
+
+    // ── Mana Gain Glow (leech caster) ──────────────────────
+
+    private double _manaGainOpacity;
+    public double ManaGainOpacity
+    {
+        get => _manaGainOpacity;
+        set => SetField(ref _manaGainOpacity, value);
+    }
+
+    private double _manaGainFraction;
+    public double ManaGainFraction
+    {
+        get => _manaGainFraction;
+        set
+        {
+            var changed = !_manaGainFraction.Equals(value);
+            SetField(ref _manaGainFraction, value);
+            if (changed) RaiseManaGainRemainder();
+        }
+    }
+
+    private double _manaGainStart;
+    public double ManaGainStart
+    {
+        get => _manaGainStart;
+        set
+        {
+            var changed = !_manaGainStart.Equals(value);
+            SetField(ref _manaGainStart, value);
+            if (changed) RaiseManaGainRemainder();
+        }
+    }
+
+    public double ManaGainRemainder => 1.0 - _manaGainStart - _manaGainFraction;
+
+    private void RaiseManaGainRemainder()
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ManaGainRemainder)));
+    }
+
+    // Mana gain color: animates from light purple to the mana bar color
+    private string _manaGainColor = "#cc88ff";
+    public string ManaGainColor
+    {
+        get => _manaGainColor;
+        set => SetField(ref _manaGainColor, value);
+    }
+
     // ── Damage Preview properties ──────────────────────────
 
     private double _damagePreviewOpacity;
