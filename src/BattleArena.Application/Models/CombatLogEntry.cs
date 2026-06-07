@@ -96,4 +96,10 @@ public class CombatLogEntry
 
     // Populated on LeechTick events — caster's resource value after gain
     public int? LeechCasterAfter { get; set; }
+
+    // Present on TurnStart and Attack events for spells — used by the
+    // presentation layer to determine if the spell qualifies as "upgraded"
+    // (caster level significantly above spell level → Major visual tier).
+    public int? SpellLevel { get; set; }
+    public int? CasterLevel { get; set; }
 }

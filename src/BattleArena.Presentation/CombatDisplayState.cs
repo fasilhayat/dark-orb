@@ -114,6 +114,10 @@ public sealed class CombatDisplayState
                     healSt.Hp = e.TargetHpAfter ?? Math.Min(healSt.MaxHp, healSt.Hp + (e.DamageDealt ?? 0));
                 break;
 
+            case "ManaPreview":
+                // Preview only — mana is not changed yet
+                break;
+
             case "ManaDeduct":
             case "ManaRegen":
                 if (_chars.TryGetValue(e.ActorName, out var manaSt) && e.ManaAfter.HasValue)

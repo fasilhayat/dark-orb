@@ -999,6 +999,46 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
         set => SetField(ref _manaGainColor, value);
     }
 
+    // ── Mana Cost Preview (pre-deduction glow) ─────────────
+
+    private double _manaCostPreviewOpacity;
+    public double ManaCostPreviewOpacity
+    {
+        get => _manaCostPreviewOpacity;
+        set => SetField(ref _manaCostPreviewOpacity, value);
+    }
+
+    private double _manaCostPreviewFraction;
+    public double ManaCostPreviewFraction
+    {
+        get => _manaCostPreviewFraction;
+        set
+        {
+            var changed = !_manaCostPreviewFraction.Equals(value);
+            SetField(ref _manaCostPreviewFraction, value);
+            if (changed) RaiseManaCostPreviewRemainder();
+        }
+    }
+
+    private double _manaCostPreviewStart;
+    public double ManaCostPreviewStart
+    {
+        get => _manaCostPreviewStart;
+        set
+        {
+            var changed = !_manaCostPreviewStart.Equals(value);
+            SetField(ref _manaCostPreviewStart, value);
+            if (changed) RaiseManaCostPreviewRemainder();
+        }
+    }
+
+    public double ManaCostPreviewRemainder => 1.0 - _manaCostPreviewStart - _manaCostPreviewFraction;
+
+    private void RaiseManaCostPreviewRemainder()
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ManaCostPreviewRemainder)));
+    }
+
     // ── Damage Preview properties ──────────────────────────
 
     private double _damagePreviewOpacity;

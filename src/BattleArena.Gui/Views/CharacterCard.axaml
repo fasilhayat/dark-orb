@@ -119,6 +119,16 @@
               <Border Grid.Column="1" Background="{Binding ManaGainColor}" CornerRadius="2"
                       Opacity="1" />
             </Grid>
+            <!-- Mana cost preview: violet arcane glow showing mana about to be spent -->
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding ManaCostPreviewStart, Converter={StaticResource GridLenConv}}" />
+                <ColumnDefinition Width="{Binding ManaCostPreviewFraction, Converter={StaticResource GridLenConv}}" />
+                <ColumnDefinition Width="{Binding ManaCostPreviewRemainder, Converter={StaticResource GridLenConv}}" />
+              </Grid.ColumnDefinitions>
+              <Border Grid.Column="1" Background="#aa66ff" CornerRadius="2"
+                      Opacity="{Binding ManaCostPreviewOpacity}" />
+            </Grid>
             <TextBlock Text="{Binding ManaDisplay}" Foreground="White"
                        FontSize="12" FontWeight="Bold"
                        HorizontalAlignment="Center" VerticalAlignment="Center" />

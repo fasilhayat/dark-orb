@@ -170,12 +170,13 @@ CombatPlaybackEngine (background thread)
                                                               └─ Thread.Sleep(duration) → SignalIncredibleComplete (blocks engine)
 ```
 
-### Two visual event types
+### Three visual event tiers
 
-| Type | Bus method | Behavior | Used for |
-|------|-----------|----------|----------|
-| **Normal** | `PublishNormal` | Fire-and-forget — visual runs in parallel, engine continues immediately | PerfectParry, DevastatingStrike, TotalReversal, FumblePenalty, CC labels (Stunned, Frozen, Shocked, Sleep, Fear) |
-| **Incredible** | `PublishIncredible` | Blocking — engine pauses until the visual animation completes | Cinematic moments (future: new `IncredibleEvent` log entry type) |
+| Tier | Bus method | Blocks engine? | Visual treatment | Used for |
+|------|-----------|----------------|-----------------|----------|
+| **Normal** | `PublishNormal` | No | Standard overlay, ~1–1.2s | Regular attacks, DoT ticks, effects, normal spells |
+| **Major** | `PublishMajor` | No | Larger overlay, ~1.8–2s, gold tint, optional sound emphasis | Upgraded spells (caster level significantly above spell level) |
+| **Incredible** | `PublishIncredible` | Yes (waits for animation) | Cinematic, ~2.5s+, blocking | Boss transitions, killing blows (future) |
 
 ### VisualEvent model (`VisualEvent.cs`)
 
@@ -190,13 +191,14 @@ CombatPlaybackEngine (background thread)
 
 ### Emitted visual events
 
-| CombatLogEntry EventType | VisualEvent generated | Normal/Incredible | OverlayText | Color |
-|--------------------------|----------------------|-------------------|-------------|-------|
+| CombatLogEntry EventType | VisualEvent generated | Tier | OverlayText | Color |
+|--------------------------|----------------------|------|-------------|-------|
 | `PerfectParry` | PerfectParry | Normal | `"PERFECT PARRY"` | `#44ff44` |
 | `DevastatingStrike` | DevastatingStrike | Normal | `"DEVASTATING STRIKE"` | `#ff44ff` |
 | `TotalReversal` | TotalReversal | Normal | `"TOTAL REVERSAL"` | `#ffff44` |
 | `FumblePenalty` | FumblePenalty | Normal | `"FUMBLE"` | `#ff6644` |
 | `EffectApplied` (with CcLabel) | CcLabel value | Normal | same as CcLabel | `#ff8844` |
+| `Attack` (spell, upgraded) | SpellOverlay | **Major** | `"{SPELL} ✦"` | `#ffdd44` |
 | `IncredibleEvent` | IncredibleEvent | Incredible | entry.Message | `#ffdd00` |
 
 ## Sound Event Pipeline
@@ -266,8 +268,19 @@ The `VisualEventBus`, `SoundEvent`, `CombatSoundRegistry`, and `CombatPlaybackEn
 
 1. Add a `case` to `EmitVisualEvents` in `CombatPlaybackEngine.cs` for the source `EventType`
 2. Create a `VisualEvent` with the desired overlay text, color, and duration
-3. Call `bus.PublishNormal(...)` for parallel or `bus.PublishIncredible(...)` for blocking
-4. The `AvaloniaCombatPresenter` already subscribes — no changes needed unless you want custom rendering
+3. Call `bus.PublishNormal(...)` for fire-and-forget, `bus.PublishMajor(...)` for elevated (non-blocking), or `bus.PublishIncredible(...)` for blocking
+4. Register a delay in `_delays` in `AvaloniaCombatPresenter` if the event needs a specific pacing delay
+5. The `AvaloniaCombatPresenter` subscribes to all three tiers — no changes needed unless you want custom rendering
+
+### Upgraded spell classification
+
+A spell cast is promoted from **Normal → Major** tier when:
+
+```
+caster.Level >= spell.SpellLevel + UpgradeThreshold
+```
+
+Where `UpgradeThreshold` defaults to **5** (tunable constant in `CombatPlaybackEngine`). The check is performed at emit time based on `SpellLevel` and `CasterLevel` fields on the `CombatLogEntry`. Non-spell attacks and spells below the threshold remain Normal.
 
 ## Event Types
 

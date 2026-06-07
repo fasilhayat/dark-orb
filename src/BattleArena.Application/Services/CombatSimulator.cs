@@ -214,7 +214,8 @@ public class CombatSimulator : ICombatSimulator
 
     private CombatLogEntry BuildAttackEntry(
         int tick, string actorName, string attackSourceName, bool isSpell,
-        string targetName, AttackResult result, DamageType damageType = DamageType.Slashing)
+        string targetName, AttackResult result, DamageType damageType = DamageType.Slashing,
+        int? spellLevel = null, int? casterLevel = null)
     {
         var outcome = GetOutcomeTag(result);
         var msg = $"{actorName} [{attackSourceName}] -> {targetName}: " +
@@ -253,6 +254,8 @@ public class CombatSimulator : ICombatSimulator
             AttackSourceName    = attackSourceName,
             IsSpell             = isSpell,
             TargetName          = targetName,
+            SpellLevel          = spellLevel,
+            CasterLevel         = casterLevel,
             Phrase              = phrase,
             Message             = msg
         };
@@ -885,6 +888,8 @@ public class CombatSimulator : ICombatSimulator
             TurnMeterSnapshot  = states
                 .Where(s => s.Character.IsAlive)
                 .ToDictionary(s => s.Character.Name, s => s.Meter.CurrentValue),
+            SpellLevel         = setup.IsSpell && setup.Source is Spell ss ? ss.SpellLevel : null,
+            CasterLevel        = actorState.Character.Level,
             Message            = $"{actorState.Character.Name} takes their turn  (TM: {actorState.Meter.CurrentValue})"
         });
 
@@ -941,7 +946,9 @@ public class CombatSimulator : ICombatSimulator
             }
 
             var result = _combat.ResolveAttack(actorState.Character, setup.Target, setup.Source, actorState.EngagementRange, terrain);
-            await notify(BuildAttackEntry(tick, actorState.Character.Name, setup.Source.Name, setup.IsSpell, setup.Target.Name, result, setup.Source.DamageType));
+
+            var spellLevel = setup.IsSpell && setup.Source is Spell attackSpell ? attackSpell.SpellLevel : (int?)null;
+            await notify(BuildAttackEntry(tick, actorState.Character.Name, setup.Source.Name, setup.IsSpell, setup.Target.Name, result, setup.Source.DamageType, spellLevel, actorState.Character.Level));
 
             var outcome = await ResolveAttackOutcomeAsync(
                 tick, actorState, setup, result, states, stateMap, lastAttackerOf,
@@ -1207,6 +1214,19 @@ public class CombatSimulator : ICombatSimulator
     {
         if (spell is null || spell.ManaCost <= 0) return;
         var before = actorState.Character.CurrentMana;
+
+        // Emit preview BEFORE mutation so the UI can show the reserved segment
+        await notify(new CombatLogEntry
+        {
+            Tick             = tick,
+            ActorName        = actorState.Character.Name,
+            EventType        = "ManaPreview",
+            ManaCost         = spell.ManaCost,
+            ManaAfter        = before,
+            AttackSourceName = spell.Name,
+            Message          = $"{actorState.Character.Name} prepares to spend {spell.ManaCost} mana on {spell.Name}. (current: {before})"
+        });
+
         actorState.Character.CurrentMana = Math.Max(0, before - spell.ManaCost);
         await notify(new CombatLogEntry
         {

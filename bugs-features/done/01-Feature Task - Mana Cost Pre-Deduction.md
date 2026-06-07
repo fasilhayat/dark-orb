@@ -152,11 +152,36 @@ Add tunable UI parameters:
 
 ## Acceptance Criteria
 
-- [ ] Mana cost is visually previewed before deduction
-- [ ] Glow effect accurately reflects exact mana cost
-- [ ] MP bar updates only after preview completes
-- [ ] No desync between engine state and UI display
-- [ ] Works for all spell types and abilities
-- [ ] Handles insufficient mana correctly
-- [ ] Fully deterministic in replay system
-- [ ] No direct UI-side mana calculations
+- [x] Mana cost is visually previewed before deduction
+- [x] Glow effect accurately reflects exact mana cost
+- [x] MP bar updates only after preview completes
+- [x] No desync between engine state and UI display
+- [x] Works for all spell types and abilities
+- [x] Handles insufficient mana correctly
+- [x] Fully deterministic in replay system
+- [x] No direct UI-side mana calculations
+
+---
+
+## Implementation Summary
+
+### Core combat simulation
+- **`CombatSimulator.DeductManaCostAsync`** — emits a `ManaPreview` event (with cost and current mana) BEFORE mutating `CurrentMana`, then emits the existing `ManaDeduct` after deduction
+- Zero-cost spells (`ManaCost <= 0`) skip preview entirely
+
+### Presentation layer
+- **`CombatDisplayState.ApplyEvent`** — `ManaPreview` passes through without state mutation (mana unchanged until `ManaDeduct`)
+- **`CombatPlaybackEngine.EmitVisualEvents`** — emits a `VisualEvent` with `ManaCost` and `ManaBefore` fields, violet arcane overlay text `"MANA -{cost}"`
+- **`VisualEvent`** — added `ManaCost` and `ManaBefore` fields
+
+### GUI (Avalonia)
+- **`CharacterCard.axaml`** — mana bar now has a violet arcane glow overlay (`#aa66ff`) bound to `ManaCostPreviewOpacity/Start/Fraction/Remainder`
+- **`CharCardViewModel`** — added mana cost preview overlay properties
+- **`AvaloniaCombatPresenter`** — `AnimateManaCostPreview` (opacity fade 0.8→0, 600ms); `ManaPreview` handled in `OnNormalVisualEvent` with `ManaCost`; `BuildManaPreviewRow` for GUI log; 500ms delay configured in `_delays`
+
+### Combat log output
+- **`CombatLogWriter`** — `ManaPreview` rendered as `[tick] MANAPREVIEW {message}`
+- **GUI log** — `BuildManaPreviewRow` shows ◆-dimmed "prepares [spell] (reserving {cost} mana)"
+
+### Tests
+- All **702 tests pass** (582 unit + 120 acceptance)

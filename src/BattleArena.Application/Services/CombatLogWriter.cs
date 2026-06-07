@@ -261,6 +261,11 @@ public static class CombatLogWriter
                     lastTick = e.Tick;
                     break;
 
+                case "ManaPreview":
+                    sb.AppendLine($"  [{e.Tick,5}]  MANAPREVIEW  {e.Message}");
+                    lastTick = e.Tick;
+                    break;
+
                 case "ManaDeduct":
                     sb.AppendLine($"  [{e.Tick,5}]  MANACOST  {e.Message}");
                     lastTick = e.Tick;

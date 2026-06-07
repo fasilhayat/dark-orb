@@ -347,6 +347,8 @@ public static class CombatPlaybackEngine
             case "Attack":
                 if (entry.IsCritical == true)
                     soundId = CombatSoundRegistry.GetCriticalHitSoundId();
+                else if (IsUpgradedSpell(entry))
+                    soundId = CombatSoundRegistry.GetEventSoundId("SpellUpgrade");
                 else if (entry.IsSpell)
                     soundId = CombatSoundRegistry.GetSpellCastSoundId(entry.AttackSourceName);
                 break;
@@ -395,6 +397,14 @@ public static class CombatPlaybackEngine
         bus.PublishSound(new SoundEvent { SoundId = soundId, Description = desc });
     }
 
+    private const int UpgradeThreshold = 5;
+
+    private static bool IsUpgradedSpell(CombatLogEntry entry) =>
+        entry.IsSpell &&
+        entry.SpellLevel.HasValue &&
+        entry.CasterLevel.HasValue &&
+        entry.CasterLevel.Value >= entry.SpellLevel.Value + UpgradeThreshold;
+
     private static void EmitVisualEvents(VisualEventBus bus, CombatLogEntry entry)
     {
         switch (entry.EventType)
@@ -402,15 +412,22 @@ public static class CombatPlaybackEngine
             case "Attack":
                 if (entry.IsSpell && !string.IsNullOrEmpty(entry.AttackSourceName))
                 {
-                    bus.PublishNormal(new VisualEvent
+                    var isUpgraded = IsUpgradedSpell(entry);
+                    var ev = new VisualEvent
                     {
                         EventType = entry.EventType,
                         ActorName = entry.ActorName,
                         TargetName = entry.TargetName,
-                        OverlayText = entry.AttackSourceName!.ToUpperInvariant(),
-                        Color = SpellOverlayColor(entry.AttackSourceName),
-                        DurationMs = 1200,
-                    });
+                        OverlayText = isUpgraded
+                            ? $"{entry.AttackSourceName!.ToUpperInvariant()} \u2726"
+                            : entry.AttackSourceName!.ToUpperInvariant(),
+                        Color = isUpgraded ? "#ffdd44" : SpellOverlayColor(entry.AttackSourceName),
+                        DurationMs = isUpgraded ? 1800 : 1200,
+                    };
+                    if (isUpgraded)
+                        bus.PublishMajor(ev);
+                    else
+                        bus.PublishNormal(ev);
                 }
                 else if (entry.IsCritical == true)
                 {
@@ -615,6 +632,22 @@ public static class CombatPlaybackEngine
                     Color = "#44cc44",
                     DurationMs = 2000,
                 });
+                break;
+
+            case "ManaPreview":
+                if (entry.ManaCost > 0)
+                {
+                    bus.PublishNormal(new VisualEvent
+                    {
+                        EventType = entry.EventType,
+                        ActorName = entry.ActorName,
+                        OverlayText = $"MANA -{entry.ManaCost}",
+                        Color = "#aa66ff",
+                        DurationMs = 600,
+                        ManaCost = entry.ManaCost ?? 0,
+                        ManaBefore = entry.ManaAfter ?? 0,
+                    });
+                }
                 break;
 
             case "IncredibleEvent":

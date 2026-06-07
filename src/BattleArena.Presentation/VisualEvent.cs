@@ -20,4 +20,8 @@ public sealed class VisualEvent
     public int LeechAmount { get; init; }
     public string? LeechCasterName { get; init; }
     public string LeechResourceType { get; init; } = "HP";
+
+    // Mana cost preview
+    public int ManaCost { get; init; }
+    public int ManaBefore { get; init; }
 }

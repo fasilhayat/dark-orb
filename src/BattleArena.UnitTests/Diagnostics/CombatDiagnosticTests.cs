@@ -594,6 +594,81 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
     }
 
     // ─────────────────────────────────────────────────────────────────────────
+    // TEST 12 — Major visual event tier: a high-level caster casting a low-level
+    //           spell stamps SpellLevel + CasterLevel on Attack entries, enabling
+    //           the presentation layer to promote the event to Major tier.
+    // ─────────────────────────────────────────────────────────────────────────
+
+    [Fact]
+    public void Attack_HighLevelCasterLowLevelSpell_StampsSpellAndCasterLevel()
+    {
+        // Level 11 caster with a level 1 spell → qualifies as upgraded
+        // (casterLevel 11 >= spellLevel 1 + UpgradeThreshold 5 = 6)
+        var magicMissile = MakeSpell("Magic Missile", DieType.D4, 3, 2);
+        magicMissile.SpellLevel = 1;
+
+        var caster = MakeCaster("Archmage", 11, 18, 14, 50, 8, 15, magicMissile);
+        caster.MaxMana = 200;
+        caster.CurrentMana = 200;
+
+        var target = MakeWarrior("Target", 5, 15, 12, 80, 6, 12, "Chain Mail", "Mace", DieType.D6, 1, 1);
+
+        var result = BuildSim().Simulate(
+            Party.Solo(caster, magicMissile),
+            Party.Solo(target, target.Equipment.RightHand!));
+
+        DumpLog(result);
+
+        // Every TurnStart for the caster (Archmage) must have spell level + caster level
+        foreach (var turnStart in result.Log.Where(e => e.EventType == "TurnStart" && e.ActorName == "Archmage"))
+        {
+            Assert.True(turnStart.SpellLevel.HasValue, $"TurnStart for {turnStart.ActorName} missing SpellLevel");
+            Assert.True(turnStart.CasterLevel.HasValue, $"TurnStart for {turnStart.ActorName} missing CasterLevel");
+        }
+
+        // TurnStart for non-casters should NOT have SpellLevel
+        foreach (var turnStart in result.Log.Where(e => e.EventType == "TurnStart" && e.ActorName != "Archmage"))
+        {
+            Assert.Null(turnStart.SpellLevel);
+            Assert.True(turnStart.CasterLevel.HasValue, $"TurnStart for {turnStart.ActorName} missing CasterLevel");
+        }
+
+        // Every Attack from the caster must have the fields
+        foreach (var atk in result.Log.Where(e => e.EventType == "Attack" && e.ActorName == "Archmage"))
+        {
+            Assert.Equal(1, atk.SpellLevel);
+            Assert.Equal(11, atk.CasterLevel);
+        }
+
+        AssertLogIntegrity(result);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // TEST 13 — Non-spell attacks do NOT have SpellLevel/CasterLevel
+    // ─────────────────────────────────────────────────────────────────────────
+
+    [Fact]
+    public void Attack_WeaponAttack_DoesNotHaveSpellLevel()
+    {
+        var theron = MakeWarrior("Theron", 5, 18, 12, 50, 10, 14, "Chain Mail", "Longsword", DieType.D8, 1, 2);
+        var krag = MakeWarrior("Krag", 4, 17, 9, 45, 7, 15, "Hide Armor", "Orcish Axe", DieType.D10, 1, 1);
+
+        var result = BuildSim().Simulate(
+            Party.Solo(theron, theron.Equipment.RightHand!),
+            Party.Solo(krag, krag.Equipment.RightHand!));
+
+        DumpLog(result);
+
+        // Weapon attacks should NOT have SpellLevel set
+        foreach (var atk in result.Log.Where(e => e.EventType == "Attack"))
+        {
+            Assert.Null(atk.SpellLevel);
+        }
+
+        AssertLogIntegrity(result);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
     // TEST 10 — Mana Leech: caster's on-hit leech effect drains mana from target
     //           and transfers it to caster each turn the target acts.
     // ─────────────────────────────────────────────────────────────────────────

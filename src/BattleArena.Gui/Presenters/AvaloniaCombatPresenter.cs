@@ -59,6 +59,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         ["FumblePenalty"] = 500, ["Death"] = 1200, ["KnockedOut"] = 1200,
         ["PerfectParry"] = 800, ["DevastatingStrike"] = 1000, ["TotalReversal"] = 1000,
         ["DamagePreview"] = 800,
+        ["ManaPreview"] = 500,
     };
 
     public AvaloniaCombatPresenter(
@@ -76,6 +77,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         _pacingMultiplier = 1.0;
 
         _visualEventBus.NormalEventPublished += OnNormalVisualEvent;
+        _visualEventBus.MajorEventPublished += OnMajorVisualEvent;
         _visualEventBus.IncredibleEventPublished += OnIncredibleVisualEvent;
         if (_soundPlayer is not null)
             _visualEventBus.SoundRequested += OnSoundRequested;
@@ -98,6 +100,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         ClearAllPersistentEffects();
         _dispatcher.Post(() => _vm.ClearOverlay());
         _visualEventBus.NormalEventPublished -= OnNormalVisualEvent;
+        _visualEventBus.MajorEventPublished -= OnMajorVisualEvent;
         _visualEventBus.IncredibleEventPublished -= OnIncredibleVisualEvent;
         _visualEventBus.SoundRequested -= OnSoundRequested;
     }
@@ -177,12 +180,37 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                 }
             }
 
+            if (ev.ManaCost > 0)
+            {
+                var card = FindCard(ev.ActorName);
+                if (card is not null && card.MaxMana > 0)
+                {
+                    var cost = Math.Min(ev.ManaCost, Math.Max(0, card.Mana));
+                    var start = (double)Math.Max(0, card.Mana - cost) / card.MaxMana;
+                    var width = (double)cost / card.MaxMana;
+                    AnimateManaCostPreview(card, start, width);
+                }
+            }
+
             FlashBorder(ev.ActorName, ev.Color);
             if (ev.TargetName is not null)
                 FlashBorder(ev.TargetName, ev.Color);
 
             _vm.TriggerOverlay(ev.OverlayText);
             AnimateOverlay();
+        });
+    }
+
+    private void OnMajorVisualEvent(VisualEvent ev)
+    {
+        _dispatcher.Post(() =>
+        {
+            FlashBorder(ev.ActorName, ev.Color);
+            if (ev.TargetName is not null)
+                FlashBorder(ev.TargetName, ev.Color);
+
+            _vm.TriggerOverlay(ev.OverlayText);
+            AnimateMajorOverlay();
         });
     }
 
@@ -543,6 +571,15 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         });
     }
 
+    private void AnimateManaCostPreview(CharCardViewModel card, double start, double width)
+    {
+        AnimateGlow(
+            () => { card.ManaCostPreviewOpacity = 0.8; card.ManaCostPreviewStart = start; card.ManaCostPreviewFraction = width; },
+            o => card.ManaCostPreviewOpacity = o,
+            () => { card.ManaCostPreviewOpacity = 0; card.ManaCostPreviewStart = 0; card.ManaCostPreviewFraction = 0; },
+            600);
+    }
+
     private void AnimateGlow(
         Action setInitial,
         Action<double> setOpacity,
@@ -577,6 +614,40 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     {
         var c = Color.Parse(hex);
         return $"#{(byte)(c.R * 0.5):x2}{(byte)(c.G * 0.5):x2}{(byte)(c.B * 0.5):x2}";
+    }
+
+    private void AnimateMajorOverlay()
+    {
+        const int durationMs = 1800;
+        const int intervalMs = 30;
+        var steps = durationMs / intervalMs;
+        var elapsed = 0;
+
+        Task.Run(async () =>
+        {
+            for (var i = 0; i < steps && !_stopped; i++)
+            {
+                await Task.Delay(intervalMs);
+                if (_stopped) return;
+                elapsed += intervalMs;
+                var t = (double)elapsed / durationMs;
+                var eased = 1.0 - (1.0 - t) * (1.0 - t);
+                var mainScale = 0.40 + eased * 2.60;
+                var mainOpacity = Math.Max(0, 1.0 - (eased - 0.12) / 0.88);
+                _dispatcher.Post(() =>
+                {
+                    if (_stopped) return;
+                    _vm.OverlayScale = mainScale;
+                    _vm.OverlayOpacity = mainOpacity;
+                    _vm.OverlayTrailScale1 = mainScale * 0.78;
+                    _vm.OverlayTrailOpacity1 = mainOpacity * 0.35;
+                    _vm.OverlayTrailScale2 = mainScale * 0.56;
+                    _vm.OverlayTrailOpacity2 = mainOpacity * 0.15;
+                });
+            }
+            if (!_stopped)
+                _dispatcher.Post(() => _vm.ClearOverlay());
+        });
     }
 
     private void AnimateOverlay()
@@ -635,6 +706,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             "RoundEnd"           => [],
             "ManaRegen"          => [BuildManaRegenRow(e, state)],
             "ManaDeduct"         => [BuildManaDeductRow(e, state)],
+            "ManaPreview"        => [BuildManaPreviewRow(e, state)],
             "ApiCall"            => [[Seg("  \u26a1 ", Cyan), Seg(e.Message, DarkGray)]],
             _                    => [[Seg($"  [{e.EventType}] {e.Message}", Gray)]]
         };
@@ -855,6 +927,19 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             Seg("  casts  ", Gray),
             Seg(e.AttackSourceName ?? "unknown", Magenta),
             Seg($"  (-{e.ManaCost} mana)", Magenta),
+        ];
+    }
+
+    private static List<LogSegment> BuildManaPreviewRow(CombatLogEntry e, CombatDisplayState state)
+    {
+        var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
+        return
+        [
+            Seg("  \u25c6 ", Dim),
+            Seg(e.ActorName, actorColor),
+            Seg("  prepares  ", Gray),
+            Seg(e.AttackSourceName ?? "unknown", Magenta),
+            Seg($"  (reserving {e.ManaCost} mana)", Dim),
         ];
     }
 

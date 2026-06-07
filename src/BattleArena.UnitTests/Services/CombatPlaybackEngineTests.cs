@@ -680,6 +680,32 @@ public class CombatPlaybackEngineTests
         Assert.Contains(sounds, s => s.SoundId == "PoisonTick");
     }
 
+    [Fact]
+    public void VisualEventBus_PublishMajor_FiresMajorEvent()
+    {
+        var bus = new VisualEventBus();
+        VisualEvent? captured = null;
+        bus.MajorEventPublished += ev => captured = ev;
+
+        var ev = new VisualEvent
+        {
+            EventType = "Attack",
+            ActorName = "Archmage",
+            OverlayText = "FIREBALL \u2726",
+            Color = "#ffdd44",
+            DurationMs = 1800
+        };
+
+        bus.PublishMajor(ev);
+
+        Assert.NotNull(captured);
+        Assert.Equal("Attack", captured!.EventType);
+        Assert.Equal("Archmage", captured.ActorName);
+        Assert.Contains("\u2726", captured.OverlayText);
+        Assert.Equal("#ffdd44", captured.Color);
+        Assert.Equal(1800, captured.DurationMs);
+    }
+
     // ── Helpers ───────────────────────────────────────────────────────────────────
 
     private sealed class CapturingPresenter : ICombatPresenter
