@@ -222,6 +222,96 @@ Verify all spell progression chains:
 
 ---
 
+## Research Findings — Gap Analysis
+
+### Current State (Pre-Implementation)
+
+#### 1. Spell Schools — COMPLETE MISMATCH
+
+| Source | Schools |
+|--------|---------|
+| **Spellbook** (`dark-orb-master-spellbook.md`) | Aegis, Stormcraft, Verdancy, Umbramancy, Mirage, Dominion, Deity |
+| **DB seed** (`02-seed-data.sql` line 53) | AoE, CC, Conjuration, Evocation, Other, Healing |
+| **C# enum** (`SpellSchool.cs`) | AoE, CC, Conjuration, Evocation, Other, Healing |
+
+The DB and C# enum are locked to a legacy school system. The spellbook defines 7 completely different schools. **This is the root gap that blocks all other work.**
+
+#### 2. `arena_data.spell` table — NEVER POPULATED
+
+- The `spell` table schema exists in `01-schema.sql` with columns: `id, school_id, damage_die_id, damage_type_id, attack_type_id, name, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage, description`
+- **No `INSERT INTO arena_data.spell` statements exist anywhere in the SQL seed files**
+- `character_spell` INSERTs (lines 1297-1334) reference `SELECT s.id FROM arena_data.spell s WHERE s.name = 'X'` — these would fail at runtime since no spells exist in the table
+
+#### 3. Spells Currently Loaded at Runtime (JSON roster only)
+
+| Spell | Roster School | Spellbook School | Notes |
+|-------|--------------|-----------------|-------|
+| Fireball | Evocation | Stormcraft | Afterburn in spellbook says "No in baseline" — task says entry-level must NOT include afterburn (already compliant) |
+| Ice Bolt | Evocation | *not in spellbook* | Ice Storm is the canon spell (level 4, Mage 5); Ice Bolt may be a simplified variant |
+| Shock | Evocation | *not in spellbook* | Lightning Bolt (level 3, Mage 4) is the canon equivalent |
+| Static Shock | Evocation | *not in spellbook* | Arc Lash Variant (Stormcraft, level 3) is the closest match |
+| Smite | Evocation | **Deity** | School mismatch, also shows level 2 in roster vs level 1 in spellbook |
+| Heal | Healing | Dominion / Verdancy | No explicit school "Healing" in spellbook — Heal is Dominion/Verdancy, level 6, Priest 8 |
+| Mass Heal | Healing | *not in spellbook* | Not found in spellbook |
+
+#### 4. Characters and Spell Assignments
+
+| Character | Class | Current Spells (roster + DB) | Should Have (per spellbook) |
+|-----------|-------|------------------------------|---------------------------|
+| Sister Elira Vane | Priest (level 7) | Smite, Heal | Priest spells per Priest table (level 7 access): Bless, Command, Cure Light Wounds, Protection from Evil, Sanctuary, Chasten, Aid, Chant, Hold Person, Prayer, Remove Paralysis, Cure Serious Wounds, etc. |
+| Vaelith Moonveil | Fighter (level 9) | Fireball, Ice Bolt, Shock, Static Shock | Fighter is not a caster class — should have 0 spells. Discrepancy between classId=8 (Fighter) and having `maxMana=90` with 4 memorized spells |
+| Ser Garrick Dawnshield | Paladin (level 12) | *none* | Should have Paladin spells per Paladin table: Bless, Command, Cure Light Wounds, Remove Fear, Protection from Evil, Smite, Aid, Resist Fire/Cold, Chant, Remove Paralysis, Magical Vestment, Free Action, Protection from Evil 10' Radius, Paladin's Warcry, Holy Bulwark |
+| Lord Aethor Valeborn | Knight (level 11) | *none* | Should have Knight spells per Knight table: War Cry, Smite, Rallying Cry, Steadfast Line, Banner of Resolve, Advance Signal, Iron Will Litany, Shielding Cadence, Battle Hymn of Defiance |
+
+**Frozen entities (DO NOT MODIFY):** Training Dummy (Practice Dummy), Golem (Target Golem)
+
+#### 5. DB Schema Gaps vs Spellbook Columns
+
+The `spell` table is missing these columns that the spellbook uses:
+- `access_layer` (Common Core, Class Core, School Specialization)
+- `access_tier` (Early, Mid, Late)
+- `afterburn` (boolean/description)
+- `tags` (Offensive, Defensive, Buff, Debuff, AoE, etc.)
+- No `spell_progression` table exists at all
+- No mechanism for deity-based spell assignments (`primary_deity`, `deity_alignment`)
+
+#### 6. Fireball / Ice Storm Revision Check
+
+| Spell | Current State | Task Requirement |
+|-------|--------------|-----------------|
+| Fireball | Afterburn field says "No in baseline effect text." — **Already compliant** | Entry-level no afterburn |
+| Ice Storm | Afterburn field says "No." — **Already compliant** | Entry-level no secondary effects |
+
+Both already meet the task's revision requirements in the spellbook.
+
+#### 7. Smite / Chasten State
+
+| Spell | DB School | Roster School | Spellbook School | DB Exists | Roster Exists |
+|-------|-----------|---------------|-----------------|-----------|---------------|
+| Smite | *N/A (table empty)* | Evocation | Deity | No spell row | Yes (as Evocation) |
+| Chasten | *N/A (table empty)* | *N/A* | Deity | No spell row | Not in roster |
+
+Smite needs school change from Evocation → Deity. Chasten needs full creation.
+
+#### 8. `battle-arena-lore.md` Alignment
+
+The lore doc (Section 20) uses the same legacy schools as the DB (AoE, CC, Other, Conjuration, Evocation, Healing) — does not match the spellbook's Aegis/Stormcraft/etc. system. This will need a sync pass.
+
+#### Summary of Work Needed
+
+1. Update `SpellSchool` C# enum to match spellbook (Aegis, Stormcraft, Verdancy, Umbramancy, Mirage, Dominion, Deity)
+2. Update `spell_school` table seed data in `02-seed-data.sql` to match
+3. Add missing columns to `spell` table (`access_layer`, `access_tier`, `afterburn`, `tags`) or create a `spell_progression` table
+4. Seed ALL spells from spellbook into `arena_data.spell`
+5. Seed `character_spell` assignments per spellbook class access rules
+6. Update JSON roster files to use correct school names
+7. Create Chasten in roster files
+8. Update Smite school in roster files from Evocation to Deity
+9. Update `battle-arena-lore.md` spells section to match
+10. Do NOT modify Training Dummy or Golem
+
+---
+
 # Phase 7 - Database Integrity Validation
 
 Ensure:

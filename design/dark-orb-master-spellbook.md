@@ -116,6 +116,14 @@ Deities are defined in `design/assets/deities_names-alignment.md`. The authorita
 | **Celestara** | The weaver of destiny | Destiny, Time |
 | **Lunara** | The silver moon goddess | Moon, Magic, Tides |
 
+#### Neutral deity (Boundary / Time aligned)
+
+| Deity | Title | Domain |
+|-------|-------|--------|
+| **Chronara** | The keeper of time | Time, Stars, Balance |
+
+Chronara watches stars ignite and shadows burn out without ever taking a side. She is the neutral fulcrum between the celestial and the void. Her associations with stars and the night sky underpin future night-sky buff mechanics tied to constellations, moon phases, and star visibility.
+
 #### Evil deities (Elemental / Shadow aligned)
 
 | Deity | Title | Domain |
@@ -132,7 +140,7 @@ Every divine spell includes the following conceptual fields:
 | Field | Required | Description |
 |-------|----------|-------------|
 | `PrimaryDeity` | Yes | The deity granting the spell |
-| `DeityAlignment` | Yes | Good or Evil |
+| `DeityAlignment` | Yes | Good, Evil, or Neutral |
 | `DeitySource` | Yes | Power origin identifier |
 | `FallbackDeity` | Yes | `DEITY_UNBOUND` (see below) |
 
@@ -143,6 +151,15 @@ Used when no specific deity is assigned:
 - Meaning: Generic divine power source, temporary fallback
 - Used until explicit deity binding is defined
 - Prevents system gaps during incomplete mappings
+
+### Night-sky buffs (future implementation)
+
+Extra buffs become available when constellations, the moon, or stars are visible in the night sky. These effects are:
+
+- **Reserved for future implementation** — not yet active
+- Associated with Chronara (time/stars), Astrara (guiding star), and Lunara (moon)
+- May grant temporary bonuses to divine caster classes when fighting under visible celestial bodies
+- Design intent: create dynamic power variance tied to in-game time-of-day and location visibility
 
 ### School / deity boundary
 
@@ -221,25 +238,25 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 | Spell | School | Spell Level | Access Layer | Access Tier | Minimum Level | Effect | Impact | Class | Damage Type | Afterburn | Tags |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| Bless | Dominion | 1 | Class Core | Early | Priest 1 | Improves ally morale and combat performance.[web:6] | TM uplift in custom pacing systems and general support.[web:6] | Priest, Paladin [web:6] | None [web:6] | Yes, duration buff.[web:6] | Buff, AoE |
-| Command | Dominion | 1 | Class Core | Early | Priest 1 | One-word forced action disrupting the target briefly.[web:6] | TM disruption and action loss for the victim.[web:6] | Priest, Paladin [web:6] | None/Control [web:6] | No.[web:6] | CC |
-| Cure Light Wounds | Dominion / Verdancy | 1 | Class Core | Early | Priest 1 | Basic divine healing.[web:6] | HP restoration.[web:6] | Priest, Druid, Paladin [web:6] | Healing [web:6] | No direct after-effect beyond restored HP.[web:6] | Healing |
-| Protection from Evil | Aegis | 1 | Class Core | Early | Priest 1 | Defensive ward against evil influence and attacks.[web:6] | Armor Class improvement and defensive resistance versus evil threats.[web:6] | Priest, Paladin [web:6] | None [web:6] | No.[web:6] | Defensive, Buff |
+| Bless | Deity | 1 | Class Core | Early | Priest 1 | Improves ally morale and combat performance.[web:6] | TM uplift in custom pacing systems and general support.[web:6] | Priest, Paladin [web:6] | None [web:6] | Yes, duration buff.[web:6] | Buff, AoE |
+| Command | Deity | 1 | Class Core | Early | Priest 1 | One-word forced action disrupting the target briefly.[web:6] | TM disruption and action loss for the victim.[web:6] | Priest, Paladin [web:6] | None/Control [web:6] | No.[web:6] | CC |
+| Cure Light Wounds | Deity | 1 | Class Core | Early | Priest 1 | Basic divine healing.[web:6] | HP restoration.[web:6] | Priest, Druid, Paladin [web:6] | Healing [web:6] | No direct after-effect beyond restored HP.[web:6] | Healing |
+| Protection from Evil | Deity | 1 | Class Core | Early | Priest 1 | Defensive ward against evil influence and attacks.[web:6] | Armor Class improvement and defensive resistance versus evil threats.[web:6] | Priest, Paladin [web:6] | None [web:6] | No.[web:6] | Defensive, Buff |
 | Chasten | Deity | 1 | Core | Early | 1 | Weakens sinful/hostile targets | TM loss / debuff | Priest | Radiant | No | Debuff |
-| Sanctuary | Aegis / Dominion | 1 | Class Core | Early | Priest 1 | Makes hostile creatures less likely or unable to attack the protected subject directly.[web:6] | Defensive targeting denial and effective survivability increase.[web:6] | Priest, Paladin [web:6] | None [web:6] | Yes, duration shield-state.[web:6] | Defensive |
-| Aid | Dominion / Aegis | 2 | Class Core | Early | Priest 3 | Supportive blessing that improves staying power.[web:6] | Effective HP increase and morale support.[web:6] | Priest, Paladin [web:6] | None [web:6] | Yes, duration support buff.[web:6] | Buff |
-| Chant | Dominion | 2 | Class Core | Early | Priest 3 | Battlefield prayer that aids allies and hinders enemies.[web:6] | Ally TM support, enemy TM drag, and battle momentum shift.[web:6] | Priest [web:6] | None [web:6] | Yes, duration aura.[web:6] | Buff, Debuff |
-| Hold Person | Dominion / Umbramancy | 2/3 | Class Core | Mid | Priest 4 | Paralyzes humanoid targets.[web:6][web:2] | TM freeze and Movement set to zero while held.[web:6][web:2] | Priest [web:6] | None/Control [web:6] | No.[web:6] | CC |
-| Prayer | Dominion | 3 | Class Core | Mid | Priest 5 | Broad ally buff plus enemy penalty effect.[web:6] | Teamwide tempo advantage, including custom TM uplift for allies and drag for foes.[web:6] | Priest [web:6] | None [web:6] | Yes, duration field effect.[web:6] | Buff, Debuff |
-| Remove Paralysis | Dominion | 3 | Class Core | Mid | Priest 5 | Frees allies from paralysis.[web:6] | Restores Movement and TM gain by ending paralysis.[web:6] | Priest, Paladin [web:6] | Cleanse [web:6] | No.[web:6] | Healing, Cleanse |
-| Cure Serious Wounds | Dominion / Verdancy | 4 | Class Core | Mid | Priest 6 | Stronger direct healing.[web:6] | HP restoration.[web:6] | Priest, Druid, Paladin [web:6] | Healing [web:6] | No.[web:6] | Healing |
-| Free Action | Aegis | 4 | Class Core | Mid | Priest 6 | Prevents many movement-impairing effects.[web:6] | Movement immunity to many roots, holds, or slows.[web:6] | Priest, Paladin [web:6] | None [web:6] | Yes, duration buff.[web:6] | Defensive |
-| Cure Critical Wounds | Dominion / Verdancy | 5 | School Specialization | Late | Priest 7 | Large heal for severe injuries.[web:6] | HP restoration.[web:6] | Priest, Druid, Paladin [web:6] | Healing [web:6] | No.[web:6] | Healing |
-| Flame Strike | Stormcraft / Dominion | 5 | School Specialization | Late | Priest 7 | Vertical divine column of holy fire.[web:6] | HP damage and holy offensive pressure.[web:6] | Priest [web:6] | Fire/Radiant [web:6] | No explicit lingering burn.[web:6] | Offensive, Nuke |
-| Heal | Dominion / Verdancy | 6 | School Specialization | Late | Priest 8 | Major restorative miracle.[web:6] | Major HP restoration and condition recovery.[web:6] | Priest [web:6] | Healing [web:6] | No.[web:6] | Healing |
-| Blade Barrier | Aegis / Dominion | 6 | School Specialization | Late | Priest 8 | Immobile wall or ring of whirling blades around a point.[web:18][web:6] | HP damage and Movement denial by forcing enemies to stop, reroute, or suffer repeated contact damage.[web:18][web:6] | Priest [web:18][web:6] | Physical/Magical [web:18] | Yes, persistent hazard while active.[web:18][web:6] | Offensive, Defensive, Barrier |
-| Heroes' Feast | Dominion | 6 | School Specialization | Late | Priest 8 | Group pre-battle meal with strong support benefits.[web:6] | Teamwide survivability, morale, and resilience increase.[web:6] | Priest [web:6] | Buff [web:6] | Yes, prebuff duration benefits.[web:6] | Buff, AoE |
-| Restoration | Dominion | 7 | School Specialization | Late | Priest 9 | Repairs severe spiritual or life-force harm.[web:6] | Restores magical stability and cleanses severe debuffs.[web:6] | Priest [web:6] | Healing [web:6] | No.[web:6] | Healing, Cleanse |
+| Sanctuary | Deity | 1 | Class Core | Early | Priest 1 | Makes hostile creatures less likely or unable to attack the protected subject directly.[web:6] | Defensive targeting denial and effective survivability increase.[web:6] | Priest, Paladin [web:6] | None [web:6] | Yes, duration shield-state.[web:6] | Defensive |
+| Aid | Deity | 2 | Class Core | Early | Priest 3 | Supportive blessing that improves staying power.[web:6] | Effective HP increase and morale support.[web:6] | Priest, Paladin [web:6] | None [web:6] | Yes, duration support buff.[web:6] | Buff |
+| Chant | Deity | 2 | Class Core | Early | Priest 3 | Battlefield prayer that aids allies and hinders enemies.[web:6] | Ally TM support, enemy TM drag, and battle momentum shift.[web:6] | Priest [web:6] | None [web:6] | Yes, duration aura.[web:6] | Buff, Debuff |
+| Hold Person | Deity | 2/3 | Class Core | Mid | Priest 4 | Paralyzes humanoid targets.[web:6][web:2] | TM freeze and Movement set to zero while held.[web:6][web:2] | Priest [web:6] | None/Control [web:6] | No.[web:6] | CC |
+| Prayer | Deity | 3 | Class Core | Mid | Priest 5 | Broad ally buff plus enemy penalty effect.[web:6] | Teamwide tempo advantage, including custom TM uplift for allies and drag for foes.[web:6] | Priest [web:6] | None [web:6] | Yes, duration field effect.[web:6] | Buff, Debuff |
+| Remove Paralysis | Deity | 3 | Class Core | Mid | Priest 5 | Frees allies from paralysis.[web:6] | Restores Movement and TM gain by ending paralysis.[web:6] | Priest, Paladin [web:6] | Cleanse [web:6] | No.[web:6] | Healing, Cleanse |
+| Cure Serious Wounds | Deity | 4 | Class Core | Mid | Priest 6 | Stronger direct healing.[web:6] | HP restoration.[web:6] | Priest, Druid, Paladin [web:6] | Healing [web:6] | No.[web:6] | Healing |
+| Free Action | Deity | 4 | Class Core | Mid | Priest 6 | Prevents many movement-impairing effects.[web:6] | Movement immunity to many roots, holds, or slows.[web:6] | Priest, Paladin [web:6] | None [web:6] | Yes, duration buff.[web:6] | Defensive |
+| Cure Critical Wounds | Deity | 5 | School Specialization | Late | Priest 7 | Large heal for severe injuries.[web:6] | HP restoration.[web:6] | Priest, Druid, Paladin [web:6] | Healing [web:6] | No.[web:6] | Healing |
+| Flame Strike | Deity | 5 | School Specialization | Late | Priest 7 | Vertical divine column of holy fire.[web:6] | HP damage and holy offensive pressure.[web:6] | Priest [web:6] | Fire/Radiant [web:6] | No explicit lingering burn.[web:6] | Offensive, Nuke |
+| Heal | Deity | 6 | School Specialization | Late | Priest 8 | Major restorative miracle.[web:6] | Major HP restoration and condition recovery.[web:6] | Priest [web:6] | Healing [web:6] | No.[web:6] | Healing |
+| Blade Barrier | Deity | 6 | School Specialization | Late | Priest 8 | Immobile wall or ring of whirling blades around a point.[web:18][web:6] | HP damage and Movement denial by forcing enemies to stop, reroute, or suffer repeated contact damage.[web:18][web:6] | Priest [web:18][web:6] | Physical/Magical [web:18] | Yes, persistent hazard while active.[web:18][web:6] | Offensive, Defensive, Barrier |
+| Heroes' Feast | Deity | 6 | School Specialization | Late | Priest 8 | Group pre-battle meal with strong support benefits.[web:6] | Teamwide survivability, morale, and resilience increase.[web:6] | Priest [web:6] | Buff [web:6] | Yes, prebuff duration benefits.[web:6] | Buff, AoE |
+| Restoration | Deity | 7 | School Specialization | Late | Priest 9 | Repairs severe spiritual or life-force harm.[web:6] | Restores magical stability and cleanses severe debuffs.[web:6] | Priest [web:6] | Healing [web:6] | No.[web:6] | Healing, Cleanse |
 
 ## Druid spellbook
 
@@ -247,22 +264,22 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 
 | Spell | School | Spell Level | Access Layer | Access Tier | Minimum Level | Effect | Impact | Class | Damage Type | Afterburn | Tags |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| Entangle | Verdancy | 1 | Class Core | Early | Druid 1 | Plants twist around creatures in the area and restrain them.[web:6][web:23] | Movement reduction or full root; TM loss in variant implementations.[web:23][web:6] | Druid, Priest [web:6][web:23] | None/Control [web:23] | Yes, persistent rooting zone while active.[web:23][web:6] | CC, Root |
-| Faerie Fire | Verdancy / Mirage | 1 | Class Core | Early | Druid 1 | Outlines targets, countering stealth and concealment.[web:6] | Reduced evasiveness and easier targeting; lowers effective defensive concealment.[web:6] | Druid, Priest [web:6] | None/Reveal [web:6] | Yes, duration reveal.[web:6] | Debuff |
-| Shillelagh | Verdancy | 1 | Class Core | Early | Druid 1 | Enchants a club or staff to hit harder.[web:6] | Raises weapon HP damage output.[web:6] | Druid [web:6] | Physical/Magical [web:6] | No.[web:6] | Buff |
-| Barkskin | Verdancy / Aegis | 2 | Class Core | Early | Druid 3 | Skin becomes as tough as bark, improving base Armor Class.[web:46] | Armor Class increase and slight defensive resilience increase.[web:46] | Druid, Priest [web:46] | None [web:46] | Yes, duration-based defensive skin.[web:46] | Defensive |
-| Goodberry | Verdancy | 2 | Class Core | Early | Druid 3 | Creates restorative berries.[web:6] | HP restoration and sustain support.[web:6] | Druid, Priest [web:6] | Healing [web:6] | No.[web:6] | Healing |
-| Heat Metal | Verdancy / Stormcraft | 2 | Class Core | Early | Druid 3 | Punishes armored enemies through escalating heat.[web:6] | HP damage over time, pain pressure, and possible Movement disruption.[web:6] | Druid, Priest [web:6] | Fire [web:6] | Yes, continuing heat damage or pressure.[web:6] | Debuff |
-| Call Lightning | Stormcraft / Verdancy | 3 | Class Core | Mid | Druid 5 | Repeated lightning strikes called from a storm.[web:6] | HP damage; ideal for variants with Electrocute, TM loss, or anti-metal bonus damage.[web:6] | Druid, Priest [web:6] | Lightning [web:6] | Yes in repeated-round use, though not burn.[web:6] | Offensive |
-| Hold Animal | Verdancy / Dominion | 3 | Class Core | Mid | Druid 5 | Immobilizes beasts.[web:6] | TM freeze and Movement set to zero.[web:6] | Druid, Priest [web:6] | None/Control [web:6] | Yes, duration root/paralysis.[web:6] | CC |
-| Call Woodland Beings | Verdancy | 4 | School Specialization | Mid | Druid 6 | Brings nature spirits or woodland allies.[web:6] | HP pressure, support utility, or CC depending on ally type.[web:6] | Druid [web:6] | Variable [web:6] | Yes, summoned allies persist for duration.[web:6] | Summoning |
-| Giant Insect | Verdancy | 4 | School Specialization | Mid | Druid 6 | Enlarges vermin into combat-capable forms.[web:6] | HP pressure and Movement denial through large bodies.[web:6] | Druid, Priest [web:6] | Physical [web:6] | Yes, transformed creatures persist for duration.[web:6] | Summoning-lite |
-| Insect Plague | Verdancy | 5 | School Specialization | Late | Druid 7 | Swarming insects disrupt and overwhelm groups.[web:6] | HP chip damage, Movement hindrance, and TM pressure through disruption.[web:6] | Druid, Priest [web:6] | Physical/Poison-theme [web:6] | Yes, persistent swarm presence.[web:6] | Offensive, CC |
-| Anti-Plant Shell | Aegis / Verdancy | 5 | School Specialization | Late | Druid 7 | Prevents plant creatures from closing in.[web:6] | Personal safety zone and Movement denial against plant attackers.[web:6] | Druid, Priest [web:6] | None [web:6] | Yes, persistent shell.[web:6] | Defensive |
-| Fire Seeds | Verdancy / Stormcraft | 6 | School Specialization | Late | Druid 8 | Druid explosive seeds used as bombs or traps.[web:6] | HP damage and trap-style zone denial.[web:6] | Druid [web:6] | Fire [web:6] | Sometimes, depending on trap-style implementation.[web:6] | Offensive |
-| Liveoak | Verdancy | 6 | School Specialization | Late | Druid 8 | Awakens or empowers a great tree guardian.[web:6] | HP pressure, tank presence, and Movement blocking.[web:6] | Druid [web:6] | Physical [web:6] | Yes, awakened guardian persists.[web:6] | Summoning |
-| Creeping Doom | Verdancy | 7 | School Specialization | Late | Druid 9 | Devastating moving swarm that overwhelms enemies.[web:6] | HP damage over time plus Movement denial by panic and pursuit pressure.[web:6] | Druid [web:6] | Physical [web:6] | Yes, persistent swarm pressure.[web:6] | Offensive, CC |
-| Earthquake | Verdancy | 7 | School Specialization | Late | Druid 9 | Wide-area terrain disruption and collapse threat.[web:6] | HP damage, Movement disruption, and TM loss from knockdown or instability in variants.[web:6] | Druid, Priest [web:6] | Physical [web:6] | Yes, persistent terrain disruption during effect.[web:6] | Offensive, AoE |
+| Entangle | Deity | 1 | Class Core | Early | Druid 1 | Plants twist around creatures in the area and restrain them.[web:6][web:23] | Movement reduction or full root; TM loss in variant implementations.[web:23][web:6] | Druid, Priest [web:6][web:23] | None/Control [web:23] | Yes, persistent rooting zone while active.[web:23][web:6] | CC, Root |
+| Faerie Fire | Deity | 1 | Class Core | Early | Druid 1 | Outlines targets, countering stealth and concealment.[web:6] | Reduced evasiveness and easier targeting; lowers effective defensive concealment.[web:6] | Druid, Priest [web:6] | None/Reveal [web:6] | Yes, duration reveal.[web:6] | Debuff |
+| Shillelagh | Deity | 1 | Class Core | Early | Druid 1 | Enchants a club or staff to hit harder.[web:6] | Raises weapon HP damage output.[web:6] | Druid [web:6] | Physical/Magical [web:6] | No.[web:6] | Buff |
+| Barkskin | Deity | 2 | Class Core | Early | Druid 3 | Skin becomes as tough as bark, improving base Armor Class.[web:46] | Armor Class increase and slight defensive resilience increase.[web:46] | Druid, Priest [web:46] | None [web:46] | Yes, duration-based defensive skin.[web:46] | Defensive |
+| Goodberry | Deity | 2 | Class Core | Early | Druid 3 | Creates restorative berries.[web:6] | HP restoration and sustain support.[web:6] | Druid, Priest [web:6] | Healing [web:6] | No.[web:6] | Healing |
+| Heat Metal | Deity | 2 | Class Core | Early | Druid 3 | Punishes armored enemies through escalating heat.[web:6] | HP damage over time, pain pressure, and possible Movement disruption.[web:6] | Druid, Priest [web:6] | Fire [web:6] | Yes, continuing heat damage or pressure.[web:6] | Debuff |
+| Call Lightning | Deity | 3 | Class Core | Mid | Druid 5 | Repeated lightning strikes called from a storm.[web:6] | HP damage; ideal for variants with Electrocute, TM loss, or anti-metal bonus damage.[web:6] | Druid, Priest [web:6] | Lightning [web:6] | Yes in repeated-round use, though not burn.[web:6] | Offensive |
+| Hold Animal | Deity | 3 | Class Core | Mid | Druid 5 | Immobilizes beasts.[web:6] | TM freeze and Movement set to zero.[web:6] | Druid, Priest [web:6] | None/Control [web:6] | Yes, duration root/paralysis.[web:6] | CC |
+| Call Woodland Beings | Deity | 4 | School Specialization | Mid | Druid 6 | Brings nature spirits or woodland allies.[web:6] | HP pressure, support utility, or CC depending on ally type.[web:6] | Druid [web:6] | Variable [web:6] | Yes, summoned allies persist for duration.[web:6] | Summoning |
+| Giant Insect | Deity | 4 | School Specialization | Mid | Druid 6 | Enlarges vermin into combat-capable forms.[web:6] | HP pressure and Movement denial through large bodies.[web:6] | Druid, Priest [web:6] | Physical [web:6] | Yes, transformed creatures persist for duration.[web:6] | Summoning-lite |
+| Insect Plague | Deity | 5 | School Specialization | Late | Druid 7 | Swarming insects disrupt and overwhelm groups.[web:6] | HP chip damage, Movement hindrance, and TM pressure through disruption.[web:6] | Druid, Priest [web:6] | Physical/Poison-theme [web:6] | Yes, persistent swarm presence.[web:6] | Offensive, CC |
+| Anti-Plant Shell | Deity | 5 | School Specialization | Late | Druid 7 | Prevents plant creatures from closing in.[web:6] | Personal safety zone and Movement denial against plant attackers.[web:6] | Druid, Priest [web:6] | None [web:6] | Yes, persistent shell.[web:6] | Defensive |
+| Fire Seeds | Deity | 6 | School Specialization | Late | Druid 8 | Druid explosive seeds used as bombs or traps.[web:6] | HP damage and trap-style zone denial.[web:6] | Druid [web:6] | Fire [web:6] | Sometimes, depending on trap-style implementation.[web:6] | Offensive |
+| Liveoak | Deity | 6 | School Specialization | Late | Druid 8 | Awakens or empowers a great tree guardian.[web:6] | HP pressure, tank presence, and Movement blocking.[web:6] | Druid [web:6] | Physical [web:6] | Yes, awakened guardian persists.[web:6] | Summoning |
+| Creeping Doom | Deity | 7 | School Specialization | Late | Druid 9 | Devastating moving swarm that overwhelms enemies.[web:6] | HP damage over time plus Movement denial by panic and pursuit pressure.[web:6] | Druid [web:6] | Physical [web:6] | Yes, persistent swarm pressure.[web:6] | Offensive, CC |
+| Earthquake | Deity | 7 | School Specialization | Late | Druid 9 | Wide-area terrain disruption and collapse threat.[web:6] | HP damage, Movement disruption, and TM loss from knockdown or instability in variants.[web:6] | Druid, Priest [web:6] | Physical [web:6] | Yes, persistent terrain disruption during effect.[web:6] | Offensive, AoE |
 
 ## Paladin spellbook
 
@@ -270,22 +287,22 @@ Paladins begin magical access around level 6 in Dark Orb and remain a narrow sup
 
 | Spell | School | Spell Level | Access Layer | Access Tier | Minimum Level | Effect | Impact | Class | Damage Type | Afterburn | Tags |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| Bless | Dominion | 1 | Class Core | Early | Paladin 6 | Improves ally morale and combat readiness.[web:6] | TM uplift and combat support.
+| Bless | Deity | 1 | Class Core | Early | Paladin 6 | Improves ally morale and combat readiness.[web:6] | TM uplift and combat support.
 [web:6] | Paladin [web:6] | None [web:6] | Yes, duration buff.[web:6] | Buff, AoE |
 | Smite | Deity | 1 | Class Core | Early | Paladin 6 | Divine strike vs enemies | HP dmg | Paladin | Radiant | No | Offensive |
-| Cure Light Wounds | Dominion / Verdancy | 1 | Class Core | Early | Paladin 6 | Basic holy healing.[web:6] | HP restoration.[web:6] | Paladin [web:6] | Healing [web:6] | No.[web:6] | Healing |
-| Remove Fear | Dominion | 1 | Class Core | Early | Paladin 6 | Clears fear and bolsters courage.[web:6] | TM stabilization and panic protection.[web:6] | Paladin [web:6] | None [web:6] | No major after-effect beyond morale protection.[web:6] | Buff, Cleanse |
-| Protection from Evil | Aegis | 1 | Class Core | Early | Paladin 6 | Defensive ward against evil influence and attacks.[web:6] | Armor Class support and defensive resistance.[web:6] | Paladin [web:6] | None [web:6] | No.[web:6] | Defensive |
-| Aid | Dominion / Aegis | 2 | Class Core | Early | Paladin 7 | Supportive blessing with extra staying power.[web:6] | Effective HP increase and morale support.[web:6] | Paladin [web:6] | None [web:6] | Yes, duration support buff.[web:6] | Buff |
-| Barkskin | Verdancy / Aegis | 2 | Class Core | Early | Paladin 7 | Toughens skin like bark in Dark Orb's holy-nature support blend.[web:46] | Armor Class increase and resilience increase.[web:46] | Paladin | None [web:46] | Yes, duration-based defensive skin.[web:46] | Defensive, Variant |
-| Resist Fire/Resist Cold | Aegis | 2 | Class Core | Mid | Paladin 7 | Grants elemental resistance.[web:6] | Effective HP increase versus selected damage type.[web:6] | Paladin [web:6] | None [web:6] | Yes, duration buff.[web:6] | Defensive |
-| Chant | Dominion | 2 | Class Core | Mid | Paladin 8 | Holy chant that steadies allies and pressures foes.[web:6] | Ally TM support and enemy tempo drag.[web:6] | Paladin | None [web:6] | Yes, duration aura.[web:6] | Buff, Debuff, Variant |
-| Remove Paralysis | Dominion | 3 | Class Core | Mid | Paladin 8 | Frees allies from paralysis.[web:6] | Restores Movement and TM gain by ending paralysis.[web:6] | Paladin [web:6] | Cleanse [web:6] | No.[web:6] | Cleanse |
-| Magical Vestment | Aegis | 3 | Class Core | Mid | Paladin 8 | Enhances armor or shield quality with divine power.[web:6] | Armor Class increase.[web:6] | Paladin [web:6] | None [web:6] | Yes, duration buff.[web:6] | Buff, Defensive |
-| Free Action | Aegis | 4 | School Specialization | Late | Paladin 9 | Prevents roots, holds, and slows.[web:6] | Movement immunity to control effects.[web:6] | Paladin [web:6] | None [web:6] | Yes, duration buff.[web:6] | Defensive |
-| Protection from Evil, 10' Radius | Aegis | 4 | School Specialization | Late | Paladin 9 | Group protection aura against evil.[web:6] | Group defense, Armor Class support, and anti-control protection.[web:6] | Paladin [web:6] | None [web:6] | Yes, persistent aura duration.[web:6] | Defensive, AoE |
-| Holy Bulwark Variant | Aegis / Dominion | 4 | School Specialization | Late | Paladin 10 | Elite paladin ward for nearby allies.[web:34][web:48] | Armor Class increase, Magic Resistance support, and brief TM stabilization.[web:34][web:48] | Paladin | Radiant/None | Yes, aura duration.[web:34][web:48] | Defensive, Variant |
-| Paladin's Warcry Variant | Dominion | 3 | School Specialization | Late | Paladin 9 | Inspiring holy battle-cry that rallies nearby allies.[web:47][web:6] | Ally TM increase, fear resistance, and minor attack uplift in custom design.[web:47][web:6] | Paladin [web:47][web:6] | Sonic/Morale | Short-duration momentum buff.[web:47] | Buff, AoE, Variant |
+| Cure Light Wounds | Deity | 1 | Class Core | Early | Paladin 6 | Basic holy healing.[web:6] | HP restoration.[web:6] | Paladin [web:6] | Healing [web:6] | No.[web:6] | Healing |
+| Remove Fear | Deity | 1 | Class Core | Early | Paladin 6 | Clears fear and bolsters courage.[web:6] | TM stabilization and panic protection.[web:6] | Paladin [web:6] | None [web:6] | No major after-effect beyond morale protection.[web:6] | Buff, Cleanse |
+| Protection from Evil | Deity | 1 | Class Core | Early | Paladin 6 | Defensive ward against evil influence and attacks.[web:6] | Armor Class support and defensive resistance.[web:6] | Paladin [web:6] | None [web:6] | No.[web:6] | Defensive |
+| Aid | Deity | 2 | Class Core | Early | Paladin 7 | Supportive blessing with extra staying power.[web:6] | Effective HP increase and morale support.[web:6] | Paladin [web:6] | None [web:6] | Yes, duration support buff.[web:6] | Buff |
+| Barkskin | Deity | 2 | Class Core | Early | Paladin 7 | Toughens skin like bark in Dark Orb's holy-nature support blend.[web:46] | Armor Class increase and resilience increase.[web:46] | Paladin | None [web:46] | Yes, duration-based defensive skin.[web:46] | Defensive, Variant |
+| Resist Fire/Resist Cold | Deity | 2 | Class Core | Mid | Paladin 7 | Grants elemental resistance.[web:6] | Effective HP increase versus selected damage type.[web:6] | Paladin [web:6] | None [web:6] | Yes, duration buff.[web:6] | Defensive |
+| Chant | Deity | 2 | Class Core | Mid | Paladin 8 | Holy chant that steadies allies and pressures foes.[web:6] | Ally TM support and enemy tempo drag.[web:6] | Paladin | None [web:6] | Yes, duration aura.[web:6] | Buff, Debuff, Variant |
+| Remove Paralysis | Deity | 3 | Class Core | Mid | Paladin 8 | Frees allies from paralysis.[web:6] | Restores Movement and TM gain by ending paralysis.[web:6] | Paladin [web:6] | Cleanse [web:6] | No.[web:6] | Cleanse |
+| Magical Vestment | Deity | 3 | Class Core | Mid | Paladin 8 | Enhances armor or shield quality with divine power.[web:6] | Armor Class increase.[web:6] | Paladin [web:6] | None [web:6] | Yes, duration buff.[web:6] | Buff, Defensive |
+| Free Action | Deity | 4 | School Specialization | Late | Paladin 9 | Prevents roots, holds, and slows.[web:6] | Movement immunity to control effects.[web:6] | Paladin [web:6] | None [web:6] | Yes, duration buff.[web:6] | Defensive |
+| Protection from Evil, 10' Radius | Deity | 4 | School Specialization | Late | Paladin 9 | Group protection aura against evil.[web:6] | Group defense, Armor Class support, and anti-control protection.[web:6] | Paladin [web:6] | None [web:6] | Yes, persistent aura duration.[web:6] | Defensive, AoE |
+| Holy Bulwark Variant | Deity | 4 | School Specialization | Late | Paladin 10 | Elite paladin ward for nearby allies.[web:34][web:48] | Armor Class increase, Magic Resistance support, and brief TM stabilization.[web:34][web:48] | Paladin | Radiant/None | Yes, aura duration.[web:34][web:48] | Defensive, Variant |
+| Paladin's Warcry Variant | Deity | 3 | School Specialization | Late | Paladin 9 | Inspiring holy battle-cry that rallies nearby allies.[web:47][web:6] | Ally TM increase, fear resistance, and minor attack uplift in custom design.[web:47][web:6] | Paladin [web:47][web:6] | Sonic/Morale | Short-duration momentum buff.[web:47] | Buff, AoE, Variant |
 
 ## Knight spellbook
 
@@ -293,17 +310,17 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 
 | Spell | School | Spell Level | Access Layer | Access Tier | Minimum Level | Effect | Impact | Class | Damage Type | Afterburn | Tags |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| War Cry | Dominion | 1 | Class Core | Early | Knight 9 | Battle shout that shocks enemies or steels allies.[web:47] | Offensive version causes TM disruption and panic in enemies; support version grants TM gain and fear resistance to allies.[web:47] | Knight, Paladin [web:47] | Sonic/Morale | Short-duration momentum effect.[web:47] | CC or Buff, Variant |
+| War Cry | Deity | 1 | Class Core | Early | Knight 9 | Battle shout that shocks enemies or steels allies.[web:47] | Offensive version causes TM disruption and panic in enemies; support version grants TM gain and fear resistance to allies.[web:47] | Knight, Paladin [web:47] | Sonic/Morale | Short-duration momentum effect.[web:47] | CC or Buff, Variant |
 | Smite | Deity | 1 | Class Core | Early | Knight 6 | Divine strike vs enemies | HP dmg | Knight | Radiant | No | Offensive |
-| Rallying Cry | Dominion | 1 | Class Core | Early | Knight 9 | Calls allies back into formation.[web:47] | TM increase and morale restoration for companions.[web:47] | Knight [web:47] | Sonic/Morale | Short aura duration.[web:47] | Buff, Variant |
-| Steadfast Line | Dominion / Aegis | 2 | Class Core | Early | Knight 10 | Reinforces discipline and formation stability.[web:47][web:48] | Movement resistance to forced displacement and TM stabilization.[web:47][web:48] | Knight | None | Yes, short formation aura.[web:47][web:48] | Buff, Variant |
-| Banner of Resolve | Dominion | 2 | Class Core | Early | Knight 10 | Banner magic that hardens allied will.[web:47][web:48] | Fear resistance, TM uplift, and morale support.[web:47][web:48] | Knight | None | Yes, aura duration.[web:47][web:48] | Buff, Variant |
-| Iron Will Litany | Aegis / Dominion | 3 | Class Core | Mid | Knight 11 | Litany of discipline against hostile magic.[web:48] | Magic Resistance increase and anti-panic support.[web:48] | Knight | None | Yes, chant duration.[web:48] | Defensive, Variant |
-| Advance Signal | Dominion | 3 | Class Core | Mid | Knight 11 | Tactical call to press the attack.[web:47][web:48] | Ally TM increase and Movement boost for an advance.[web:47][web:48] | Knight | None | Short-duration surge.[web:47][web:48] | Buff, Variant |
-| Shielding Cadence | Aegis / Dominion | 3 | Class Core | Mid | Knight 12 | Rhythmic command that improves survival in formation.[web:48] | Armor Class increase and partial Magic Resistance support.[web:48] | Knight | None | Yes, cadence duration.[web:48] | Defensive, Variant |
-| Battle Hymn of Defiance | Dominion | 4 | School Specialization | Late | Knight 12 | Powerful morale chant for large engagements.[web:47][web:48] | Teamwide TM uplift, panic immunity, and combat resilience.[web:47][web:48] | Knight | Sonic/Morale | Yes, anthem duration.[web:47][web:48] | Buff, AoE, Variant |
-| Arcane Defiance Banner | Aegis | 4 | School Specialization | Late | Knight 13 | Elite banner ward against sorcery.[web:48] | Group Magic Resistance increase and magical pressure reduction.[web:48] | Knight | None | Yes, banner aura.[web:48] | Defensive, Variant |
-| Lionheart Command | Dominion | 4 | School Specialization | Late | Knight 13 | Supreme command that hardens allied resolve.[web:47][web:48] | Large TM uplift, fear immunity, and offense confidence boost.[web:47][web:48] | Knight | Sonic/Morale | Yes, command duration.[web:47][web:48] | Buff, Variant |
+| Rallying Cry | Deity | 1 | Class Core | Early | Knight 9 | Calls allies back into formation.[web:47] | TM increase and morale restoration for companions.[web:47] | Knight [web:47] | Sonic/Morale | Short aura duration.[web:47] | Buff, Variant |
+| Steadfast Line | Deity | 2 | Class Core | Early | Knight 10 | Reinforces discipline and formation stability.[web:47][web:48] | Movement resistance to forced displacement and TM stabilization.[web:47][web:48] | Knight | None | Yes, short formation aura.[web:47][web:48] | Buff, Variant |
+| Banner of Resolve | Deity | 2 | Class Core | Early | Knight 10 | Banner magic that hardens allied will.[web:47][web:48] | Fear resistance, TM uplift, and morale support.[web:47][web:48] | Knight | None | Yes, aura duration.[web:47][web:48] | Buff, Variant |
+| Iron Will Litany | Deity | 3 | Class Core | Mid | Knight 11 | Litany of discipline against hostile magic.[web:48] | Magic Resistance increase and anti-panic support.[web:48] | Knight | None | Yes, chant duration.[web:48] | Defensive, Variant |
+| Advance Signal | Deity | 3 | Class Core | Mid | Knight 11 | Tactical call to press the attack.[web:47][web:48] | Ally TM increase and Movement boost for an advance.[web:47][web:48] | Knight | None | Short-duration surge.[web:47][web:48] | Buff, Variant |
+| Shielding Cadence | Deity | 3 | Class Core | Mid | Knight 12 | Rhythmic command that improves survival in formation.[web:48] | Armor Class increase and partial Magic Resistance support.[web:48] | Knight | None | Yes, cadence duration.[web:48] | Defensive, Variant |
+| Battle Hymn of Defiance | Deity | 4 | School Specialization | Late | Knight 12 | Powerful morale chant for large engagements.[web:47][web:48] | Teamwide TM uplift, panic immunity, and combat resilience.[web:47][web:48] | Knight | Sonic/Morale | Yes, anthem duration.[web:47][web:48] | Buff, AoE, Variant |
+| Arcane Defiance Banner | Deity | 4 | School Specialization | Late | Knight 13 | Elite banner ward against sorcery.[web:48] | Group Magic Resistance increase and magical pressure reduction.[web:48] | Knight | None | Yes, banner aura.[web:48] | Defensive, Variant |
+| Lionheart Command | Deity | 4 | School Specialization | Late | Knight 13 | Supreme command that hardens allied resolve.[web:47][web:48] | Large TM uplift, fear immunity, and offense confidence boost.[web:47][web:48] | Knight | Sonic/Morale | Yes, command duration.[web:47][web:48] | Buff, Variant |
 
 ## Variant design rules
 
