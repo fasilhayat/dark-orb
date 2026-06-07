@@ -107,6 +107,24 @@
       "onHitEffects": [
         { "name": "Leech", "type": "Leech", "target": "Target", "duration": 3, "applicationChance": 80, "resistanceType": "Shadow", "leechPerTurn": 6, "leechResourceType": "Mana" }
       ]
+    },
+    {
+      "name": "Chasten",
+      "school": "Deity", "damageDie": "D4", "damageCount": 1,
+      "damageType": "Holy", "attackBonus": 0,
+      "spellLevel": 1, "turnMeterCost": 60, "manaCost": 10
+    },
+    {
+      "name": "Flame Strike",
+      "school": "Deity", "damageDie": "D8", "damageCount": 3,
+      "damageType": "Fire", "attackBonus": 2,
+      "spellLevel": 5, "turnMeterCost": 100, "manaCost": 50
+    },
+    {
+      "name": "Bless",
+      "school": "Deity", "damageDie": "D4", "damageCount": 0,
+      "damageType": "None", "attackBonus": 0,
+      "spellLevel": 1, "turnMeterCost": 60, "manaCost": 10
     }
   ],
 
@@ -197,12 +215,12 @@
     },
     {
       "name": "High Priestess Luna", "level": 12,
-      "strength": 9, "dexterity": 12, "stamina": 13, "intelligence": 14, "wisdom": 19, "charisma": 17,
+      "strength": 13, "dexterity": 12, "stamina": 14, "intelligence": 14, "wisdom": 19, "charisma": 17,
       "race": "Human", "classId": 4, "className": "Priest", "sex": "F",
       "strikeRating": 17, "turnSpeed": 8,
-      "maxHitPoints": 55, "maxMana": 110,
-      "equipment": { "chest": "Padded Armor", "rightHand": "Mace" },
-      "memorizedSpells": ["Smite", "Heal"]
+      "maxHitPoints": 70, "maxMana": 120,
+      "equipment": { "chest": "Chain Mail", "rightHand": "War Hammer" },
+      "memorizedSpells": ["Smite", "Flame Strike", "Heal", "Mass Heal", "Bless", "Chasten"]
     },
     {
       "name": "Lysander the Bard", "level": 8,

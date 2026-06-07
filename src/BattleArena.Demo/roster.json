@@ -178,6 +178,12 @@
       "onHitEffects": [
         { "name": "Leech", "type": "Leech", "target": "Target", "duration": 3, "applicationChance": 80, "resistanceType": "Shadow", "leechPerTurn": 6, "leechResourceType": "Mana" }
       ]
+    },
+    {
+      "name": "Flame Strike",
+      "school": "Deity", "damageDie": "D8", "damageCount": 3,
+      "damageType": "Fire", "attackBonus": 2,
+      "spellLevel": 5, "turnMeterCost": 100, "manaCost": 50
     }
   ],
 

@@ -59,7 +59,6 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         ["FumblePenalty"] = 500, ["Death"] = 1200, ["KnockedOut"] = 1200,
         ["PerfectParry"] = 800, ["DevastatingStrike"] = 1000, ["TotalReversal"] = 1000,
         ["DamagePreview"] = 800,
-        ["ManaPreview"] = 500,
     };
 
     public AvaloniaCombatPresenter(
@@ -180,19 +179,6 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                 }
             }
 
-            if (ev.ManaCost > 0)
-            {
-                var card = FindCard(ev.ActorName);
-                if (card is not null && card.MaxMana > 0)
-                {
-                    var start = ev.ManaPreviewWidth > 0 ? ev.ManaPreviewStart
-                        : (double)Math.Max(0, card.Mana - ev.ManaCost) / card.MaxMana;
-                    var width = ev.ManaPreviewWidth > 0 ? ev.ManaPreviewWidth
-                        : (double)Math.Min(ev.ManaCost, Math.Max(0, card.Mana)) / card.MaxMana;
-                    AnimateManaCostPreview(card, start, width);
-                }
-            }
-
             FlashBorder(ev.ActorName, ev.Color);
             if (ev.TargetName is not null)
                 FlashBorder(ev.TargetName, ev.Color);
@@ -270,6 +256,20 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         _dispatcher.Post(() =>
         {
             _vm.UpdateFromState(state, entry.Tick);
+
+            if (entry.EventType == "ManaDeduct" && (entry.ManaCost ?? 0) > 0)
+            {
+                var card = FindCard(entry.ActorName);
+                if (card is not null && card.MaxMana > 0)
+                {
+                    var cost = Math.Min(entry.ManaCost ?? 0, Math.Max(0, card.Mana + (entry.ManaCost ?? 0)));
+                    var start = (double)Math.Max(0, card.Mana) / card.MaxMana;
+                    var width = (double)cost / card.MaxMana;
+                    if (width > 0)
+                        AnimateManaCostPreview(card, start, width);
+                }
+            }
+
             foreach (var row in rows)
                 if (row.Count > 0)
                     _vm.AddLogEntry(row);
