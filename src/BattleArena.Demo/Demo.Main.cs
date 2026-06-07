@@ -19,8 +19,8 @@ static partial class Demo
     internal static GuiDisplayConfig DisplayConfig { get; private set; } = GuiDisplayConfig.Default;
 
     // ── API connection ────────────────────────────────────────────────────────────
-    private static BattleArenaApiClient? ApiClient;
-    private static IDiceService? _diceService;
+private static BattleArenaApiClient? ApiClient;
+private static IDiceService? _diceService;
     internal static List<Character> ApiRoster = [];
     internal static List<Weapon> ApiWeapons = [];
 
@@ -153,15 +153,7 @@ static partial class Demo
                     }
                 }
 
-                IDiceService diceSvc;
-                if (ApiClient is not null)
-                {
-                    diceSvc = new ApiDiceService(ApiClient);
-                }
-                else
-                {
-                    diceSvc = new DiceService();
-                }
+                var diceSvc = new DiceService();
                 _diceService = diceSvc;
 
                 var makeInteractive = new Func<IActionDecisionSource>(() =>

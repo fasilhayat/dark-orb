@@ -83,7 +83,6 @@ app.Use(async (context, next) =>
 });
 
 app.MapHealthEndpoints();
-app.MapCombatEndpoints();
 app.MapCharacterEndpoints();
 app.MapEquipmentEndpoints();
 app.MapAccessoriesEndpoints();

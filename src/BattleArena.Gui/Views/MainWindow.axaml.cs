@@ -652,43 +652,20 @@ public partial class MainWindow : Window
 
         var state = new CombatDisplayState(charStates, layout, isApiMode: _useApi);
 
-        CombatResult result;
-        if (_useApi && _apiClient is not null)
-        {
-            try
-            {
-                result = await _apiClient.SimulateCombatAsync(
-                    Fighter1!.Name,
-                    new List<int> { Fighter1!.Id },
-                    Fighter2!.Name,
-                    new List<int> { Fighter2!.Id },
-                    maxTicks: CombatSimulator.DefaultMaxTicks);
-            }
-            catch (Exception ex)
-            {
-                _vm.ErrorMessage = $"API combat failed: {ex.Message}";
-                _vm.Phase = "Setup";
-                _vm.IsRunning = false;
-                return;
-            }
-        }
-        else
-        {
-            var diceService = new LoggingDiceService();
-            var combatStats = new CombatStatsService();
-            var combatService = new CombatService(diceService, combatStats, [new RangeModifier()]);
-            var turnmeterService = new TurnmeterService();
-            var statusEffectService = new StatusEffectService();
-            var simulator = new CombatSimulator(
-                combatService, turnmeterService, statusEffectService, diceService,
-                new LowestHpTargetSelector(), new LowestHpTargetSelector(),
-                new AutoActionDecisionSource(diceService), new AutoActionDecisionSource(diceService));
+        var diceService = new LoggingDiceService();
+        var combatStats = new CombatStatsService();
+        var combatService = new CombatService(diceService, combatStats, [new RangeModifier()]);
+        var turnmeterService = new TurnmeterService();
+        var statusEffectService = new StatusEffectService();
+        var simulator = new CombatSimulator(
+            combatService, turnmeterService, statusEffectService, diceService,
+            new LowestHpTargetSelector(), new LowestHpTargetSelector(),
+            new AutoActionDecisionSource(diceService), new AutoActionDecisionSource(diceService));
 
-            result = await Task.Run(() => simulator.Simulate(party1, party2, CombatSimulator.DefaultMaxTicks), _cts.Token);
+        var result = await Task.Run(() => simulator.Simulate(party1, party2, CombatSimulator.DefaultMaxTicks), _cts.Token);
 
-            result.DiceLog = diceService.DiceLog;
-            result.Log = CombatLogMerger.Merge(result.Log, result.DiceLog);
-        }
+        result.DiceLog = diceService.DiceLog;
+        result.Log = CombatLogMerger.Merge(result.Log, result.DiceLog);
 
         _waitForNext.Reset();
 

@@ -1,9 +1,6 @@
 namespace BattleArena;
 
-using Application.Models;
-using Application.Services;
 using Core.Entities;
-using Core.Entities.Enums;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -77,73 +74,6 @@ internal sealed class BattleArenaApiClient
         return list;
     }
 
-    // ── Dice API ───────────────────────────────────────────────────────────
 
-    public async Task<int> RollDieAsync(DieType dieType)
-    {
-        var path = $"/v1/roll/{dieType}";
-        LogCall("GET", path);
-        var dto = await _http.GetFromJsonAsync<DieRollResponse>(path, _json);
-        LogResult("GET", path, $"{dto?.Result}");
-        return dto?.Result ?? 0;
-    }
 
-    public async Task<int> RollDiceAsync(int count, int sides)
-    {
-        var path = $"/v1/roll/{count}d{sides}";
-        LogCall("GET", path);
-        var dto = await _http.GetFromJsonAsync<DiceRollResponse>(path, _json);
-        LogResult("GET", path, $"{dto?.Result}");
-        return dto?.Result ?? 0;
-    }
-
-    public async Task<int> RollWithAdvantageAsync(DieType dieType)
-    {
-        var path = $"/v1/roll/advantage/{dieType}";
-        LogCall("GET", path);
-        var dto = await _http.GetFromJsonAsync<DieRollResponse>(path, _json);
-        LogResult("GET", path, $"{dto?.Result}");
-        return dto?.Result ?? 0;
-    }
-
-    public async Task<int> RollWithDisadvantageAsync(DieType dieType)
-    {
-        var path = $"/v1/roll/disadvantage/{dieType}";
-        LogCall("GET", path);
-        var dto = await _http.GetFromJsonAsync<DieRollResponse>(path, _json);
-        LogResult("GET", path, $"{dto?.Result}");
-        return dto?.Result ?? 0;
-    }
-
-    internal record DieRollResponse(string Die, int Result);
-    internal record DiceRollResponse(string Dice, int Result);
-
-    public async Task<CombatResult> SimulateCombatAsync(
-        string heroPartyName, List<int> heroMemberIds,
-        string enemyPartyName, List<int> enemyMemberIds,
-        int maxTicks = CombatSimulator.DefaultMaxTicks,
-        string heroTargetStrategy = "lowestHp",
-        string enemyTargetStrategy = "lowestHp")
-    {
-        LogCall("POST", "/v1/combat/simulate");
-        var req = new CombatSimulateByMembersRequest(
-            heroPartyName, heroMemberIds,
-            enemyPartyName, enemyMemberIds,
-            maxTicks, heroTargetStrategy, enemyTargetStrategy);
-        var resp = await _http.PostAsJsonAsync("/v1/combat/simulate", req, _json);
-        resp.EnsureSuccessStatusCode();
-        var result = await resp.Content.ReadFromJsonAsync<CombatResult>(_json);
-        LogResult("POST", "/v1/combat/simulate", $"tick {result?.TotalTicks ?? 0}, log {result?.Log.Count ?? 0} entries");
-        return result ?? new CombatResult();
-    }
 }
-
-public record CombatSimulateByMembersRequest(
-    string HeroPartyName,
-    List<int> HeroPartyMemberIds,
-    string EnemyPartyName,
-    List<int> EnemyPartyMemberIds,
-    int MaxTicks = CombatSimulator.DefaultMaxTicks,
-    string HeroTargetStrategy = "lowestHp",
-    string EnemyTargetStrategy = "lowestHp"
-);

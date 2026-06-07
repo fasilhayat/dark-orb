@@ -1,10 +1,7 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using BattleArena.Application.Models;
-using BattleArena.Application.Services;
 using BattleArena.Core.Entities;
-using BattleArena.Core.Entities.Enums;
 
 namespace BattleArena.Gui;
 
@@ -71,33 +68,6 @@ internal sealed class BattleArenaApiClient
         return result ?? [];
     }
 
-    public async Task<int> RollDieAsync(DieType dieType)
-    {
-        var dto = await _http.GetFromJsonAsync<DieRollResponse>($"/v1/roll/{dieType}", JsonOptions);
-        return dto?.Result ?? 0;
-    }
-
-    public async Task<int> RollDiceAsync(int count, int sides)
-    {
-        var dto = await _http.GetFromJsonAsync<DiceRollResponse>($"/v1/roll/{count}d{sides}", JsonOptions);
-        return dto?.Result ?? 0;
-    }
-
-    public async Task<int> RollWithAdvantageAsync(DieType dieType)
-    {
-        var dto = await _http.GetFromJsonAsync<DieRollResponse>($"/v1/roll/advantage/{dieType}", JsonOptions);
-        return dto?.Result ?? 0;
-    }
-
-    public async Task<int> RollWithDisadvantageAsync(DieType dieType)
-    {
-        var dto = await _http.GetFromJsonAsync<DieRollResponse>($"/v1/roll/disadvantage/{dieType}", JsonOptions);
-        return dto?.Result ?? 0;
-    }
-
-    internal sealed record DieRollResponse(string Die, int Result);
-    internal sealed record DiceRollResponse(string Dice, int Result);
-
     public async Task<bool> HealthCheckAsync()
     {
         try
@@ -112,43 +82,4 @@ internal sealed class BattleArenaApiClient
         }
     }
 
-    public async Task<CombatResult> SimulateCombatAsync(
-        string heroPartyName, List<int> heroMemberIds,
-        string enemyPartyName, List<int> enemyMemberIds,
-        int maxTicks = CombatSimulator.DefaultMaxTicks,
-        string heroTargetStrategy = "lowestHp",
-        string enemyTargetStrategy = "lowestHp")
-    {
-        var req = new CombatSimulateByMembersRequest(
-            heroPartyName, heroMemberIds,
-            enemyPartyName, enemyMemberIds,
-            maxTicks, heroTargetStrategy, enemyTargetStrategy);
-        var resp = await _http.PostAsJsonAsync("/v1/combat/simulate", req, JsonOptions);
-        if (!resp.IsSuccessStatusCode)
-        {
-            var body = await resp.Content.ReadAsStringAsync();
-            throw new ApiException(
-                (int)resp.StatusCode,
-                $"API returned {(int)resp.StatusCode} ({resp.ReasonPhrase}) for combat simulation. Body: {body}",
-                body);
-        }
-        return await resp.Content.ReadFromJsonAsync<CombatResult>(JsonOptions) ?? new CombatResult();
-    }
 }
-
-public sealed class ApiException(int statusCode, string message, string body)
-    : Exception(message)
-{
-    public int StatusCode { get; } = statusCode;
-    public string Body { get; } = body;
-}
-
-public record CombatSimulateByMembersRequest(
-    string HeroPartyName,
-    List<int> HeroPartyMemberIds,
-    string EnemyPartyName,
-    List<int> EnemyPartyMemberIds,
-    int MaxTicks = CombatSimulator.DefaultMaxTicks,
-    string HeroTargetStrategy = "lowestHp",
-    string EnemyTargetStrategy = "lowestHp"
-);
