@@ -5,180 +5,233 @@ using Application.Models;
 using Application.Models.Combat;
 using Core.Entities;
 using Core.Entities.Enums;
-using System.Linq;
 
-/// <summary>
-/// Handles turn execution, action decisions, and target selection.
-/// </summary>
 internal class TurnProcessor
 {
     private readonly IDiceService _dice;
+    private readonly IStatusEffectService _statusEffect;
     private readonly IActionDecisionSource _heroActionSource;
     private readonly IActionDecisionSource _enemyActionSource;
     private readonly ITargetSelector _heroTargetSelector;
     private readonly ITargetSelector _enemyTargetSelector;
     private readonly SpellProcessor _spellProcessor;
+    private readonly TurnMeterProcessor _turnMeterProcessor;
     private readonly CombatLogger _logger;
 
     public TurnProcessor(
         IDiceService dice,
+        IStatusEffectService statusEffect,
         IActionDecisionSource heroActionSource,
         IActionDecisionSource enemyActionSource,
         ITargetSelector heroTargetSelector,
         ITargetSelector enemyTargetSelector,
         SpellProcessor spellProcessor,
+        TurnMeterProcessor turnMeterProcessor,
         CombatLogger logger)
     {
         _dice = dice;
+        _statusEffect = statusEffect;
         _heroActionSource = heroActionSource;
         _enemyActionSource = enemyActionSource;
         _heroTargetSelector = heroTargetSelector;
         _enemyTargetSelector = enemyTargetSelector;
         _spellProcessor = spellProcessor;
+        _turnMeterProcessor = turnMeterProcessor;
         _logger = logger;
     }
 
-    public async Task<CombatResult?> ProcessCrowdControlledActorsAsync(
+    public async Task ProcessCrowdControlledActorsAsync(
         int tick, List<CombatantState> states,
         Func<CombatLogEntry, Task> notify)
     {
-        var ccActors = states.Where(s => 
-            s.Character.IsAlive && 
-            s.Meter.IsReady &&
-            s.Character.GetCrowdControlType() is not null).ToList();
-            
-        foreach (var actor in ccActors)
+        foreach (var s in states)
         {
-            var ccType = actor.Character.GetCrowdControlType();
-            actor.Meter.CurrentValue = Math.Max(0, actor.Meter.CurrentValue - TurnmeterState.TurnThreshold);
-            
+            if (!s.Character.IsAlive || !s.Meter.IsReady) continue;
+            var ccLabel = s.Character.TryGetCrowdControlLabel();
+            if (ccLabel is null) continue;
+
+            var expired = _statusEffect.TickAll(s.Character);
+            await StatusEffectProcessor.NotifyExpiredEffectsAsync(tick, s.Character, expired, notify);
+
+            if (s.QueuedSpell is not null)
+            {
+                await notify(new CombatLogEntry
+                {
+                    Tick = tick, ActorName = s.Character.Name,
+                    EventType = "SpellLost",
+                    AttackSourceName = s.QueuedSpell.Spell.Name,
+                    Message = $"{s.Character.Name} loses concentration on {s.QueuedSpell.Spell.Name} — crowd controlled!"
+                });
+                s.QueuedSpell = null;
+            }
+
             await notify(new CombatLogEntry
             {
-                Tick      = tick,
-                ActorName = actor.Character.Name,
+                Tick = tick, ActorName = s.Character.Name,
                 EventType = "SkippedTurn",
-                Message   = $"{actor.Character.Name} is {ccType} and cannot act!"
+                CcLabel = ccLabel,
+                Message = $"{s.Character.Name} is {ccLabel} and cannot act!"
             });
         }
-        
-        return null;
     }
 
     public async Task<ActorSetup?> SetupActorAttackAsync(
-        int tick, CombatantState actorState, 
-        Party heroParty, Party enemyParty,
-        Func<CombatLogEntry, Task> notify)
+        int tick, CombatantState actorState,
+        List<CombatantState> states, Dictionary<Character, Character> lastAttackerOf,
+        Func<CombatLogEntry, Task> notify, CancellationToken ct)
     {
-        // Check for queued spell
         if (actorState.QueuedSpell is not null)
-        {
-            return await HandleQueuedSpellAsync(tick, actorState, notify);
-        }
-        
-        // Setup new attack
-        return await HandleNewAttackSetupAsync(
-            tick, actorState, heroParty, enemyParty, notify);
+            return await HandleQueuedSpellAsync(tick, actorState, states, notify, ct);
+        return await HandleNewAttackSetupAsync(tick, actorState, states, lastAttackerOf, notify, ct);
     }
 
     private async Task<ActorSetup?> HandleQueuedSpellAsync(
         int tick, CombatantState actorState,
-        Func<CombatLogEntry, Task> notify)
+        List<CombatantState> states, Func<CombatLogEntry, Task> notify, CancellationToken ct)
     {
-        var queued = actorState.QueuedSpell!;
-        queued.RemainingCost = Math.Max(0, queued.RemainingCost - TurnmeterState.TurnThreshold);
-        
-        if (queued.RemainingCost > 0)
+        var qs = actorState.QueuedSpell!;
+
+        if (qs.RemainingCost > 0)
         {
             await notify(new CombatLogEntry
             {
-                Tick             = tick,
-                ActorName        = actorState.Character.Name,
-                EventType        = "SpellCharging",
-                AttackSourceName = queued.Spell.Name,
-                Message          = $"{actorState.Character.Name} continues casting {queued.Spell.Name}... ({queued.RemainingCost} TM remaining)"
+                Tick = tick, ActorName = actorState.Character.Name,
+                EventType = "SpellCharging",
+                Message = $"{actorState.Character.Name} is charging {qs.Spell.Name}  (need {qs.RemainingCost} more TM)"
             });
-            return null; // Continue charging
+            return null;
         }
-        
-        // Spell is ready
-        var target = queued.Target;
+
         actorState.QueuedSpell = null;
-        
-        await notify(new CombatLogEntry
+        var target = qs.Target;
+
+        if (!target.IsAlive)
         {
-            Tick             = tick,
-            ActorName        = actorState.Character.Name,
-            EventType        = "SpellReady",
-            AttackSourceName = queued.Spell.Name,
-            Message          = $"{actorState.Character.Name} unleashes {queued.Spell.Name}!"
-        });
-        
-        return new ActorSetup(queued.Spell, target, 0, true);
+            if (qs.Spell.IsHealing)
+            {
+                var liveAllies = states
+                    .Where(s => s.PartyIndex == actorState.PartyIndex && s.Character.IsAlive)
+                    .Select(s => s.Character).ToList();
+                var healTarget = liveAllies
+                    .Where(a => a.CurrentHitPoints < a.MaxHitPoints)
+                    .MinBy(a => a.CurrentHitPoints);
+                target = healTarget ?? actorState.Character;
+            }
+            else
+            {
+                var liveEnemies = states
+                    .Where(s => s.PartyIndex != actorState.PartyIndex && s.Character.IsAlive).ToList();
+                if (liveEnemies.Count == 0) return null;
+                var reSelector = actorState.PartyIndex == 0 ? _heroTargetSelector : _enemyTargetSelector;
+                target = await reSelector.SelectTargetAsync(
+                    actorState.Character, liveEnemies.Select(s => s.Character), ct);
+            }
+        }
+
+        var actualTmCost = actorState.Character.ComputeSpellTurnMeterCost(qs.Spell);
+        await _spellProcessor.DeductManaCostAsync(tick, actorState, qs.Spell, notify);
+        return new ActorSetup(qs.Spell, target, actualTmCost, IsSpell: true);
     }
 
     private async Task<ActorSetup?> HandleNewAttackSetupAsync(
         int tick, CombatantState actorState,
-        Party heroParty, Party enemyParty,
-        Func<CombatLogEntry, Task> notify)
+        List<CombatantState> states, Dictionary<Character, Character> lastAttackerOf,
+        Func<CombatLogEntry, Task> notify, CancellationToken ct)
     {
-        var enemies = GetEnemies(actorState, heroParty, enemyParty);
-        if (!enemies.Any()) return null;
-        var allies = GetAllies(actorState, heroParty, enemyParty);
-        var alliesReadOnly = allies.AsReadOnly();
-        var enemiesReadOnly = enemies.AsReadOnly();
-        
-        // Get action decision
-        var actionSource = actorState.PartyIndex == 0 ? _heroActionSource : _enemyActionSource;
-        var chosenAttack = await actionSource.ChooseAttackAsync(
-            actorState.Character, actorState.AttackSource, enemiesReadOnly, alliesReadOnly, tick, CancellationToken.None);
-        
-        // Select target
-        var targetSelector = actorState.PartyIndex == 0 ? _heroTargetSelector : _enemyTargetSelector;
-        var target = await SelectActorTargetAsync(
-            tick, actorState.Character, enemies, targetSelector, notify);
-        
-        if (target == null) return null;
-        
-        // Handle spell queueing if needed
-        if (chosenAttack is Spell spell && spell.TurnMeterCost > TurnmeterState.TurnThreshold)
+        var enemies = states
+            .Where(s => s.PartyIndex != actorState.PartyIndex && s.Character.IsAlive).ToList();
+        if (enemies.Count == 0) return null;
+
+        var allies = states
+            .Where(s => s.PartyIndex == actorState.PartyIndex && s.Character.IsAlive)
+            .Select(s => s.Character).ToList();
+
+        var decisionSource = actorState.PartyIndex == 0 ? _heroActionSource : _enemyActionSource;
+        var attackSource = await decisionSource.ChooseAttackAsync(
+            actorState.Character, actorState.AttackSource,
+            enemies.Select(s => s.Character).ToList(), allies, tick, ct);
+
+        if (attackSource is null)
         {
-            await _spellProcessor.QueueSpellAsync(tick, actorState, spell, target, notify);
-            await _spellProcessor.DeductManaCostAsync(tick, actorState, spell, notify);
-            return null; // Spell queued, no immediate action
+            await notify(new CombatLogEntry
+            {
+                Tick = tick, ActorName = actorState.Character.Name,
+                EventType = "SkippedTurn",
+                Message = $"{actorState.Character.Name} skips their turn."
+            });
+            actorState.Meter.IsActive = false;
+            await notify(_turnMeterProcessor.BuildAfterTurnEntry(actorState, tick, TurnmeterState.TurnThreshold));
+            return null;
         }
-        
-        return new ActorSetup(
-            chosenAttack ?? actorState.AttackSource ?? UnarmedStrike.Default,
-            target,
-            chosenAttack is Spell s ? s.TurnMeterCost : TurnmeterState.TurnThreshold,
-            chosenAttack is Spell);
+
+        if (attackSource is MoveIntent)
+        {
+            var speed = actorState.Character.EffectiveMovementSpeed;
+            var from = actorState.EngagementRange;
+            actorState.EngagementRange = from switch
+            {
+                EngagementRange.Melee => EngagementRange.Short,
+                EngagementRange.Long => EngagementRange.Short,
+                EngagementRange.Short => EngagementRange.Melee,
+                _ => EngagementRange.Melee
+            };
+            await notify(new CombatLogEntry
+            {
+                Tick = tick, ActorName = actorState.Character.Name,
+                EventType = "Move",
+                Message = $"{actorState.Character.Name} moves 15 ft ({from} → {actorState.EngagementRange}). Speed: {speed} ft"
+            });
+            actorState.Meter.IsActive = false;
+            await notify(_turnMeterProcessor.BuildAfterTurnEntry(actorState, tick, TurnmeterState.TurnThreshold));
+            return null;
+        }
+
+        var isSpell = attackSource is Spell;
+        var meterNow = actorState.Meter.CurrentValue;
+        var tmCost = isSpell ? actorState.Character.ComputeSpellTurnMeterCost((Spell)attackSource) : 100;
+
+        if (attackSource is UnarmedStrike && actorState.Character.MemorizedSpells.Count > 0)
+            await notify(new CombatLogEntry
+            {
+                Tick = tick, ActorName = actorState.Character.Name,
+                EventType = "InsufficientMana",
+                Message = $"{actorState.Character.Name} lacks mana for spells — resorting to unarmed strike!"
+            });
+
+        if (isSpell && meterNow < tmCost)
+        {
+            await _spellProcessor.QueueSpellAsync(tick, actorState, (Spell)attackSource, enemies, allies, tmCost, meterNow, notify, ct, _heroTargetSelector, _enemyTargetSelector);
+            return null;
+        }
+
+        Character target;
+        if (attackSource is Spell castSpell && castSpell.IsHealing)
+        {
+            var healTarget = allies
+                .Where(a => a.CurrentHitPoints < a.MaxHitPoints)
+                .MinBy(a => a.CurrentHitPoints);
+            target = healTarget ?? actorState.Character;
+        }
+        else
+        {
+            target = await SelectActorTargetAsync(actorState, enemies, lastAttackerOf, ct);
+        }
+        await _spellProcessor.DeductManaCostAsync(tick, actorState, isSpell ? (Spell)attackSource : null, notify);
+        return new ActorSetup(attackSource, target, tmCost, isSpell);
     }
 
-    private async Task<Character?> SelectActorTargetAsync(
-        int tick, Character actor, List<Character> enemies,
-        ITargetSelector selector, Func<CombatLogEntry, Task> notify)
+    private async Task<Character> SelectActorTargetAsync(
+        CombatantState actorState, List<CombatantState> enemies,
+        Dictionary<Character, Character> lastAttackerOf, CancellationToken ct)
     {
-        var selected = await selector.SelectTargetAsync(actor, enemies);
-        return selected;
-    }
-
-    private static List<Character> GetEnemies(
-        CombatantState actorState, Party heroParty, Party enemyParty)
-    {
-        var enemyParty2 = actorState.PartyIndex == 0 ? enemyParty : heroParty;
-        return enemyParty2.Members
-            .Select(m => m.Character)
-            .Where(c => c.IsAlive)
-            .ToList();
-    }
-
-    private static List<Character> GetAllies(
-        CombatantState actorState, Party heroParty, Party enemyParty)
-    {
-        var allyParty = actorState.PartyIndex == 0 ? heroParty : enemyParty;
-        return allyParty.Members
-            .Select(m => m.Character)
-            .Where(c => c.IsAlive)
-            .ToList();
+        if (actorState.IsSummoned && actorState.SummonedBy is { } master)
+        {
+            var last = lastAttackerOf.GetValueOrDefault(master);
+            if (last?.IsAlive == true && enemies.Any(e => e.Character == last))
+                return last;
+            return enemies.OrderBy(e => e.Character.CurrentHitPoints).First().Character;
+        }
+        var selector = actorState.PartyIndex == 0 ? _heroTargetSelector : _enemyTargetSelector;
+        return await selector.SelectTargetAsync(actorState.Character, enemies.Select(s => s.Character), ct);
     }
 }

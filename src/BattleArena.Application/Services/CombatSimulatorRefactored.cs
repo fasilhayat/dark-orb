@@ -52,7 +52,7 @@ internal class CombatSimulatorRefactored : ICombatSimulator
         _victoryEvaluator = new VictoryEvaluator(dice);
         _statusEffectProcessor = new StatusEffectProcessor(statusEffect, dice, _logger);
         _spellProcessor = new SpellProcessor(combat, dice, _logger, _statusEffectProcessor);
-        _attackResolver = new AttackResolver(combat, dice, _logger, _turnMeterProcessor, _statusEffectProcessor, _spellProcessor);
+        _attackResolver = new AttackResolver(combat, dice, _logger, _victoryEvaluator, _turnMeterProcessor, _statusEffectProcessor, _spellProcessor);
         
         // Use provided or default selectors/sources
         var heroTarget = heroTargetSelector ?? new RandomTargetSelector();
@@ -60,7 +60,7 @@ internal class CombatSimulatorRefactored : ICombatSimulator
         var heroAction = heroActionSource ?? new AutoActionDecisionSource(dice);
         var enemyAction = enemyActionSource ?? new AutoActionDecisionSource(dice);
         
-        _turnProcessor = new TurnProcessor(dice, heroAction, enemyAction, heroTarget, enemyTarget, _spellProcessor, _logger);
+        _turnProcessor = new TurnProcessor(dice, statusEffect, heroAction, enemyAction, heroTarget, enemyTarget, _spellProcessor, _turnMeterProcessor, _logger);
     }
 
     // ── Public API ─────────────────────────────────────────────────────────────
@@ -190,8 +190,9 @@ internal class CombatSimulatorRefactored : ICombatSimulator
         if (defeatedByEffects != null) return defeatedByEffects;
 
         // Setup attack
+        var emptyDic = new Dictionary<Character, Character>();
         var setup = await _turnProcessor.SetupActorAttackAsync(
-            tick, actorState, heroParty, enemyParty, notify);
+            tick, actorState, states, emptyDic, notify, CancellationToken.None);
 
         if (setup == null)
         {
@@ -201,40 +202,36 @@ internal class CombatSimulatorRefactored : ICombatSimulator
         }
 
         // Handle special spell cases
-        if (setup.IsSpell && setup.Source is Spell spell)
+        if (setup.IsSpell && setup.Source is Spell)
         {
-            // Deduct mana if not already deducted
+            var sp = (Spell)setup.Source;
             if (actorState.QueuedSpell == null)
-                await _spellProcessor.DeductManaCostAsync(tick, actorState, spell, notify);
+                await _spellProcessor.DeductManaCostAsync(tick, actorState, sp, notify);
 
-            // Handle summon pets
             if (await _spellProcessor.TryHandlePetSummonAsync(
-                tick, actorState, spell, currentRound, states, heroParty, enemyParty, notify))
+                tick, actorState, sp, currentRound, states, heroParty, enemyParty, notify))
             {
                 await notify(_turnMeterProcessor.BuildAfterTurnEntry(actorState, tick, setup.TmCost));
                 return null;
             }
 
-            // Handle healing spells
-            if (spell.IsHealing)
+            if (sp.IsHealing)
             {
                 var result = await _spellProcessor.ProcessHealingSpellAsync(
-                    tick, actorState, spell, setup.Target, heroParty, enemyParty, log,
+                    tick, actorState, sp, setup.Target, heroParty, enemyParty, log,
                     _victoryEvaluator, terrain, notify);
                 await notify(_turnMeterProcessor.BuildAfterTurnEntry(actorState, tick, setup.TmCost));
                 return result;
             }
 
-            // Check spell reflection
             if (_spellProcessor.ShouldReflectSpell(setup.Target))
             {
                 setup = new ActorSetup(setup.Source, actorState.Character, setup.TmCost, true);
                 await notify(new CombatLogEntry
                 {
-                    Tick      = tick,
-                    ActorName = actorState.Character.Name,
+                    Tick = tick, ActorName = actorState.Character.Name,
                     EventType = "SpellReflected",
-                    Message   = $"{setup.Target.Name}'s spell reflection bounces {spell.Name} back!"
+                    Message = $"{setup.Target.Name}'s spell reflection bounces {sp.Name} back!"
                 });
             }
         }

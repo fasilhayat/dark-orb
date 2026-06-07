@@ -4,6 +4,7 @@ using Application.Interfaces;
 using Application.Models;
 using Application.Models.Combat;
 using Core.Entities;
+using Core.Entities.Enums;
 
 /// <summary>
 /// Handles turn meter calculations, updates, and mana regeneration.
@@ -22,31 +23,63 @@ internal class TurnMeterProcessor
     public async Task ProcessTickMeterAndManaAsync(
         int tick, List<CombatantState> states, Func<CombatLogEntry, Task> notify)
     {
-        // Process turn meter gains for all living combatants
-        foreach (var s in states.Where(s => s.Character.IsAlive))
+        foreach (var s in states)
         {
+            if (!s.Character.IsAlive) continue;
+
             s.SnapshotMeter();
             s.Meter = _turnmeterService.Tick(s.Character, s.Meter);
-            if (s.Meter.CurrentValue > s.PrevMeter)
-                await notify(_logger.BuildTurnMeterGainEntry(tick, s));
-        }
+            await notify(_logger.BuildTurnMeterGainEntry(tick, s.Character.Name, s.PrevMeter, s.Meter.CurrentValue, s.Meter.IsReady, s.Meter.IsActive));
 
-        // Process mana regeneration
-        foreach (var s in states.Where(s => s.Character.IsAlive))
-        {
-            var regenBase = s.Character.ManaRegenPerTick;
-            var regenBonus = s.Character.ActiveStatusEffects
-                .Where(e => e.ManaRegenModifier > 0)
-                .Sum(e => e.ManaRegenModifier);
-            var totalRegen = regenBase + regenBonus;
-            
-            if (totalRegen <= 0) continue;
-            
-            var manaBefore = s.Character.CurrentMana;
-            s.Character.CurrentMana = Math.Min(s.Character.CurrentMana + totalRegen, s.Character.MaxMana);
-            
-            if (s.Character.CurrentMana > manaBefore)
-                await notify(_logger.BuildManaRegenEntry(tick, s.Character.Name, manaBefore, s.Character.CurrentMana, totalRegen));
+            if (s.Character.MaxMana > 0 && s.Character.CurrentMana < s.Character.EffectiveMaxMana)
+            {
+                var regen = s.Character.ManaRegenPerTick;
+
+                var leech = s.Character.ActiveStatusEffects
+                    .FirstOrDefault(e => e.Type == StatusEffectType.Leech
+                        && e.LeechPerTurn > 0
+                        && e.LeechResourceType == "Mana"
+                        && !string.IsNullOrEmpty(e.CasterName));
+
+                if (leech is not null)
+                {
+                    var redirectAmount = Math.Min(regen, leech.LeechPerTurn);
+                    var leechCaster = states.FirstOrDefault(cs => cs.Character.Name == leech.CasterName);
+                    if (leechCaster?.Character.IsAlive == true)
+                    {
+                        var casterManaBefore = leechCaster.Character.CurrentMana;
+                        leechCaster.Character.CurrentMana = Math.Min(
+                            leechCaster.Character.EffectiveMaxMana,
+                            casterManaBefore + redirectAmount);
+
+                        await notify(new CombatLogEntry
+                        {
+                            Tick = tick, ActorName = s.Character.Name,
+                            EventType = "LeechTick", LeechAmount = redirectAmount,
+                            LeechCasterName = leech.CasterName,
+                            LeechResourceType = "Mana",
+                            LeechTargetAfter = s.Character.CurrentMana,
+                            LeechCasterAfter = leechCaster.Character.CurrentMana,
+                            StatusEffectName = leech.Name,
+                            Message = $"{s.Character.Name}'s mana regen ({regen}) redirected to {leech.CasterName} by {leech.Name}.  {leech.CasterName} gains {redirectAmount} mana."
+                        });
+                        continue;
+                    }
+                }
+
+                var manaBefore = s.Character.CurrentMana;
+                s.Character.CurrentMana = Math.Min(s.Character.EffectiveMaxMana, manaBefore + regen);
+                await notify(new CombatLogEntry
+                {
+                    Tick = tick, ActorName = s.Character.Name,
+                    EventType = "ManaRegen", ManaRegen = regen,
+                    ManaAfter = s.Character.CurrentMana,
+                    Message = $"{s.Character.Name} regens {regen} mana  ({manaBefore} -> {s.Character.CurrentMana})"
+                });
+            }
+
+            if (s.QueuedSpell is not null)
+                s.QueuedSpell.RemainingCost -= _turnmeterService.ComputeGainPerTick(s.Character);
         }
     }
 
