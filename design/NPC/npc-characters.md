@@ -32,7 +32,7 @@ A wise elderly human priest with long, wild white hair and a patch-like blindfol
 
 <img src="portraits/greta-ironhand.png" alt="Greta Ironhand" width="150"/>
 
-A battle-hardened dwarf woman with a short, muscular build, auburn hair tied in practical braids, and a thick beard with metal rings woven through. Her arms are corded with muscle from years at the forge, and soot and faint burn scars mark her skin. She wears a leather apron over steel-mail armor, an iron-greaved belt, and gauntlets with runes etched into them.
+A battle-hardened dwarf woman with a short, muscular build, auburn hair tied in practical braids. Her arms are corded with muscle from years at the forge, and soot and faint burn scars mark her skin. She wears a leather apron over steel-mail armor, an iron-greaved belt, and gauntlets with runes etched into them.
 
 > **Art prompt:** gritty, realistic fantasy, warm forge lighting.
 

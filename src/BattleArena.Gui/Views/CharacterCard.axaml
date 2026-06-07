@@ -115,6 +115,16 @@
                 <ScaleTransform ScaleX="{Binding HpFraction}" />
               </Border.RenderTransform>
             </Border>
+            <!-- Damage preview overlay: white bar at right edge of current HP -->
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding DamagePreviewStart, Converter={StaticResource GridLenConv}}" />
+                <ColumnDefinition Width="{Binding DamagePreviewFraction, Converter={StaticResource GridLenConv}}" />
+                <ColumnDefinition Width="{Binding DamagePreviewRemainder, Converter={StaticResource GridLenConv}}" />
+              </Grid.ColumnDefinitions>
+              <Border Grid.Column="1" Background="#ffffff" CornerRadius="2"
+                      Opacity="{Binding DamagePreviewOpacity}" />
+            </Grid>
             <!-- Heal glow overlay: white bar positioned at the HP boundary, not the root -->
             <Grid>
               <Grid.ColumnDefinitions>

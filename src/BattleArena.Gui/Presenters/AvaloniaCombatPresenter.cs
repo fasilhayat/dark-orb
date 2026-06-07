@@ -47,6 +47,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     }
 
     VisualEventBus ICombatPresenter.VisualEventBus => _visualEventBus;
+    DamagePreviewConfig ICombatPresenter.DamagePreviewConfig => DamagePreviewConfig.Default;
 
     private static readonly Dictionary<string, int> _delays = new()
     {
@@ -57,6 +58,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         ["RoundStart"] = 500, ["RoundEnd"] = 400, ["SkippedTurn"] = 600,
         ["FumblePenalty"] = 500, ["Death"] = 1200, ["KnockedOut"] = 1200,
         ["PerfectParry"] = 800, ["DevastatingStrike"] = 1000, ["TotalReversal"] = 1000,
+        ["DamagePreview"] = 800,
     };
 
     public AvaloniaCombatPresenter(
@@ -125,10 +127,24 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                 if (card is not null)
                 {
                     var maxHp = Math.Max(1, card.MaxHp);
-                    var healAmount = Math.Min(ev.HealAmount, card.MaxHp);
-                    var start = (double)Math.Max(0, card.Hp) / maxHp;
+                    var currentHp = Math.Max(0, card.Hp);
+                    var healAmount = Math.Min(ev.HealAmount, maxHp - currentHp);
+                    var start = (double)currentHp / maxHp;
                     var width = (double)healAmount / maxHp;
                     AnimateHealGlow(card, start, width);
+                }
+            }
+
+            if (ev.DamagePreviewAmount > 0 && ev.TargetName is not null)
+            {
+                var card = FindCard(ev.TargetName);
+                if (card is not null)
+                {
+                    var maxHp = Math.Max(1, ev.TargetMaxHp);
+                    var previewAmount = Math.Min(ev.DamagePreviewAmount, Math.Max(0, ev.HpBefore));
+                    var start = (double)Math.Max(0, ev.HpBefore - previewAmount) / maxHp;
+                    var width = (double)previewAmount / maxHp;
+                    AnimateDamagePreview(card, start, width);
                 }
             }
 
@@ -429,11 +445,30 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
     private void AnimateHealGlow(CharCardViewModel card, double start, double width)
     {
-        card.HealGlowOpacity = 0.7;
-        card.HealGlowStart = start;
-        card.HealGlowFraction = width;
+        AnimateGlow(
+            () => { card.HealGlowOpacity = 0.7; card.HealGlowStart = start; card.HealGlowFraction = width; },
+            o => card.HealGlowOpacity = o,
+            () => { card.HealGlowOpacity = 0; card.HealGlowStart = 0; card.HealGlowFraction = 0; },
+            800);
+    }
 
-        const int durationMs = 800;
+    private void AnimateDamagePreview(CharCardViewModel card, double start, double width)
+    {
+        AnimateGlow(
+            () => { card.DamagePreviewOpacity = 0.7; card.DamagePreviewStart = start; card.DamagePreviewFraction = width; },
+            o => card.DamagePreviewOpacity = o,
+            () => { card.DamagePreviewOpacity = 0; card.DamagePreviewStart = 0; card.DamagePreviewFraction = 0; },
+            700);
+    }
+
+    private void AnimateGlow(
+        Action setInitial,
+        Action<double> setOpacity,
+        Action reset,
+        int durationMs)
+    {
+        setInitial();
+
         const int intervalMs = 30;
         var steps = durationMs / intervalMs;
 
@@ -448,18 +483,11 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                 _dispatcher.Post(() =>
                 {
                     if (_stopped) return;
-                    card.HealGlowOpacity = opacity;
+                    setOpacity(opacity);
                 });
             }
             if (!_stopped)
-            {
-                _dispatcher.Post(() =>
-                {
-                    card.HealGlowOpacity = 0;
-                    card.HealGlowStart = 0;
-                    card.HealGlowFraction = 0;
-                });
-            }
+                _dispatcher.Post(() => reset());
         });
     }
 
@@ -795,27 +823,47 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     private static List<LogSegment> BuildHoTTickRow(CombatLogEntry e, CombatDisplayState state)
     {
         var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
-        return
-        [
+        var list = new List<LogSegment>
+        {
             Seg("  \u2191 ", Green),
             Seg(e.ActorName, actorColor),
             Seg("  recovers  ", Gray),
             Seg($"{e.DamageDealt}", Green),
-            Seg($"  HP from {e.StatusEffectName ?? "HoT"}", Green),
-        ];
+        };
+        if (e.TargetHpBefore.HasValue || e.TargetHpAfter.HasValue)
+        {
+            list.Add(Seg("  [", Gray));
+            if (e.TargetHpBefore.HasValue)
+                list.Add(Seg($"{e.TargetHpBefore}", Gray));
+            list.Add(Seg(" \u2192 ", Gray));
+            list.Add(Seg($"{Math.Max(0, e.TargetHpAfter ?? 0)}", White));
+            list.Add(Seg("/HP]", Gray));
+        }
+        list.Add(Seg($"  from {e.StatusEffectName ?? "HoT"}", Green));
+        return list;
     }
 
     private static List<LogSegment> BuildHealedRow(CombatLogEntry e, CombatDisplayState state)
     {
         var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
-        return
-        [
+        var list = new List<LogSegment>
+        {
             Seg("  \u2665 ", Green),
             Seg(e.ActorName, actorColor),
             Seg("  healed for  ", Gray),
             Seg($"{e.DamageDealt}", Green),
-            Seg($"  HP by {e.AttackSourceName ?? "spell"}", Green),
-        ];
+        };
+        if (e.TargetHpBefore.HasValue || e.TargetHpAfter.HasValue)
+        {
+            list.Add(Seg("  [", Gray));
+            if (e.TargetHpBefore.HasValue)
+                list.Add(Seg($"{e.TargetHpBefore}", Gray));
+            list.Add(Seg(" \u2192 ", Gray));
+            list.Add(Seg($"{Math.Max(0, e.TargetHpAfter ?? 0)}", White));
+            list.Add(Seg("/HP]", Gray));
+        }
+        list.Add(Seg($"  by {e.AttackSourceName ?? "spell"}", Green));
+        return list;
     }
 
     private static IBrush NameBrush(bool isHero, string? name, IBrush? fallback)

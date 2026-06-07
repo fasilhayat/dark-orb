@@ -1044,7 +1044,7 @@ public class CombatSimulator : ICombatSimulator
         var meterNow = actorState.Meter.CurrentValue;
         var tmCost = isSpell ? actorState.Character.ComputeSpellTurnMeterCost((Spell)attackSource) : 100;
 
-        if (!isSpell && actorState.Character.MemorizedSpells.Count > 0)
+        if (attackSource is UnarmedStrike && actorState.Character.MemorizedSpells.Count > 0)
             await notify(new CombatLogEntry
             {
                 Tick      = tick,

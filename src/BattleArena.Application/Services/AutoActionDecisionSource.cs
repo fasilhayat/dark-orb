@@ -5,6 +5,8 @@ using Core.Entities;
 
 public class AutoActionDecisionSource : IActionDecisionSource
 {
+    private const double HealThreshold = 0.7;
+
     private readonly IDiceService _dice;
 
     public AutoActionDecisionSource(IDiceService dice)
@@ -21,44 +23,40 @@ public class AutoActionDecisionSource : IActionDecisionSource
         CancellationToken ct)
     {
         var spells = actor.MemorizedSpells.Where(s => actor.CanCast(s)).ToList();
+
         if (spells.Count > 0)
         {
-            var healSpells = spells.Where(s => s.IsHealing).ToList();
-            var dmgSpells = spells.Where(s => !s.IsHealing).ToList();
-
-            var anyInjuredAlly = allies.Any(a => a.CurrentHitPoints < a.MaxHitPoints);
-            var anyLowAlly = allies.Any(a => a.CurrentHitPoints <= a.MaxHitPoints / 2);
-
-            List<Spell> candidates;
-            if (!anyInjuredAlly && healSpells.Count > 0)
-            {
-                // Everyone at full HP — exclude healing spells
-                candidates = dmgSpells.Count > 0 ? dmgSpells : healSpells;
-            }
-            else if (anyLowAlly && healSpells.Count > 0 && dmgSpells.Count > 0)
-            {
-                // Someone critically injured — prefer healing (70% chance)
-                candidates = _dice.RollIndex(10) < 7 ? healSpells : dmgSpells;
-            }
-            else
-            {
-                // Mix of all affordable spells
-                candidates = spells;
-            }
-
-            var affordable = candidates
-                .Where(s => s.ManaCost <= 0 || actor.CurrentMana >= s.ManaCost)
+            var healSpells = spells
+                .Where(s => s.IsHealing && (s.ManaCost <= 0 || actor.CurrentMana >= s.ManaCost))
                 .ToList();
 
-            if (affordable.Count > 0)
-                return Task.FromResult<IAttackSource?>(affordable[_dice.RollIndex(affordable.Count)]);
+            var dmgSpells = spells
+                .Where(s => !s.IsHealing && (s.ManaCost <= 0 || actor.CurrentMana >= s.ManaCost))
+                .ToList();
 
-            return Task.FromResult<IAttackSource?>(UnarmedStrike.Default);
+            // Priority 1: Heal only if an ally is below the HP threshold
+            if (healSpells.Count > 0)
+            {
+                var anyNeedHeal = allies.Any(a => (double)a.CurrentHitPoints / a.MaxHitPoints < HealThreshold);
+                if (anyNeedHeal)
+                    return Task.FromResult<IAttackSource?>(healSpells[_dice.RollIndex(healSpells.Count)]);
+            }
+
+            // Priority 2: Use damage spells on enemies
+            if (dmgSpells.Count > 0)
+                return Task.FromResult<IAttackSource?>(dmgSpells[_dice.RollIndex(dmgSpells.Count)]);
         }
 
+        // Priority 3: Use default weapon
         if (defaultAttack is not null)
             return Task.FromResult<IAttackSource?>(defaultAttack);
 
+        // Priority 3b: Check equipped weapon directly (handles case where
+        // PartyMember.AttackSource is null for spellcasters — see Demo.GetAttackSource)
+        if (actor.Equipment.RightHand is { } weapon)
+            return Task.FromResult<IAttackSource?>(weapon);
+
+        // Priority 4: Unarmed strike
         return Task.FromResult<IAttackSource?>(UnarmedStrike.Default);
     }
 }

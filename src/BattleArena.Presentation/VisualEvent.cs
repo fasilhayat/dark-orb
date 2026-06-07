@@ -12,6 +12,7 @@ public sealed class VisualEvent
     public string? EffectName { get; init; }
     public bool IsPersistent { get; init; }
     public int HealAmount { get; init; }
+    public int DamagePreviewAmount { get; init; }
     public int TargetMaxHp { get; init; }
     public int HpBefore { get; init; }
 }

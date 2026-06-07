@@ -8,6 +8,7 @@ public class CombatPlaybackEngineTests
     private sealed class SpyPresenter : ICombatPresenter
     {
         public VisualEventBus VisualEventBus { get; } = new();
+        DamagePreviewConfig ICombatPresenter.DamagePreviewConfig => DamagePreviewConfig.Default;
 
         public List<string> Calls { get; } = [];
         public List<CombatLogEntry> RenderedEvents { get; } = [];
@@ -684,6 +685,7 @@ public class CombatPlaybackEngineTests
     private sealed class CapturingPresenter : ICombatPresenter
     {
         public VisualEventBus VisualEventBus { get; } = new();
+        DamagePreviewConfig ICombatPresenter.DamagePreviewConfig => DamagePreviewConfig.Default;
         private readonly Action<CombatLogEntry> _onEvent;
 
         public CapturingPresenter(Action<CombatLogEntry> onEvent) => _onEvent = onEvent;
@@ -709,6 +711,7 @@ public class CombatPlaybackEngineTests
     private sealed class RefreshCapturingPresenter : ICombatPresenter
     {
         public VisualEventBus VisualEventBus { get; } = new();
+        DamagePreviewConfig ICombatPresenter.DamagePreviewConfig => DamagePreviewConfig.Default;
         public List<Dictionary<string, int>> TmSnapshotsAtRefresh { get; } = [];
 
         public void RefreshScreen(CombatDisplayState state, int tick, string? active) =>

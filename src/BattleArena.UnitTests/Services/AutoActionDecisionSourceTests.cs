@@ -133,14 +133,12 @@ public class AutoActionDecisionSourceTests
     }
 
     [Fact]
-    public async Task ChooseAttack_InsufficientMana_FallsBackToUnarmed()
+    public async Task ChooseAttack_InsufficientMana_FallsBackToDefaultAttack()
     {
         var dice = Substitute.For<IDiceService>();
         var sut = CreateSut(dice);
 
-        // When the character has spells but lacks mana, the original behaviour
-        // was to return UnarmedStrike (not defaultAttack). The health-aware logic
-        // preserves this: no affordable spells → UnarmedStrike.
+        // When the character has spells but lacks mana, fall back to the weapon
         var actor = MakeActor("Sera", hp: 50, maxHp: 50,
             MakeHeal(manaCost: 50),
             MakeDamage(manaCost: 50));
@@ -159,30 +157,111 @@ public class AutoActionDecisionSourceTests
             Array.Empty<Character>(), Array.Empty<Character>(), 0, default);
 
         Assert.NotNull(result);
-        Assert.Equal(UnarmedStrike.Default.Name, result.Name);
+        Assert.Equal("Mace", result.Name);
     }
 
     [Fact]
-    public async Task ChooseAttack_SomeInjured_MixesHealAndDamage()
+    public async Task ChooseAttack_AllyBelowThreshold_AlwaysHeals()
     {
         var dice = Substitute.For<IDiceService>();
-        // First call RollIndex to pick from the mixed pool (both spells)
-        dice.RollIndex(Arg.Any<int>()).Returns(0, 1);
+        dice.RollIndex(Arg.Any<int>()).Returns(0);
         var sut = CreateSut(dice);
 
-        var actor = MakeActor("Sera", hp: 40, maxHp: 50,
+        var actor = MakeActor("Sera", hp: 30, maxHp: 50,
             MakeHeal(),
             MakeDamage());
 
-        var allies = new[] { MakeAlly("Sera", hp: 40, maxHp: 50) };
+        var allies = new[] { MakeAlly("Sera", hp: 30, maxHp: 50) };
         var enemies = new[] { MakeAlly("Gruk", hp: 50) };
 
-        var first = await sut.ChooseAttackAsync(actor, null, enemies, allies, 0, default);
-        var second = await sut.ChooseAttackAsync(actor, null, enemies, allies, 0, default);
+        // Ally is at 60% HP, below 70% threshold → always heals
+        var result = await sut.ChooseAttackAsync(actor, null, enemies, allies, 0, default);
 
-        Assert.NotNull(first);
-        Assert.NotNull(second);
-        // RollIndex(2) returned 0 then 1 → should be two different spells
-        Assert.NotEqual(first.Name, second.Name);
+        Assert.NotNull(result);
+        Assert.True(result is Spell s && s.IsHealing,
+            $"Expected a healing spell when ally is below 70% HP, got {result.Name}");
+    }
+
+    [Fact]
+    public async Task ChooseAttack_AllyAboveThreshold_UsesDamageSpells()
+    {
+        var dice = Substitute.For<IDiceService>();
+        dice.RollIndex(Arg.Any<int>()).Returns(0);
+        var sut = CreateSut(dice);
+
+        var actor = MakeActor("Sera", hp: 45, maxHp: 50,
+            MakeHeal(),
+            MakeDamage());
+
+        var allies = new[] { MakeAlly("Sera", hp: 45, maxHp: 50) };
+        var enemies = new[] { MakeAlly("Gruk", hp: 50) };
+
+        // Ally is at 90% HP, above 70% threshold → uses damage spells
+        var result = await sut.ChooseAttackAsync(actor, null, enemies, allies, 0, default);
+
+        Assert.NotNull(result);
+        Assert.True(result is Spell s && !s.IsHealing,
+            $"Expected a damage spell when ally is above 70% HP, got {result.Name}");
+    }
+
+    [Fact]
+    public async Task ChooseAttack_OnlyHealSpellsAndFullHp_UsesWeapon()
+    {
+        var dice = Substitute.For<IDiceService>();
+        var sut = CreateSut(dice);
+
+        var actor = MakeActor("Sera", hp: 50, maxHp: 50,
+            MakeHeal());
+
+        var allies = new[] { MakeAlly("Sera", hp: 50, maxHp: 50) };
+        var enemies = new[] { MakeAlly("Gruk", hp: 50) };
+
+        var weapon = new Weapon
+        {
+            Name = "Mace",
+            DamageDie = DieType.D6,
+            DamageCount = 1,
+            DamageType = DamageType.Bludgeoning,
+            AttackType = AttackType.Melee
+        };
+
+        // Only healing spells, allies at full HP → should use weapon
+        var result = await sut.ChooseAttackAsync(actor, weapon, enemies, allies, 0, default);
+
+        Assert.NotNull(result);
+        Assert.Equal("Mace", result.Name);
+    }
+
+    [Fact]
+    public async Task ChooseAttack_NullDefaultWithEquippedWeapon_UsesWeapon()
+    {
+        var dice = Substitute.For<IDiceService>();
+        var sut = CreateSut(dice);
+
+        var actor = MakeActor("Elira", hp: 50, maxHp: 50,
+            MakeHeal("Cure Light Wounds"),
+            MakeHeal("Cure Serious Wounds"),
+            MakeHeal("Heal"),
+            MakeHeal("Mass Heal"));
+
+        actor.Equipment.RightHand = new Weapon
+        {
+            Name = "Mace",
+            DamageDie = DieType.D6,
+            DamageCount = 1,
+            DamageType = DamageType.Bludgeoning,
+            AttackType = AttackType.Melee
+        };
+
+        var allies = new[] { MakeAlly("Elira", hp: 50, maxHp: 50) };
+        var enemies = new[] { MakeAlly("Gruk", hp: 50) };
+
+        // defaultAttack is null (spellcaster), only healing spells, allies are full HP
+        // should fall back to equipped weapon, not unarmed
+        var result = await sut.ChooseAttackAsync(actor, null, enemies, allies, 0, default);
+
+        Assert.NotNull(result);
+        Assert.Equal("Mace", result.Name);
+        Assert.IsNotType<UnarmedStrike>(result);
     }
 }

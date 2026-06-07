@@ -67,7 +67,7 @@ ON CONFLICT (name) DO NOTHING;
 -- ============================================================
 
 INSERT INTO arena_data.spell (school_id, damage_die_id, damage_type_id, attack_type_id, name, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage, description)
-SELECT ss.id, dd.id, dt.id, at.id, s.*
+SELECT ss.id, dd.id, dt.id, at.id, s.name, s.mana_cost, s.turn_meter_cost, s.spell_level, s.damage_count, s.attack_bonus, s.flat_damage_bonus, s.elemental_type, s.elemental_damage, s.description
 FROM (VALUES
     -- Mage Common Core (level 1-2)
     ('Stormcraft', 'D4', 'Force', 'Spell', 'Magic Missile',    10, 60, 1, 3, 2, 0, 'Force',    0, 'Reliable force darts that strike true.  Tags: Single-Target Damage, Nuke'),

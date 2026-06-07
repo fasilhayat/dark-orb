@@ -28,10 +28,59 @@ public static class CombatPlaybackEngine
             presenter.RefreshScreen(state, turnTick, turnStart.ActiveActorName);
             presenter.ShowTurnHeader(turnCount, turnStart.ActorName, turnStart.TargetName, isHero);
 
-            foreach (var entry in turnEvents)
+            var config = presenter.DamagePreviewConfig;
+
+            for (var i = 0; i < turnEvents.Count; i++)
             {
+                var entry = turnEvents[i];
+
                 if (!ReferenceEquals(entry, turnStart))
+                {
+                    if (entry.EventType == "Damage")
+                    {
+                        var wasCrit = WasFromCriticalHit(turnEvents, i);
+                        var showPreview = wasCrit
+                            || MeetsDevastationThreshold(entry, state, config.DevastationThresholdPercent);
+
+                        if (showPreview)
+                        {
+                            var totalDamage = entry.DamageDealt ?? 0;
+                            var targetName = entry.ActorName;
+
+                            while (i + 1 < turnEvents.Count
+                                && turnEvents[i + 1].EventType == "Damage"
+                                && turnEvents[i + 1].ActorName == targetName)
+                            {
+                                i++;
+                                totalDamage += turnEvents[i].DamageDealt ?? 0;
+                            }
+
+                            var targetState = state.TryGet(targetName);
+                            if (targetState is not null && totalDamage > 0)
+                            {
+                                var previewAmount = Math.Min(totalDamage, Math.Max(0, targetState.Hp));
+                                var overlay = wasCrit ? "\u00d72 CRIT!" : "";
+                                bus.PublishNormal(new VisualEvent
+                                {
+                                    EventType = "DamagePreview",
+                                    ActorName = targetName,
+                                    TargetName = targetName,
+                                    OverlayText = overlay,
+                                    Color = wasCrit ? "#ff44ff" : "#ffffff",
+                                    DamagePreviewAmount = previewAmount,
+                                    TargetMaxHp = targetState.MaxHp,
+                                    HpBefore = targetState.Hp,
+                                });
+
+                                var previewDelay = presenter.GetEventDelayMs("DamagePreview");
+                                if (previewDelay > 0)
+                                    presenter.Wait(previewDelay);
+                            }
+                        }
+                    }
+
                     state.ApplyEvent(entry);
+                }
 
                 EmitVisualEvents(bus, entry);
                 EmitCombatSounds(bus, entry);
@@ -234,6 +283,30 @@ public static class CombatPlaybackEngine
         if (lower.Contains("shield") || lower.Contains("armor") || lower.Contains("ward") || lower.Contains("protect"))
             return "#88aaff";
         return "#ffffff";
+    }
+
+    private static bool WasFromCriticalHit(IReadOnlyList<CombatLogEntry> turnEvents, int damageIndex)
+    {
+        for (var j = damageIndex - 1; j >= 0; j--)
+        {
+            var prev = turnEvents[j];
+            if (prev.EventType == "Attack" && prev.TargetName == turnEvents[damageIndex].ActorName)
+                return prev.IsCritical == true;
+            if (prev.EventType == "TurnStart")
+                break;
+        }
+        return false;
+    }
+
+    private static bool MeetsDevastationThreshold(CombatLogEntry entry, CombatDisplayState state, int devastationThresholdPercent)
+    {
+        var targetState = state.TryGet(entry.ActorName);
+        if (targetState is null) return false;
+
+        var damageAmount = entry.DamageDealt ?? 0;
+        if (damageAmount <= 0) return false;
+
+        return damageAmount * 100 >= targetState.MaxHp * devastationThresholdPercent;
     }
 
     private static readonly HashSet<string> PersistentEffectNames =

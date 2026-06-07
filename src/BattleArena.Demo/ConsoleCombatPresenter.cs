@@ -6,6 +6,7 @@ using BattleArena.Presentation;
 internal sealed class ConsoleCombatPresenter : ICombatPresenter
 {
     public VisualEventBus VisualEventBus { get; } = new();
+    DamagePreviewConfig ICombatPresenter.DamagePreviewConfig => DamagePreviewConfig.Default;
 
     private readonly GuiDisplayConfig _config;
     private readonly IReadOnlyDictionary<string, int> _maxHp;

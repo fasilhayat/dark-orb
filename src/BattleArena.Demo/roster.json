@@ -89,13 +89,13 @@
     {
       "name": "Heal",
       "school": "Deity", "damageDie": "D8", "damageCount": 2,
-      "damageType": "Holy", "attackBonus": 0,
+      "damageType": "Healing", "attackBonus": 0,
       "spellLevel": 6, "turnMeterCost": 80, "manaCost": 25
     },
     {
       "name": "Mass Heal",
       "school": "Deity", "damageDie": "D6", "damageCount": 3,
-      "damageType": "Holy", "attackBonus": 0,
+      "damageType": "Healing", "attackBonus": 0,
       "spellLevel": 4, "turnMeterCost": 100, "manaCost": 50
     },
     {

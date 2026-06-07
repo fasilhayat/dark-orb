@@ -16,6 +16,7 @@ using BattleArena.Application.Models;
 public interface ICombatPresenter
 {
     VisualEventBus VisualEventBus { get; }
+    DamagePreviewConfig DamagePreviewConfig { get; }
 
     void ShowInitialScreen(CombatDisplayState state, int tick);
     void WaitForCombatStart();

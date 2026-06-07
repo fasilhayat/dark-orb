@@ -911,6 +911,46 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HealGlowRemainder)));
     }
 
+    // ── Damage Preview properties ──────────────────────────
+
+    private double _damagePreviewOpacity;
+    public double DamagePreviewOpacity
+    {
+        get => _damagePreviewOpacity;
+        set => SetField(ref _damagePreviewOpacity, value);
+    }
+
+    private double _damagePreviewFraction;
+    public double DamagePreviewFraction
+    {
+        get => _damagePreviewFraction;
+        set
+        {
+            var changed = !_damagePreviewFraction.Equals(value);
+            SetField(ref _damagePreviewFraction, value);
+            if (changed) RaiseDamagePreviewRemainder();
+        }
+    }
+
+    private double _damagePreviewStart;
+    public double DamagePreviewStart
+    {
+        get => _damagePreviewStart;
+        set
+        {
+            var changed = !_damagePreviewStart.Equals(value);
+            SetField(ref _damagePreviewStart, value);
+            if (changed) RaiseDamagePreviewRemainder();
+        }
+    }
+
+    public double DamagePreviewRemainder => 1.0 - _damagePreviewStart - _damagePreviewFraction;
+
+    private void RaiseDamagePreviewRemainder()
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DamagePreviewRemainder)));
+    }
+
     public string HpBarColor
     {
         get
@@ -1001,6 +1041,8 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
                 Raise(nameof(EffectsDisplay));
                 Raise(nameof(HasEffectsDisplay));
                 Raise(nameof(EffectsColor));
+                break;
+            case nameof(DamagePreviewOpacity):
                 break;
         }
 
