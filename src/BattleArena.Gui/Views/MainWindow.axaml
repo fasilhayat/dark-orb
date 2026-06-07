@@ -230,12 +230,32 @@
           <Button x:Name="StartButton" Content="Back to Setup" Click="OnBackToSetupClick"
                   Width="110" Height="28" FontSize="11"
                   HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
-          <Button x:Name="NextButton" Content="Next Turn" Click="OnNextClick"
-                  Width="70" Height="28" FontSize="11" IsEnabled="False"
-                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
-          <Button x:Name="AutoButton" Content="Auto Play" Click="OnAutoClick"
-                  Width="70" Height="28" FontSize="11" IsEnabled="False"
-                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+          <Button x:Name="TurnButton" Content="Turn based" Click="OnTurnClick"
+                  Width="130" Height="28" FontSize="11"
+                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+            <Button.Styles>
+              <Style Selector="Button">
+                <Setter Property="Background" Value="#3a3a5c" />
+              </Style>
+              <Style Selector="Button.waiting">
+                <Setter Property="Background" Value="#0088ff" />
+                <Setter Property="BorderBrush" Value="#44aaff" />
+              </Style>
+            </Button.Styles>
+          </Button>
+          <Button x:Name="AutoPlayButton" Content="Auto-play" Click="OnAutoPlayClick"
+                  Width="100" Height="28" FontSize="11"
+                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+            <Button.Styles>
+              <Style Selector="Button">
+                <Setter Property="Background" Value="#3a3a5c" />
+              </Style>
+              <Style Selector="Button.waiting">
+                <Setter Property="Background" Value="#0088ff" />
+                <Setter Property="BorderBrush" Value="#44aaff" />
+              </Style>
+            </Button.Styles>
+          </Button>
           <Separator Width="1" Background="#444" Margin="4,0" />
           <Button x:Name="NewCombatButton" Content="New Combat" Click="OnNewCombatClick"
                   Width="100" Height="28" FontSize="11" IsVisible="False"
@@ -320,14 +340,6 @@
                 Width="110" Height="30" FontSize="12" />
         <Button x:Name="ClashButton" Classes="toggle" Content="Clash" Click="OnClashClick"
                 Width="110" Height="30" FontSize="12" />
-      </StackPanel>
-
-      <!-- Mode toggle -->
-      <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="4" Margin="0,0,0,4">
-        <Button x:Name="TurnBasedButton" Classes="toggle" Content="Turn-based" Click="OnTurnBasedClick"
-                Width="110" Height="28" FontSize="11" />
-        <Button x:Name="AutoModeButton" Classes="toggle" Content="Auto" Click="OnAutoModeClick"
-                Width="100" Height="28" FontSize="11" />
       </StackPanel>
 
       <!-- Error banner -->

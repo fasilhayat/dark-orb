@@ -33,6 +33,8 @@ public partial class MainWindow : Window
     private int _teamSize = 1;
     private bool _useApi;
     private BattleArenaApiClient? _apiClient;
+    private Party? _combatParty1;
+    private Party? _combatParty2;
     private List<Character> _apiRoster = [];
     private readonly ISoundPlayer? _soundPlayer;
 
@@ -101,9 +103,6 @@ public partial class MainWindow : Window
         ClearSelection();
     }
 
-    private Character? Fighter1 => _team1.Count > 0 ? _team1[0]?.Character : null;
-    private Character? Fighter2 => _team2.Count > 0 ? _team2[0]?.Character : null;
-
     private void ClearSelection()
     {
         foreach (var item in _team1.Concat(_team2))
@@ -168,21 +167,21 @@ public partial class MainWindow : Window
         _vm.ErrorMessage = "";
     }
 
-    private async void OnFightClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private void OnFightClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        if (Fighter1 is null || Fighter2 is null) return;
-        await StartCombat();
+        if (_team1.Count == 0 || _team2.Count == 0) return;
+        StartCombat();
     }
 
-    private async void OnNewCombatClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private void OnNewCombatClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         NewCombatButton.IsVisible = false;
-        if (Fighter1 is null || Fighter2 is null) return;
+        if (_team1.Count == 0 || _team2.Count == 0) return;
         _presenter?.Stop();
-        await StartCombat();
+        StartCombat();
     }
 
-    private async Task StartCombat()
+    private void StartCombat()
     {
         _vm.ErrorMessage = "";
         SpeedSlider.Value = 1;
@@ -196,13 +195,78 @@ public partial class MainWindow : Window
         _vm.RoundNumber = 0;
         _vm.TickInRound = 0;
 
-        ResetCombatant(Fighter1!);
-        ResetCombatant(Fighter2!);
+        foreach (var item in _team1.Concat(_team2))
+            ResetCombatant(item!.Character);
 
-        var party1 = Party.Solo(Fighter1!, Roster.GetAttackSource(Fighter1!));
-        var party2 = Party.Solo(Fighter2!, Roster.GetAttackSource(Fighter2!));
+        _combatParty1 = BuildParty(_team1);
+        _combatParty2 = BuildParty(_team2);
 
-        await RunCombat(party1, party2);
+        PopulateCharacterCards(_combatParty1, _combatParty2);
+    }
+
+    private void PopulateCharacterCards(Party party1, Party party2)
+    {
+        foreach (var pm in party1.Members)
+        {
+            _vm.Heroes.Add(new CharCardViewModel
+            {
+                Name = pm.Character.Name,
+                MaxHp = pm.Character.MaxHitPoints,
+                MaxMana = pm.Character.MaxMana,
+                IsHero = true,
+                Level = pm.Character.Level,
+                ClassName = pm.Character.ClassName,
+                Sex = pm.Character.Sex,
+                Race = pm.Character.Race?.Name ?? "",
+                StrikeRating = pm.Character.StrikeRating,
+                ArmorName = pm.Character.Equipment.Chest?.Name ?? "None",
+                ArmorClass = pm.Character.Equipment.TotalArmorClass,
+                WeaponStats = FormatWeaponStats(pm.AttackSource),
+                MagicResistance = pm.Character.ComputeResistance(ResistanceType.Magic),
+                Hp = pm.Character.MaxHitPoints,
+                Mana = pm.Character.CurrentMana,
+                CurrentWeapon = pm.AttackSource?.Name ?? "",
+                Portrait = PortraitResolver.GetPortrait(pm.Character.Name)
+            });
+        }
+        foreach (var pm in party2.Members)
+        {
+            _vm.Enemies.Add(new CharCardViewModel
+            {
+                Name = pm.Character.Name,
+                MaxHp = pm.Character.MaxHitPoints,
+                MaxMana = pm.Character.MaxMana,
+                IsHero = false,
+                Level = pm.Character.Level,
+                ClassName = pm.Character.ClassName,
+                Sex = pm.Character.Sex,
+                Race = pm.Character.Race?.Name ?? "",
+                StrikeRating = pm.Character.StrikeRating,
+                ArmorName = pm.Character.Equipment.Chest?.Name ?? "None",
+                ArmorClass = pm.Character.Equipment.TotalArmorClass,
+                WeaponStats = FormatWeaponStats(pm.AttackSource),
+                MagicResistance = pm.Character.ComputeResistance(ResistanceType.Magic),
+                Hp = pm.Character.MaxHitPoints,
+                Mana = pm.Character.CurrentMana,
+                CurrentWeapon = pm.AttackSource?.Name ?? "",
+                Portrait = PortraitResolver.GetPortrait(pm.Character.Name)
+            });
+        }
+    }
+
+    private static Party BuildParty(List<CharacterDisplayItem?> team)
+    {
+        var party = new Party();
+        foreach (var item in team)
+        {
+            if (item?.Character is null) continue;
+            party.Members.Add(new PartyMember
+            {
+                Character = item.Character,
+                AttackSource = Roster.GetAttackSource(item.Character)
+            });
+        }
+        return party;
     }
 
     private async void OnStartClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -213,6 +277,7 @@ public partial class MainWindow : Window
     private void OnBackToSetupClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         _presenter?.Stop();
+        _vm.PropertyChanged -= OnVmWaitingChanged;
         _presenter = null;
         _cts?.Cancel();
         _waitForNext?.Set();
@@ -230,8 +295,6 @@ public partial class MainWindow : Window
         _vm.Tick = 0;
         _vm.RoundNumber = 0;
         _vm.TickInRound = 0;
-        NextButton.IsEnabled = false;
-        AutoButton.IsEnabled = false;
         NewCombatButton.IsVisible = false;
         ClearSelection();
     }
@@ -247,11 +310,17 @@ public partial class MainWindow : Window
         _vm.Tick = 0;
         _vm.RoundNumber = 0;
         _vm.TickInRound = 0;
+        StopBlink();
+        TurnButton.Classes.Remove("waiting");
+        TurnButton.Content = "Turn based";
+        AutoPlayButton.Classes.Remove("waiting");
+        AutoPlayButton.Content = "Auto-play";
+        NewCombatButton.IsVisible = false;
+        _combatParty1 = null;
+        _combatParty2 = null;
         ClearSelection();
         DuelButton.IsEnabled = false;
         ClashButton.IsEnabled = true;
-        TurnBasedButton.IsEnabled = false;
-        AutoModeButton.IsEnabled = true;
         HeroListBox.ItemsSource = ToDisplayItems(Roster.AllHeroes);
         DummyListBox.ItemsSource = ToDisplayItems(Roster.AllDummies);
         DummyListBox.IsVisible = true;
@@ -530,18 +599,47 @@ public partial class MainWindow : Window
             _vm.CreationStep = 0;
     }
 
-    private void OnTurnBasedClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private async void OnTurnClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
+        if (_presenter is not null)
+        {
+            _presenter.AutoMode = false;
+            _vm.WaitingForNextTurn = false;
+            _waitForNext?.Set();
+            return;
+        }
+
         _vm.Mode = "TurnBased";
-        TurnBasedButton.IsEnabled = false;
-        AutoModeButton.IsEnabled = true;
+        if (_combatParty1 is not null && _combatParty2 is not null)
+            await RunCombat(_combatParty1, _combatParty2);
     }
 
-    private void OnAutoModeClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private async void OnAutoPlayClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
+        if (_presenter is not null)
+        {
+            _presenter.AutoMode = !_presenter.AutoMode;
+            AutoPlayButton.Content = _presenter.AutoMode ? "Stop turn" : "Auto-play";
+            TurnButton.Content = _presenter.AutoMode ? "Next turn" : "Turn based";
+            if (_presenter.AutoMode)
+            {
+                StopBlink();
+                TurnButton.Classes.Remove("waiting");
+                AutoPlayButton.Classes.Add("waiting");
+                _waitForNext?.Set();
+            }
+            else
+            {
+                AutoPlayButton.Classes.Remove("waiting");
+                if (_vm.WaitingForNextTurn)
+                    StartBlink();
+            }
+            return;
+        }
+
         _vm.Mode = "Auto";
-        TurnBasedButton.IsEnabled = true;
-        AutoModeButton.IsEnabled = false;
+        if (_combatParty1 is not null && _combatParty2 is not null)
+            await RunCombat(_combatParty1, _combatParty2);
     }
 
     private void OnBackToMainFromSetupClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -578,6 +676,8 @@ public partial class MainWindow : Window
     private async Task RunCombat(Party party1, Party party2)
     {
         _presenter?.Stop();
+        _vm.PropertyChanged -= OnVmWaitingChanged;
+        StopBlink();
         _presenter = null;
         _cts?.Cancel();
         _waitForNext?.Set();
@@ -587,57 +687,9 @@ public partial class MainWindow : Window
         _cts = new CancellationTokenSource();
         _waitForNext = new ManualResetEventSlim(false);
         _vm.IsRunning = true;
-        NextButton.IsEnabled = true;
-        AutoButton.IsEnabled = true;
-        AutoButton.Content = "Auto Play";
         NewCombatButton.IsVisible = false;
-
-        foreach (var pm in party1.Members)
-        {
-            _vm.Heroes.Add(new CharCardViewModel
-            {
-                Name = pm.Character.Name,
-                MaxHp = pm.Character.MaxHitPoints,
-                MaxMana = pm.Character.MaxMana,
-                IsHero = true,
-                Level = pm.Character.Level,
-                ClassName = pm.Character.ClassName,
-                Sex = pm.Character.Sex,
-                Race = pm.Character.Race?.Name ?? "",
-                StrikeRating = pm.Character.StrikeRating,
-                ArmorName = pm.Character.Equipment.Chest?.Name ?? "None",
-                ArmorClass = pm.Character.Equipment.TotalArmorClass,
-                WeaponStats = FormatWeaponStats(pm.AttackSource),
-                MagicResistance = pm.Character.ComputeResistance(ResistanceType.Magic),
-                Hp = pm.Character.MaxHitPoints,
-                Mana = pm.Character.CurrentMana,
-                CurrentWeapon = pm.AttackSource?.Name ?? "",
-                Portrait = PortraitResolver.GetPortrait(pm.Character.Name)
-            });
-        }
-        foreach (var pm in party2.Members)
-        {
-            _vm.Enemies.Add(new CharCardViewModel
-            {
-                Name = pm.Character.Name,
-                MaxHp = pm.Character.MaxHitPoints,
-                MaxMana = pm.Character.MaxMana,
-                IsHero = false,
-                Level = pm.Character.Level,
-                ClassName = pm.Character.ClassName,
-                Sex = pm.Character.Sex,
-                Race = pm.Character.Race?.Name ?? "",
-                StrikeRating = pm.Character.StrikeRating,
-                ArmorName = pm.Character.Equipment.Chest?.Name ?? "None",
-                ArmorClass = pm.Character.Equipment.TotalArmorClass,
-                WeaponStats = FormatWeaponStats(pm.AttackSource),
-                MagicResistance = pm.Character.ComputeResistance(ResistanceType.Magic),
-                Hp = pm.Character.MaxHitPoints,
-                Mana = pm.Character.CurrentMana,
-                CurrentWeapon = pm.AttackSource?.Name ?? "",
-                Portrait = PortraitResolver.GetPortrait(pm.Character.Name)
-            });
-        }
+        AutoPlayButton.Content = "Auto-play";
+        TurnButton.Content = "Next turn";
 
         var charStates = new List<CharDisplayState>();
         foreach (var c in _vm.Heroes)
@@ -675,6 +727,10 @@ public partial class MainWindow : Window
             AutoMode = _vm.Mode == "Auto"
         };
 
+        _vm.PropertyChanged += OnVmWaitingChanged;
+        if (_presenter.AutoMode)
+            AutoPlayButton.Classes.Add("waiting");
+
         var playbackToken = _cts.Token;
         _ = Task.Run(() =>
         {
@@ -699,8 +755,11 @@ public partial class MainWindow : Window
                     {
                         _vm.IsRunning = false;
                         _vm.CombatOver = true;
-                        NextButton.IsEnabled = false;
-                        AutoButton.IsEnabled = false;
+                        StopBlink();
+                        TurnButton.Classes.Remove("waiting");
+                        TurnButton.Content = "Turn based";
+                        AutoPlayButton.Classes.Remove("waiting");
+                        AutoPlayButton.Content = "Auto-play";
                         NewCombatButton.IsVisible = true;
                     });
                 }
@@ -774,28 +833,44 @@ public partial class MainWindow : Window
             Weapon = c.CurrentWeapon
         };
 
+    private DispatcherTimer? _blinkTimer;
+
+    private void OnVmWaitingChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(_vm.WaitingForNextTurn)) return;
+        if (_vm.WaitingForNextTurn)
+            StartBlink();
+        else
+            StopBlink();
+    }
+
+    private void StartBlink()
+    {
+        StopBlink();
+        _blinkTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
+        _blinkTimer.Tick += (_, _) =>
+        {
+            if (TurnButton.Classes.Contains("waiting"))
+                TurnButton.Classes.Remove("waiting");
+            else
+                TurnButton.Classes.Add("waiting");
+        };
+        _blinkTimer.Start();
+    }
+
+    private void StopBlink()
+    {
+        if (_blinkTimer is null) return;
+        _blinkTimer.Stop();
+        _blinkTimer = null;
+        TurnButton.Classes.Remove("waiting");
+    }
+
     private static void ResetCombatant(Character c)
     {
         c.CurrentHitPoints = c.MaxHitPoints;
         c.CurrentMana = c.MaxMana;
         c.ActiveStatusEffects.Clear();
-    }
-
-    private void OnNextClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        _waitForNext?.Set();
-    }
-
-    private void OnAutoClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        if (_presenter is null) return;
-
-        _presenter.AutoMode = !_presenter.AutoMode;
-        AutoButton.Content = _presenter.AutoMode ? "Stop" : "Auto";
-        NextButton.IsEnabled = !_presenter.AutoMode;
-
-        if (_presenter.AutoMode)
-            _waitForNext?.Set();
     }
 
     private void OnSpeedChanged(object? sender, Avalonia.Controls.Primitives.RangeBaseValueChangedEventArgs e)

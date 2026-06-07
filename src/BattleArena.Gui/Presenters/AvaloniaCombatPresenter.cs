@@ -237,11 +237,15 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         if (_stopped) return;
         _dispatcher.Post(() => _vm.CombatOver = combatOver);
         if (AutoMode)
+        {
             Thread.Sleep((int)(600 * PacingMultiplier));
+        }
         else
         {
+            _dispatcher.Post(() => _vm.WaitingForNextTurn = true);
             _waitHandle.Wait();
             _waitHandle.Reset();
+            _dispatcher.Post(() => _vm.WaitingForNextTurn = false);
         }
     }
 

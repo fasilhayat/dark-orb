@@ -125,7 +125,11 @@ public static class CombatPlaybackEngine
                         pendingMessages.Clear();
                     }
 
-                    FlushTurn();
+                    if (inTurn)
+                    {
+                        FlushTurn();
+                        presenter.WaitForNextTurn(false);
+                    }
                     inTurn = true;
                     turnCount++;
                     turnTick = entry.Tick;
@@ -161,11 +165,12 @@ public static class CombatPlaybackEngine
         if (pendingMessages.Count > 0)
             turnEvents.InsertRange(0, pendingMessages);
 
-        FlushTurn();
+        if (inTurn)
+            FlushTurn();
 
-        presenter.ClearAllPersistentEffects();
         var combatOver = result.Log.Any(e => e.EventType is "Death" or "KnockedOut");
         presenter.WaitForNextTurn(combatOver);
+        presenter.ClearAllPersistentEffects();
     }
 
     public static void PlayRealTime(

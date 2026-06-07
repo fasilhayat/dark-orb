@@ -72,6 +72,13 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         set => SetField(ref _combatOver, value);
     }
 
+    private bool _waitingForNextTurn;
+    public bool WaitingForNextTurn
+    {
+        get => _waitingForNextTurn;
+        set => SetField(ref _waitingForNextTurn, value);
+    }
+
     private bool _isRunning;
     public bool IsRunning
     {
