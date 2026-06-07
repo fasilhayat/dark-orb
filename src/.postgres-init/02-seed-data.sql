@@ -15,7 +15,7 @@ ON CONFLICT (name) DO NOTHING;
 
 INSERT INTO arena_data.damage_type (name) VALUES
     ('Bludgeoning'), ('Piercing'), ('Slashing'), ('Poison'), ('Fire'),
-    ('Ice'), ('Lightning'), ('Shadow'), ('Holy'), ('Acid'), ('Psychic')
+    ('Ice'), ('Lightning'), ('Shadow'), ('Holy'),     ('Acid'), ('Psychic'), ('Healing')
 ON CONFLICT (name) DO NOTHING;
 
 
@@ -51,12 +51,132 @@ ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.spell_school (name, description) VALUES
-    ('AoE', 'Spells that affect multiple targets in an area.'),
-    ('CC', 'Crowd-control spells that impair or disable enemies.'),
-    ('Other', 'Miscellaneous magical effects that do not fit other categories.'),
-    ('Evocation', 'Raw elemental magic — fire, ice, lightning, and force.'),
-    ('Conjuration', 'Summoning creatures, objects, and magical barriers.'),
-    ('Healing', 'Restorative magic that mends wounds and cures ailments.')
+    ('Aegis', 'Wards, protection, armor reinforcement, resistance, sanctuaries, and anti-magic.'),
+    ('Stormcraft', 'Raw elemental force — fire, lightning, frost, detonations, and destructive hazards.'),
+    ('Verdancy', 'Nature, beasts, roots, wind, stone, insects, herbs, and primal elemental power.'),
+    ('Umbramancy', 'Dark magic — death, undead, shadow, curses, fear, life-drain, and sinister control.'),
+    ('Mirage', 'Illusion, invisibility, mirror images, deception, confusion, stealth, and perception warping.'),
+    ('Dominion', 'Command, blessing, morale, discipline, fear resistance, divine authority, and battle momentum.'),
+    ('Deity', 'Divine magic channeled through deities — used by priests, druids, paladins, and knights.')
+ON CONFLICT (name) DO NOTHING;
+
+
+-- ============================================================
+-- SEED: SPELLS
+-- All spells from dark-orb-master-spellbook.md
+-- ============================================================
+
+INSERT INTO arena_data.spell (school_id, damage_die_id, damage_type_id, attack_type_id, name, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage, description)
+SELECT ss.id, dd.id, dt.id, at.id, s.*
+FROM (VALUES
+    -- Mage Common Core (level 1-2)
+    ('Stormcraft', 'D4', 'Force', 'Spell', 'Magic Missile',    10, 60, 1, 3, 2, 0, 'Force',    0, 'Reliable force darts that strike true.  Tags: Single-Target Damage, Nuke'),
+    ('Aegis', 'D4', 'None', 'Spell', 'Armor',                   5, 60, 1, 0, 0, 0, 'None',     0, 'Magical armor that improves survivability.  Tags: Defensive, Buff'),
+    ('Aegis', 'D4', 'None', 'Spell', 'Shield',                  5, 60, 1, 0, 0, 0, 'None',     0, 'Magical shield against attacks and missiles.  Tags: Defensive'),
+    ('Stormcraft', 'D4', 'Fire', 'Spell', 'Burning Hands',     10, 60, 1, 1, 2, 0, 'Fire',     3, 'Short cone of flame that scorches nearby enemies.  Tags: Offensive, AoE'),
+    ('Mirage', 'D4', 'None', 'Spell', 'Grease',                 8, 60, 1, 0, 0, 0, 'None',     0, 'Slippery coating that causes falls and handling failure.  Tags: CC, Slip, AoE'),
+    ('Mirage', 'D4', 'None', 'Spell', 'Sleep',                  8, 60, 1, 0, 0, 0, 'None',     0, 'Puts weaker targets into magical sleep.  Tags: CC, AoE'),
+    ('Mirage', 'D4', 'None', 'Spell', 'Color Spray',            8, 60, 1, 0, 0, 0, 'Light',    0, 'Cone of sensory overload that blinds, stuns, or drops weak targets.  Tags: CC, AoE'),
+    ('Mirage', 'D4', 'None', 'Spell', 'Detect Magic',           5, 60, 1, 0, 0, 0, 'None',     0, 'Reveals magical auras and enchantments.  Tags: Utility'),
+    ('Mirage', 'D4', 'None', 'Spell', 'Invisibility',          12, 70, 2, 0, 0, 0, 'None',     0, 'Makes a target unseen until broken.  Tags: Invisibility'),
+    ('Mirage', 'D4', 'None', 'Spell', 'Mirror Image',          12, 70, 2, 0, 0, 0, 'None',     0, 'Creates illusory duplicates to absorb attacks.  Tags: Defensive, Image'),
+    ('Dominion', 'D4', 'None', 'Spell', 'Web',                 15, 70, 2, 0, 0, 0, 'None',     0, 'Sticky strands trap and hinder enemies.  Tags: CC, Root, AoE'),
+    ('Mirage', 'D4', 'Poison', 'Spell', 'Stinking Cloud',      15, 70, 2, 0, 0, 0, 'Poison',   0, 'Nauseating cloud that disrupts actions.  Tags: CC, AoE'),
+
+    -- Mage Specialization (level 3+)
+    ('Stormcraft', 'D6', 'Lightning', 'Spell', 'Lightning Bolt',    25, 80, 3, 3, 2, 0, 'Lightning', 0, 'Straight-line lightning blast through enemies.  Tags: Offensive, AoE, Nuke'),
+    ('Stormcraft', 'D6', 'Fire', 'Spell', 'Fireball',               30, 90, 3, 3, 2, 0, 'Fire',      0, 'Explosive ranged fire burst for clustered targets.  Tags: Offensive, AoE, Nuke'),
+    ('Mirage', 'D4', 'None', 'Spell', 'Blink',                     20, 80, 3, 0, 0, 0, 'None',      0, 'Phasing displacement defense.  Tags: Blink, Defensive'),
+    ('Dominion', 'D4', 'None', 'Spell', 'Slow',                    20, 80, 3, 0, 0, 0, 'None',      0, 'Reduces enemy tempo and action efficiency.  Tags: CC, Debuff, Turn-Meter Control'),
+    ('Umbramancy', 'D8', 'Shadow', 'Spell', 'Vampiric Touch',      25, 80, 3, 2, 2, 0, 'Shadow',    0, 'Melee life-drain spell that steals vitality.  Tags: Single-Target Damage, Leech'),
+    ('Umbramancy', 'D4', 'None', 'Spell', 'Fear',                  22, 80, 4, 0, 0, 0, 'Shadow',    0, 'Sends enemies fleeing in panic.  Tags: CC, Debuff'),
+    ('Stormcraft', 'D6', 'Ice', 'Spell', 'Ice Storm',              35, 90, 4, 4, 2, 0, 'Ice',       5, 'Area storm of cold and impact force.  Tags: Offensive, AoE'),
+    ('Mirage', 'D4', 'None', 'Spell', 'Confusion',                 30, 90, 4, 0, 0, 0, 'None',      0, 'Scrambles enemy behavior and target selection.  Tags: CC, AoE'),
+    ('Umbramancy', 'D6', 'Poison', 'Spell', 'Cloudkill',           40, 100, 5, 4, 2, 0, 'Poison',    0, 'Expanding poisonous cloud.  Tags: Offensive, AoE'),
+    ('Stormcraft', 'D6', 'Ice', 'Spell', 'Cone of Cold',           40, 100, 5, 5, 2, 0, 'Ice',       0, 'Heavy cone-shaped cold burst.  Tags: Offensive, AoE, Nuke'),
+    ('Umbramancy', 'D4', 'None', 'Spell', 'Feeblemind',            35, 100, 5, 0, 0, 0, 'None',      0, 'Cripples caster or intellectual function.  Tags: CC, Anti-Mage'),
+    ('Stormcraft', 'D6', 'Fire', 'Spell', 'Delayed Blast Fireball',50, 110, 7, 5, 3, 0, 'Fire',      10, 'Timed explosive fire spell.  Tags: Offensive, AoE, Nuke'),
+    ('Mirage', 'D4', 'None', 'Spell', 'Maze',                      45, 120, 8, 0, 0, 0, 'None',      0, 'Temporarily removes a target from the battlefield.  Tags: CC'),
+
+    -- Mage variants
+    ('Umbramancy', 'D4', 'Shadow', 'Spell', 'Mind Siphon',         25, 80, 4, 0, 2, 0, 'Shadow',    0, 'Dark anti-mage variant that drains magical reserves.  Tags: MP Leech, Variant'),
+    ('Stormcraft', 'D6', 'Lightning', 'Spell', 'Arc Lash',         25, 80, 3, 2, 2, 0, 'Lightning', 0, 'Focused lightning lash that shocks one target.  Tags: Single-Target Damage, TM Control, Variant'),
+    ('Mirage', 'D4', 'None', 'Spell', 'Mirror Guard',              22, 80, 3, 0, 0, 0, 'None',      0, 'Advanced mirror-image ward with partial retaliation.  Tags: Defensive, Variant'),
+    ('Stormcraft', 'D6', 'Fire', 'Spell', 'Greasefire',            20, 75, 2, 2, 2, 0, 'Fire',      3, 'Ignites a grease field into a burning slick.  Tags: Offensive, AoE, Variant'),
+
+    -- Legacy roster spells (mapped to new schools)
+    ('Stormcraft', 'D8', 'Ice', 'Spell', 'Ice Bolt',               35, 80, 2, 2, 2, 0, 'Ice',       0, 'A bolt of ice that freezes the target.  Tags: Single-Target Damage'),
+    ('Stormcraft', 'D6', 'Lightning', 'Spell', 'Shock',            20, 75, 2, 2, 2, 0, 'Lightning', 0, 'A jolt of electrical energy.  Tags: Single-Target Damage'),
+    ('Stormcraft', 'D6', 'Lightning', 'Spell', 'Static Shock',     30, 80, 2, 1, 2, 0, 'Lightning', 0, 'A charged static shock that leaves lasting effects.  Tags: Single-Target Damage, Debuff'),
+
+    -- Priest spells (Deity school)
+    ('Deity', 'D4', 'None', 'Spell', 'Bless',                     10, 60, 1, 0, 0, 0, 'None',     0, 'Improves ally morale and combat performance.  Tags: Buff, AoE'),
+    ('Deity', 'D4', 'None', 'Spell', 'Command',                   10, 60, 1, 0, 0, 0, 'None',     0, 'One-word forced action disrupting the target.  Tags: CC'),
+    ('Deity', 'D4', 'Healing', 'Spell', 'Cure Light Wounds',     15, 60, 1, 1, 0, 4, 'None',     0, 'Basic divine healing.  Tags: Healing'),
+    ('Deity', 'D4', 'None', 'Spell', 'Protection from Evil',     10, 60, 1, 0, 0, 0, 'None',     0, 'Defensive ward against evil influence.  Tags: Defensive, Buff'),
+    ('Deity', 'D4', 'None', 'Spell', 'Chasten',                  10, 60, 1, 0, 0, 0, 'None',     0, 'Weakens sinful and hostile targets.  Tags: Debuff'),
+    ('Deity', 'D4', 'None', 'Spell', 'Sanctuary',                10, 60, 1, 0, 0, 0, 'None',     0, 'Makes hostile creatures less likely to attack.  Tags: Defensive'),
+    ('Deity', 'D4', 'None', 'Spell', 'Aid',                      15, 70, 2, 0, 0, 0, 'None',     0, 'Supportive blessing that improves staying power.  Tags: Buff'),
+    ('Deity', 'D4', 'None', 'Spell', 'Chant',                    15, 70, 2, 0, 0, 0, 'None',     0, 'Battlefield prayer that aids allies and hinders enemies.  Tags: Buff, Debuff'),
+    ('Deity', 'D4', 'None', 'Spell', 'Hold Person',              18, 70, 2, 0, 0, 0, 'None',     0, 'Paralyzes humanoid targets.  Tags: CC'),
+    ('Deity', 'D4', 'None', 'Spell', 'Prayer',                   20, 80, 3, 0, 0, 0, 'None',     0, 'Broad ally buff plus enemy penalty effect.  Tags: Buff, Debuff'),
+    ('Deity', 'D4', 'None', 'Spell', 'Remove Paralysis',         12, 70, 3, 0, 0, 0, 'None',     0, 'Frees allies from paralysis.  Tags: Healing, Cleanse'),
+    ('Deity', 'D4', 'Healing', 'Spell', 'Cure Serious Wounds',   25, 80, 4, 2, 0, 8, 'None',     0, 'Stronger direct healing.  Tags: Healing'),
+    ('Deity', 'D4', 'None', 'Spell', 'Free Action',              18, 80, 4, 0, 0, 0, 'None',     0, 'Prevents many movement-impairing effects.  Tags: Defensive'),
+    ('Deity', 'D4', 'Healing', 'Spell', 'Cure Critical Wounds',  35, 90, 5, 2, 0, 12, 'None',    0, 'Large heal for severe injuries.  Tags: Healing'),
+    ('Deity', 'D6', 'Fire', 'Spell', 'Flame Strike',             30, 90, 5, 3, 2, 0, 'Fire',      5, 'Vertical divine column of holy fire.  Tags: Offensive, Nuke'),
+    ('Deity', 'D8', 'Healing', 'Spell', 'Heal',                  25, 80, 6, 2, 0, 12, 'None',     0, 'Major restorative miracle.  Tags: Healing'),
+    ('Deity', 'D6', 'Physical', 'Spell', 'Blade Barrier',        35, 100, 6, 4, 2, 0, 'None',     0, 'Wall or ring of whirling blades.  Tags: Offensive, Defensive, Barrier'),
+    ('Deity', 'D4', 'None', 'Spell', 'Heroes Feast',             40, 100, 6, 0, 0, 0, 'None',     0, 'Group pre-battle meal with strong support benefits.  Tags: Buff, AoE'),
+    ('Deity', 'D4', 'None', 'Spell', 'Restoration',              30, 90, 7, 0, 0, 0, 'None',     0, 'Repairs severe spiritual or life-force harm.  Tags: Healing, Cleanse'),
+
+    -- Druid spells
+    ('Deity', 'D4', 'None', 'Spell', 'Entangle',                 10, 60, 1, 0, 0, 0, 'None',     0, 'Plants twist around creatures and restrain them.  Tags: CC, Root'),
+    ('Deity', 'D4', 'None', 'Spell', 'Faerie Fire',              10, 60, 1, 0, 0, 0, 'None',     0, 'Outlines targets, countering stealth.  Tags: Debuff'),
+    ('Deity', 'D4', 'Physical', 'Spell', 'Shillelagh',            5, 60, 1, 0, 2, 0, 'None',     0, 'Enchants a club or staff to hit harder.  Tags: Buff'),
+    ('Deity', 'D4', 'None', 'Spell', 'Barkskin',                 15, 70, 2, 0, 0, 0, 'None',     0, 'Skin becomes as tough as bark.  Tags: Defensive'),
+    ('Deity', 'D4', 'Healing', 'Spell', 'Goodberry',             12, 70, 2, 1, 0, 4, 'None',     0, 'Creates restorative berries.  Tags: Healing'),
+    ('Deity', 'D4', 'Fire', 'Spell', 'Heat Metal',              15, 70, 2, 1, 2, 0, 'Fire',      3, 'Punishes armored enemies through heat.  Tags: Debuff'),
+    ('Deity', 'D6', 'Lightning', 'Spell', 'Call Lightning',      25, 80, 3, 3, 2, 0, 'Lightning', 0, 'Repeated lightning strikes from a storm.  Tags: Offensive'),
+    ('Deity', 'D4', 'None', 'Spell', 'Hold Animal',              18, 70, 3, 0, 0, 0, 'None',     0, 'Immobilizes beasts.  Tags: CC'),
+    ('Deity', 'D4', 'None', 'Spell', 'Call Woodland Beings',    25, 80, 4, 0, 0, 0, 'None',     0, 'Summons nature spirits or woodland allies.  Tags: Summoning'),
+    ('Deity', 'D4', 'Physical', 'Spell', 'Giant Insect',         25, 80, 4, 2, 2, 0, 'None',     0, 'Enlarges vermin into combat-capable forms.  Tags: Summoning-lite'),
+    ('Deity', 'D4', 'Poison', 'Spell', 'Insect Plague',          35, 90, 5, 3, 2, 0, 'Poison',    0, 'Swarming insects disrupt and overwhelm groups.  Tags: Offensive, CC'),
+    ('Deity', 'D4', 'None', 'Spell', 'Anti-Plant Shell',        25, 80, 5, 0, 0, 0, 'None',     0, 'Prevents plant creatures from closing in.  Tags: Defensive'),
+    ('Deity', 'D6', 'Fire', 'Spell', 'Fire Seeds',              35, 90, 6, 4, 2, 0, 'Fire',      5, 'Druid explosive seeds used as bombs or traps.  Tags: Offensive'),
+    ('Deity', 'D4', 'Physical', 'Spell', 'Liveoak',              40, 100, 6, 0, 0, 0, 'None',     0, 'Awakens a great tree guardian.  Tags: Summoning'),
+    ('Deity', 'D4', 'Physical', 'Spell', 'Creeping Doom',        45, 100, 7, 4, 2, 0, 'Poison',    0, 'Devastating moving swarm.  Tags: Offensive, CC'),
+    ('Deity', 'D6', 'Physical', 'Spell', 'Earthquake',           45, 110, 7, 5, 2, 0, 'None',     0, 'Wide-area terrain disruption.  Tags: Offensive, AoE'),
+
+    -- Paladin spells
+    ('Deity', 'D4', 'None', 'Spell', 'Remove Fear',              10, 60, 1, 0, 0, 0, 'None',     0, 'Clears fear and bolsters courage.  Tags: Buff, Cleanse'),
+    ('Deity', 'D8', 'Holy', 'Spell', 'Smite',                    35, 80, 2, 2, 2, 0, 'None',     0, 'Divine strike against enemies.  Tags: Offensive'),
+    ('Deity', 'D4', 'None', 'Spell', 'Resist Fire',              12, 70, 2, 0, 0, 0, 'Fire',     0, 'Grants fire resistance.  Tags: Defensive'),
+    ('Deity', 'D4', 'None', 'Spell', 'Resist Cold',              12, 70, 2, 0, 0, 0, 'Ice',      0, 'Grants cold resistance.  Tags: Defensive'),
+    ('Deity', 'D4', 'None', 'Spell', 'Magical Vestment',         18, 80, 3, 0, 0, 0, 'None',     0, 'Enhances armor or shield with divine power.  Tags: Buff, Defensive'),
+    ('Deity', 'D4', 'None', 'Spell', 'Protection from Evil 10ft',20, 80, 4, 0, 0, 0, 'None',     0, 'Group protection aura against evil.  Tags: Defensive, AoE'),
+    ('Deity', 'D4', 'None', 'Spell', 'Holy Bulwark',             25, 80, 4, 0, 0, 0, 'None',     0, 'Elite paladin ward for nearby allies.  Tags: Defensive, Variant'),
+    ('Deity', 'D4', 'None', 'Spell', 'Paladin Warcry',           20, 80, 3, 0, 0, 0, 'None',     0, 'Inspiring holy battle-cry that rallies allies.  Tags: Buff, AoE, Variant'),
+
+    -- Knight spells
+    ('Deity', 'D4', 'None', 'Spell', 'War Cry',                  15, 70, 1, 0, 0, 0, 'None',     0, 'Battle shout that shocks enemies or steels allies.  Tags: CC or Buff, Variant'),
+    ('Deity', 'D4', 'None', 'Spell', 'Rallying Cry',             15, 70, 1, 0, 0, 0, 'None',     0, 'Calls allies back into formation.  Tags: Buff, Variant'),
+    ('Deity', 'D4', 'None', 'Spell', 'Steadfast Line',           18, 75, 2, 0, 0, 0, 'None',     0, 'Reinforces discipline and formation stability.  Tags: Buff, Variant'),
+    ('Deity', 'D4', 'None', 'Spell', 'Banner of Resolve',        18, 75, 2, 0, 0, 0, 'None',     0, 'Banner magic that hardens allied will.  Tags: Buff, Variant'),
+    ('Deity', 'D4', 'None', 'Spell', 'Iron Will Litany',         22, 80, 3, 0, 0, 0, 'None',     0, 'Litany of discipline against hostile magic.  Tags: Defensive, Variant'),
+    ('Deity', 'D4', 'None', 'Spell', 'Advance Signal',           20, 80, 3, 0, 0, 0, 'None',     0, 'Tactical call to press the attack.  Tags: Buff, Variant'),
+    ('Deity', 'D4', 'None', 'Spell', 'Shielding Cadence',        22, 80, 3, 0, 0, 0, 'None',     0, 'Rhythmic command that improves survival.  Tags: Defensive, Variant'),
+    ('Deity', 'D4', 'None', 'Spell', 'Battle Hymn of Defiance', 30, 90, 4, 0, 0, 0, 'None',     0, 'Powerful morale chant for large engagements.  Tags: Buff, AoE, Variant'),
+    ('Deity', 'D4', 'None', 'Spell', 'Arcane Defiance Banner',  30, 90, 4, 0, 0, 0, 'None',     0, 'Elite banner ward against sorcery.  Tags: Defensive, Variant'),
+    ('Deity', 'D4', 'None', 'Spell', 'Lionheart Command',        35, 100, 4, 0, 0, 0, 'None',     0, 'Supreme command that hardens allied resolve.  Tags: Buff, Variant'),
+
+    -- Legacy roster spells (continued)
+    ('Deity', 'D6', 'Healing', 'Spell', 'Mass Heal',             50, 100, 4, 3, 0, 6, 'None',     0, 'Powerful group healing spell.  Tags: Healing, AoE')
+) AS s(school_name, die_name, dmg_type_name, atk_type_name, name, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage, description)
+JOIN arena_data.spell_school ss ON ss.name = s.school_name
+JOIN arena_data.die_type dd ON dd.name = s.die_name
+JOIN arena_data.damage_type dt ON dt.name = s.dmg_type_name
+JOIN arena_data.attack_type at ON at.name = s.atk_type_name
 ON CONFLICT (name) DO NOTHING;
 
 
@@ -1266,6 +1386,25 @@ BEGIN
     SELECT v_id, es.id, 'armor', a.id
     FROM arena_data.equipment_slot es, arena_data.armor a
     WHERE es.name = 'Chest' AND a.name = 'Plate Armor';
+
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Smite';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Remove Fear';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Resist Fire';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Resist Cold';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Magical Vestment';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Protection from Evil 10ft';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Heal';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Holy Bulwark';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Heroes Feast';
 END;
 $$;
 
@@ -1300,6 +1439,18 @@ BEGIN
     SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Ice Bolt';
     INSERT INTO arena_data.character_spell (character_id, spell_id)
     SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Shock';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Magic Missile';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Shield';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Mirror Image';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Blink';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Lightning Bolt';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Invisibility';
 END;
 $$;
 
@@ -1329,9 +1480,21 @@ BEGIN
     WHERE es.name = 'Chest' AND a.name = 'Padded Armor';
 
     INSERT INTO arena_data.character_spell (character_id, spell_id)
-    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Smite';
-    INSERT INTO arena_data.character_spell (character_id, spell_id)
     SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Heal';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Mass Heal';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Bless';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Cure Light Wounds';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Cure Serious Wounds';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Command';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Chasten';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Prayer';
 END;
 $$;
 

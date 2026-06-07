@@ -55,25 +55,25 @@
   "spells": [
     {
       "name": "Fireball",
-      "school": "Evocation", "damageDie": "D6", "damageCount": 3,
+      "school": "Stormcraft", "damageDie": "D6", "damageCount": 3,
       "damageType": "Fire", "attackBonus": 2,
       "spellLevel": 3, "turnMeterCost": 90, "manaCost": 50
     },
     {
       "name": "Ice Bolt",
-      "school": "Evocation", "damageDie": "D8", "damageCount": 2,
+      "school": "Stormcraft", "damageDie": "D8", "damageCount": 2,
       "damageType": "Ice", "attackBonus": 2,
       "spellLevel": 2, "turnMeterCost": 80, "manaCost": 35
     },
     {
       "name": "Shock",
-      "school": "Evocation", "damageDie": "D6", "damageCount": 2,
+      "school": "Stormcraft", "damageDie": "D6", "damageCount": 2,
       "damageType": "Lightning", "attackBonus": 2,
       "spellLevel": 2, "turnMeterCost": 75, "manaCost": 20
     },
     {
       "name": "Static Shock",
-      "school": "Evocation", "damageDie": "D6", "damageCount": 1,
+      "school": "Stormcraft", "damageDie": "D6", "damageCount": 1,
       "damageType": "Lightning", "attackBonus": 2,
       "spellLevel": 2, "turnMeterCost": 80, "manaCost": 30,
       "onHitEffects": [
@@ -82,21 +82,93 @@
     },
     {
       "name": "Smite",
-      "school": "Evocation", "damageDie": "D8", "damageCount": 2,
+      "school": "Deity", "damageDie": "D8", "damageCount": 2,
       "damageType": "Holy", "attackBonus": 2,
       "spellLevel": 2, "turnMeterCost": 80, "manaCost": 35
     },
     {
       "name": "Heal",
-      "school": "Healing", "damageDie": "D8", "damageCount": 2,
+      "school": "Deity", "damageDie": "D8", "damageCount": 2,
       "damageType": "Holy", "attackBonus": 0,
-      "spellLevel": 2, "turnMeterCost": 80, "manaCost": 25
+      "spellLevel": 6, "turnMeterCost": 80, "manaCost": 25
     },
     {
       "name": "Mass Heal",
-      "school": "Healing", "damageDie": "D6", "damageCount": 3,
+      "school": "Deity", "damageDie": "D6", "damageCount": 3,
       "damageType": "Holy", "attackBonus": 0,
       "spellLevel": 4, "turnMeterCost": 100, "manaCost": 50
+    },
+    {
+      "name": "Chasten",
+      "school": "Deity", "damageDie": "D4", "damageCount": 0,
+      "damageType": "None", "attackBonus": 0,
+      "spellLevel": 1, "turnMeterCost": 60, "manaCost": 10
+    },
+    {
+      "name": "Bless",
+      "school": "Deity", "damageDie": "D4", "damageCount": 0,
+      "damageType": "None", "attackBonus": 0,
+      "spellLevel": 1, "turnMeterCost": 60, "manaCost": 10
+    },
+    {
+      "name": "Cure Light Wounds",
+      "school": "Deity", "damageDie": "D4", "damageCount": 1,
+      "damageType": "Healing", "attackBonus": 0,
+      "spellLevel": 1, "turnMeterCost": 60, "manaCost": 15
+    },
+    {
+      "name": "Cure Serious Wounds",
+      "school": "Deity", "damageDie": "D4", "damageCount": 2,
+      "damageType": "Healing", "attackBonus": 0,
+      "spellLevel": 4, "turnMeterCost": 80, "manaCost": 25
+    },
+    {
+      "name": "Prayer",
+      "school": "Deity", "damageDie": "D4", "damageCount": 0,
+      "damageType": "None", "attackBonus": 0,
+      "spellLevel": 3, "turnMeterCost": 80, "manaCost": 20
+    },
+    {
+      "name": "Command",
+      "school": "Deity", "damageDie": "D4", "damageCount": 0,
+      "damageType": "None", "attackBonus": 0,
+      "spellLevel": 1, "turnMeterCost": 60, "manaCost": 10
+    },
+    {
+      "name": "Magic Missile",
+      "school": "Stormcraft", "damageDie": "D4", "damageCount": 3,
+      "damageType": "Force", "attackBonus": 2,
+      "spellLevel": 1, "turnMeterCost": 60, "manaCost": 10
+    },
+    {
+      "name": "Shield",
+      "school": "Aegis", "damageDie": "D4", "damageCount": 0,
+      "damageType": "None", "attackBonus": 0,
+      "spellLevel": 1, "turnMeterCost": 60, "manaCost": 5
+    },
+    {
+      "name": "Mirror Image",
+      "school": "Mirage", "damageDie": "D4", "damageCount": 0,
+      "damageType": "None", "attackBonus": 0,
+      "spellLevel": 2, "turnMeterCost": 70, "manaCost": 12
+    },
+    {
+      "name": "Blink",
+      "school": "Mirage", "damageDie": "D4", "damageCount": 0,
+      "damageType": "None", "attackBonus": 0,
+      "spellLevel": 3, "turnMeterCost": 80, "manaCost": 20
+    },
+    {
+      "name": "Lightning Bolt",
+      "school": "Stormcraft", "damageDie": "D6", "damageCount": 3,
+      "damageType": "Lightning", "attackBonus": 2,
+      "spellLevel": 3, "turnMeterCost": 80, "manaCost": 25
+    },
+    {
+      "name": "Invisibility",
+      "school": "Mirage", "damageDie": "D4", "damageCount": 0,
+      "damageType": "None", "attackBonus": 0,
+      "spellLevel": 2, "turnMeterCost": 70, "manaCost": 12
     }
   ],
 
@@ -124,7 +196,8 @@
       "race": "Human", "classId": 3, "className": "Paladin", "sex": "M",
       "strikeRating": 13, "turnSpeed": 8,
       "maxHitPoints": 96,
-      "equipment": { "chest": "Plate Armor", "rightHand": "War Hammer" }
+      "equipment": { "chest": "Plate Armor", "rightHand": "War Hammer" },
+      "memorizedSpells": ["Smite", "Heal", "Remove Fear", "Resist Fire", "Resist Cold", "Magical Vestment", "Protection from Evil 10ft", "Holy Bulwark", "Heroes Feast"]
     },
     {
       "name": "Vaelith Moonveil", "level": 9,
@@ -133,7 +206,7 @@
       "strikeRating": 15, "turnSpeed": 8,
       "maxHitPoints": 45, "maxMana": 90,
       "equipment": { "chest": "Mithril Chain", "rightHand": "Long Sword" },
-      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Static Shock"]
+      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Static Shock", "Magic Missile", "Shield", "Mirror Image", "Blink", "Lightning Bolt", "Invisibility"]
     },
     {
       "name": "Sister Elira Vane", "level": 7,
@@ -142,7 +215,7 @@
       "strikeRating": 17, "turnSpeed": 8,
       "maxHitPoints": 49, "maxMana": 70,
       "equipment": { "chest": "Padded Armor", "rightHand": "Mace" },
-      "memorizedSpells": ["Smite", "Heal"]
+      "memorizedSpells": ["Heal", "Mass Heal", "Bless", "Cure Light Wounds", "Cure Serious Wounds", "Command", "Chasten", "Prayer"]
     },
     {
       "name": "Lord Aethor Valeborn", "level": 11,

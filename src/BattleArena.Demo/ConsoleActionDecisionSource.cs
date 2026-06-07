@@ -80,7 +80,7 @@ internal class ConsoleActionDecisionSource : IActionDecisionSource
             options.Add((nextKey++, $"Attack: {weapon.Name}{rangedTag}", weapon));
         }
 
-        foreach (var spell in actor.MemorizedSpells)
+        foreach (var spell in actor.MemorizedSpells.Where(s => actor.CanCast(s)))
         {
             if (spell.ManaCost <= 0 || actor.CurrentMana >= spell.ManaCost)
             {

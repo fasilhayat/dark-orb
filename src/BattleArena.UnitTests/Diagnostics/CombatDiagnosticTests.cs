@@ -89,11 +89,11 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
 
     static Spell MakeSpell(string name, DieType die, int count, int bonus) =>
         new() { Name = name, DamageDie = die, DamageCount = count, DamageType = DamageType.Fire,
-                AttackBonus = bonus, School = SpellSchool.Evocation, SpellLevel = 2 };
+                AttackBonus = bonus, School = SpellSchool.Stormcraft, SpellLevel = 2 };
 
     static Spell MakeSpell(string name, DieType die, int count, int bonus, StatusEffect onHit) =>
         new() { Name = name, DamageDie = die, DamageCount = count, DamageType = DamageType.Lightning,
-                AttackBonus = bonus, School = SpellSchool.Evocation, SpellLevel = 2,
+                AttackBonus = bonus, School = SpellSchool.Stormcraft, SpellLevel = 2,
                 OnHitEffects = [onHit] };
 
     // ── Log printer ───────────────────────────────────────────────────────────

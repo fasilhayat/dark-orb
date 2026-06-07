@@ -519,36 +519,46 @@ Dwarf and Gladefolk Priests cannot bond with a Dragon (Human/Elf only). Instead,
 |-------|-------------|:----:|
 | Summon Creature | Calls a creature to fight for you. | 12 |
 
-### Conjuration Spells
-
-| Spell | Description | Mana |
-|-------|-------------|:----:|
-| Summon: Spirit Wolf | Summons a spirit wolf to protect and fight alongside its master. | 12 |
-
-### Evocation Spells
+### Stormcraft Spells
 
 | Spell | Description | Damage | Mana |
 |-------|-------------|:------:|:----:|
 | Fireball | A blazing orb of fire that explodes on impact. | 3D6 Fire | 8 |
 | Ice Bolt | A shard of enchanted ice that pierces and slows. | 2D8 Ice | 6 |
-| Shadow Bolt | A bolt of shadow energy that drains vitality. | 2D6 Shadow | 5 |
-| Smite | A powerful holy strike channelled through the caster. | 2D8 Holy | 8 |
-| Moonfire | Sacred moonlight burns unholy enemies and heals allies. | 2D6 Holy | 6 |
-| Soul Drain | Drains the life force of an enemy to restore the caster. | 2D6 Shadow | 7 |
 | Static Shock | A focused lightning charge that stuns the target for a short duration. | 1D6 Lightning | 8 |
+
+### Umbramancy Spells
+
+| Spell | Description | Damage | Mana |
+|-------|-------------|:------:|:----:|
+| Shadow Bolt | A bolt of shadow energy that drains vitality. | 2D6 Shadow | 5 |
+| Soul Drain | Drains the life force of an enemy to restore the caster. | 2D6 Shadow | 7 |
+
+### Aegis Spells
+
+| Spell | Description | Damage | Mana |
+|-------|-------------|:------:|:----:|
 | Arcane Ward | Wraps the caster in a protective magical barrier that grants magic resistance and increases defense. | — | 8 |
-| Divine Protection | Holy energy shields the target, reducing all incoming damage for a short time. | — | 10 |
 | Stone Skin | Hardens the caster's skin to stone, granting significant damage resistance. | — | 7 |
 
-### Healing Spells
+### Deity Spells
 
-| Spell | Description | Heal | Mana |
-|-------|-------------|:----:|:----:|
+| Spell | Description | Damage/Heal | Mana |
+|-------|-------------|:-----------:|:----:|
+| Smite | A powerful holy strike channelled through the caster. | 2D8 Holy | 8 |
+| Moonfire | Sacred moonlight burns unholy enemies and heals allies. | 2D6 Holy | 6 |
+| Divine Protection | Holy energy shields the target, reducing all incoming damage for a short time. | — | 10 |
 | Heal | Restores a moderate amount of hit points to a single ally. | 2D8+4 | 6 |
 | Mass Heal | A wave of holy light restores hit points to all allies. | 3D6+6 (group) | 14 |
 | Regeneration | Bestows rapid healing over time on a single ally. | 2D6+2 | 10 |
 | Restoration | Cures all ailments and restores a small amount of health. | 1D10+8 | 8 |
 | Prayer of Healing | A group heal that calls upon divine favour to mend all allies. | 2D8+10 (group) | 12 |
+
+### Verdancy Spells
+
+| Spell | Description | Mana |
+|-------|-------------|:----:|
+| Summon: Spirit Wolf | Summons a spirit wolf to protect and fight alongside its master. | 12 |
 
 ---
 

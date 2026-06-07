@@ -14,12 +14,13 @@ public class HealingModifierTests
         List<StatusEffect>? targetDebuffs = null,
         bool isGroupHeal = false)
     {
-        var school   = isGroupHeal ? SpellSchool.Healing : SpellSchool.Healing;
+        var school   = isGroupHeal ? SpellSchool.Deity : SpellSchool.Deity;
         var spellName = isGroupHeal ? "Mass Heal" : "Heal";
         var spell = new Spell
         {
             Name = spellName,
             School = school,
+            DamageType = DamageType.Healing,
             ManaCost = 6,
             DamageDie = DieType.D8,
             DamageCount = 2,

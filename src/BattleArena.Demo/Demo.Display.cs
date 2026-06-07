@@ -81,7 +81,10 @@ static partial class Demo
         Row($"Armor   : {ch.Equipment.Chest?.Name ?? "None",-18} AC {ac,-2}  Mitigation: {mit}");
         if (ch.MemorizedSpells.Count > 0)
             foreach (var spell in ch.MemorizedSpells)
-                Row($"Spells  : {spell.Name,-18} {spell.DamageCount}d{DieSides(spell.DamageDie)} {spell.DamageType}");
+            {
+                var restriction = !ch.CanCast(spell) ? " (restricted)" : "";
+                Row($"Spells  : {spell.Name,-18} {spell.DamageCount}d{DieSides(spell.DamageDie)} {spell.DamageType}{restriction}");
+            }
         else if (attackSource is not null)
             Row($"Weapon  : {attackSource.Name,-18} {attackSource.DamageCount}d{DieSides(attackSource.DamageDie)} {attackSource.DamageType,-10} +{attackSource.AttackBonus} atk bonus");
         Sep();

@@ -302,8 +302,9 @@ static partial class Demo
     internal static IAttackSource GetSheetAttackSource(Character character, IAttackSource? attackSource)
     {
         if (attackSource is not null) return attackSource;
-        if (character.MemorizedSpells.Count > 0)
-            return character.MemorizedSpells
+        var castable = character.MemorizedSpells.Where(s => character.CanCast(s)).ToList();
+        if (castable.Count > 0)
+            return castable
                 .OrderByDescending(s => s.AttackBonus)
                 .ThenByDescending(s => s.DamageCount)
                 .First();
@@ -314,7 +315,7 @@ static partial class Demo
     // The equipped weapon is still shown on the card via Character.Equipment.RightHand.
     internal static IAttackSource? GetAttackSource(Character character)
     {
-        if (character.MemorizedSpells.Count > 0) return null;
+        if (character.MemorizedSpells.Any(s => character.CanCast(s))) return null;
         if (character.Equipment.RightHand is { } weapon) return weapon;
         return UnarmedStrike.Default;
     }
@@ -322,8 +323,9 @@ static partial class Demo
     // For display purposes only — shows the best attack name in the picker list.
     internal static string GetAttackDisplayName(Character character)
     {
-        if (character.MemorizedSpells.Count > 0)
-            return character.MemorizedSpells
+        var castable = character.MemorizedSpells.Where(s => character.CanCast(s)).ToList();
+        if (castable.Count > 0)
+            return castable
                 .OrderByDescending(s => s.AttackBonus)
                 .ThenByDescending(s => s.DamageCount)
                 .First().Name;

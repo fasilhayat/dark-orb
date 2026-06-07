@@ -282,7 +282,7 @@ public class DemoGuiContractSteps
         var fireball = new Spell
         {
             Name          = "Fireball",
-            School        = SpellSchool.Evocation,
+            School        = SpellSchool.Stormcraft,
             DamageDie     = DieType.D6,
             DamageCount   = 3,
             DamageType    = DamageType.Fire,

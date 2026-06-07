@@ -115,11 +115,17 @@ public class RosterLoaderTests : IDisposable
 
         // ── Vaelith Moonveil — arcane fighter (spellcaster) ─────────────────────
         var vaelith = data.Heroes.First(c => c.Name == "Vaelith Moonveil");
-        Assert.Equal(4, vaelith.MemorizedSpells.Count);
+        Assert.Equal(10, vaelith.MemorizedSpells.Count);
         Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Fireball");
         Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Ice Bolt");
         Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Shock");
         Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Static Shock");
+        Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Magic Missile");
+        Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Shield");
+        Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Mirror Image");
+        Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Blink");
+        Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Lightning Bolt");
+        Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Invisibility");
         Assert.Equal(90,   vaelith.MaxMana);
         Assert.Equal(90,   vaelith.CurrentMana);
         Assert.Equal("Elf", vaelith.Race?.Name);
@@ -127,11 +133,17 @@ public class RosterLoaderTests : IDisposable
         Assert.Equal("Mithril Chain", vaelith.Equipment.Chest!.Name);
         Assert.Equal(14,              vaelith.Equipment.Chest.ArmorClass);
 
-        // ── Sister Elira Vane — healer/smiter ───────────────────────────────────
+        // ── Sister Elira Vane — priest (healer) ─────────────────────────────────
         var elira = data.Heroes.First(c => c.Name == "Sister Elira Vane");
-        Assert.Equal(2, elira.MemorizedSpells.Count);
-        Assert.Contains(elira.MemorizedSpells, s => s.Name == "Smite");
+        Assert.Equal(8, elira.MemorizedSpells.Count);
         Assert.Contains(elira.MemorizedSpells, s => s.Name == "Heal");
+        Assert.Contains(elira.MemorizedSpells, s => s.Name == "Mass Heal");
+        Assert.Contains(elira.MemorizedSpells, s => s.Name == "Bless");
+        Assert.Contains(elira.MemorizedSpells, s => s.Name == "Cure Light Wounds");
+        Assert.Contains(elira.MemorizedSpells, s => s.Name == "Cure Serious Wounds");
+        Assert.Contains(elira.MemorizedSpells, s => s.Name == "Command");
+        Assert.Contains(elira.MemorizedSpells, s => s.Name == "Chasten");
+        Assert.Contains(elira.MemorizedSpells, s => s.Name == "Prayer");
         Assert.Equal(70, elira.MaxMana);
         Assert.Equal("Mace", elira.Equipment.RightHand!.Name);
         Assert.Equal("Padded Armor", elira.Equipment.Chest!.Name);

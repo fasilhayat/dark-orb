@@ -8,7 +8,7 @@ File: `feature-sfx-replacement.md`
 
 ## Objective
 
-Replace all existing placeholder “beep” and legacy spell effect sounds in the GUI system with finalized production sound assets located in the `[SPECIFIC]` audio asset directory.
+Replace all existing placeholder “beep” and legacy spell effect sounds in the GUI system with finalized production sound assets located in the `dark-orb\design\assets\sounds` audio asset directory.
 
 These new assets must fully overwrite existing files in:
 

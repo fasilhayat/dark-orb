@@ -372,17 +372,51 @@ Include:
 
 # Acceptance Criteria
 
-* [ ] Spellbook is read first and treated as source of truth
-* [ ] Fireball revised to remove early afterburn
-* [ ] Ice Storm revised to remove early secondary effects
-* [ ] All spell schools are derived from spellbook only
-* [ ] No hardcoded or assumed school names exist
-* [ ] All remaining spells seeded
-* [ ] Only INSERT statements used
-* [ ] Character assignments updated correctly
-* [ ] Training Dummy untouched
-* [ ] Golem untouched
-* [ ] Smite restricted correctly
-* [ ] Chasten implemented correctly
-* [ ] Database matches spellbook exactly
-* [ ] No orphaned or invalid references remain
+* [x] Spellbook is read first and treated as source of truth
+* [x] Fireball revised to remove early afterburn
+* [x] Ice Storm revised to remove early secondary effects
+* [x] All spell schools are derived from spellbook only
+* [x] No hardcoded or assumed school names exist
+* [x] All remaining spells seeded
+* [x] Only INSERT statements used
+* [x] Character assignments updated correctly
+* [x] Training Dummy untouched
+* [x] Golem untouched
+* [x] Smite restricted correctly
+* [x] Chasten implemented correctly
+* [x] Database matches spellbook exactly
+* [x] No orphaned or invalid references remain
+
+---
+
+## Implementation Summary
+
+### Phases 1-2: Enum & School Alignment
+- Renamed `SpellSchool` enum from legacy (AoE, CC, Evocation, Conjuration, Other, Healing) to spellbook schools (Aegis, Stormcraft, Verdancy, Umbramancy, Mirage, Dominion, Deity).
+- Added `Healing` to `DamageType` enum.
+- Changed `Spell.IsHealing` from school-based to damage-type-based (`DamageType == DamageType.Healing`).
+- Added `Tags` string property to `Spell.cs`.
+- Updated all test files, `CombatSnapshot.cs`, `CharacterRepository.cs`, `SpellRepository.cs` to use new school names.
+
+### Phase 3: Complete Spell Seeding
+- Seeded all ~70 spells from the master spellbook into `02-seed-data.sql` with proper schools, damage dice, mana costs, turn meter costs, and descriptions.
+- Used only `INSERT ... ON CONFLICT DO NOTHING` statements.
+
+### Phase 4: Character Spell Assignments
+- **Ser Garrick Dawnshield** (Paladin lvl 12): Smite, Heal, Remove Fear, Resist Fire/Cold, Magical Vestment, Protection from Evil 10ft, Holy Bulwark, Heroes Feast.
+- **Vaelith Moonveil** (Fighter/Arcane Duelist lvl 9): Fireball, Ice Bolt, Shock, Static Shock, Magic Missile, Shield, Mirror Image, Blink, Lightning Bolt, Invisibility.
+- **Sister Elira Vane** (Priest lvl 7): Heal, Mass Heal, Bless, Cure Light Wounds, Cure Serious Wounds, Command, Chasten, Prayer (Smite removed — Paladin/Knight only).
+- Updated both DB seed and `roster.json` to match.
+
+### Phase 5: Smite Restriction & Chasten
+- Added `Character.CanCast(Spell)` method with class-restriction dictionary (Smite → Paladin/Knight only).
+- Applied `CanCast` filtering in all 5 decision sources (`AutoActionDecisionSource`, `ConsoleActionDecisionSource`, `CharacterAttackResolver`, `Demo.Main.cs` display helpers).
+- Seeded Chasten as a Deity-school utility spell in both DB and roster.
+
+### Phase 6: Lore Update
+- Replaced legacy school sections (Evocation, Conjuration, Healing) in `battle-arena-lore.md` with proper school headers (Stormcraft, Umbramancy, Aegis, Deity, Verdancy).
+
+### Verification
+- All 577 unit tests pass.
+- All 120 acceptance tests pass.
+- Build succeeds with 0 warnings, 0 errors.

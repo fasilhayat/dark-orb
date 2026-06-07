@@ -230,7 +230,7 @@ public class SnapshotSpell
     public string                    DamageType    { get; set; } = "Fire";
     public int                       AttackBonus   { get; set; }
     public int                       SpellLevel    { get; set; }
-    public string                    School        { get; set; } = "Evocation";
+    public string                    School        { get; set; } = "Stormcraft";
     public List<SnapshotStatusEffect> OnHitEffects { get; set; } = [];
 
     public Spell ToSpell() => new()

@@ -160,6 +160,9 @@ Project-scoped skills live in `.opencode/skills/` and are auto-discovered:
 |-------|------|-------------|
 | `makefile-orchestration` | `.opencode/skills/makefile-orchestration.md` | Docker, demo runs, tests, container mgmt |
 | `combat-mechanics` | `.opencode/skills/combat-mechanics.md` | Changes to attack, damage, TM, effects, resistance, logging |
+| `combat-order` | `.opencode/skills/combat-order.md` | Turn meter timeline or acting-order questions |
+| `combat-log-analysis` | `.opencode/skills/combat-log-analysis.md` | User reports unexpected combat behaviour |
+| `work-intake` | `.opencode/skills/work-intake.md` | Processing numbered files in `bugs-features/` |
 
 Load via OpenCode's skill tool. `combat-mechanics` has `self-update: true` — it auto-refreshes when combat code changes.
 
@@ -173,13 +176,24 @@ Load via OpenCode's skill tool. `combat-mechanics` has `self-update: true` — i
 | `make up-dev` | Everything in Docker (interactive demo container) |
 | `make test` | `dotnet test BattleArena.sln` |
 | `make test-coverage` | Tests with OpenCover format |
+| `make gui-local` | Run Avalonia GUI standalone (requires DB + API) |
 | `make sync-instructions` | Copy AGENTS.md → `.github/copilot-instructions.md` |
 
 `battle-arena-demo` uses `profiles: [demo]` — not started by plain `docker compose up`.
 
+**Docker build strategy**: `dotnet publish` runs on the host, then Docker `COPY`s the pre-built output. No NuGet restore inside containers. Do NOT add `dotnet restore`/`dotnet build` steps to the Dockerfile.
+
 ---
 
-## 12. Doc update obligations
+## 12. Tooling non-obvious facts
+
+- **No EF Core** — Data access uses raw Npgsql + a custom `DbContext` wrapper. Do not write Entity Framework code.
+- **No CI configured** — `.github/workflows/` is empty. The agent must not rely on CI to catch issues; run `dotnet test` locally.
+- **`bugs-features/`** — Numbered files represent pending work. Process them in ascending numeric order, moving to `bugs-features/done/` when complete. Load the `work-intake` skill for the full workflow.
+
+---
+
+## 13. Doc update obligations
 
 - **README.md**: update when new project, API endpoint, DB table, Makefile target, Docker service, or test framework change. Keep Mermaid ER diagram in sync with `01-schema.sql`.
 - **design/battle-arena-lore.md**: update when SQL seed adds races, classes, deities, pets, weapons, armor, accessories, item sets, NPCs, spells, subraces, or XP formula changes. Entries must match the DB exactly.

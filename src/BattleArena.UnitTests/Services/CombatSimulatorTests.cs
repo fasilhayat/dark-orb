@@ -133,7 +133,7 @@ public class CombatSimulatorTests
     private static Spell CreateSummonSpell(int durationRounds) => new()
     {
         Name = "Summon Spirit Wolf",
-        School = SpellSchool.Conjuration,
+        School = SpellSchool.Verdancy,
         DamageDie = DieType.D4,
         DamageCount = 0,
         DamageType = DamageType.Bludgeoning,
@@ -241,10 +241,10 @@ public class CombatSimulatorSpellcasterTests
     private static Spell MakeSpell(string name, int manaCost = 0) => new()
     {
         Name          = name,
-        School        = SpellSchool.Evocation,
-        DamageDie     = DieType.D8,
-        DamageCount   = 2,
-        DamageType    = DamageType.Fire,
+            School        = SpellSchool.Stormcraft,
+            DamageDie     = DieType.D8,
+            DamageCount   = 2,
+            DamageType    = DamageType.Fire,
         AttackBonus   = 2,
         SpellLevel    = 2,
         TurnMeterCost = 80,
@@ -270,7 +270,7 @@ public class CombatSimulatorSpellcasterTests
     public void Simulate_SpellcasterCastingSpells_EmitsManaDeductEvents()
     {
         var (_, simulator) = CreateSimulator();
-        var caster = CreateSpellcaster("Mira", MakeSpell("Smite"), manaCost: 20);
+        var caster = CreateSpellcaster("Mira", MakeSpell("Fireball"), manaCost: 20);
 
         var result = simulator.Simulate(Party.Solo(caster), Party.Solo(CreateToughTarget("Dummy")), 30);
 
@@ -364,20 +364,20 @@ public class CombatSimulatorHealingTests
         new()
         {
             Name          = name,
-            School        = SpellSchool.Healing,
+            School        = SpellSchool.Deity,
             DamageDie     = DieType.D8,
             DamageCount   = 2,
-            DamageType    = DamageType.Holy,
+            DamageType    = DamageType.Healing,
             ManaCost      = manaCost,
             TurnMeterCost = 80,
             SpellLevel    = 2
         };
 
-    private static Spell MakeDamage(string name = "Smite", int manaCost = 15) =>
+    private static Spell MakeDamage(string name = "Magic Missile", int manaCost = 15) =>
         new()
         {
             Name          = name,
-            School        = SpellSchool.Evocation,
+            School        = SpellSchool.Stormcraft,
             DamageDie     = DieType.D8,
             DamageCount   = 2,
             DamageType    = DamageType.Holy,
@@ -395,7 +395,7 @@ public class CombatSimulatorHealingTests
         var (_, simulator) = CreateSimulator();
         var healer = MakeHealer("Sera", hp: 30, maxHp: 50, mana: 200,
             MakeHeal(),
-            MakeDamage("Smite"));
+            MakeDamage("Fireball"));
         var ally = MakeTarget("Ally", hp: 10, maxHp: 50);
         var enemy = MakeTarget("Gruk", hp: 50, maxHp: 50);
 
@@ -437,7 +437,7 @@ public class CombatSimulatorHealingTests
         // Both healer and ally at full HP → AI should prefer Smite over Heal
         var healer = MakeHealer("Sera", hp: 50, maxHp: 50, mana: 200,
             MakeHeal(),
-            MakeDamage("Smite"));
+            MakeDamage("Fireball"));
         var ally = MakeTarget("Ally", hp: 50, maxHp: 50);
         var enemy = MakeTarget("Gruk", hp: 50, maxHp: 50);
 
@@ -470,7 +470,7 @@ public class CombatSimulatorHealingTests
         var (_, simulator) = CreateSimulator();
         var healer = MakeHealer("Sera", hp: 50, maxHp: 50, mana: 200,
             MakeHeal(),
-            MakeDamage("Smite"));
+            MakeDamage("Fireball"));
         var enemy = MakeTarget("Gruk", hp: 50, maxHp: 50);
 
         var result = simulator.Simulate(Party.Solo(healer), Party.Solo(enemy), maxTicks: 30);
@@ -510,7 +510,7 @@ public class CombatSimulatorQueuedSpellTests
         var slowSpell = new Spell
         {
             Name = "SlowCast",
-            School = SpellSchool.Evocation,
+            School = SpellSchool.Stormcraft,
             DamageDie = DieType.D8,
             DamageCount = 1,
             DamageType = DamageType.Fire,
@@ -675,7 +675,7 @@ public class CombatSimulatorElementalDoTTests
     private static Spell MakeFireSpell() => new()
     {
         Name = "Fireball",
-        School = SpellSchool.Evocation,
+        School = SpellSchool.Stormcraft,
         DamageDie = DieType.D6,
         DamageCount = 3,
         DamageType = DamageType.Fire,
@@ -689,7 +689,7 @@ public class CombatSimulatorElementalDoTTests
     private static Spell MakePlainSpell() => new()
     {
         Name = "Magic Dart",
-        School = SpellSchool.Evocation,
+        School = SpellSchool.Stormcraft,
         DamageDie = DieType.D4,
         DamageCount = 2,
         DamageType = DamageType.Psychic,

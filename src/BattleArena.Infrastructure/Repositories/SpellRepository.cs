@@ -37,7 +37,7 @@ public class SpellRepository : ISpellRepository
         Name = (string)reader["name"],
         Description = reader["description"] as string ?? string.Empty,
         School = Enum.TryParse<SpellSchool>((string)reader["school"], true, out var school)
-            ? school : SpellSchool.Other,
+            ? school : SpellSchool.Stormcraft,
         ManaCost = reader["mana_cost"] as int? ?? 0,
         TurnMeterCost = reader["turn_meter_cost"] as int? ?? 100,
         SpellLevel = reader["spell_level"] as int? ?? 1,

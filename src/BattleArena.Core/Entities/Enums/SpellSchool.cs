@@ -2,10 +2,11 @@ namespace BattleArena.Core.Entities.Enums;
 
 public enum SpellSchool
 {
-    AoE,
-    CC,
-    Conjuration,
-    Evocation,
-    Other,
-    Healing
+    Aegis,
+    Stormcraft,
+    Verdancy,
+    Umbramancy,
+    Mirage,
+    Dominion,
+    Deity
 }

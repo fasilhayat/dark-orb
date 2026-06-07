@@ -12,5 +12,6 @@ public enum DamageType
     Shadow,
     Holy,
     Acid,
-    Psychic
+    Psychic,
+    Healing
 }

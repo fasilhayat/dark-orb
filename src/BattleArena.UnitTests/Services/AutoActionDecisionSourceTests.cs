@@ -29,18 +29,19 @@ public class AutoActionDecisionSourceTests
         new()
         {
             Name = name,
-            School = SpellSchool.Healing,
+            School = SpellSchool.Deity,
             DamageDie = DieType.D8,
             DamageCount = 2,
+            DamageType = DamageType.Healing,
             ManaCost = manaCost,
             TurnMeterCost = 80
         };
 
-    private static Spell MakeDamage(string name = "Smite", int manaCost = 15) =>
+    private static Spell MakeDamage(string name = "Magic Missile", int manaCost = 15) =>
         new()
         {
             Name = name,
-            School = SpellSchool.Evocation,
+            School = SpellSchool.Stormcraft,
             DamageDie = DieType.D8,
             DamageCount = 2,
             ManaCost = manaCost,

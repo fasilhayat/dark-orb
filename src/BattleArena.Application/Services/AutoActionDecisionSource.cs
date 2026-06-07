@@ -20,7 +20,7 @@ public class AutoActionDecisionSource : IActionDecisionSource
         int currentTick,
         CancellationToken ct)
     {
-        var spells = actor.MemorizedSpells;
+        var spells = actor.MemorizedSpells.Where(s => actor.CanCast(s)).ToList();
         if (spells.Count > 0)
         {
             var healSpells = spells.Where(s => s.IsHealing).ToList();

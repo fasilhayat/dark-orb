@@ -45,7 +45,7 @@ public class ElementalAfterburnSteps
         _spell = new Spell
         {
             Name = name,
-            School = SpellSchool.Evocation,
+            School = SpellSchool.Stormcraft,
             DamageDie = ParseDieType(sides),
             DamageCount = count,
             DamageType = ParseDamageType(damageTypeName),
@@ -64,7 +64,7 @@ public class ElementalAfterburnSteps
         _spell = new Spell
         {
             Name = name,
-            School = SpellSchool.Evocation,
+            School = SpellSchool.Stormcraft,
             DamageDie = ParseDieType(sides),
             DamageCount = count,
             DamageType = ParseDamageType(damageTypeName),

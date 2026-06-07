@@ -293,6 +293,19 @@ public class Character
     /// Returns the spell's turn-meter cost as a percentage of a full turn
     /// (100 = 100 % = one full turn). Reduced by INT, level, and equipment.
     /// </summary>
+    private static readonly Dictionary<string, HashSet<string>> SpellClassRestrictions = new()
+    {
+        ["Smite"] = ["Paladin", "Knight"]
+    };
+
+    /// <summary>
+    /// Returns true if this character's class can cast the given spell.
+    /// Some spells (e.g., Smite) are restricted to specific classes.
+    /// </summary>
+    public bool CanCast(Spell spell) =>
+        !SpellClassRestrictions.TryGetValue(spell.Name, out var allowed)
+        || allowed.Contains(ClassName ?? string.Empty);
+
     public int ComputeSpellTurnMeterCost(Spell spell)
     {
         var intMod = (Intelligence - 10) / 2;

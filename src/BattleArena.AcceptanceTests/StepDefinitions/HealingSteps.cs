@@ -159,33 +159,33 @@ public class HealingSteps
         "Heal" => new Spell
         {
             Name = "Heal",
-            School = SpellSchool.Healing,
+            School = SpellSchool.Deity,
             DamageDie = DieType.D8,
             DamageCount = 2,
             FlatDamageBonus = 4,
             ManaCost = 25,
             TurnMeterCost = 80,
             SpellLevel = 2,
-            DamageType = DamageType.Holy,
+            DamageType = DamageType.Healing,
             AttackType = AttackType.Ranged
         },
         "Mass Heal" => new Spell
         {
             Name = "Mass Heal",
-            School = SpellSchool.Healing,
+            School = SpellSchool.Deity,
             DamageDie = DieType.D6,
             DamageCount = 3,
             FlatDamageBonus = 6,
             ManaCost = 45,
             TurnMeterCost = 100,
             SpellLevel = 4,
-            DamageType = DamageType.Holy,
+            DamageType = DamageType.Healing,
             AttackType = AttackType.Ranged
         },
         "Smite" => new Spell
         {
             Name = "Smite",
-            School = SpellSchool.Evocation,
+            School = SpellSchool.Deity,
             DamageDie = DieType.D8,
             DamageCount = 2,
             ManaCost = 35,

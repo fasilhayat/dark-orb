@@ -8,8 +8,9 @@ public static class CharacterAttackResolver
     {
         if (character.Equipment.RightHand is { } weapon)
             return weapon;
-        if (character.MemorizedSpells.Count > 0)
-            return character.MemorizedSpells
+        var castable = character.MemorizedSpells.Where(s => character.CanCast(s)).ToList();
+        if (castable.Count > 0)
+            return castable
                 .OrderByDescending(s => s.AttackBonus)
                 .ThenByDescending(s => s.DamageCount)
                 .First();

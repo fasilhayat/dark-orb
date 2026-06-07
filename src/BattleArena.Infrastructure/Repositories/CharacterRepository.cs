@@ -183,11 +183,13 @@ public class CharacterRepository : ICharacterRepository
         var schoolStr = (string)reader["school"];
         var school = schoolStr switch
         {
-            "AoE" => SpellSchool.AoE,
-            "CC" => SpellSchool.CC,
-            "Conjuration" => SpellSchool.Conjuration,
-            "Evocation" => SpellSchool.Evocation,
-            _ => SpellSchool.Other
+            "Aegis" => SpellSchool.Aegis,
+            "Stormcraft" => SpellSchool.Stormcraft,
+            "Verdancy" => SpellSchool.Verdancy,
+            "Umbramancy" => SpellSchool.Umbramancy,
+            "Mirage" => SpellSchool.Mirage,
+            "Dominion" => SpellSchool.Dominion,
+            _ => SpellSchool.Deity
         };
 
         return new Spell
