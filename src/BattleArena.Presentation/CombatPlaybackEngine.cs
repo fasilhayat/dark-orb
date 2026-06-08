@@ -595,6 +595,8 @@ public static class CombatPlaybackEngine
                         ActorName = entry.ActorName,
                         TargetName = entry.TargetName,
                         EffectName = entry.StatusEffectName,
+                        IsPersistent = true,
+                        Color = GetPersistentColor(entry.StatusEffectName),
                     });
                 }
                 break;

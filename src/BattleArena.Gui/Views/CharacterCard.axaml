@@ -90,7 +90,7 @@
         </Border>
 
         <!-- Mana bar -->
-        <Border BorderBrush="#333" BorderThickness="1" CornerRadius="3" Background="#111" Height="20" ClipToBounds="True">
+        <Border BorderBrush="{Binding ManaBarBorderBrush}" BorderThickness="1" CornerRadius="3" Background="#111" Height="20" ClipToBounds="True">
           <Grid>
             <Border Background="#111" CornerRadius="2" />
             <Border Background="{Binding ManaBarColor}" CornerRadius="2"

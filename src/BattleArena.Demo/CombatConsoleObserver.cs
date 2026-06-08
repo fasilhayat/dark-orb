@@ -69,6 +69,13 @@ internal sealed class CombatConsoleObserver : ICombatObserver
                 Demo.CW("     ◆ ", ConsoleColor.Magenta);
                 Demo.CWL($"{entry.ActorName}  casts {entry.AttackSourceName}  (-{entry.ManaCost} mana)", ConsoleColor.Magenta);
                 break;
+            case "LeechTick":
+                var leechRes = entry.LeechResourceType == "Mana" ? "mana" : "HP";
+                Demo.CW("     ◇ ", ConsoleColor.Magenta);
+                Demo.CW($"{entry.ActorName}  loses {entry.LeechAmount} {leechRes}  →  ");
+                Demo.CW($"{entry.LeechCasterName}", ConsoleColor.Green);
+                Demo.CWL($"  [+{entry.LeechAmount} {leechRes}]", ConsoleColor.Magenta);
+                break;
             case "SpellQueued":
                 Demo.CW("     ⏳ ", ConsoleColor.Magenta);
                 Demo.CWL(entry.Message, ConsoleColor.Magenta);

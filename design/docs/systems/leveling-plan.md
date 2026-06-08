@@ -1,60 +1,281 @@
 # BattleArena — Leveling Plan
 
-> **Class features, racial unlocks, and spell progression for levels 1–12.**
-> This file complements the rules in `battle-arena-lore.md §22 (Leveling & Experience)`.
+> **Level cap, XP, class features, racial unlocks, and spell progression for levels 1–20.**
+> Canonical source for all leveling data.
 
 ---
 
 ## Table of Contents
 
-1. [Level Cap & Overview](#1-level-cap--overview)
-2. [Class-by-Class Progression](#2-class-by-class-progression)
-   - 2.1 — Barbarian
-   - 2.2 — Fighter
-   - 2.3 — Knight
-   - 2.4 — Paladin
-   - 2.5 — Rogue
-   - 2.6 — Bard
-   - 2.7 — Mage
-   - 2.8 — Priest
-   - 2.9 — Druid
-3. [Spell Progression Tables](#3-spell-progression-tables)
-   - 3.1 — Full Casters (Mage, Priest, Druid, Bard)
-   - 3.2 — Half-Casters (Paladin)
-4. [Spell Memorization by Level](#4-spell-memorization-by-level)
-5. [Racial Benefits by Level](#5-racial-benefits-by-level)
-6. [Pet Unlock Summary](#6-pet-unlock-summary)
-7. [Level-Up Checklist](#7-level-up-checklist)
+1. [XP & Leveling](#1-xp--leveling)
+2. [Hit Points & Hit Dice](#2-hit-points--hit-dice)
+3. [Strike Rating Progression](#3-strike-rating-progression)
+4. [Turnmeter Level Bonus](#4-turnmeter-level-bonus)
+5. [Accessory Slot Unlocks](#5-accessory-slot-unlocks)
+6. [Spell Memorization](#6-spell-memorization)
+7. [XP from Battles](#7-xp-from-battles)
+8. [Class-by-Class Progression](#8-class-by-class-progression)
+9. [Spell Progression Tables](#9-spell-progression-tables)
+10. [Racial Benefits by Level](#10-racial-benefits-by-level)
+11. [Pet Unlock Summary](#11-pet-unlock-summary)
+12. [Level-Up Checklist](#12-level-up-checklist)
 
 ---
 
-## 1. Level Cap & Overview
+## 1. XP & Leveling
 
-**Max level: 20** (D&D 5e standard, following §22).
+**Max level: 20** (D&D 5e standard).
 
 Every level-up grants:
 
 | Benefit | Detail |
 |---------|--------|
 | Hit Points | Roll HitDie + Stamina mod (max HD at L1) |
-| Strike Rating | Per archetype table in §22 |
-| Turnmeter Bonus | Per archetype table in §22 |
-| Accessory Slots | Per archetype table in §22 |
-| Class feature | See §2 below |
-| Racial benefit | See §5 below (unlock levels only) |
+| Strike Rating | Per archetype table (§3) |
+| Turnmeter Bonus | Per archetype table (§4) |
+| Accessory Slots | Per archetype table (§5) |
+| Class feature | See §8 below |
+| Racial benefit | See §10 below (unlock levels only) |
+
+### XP Thresholds
+
+| Level | Total XP Required | XP to Next Level |
+|:-----:|:-----------------:|:----------------:|
+| 1 | 0 | 300 |
+| 2 | 300 | 600 |
+| 3 | 900 | 1,800 |
+| 4 | 2,700 | 3,800 |
+| 5 | 6,500 | 7,500 |
+| 6 | 14,000 | 9,000 |
+| 7 | 23,000 | 11,000 |
+| 8 | 34,000 | 14,000 |
+| 9 | 48,000 | 16,000 |
+| 10 | 64,000 | 21,000 |
+| 11 | 85,000 | 15,000 |
+| 12 | 100,000 | 20,000 |
+| 13 | 120,000 | 20,000 |
+| 14 | 140,000 | 25,000 |
+| 15 | 165,000 | 30,000 |
+| 16 | 195,000 | 30,000 |
+| 17 | 225,000 | 40,000 |
+| 18 | 265,000 | 40,000 |
+| 19 | 305,000 | 50,000 |
+| 20 | 355,000 | — |
 
 ---
 
-## 2. Class-by-Class Progression
+## 2. Hit Points & Hit Dice
 
-### 2.1 Barbarian (Martial, D12)
+Each class uses a specific **Hit Die** that determines how many HP a character gains per level.
+
+| Class | Archetype | Hit Die | Sides | Avg per level |
+|-------|:---------:|:-------:|:-----:|:-------------:|
+| Barbarian | Martial | D12 | 12 | 6.5 |
+| Fighter | Martial | D10 | 10 | 5.5 |
+| Knight | Martial | D10 | 10 | 5.5 |
+| Paladin | Martial | D10 | 10 | 5.5 |
+| Mage | Caster | D6 | 6 | 3.5 |
+| Priest | Caster | D10 | 10 | 5.5 |
+| Druid | Caster | D10 | 10 | 5.5 |
+| Rogue | Hybrid | D8 | 8 | 4.5 |
+| Bard | Hybrid | D8 | 8 | 4.5 |
+
+### Level 1 HP
+
+At Level 1, a character receives the **maximum** value of their hit die plus their Stamina modifier:
+
+```
+Level 1 HP = max(HitDie) + StaminaModifier
+```
+
+Where `StaminaModifier = (Stamina - 10) / 2`.
+
+### HP per level
+
+On each subsequent level-up, the character **rolls** their hit die and adds their Stamina modifier:
+
+```
+HP Gain = Roll(HitDie) + StaminaModifier (minimum 1)
+```
+
+This gain is added to **both** MaxHitPoints and CurrentHitPoints.
+
+Stamina (Constitution) is the primary defensive stat — a Fighter with 18 Stamina (+4 modifier) gains an average of 9.5 HP per level, compared to a Mage with 10 Stamina (+0) gaining 3.5.
+
+### HP Examples
+
+| Character | Class | Level | Stamina | Hit Die | Expected HP |
+|-----------|-------|:-----:|:-------:|:-------:|:-----------:|
+| Priest (avg) | D10 | 1 | 12 | D10 | 11 |
+| Priest (avg) | D10 | 4 | 12 | D10 | 29 |
+| Priest (avg) | D10 | 9 | 12 | D10 | 59 |
+| Fighter (tough) | D10 | 5 | 18 | D10 | 52 |
+| Mage (frail) | D6 | 10 | 10 | D6 | 33 |
+| Barbarian (sturdy) | D12 | 8 | 18 | D12 | 86 |
+
+### Stamina Modifier Table
+
+| Stamina | Modifier |
+|:-------:|:--------:|
+| 3 | –3 |
+| 4–5 | –2 |
+| 6–8 | –1 |
+| 9–12 | +0 |
+| 13–15 | +1 |
+| 16–17 | +2 |
+| 18–19 | +3 |
+| 20 | +4 |
+
+---
+
+## 3. Strike Rating Progression
+
+A higher Strike Rating is better. The table below shows the cumulative bonus added to the class base SR.
+
+| Level | Martial | Hybrid | Caster |
+|:-----:|:-------:|:------:|:------:|
+| 1 | +0 | +0 | +0 |
+| 2 | +0 | +0 | +0 |
+| 3 | +1 | +0 | +0 |
+| 4 | +1 | +1 | +0 |
+| 5 | +2 | +1 | +1 |
+| 6 | +2 | +1 | +1 |
+| 7 | +3 | +2 | +1 |
+| 8 | +3 | +2 | +2 |
+| 9 | +4 | +2 | +2 |
+| 10 | +4 | +3 | +2 |
+| 11 | +5 | +3 | +3 |
+| 12 | +5 | +3 | +3 |
+
+**Example:** A Level 10 Fighter (base SR 21) → effective SR = 21 + 4 = **25**.  
+A Level 10 Mage (base SR 17) → effective SR = 17 + 2 = **19**.
+
+---
+
+## 4. Turnmeter Level Bonus
+
+Level provides a small bonus to turnmeter gain per tick, scaled by archetype:
+
+| Archetype | TM Bonus |
+|:---------:|:--------:|
+| Martial | +Level/3 |
+| Hybrid | +Level/4 |
+| Caster | +Level/5 |
+
+This ensures higher-level characters act slightly more often, but Dexterity and TurnSpeed remain the primary axes for action frequency.
+
+**Example:** A Level 9 Priest (Caster) gets +9/5 = +1 TM/tick, while a Level 4 Priest gets +4/5 = +0 TM/tick. The level gap provides a minor action frequency advantage.
+
+---
+
+## 5. Accessory Slot Unlocks
+
+Accessory slots determine how many rings, amulets, and girdles a character can equip simultaneously.
+
+| Level | Martial | Hybrid | Caster |
+|:-----:|:-------:|:------:|:------:|
+| 1 | 0 | 0 | 0 |
+| 2 | 0 | 0 | 1 |
+| 3 | 1 | 1 | 1 |
+| 4 | 1 | 1 | 2 |
+| 5 | 1 | 2 | 2 |
+| 6 | 2 | 2 | 3 |
+| 7 | 2 | 2 | 3 |
+| 8 | 2 | 3 | 4 |
+| 9 | 3 | 3 | 4 |
+| 10 | 3 | 4 | 5 |
+| 11 | 3 | 4 | 5 |
+| 12 | 4 | 5 | 6 |
+
+Casters attune to magical items more readily and unlock accessory slots earlier and in greater number. Martials gain fewer slots but compensate with superior weapon training and armor proficiency.
+
+---
+
+## 6. Spell Memorization
+
+The number of spells a character can **memorize** (prepare) per day depends on their primary casting stat and class level.
+
+| Class | Casting Stat | Formula | Bonus per level |
+|-------|:------------:|---------|:---------------:|
+| Mage | Intelligence | 2 + (Int − 10) / 2 + level / 3 | +1 every 3 levels |
+| Priest | Wisdom | 2 + (Wis − 10) / 2 + level / 3 | +1 every 3 levels |
+| Druid | Wisdom | 2 + (Wis − 10) / 2 + level / 3 | +1 every 3 levels |
+| Bard | Charisma | 2 + (Cha − 10) / 2 + level / 3 | +1 every 3 levels |
+| Paladin | Charisma | 1 + (Cha − 10) / 2 + level / 4 | +1 every 4 levels |
+
+Minimum 1 slot at any level.
+
+**Example:** A Priest with 16 Wisdom (+2 mod) at level 6:
+- Base = 2 + 2 = 4
+- Level bonus = 6 / 3 = 2
+- Total = **6 prepared spells**
+
+| Intelligence | INT Mod | Base Slots |
+|:-----------:|:-------:|:----------:|
+| 3 | –3 | 1 |
+| 6–8 | –1 | 1 |
+| 9–12 | +0 | 2 |
+| 13–15 | +1 | 3 |
+| 16–17 | +2 | 4 |
+| 18–19 | +3 | 5 |
+| 20 | +4 | 6 |
+
+Equipment bonuses (e.g., Mage Robes, Arcane Circlets, Amulets of Wisdom) can add additional spell slots.
+
+---
+
+## 7. XP from Battles
+
+After each battle, experience is awarded using the following formula:
+
+```
+Base XP   = sum(enemy levels) × 12
+Net bonus = (party crits - party fumbles) × 8
+
+Expected rounds = (party size + enemy size) × 2
+Round ratio     = actual rounds ÷ expected rounds
+Round factor    = 1.0 + |round ratio - 1.0| × 0.3   clamped to [0.5, 2.0]
+
+Total XP = floor(base XP × round factor) + net bonus
+XP per survivor = Total XP ÷ number of surviving party members (rounded down)
+```
+
+The **round factor** rewards both ends of the bell curve:
+- Fights resolved much faster than expected (high efficiency) earn a bonus.
+- Fights that drag on much longer than expected (grueling endurance) also earn a bonus.
+- Standard-length fights earn base XP with no modifier.
+
+Each **critical hit** landed by the party adds +8 XP to the pool before splitting.
+Each **fumble** by the party subtracts -8 XP.
+
+Only characters who are **alive** at the end of the battle receive XP. Unconscious or dead characters gain nothing.
+
+**Example 1 (efficient):** A party of 3 heroes defeats 3 enemies of levels 5, 4, and 3 in 5 rounds.  
+Base XP = (5 + 4 + 3) × 12 = 144  
+Expected rounds = (3 + 3) × 2 = 12  
+Round ratio = 5 ÷ 12 = 0.42 → factor = 1 + |0.42 - 1| × 0.3 = 1.17  
+Total XP (no crits or fumbles) = 144 × 1.17 = 168  
+All 3 survive → 168 ÷ 3 = **56 XP each** (efficiency bonus).
+
+**Example 2 (grueling):** Same enemies but the fight takes 20 rounds with 2 party crits and 1 fumble.  
+Base XP = 144  
+Round ratio = 20 ÷ 12 = 1.67 → factor = 1 + |1.67 - 1| × 0.3 = 1.20  
+Net bonus = (2 - 1) × 8 = +8  
+Total XP = 144 × 1.20 + 8 = 180  
+All 3 survive → 180 ÷ 3 = **60 XP each** (endurance bonus + net crit benefit).
+
+---
+
+## 8. Class-by-Class Progression
+
+### 8.1 Barbarian (Martial, D12)
 
 | Lvl | Features |
 |:---:|----------|
 | 1 | **Rage** (1/rest)* — +2 melee damage, take half damage from physical attacks. Lasts 3 + Stamina mod rounds.<br>**Unarmored Defense** — AC = 10 + Dex mod + Stamina mod when not wearing armor. |
 | 2 | **Reckless Attack** — Attack with advantage; enemies get advantage against you until next turn.<br>**Danger Sense** — Advantage on reflex saves vs. traps/area effects. |
 | 3 | **Rage** (2/rest). **Primal Path** — choose Berserker (bonus attack when raging) or Totem Warrior (spirit animal grants utility). |
-| 4 | **Pet Companion** — gain a **Wolf** or **Hound** pet (see Pet Unlock §6).<br>**Rage** (3/rest). |
+| 4 | **Pet Companion** — gain a **Wolf** or **Hound** pet (see Pet Unlock §11).<br>**Rage** (3/rest). |
 | 5 | **Extra Attack** — attack twice per action.<br>**Fast Movement** — +10 ft. base move. |
 | 6 | **Rage** (4/rest). **Feral Instinct** — advantage on initiative; can enter Rage at the start of combat even when surprised. |
 | 7 | **Brutal Critical** — add one extra weapon die on critical hits. |
@@ -68,7 +289,7 @@ Every level-up grants:
 
 ---
 
-### 2.2 Fighter (Martial, D10)
+### 8.2 Fighter (Martial, D10)
 
 | Lvl | Features |
 |:---:|----------|
@@ -87,11 +308,11 @@ Every level-up grants:
 
 ---
 
-### 2.3 Knight (Martial, D10)
+### 8.3 Knight (Martial, D10)
 
 | Lvl | Features |
 |:---:|----------|
-| 1 | **Heavy Armor Proficiency** — no movement penalty in heavy armor.<br>**Shield Bash** — bonus-action bash (1D4 + Str mod bludgeoning; on hit, target is pushed 5 ft.).<br>**Pet Companion** — gain a **Wolf** or **Falcon** pet (see Pet Unlock §6). |
+| 1 | **Heavy Armor Proficiency** — no movement penalty in heavy armor.<br>**Shield Bash** — bonus-action bash (1D4 + Str mod bludgeoning; on hit, target is pushed 5 ft.).<br>**Pet Companion** — gain a **Wolf** or **Falcon** pet (see Pet Unlock §11). |
 | 2 | **Mounted Combat** — when mounted, mount gains +2 AC and shares half the damage you take.<br>**Charging Strike** — after moving 10+ ft. in a straight line, next melee attack deals +1D8 extra damage. |
 | 3 | **Commanding Presence** — allies within 15 ft. gain +1 to hit while you are conscious. |
 | 4 | **Improved Shield Bash** — shield bash now deals 1D6 and stuns for 1 round on a critical. |
@@ -102,16 +323,16 @@ Every level-up grants:
 | 9 | **Unbreakable Will** — once per rest, if you would be stunned or charmed, ignore that effect. |
 | 10 | **Improved Mount** — mount gains an additional attack when you take the Attack action. |
 | 11 | **Battlefield Commander** — as a bonus action, grant one ally an immediate attack. |
-| 12 | **Iron Bulwark** — reduce all incoming damage by 3 while wearing heavy armor and a shield. Allies behind you gain half-cover (+2 AC).<br>**Dragon Bond** (Human/Elf only) — unlock Dragon pet (see §6). |
+| 12 | **Iron Bulwark** — reduce all incoming damage by 3 while wearing heavy armor and a shield. Allies behind you gain half-cover (+2 AC).<br>**Dragon Bond** (Human/Elf only) — unlock Dragon pet (see §11). |
 
 ---
 
-### 2.4 Paladin (Martial, D10 — Half-Caster)
+### 8.4 Paladin (Martial, D10 — Half-Caster)
 
 | Lvl | Features |
 |:---:|----------|
-| 1 | **Divine Sense** — detect celestials, fiends, and undead within 60 ft. (number of uses = 1 + Cha mod / rest).<br>**Lay on Hands** — pool of 5 × level HP to heal allies (can also cure one disease/poison per 5 points spent).<br>**Pet Companion** — gain a **Wolf** or **Falcon** pet (see Pet Unlock §6). |
-| 2 | **Divine Smite** — spend a spell slot to add 1D8 + 1D8 per spell level (max +5D8) to a melee hit.<br>**Spellcasting** — L1 spells. Access to half-caster spell progression (see §3.2). |
+| 1 | **Divine Sense** — detect celestials, fiends, and undead within 60 ft. (number of uses = 1 + Cha mod / rest).<br>**Lay on Hands** — pool of 5 × level HP to heal allies (can also cure one disease/poison per 5 points spent).<br>**Pet Companion** — gain a **Wolf** or **Falcon** pet (see Pet Unlock §11). |
+| 2 | **Divine Smite** — spend a spell slot to add 1D8 + 1D8 per spell level (max +5D8) to a melee hit.<br>**Spellcasting** — L1 spells. Access to half-caster spell progression (see §9.2). |
 | 3 | **Divine Health** — immune to disease.<br>**Sacred Oath** — choose Oath of Devotion, Oath of Vengeance, or Oath of the Ancients. |
 | 4 | **L2 spells**.<br>**Ability Score Improvement** — +1 to any ability (max 20). |
 | 5 | **Extra Attack** — attack twice per action. |
@@ -121,11 +342,11 @@ Every level-up grants:
 | 9 | **L4 spells**. |
 | 10 | **Aura of Courage** — you and allies within 10 ft. are immune to fear. |
 | 11 | **Improved Divine Smite** — all melee hits deal an extra 1D8 radiant damage. |
-| 12 | **L5 spells**.<br>**Holy Champion** — once per rest, transform for 1 minute: gain flying speed 30 ft., aura radius doubles, and smite dice max at no cost.<br>**Dragon Bond** (Human/Elf only) — unlock Dragon pet (see §6). |
+| 12 | **L5 spells**.<br>**Holy Champion** — once per rest, transform for 1 minute: gain flying speed 30 ft., aura radius doubles, and smite dice max at no cost.<br>**Dragon Bond** (Human/Elf only) — unlock Dragon pet (see §11). |
 
 ---
 
-### 2.5 Rogue (Hybrid, D6)
+### 8.5 Rogue (Hybrid, D6)
 
 | Lvl | Features |
 |:---:|----------|
@@ -144,11 +365,11 @@ Every level-up grants:
 
 ---
 
-### 2.6 Bard (Hybrid, D6 — Full Caster)
+### 8.6 Bard (Hybrid, D6 — Full Caster)
 
 | Lvl | Features |
 |:---:|----------|
-| 1 | **Spellcasting** — L1 spells (full-caster progression, see §3.1).<br>**Bardic Inspiration** (D6) — 3×/rest, grant an ally a D6 die to add to one roll. |
+| 1 | **Spellcasting** — L1 spells (full-caster progression, see §9.1).<br>**Bardic Inspiration** (D6) — 3×/rest, grant an ally a D6 die to add to one roll. |
 | 2 | **Jack of All Trades** — add half proficiency to all untrained ability checks.<br>**Song of Rest** — during a short rest, allies regain +1D6 extra HP. |
 | 3 | **L2 spells**.<br>**Bard College** — choose College of Lore (extra skills, Cutting Words) or College of Valor (armor proficiency, Combat Inspiration).<br>**Expertise** — double proficiency for two skills. |
 | 4 | **Bardic Inspiration** (D8). **Ability Score Improvement** — +1 to any ability (max 20). |
@@ -163,11 +384,11 @@ Every level-up grants:
 
 ---
 
-### 2.7 Mage (Caster, D4 — Full Caster)
+### 8.7 Mage (Caster, D4 — Full Caster)
 
 | Lvl | Features |
 |:---:|----------|
-| 1 | **Spellcasting** — L1 spells (full-caster progression, see §3.1).<br>**Arcane Recovery** (1/rest) — regain half your level in total spell levels during a short rest (rounded up). |
+| 1 | **Spellcasting** — L1 spells (full-caster progression, see §9.1).<br>**Arcane Recovery** (1/rest) — regain half your level in total spell levels during a short rest (rounded up). |
 | 2 | **Arcane Tradition** — choose Evocation (sculpt spells), Conjuration (extended summons), or Illusion (heightened DCs). Gain tradition's L2 feature. |
 | 3 | **L2 spells**. |
 | 4 | **Ability Score Improvement** — +1 to any ability (max 20). |
@@ -178,15 +399,15 @@ Every level-up grants:
 | 9 | **L5 spells**. |
 | 10 | **Arcane Recovery** (3/rest). |
 | 11 | **L6 spells**. |
-| 12 | **Archmage** — choose one L1 and one L2 spell; you may cast each at its base level for 0 Mana once per rest. Arcane Recovery restores all spent Mana (instead of half).<br>**Dragon Bond** (Human/Elf only) — unlock Dragon pet (see §6). |
+| 12 | **Archmage** — choose one L1 and one L2 spell; you may cast each at its base level for 0 Mana once per rest. Arcane Recovery restores all spent Mana (instead of half).<br>**Dragon Bond** (Human/Elf only) — unlock Dragon pet (see §11). |
 
 ---
 
-### 2.8 Priest (Caster, D8 — Full Caster)
+### 8.8 Priest (Caster, D8 — Full Caster)
 
 | Lvl | Features |
 |:---:|----------|
-| 1 | **Spellcasting** — L1 spells (full-caster progression, see §3.1).<br>**Turn Undead** (1/rest) — undead within 30 ft. make a Wisdom save or flee for 1 minute. |
+| 1 | **Spellcasting** — L1 spells (full-caster progression, see §9.1).<br>**Turn Undead** (1/rest) — undead within 30 ft. make a Wisdom save or flee for 1 minute. |
 | 2 | **Channel Divinity** (1/rest) — use one of: Turn Undead (doesn't count against rest) **or** a domain-specific channel.<br>**Divine Domain** — choose Light (bonus fire/holy spells), Healing (bonus heal dice), or War (weapon/armor prof). |
 | 3 | **L2 spells**. |
 | 4 | **Turn Undead** (2/rest). **Ability Score Improvement** — +1 to any ability (max 20). |
@@ -197,15 +418,15 @@ Every level-up grants:
 | 9 | **L5 spells**. |
 | 10 | **Turn Undead** (3/rest). |
 | 11 | **L6 spells**. |
-| 12 | **High Priest** — your Turn Undead now destroys undead of CR 2 or lower on a failed save. Divine Intervention cooldown reduces to 3 days.<br>**Dragon Bond** (Human/Elf only) — unlock Dragon pet (see §6). Dwarf/Gladefolk Priests instead gain Two-Pet ability (see §6b). |
+| 12 | **High Priest** — your Turn Undead now destroys undead of CR 2 or lower on a failed save. Divine Intervention cooldown reduces to 3 days.<br>**Dragon Bond** (Human/Elf only) — unlock Dragon pet (see §11). Dwarf/Gladefolk Priests instead gain Two-Pet ability (see §11b). |
 
 ---
 
-### 2.9 Druid (Caster, D8 — Full Caster)
+### 8.9 Druid (Caster, D8 — Full Caster)
 
 | Lvl | Features |
 |:---:|----------|
-| 1 | **Spellcasting** — L1 spells (full-caster progression, see §3.1).<br>**Druidic** — a secret language of druids.<br>**Pet Companion** — gain a **Wolf** or **Falcon** pet (see Pet Unlock §6). |
+| 1 | **Spellcasting** — L1 spells (full-caster progression, see §9.1).<br>**Druidic** — a secret language of druids.<br>**Pet Companion** — gain a **Wolf** or **Falcon** pet (see Pet Unlock §11). |
 | 2 | **Wild Shape** — transform into a beast of CR 1/4 or lower. Duration = Druid level × 2 rounds. Use 2/rest.<br>**Druid Circle** — choose Circle of the Land (bonus spell slots in natural terrain) or Circle of the Moon (higher CR wild shapes, combat forms). |
 | 3 | **L2 spells**. |
 | 4 | **Wild Shape** improvement — can now take forms of CR 1/2.<br>**Ability Score Improvement** — +1 to any ability (max 20). |
@@ -220,9 +441,9 @@ Every level-up grants:
 
 ---
 
-## 3. Spell Progression Tables
+## 9. Spell Progression Tables
 
-### 3.1 Full Casters (Mage, Priest, Druid, Bard)
+### 9.1 Full Casters (Mage, Priest, Druid, Bard)
 
 **Spell Slots per Level:**
 
@@ -260,7 +481,7 @@ Every level-up grants:
 
 *\* Mages learn spells into their spellbook (can copy more from scrolls). Priests and Druids prepare spells from their full class list — the "Spells Known" column represents how many they can prepare each day.*
 
-### 3.2 Half-Casters (Paladin)
+### 9.2 Half-Casters (Paladin)
 
 **Spell Slots per Level:**
 
@@ -285,28 +506,7 @@ Half-casters round spell levels down — Paladins gain L4 spells at L12, and nev
 
 ---
 
-## 4. Spell Memorization by Level
-
-The number of spells a character can **memorize** (prepare) per day depends on their primary casting stat and class level.
-
-| Class | Casting Stat | Formula | Bonus per level |
-|-------|:------------:|---------|:---------------:|
-| Mage | Intelligence | 2 + (Int − 10) / 2 + level / 3 | +1 every 3 levels |
-| Priest | Wisdom | 2 + (Wis − 10) / 2 + level / 3 | +1 every 3 levels |
-| Druid | Wisdom | 2 + (Wis − 10) / 2 + level / 3 | +1 every 3 levels |
-| Bard | Charisma | 2 + (Cha − 10) / 2 + level / 3 | +1 every 3 levels |
-| Paladin | Charisma | 1 + (Cha − 10) / 2 + level / 4 | +1 every 4 levels |
-
-Minimum 1 slot at any level.
-
-**Example:** A Priest with 16 Wisdom (+2 mod) at level 6:
-- Base = 2 + 2 = 4
-- Level bonus = 6 / 3 = 2
-- Total = **6 prepared spells**
-
----
-
-## 5. Racial Benefits by Level
+## 10. Racial Benefits by Level
 
 Each race unlocks new abilities as the character gains experience. Racial benefits are gated by **character level**, not class level.
 
@@ -389,8 +589,6 @@ Each race unlocks new abilities as the character gains experience. Racial benefi
 
 ### Gladefolk
 
-*Fully grown Gladefolk stand no taller than a human child of thirteen or fourteen, with slender builds and deceptively youthful features that persist well into middle age. Their cultural emphasis on wit, luck, and warm camaraderie makes them natural survivors.*
-
 | Lvl | Benefit |
 |:---:|---------|
 | 1 | **Taunt** — force an enemy to attack you (see Status Effects). **Fear Immunity** — immune to the Frightened condition. **Lucky** — once per rest, reroll a natural 1 on an attack, save, or ability check. |
@@ -402,13 +600,13 @@ Each race unlocks new abilities as the character gains experience. Racial benefi
 
 ---
 
-## 6. Pet Unlock Summary
+## 11. Pet Unlock Summary
 
-Reference: see §4 in `battle-arena-lore.md` for full pet stats and special abilities.
+Reference: see [`../reference/pets.md`](../reference/pets.md) for full pet stats and special abilities.
 
 ### Pet Special Abilities
 
-Every pet has a unique **Special Ability** that activates in combat (see `battle-arena-lore.md §4` for the full table). Abilities range from Pack Hunter (Wolf) to Venom (Spider) and are tied to the pet, not the master's class.
+Every pet has a unique **Special Ability** that activates in combat (see `pets.md` for the full table). Abilities range from Pack Hunter (Wolf) to Venom (Spider) and are tied to the pet, not the master's class.
 
 ### Dragon — Extraordinary Pet
 
@@ -428,7 +626,7 @@ All Dragons share **Fire Breath** (1D10 fire AoE, 1/rest). Additionally, a Drago
 | **Mage** | Fireball | Single-target 2D10 fire damage, save for half. 1/rest. |
 | **Priest** | Diamond Scales | Permanent +2 AC, +10 Max HP, damage reduction 2. |
 
-> **Important:** Non-Human/Elf characters cannot bond with a Dragon even if their class qualifies. See §6b below for the Dwarf/Gladefolk Priest alternative.
+> **Important:** Non-Human/Elf characters cannot bond with a Dragon even if their class qualifies. See §11b below for the Dwarf/Gladefolk Priest alternative.
 
 ### Standard Pet Unlock Levels
 
@@ -450,7 +648,7 @@ All Dragons share **Fire Breath** (1D10 fire AoE, 1/rest). Additionally, a Drago
 | **Mage** | L12 | Human or Elf only |
 | **Priest** | L12 | Human or Elf only |
 
-### 6b. Dwarf & Gladefolk Priest — Two-Pet Exception
+### 11b. Dwarf & Gladefolk Priest — Two-Pet Exception
 
 Dwarf and Gladefolk Priests cannot bond with a Dragon (Human/Elf only). Instead, they gain the **Two-Pet** ability at L12:
 
@@ -480,20 +678,20 @@ When a character levels up, their pet also improves:
 
 ---
 
-## 7. Level-Up Checklist
+## 12. Level-Up Checklist
 
 When a character gains a level, the player should:
 
 1. **Roll Hit Points** — Roll HitDie + Stamina modifier (min 1). Add to both MaxHP and CurrentHP.
-2. **Check Strike Rating** — Apply cumulative reduction from the archetype table (§22).
-3. **Check Turnmeter Bonus** — Recalculate +Level/N.
-4. **Check Accessory Slots** — Unlock any new slots per archetype table (§22).
-5. **Apply Class Feature** — Add the feature(s) listed in §2 for this level.
-6. **Apply Racial Benefit** — If this is a racial-unlock level (1, 3, 5, 7, 9, or 12), add the benefit from §5.
-7. **Update Spells** — If this level grants new spell slots (see §3), select/prepare new spells.
-8. **Update Pet** — If this level grants a pet improvement (see §6), apply the bonus.
+2. **Check Strike Rating** — Apply cumulative bonus from the archetype table (§3).
+3. **Check Turnmeter Bonus** — Recalculate +Level/N from §4.
+4. **Check Accessory Slots** — Unlock any new slots per archetype table (§5).
+5. **Apply Class Feature** — Add the feature(s) listed in §8 for this level.
+6. **Apply Racial Benefit** — If this is a racial-unlock level (1, 3, 5, 7, 9, or 12), add the benefit from §10.
+7. **Update Spells** — If this level grants new spell slots (see §9), select/prepare new spells.
+8. **Update Pet** — If this level grants a pet improvement (see §11), apply the bonus.
 9. **Save** — Update the character sheet or database record.
 
 ---
 
-*Last updated: May 2026 — 9 classes, 8 races, 12-level progression with class features, racial unlocks, spell progression, pets with special abilities, class-bound Dragon pet, and two-pet exception for Dwarf/Gladefolk Priests.*
+*Last updated: June 2026.*

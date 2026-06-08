@@ -113,9 +113,13 @@ Hard rules:
 
 ## 7. Combat engine rules
 
-### Event types (`CombatLogEntry.EventType` — plain string, no enum yet)
+### Event types
 
-`TurnMeterGain`, `TurnStart`, `Attack`, `Damage`, `SkippedTurn`, `EffectApplied`, `EffectResisted`, `EffectExpired`, `DoTDamage`, `FumblePenalty`, `Death` (HP ≤ -10), `KnockedOut` (HP -9–0), `PerfectParry`, `DevastatingStrike`, `TotalReversal`.
+`EventType` is a plain string on `CombatLogEntry` — no enum. Common types:
+
+`RoundStart`, `RoundEnd`, `TurnMeterGain`, `TurnStart`, `TurnEnd`, `Attack`, `Damage`, `SkippedTurn`, `EffectApplied`, `EffectResisted`, `EffectExpired`, `EffectReflected`, `DoTTick`, `HoTTick`, `LeechTick`, `Healed`, `FumblePenalty`, `Death` (HP ≤ -10), `KnockedOut` (HP -9–0), `PerfectParry`, `DevastatingStrike`, `TotalReversal`, `Clash`, `ManaDeduct`, `ManaRegen`, `SpellQueued`, `SpellCharging`, `PetSummoned`, `PetExpired`, `Resurrection`.
+
+Check `Application/Models/CombatLogEntry.cs` for all fields.
 
 ### Key constraints
 
@@ -205,7 +209,7 @@ Load via OpenCode's skill tool. `combat-mechanics` has `self-update: true` — i
 - **API requires `X-Api-Key` header** — All endpoints except `/swagger` and `/api/healthcheck` require an API key. Default: `BA-DEV-2024-SECRET`. 500 errors return JSON `{"error":"..."}`.
 - **Swagger only in Development/LocalDev** — `app.UseSwagger()` is gated on `IsDevelopment() || IsEnvironment("LocalDev")`.
 - **SQL init files** — `.postgres-init/` contains: `01-schema.sql`, `02-seed-data.sql`, `03-characters.sql`, `04-bestiary.sql`. Keep seed data in sync with design docs.
-- **`design/`** — Contains game design docs: `battle-arena-lore.md`, `combat-design.md`, `dark-orb-game-design.md`, `bestiary.md`, `leveling-plan.md`, `dark-orb-master-spellbook.md`. Keep in sync with SQL seed data.
+- **`design/docs/`** — Contains game design docs organized into `world/`, `reference/`, and `systems/`. Keep in sync with SQL seed data.
 - **`bugs-features/`** — Numbered files represent pending work. Process them in ascending numeric order, moving to `bugs-features/done/` when complete. Load the `work-intake` skill for the full workflow.
 - **`scripts/generate-sounds.ps1`** — Generates placeholder WAV files for GUI combat sound effects (installed in `BattleArena.Gui/Assets/Sounds/`).
 - **No `Directory.Build.props`** — Each `.csproj` sets its own SDK version, nullable, ImplicitUsings. No central package management.
@@ -215,5 +219,5 @@ Load via OpenCode's skill tool. `combat-mechanics` has `self-update: true` — i
 ## 13. Doc update obligations
 
 - **README.md**: update when new project, API endpoint, DB table, Makefile target, Docker service, or test framework change. Keep Mermaid ER diagram in sync with `01-schema.sql`.
-- **design/battle-arena-lore.md**: update when SQL seed adds races, classes, deities, pets, weapons, armor, accessories, item sets, NPCs, spells, subraces, or XP formula changes. Entries must match the DB exactly.
+- **design/docs/**: update `docs/world/lore.md`, `docs/reference/deities.md`, `docs/reference/equipment.md`, `docs/reference/pets.md`, `docs/reference/npcs.md`, `docs/reference/spells.md`, `docs/reference/bestiary.md`, or `docs/systems/leveling-plan.md` when SQL seed adds races, classes, deities, pets, weapons, armor, accessories, item sets, NPCs, spells, subraces, or XP formula changes. Entries must match the DB exactly.
 - **release-notes.md**: do NOT touch unless the user explicitly asks. The file is managed manually and has its own maturity-assessment format.

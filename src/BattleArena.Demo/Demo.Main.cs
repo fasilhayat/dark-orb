@@ -576,9 +576,13 @@ private static IDiceService? _diceService;
             var outputDir = Path.Combine(string.IsNullOrEmpty(dir) ? AppContext.BaseDirectory : dir, "combat-logs");
             Directory.CreateDirectory(outputDir);
 
-            var winner  = Result.WinningParty?.Name ?? "unknown";
-            var loser   = Result.LosingParty?.Name  ?? "unknown";
-            var label   = $"{winner}_vs_{loser}".Replace(" ", "_");
+            var p1      = Result.Party1 ?? Result.WinningParty;
+            var p2      = Result.Party2 ?? Result.LosingParty;
+            var lead1   = p1?.Members?.FirstOrDefault()?.Character?.Name ?? "unknown";
+            var lead2   = p2?.Members?.FirstOrDefault()?.Character?.Name ?? "unknown";
+            var isParty = (p1?.Members?.Count ?? 1) > 1 || (p2?.Members?.Count ?? 1) > 1;
+            var suffix  = isParty ? "_party" : "";
+            var label   = $"{lead1}_vs_{lead2}{suffix}".Replace(" ", "_");
             var txtPath = CombatLogWriter.Write(Result, label, outputDir, _combatModeLabel);
             var jsonPath = Path.ChangeExtension(txtPath, ".json");
 

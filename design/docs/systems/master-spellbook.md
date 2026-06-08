@@ -105,7 +105,7 @@ These classes **do not** use spell schools as their primary identity system. Sch
 
 ### Canonical deities
 
-Deities are defined in `design/assets/deities_names-alignment.md`. The authoritative list:
+Deities are defined in [`../reference/deities.md`](../reference/deities.md). The authoritative list:
 
 #### Good deities (Sky / Heaven aligned)
 
@@ -321,6 +321,31 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 | Battle Hymn of Defiance | Deity | 4 | School Specialization | Late | Knight 12 | Powerful morale chant for large engagements.[web:47][web:48] | Teamwide TM uplift, panic immunity, and combat resilience.[web:47][web:48] | Knight | Sonic/Morale | Yes, anthem duration.[web:47][web:48] | Buff, AoE, Variant |
 | Arcane Defiance Banner | Deity | 4 | School Specialization | Late | Knight 13 | Elite banner ward against sorcery.[web:48] | Group Magic Resistance increase and magical pressure reduction.[web:48] | Knight | None | Yes, banner aura.[web:48] | Defensive, Variant |
 | Lionheart Command | Deity | 4 | School Specialization | Late | Knight 13 | Supreme command that hardens allied resolve.[web:47][web:48] | Large TM uplift, fear immunity, and offense confidence boost.[web:47][web:48] | Knight | Sonic/Morale | Yes, command duration.[web:47][web:48] | Buff, Variant |
+
+## Additional Common Spells
+
+These spells are migrated from the quick-reference index. School, class, and progression metadata are preliminary — review during the next progression pass.
+
+| Spell | School | Description | Damage | Mana | Impact | Class | Tags |
+|-------|--------|-------------|:------:|:----:|--------|-------|------|
+| Fire Storm | Stormcraft | A conflagration engulfs the area. | 1D10 Fire | 12 | HP damage | Mage | Offensive, AoE, Nuke |
+| Acid Rain | Stormcraft | Corrosive rain burns all in the area. | 1D6 Acid | 9 | HP damage | Mage | Offensive, AoE |
+| Lava Hail | Stormcraft | Molten rock rains from the sky. | 1D12 Fire | 15 | HP damage | Mage | Offensive, AoE, Nuke |
+| Lightning Strike | Stormcraft | A bolt of lightning strikes from above. | 1D10 Lightning | 10 | HP damage | Mage | Offensive, AoE |
+| Sand Storm | Verdancy | Blinding sand scours the battlefield. | 1D6 Bludgeoning | 7 | HP damage | Druid | Offensive, AoE |
+| Blinding Flash | Mirage | A brilliant flash blinds all who see it. | — | 6 | TM disruption | Mage, Priest | CC, AoE |
+| Insect Swarm | Verdancy | A cloud of biting insects descends. | 1D4 Piercing | 7 | HP damage, DoT | Druid | Offensive, DoT |
+| Fog of Despair | Umbramancy | A choking fog that saps morale. | — | 8 | TM disruption | Priest | CC, AoE |
+| Stun | Stormcraft | A concussive force that stuns the target. | — | 5 | TM freeze | Mage | CC |
+| Charm Enemy | Mirage | Bends an enemy to your will. | — | 8 | TM control | Mage | CC |
+| Taunt | Dominion | Forces an enemy to attack you. | — | 4 | TM disruption | Knight | CC |
+| Freeze | Stormcraft | Encases the target in ice. | — | 7 | TM freeze | Mage | CC |
+| Confuse | Mirage | Makes the target act erratically. | — | 6 | TM disruption | Mage | CC |
+| Provoke | Dominion | Enrages the target, reducing its defenses. | — | 5 | Debuff | Knight | CC, Debuff |
+| Sacrifice | Deity | Sacrifice own HP to empower an ally. | — | 0 | HP transfer | Priest | Support |
+| Blind | Mirage | Robs the target of sight. | — | 5 | Debuff | Mage | CC |
+| Root | Verdancy | Anchors the target to the ground. | — | 5 | Movement denial | Druid | CC |
+| Summon Creature | Varied | Calls a creature to fight for you. | — | 12 | Summoning | Mage | Summon |
 
 ## Variant design rules
 

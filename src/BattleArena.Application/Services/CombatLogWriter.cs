@@ -273,7 +273,8 @@ public static class CombatLogWriter
 
                 case "LeechTick":
                     var leechSymbol = e.LeechResourceType == "Mana" ? "\u2666" : "\uD83E\uDE78";
-                    sb.AppendLine($"  [{e.Tick,5}]  LEECH {e.ActorName,-12}  {leechSymbol} -{e.LeechAmount} {e.LeechResourceType}  \u2192  {e.LeechCasterName}  {leechSymbol} +{e.LeechAmount}  [{e.StatusEffectName}]");
+                    var leechResName = e.LeechResourceType == "Mana" ? "mana" : "HP";
+                    sb.AppendLine($"  [{e.Tick,5}]  LEECH  {leechSymbol} {e.ActorName} loses {e.LeechAmount} {leechResName} \u2192 transferred to {e.LeechCasterName} (+{e.LeechAmount})  [{e.StatusEffectName}]");
                     lastTick = e.Tick;
                     break;
 

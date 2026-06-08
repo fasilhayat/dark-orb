@@ -81,8 +81,13 @@ All tests must pass (`dotnet test BattleArena.sln` from `src/`). If test count d
 ### Coverage
 
 ```bash
-dotnet test BattleArena.sln --collect:"XPlat Code Coverage" --results-directory coverage
+make test-coverage    # from src/ — inline coverlet properties (OpenCover format). Pass --settings coverlet.runsettings to get exclusions.
 ```
+
+Alternative: `dotnet test BattleArena.sln /p:CollectCoverage=true /p:CoverletOutputFormat=opencover`
+
+Single test project: `dotnet test BattleArena.sln --project BattleArena.UnitTests/BattleArena.UnitTests.csproj`
+Single test: `dotnet test BattleArena.sln --filter "FullyQualifiedName~TestMethodName"`
 
 Targets: Application/Services ≥ 80 %, Core/Entities key methods ≥ 1 dedicated test per source, every interface tested.
 
@@ -108,9 +113,13 @@ Hard rules:
 
 ## 7. Combat engine rules
 
-### Event types (`CombatLogEntry.EventType` — plain string, no enum yet)
+### Event types
 
-`TurnMeterGain`, `TurnStart`, `Attack`, `Damage`, `SkippedTurn`, `EffectApplied`, `EffectResisted`, `EffectExpired`, `DoTDamage`, `FumblePenalty`, `Death` (HP ≤ -10), `KnockedOut` (HP -9–0), `PerfectParry`, `DevastatingStrike`, `TotalReversal`.
+`EventType` is a plain string on `CombatLogEntry` — no enum. Common types:
+
+`RoundStart`, `RoundEnd`, `TurnMeterGain`, `TurnStart`, `TurnEnd`, `Attack`, `Damage`, `SkippedTurn`, `EffectApplied`, `EffectResisted`, `EffectExpired`, `EffectReflected`, `DoTTick`, `HoTTick`, `LeechTick`, `Healed`, `FumblePenalty`, `Death` (HP ≤ -10), `KnockedOut` (HP -9–0), `PerfectParry`, `DevastatingStrike`, `TotalReversal`, `Clash`, `ManaDeduct`, `ManaRegen`, `SpellQueued`, `SpellCharging`, `PetSummoned`, `PetExpired`, `Resurrection`.
+
+Check `Application/Models/CombatLogEntry.cs` for all fields.
 
 ### Key constraints
 
@@ -173,15 +182,22 @@ Load via OpenCode's skill tool. `combat-mechanics` has `self-update: true` — i
 | Command | What starts |
 |---------|-------------|
 | `make up-local` | DB + API in Docker (ports 5432, 8585). Demo on host via `make demo-local` |
-| `make up-dev` | Everything in Docker (interactive demo container) |
+| `make up-dev` | Build demo in Release, start DB + API + demo (interactive `run --rm`) |
+| `make dev-up` | Alias for `up-dev` (build, start, run demo) |
+| `make run-dev` | Re-run demo container only (DB + API must already be up) |
 | `make test` | `dotnet test BattleArena.sln` |
 | `make test-coverage` | Tests with OpenCover format |
-| `make gui-local` | Run Avalonia GUI standalone (requires DB + API) |
+| `make gui-local` | Run Avalonia GUI standalone (no DB required) |
+| `make install` | Full cycle: clean Docker → test → up-local → demo |
+| `make install-dev` | Full dev setup: clean + dotnet clean + test + dev-up |
+| `make clean-logs` | Delete generated `combat-logs/` files |
 | `make sync-instructions` | Copy AGENTS.md → `.github/copilot-instructions.md` |
 
 `battle-arena-demo` uses `profiles: [demo]` — not started by plain `docker compose up`.
 
 **Docker build strategy**: `dotnet publish` runs on the host, then Docker `COPY`s the pre-built output. No NuGet restore inside containers. Do NOT add `dotnet restore`/`dotnet build` steps to the Dockerfile.
+
+**Dev demo** (`docker-compose.dev.yml`) mounts `combat-logs/` from the repo root into the demo container — logs survive container teardown.
 
 ---
 
@@ -189,12 +205,19 @@ Load via OpenCode's skill tool. `combat-mechanics` has `self-update: true` — i
 
 - **No EF Core** — Data access uses raw Npgsql + a custom `DbContext` wrapper. Do not write Entity Framework code.
 - **No CI configured** — `.github/workflows/` is empty. The agent must not rely on CI to catch issues; run `dotnet test` locally.
+- **No `opencode.json`** — This repo has no OpenCode config file. Instructions come solely from `AGENTS.md`.
+- **API requires `X-Api-Key` header** — All endpoints except `/swagger` and `/api/healthcheck` require an API key. Default: `BA-DEV-2024-SECRET`. 500 errors return JSON `{"error":"..."}`.
+- **Swagger only in Development/LocalDev** — `app.UseSwagger()` is gated on `IsDevelopment() || IsEnvironment("LocalDev")`.
+- **SQL init files** — `.postgres-init/` contains: `01-schema.sql`, `02-seed-data.sql`, `03-characters.sql`, `04-bestiary.sql`. Keep seed data in sync with design docs.
+- **`design/docs/`** — Contains game design docs organized into `world/`, `reference/`, and `systems/`. Keep in sync with SQL seed data.
 - **`bugs-features/`** — Numbered files represent pending work. Process them in ascending numeric order, moving to `bugs-features/done/` when complete. Load the `work-intake` skill for the full workflow.
+- **`scripts/generate-sounds.ps1`** — Generates placeholder WAV files for GUI combat sound effects (installed in `BattleArena.Gui/Assets/Sounds/`).
+- **No `Directory.Build.props`** — Each `.csproj` sets its own SDK version, nullable, ImplicitUsings. No central package management.
 
 ---
 
 ## 13. Doc update obligations
 
 - **README.md**: update when new project, API endpoint, DB table, Makefile target, Docker service, or test framework change. Keep Mermaid ER diagram in sync with `01-schema.sql`.
-- **design/battle-arena-lore.md**: update when SQL seed adds races, classes, deities, pets, weapons, armor, accessories, item sets, NPCs, spells, subraces, or XP formula changes. Entries must match the DB exactly.
+- **design/docs/**: update `docs/world/lore.md`, `docs/reference/deities.md`, `docs/reference/equipment.md`, `docs/reference/pets.md`, `docs/reference/npcs.md`, `docs/reference/spells.md`, `docs/reference/bestiary.md`, or `docs/systems/leveling-plan.md` when SQL seed adds races, classes, deities, pets, weapons, armor, accessories, item sets, NPCs, spells, subraces, or XP formula changes. Entries must match the DB exactly.
 - **release-notes.md**: do NOT touch unless the user explicitly asks. The file is managed manually and has its own maturity-assessment format.

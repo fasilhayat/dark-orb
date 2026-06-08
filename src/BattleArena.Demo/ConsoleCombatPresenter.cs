@@ -32,6 +32,7 @@ internal sealed class ConsoleCombatPresenter : ICombatPresenter
         ["RoundEnd"] = 500,
         ["SkippedTurn"] = 900,
         ["FumblePenalty"] = 600,
+        ["LeechTick"] = 800,
         ["Death"] = 1800,
         ["KnockedOut"] = 1800,
     };
@@ -298,6 +299,16 @@ internal sealed class ConsoleCombatPresenter : ICombatPresenter
         Demo.CWL($" +{entry.ManaRegen} mana", ConsoleColor.Magenta);
     }
 
+    private static void HandleLeechTick(CombatLogEntry entry, CombatDisplayState _)
+    {
+        var resource = entry.LeechResourceType == "Mana" ? "mana" : "HP";
+        Demo.CW("     ◇ ", ConsoleColor.Magenta);
+        Demo.CW(entry.ActorName, Demo.CharColor(entry.ActorName, entry.ActiveActorName));
+        Demo.CW($"  loses {entry.LeechAmount} {resource}  →  ");
+        Demo.CW(entry.LeechCasterName ?? "?", ConsoleColor.Green);
+        Demo.CWL($"  [+{entry.LeechAmount} {resource}]", ConsoleColor.Magenta);
+    }
+
     private static void HandleManaDeduct(CombatLogEntry entry, CombatDisplayState _)
     {
         Demo.CW("  ◆ ", ConsoleColor.Magenta);
@@ -330,5 +341,6 @@ internal sealed class ConsoleCombatPresenter : ICombatPresenter
         ["ApiCall"] = HandleApiCall,
         ["ManaRegen"] = HandleManaRegen,
         ["ManaDeduct"] = HandleManaDeduct,
+        ["LeechTick"] = HandleLeechTick,
     };
 }

@@ -781,9 +781,11 @@ public partial class MainWindow : Window
                 "combat-logs");
             Directory.CreateDirectory(outputDir);
 
-            var p1Name = result.Party1?.Name ?? "Party1";
-            var p2Name = result.Party2?.Name ?? "Party2";
-            var label = $"{p1Name}_vs_{p2Name}".Replace(" ", "_");
+            var lead1   = result.Party1?.Members?.FirstOrDefault()?.Character?.Name ?? "Party1";
+            var lead2   = result.Party2?.Members?.FirstOrDefault()?.Character?.Name ?? "Party2";
+            var isParty = (result.Party1?.Members?.Count ?? 1) > 1 || (result.Party2?.Members?.Count ?? 1) > 1;
+            var suffix  = isParty ? "_party" : "";
+            var label   = $"{lead1}_vs_{lead2}{suffix}".Replace(" ", "_");
 
             CombatLogWriter.Write(result, label, outputDir, "GUI");
 

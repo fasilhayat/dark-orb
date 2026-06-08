@@ -24,6 +24,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
     private readonly VisualEventBus _visualEventBus = new();
     private readonly Dictionary<string, DispatcherTimer> _effectFlickerTimers = new();
+    private readonly Dictionary<string, DispatcherTimer> _manaBarBlinkTimers = new();
     private readonly Dictionary<string, List<(string EffectName, string Color)>> _effectOrder = new();
 
     private static readonly IBrush Gray = MakeBrush("#888");
@@ -108,6 +109,15 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     {
         _dispatcher.Post(() =>
         {
+            if (ev.IsPersistent && ev.EffectName is not null)
+            {
+                if (ev.EventType == "EffectApplied")
+                    StartPersistentEffect(ev.ActorName, ev.EffectName, ev.Color);
+                else if (ev.EventType == "EffectExpired")
+                    RemovePersistentEffect(ev.ActorName, ev.EffectName);
+                return;
+            }
+
             FlashBorder(ev.ActorName, ev.Color);
             if (ev.TargetName is not null)
                 FlashBorder(ev.TargetName, ev.Color);
@@ -325,6 +335,12 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         }
         list.Add((effectName, color));
 
+        if (effectName is "Leech" or "LeechMana")
+        {
+            StartManaBarBlink(characterName, effectName);
+            return;
+        }
+
         // Stop any existing timer before setting new effect
         StopFlickerTimer(characterName);
 
@@ -348,6 +364,11 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
     private void RemovePersistentEffect(string characterName, string expiredEffectName)
     {
+        if (expiredEffectName is "Leech" or "LeechMana")
+        {
+            StopManaBarBlink(characterName);
+        }
+
         if (_effectOrder.TryGetValue(characterName, out var list))
         {
             list.RemoveAll(e => e.EffectName == expiredEffectName);
@@ -411,6 +432,19 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                 card.PersistentBorderColor = null;
         }
         _effectFlickerTimers.Clear();
+
+        foreach (var kvp in _manaBarBlinkTimers)
+        {
+            kvp.Value.Stop();
+            var card = FindCard(kvp.Key);
+            if (card is not null)
+            {
+                card.ManaBarColor = "#cc44cc";
+                card.ManaBarBorderBrush = "#333";
+            }
+        }
+        _manaBarBlinkTimers.Clear();
+
         _effectOrder.Clear();
     }
 
@@ -426,11 +460,54 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     private void StopPersistentEffect(string characterName)
     {
         StopFlickerTimer(characterName);
+        StopManaBarBlink(characterName);
         _effectOrder.Remove(characterName);
 
         var card = FindCard(characterName);
         if (card is not null)
             card.PersistentBorderColor = null;
+    }
+
+    private void StartManaBarBlink(string characterName, string effectName)
+    {
+        StopManaBarBlink(characterName);
+
+        const string manaRed = "#ff3333";
+        const string manaDefault = "#cc44cc";
+        const string borderRed = "#ff3333";
+        const string borderDefault = "#333";
+
+        var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
+        timer.Tick += (_, _) =>
+        {
+            var c = FindCard(characterName);
+            if (c is null)
+            {
+                timer.Stop();
+                _manaBarBlinkTimers.Remove(characterName);
+                return;
+            }
+            c.ManaBarColor = c.ManaBarColor == manaRed ? manaDefault : manaRed;
+            c.ManaBarBorderBrush = c.ManaBarBorderBrush == borderRed ? borderDefault : borderRed;
+        };
+        timer.Start();
+        _manaBarBlinkTimers[characterName] = timer;
+    }
+
+    private void StopManaBarBlink(string characterName)
+    {
+        if (_manaBarBlinkTimers.TryGetValue(characterName, out var timer))
+        {
+            timer.Stop();
+            _manaBarBlinkTimers.Remove(characterName);
+        }
+
+        var card = FindCard(characterName);
+        if (card is not null)
+        {
+            card.ManaBarColor = "#cc44cc";
+            card.ManaBarBorderBrush = "#333";
+        }
     }
 
     private void AnimateHealGlow(CharCardViewModel card, double start, double width)

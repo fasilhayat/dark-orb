@@ -7,7 +7,7 @@ BattleArena is a homebrew fantasy RPG backend and data model for a Dungeons & Dr
 - Provide a REST API for combat, character management, equipment, accessories, and NPC data.
 - Seed a rich fantasy world with races, classes, deities, pets, weapons, armor, accessories (rings, amulets, girdles), item sets, NPCs, spells, and sample characters.
 - Support a Docker-based development workflow with PostgreSQL and the ASP.NET API.
-- Provide a shared lore reference in [design/battle-arena-lore.md](design/battle-arena-lore.md).
+- Provide a shared lore reference in [design/docs/](design/docs/).
 
 ## Solution overview
 
@@ -42,7 +42,7 @@ BattleArena is a homebrew fantasy RPG backend and data model for a Dungeons & Dr
 
 ## Lore and world setting
 
-The world lore is documented in [design/battle-arena-lore.md](design/battle-arena-lore.md) across 22 sections covering races, classes, deities, pets, weapons, armor, accessories, item sets, NPCs, spells, subraces, and a leveling & experience system. The current lore emphasizes:
+The world lore is documented in [design/docs/](design/docs/), organized into reference, systems, and world subdirectories. The current lore emphasizes:
 
 - A homebrew AD&D-inspired fantasy realm with gods, races, and ancient artifacts.
 - A combat model driven by `StrikeRating`, armor class, and `d20`-style rolls.
@@ -510,7 +510,7 @@ Run unit and acceptance tests from the solution root:
 
 ## References
 
-- Lore source: [design/battle-arena-lore.md](design/battle-arena-lore.md)
+- Lore source: [design/docs/world/lore.md](design/docs/world/lore.md)
 - Database initialization: `src/.postgres-init/`
 - Docker configuration: `docker-compose.yml`
 - API entry point: `BattleArena.Api/Program.cs`

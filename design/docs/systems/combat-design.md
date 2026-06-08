@@ -671,7 +671,54 @@ These targets assume no extreme gear/stat disparities. A Level 1 in plate armor 
 
 ---
 
-## 21. Quick Reference: Formula Cheat Sheet
+## 21. Visual Consistency Rules
+
+### 21.1 Effect Color Mapping
+
+All visual representations of a status effect **must use the same color** across all channels:
+
+| Channel | Description |
+|---------|-------------|
+| **Persistent Border** | Flashing border on the character card while the effect is active |
+| **Inline Label** | Effect name text next to the character name |
+| **Overlay Message** | Floating combat text (e.g. "BURNING", "LEECH") |
+
+### 21.2 Canonical Color Sources
+
+| Effect | Color | Hex | Source |
+|--------|-------|:---:|--------|
+| **Burning** | Orange | `#ff6600` | `GetPersistentColor()` switch |
+| **Ignite** | Bright red-orange | `#ff4400` | `GetPersistentColor()` switch |
+| **Shocked** | Yellow | `#ffff44` | `GetPersistentColor()` switch |
+| **Frozen / Freeze** | Light blue | `#44ccff` | `GetPersistentColor()` switch |
+| **Poisoned** | Green | `#44ff44` | `GetPersistentColor()` switch |
+| **Bleeding** | Red | `#ff4444` | `GetPersistentColor()` switch |
+| **Leech** | Red-orange | `#ff6644` | `TransferEffectRegistry.TransferColor` |
+| **LeechMana** | Purple | `#cc44ff` | `TransferEffectRegistry.TransferColor` |
+
+CC effects (Stun, Sleep, Fear, Petrify, Root) use `CcVisualConfig` as their single source of truth.
+
+### 21.3 Source-of-Truth Hierarchy
+
+1. **`CcVisualConfig`** — CC effects (Stun, Freeze, Sleep, etc.)
+2. **`TransferEffectRegistry`** — Transfer effects (Leech, LeechMana)
+3. **`GetPersistentColor()` switch** — Standard DoTs/debuffs (Burning, Shocked, Poisoned, etc.)
+
+GUI label color (`GetEffectColor()`) **must delegate** to these sources rather than hardcoding independent values. This ensures border, label, and overlay messages are always consistent.
+
+### 21.4 Persistent Effect Lifecycle
+
+| Phase | Event | Visual Action | Presenter Method |
+|-------|-------|---------------|------------------|
+| **Start** | `EffectApplied` | Start border flicker or mana bar blink | `StartPersistentEffect()` |
+| **Tick** | `DoTTick` / `LeechTick` | Flash border + overlay message | `FlashBorder()` + `AddOverlayMessage()` |
+| **End** | `EffectExpired` | Stop flicker/blink, reset visual state | `RemovePersistentEffect()` |
+
+The lifecycle completes properly only when both `EffectApplied` and `EffectExpired` visual events carry `IsPersistent = true`.
+
+---
+
+## 22. Quick Reference: Formula Cheat Sheet
 
 ```
 To-hit:             d20 + AttackPower ≥ d20 + DefensePower   (both sides roll — modern opposed-roll model)

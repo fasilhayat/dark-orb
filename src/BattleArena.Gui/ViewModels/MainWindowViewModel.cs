@@ -667,14 +667,15 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
             return CcVisualConfig.GetColor(name);
         return name switch
         {
-            "Burning"  => "#ff6600",
-            "Ignite"   => "#ff4400",
-            "Frozen"   => "#44ccff",
-            "Freeze"   => "#44ccff",
-            "Shocked"  => "#ffff44",
-            "Poisoned" => "#44ff44",
-            "Bleeding" => "#ff4444",
-            _          => "#88ccff",
+            "Burning"   => "#ff6600",
+            "Ignite"    => "#ff4400",
+            "Frozen"    => "#44ccff",
+            "Freeze"    => "#44ccff",
+            "Shocked"   => "#ffff44",
+            "Poisoned"  => "#44ff44",
+            "Bleeding"  => "#ff4444",
+            "Leech" or "LeechMana" => TransferEffectRegistry.GetConfig(name).TransferColor,
+            _           => "#88ccff",
         };
     }
 
@@ -1044,7 +1045,20 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
         }
     }
 
-    public string ManaBarColor => MaxMana > 0 ? "#cc44cc" : "#444";
+    private string _manaBarColor = "#cc44cc";
+    public string ManaBarColor
+    {
+        get => _manaBarColor;
+        set => SetField(ref _manaBarColor, value);
+    }
+
+    private string _manaBarBorderBrush = "#333";
+    public string ManaBarBorderBrush
+    {
+        get => _manaBarBorderBrush;
+        set => SetField(ref _manaBarBorderBrush, value);
+    }
+
     public string ManaLabelColor => MaxMana > 0 ? "#999" : "#444";
 
     private string SexDisplay => Sex switch { "F" => "Female", "M" => "Male", _ => "None" };

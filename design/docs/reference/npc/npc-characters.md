@@ -218,7 +218,7 @@ A massive, ancient treant-like elf druid whose body is half-tree and half-human:
 
 <img src="portraits/ser-garrick-dawnshield.png" alt="Ser Garrick Dawnshield" width="150"/>
 
-Ser Garrick Dawnshield is a towering paladin clad in polished silver plate marked with the sigil of Heaven. Once a knight of the Silver Basilica, Garrick survived the Fall of Black Hollow where an entire battalion was consumed by demonic fire. Since then, he wanders the realm seeking signs of infernal corruption. Though feared for his unwavering zeal, those he protects speak of his kindness toward the weak and merciless fury toward evil.
+Ser Garrick Dawnshield is a towering paladin clad in polished silver plate marked with the sigil of Aethelion. Once a knight of the Silver Basilica, Garrick survived the Fall of Black Hollow where an entire battalion was consumed by demonic fire. Since then, he wanders the realm seeking signs of infernal corruption. Though feared for his unwavering zeal, those he protects speak of his kindness toward the weak and merciless fury toward evil.
 
 He carries the massive warhammer *Judicator*, a relic said to glow brighter near undead and demons. Garrick believes suffering is the forge through which true virtue is tempered.
 
