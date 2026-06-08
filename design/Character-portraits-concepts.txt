@@ -1,6 +1,4 @@
-These are strong character concepts, but if you want a coherent portrait set, I would tighten a few art-direction rules first:
-
-All portraits should use the same golden D&D-style ornamental frame.
+All portraits should use the same silver D&D-style ornamental frame.
 Portrait orientation should be vertical (roughly 1024×1536 or 1536×2304).
 Characters should be shown from mid-thigh or waist-up rather than full body so equipment and faces remain visible.
 Priests and clerics should wear genuine heavy plate armor with religious ornamentation, not robe-armor hybrids.
@@ -10,80 +8,48 @@ No modern fantasy-anime styling. Aim for realistic CRPG character art similar to
 The ornate silver D&D frames intact, but with a clear defined border so it is easy to follow and crop. Same size portraits.
 No names in the portrait. I know who is who.
 
-
-I would generate them individually or in small batches because combining all 16 into one generation usually causes style drift.
-
-Use these portrait prompts:
+-------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Old Man Kael — Blind Seer
-
 Ultra-realistic fantasy character portrait, elderly human priest, long wild white hair, blindfold covering milky white eyes, deeply weathered face filled with wisdom, heavy silver-blue plate armor engraved with celestial sun symbols, carrying an ancient gnarled staff covered in prayer beads, subtle divine glow around his hands, serene expression, golden D&D portrait frame, cathedral lighting, realistic, highly detailed, cinematic, vertical character sheet portrait.
 
 Greta Ironhand — Dwarf Smith
-
 Ultra-realistic fantasy portrait of a powerful dwarf woman blacksmith, muscular build, auburn braided hair, feminine and strong looking, soot-stained skin, rune-etched plate armor beneath a forge apron, holding a massive warhammer across her shoulder, forge fire illuminating her face, sparks in background, golden D&D portrait frame, realistic fantasy artwork, detailed metal textures, character sheet portrait.
 
 Shadowmere — Elf Rogue Leader
-
-Realistic dark fantasy female elf rogue, pale silver skin, piercing eyes, long black hair tied in a high warrior ponytail, elegant black and purple leather armor, twin daggers visible, confident and dangerous expression, moonlit city rooftops behind her, golden D&D portrait frame, cinematic shadows, realistic CRPG character art, highly detailed portrait.
-
-Merchant Vex — Kobold Trader
-
-Realistic fantasy kobold merchant, bright green scales, oversized curious eyes, mischievous grin, patchwork trader clothing with many pockets, magical trinkets and rings hanging everywhere, small merchant cart visible behind, warm marketplace atmosphere, golden D&D portrait frame, colorful detailed fantasy portrait, realistic creature design.
-
-Kaela Vornskald
-
-Ultra-realistic barbarian warrior woman, massive athletic physique, dark braided warrior hairstyle, fierce gray eyes, practical barbarian armor made of leather, fur and steel plates, carrying a huge great-sword, beautiful but intimidating, standing before snowy mountains, wind-blown hair, golden D&D portrait frame, realistic dark, highly detailed.
-
-High Priestess Luna
-
-Ultra-realistic mature human priestess, long flowing silver-white hair, wise blue-gray eyes, ornate silver and white heavy plate armor engraved with lunar symbols, elegant silver crown, wielding a ceremonial mace whose head is a glowing white-blue orb, standing beneath a radiant fantasy moon unlike Earth's moon, divine moonlight illuminating her armor, golden D&D portrait frame, realistic fantasy masterpiece, highly detailed.
+Realistic dark fantasy female elf rogue, pale silver skin, piercing eyes, long black hair tied in a high warrior ponytail, elegant black and purple leather armor, twin daggers visible, confident and dangerous expression, moonlit city rooftops behind her, cinematic shadows, realistic CRPG character art, highly detailed portrait.
 
 Lysander the Bard
-
-Realistic Gladefolk bard appearing youthful despite age, curly auburn hair, cheerful smile, colorful traveler clothing reinforced with light armor, carrying a beautifully crafted lute, maps and charms hanging from belt, warm tavern background, golden D&D portrait frame, realistic fantasy art, detailed character portrait.
+Realistic Gladefolk bard appearing youthful despite age, curly auburn hair, cheerful smile, colorful traveler clothing reinforced with light armor, carrying a beautifully crafted lute, maps and charms hanging from belt, warm tavern background, realistic fantasy art, detailed character portrait.
 
 Elder Treant
-
-Epic ancient treant druid portrait, towering half-tree half-elf being, bark skin, glowing green eyes, branches woven into hair, living armor of vines and roots, ancient wooden staff, forest spirits surrounding him, mystical ancient forest background, golden D&D portrait frame, highly detailed realistic fantasy artwork.
-
+Epic ancient treant druid portrait, towering half-tree half-elf being, bark skin, glowing green eyes, branches woven into hair, living armor of vines and roots, ancient wooden staff, forest spirits surrounding him, mystical ancient forest background, highly detailed realistic fantasy artwork.
 Ser Garrick Dawnshield
-
-Ultra-realistic human paladin, powerful build, polished silver plate armor, white tabard with golden sun emblem, carrying the massive warhammer Judicator, short dark hair and trimmed beard, unwavering heroic expression, cathedral light shining behind him, golden D&D portrait frame, realistic dark fantasy style.
+Ultra-realistic human paladin, powerful build, polished silver plate armor, white tabard with golden sun emblem, carrying the massive warhammer Judicator, short dark hair and trimmed beard, unwavering heroic expression, cathedral light shining behind him, realistic dark fantasy style.
 
 Vaelith Moonveil
-
-Ultra-realistic female high elf fighter-mage, long silver hair, glowing blue eyes, enchanted blue-black mithril armor, elegant longsword in one hand, arcane energy swirling around the other, magical runes floating around her, ancient ruins in background, golden D&D portrait frame, realistic fantasy masterpiece.
+Ultra-realistic female high elf fighter-mage, long silver hair, glowing blue eyes, enchanted blue-black mithril armor, elegant longsword in one hand, arcane energy swirling around the other, magical runes floating around her, ancient ruins in background, realistic fantasy masterpiece.
 
 Sister Elira Vane
-
-Ultra-realistic human cleric, calm compassionate face, long dark brown hair, ornate silver and white heavy plate armor marked with lunar symbols, carrying a silver mace and sacred censer, soft divine light surrounding her, standing beneath the Bright Moon, golden D&D portrait frame, realistic fantasy portrait, highly detailed.
+Ultra-realistic human cleric, calm compassionate face, long dark brown hair, ornate silver and white heavy plate armor marked with lunar symbols, carrying a silver mace and sacred censer, soft divine light surrounding her, standing beneath the Bright Moon, realistic fantasy portrait, highly detailed.
 
 Lord Aethor Valeborn
-
 Ultra-realistic male elf knight, long pale blond hair, noble expression, ornate silver-blue plate armor with faded heraldry, carrying the massive froststeel greatsword Winter Oath, snow and frost swirling around him, golden D&D portrait frame, realistic high fantasy portrait, detailed medieval armor.
 
 Finnick "Quickfingers" Bramblefoot
-
 Realistic Gladefolk rogue appearing like a clever young adventurer, messy brown hair, sly green eyes, dark leather armor beneath a travel cloak, twin daggers drawn, mischievous grin, shadowy medieval alley background, golden D&D portrait frame, realistic fantasy character art.
 
 Korg Stonefist
-
 Ultra-realistic orc berserker, enormous muscular body, green-gray skin covered in scars, cursed black iron chain mail fused into flesh, blood leaking from armor seams, carrying a gigantic maul, savage expression, stormy battlefield background, Dark Moon visible behind him as a glowing dark gray asteroid-like celestial body, golden D&D portrait frame, dark fantasy realism.
 
 Graveworm
-
-Ultra-realistic undead knight warlord, skeletal face with glowing blue eyes, frozen decayed armor fused with bone, holding the cursed sword Frostbite, cold mist and frost swirling around him, Dark Moon visible in the background, golden D&D portrait frame, realistic gothic fantasy artwork, highly detailed.
+Ultra-realistic undead knight warlord, skeletal face with glowing blue eyes, frozen decayed armor fused with bone, holding the cursed sword Frostbite, cold mist and frost swirling around him, Dark Moon visible in the background, realistic gothic fantasy artwork, highly detailed.
 
 Infernal Commander Maleth
+Ultra-realistic demon knight lord, towering horned demon clad in obsidian and brass armor, molten skin glowing through armor gaps, wielding the lightning lance Stormbringer, hellfire surrounding him, burning battlefield background, Dark Moon looming behind him, epic dark fantasy boss portrait, highly detailed realistic painting.
 
-Ultra-realistic demon knight lord, towering horned demon clad in obsidian and brass armor, molten skin glowing through armor gaps, wielding the lightning lance Stormbringer, hellfire surrounding him, burning battlefield background, Dark Moon looming behind him, golden D&D portrait frame, epic dark fantasy boss portrait, highly detailed realistic painting.
+
 
 One additional recommendation: keep the Bright Moon consistent across Luna, Elira, Garrick, and Kael, and keep the Dark Moon consistent across Korg, Graveworm, and Maleth. Treat them as recurring celestial objects in the setting rather than random background elements. That will make the portrait collection feel like it belongs to a single world.
 
-A dummy
-Dummy training portrait. A dummy torso on top of a stick with a few arrows and shooting disc markings.
-
-Golem
-A stone golem for training purposes. 
 
