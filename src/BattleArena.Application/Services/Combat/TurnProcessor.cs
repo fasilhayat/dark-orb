@@ -5,6 +5,7 @@ using Application.Models;
 using Application.Models.Combat;
 using Core.Entities;
 using Core.Entities.Enums;
+using System.Linq;
 
 internal class TurnProcessor
 {
@@ -168,22 +169,65 @@ internal class TurnProcessor
         {
             var speed = actorState.Character.EffectiveMovementSpeed;
             var from = actorState.EngagementRange;
-            actorState.EngagementRange = from switch
+
+            // Root / immobilize check — cannot move if movement is 0 or negative
+            if (speed <= 0 || actorState.Character.ActiveStatusEffects.Any(e => e.Type == StatusEffectType.Root))
             {
-                EngagementRange.Melee => EngagementRange.Short,
-                EngagementRange.Long => EngagementRange.Short,
-                EngagementRange.Short => EngagementRange.Melee,
-                _ => EngagementRange.Melee
-            };
+                await notify(new CombatLogEntry
+                {
+                    Tick = tick, ActorName = actorState.Character.Name,
+                    EventType = "SkippedTurn",
+                    Message = $"{actorState.Character.Name} is rooted and cannot move!"
+                });
+                actorState.Meter.IsActive = false;
+                await notify(_turnMeterProcessor.BuildAfterTurnEntry(actorState, tick, TurnmeterState.TurnThreshold));
+                return null;
+            }
+
+            // Every 30 ft of effective speed = 1 band of movement
+            var bands = Math.Max(1, speed / 30);
+            var to = from;
+            for (var b = 0; b < bands; b++)
+                to = to switch
+                {
+                    EngagementRange.Melee => EngagementRange.Short,
+                    EngagementRange.Short => EngagementRange.Long,
+                    EngagementRange.Long => EngagementRange.Melee,
+                    _ => EngagementRange.Melee
+                };
+            actorState.EngagementRange = to;
+
             await notify(new CombatLogEntry
             {
                 Tick = tick, ActorName = actorState.Character.Name,
                 EventType = "Move",
-                Message = $"{actorState.Character.Name} moves 15 ft ({from} → {actorState.EngagementRange}). Speed: {speed} ft"
+                Message = $"{actorState.Character.Name} moves {speed} ft ({from} → {to})."
             });
-            actorState.Meter.IsActive = false;
-            await notify(_turnMeterProcessor.BuildAfterTurnEntry(actorState, tick, TurnmeterState.TurnThreshold));
-            return null;
+
+            // Deduct TM for moving, then continue choosing an attack
+            const int MoveTmCost = 30;
+            actorState.Meter.CurrentValue = Math.Max(0, actorState.Meter.CurrentValue - MoveTmCost);
+            attackSource = await decisionSource.ChooseAttackAsync(
+                actorState.Character, actorState.AttackSource,
+                enemies.Select(s => s.Character).ToList(), allies, tick, ct);
+            if (attackSource is null)
+            {
+                actorState.Meter.IsActive = false;
+                await notify(_turnMeterProcessor.BuildAfterTurnEntry(actorState, tick, TurnmeterState.TurnThreshold));
+                return null;
+            }
+            if (attackSource is MoveIntent)
+            {
+                await notify(new CombatLogEntry
+                {
+                    Tick = tick, ActorName = actorState.Character.Name,
+                    EventType = "SkippedTurn",
+                    Message = $"{actorState.Character.Name} tries to move again but has no TM left."
+                });
+                actorState.Meter.IsActive = false;
+                await notify(_turnMeterProcessor.BuildAfterTurnEntry(actorState, tick, TurnmeterState.TurnThreshold));
+                return null;
+            }
         }
 
         var isSpell = attackSource is Spell;

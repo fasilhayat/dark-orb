@@ -962,18 +962,18 @@ No UI changes.
 
 # Acceptance Criteria
 
-- [ ] Movement system options analyzed
-- [ ] Distance-band approach evaluated and recommended
-- [ ] Race mobility model proposed
-- [ ] Armor mobility model proposed
-- [ ] Class mobility model proposed
-- [ ] Spell movement modifiers analyzed
-- [ ] Equipment modifiers analyzed
-- [ ] Deity influence opportunities documented
-- [ ] Fear and flee systems documented
-- [ ] Range system implications documented
-- [ ] AI impact documented
-- [ ] Replay impact documented
-- [ ] Data model proposal created
-- [ ] Recommended implementation path identified
-- [ ] Awaiting user approval before development
+- [x] Movement system options analyzed
+- [x] Distance-band approach evaluated and recommended
+- [x] Race mobility model proposed
+- [x] Armor mobility model proposed
+- [x] Class mobility model proposed
+- [x] Spell movement modifiers analyzed
+- [x] Equipment modifiers analyzed
+- [x] Deity influence opportunities documented
+- [x] Fear and flee systems documented
+- [x] Range system implications documented
+- [x] AI impact documented
+- [x] Replay impact documented
+- [x] Data model proposal created
+- [x] Recommended implementation path identified
+- [x] Awaiting user approval before development
