@@ -5,7 +5,9 @@
     { "name": "Elf",       "baseMovementSpeed": 35, "feats": [ { "name": "Magic Resistance", "resistances": [ { "type": "Magic", "value": 20 } ] } ] },
     { "name": "Undead",    "baseMovementSpeed": 30 },
     { "name": "Gladefolk", "baseMovementSpeed": 30 },
-    { "name": "Dwarf",     "baseMovementSpeed": 25, "feats": [ { "name": "Poison Resistance", "resistances": [ { "type": "Poison", "value": 20 } ] } ] }
+    { "name": "Dwarf",     "baseMovementSpeed": 25, "feats": [ { "name": "Poison Resistance", "resistances": [ { "type": "Poison", "value": 20 } ] } ] },
+    { "name": "Demon",     "baseMovementSpeed": 30 },
+    { "name": "Kobold",    "baseMovementSpeed": 30 }
   ],
 
   "weapons": [
@@ -62,25 +64,25 @@
   "spells": [
     {
       "name": "Fireball",
-      "school": "Evocation", "damageDie": "D6", "damageCount": 3,
+      "school": "Stormcraft", "damageDie": "D6", "damageCount": 3,
       "damageType": "Fire", "attackBonus": 2,
       "spellLevel": 3, "turnMeterCost": 90, "manaCost": 50
     },
     {
       "name": "Ice Bolt",
-      "school": "Evocation", "damageDie": "D8", "damageCount": 2,
+      "school": "Stormcraft", "damageDie": "D8", "damageCount": 2,
       "damageType": "Ice", "attackBonus": 2,
       "spellLevel": 2, "turnMeterCost": 80, "manaCost": 35
     },
     {
       "name": "Shock",
-      "school": "Evocation", "damageDie": "D6", "damageCount": 2,
+      "school": "Stormcraft", "damageDie": "D6", "damageCount": 2,
       "damageType": "Lightning", "attackBonus": 2,
       "spellLevel": 2, "turnMeterCost": 75, "manaCost": 20
     },
     {
       "name": "Static Shock",
-      "school": "Evocation", "damageDie": "D6", "damageCount": 1,
+      "school": "Stormcraft", "damageDie": "D6", "damageCount": 1,
       "damageType": "Lightning", "attackBonus": 2,
       "spellLevel": 2, "turnMeterCost": 80, "manaCost": 30,
       "onHitEffects": [
@@ -89,19 +91,19 @@
     },
     {
       "name": "Smite",
-      "school": "Evocation", "damageDie": "D8", "damageCount": 2,
+      "school": "Stormcraft", "damageDie": "D8", "damageCount": 2,
       "damageType": "Holy", "attackBonus": 2,
       "spellLevel": 2, "turnMeterCost": 80, "manaCost": 35
     },
     {
       "name": "Heal",
-      "school": "Healing", "damageDie": "D8", "damageCount": 2,
+      "school": "Deity", "damageDie": "D8", "damageCount": 2,
       "damageType": "Healing", "attackBonus": 0,
       "spellLevel": 2, "turnMeterCost": 80, "manaCost": 25
     },
     {
       "name": "Mass Heal",
-      "school": "Healing", "damageDie": "D6", "damageCount": 3,
+      "school": "Deity", "damageDie": "D6", "damageCount": 3,
       "damageType": "Healing", "attackBonus": 0,
       "spellLevel": 4, "turnMeterCost": 100, "manaCost": 50
     },
@@ -131,6 +133,42 @@
       "school": "Deity", "damageDie": "D4", "damageCount": 0,
       "damageType": "None", "attackBonus": 0,
       "spellLevel": 1, "turnMeterCost": 60, "manaCost": 10
+    },
+    {
+      "name": "Magic Missile",
+      "school": "Stormcraft", "damageDie": "D4", "damageCount": 3,
+      "damageType": "Force", "attackBonus": 2,
+      "spellLevel": 1, "turnMeterCost": 60, "manaCost": 10
+    },
+    {
+      "name": "Shield",
+      "school": "Aegis", "damageDie": "D4", "damageCount": 0,
+      "damageType": "None", "attackBonus": 0,
+      "spellLevel": 1, "turnMeterCost": 60, "manaCost": 5
+    },
+    {
+      "name": "Mirror Image",
+      "school": "Mirage", "damageDie": "D4", "damageCount": 0,
+      "damageType": "None", "attackBonus": 0,
+      "spellLevel": 2, "turnMeterCost": 70, "manaCost": 12
+    },
+    {
+      "name": "Blink",
+      "school": "Mirage", "damageDie": "D4", "damageCount": 0,
+      "damageType": "None", "attackBonus": 0,
+      "spellLevel": 3, "turnMeterCost": 80, "manaCost": 20
+    },
+    {
+      "name": "Lightning Bolt",
+      "school": "Stormcraft", "damageDie": "D6", "damageCount": 3,
+      "damageType": "Lightning", "attackBonus": 2,
+      "spellLevel": 3, "turnMeterCost": 80, "manaCost": 25
+    },
+    {
+      "name": "Invisibility",
+      "school": "Mirage", "damageDie": "D4", "damageCount": 0,
+      "damageType": "None", "attackBonus": 0,
+      "spellLevel": 2, "turnMeterCost": 70, "manaCost": 12
     }
   ],
 
@@ -167,7 +205,7 @@
       "strikeRating": 15, "turnSpeed": 8,
       "maxHitPoints": 45, "maxMana": 90,
       "equipment": { "chest": "Mithril Chain", "rightHand": "Long Sword" },
-      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Static Shock", "Mind Siphon"]
+      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Static Shock", "Magic Missile", "Shield", "Mirror Image", "Blink", "Lightning Bolt", "Invisibility"]
     },
     {
       "name": "Sister Elira Vane", "level": 7,
@@ -176,7 +214,7 @@
       "strikeRating": 17, "turnSpeed": 8,
       "maxHitPoints": 49, "maxMana": 70,
       "equipment": { "chest": "Padded Armor", "rightHand": "Mace" },
-      "memorizedSpells": ["Smite", "Heal"]
+      "memorizedSpells": ["Chasten", "Heal"]
     },
     {
       "name": "Lord Aethor Valeborn", "level": 11,
@@ -195,64 +233,61 @@
       "equipment": { "chest": "Studded Leather", "rightHand": "Dagger" }
     },
     {
-      "name": "Old Man Kael", "level": 14,
-      "strength": 10, "dexterity": 12, "stamina": 10, "intelligence": 18, "wisdom": 16, "charisma": 13,
-      "race": "Human", "classId": 8, "className": "Fighter", "sex": "M",
-      "strikeRating": 14, "turnSpeed": 7,
-      "maxHitPoints": 55, "maxMana": 100,
-      "equipment": { "chest": "Padded Armor", "rightHand": "Long Sword" },
-      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Mind Siphon"]
+      "name": "Old Man Kael", "level": 8,
+      "strength": 9, "dexterity": 8, "stamina": 11, "intelligence": 15, "wisdom": 19, "charisma": 14,
+      "race": "Human", "classId": 4, "className": "Priest", "sex": "M",
+      "strikeRating": 17, "turnSpeed": 6,
+      "maxHitPoints": 40, "maxMana": 60,
+      "equipment": { "chest": "Padded Armor", "rightHand": "Mace" }
     },
     {
-      "name": "Greta Ironhand", "level": 9,
-      "strength": 17, "dexterity": 13, "stamina": 16, "intelligence": 10, "wisdom": 10, "charisma": 12,
-      "race": "Dwarf", "classId": 1, "className": "Barbarian", "sex": "F",
-      "strikeRating": 14, "turnSpeed": 6,
-      "maxHitPoints": 110,
-      "equipment": { "chest": "Chain Mail", "rightHand": "War Hammer" }
+      "name": "Greta Ironhand", "level": 12,
+      "strength": 19, "dexterity": 10, "stamina": 18, "intelligence": 10, "wisdom": 13, "charisma": 8,
+      "race": "Dwarf", "classId": 8, "className": "Fighter", "sex": "F",
+      "strikeRating": 13, "turnSpeed": 7,
+      "maxHitPoints": 120,
+      "equipment": { "chest": "Chain Mail", "rightHand": "War Hammer", "offHand": "Mace" }
     },
     {
       "name": "Merchant Vex", "level": 6,
-      "strength": 10, "dexterity": 16, "stamina": 12, "intelligence": 15, "wisdom": 11, "charisma": 14,
-      "race": "Human", "classId": 9, "className": "Rogue", "sex": "M",
-      "strikeRating": 16, "turnSpeed": 11,
-      "maxHitPoints": 35,
-      "equipment": { "chest": "Studded Leather", "rightHand": "Dagger" }
+      "strength": 8, "dexterity": 17, "stamina": 10, "intelligence": 14, "wisdom": 10, "charisma": 14,
+      "race": "Kobold", "classId": 9, "className": "Rogue", "sex": "F",
+      "strikeRating": 18, "turnSpeed": 11,
+      "maxHitPoints": 24,
+      "equipment": { "chest": "Padded Armor", "rightHand": "Dagger" }
     },
     {
-      "name": "High Priestess Luna", "level": 12,
-      "strength": 16, "dexterity": 12, "stamina": 14, "intelligence": 14, "wisdom": 19, "charisma": 17,
+      "name": "High Priestess Luna", "level": 14,
+      "strength": 16, "dexterity": 11, "stamina": 13, "intelligence": 15, "wisdom": 19, "charisma": 17,
       "race": "Human", "classId": 4, "className": "Priest", "sex": "F",
-      "strikeRating": 17, "turnSpeed": 8,
-      "maxHitPoints": 70, "maxMana": 120,
+      "strikeRating": 16, "turnSpeed": 8,
+      "maxHitPoints": 84, "maxMana": 120,
       "equipment": { "chest": "Plate Armor", "rightHand": "Great Mace" },
       "memorizedSpells": ["Smite", "Flame Strike", "Heal", "Mass Heal", "Bless", "Chasten"]
     },
     {
-      "name": "Lysander the Bard", "level": 8,
-      "strength": 10, "dexterity": 15, "stamina": 12, "intelligence": 14, "wisdom": 12, "charisma": 19,
-      "race": "Human", "classId": 8, "className": "Fighter", "sex": "M",
-      "strikeRating": 15, "turnSpeed": 9,
-      "maxHitPoints": 48, "maxMana": 60,
-      "equipment": { "chest": "Studded Leather", "rightHand": "Short Sword" },
-      "memorizedSpells": ["Heal", "Shock"]
+      "name": "Lysander the Bard", "level": 7,
+      "strength": 8, "dexterity": 18, "stamina": 13, "intelligence": 14, "wisdom": 11, "charisma": 18,
+      "race": "Gladefolk", "classId": 6, "className": "Bard", "sex": "M",
+      "strikeRating": 17, "turnSpeed": 10,
+      "maxHitPoints": 35, "maxMana": 50,
+      "equipment": { "chest": "Studded Leather", "rightHand": "Short Sword", "offHand": "Dagger" }
     },
     {
-      "name": "Elder Treant", "level": 13,
-      "strength": 20, "dexterity": 6, "stamina": 19, "intelligence": 12, "wisdom": 14, "charisma": 10,
-      "race": "Human", "classId": 1, "className": "Barbarian", "sex": "M",
-      "strikeRating": 12, "turnSpeed": 4,
-      "maxHitPoints": 190,
-      "equipment": { "chest": "Hide Armor", "rightHand": "Maul" }
+      "name": "Elder Treant", "level": 20,
+      "strength": 14, "dexterity": 12, "stamina": 16, "intelligence": 16, "wisdom": 20, "charisma": 15,
+      "race": "Elf", "classId": 7, "className": "Druid", "sex": "M",
+      "strikeRating": 15, "turnSpeed": 5,
+      "maxHitPoints": 160, "maxMana": 100,
+      "equipment": { "chest": "Padded Armor", "rightHand": "Mace" }
     },
     {
-      "name": "Infernal Commander Maleth", "level": 16,
-      "strength": 20, "dexterity": 14, "stamina": 18, "intelligence": 16, "wisdom": 12, "charisma": 18,
-      "race": "Human", "classId": 3, "className": "Paladin", "sex": "M",
-      "strikeRating": 16, "turnSpeed": 7,
-      "maxHitPoints": 140, "maxMana": 80,
-      "equipment": { "chest": "Plate Armor", "rightHand": "Great Sword" },
-      "memorizedSpells": ["Smite"]
+      "name": "Infernal Commander Maleth", "level": 18,
+      "strength": 22, "dexterity": 12, "stamina": 19, "intelligence": 15, "wisdom": 10, "charisma": 17,
+      "race": "Demon", "classId": 2, "className": "Knight", "sex": "M",
+      "strikeRating": 12, "turnSpeed": 6,
+      "maxHitPoints": 180,
+      "equipment": { "chest": "Plate Armor", "rightHand": "Great Sword" }
     }
   ],
 
@@ -290,7 +325,7 @@
       "strikeRating": 14, "turnSpeed": 6,
       "maxHitPoints": 300, "maxMana": 100,
       "equipment": { "chest": "Plate Armor", "rightHand": "Long Sword" },
-      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Static Shock", "Smite", "Heal", "Mass Heal"]
+      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Static Shock", "Smite", "Heal", "Mass Heal", "Mind Siphon"]
     },
     {
       "name": "Practice Dummy", "level": 10,

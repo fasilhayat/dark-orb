@@ -107,7 +107,7 @@ These classes **do not** use spell schools as their primary identity system. Sch
 
 Deities are defined in [`../reference/deities.md`](../reference/deities.md). The authoritative list:
 
-#### Good deities (Sky / Heaven aligned)
+#### Light deities (Sky / Heaven aligned)
 
 | Deity | Title | Domain |
 |-------|-------|--------|
@@ -116,15 +116,15 @@ Deities are defined in [`../reference/deities.md`](../reference/deities.md). The
 | **Celestara** | The weaver of destiny | Destiny, Time |
 | **Lunara** | The silver moon goddess | Moon, Magic, Tides |
 
-#### Neutral deity (Boundary / Time aligned)
+#### Twilight deity (Boundary / Time aligned)
 
 | Deity | Title | Domain |
 |-------|-------|--------|
 | **Chronara** | The keeper of time | Time, Stars, Balance |
 
-Chronara watches stars ignite and shadows burn out without ever taking a side. She is the neutral fulcrum between the celestial and the void. Her associations with stars and the night sky underpin future night-sky buff mechanics tied to constellations, moon phases, and star visibility.
+Chronara watches stars ignite and shadows burn out without ever taking a side. She is the twilight fulcrum between the celestial and the void. Her associations with stars and the night sky underpin future night-sky buff mechanics tied to constellations, moon phases, and star visibility.
 
-#### Evil deities (Elemental / Shadow aligned)
+#### Dark deities (Elemental / Shadow aligned)
 
 | Deity | Title | Domain |
 |-------|-------|--------|
@@ -181,7 +181,7 @@ Both systems coexist. Schools remain fully intact and functional for non-divine 
 
 - Divine counterpart to Smite for non-martial casters
 - Available to: Priest (Level 1+), Druid (Level 1+)
-- Default bound to Good deities
+- Default bound to Light deities
 - Supports `DEITY_UNBOUND` fallback
 - Mirrors Smite progression structure
 

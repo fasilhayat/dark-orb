@@ -46,7 +46,7 @@ ON CONFLICT (name) DO NOTHING;
 
 
 INSERT INTO arena_data.deity_alignment (name) VALUES
-    ('Light'), ('Dark')
+    ('Light'), ('Dark'), ('Twilight')
 ON CONFLICT (name) DO NOTHING;
 
 
@@ -486,14 +486,15 @@ JOIN arena_data.race r ON r.name = src.race_name;
 INSERT INTO arena_data.deity (name, alignment_id, description, domain)
 SELECT src.name, a.id, src.description, src.domain
 FROM (VALUES
-    ('Heaven',       'Light', 'The celestial realm of pure light and order.',       'Heaven, Light'),
-    ('Star',         'Light', 'The guiding stars that illuminate fate.',            'Stars, Fate'),
-    ('Constellations', 'Light', 'The woven patterns of destiny in the night sky.',  'Destiny, Time'),
-    ('Moon',         'Light', 'The silver orb that governs tides and magic.',       'Moon, Magic, Tides'),
-    ('Fire',         'Dark',  'The consuming flame of destruction and rebirth.',     'Fire, Destruction'),
-    ('Darkness',     'Dark',  'The void from which all shadows are born.',           'Darkness, Secrets'),
-    ('Smoke',        'Dark',  'The veil of deception and obscured truths.',          'Deception, Illusion'),
-    ('Shadow',       'Dark',  'The realm between light and dark, home to assassins.','Shadow, Stealth')
+    ('Aethelion',  'Light',   'The radiant father of pure light and order.',                'Heaven, Light'),
+    ('Astrara',    'Light',   'The guiding star mother who illuminates fate.',               'Stars, Fate'),
+    ('Celestara',  'Light',   'The weaver of destiny in the night sky.',                     'Destiny, Time'),
+    ('Lunara',     'Light',   'The silver moon goddess governing tides and magic.',          'Moon, Magic, Tides'),
+    ('Ignaroth',   'Dark',    'The burning destroyer of flame and destruction.',             'Fire, Destruction'),
+    ('Umbraex',    'Dark',    'The void lord from which all shadows are born.',              'Darkness, Secrets'),
+    ('Veparix',    'Dark',    'The deceptive mist of illusion and obscured truths.',         'Deception, Illusion'),
+    ('Noctivane',  'Dark',    'The shadow assassin god of stealth and the realm between.',   'Shadow, Stealth'),
+    ('Chronara',   'Twilight', 'The keeper of time who watches stars ignite and shadows burn out without ever taking a side.', 'Time, Stars, Balance')
 ) AS src(name, alignment_name, description, domain)
 JOIN arena_data.deity_alignment a ON a.name = src.alignment_name;
 
@@ -524,7 +525,7 @@ FROM (VALUES
     ('Hound', 'Paladin'), ('Hound', 'Fighter'), ('Hound', 'Barbarian'),
     ('Panther', 'Rogue'),
     ('Boar', 'Fighter'), ('Boar', 'Barbarian'),
-    ('Dragon', 'Mage'), ('Dragon', 'Paladin'), ('Dragon', 'Fighter'), ('Dragon', 'Barbarian'),
+    ('Dragon', 'Mage'), ('Dragon', 'Paladin'), ('Dragon', 'Knight'), ('Dragon', 'Priest'),
     ('Bat', 'Priest'), ('Bat', 'Mage'),
     ('Spider', 'Priest'), ('Spider', 'Mage')
 ) AS src(pet_name, class_name)
@@ -811,7 +812,7 @@ FROM (VALUES
     ('Plate Armor',      'The pinnacle of mortal armor craft. Articulated steel plates covering every inch of the body. Only knights and wealthy lords can afford it.',
                                                                                                    18, 'Heavy',  0,  TRUE,  15, 'Common'),
     -- Epic armor
-    ('Knight''s Honor',  'Ceremonial splint armor blessed by the priests of Heaven. Its enameled surface depicts the Battle of the Silver Plains in exquisite detail.',
+    ('Knight''s Honor',  'Ceremonial splint armor blessed by the priests of Aethelion. Its enameled surface depicts the Battle of the Silver Plains in exquisite detail.',
                                                                                                    17, 'Heavy',  0, TRUE,  15, 'Epic'),
     ('Mithril Chain',    'A shimmering chain shirt forged from mithril, the lightest metal known to dwarven craft. It flows like silk but protects like steel.',
                                                                                                    14, 'Medium', 99, FALSE, 0,  'Epic'),
@@ -1375,7 +1376,7 @@ BEGIN
     SELECT r.id, c.id, 'Ser Garrick Dawnshield', 12, 'M',
         18, 11, 15, 11, 13, 17,
         96, 96, 13, 8, 0, 60,
-        'A towering paladin clad in polished silver plate bearing the sigil of Heaven. He wields the warhammer Judicator.'
+        'A towering paladin clad in polished silver plate bearing the sigil of Aethelion. He wields the warhammer Judicator.'
     FROM arena_data.race r, arena_data.class c
     WHERE r.name = 'Human' AND c.name = 'Paladin'
     RETURNING id INTO v_id;
@@ -1442,6 +1443,8 @@ BEGIN
     SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Ice Bolt';
     INSERT INTO arena_data.character_spell (character_id, spell_id)
     SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Shock';
+    INSERT INTO arena_data.character_spell (character_id, spell_id)
+    SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Static Shock';
     INSERT INTO arena_data.character_spell (character_id, spell_id)
     SELECT v_id, s.id FROM arena_data.spell s WHERE s.name = 'Magic Missile';
     INSERT INTO arena_data.character_spell (character_id, spell_id)

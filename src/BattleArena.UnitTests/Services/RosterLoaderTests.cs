@@ -74,7 +74,7 @@ public class RosterLoaderTests : IDisposable
 
         var data = RosterLoader.ForceLoad(path);
 
-        Assert.Equal(6, data.Heroes.Count);
+        Assert.Equal(13, data.Heroes.Count);
         Assert.Equal(3, data.Enemies.Count);
         Assert.Equal(2, data.Dummies.Count);
 
@@ -85,6 +85,13 @@ public class RosterLoaderTests : IDisposable
         Assert.Contains(data.Heroes, c => c.Name == "Sister Elira Vane");
         Assert.Contains(data.Heroes, c => c.Name == "Lord Aethor Valeborn");
         Assert.Contains(data.Heroes, c => c.Name == "Finnick Bramblefoot");
+        Assert.Contains(data.Heroes, c => c.Name == "Old Man Kael");
+        Assert.Contains(data.Heroes, c => c.Name == "Greta Ironhand");
+        Assert.Contains(data.Heroes, c => c.Name == "Merchant Vex");
+        Assert.Contains(data.Heroes, c => c.Name == "High Priestess Luna");
+        Assert.Contains(data.Heroes, c => c.Name == "Lysander the Bard");
+        Assert.Contains(data.Heroes, c => c.Name == "Elder Treant");
+        Assert.Contains(data.Heroes, c => c.Name == "Infernal Commander Maleth");
 
         // ── Enemy names ─────────────────────────────────────────────────────────
         Assert.Contains(data.Enemies, c => c.Name == "Korg Stonefist");
@@ -115,7 +122,7 @@ public class RosterLoaderTests : IDisposable
 
         // ── Vaelith Moonveil — arcane fighter (spellcaster) ─────────────────────
         var vaelith = data.Heroes.First(c => c.Name == "Vaelith Moonveil");
-        Assert.Equal(11, vaelith.MemorizedSpells.Count);
+        Assert.Equal(10, vaelith.MemorizedSpells.Count);
         Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Fireball");
         Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Ice Bolt");
         Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Shock");
@@ -126,7 +133,6 @@ public class RosterLoaderTests : IDisposable
         Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Blink");
         Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Lightning Bolt");
         Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Invisibility");
-        Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Mind Siphon");
         Assert.Equal(90,   vaelith.MaxMana);
         Assert.Equal(90,   vaelith.CurrentMana);
         Assert.Equal("Elf", vaelith.Race?.Name);
@@ -136,15 +142,9 @@ public class RosterLoaderTests : IDisposable
 
         // ── Sister Elira Vane — priest (healer) ─────────────────────────────────
         var elira = data.Heroes.First(c => c.Name == "Sister Elira Vane");
-        Assert.Equal(8, elira.MemorizedSpells.Count);
-        Assert.Contains(elira.MemorizedSpells, s => s.Name == "Heal");
-        Assert.Contains(elira.MemorizedSpells, s => s.Name == "Mass Heal");
-        Assert.Contains(elira.MemorizedSpells, s => s.Name == "Bless");
-        Assert.Contains(elira.MemorizedSpells, s => s.Name == "Cure Light Wounds");
-        Assert.Contains(elira.MemorizedSpells, s => s.Name == "Cure Serious Wounds");
-        Assert.Contains(elira.MemorizedSpells, s => s.Name == "Command");
+        Assert.Equal(2, elira.MemorizedSpells.Count);
         Assert.Contains(elira.MemorizedSpells, s => s.Name == "Chasten");
-        Assert.Contains(elira.MemorizedSpells, s => s.Name == "Prayer");
+        Assert.Contains(elira.MemorizedSpells, s => s.Name == "Heal");
         Assert.Equal(70, elira.MaxMana);
         Assert.Equal("Mace", elira.Equipment.RightHand!.Name);
         Assert.Equal("Padded Armor", elira.Equipment.Chest!.Name);

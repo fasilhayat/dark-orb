@@ -5,16 +5,19 @@
 
 | # | Deity Name | Alignment | Court | Domain | Symbol |
 |---|-----------|:---------:|:-----:|--------|--------|
-| 1 | **Aethelion** | Good | Sky (Heaven) | Heaven, Light — celestial realm of pure light and order | Radiant celestial crown with halo and light rays |
-| 2 | **Astrara** | Good | Sky (Heaven) | Stars, Fate — guiding stars illuminating fate | Five-pointed guiding star sigil |
-| 3 | **Celestara** | Good | Sky (Heaven) | Destiny, Time — woven destiny patterns in night sky | Connected star-map with lines |
-| 4 | **Lunara** | Good | Sky (Heaven) | Moon, Magic, Tides — silver orb governing tides and magic | Silver crescent with arcane curves |
-| 5 | **Ignaroth** | Evil | Shadow (Elemental) | Fire, Destruction — consuming flame of destruction and rebirth | Consuming flame with rebirth spiral |
-| 6 | **Umbraex** | Evil | Shadow (Shadow) | Darkness, Secrets — void from which shadows are born | Eclipse with empty eye and shadow rings |
-| 7 | **Veparix** | Evil | Shadow (Shadow) | Deception, Illusion — veil of deception and obscured truths | Layered drifting wisps forming veil |
-| 8 | **Noctivane** | Evil | Shadow (Shadow) | Shadow, Stealth — realm between light/dark, home to assassins | Stealth crescent with concealed blade |
+| 1 | **Aethelion** | Light | Sky (Heaven) | Heaven, Light — celestial realm of pure light and order | Radiant celestial crown with halo and light rays |
+| 2 | **Astrara** | Light | Sky (Heaven) | Stars, Fate — guiding stars illuminating fate | Five-pointed guiding star sigil |
+| 3 | **Celestara** | Light | Sky (Heaven) | Destiny, Time — woven destiny patterns in night sky | Connected star-map with lines |
+| 4 | **Lunara** | Light | Sky (Heaven) | Moon, Magic, Tides — silver orb governing tides and magic | Silver crescent with arcane curves |
+| 5 | **Ignaroth** | Dark | Shadow (Elemental) | Fire, Destruction — consuming flame of destruction and rebirth | Consuming flame with rebirth spiral |
+| 6 | **Umbraex** | Dark | Shadow (Shadow) | Darkness, Secrets — void from which shadows are born | Eclipse with empty eye and shadow rings |
+| 7 | **Veparix** | Dark | Shadow (Shadow) | Deception, Illusion — veil of deception and obscured truths | Layered drifting wisps forming veil |
+| 8 | **Noctivane** | Dark | Shadow (Shadow) | Shadow, Stealth — realm between light/dark, home to assassins | Stealth crescent with concealed blade |
+| 9 | **Chronara** | Twilight | Boundary (Time) | Time, Stars, Balance — keeper of time who watches without taking sides | Hourglass with star-filled sands |
 
-## Good Deities (Sky Court)
+> **Alignment aliases:** Light = Good, Dark = Evil, Twilight = Neutral
+
+## Light Deities (Sky Court)
 
 | Deity | Title | Domain | Worshipped By |
 |-------|-------|--------|---------------|
@@ -23,7 +26,7 @@
 | **Celestara** | The weaver of destiny | Destiny, Time | Historians, prophets, time-keepers |
 | **Lunara** | The silver moon goddess | Moon, Magic, Tides | Mages, seers, priests of the moon |
 
-## Evil Deities (Shadow Court)
+## Dark Deities (Shadow Court)
 
 | Deity | Title | Domain | Worshipped By |
 |-------|-------|--------|---------------|
@@ -31,6 +34,12 @@
 | **Umbraex** | The void lord | Darkness, Secrets | Spies, occultists, keepers of forbidden knowledge |
 | **Veparix** | The deceptive mist | Deception, Illusion | Tricksters, spies, illusionists |
 | **Noctivane** | The shadow assassin god | Shadow, Stealth | Assassins, thieves, shadow mages |
+
+## Twilight Deities (Boundary)
+
+| Deity | Title | Domain | Worshipped By |
+|-------|-------|--------|---------------|
+| **Chronara** | The keeper of time | Time, Stars, Balance | Historians, prophets, time-keepers, those who seek balance |
 
 ## Deity Spell Metadata
 

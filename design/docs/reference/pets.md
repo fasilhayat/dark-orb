@@ -8,7 +8,7 @@
 |-----|-------------|:------:|:--:|:--:|----------------|----------------|---------------|
 | **Wolf** | A loyal pack hunter with sharp fangs. | 1D6 | 13 | 18 | **Pack Hunter** — +1 to hit when an ally is adjacent to the target. | Barbarian, Druid, Fighter, Paladin | — |
 | **Falcon** | A swift bird of prey that strikes from above. | 1D4 | 12 | 8 | **Dive Strike** — first attack each combat deals +1 damage die. | Barbarian, Druid, Fighter, Paladin | — |
-| **Eagle** | A majestic raptor with powerful talons. | 1D6 | 13 | 14 | **Keen Sight** — master gains +1 to Perception and ranged attack rolls. | Druid, Fighter, Paladin | — |
+| **Eagle** | A majestic raptor with powerful talons. | 1D6 | 13 | 14 | **Keen Sight** — master gains +1 to Perception and ranged attack rolls. | Barbarian, Fighter, Paladin | — |
 | **Hound** | A trained war dog with a keen nose. | 1D6 | 14 | 22 | **Tracker** — +1 to hit bleeding or wounded targets. | Barbarian, Fighter, Paladin | — |
 | **Panther** | A sleek black predator that hunts in darkness. | 1D8 | 14 | 26 | **Shadow Prowl** — first attack from stealth deals double damage. | Rogue | — |
 | **Boar** | A tusked beast with thick hide and fury. | 1D8 | 15 | 30 | **Fury** — deals +1D4 damage while below 50% HP. | Barbarian, Fighter | — |
