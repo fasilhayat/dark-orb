@@ -200,6 +200,7 @@ public partial class MainWindow : Window
 
         _combatParty1 = BuildParty(_team1);
         _combatParty2 = BuildParty(_team2);
+        _vm.EngagementRange = "Melee";
 
         PopulateCharacterCards(_combatParty1, _combatParty2);
     }
@@ -742,6 +743,16 @@ public partial class MainWindow : Window
                         if (!string.IsNullOrWhiteSpace(entry.SummonedPetName) && s.TryGet(entry.SummonedPetName) is null)
                         {
                             s.EnsurePet(entry.SummonedPetName, 20, entry.ActorName);
+                        }
+                        if (entry.EventType == "Move" && entry.Message is { } msg)
+                        {
+                            var arrow = "→ ";
+                            var idx = msg.LastIndexOf(arrow);
+                            if (idx >= 0)
+                            {
+                                var to = msg[(idx + arrow.Length)..].TrimEnd('.');
+                                _vm.EngagementRange = to;
+                            }
                         }
                     });
             }

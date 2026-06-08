@@ -1,6 +1,7 @@
 namespace BattleArena.Application.Interfaces;
 
 using Core.Entities;
+using Core.Entities.Enums;
 
 public interface IActionDecisionSource
 {
@@ -10,5 +11,6 @@ public interface IActionDecisionSource
         IReadOnlyList<Character> enemies,
         IReadOnlyList<Character> allies,
         int currentTick,
-        CancellationToken ct);
+        CancellationToken ct,
+        EngagementRange engagementRange = EngagementRange.Melee);
 }

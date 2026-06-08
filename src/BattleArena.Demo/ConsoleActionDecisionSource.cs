@@ -20,7 +20,8 @@ internal class ConsoleActionDecisionSource : IActionDecisionSource
         IReadOnlyList<Character> enemies,
         IReadOnlyList<Character> allies,
         int currentTick,
-        CancellationToken ct)
+        CancellationToken ct,
+        EngagementRange engagementRange = EngagementRange.Melee)
     {
         _redrawScreen(currentTick, actor.Name);
 

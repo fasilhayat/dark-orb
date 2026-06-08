@@ -46,9 +46,20 @@ public class AutoActionDecisionSource : IActionDecisionSource
         IReadOnlyList<Character> enemies,
         IReadOnlyList<Character> allies,
         int currentTick,
-        CancellationToken ct)
+        CancellationToken ct,
+        EngagementRange engagementRange = EngagementRange.Melee)
     {
         var weapon = actor.Equipment.RightHand;
+
+        // Reposition if weapon range doesn't match current engagement
+        if (weapon is not null && actor.MemorizedSpells.Count == 0)
+        {
+            var isRanged = weapon.AttackType == AttackType.Ranged;
+            var mismatch = isRanged ? engagementRange == EngagementRange.Melee
+                                   : engagementRange != EngagementRange.Melee;
+            if (mismatch)
+                return Task.FromResult<IAttackSource?>(new MoveIntent());
+        }
 
         var spells = actor.MemorizedSpells
             .Where(s => actor.CanCast(s) && IsUsefulLeech(s, actor) && IsEffectiveDamageSpell(s))

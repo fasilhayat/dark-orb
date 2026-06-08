@@ -148,9 +148,11 @@ internal class TurnProcessor
             .Select(s => s.Character).ToList();
 
         var decisionSource = actorState.PartyIndex == 0 ? _heroActionSource : _enemyActionSource;
+
         var attackSource = await decisionSource.ChooseAttackAsync(
             actorState.Character, actorState.AttackSource,
-            enemies.Select(s => s.Character).ToList(), allies, tick, ct);
+            enemies.Select(s => s.Character).ToList(), allies, tick, ct,
+            actorState.EngagementRange);
 
         if (attackSource is null)
         {

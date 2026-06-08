@@ -72,6 +72,32 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         set => SetField(ref _combatOver, value);
     }
 
+    private string _engagementRange = "";
+    public string EngagementRange
+    {
+        get => _engagementRange;
+        set
+        {
+            if (SetField(ref _engagementRange, value))
+            {
+                EngagementRangeColor = value switch
+                {
+                    "Melee" => "#ff4444",
+                    "Short" => "#ffaa00",
+                    "Long"  => "#44cc44",
+                    _       => "#666666"
+                };
+            }
+        }
+    }
+
+    private string _engagementRangeColor = "#666";
+    public string EngagementRangeColor
+    {
+        get => _engagementRangeColor;
+        set => SetField(ref _engagementRangeColor, value);
+    }
+
     private bool _waitingForNextTurn;
     public bool WaitingForNextTurn
     {
