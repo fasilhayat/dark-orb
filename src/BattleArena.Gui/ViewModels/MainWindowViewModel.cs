@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using BattleArena.Core.Entities;
@@ -800,7 +801,14 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
 
     public string HpDisplay => IsDead ? "" : $"{Math.Max(0, Hp)}/{MaxHp}";
     public string TmDisplay => $"{Tm}";
-    public string TmBorderBrush => PersistentBorderColor ?? (IsTmLocked ? "#ffffff" : "#333");
+    public string TmBorderBrush => IsTmLocked ? "#ffffff" : "#333";
+
+    private string _hpBarBorderBrush = "#333";
+    public string HpBarBorderBrush
+    {
+        get => _hpBarBorderBrush;
+        set => SetField(ref _hpBarBorderBrush, value);
+    }
 
     public string ManaDisplay => MaxMana > 0 ? $"{Math.Max(0, Mana)}" : "--";
     public string ActiveIndicator => IsDead ? "  " : "\u25b6 ";
@@ -837,6 +845,19 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
             return "#88ccff";
         }
     }
+
+    private const string ActiveGlowWhite = "#ffffff";
+    private const string ActiveGlowBoxShadowValue = "0 0 12 0 #aaffffff";
+
+    private bool _isActiveTurn;
+    public bool IsActiveTurn
+    {
+        get => _isActiveTurn;
+        set => SetField(ref _isActiveTurn, value);
+    }
+
+    public string ActiveGlowBorderBrush => IsActiveTurn ? ActiveGlowWhite : "transparent";
+    public string ActiveGlowBoxShadow => IsActiveTurn ? ActiveGlowBoxShadowValue : "none";
 
     private string? _borderFlashColor;
     public string? BorderFlashColor
@@ -1140,13 +1161,18 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
                 Raise(nameof(StatusLine));
                 Raise(nameof(HasStatusOverlay));
                 break;
+            case nameof(IsActiveTurn):
+                Raise(nameof(ActiveGlowBorderBrush));
+                Raise(nameof(ActiveGlowBoxShadow));
+                break;
             case nameof(BorderFlashColor):
                 Raise(nameof(BorderColor));
                 break;
             case nameof(PersistentBorderColor):
                 Raise(nameof(BorderColor));
-                Raise(nameof(TmBorderBrush));
                 UpdateTmPipes();
+                break;
+            case nameof(HpBarBorderBrush):
                 break;
             case nameof(ActiveEffects):
                 Raise(nameof(EffectsDisplay));

@@ -5,8 +5,11 @@
              Width="380" MinHeight="180">
   
 
-  <Border BorderBrush="{Binding BorderColor}" BorderThickness="2" CornerRadius="4"
-          Background="#1a1a2e" Padding="8" MinHeight="0">
+  <Border BorderBrush="{Binding ActiveGlowBorderBrush}"
+          BorderThickness="2" CornerRadius="6" Padding="3"
+          BoxShadow="{Binding ActiveGlowBoxShadow}">
+    <Border BorderBrush="{Binding BorderColor}" BorderThickness="2" CornerRadius="4"
+            Background="#1a1a2e" Padding="8" MinHeight="0">
     <Grid>
       <!-- Content layer -->
       <StackPanel Spacing="4">
@@ -136,7 +139,7 @@
         </Border>
 
         <!-- HP bar -->
-        <Border BorderBrush="#333" BorderThickness="1" CornerRadius="3" Background="#111" Height="20" ClipToBounds="True">
+        <Border BorderBrush="{Binding HpBarBorderBrush}" BorderThickness="1" CornerRadius="3" Background="#111" Height="20" ClipToBounds="True">
           <Grid>
             <Border Background="#111" CornerRadius="2" />
             <Border Background="{Binding HpBarColor}" CornerRadius="2"
@@ -179,5 +182,6 @@
                    FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" />
       </Border>
     </Grid>
+    </Border>
   </Border>
 </UserControl>

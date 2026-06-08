@@ -183,6 +183,18 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         {
             _vm.ActiveActorName = activeActorName ?? "";
             _vm.UpdateFromState(state, tick);
+
+            foreach (var hero in _vm.Heroes)
+                hero.IsActiveTurn = false;
+            foreach (var enemy in _vm.Enemies)
+                enemy.IsActiveTurn = false;
+
+            if (!string.IsNullOrEmpty(activeActorName))
+            {
+                var activeCard = FindCard(activeActorName);
+                if (activeCard is not null)
+                    activeCard.IsActiveTurn = true;
+            }
         });
     }
 
@@ -346,6 +358,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
         var darkColor = DarkenColor(color);
         card.PersistentBorderColor = color;
+        card.HpBarBorderBrush = color;
 
         switch (effectName)
         {
@@ -382,6 +395,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                     StopFlickerTimer(characterName);
                     var darkColor = DarkenColor(lastColor);
                     card.PersistentBorderColor = lastColor;
+                    card.HpBarBorderBrush = lastColor;
                     switch (lastEffect)
                     {
                         case "Burning":
@@ -416,7 +430,9 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                 _effectFlickerTimers.Remove(characterName);
                 return;
             }
-            c.PersistentBorderColor = c.PersistentBorderColor == color ? darkColor : color;
+            var nextColor = c.PersistentBorderColor == color ? darkColor : color;
+            c.PersistentBorderColor = nextColor;
+            c.HpBarBorderBrush = nextColor;
         };
         timer.Start();
         _effectFlickerTimers[characterName] = timer;
@@ -429,7 +445,10 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             kvp.Value.Stop();
             var card = FindCard(kvp.Key);
             if (card is not null)
+            {
                 card.PersistentBorderColor = null;
+                card.HpBarBorderBrush = "#333";
+            }
         }
         _effectFlickerTimers.Clear();
 
@@ -465,7 +484,10 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
         var card = FindCard(characterName);
         if (card is not null)
+        {
             card.PersistentBorderColor = null;
+            card.HpBarBorderBrush = "#333";
+        }
     }
 
     private void StartManaBarBlink(string characterName, string effectName)
