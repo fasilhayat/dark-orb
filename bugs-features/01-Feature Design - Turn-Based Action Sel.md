@@ -4,7 +4,7 @@ Project: Dark Orb
 
 File: `feature-turn-action-selection.md`
 
-Status: Design / Pre-Implementation
+Status: Post-Implementation Retrospective
 
 Priority: Core Combat UX System
 
@@ -349,3 +349,54 @@ No actions available.
 - [ ] Logging captures selected actions
 - [ ] Replay system stores action decisions
 - [ ] System supports future extensibility
+
+---
+
+## Retrospective — Implementation Attempt (Jun 2026)
+
+### What Was Implemented
+
+The following changes were committed and retained:
+
+- **`IActionDecisionSource` interface** — `ChooseActionAsync` signature added with `availableActions`, `allies`, `engagementRange` parameters
+- **`AutoActionDecisionSource`** — flattens spell category children via `SelectMany` for AI selection
+- **`TurnProcessor.BuildAvailableActions`** — groups character spells under a single `Spells` category entry with sub-children, logs `ActionSelected` after choice
+- **`ConsoleActionDecisionSource`** — updated to new interface
+- **`MainWindowViewModel`** — `ActiveActorName` property added for double-border highlight
+- **`MainWindow.axaml` / `.axaml.cs`** — action panel layout updated for spell category drill-down
+
+### What Was Reverted / Not Kept
+
+The following files were created during the session but removed (not committed). Future implementation must recreate them:
+
+- **`ActionLabels.cs`** — All display label constants (`AttackFormat`, `MoveFormat`, `SpellsCategoryLabel`, `BackLabel`, `ActionSelectedFormat`, `ManaSuffixFormat`, etc.)
+- **`AvailableAction.cs`** — Model with `IsSpellCategory`, `Children`, `IsBack` properties for hierarchical action menus
+- **`GuiActionDecisionSource.cs`** — Single-wait pattern (`_actionWaitHandle` only), posts available actions to VM, sets `ActiveActorName`
+- **`LiveCombatObserver.cs`** — Was intended for live turn-by-turn pipeline (reverted)
+- **`NotBoolConverter.cs`** — Helper converter for UI bindings
+
+### Key Lessons Learned
+
+1. **Live observer pipeline was over-engineered.** The initial approach split `Simulate` into two phases (decision + execution) using `ILiveCombatObserver`. This introduced bugs and was reverted. Future implementations should stick with the existing `Simulate` + `PlayTurnBased` flow and inject decisions via `IActionDecisionSource.ChooseActionAsync` inside the existing `Simulate` Task.Run loop.
+
+2. **Action panel orchestrator pattern works.** The `GuiActionDecisionSource` single-wait approach (signal `_actionWaitHandle` on UI click) is correct. Avoid adding a second wait handle (`_actionAdvanceHandle`) or `IsAutoMode` flag — keep it simple.
+
+3. **Spell category drill-down needs `AvailableAction` model.** The hierarchical model (`IsSpellCategory` with `Children` + `IsBack` navigation) is required for spell sub-menus. Both player and AI paths flatten or navigate this tree.
+
+4. **Action selection must be required.** No automatic action bypass — the panel must block execution until the player clicks a valid leaf action.
+
+5. **Enemy team uses `AutoActionDecisionSource` directly** — no panel needed. Only the hero team triggers the GUI panel.
+
+6. **Do not build a two-phase pipeline** (decision phase separate from execution phase). The architecture decision is: decisions happen inside `Simulate`, synchronously, via the `IActionDecisionSource` callback. Any attempt to split `Simulate` into separate decision + run calls will break the existing event/applier/processor chain.
+
+7. **UI active-turn highlighting:** `ActiveActorName` should be set at the start of `ChooseActionAsync` and cleared when the action is chosen or the turn completes. The double-border ring is a visual-only concern — no game state changes needed.
+
+### Requirements for Future Implementation
+
+- Implement `AvailableAction` model (from scratch — not in commit) with `Name`, `Source` (spell), `IsSpellCategory`, `Children`, `IsBack`
+- Implement `ActionLabels` constants class for all display strings
+- Rebuild `GuiActionDecisionSource` with single-wait pattern only
+- Wire action panel to spell sub-menu using `_actionMenuStack` (push/pop) with `Back` button
+- Ensure all display text uses `ActionLabels` constants — no inline strings
+- Keep `Simulate` intact — do not split into two-phase pipeline
+- Add acceptance tests for spell sub-menu navigation
