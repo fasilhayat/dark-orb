@@ -1,0 +1,30 @@
+Rework:
+All portraits should use the same silver D&D-style ornamental frame.
+Portrait orientation should be vertical (roughly 1024×1536 or 1536×2304).
+Characters should be shown from mid-thigh or waist-up rather than full body so equipment and faces remain visible.
+Priests and clerics should wear genuine heavy plate armor with religious ornamentation, not robe-armor hybrids.
+No modern fantasy-anime styling. Aim for realistic CRPG character art similar to high-end D&D and classic fantasy book covers.
+The ornate silver D&D frames intact, but with a clear defined border so it is easy to follow and crop. Same size portraits roughly 1024×1536 or 1536×2304.
+No names in the portrait. I know who is who.
+
+
+High Priestess Luna
+Ultra-realistic mature human priestess, long flowing silver-white hair, wise blue-gray eyes, ornate silver and white heavy plate armor engraved with lunar symbols, elegant silver crown, wielding a ceremonial mace whose head is a glowing white-blue orb, standing beneath a radiant fantasy moon unlike Earth's moon, divine moonlight illuminating her armor, realistic fantasy masterpiece, highly detailed.
+
+Merchant Vex — Kobold Trader
+Realistic fantasy kobold merchant, bright green scales, oversized curious eyes, mischievous grin, patchwork trader clothing with many pockets, magical trinkets and rings hanging everywhere, small merchant cart visible behind, warm marketplace atmosphere, golden D&D portrait frame, colorful detailed fantasy portrait, realistic creature design.
+
+A training dummy
+Dummy training portrait. A dummy torso on top of a stick with a few arrows and shooting disc markings.
+
+Golem
+A stone golem for training purposes. 
+
+Kaela Vernal
+Ultra-realistic barbarian warrior woman, massive athletic physique, dark braided warrior hairstyle, fierce gray eyes, practical barbarian armor made of leather, fur and tight, carrying a huge great-sword, beautiful but intimidating, standing before snowy mountains, wind-blown hair, realistic dark, highly detailed.
+
+Lord Aethor Valeborn
+Ultra-realistic male elf knight, long pale blond hair, noble expression, ornate silver-lightblue plate armor with faded heraldry, carrying the massive froststeel greatsword Winter Oath, snow and frost swirling around him, golden D&D portrait frame, realistic high fantasy portrait, detailed medieval armor.
+
+I would generate them individually or in small batches because combining all 16 into one generation usually causes style drift.
+
