@@ -36,13 +36,14 @@ No changes to `ICombatPresenter` — `activeActorName` is already passed via `Re
 
 ## Acceptance Criteria
 
-- [ ] Gold border appears on the active combatant's card before their first action (Attack, spell, etc.)
-- [ ] Border is thicker (4px vs 2px) and clearly distinguishable from team-colour borders
-- [ ] Portrait border also thickens in sync
-- [ ] Highlight clears when the next combatant's turn starts
-- [ ] Works in **turn-based** mode (highlight visible during `WaitForNextTurn`)
-- [ ] Works in **auto-play** mode (highlight visible throughout the turn)
-- [ ] No highlight on initial combat screen (tick 0)
-- [ ] No highlight on dead combatants
-- [ ] Does not flicker or flash incorrectly between turns
-- [ ] Does not interfere with existing border flash / persistent effect systems
+- [x] White outer glow border appears on the active combatant's card before their first action
+- [x] There is a visible gap (3px padding) between the outer glow border and the inner card border
+- [x] Outer glow border uses `BoxShadow` for a glowing effect
+- [x] Highlight clears when the next combatant's turn starts
+- [x] Works in **turn-based** mode
+- [x] Works in **auto-play** mode
+- [x] No highlight on initial combat screen (tick 0)
+- [x] No highlight on dead combatants
+- [x] Does not flicker or flash incorrectly between turns
+- [x] Does not interfere with existing border flash / persistent effect systems
+- [x] Inner card border (team colors, persistent effects) is unaffected by the active turn state

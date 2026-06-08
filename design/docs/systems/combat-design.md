@@ -706,11 +706,66 @@ CC effects (Stun, Sleep, Fear, Petrify, Root) use `CcVisualConfig` as their sing
 
 GUI label color (`GetEffectColor()`) **must delegate** to these sources rather than hardcoding independent values. This ensures border, label, and overlay messages are always consistent.
 
-### 21.4 Persistent Effect Lifecycle
+### 21.4 Visual Feedback Per Effect
+
+Each persistent effect provides visual feedback on the actor's character card. Which UI element blinks depends on what resource the effect targets:
+
+| Category | Resource affected | Blinking element | Effects |
+|----------|-----------------|------------------|---------|
+| **HP** | Hit Points | Card border + HP bar border | Burning, Ignite, Poisoned, Bleeding, Leech |
+| **TM** | Turn Meter | Card border + TM pipes | Stun, Sleep, Fear, Petrify, Root, Frozen, Freeze, Shocked |
+| **MP** | Mana | Card border + Mana bar | LeechMana |
+
+#### HP effects (DoTs & HP leech)
+
+Card border and HP bar border blink at 300ms. The TM bar is not affected.
+
+| Effect | Color | Hex | Blink |
+|--------|-------|:---:|:-----:|
+| Burning | Orange | `#ff6600` | 300ms |
+| Ignite | Bright red-orange | `#ff4400` | 300ms |
+| Poisoned | Green | `#44ff44` | 300ms |
+| Bleeding | Red | `#ff4444` | 300ms |
+| Leech | Red-orange | `#ff6644` | 300ms + mana bar blink |
+
+#### TM effects (Crowd control)
+
+Card border blinks while the TM pipes fill with the effect color (when `IsTmLocked = true`). The HP bar border is not affected differently — the blink targets card border and TM pipes.
+
+| Effect | Color | Hex | Blink |
+|--------|-------|:---:|:-----:|
+| Stun | Gold | `#d4a017` | 800ms (slow) |
+| Freeze | Light blue | `#44ccff` | 300ms |
+| Sleep | Purple | `#aa44ff` | 300ms |
+| Petrify | Gray | `#888888` | 300ms |
+| Fear | Dark purple | `#8822aa` | 300ms |
+| Root | Green | `#44cc44` | 300ms |
+| Frozen / Shocked | See table below | — | 300ms |
+
+Frozen, Freeze, and Shocked also affect the Turn Meter (they are also CC effects in the combat engine).
+
+#### MP effects (Mana leech)
+
+LeechMana blinks the card border and the Mana bar. HP bar border is not affected.
+
+| Effect | Color | Hex | Blink |
+|--------|-------|:---:|:-----:|
+| LeechMana | Purple | `#cc44ff` | 300ms + mana bar blink |
+
+### 21.5 Flicker Timing Summary
+
+| Blink rate | Effects |
+|-----------|---------|
+| 300ms (fast) | All effects except Stun |
+| 800ms (slow) | Stun only |
+
+The slower blink for Stun visually communicates a dazed/paralyzed state, distinct from the rapid flicker of damage-over-time effects.
+
+### 21.6 Persistent Effect Lifecycle
 
 | Phase | Event | Visual Action | Presenter Method |
 |-------|-------|---------------|------------------|
-| **Start** | `EffectApplied` | Start border flicker or mana bar blink | `StartPersistentEffect()` |
+| **Start** | `EffectApplied` | Start border flicker + resource bar blink | `StartPersistentEffect()` |
 | **Tick** | `DoTTick` / `LeechTick` | Flash border + overlay message | `FlashBorder()` + `AddOverlayMessage()` |
 | **End** | `EffectExpired` | Stop flicker/blink, reset visual state | `RemovePersistentEffect()` |
 

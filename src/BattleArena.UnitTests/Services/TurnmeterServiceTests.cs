@@ -61,7 +61,7 @@ public class TurnmeterServiceTests
             Level = 6,
             ActiveStatusEffects = new List<StatusEffect>
             {
-                new() { Name = "Shock", Type = StatusEffectType.Shock, Duration = 2 }
+                new() { Name = "Electrified", Type = StatusEffectType.Shock, Duration = 2 }
             }
         };
 

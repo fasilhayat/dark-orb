@@ -443,7 +443,7 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
     {
         var shock = new StatusEffect
         {
-            Name = "Shock", Type = StatusEffectType.Shock,
+            Name = "Electrified", Type = StatusEffectType.Shock,
             Target = EffectTarget.Target, Duration = 3, ApplicationChance = 100
         };
         var staticShock = MakeSpell("Static Shock", DieType.D6, 1, 2, shock);
@@ -456,9 +456,9 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
 
         DumpLog(result);
 
-        // The Shock effect must only appear on the enemy, never on Vaelith
+        // The Electrified effect must only appear on the enemy, never on Vaelith
         var shockApplied = result.Log
-            .Where(e => e.EventType == "EffectApplied" && e.StatusEffectName == "Shock")
+            .Where(e => e.EventType == "EffectApplied" && e.StatusEffectName == "Electrified")
             .ToList();
 
         Assert.Contains(shockApplied, e => e.ActorName == "Target");
@@ -499,10 +499,10 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // TEST 9 — Reflective Shield bounces Shock back to the caster when it procs.
+    // TEST 9 — Reflective Shield bounces Electrified back to the caster when it procs.
     //          The defender has a pre-applied reflective buff with 100 % chance;
-    //          the attacker casts Static Shock (on-hit Shock).
-    //          The EffectReflected event must fire and the Shock must land on the
+    //          the attacker casts Static Shock (on-hit Electrified).
+    //          The EffectReflected event must fire and the Electrified must land on the
     //          attacker, not the defender.
     // ─────────────────────────────────────────────────────────────────────────
 
@@ -511,7 +511,7 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
     {
         var shock = new StatusEffect
         {
-            Name = "Shock", Type = StatusEffectType.Shock,
+            Name = "Electrified", Type = StatusEffectType.Shock,
             Target = EffectTarget.Target, Duration = 2, ApplicationChance = 100
         };
         var staticShock = MakeSpell("Static Shock", DieType.D6, 1, 2, shock);
@@ -539,9 +539,9 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
         Assert.Contains(result.Log, e => e.EventType == "EffectReflected"
                                          && e.ActorName == "Defender");
 
-        // The Shock must land on the *caster*, not the defender
+        // The Electrified must land on the *caster*, not the defender
         var shockApplied = result.Log
-            .Where(e => e.EventType == "EffectApplied" && e.StatusEffectName == "Shock")
+            .Where(e => e.EventType == "EffectApplied" && e.StatusEffectName == "Electrified")
             .ToList();
 
         Assert.Contains(shockApplied, e => e.ActorName == "Caster");
@@ -557,7 +557,7 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
     {
         var shock = new StatusEffect
         {
-            Name = "Shock", Type = StatusEffectType.Shock,
+            Name = "Electrified", Type = StatusEffectType.Shock,
             Target = EffectTarget.Target, Duration = 2, ApplicationChance = 100
         };
         var staticShock = MakeSpell("Static Shock", DieType.D6, 1, 2, shock);
@@ -584,9 +584,9 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
         // No reflection event
         Assert.DoesNotContain(result.Log, e => e.EventType == "EffectReflected");
 
-        // Shock lands on the defender as normal
+        // Electrified lands on the defender as normal
         var shockApplied = result.Log
-            .Where(e => e.EventType == "EffectApplied" && e.StatusEffectName == "Shock")
+            .Where(e => e.EventType == "EffectApplied" && e.StatusEffectName == "Electrified")
             .ToList();
 
         Assert.Contains(shockApplied, e => e.ActorName == "Defender");

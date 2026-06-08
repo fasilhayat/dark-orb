@@ -321,12 +321,6 @@ public static class CombatPlaybackEngine
         return damageAmount * 100 >= targetState.MaxHp * devastationThresholdPercent;
     }
 
-    private static readonly HashSet<string> PersistentEffectNames =
-    [
-        "Burning", "Ignite", "Frozen", "Freeze", "Shocked", "Stun",
-        "Sleep", "Fear", "Petrify", "Poisoned", "Bleeding", "Leech", "LeechMana"
-    ];
-
     private static string GetPersistentColor(string effectName)
     {
         if (CcVisualConfig.IsCcEffect(effectName))
@@ -557,7 +551,7 @@ public static class CombatPlaybackEngine
                         DurationMs = 1000,
                     });
                 }
-                if (entry.StatusEffectName is not null && PersistentEffectNames.Contains(entry.StatusEffectName))
+                if (entry.StatusEffectName is not null && EffectVisualConfig.IsDisplayed(entry.StatusEffectName))
                 {
                     bus.PublishNormal(new VisualEvent
                     {
@@ -587,7 +581,7 @@ public static class CombatPlaybackEngine
                 break;
 
             case "EffectExpired":
-                if (entry.StatusEffectName is not null && PersistentEffectNames.Contains(entry.StatusEffectName))
+                if (entry.StatusEffectName is not null && EffectVisualConfig.IsDisplayed(entry.StatusEffectName))
                 {
                     bus.PublishNormal(new VisualEvent
                     {

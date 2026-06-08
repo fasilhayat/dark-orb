@@ -334,12 +334,17 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         });
     }
 
+    private static int FlickerIntervalMs(string effectName) => effectName switch
+    {
+        "Stun" => 800,
+        _ => 300,
+    };
+
     private void StartPersistentEffect(string characterName, string effectName, string color)
     {
         var card = FindCard(characterName);
         if (card is null) return;
 
-        // Track application order
         if (!_effectOrder.TryGetValue(characterName, out var list))
         {
             list = new List<(string, string)>();
@@ -347,40 +352,25 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         }
         list.Add((effectName, color));
 
-        if (effectName is "Leech" or "LeechMana")
-        {
-            StartManaBarBlink(characterName, effectName);
-            return;
-        }
-
-        // Stop any existing timer before setting new effect
         StopFlickerTimer(characterName);
 
         var darkColor = DarkenColor(color);
         card.PersistentBorderColor = color;
-        card.HpBarBorderBrush = color;
 
-        switch (effectName)
-        {
-            case "Burning":
-            case "Frozen":
-            case "Freeze":
-            case "Shocked":
-                StartFlickerTimer(characterName, color, darkColor, 300);
-                break;
+        card.HpBarBorderBrush = "#333";
+        if (EffectVisualConfig.AffectsHpBar(effectName))
+            card.HpBarBorderBrush = color;
 
-            case "Stun":
-                StartFlickerTimer(characterName, color, darkColor, 800);
-                break;
-        }
+        if (EffectVisualConfig.AffectsManaBar(effectName))
+            StartManaBarBlink(characterName, effectName);
+
+        StartFlickerTimer(characterName, color, darkColor, FlickerIntervalMs(effectName), effectName);
     }
 
     private void RemovePersistentEffect(string characterName, string expiredEffectName)
     {
-        if (expiredEffectName is "Leech" or "LeechMana")
-        {
+        if (EffectVisualConfig.AffectsManaBar(expiredEffectName))
             StopManaBarBlink(characterName);
-        }
 
         if (_effectOrder.TryGetValue(characterName, out var list))
         {
@@ -395,19 +385,15 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                     StopFlickerTimer(characterName);
                     var darkColor = DarkenColor(lastColor);
                     card.PersistentBorderColor = lastColor;
-                    card.HpBarBorderBrush = lastColor;
-                    switch (lastEffect)
-                    {
-                        case "Burning":
-                        case "Frozen":
-                        case "Freeze":
-                        case "Shocked":
-                            StartFlickerTimer(characterName, lastColor, darkColor, 300);
-                            break;
-                        case "Stun":
-                            StartFlickerTimer(characterName, lastColor, darkColor, 800);
-                            break;
-                    }
+
+                    card.HpBarBorderBrush = "#333";
+                    if (EffectVisualConfig.AffectsHpBar(lastEffect))
+                        card.HpBarBorderBrush = lastColor;
+
+                    if (EffectVisualConfig.AffectsManaBar(lastEffect))
+                        StartManaBarBlink(characterName, lastEffect);
+
+                    StartFlickerTimer(characterName, lastColor, darkColor, FlickerIntervalMs(lastEffect), lastEffect);
                 }
                 return;
             }
@@ -418,8 +404,9 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         StopPersistentEffect(characterName);
     }
 
-    private void StartFlickerTimer(string characterName, string color, string darkColor, int intervalMs)
+    private void StartFlickerTimer(string characterName, string color, string darkColor, int intervalMs, string effectName)
     {
+        var affectsHp = EffectVisualConfig.AffectsHpBar(effectName);
         var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(intervalMs) };
         timer.Tick += (_, _) =>
         {
@@ -432,7 +419,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             }
             var nextColor = c.PersistentBorderColor == color ? darkColor : color;
             c.PersistentBorderColor = nextColor;
-            c.HpBarBorderBrush = nextColor;
+            c.HpBarBorderBrush = affectsHp ? nextColor : "#333";
         };
         timer.Start();
         _effectFlickerTimers[characterName] = timer;
@@ -460,6 +447,8 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             {
                 card.ManaBarColor = "#cc44cc";
                 card.ManaBarBorderBrush = "#333";
+                card.PersistentBorderColor = null;
+                card.HpBarBorderBrush = "#333";
             }
         }
         _manaBarBlinkTimers.Clear();

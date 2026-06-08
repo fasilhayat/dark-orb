@@ -157,7 +157,8 @@ public sealed class CombatDisplayState
 
             case "EffectApplied":
                 if (!string.IsNullOrWhiteSpace(e.StatusEffectName)
-                    && _chars.TryGetValue(e.ActorName, out var applySt))
+                    && _chars.TryGetValue(e.ActorName, out var applySt)
+                    && EffectVisualConfig.IsDisplayed(e.StatusEffectName))
                 {
                     if (!applySt.ActiveEffects.Contains(e.StatusEffectName))
                         applySt.ActiveEffects.Add(e.StatusEffectName);
