@@ -1,55 +1,534 @@
-All portraits should use the same silver D&D-style ornamental frame.
-Portrait orientation should be vertical (roughly 1024×1536 or 1536×2304).
-Characters should be shown from mid-thigh or waist-up rather than full body so equipment and faces remain visible.
-Priests and clerics should wear genuine heavy plate armor with religious ornamentation, not robe-armor hybrids.
-Good-aligned lunar characters should feature the Bright Moon (a unique fantasy moon, not Earth's moon).
-Evil characters should feature the Dark Moon (a dark gray shining asteroid-like moon with fractured rocky texture).
-No modern fantasy-anime styling. Aim for realistic CRPG character art similar to high-end D&D and classic fantasy book covers.
-The ornate silver D&D frames intact, but with a clear defined border so it is easy to follow and crop. Same size portraits.
-No names in the portrait. I know who is who.
+# Dark Orb Character Portrait Sheet (Final Prompt)
 
--------------------------------------------------------------------------------------------------------------------------------------------------------
+Create a SINGLE fantasy character-sheet image containing all character portraits arranged in a clean grid.
 
-Old Man Kael — Blind Seer
-Ultra-realistic fantasy character portrait, elderly human priest, long wild white hair, blindfold covering milky white eyes, deeply weathered face filled with wisdom, heavy silver-blue plate armor engraved with celestial sun symbols, carrying an ancient gnarled staff covered in prayer beads, subtle divine glow around his hands, serene expression, golden D&D portrait frame, cathedral lighting, realistic, highly detailed, cinematic, vertical character sheet portrait.
+---
 
-Greta Ironhand — Dwarf Smith
-Ultra-realistic fantasy portrait of a powerful dwarf woman blacksmith, muscular build, auburn braided hair, feminine and strong looking, soot-stained skin, rune-etched plate armor beneath a forge apron, holding a massive warhammer across her shoulder, forge fire illuminating her face, sparks in background, golden D&D portrait frame, realistic fantasy artwork, detailed metal textures, character sheet portrait.
+# ART STYLE (NON-NEGOTIABLE)
 
-Shadowmere — Elf Rogue Leader
-Realistic dark fantasy female elf rogue, pale silver skin, piercing eyes, long black hair tied in a high warrior ponytail, elegant black and purple leather armor, twin daggers visible, confident and dangerous expression, moonlit city rooftops behind her, cinematic shadows, realistic CRPG character art, highly detailed portrait.
+- Realistic CRPG fantasy artwork
+- High-end D&D sourcebook quality
+- Classic fantasy book-cover realism
+- No anime
+- No manga
+- No stylized/cartoon rendering
+- No Pixar style
+- No exaggerated beauty aesthetics
+- Grounded, believable human proportions and faces
+- Consistent rendering style across all portraits
+- Each portraits around 230px (horizontal)*400px(vertical) 
 
-Lysander the Bard
-Realistic Gladefolk bard appearing youthful despite age, curly auburn hair, cheerful smile, colorful traveler clothing reinforced with light armor, carrying a beautifully crafted lute, maps and charms hanging from belt, warm tavern background, realistic fantasy art, detailed character portrait.
+---
 
-Elder Treant
-Epic ancient treant druid portrait, towering half-tree half-elf being, bark skin, glowing green eyes, branches woven into hair, living armor of vines and roots, ancient wooden staff, forest spirits surrounding him, mystical ancient forest background, highly detailed realistic fantasy artwork.
-Ser Garrick Dawnshield
-Ultra-realistic human paladin, powerful build, polished silver plate armor, white tabard with golden sun emblem, carrying the massive warhammer Judicator, short dark hair and trimmed beard, unwavering heroic expression, cathedral light shining behind him, realistic dark fantasy style.
+# GLOBAL LAYOUT RULES
 
-Vaelith Moonveil
-Ultra-realistic female high elf fighter-mage, long silver hair, glowing blue eyes, enchanted blue-black mithril armor, elegant longsword in one hand, arcane energy swirling around the other, magical runes floating around her, ancient ruins in background, realistic fantasy masterpiece.
+## Character Sheet Format
 
-Sister Elira Vane
-Ultra-realistic human cleric, calm compassionate face, long dark brown hair, ornate silver and white heavy plate armor marked with lunar symbols, carrying a silver mace and sacred censer, soft divine light surrounding her, standing beneath the Bright Moon, realistic fantasy portrait, highly detailed.
+All portraits must be arranged in a structured grid character sheet.
 
-Lord Aethor Valeborn
-Ultra-realistic male elf knight, long pale blond hair, noble expression, ornate silver-blue plate armor with faded heraldry, carrying the massive froststeel greatsword Winter Oath, snow and frost swirling around him, golden D&D portrait frame, realistic high fantasy portrait, detailed medieval armor.
+## Frames
 
-Finnick "Quickfingers" Bramblefoot
-Realistic Gladefolk rogue appearing like a clever young adventurer, messy brown hair, sly green eyes, dark leather armor beneath a travel cloak, twin daggers drawn, mischievous grin, shadowy medieval alley background, golden D&D portrait frame, realistic fantasy character art.
+All portraits must use IDENTICAL ornate silver D&D-style frames. Not a thick ornate - keep it simple and elegant.
 
-Korg Stonefist
-Ultra-realistic orc berserker, enormous muscular body, green-gray skin covered in scars, cursed black iron chain mail fused into flesh, blood leaking from armor seams, carrying a gigantic maul, savage expression, stormy battlefield background, Dark Moon visible behind him as a glowing dark gray asteroid-like celestial body, golden D&D portrait frame, dark fantasy realism.
+Frame requirements:
 
-Graveworm
-Ultra-realistic undead knight warlord, skeletal face with glowing blue eyes, frozen decayed armor fused with bone, holding the cursed sword Frostbite, cold mist and frost swirling around him, Dark Moon visible in the background, realistic gothic fantasy artwork, highly detailed.
+- Same size for every portrait
+- Vertical orientation only
+- Thin, clearly defined outer border
+- Clean rectangular boundary
+- Fully closed frame (no breaks)
+- No decorative elements extending outside the frame
+- Must be easy for automated cropping
 
-Infernal Commander Maleth
-Ultra-realistic demon knight lord, towering horned demon clad in obsidian and brass armor, molten skin glowing through armor gaps, wielding the lightning lance Stormbringer, hellfire surrounding him, burning battlefield background, Dark Moon looming behind him, epic dark fantasy boss portrait, highly detailed realistic painting.
+## Portrait Composition
 
+- Vertical format only (2:3 ratio, ~1024×1536 style)
+- Never horizontal
+- Never landscape
+- Waist-up or mid-thigh-up only
+- No full-body characters
+- Faces, armor, and weapons must be clearly visible
 
+## Grid Filling Rule
 
-One additional recommendation: keep the Bright Moon consistent across Luna, Elira, Garrick, and Kael, and keep the Dark Moon consistent across Korg, Graveworm, and Maleth. Treat them as recurring celestial objects in the setting rather than random background elements. That will make the portrait collection feel like it belongs to a single world.
+If character slots are not fully used:
 
+- Leave empty framed placeholders
+- Do NOT duplicate characters
+- Do NOT stretch or rearrange existing portraits
 
+---
+
+# STRICT CONTENT RULES
+
+## NO TEXT
+
+Do not include:
+
+- Names
+- Titles
+- Labels
+- Numbers
+- Captions
+- Class names
+- UI-like overlays
+
+---
+
+# RACE ACCURACY (CRITICAL FAILURE POINT)
+
+Humans must look HUMAN.
+
+Humans must NOT have:
+
+- Pointed ears
+- Elven facial structure
+- Elven aesthetic traits
+
+Elves must clearly have:
+
+- Pointed ears
+- Elven facial structure
+- Distinct elven elegance
+
+Dwarves must clearly have:
+
+- Shorter proportions
+- Broad, dense builds
+- Strong facial structure
+
+Orcs must clearly appear orcish.
+
+Treants must clearly appear as ancient living tree entities.
+
+NEVER randomly reassign races.
+
+NEVER “fantasy-generic” characters into elves.
+
+---
+
+# AGE ACCURACY (CRITICAL)
+
+- Elderly characters must visibly look elderly
+- Mature adults must NOT appear young
+- No accidental de-aging
+
+---
+
+# WORLD CONSISTENCY — CELESTIAL OBJECTS
+
+## Bright Moon (Holy/Lunar Order)
+
+Use ONE consistent Bright Moon design across all instances:
+
+- Luminous silver-white celestial body
+- Smooth, divine, magical appearance
+- NOT Earth’s moon
+- NOT realistic lunar photography
+- Clearly fantasy-religious artifact
+
+Used by:
+
+- Luna
+- Sister Elira Vane
+- Ser Garrick Dawnshield
+- Old Man Kael
+
+---
+
+## Dark Moon (Forbidden/Corrupted Order)
+
+Use ONE consistent Dark Moon design across all instances:
+
+- Dark gray celestial body
+- Fractured rocky asteroid-like surface
+- Visible glowing cracks
+- Ominous magical presence
+
+Used by:
+
+- Korg Stonefist
+- Graveworm
+- Infernal Commander Maleth
+
+---
+
+# ARMOR & CLASS RULES
+
+## Clerics / Priests
+
+- Must wear genuine heavy plate armor
+- Must have religious ornamentation
+- NO robes
+- NO robe-armor hybrids
+
+## Paladins
+
+- Heavy plate armor only
+
+## Fighters
+
+- Practical combat armor
+
+## Rogues
+
+- Leather armor only
+- NO plate armor
+
+## Barbarians
+
+- Fur and leather armor
+- Tribal aesthetic
+- Athletic physique
+- Visible abs allowed
+- NO plate armor
+- NO knight-style armor
+
+---
+
+# CHARACTER SHEET ENTRIES
+
+---
+
+## Old Man Kael — Blind Seer
+
+HUMAN male elderly priest.
+
+IMPORTANT:
+- Human
+- Not elf
+- No pointed ears
+
+Very old age (clearly elderly)
+
+Long wild white hair
+
+Blindfold covering milky white eyes
+
+Deeply weathered face showing wisdom
+
+Heavy silver-blue plate armor engraved with celestial sun symbols
+
+Ancient gnarled staff with prayer beads
+
+Subtle divine glow around hands
+
+Serene expression
+
+Bright Moon presence
+
+Cathedral lighting
+
+---
+
+## Greta Ironhand — Dwarf Smith
+
+DWARF female blacksmith
+
+IMPORTANT:
+- Dwarf
+- Not human
+- Not elf
+
+Muscular powerful build
+
+Strong feminine features
+
+Auburn braided hair
+
+Soot-stained skin
+
+Rune-etched plate armor beneath forge apron
+
+Massive warhammer over shoulder
+
+Forge fire lighting face
+
+Sparks in background
+
+---
+
+## Shadowmere — Rogue Leader
+
+ELF female rogue
+
+IMPORTANT:
+- Elf
+- Clearly pointed ears required
+
+Pale silver skin
+
+Sharp piercing eyes
+
+Long black hair tied back
+
+Black and purple leather armor
+
+Twin daggers
+
+Moonlit rooftop setting
+
+---
+
+## Lysander the Bard
+
+GLADEFOLK male bard
+
+Young-looking traveler aesthetic
+
+Curly auburn hair
+
+Cheerful expression
+
+Light armor travel clothing
+
+Lute instrument
+
+Tavern background
+
+---
+
+## Elder Treant
+
+Ancient TREANT entity
+
+Half-tree half-guardian form
+
+Living bark skin
+
+Glowing green eyes
+
+Vine and root armor
+
+Forest spirits surrounding
+
+Ancient forest background
+
+---
+
+## Ser Garrick Dawnshield
+
+HUMAN male paladin
+
+IMPORTANT:
+- Human
+- Not elf
+- No pointed ears
+
+Heavy silver plate armor
+
+White tabard with golden sun emblem
+
+Massive warhammer (Judicator)
+
+Short dark hair
+
+Trimmed beard
+
+Heroic expression
+
+Bright Moon presence
+
+---
+
+## Vaelith Moonveil
+
+HIGH ELF female fighter-mage
+
+IMPORTANT:
+- Elf
+- Pointed ears required
+
+Long silver hair
+
+Blue glowing eyes
+
+Enchanted mithril armor (blue-black)
+
+Arcane energy in hand
+
+Floating runes
+
+Ancient ruins background
+
+---
+
+## Luna — Lunar High Priestess
+
+HUMAN female, mature (45–55)
+
+IMPORTANT:
+- Human
+- Not elf
+- No pointed ears
+
+Wise, elegant, mature appearance
+
+Subtle silver-streaked dark hair
+
+Calm, compassionate expression
+
+Heavy silver-white plate armor with Bright Moon iconography
+
+### WEAPON (CRITICAL — GREAT MACE)
+
+Luna wields a TWO-HANDED GREAT MACE.
+
+This weapon must ALWAYS be correct:
+
+- Large sacred silver orb head
+- Smooth spherical design
+- Divine lunar relic aesthetic
+- No spikes of any kind
+- No star-shaped edges
+- No flanges
+- No morningstar spikes
+- No flail chains
+- No axe or hammer heads
+
+Handle:
+
+- Long straight haft
+- Standard weapon shaft (wood or metal)
+- Proper two-handed length
+
+Grip style:
+
+- Held like a two-handed sword
+- Both hands on the shaft
+- One hand above the other
+- Upright ceremonial stance
+
+The weapon is a sacred temple relic, not a brutal weapon.
+
+Bright Moon visible
+
+Cathedral lighting
+
+---
+
+## Sister Elira Vane
+
+HUMAN female cleric
+
+IMPORTANT:
+- Human
+- Not elf
+- No pointed ears
+
+Calm compassionate expression
+
+Ornate silver-white heavy plate armor
+
+Bright Moon symbols
+
+Silver mace
+
+Sacred censer
+
+Divine soft light
+
+---
+
+## Lord Aethor Valeborn
+
+ELF male knight
+
+IMPORTANT:
+- Elf
+- Pointed ears required
+
+Noble expression
+
+Silver-blue ornate plate armor
+
+Froststeel greatsword
+
+Snow and frost effects
+
+---
+
+## Finnick "Quickfingers" Bramblefoot
+
+GLADEFOLK male rogue
+
+Clever youthful look
+
+Leather armor
+
+Travel cloak
+
+Twin daggers
+
+Urban alley background
+
+---
+
+## Korg Stonefist
+
+ORC male berserker
+
+IMPORTANT:
+- Orc required
+
+Massive muscular build
+
+Green-gray skin, scarred
+
+Fused black iron chain armor
+
+Gigantic maul
+
+Storm battlefield
+
+Dark Moon present
+
+---
+
+## Graveworm
+
+Undead knight warlord
+
+Skeletal face
+
+Glowing blue eyes
+
+Frozen bone-fused armor
+
+Cursed sword
+
+Frost mist
+
+Dark Moon present
+
+---
+
+## Infernal Commander Maleth
+
+Demon knight lord
+
+Horned demon form
+
+Obsidian/brass armor
+
+Molten skin glow
+
+Lightning lance
+
+Hellfire battlefield
+
+Dark Moon looming
+
+---
+
+# FINAL CONSISTENCY RULES
+
+- One shared silver frame design across all portraits
+- Strict vertical portraits only
+- No text anywhere
+- Humans remain humans permanently
+- Elves remain elves permanently
+- Dwarves remain dwarves permanently
+- Orcs remain orcs permanently
+- Bright Moon and Dark Moon must be visually consistent across all characters
+- Luna must ALWAYS have a correct two-handed orb great mace (never spiked, never flanged, never flail-like)
