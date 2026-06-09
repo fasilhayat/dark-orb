@@ -699,6 +699,7 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
             "Frozen"    => "#44ccff",
             "Freeze"    => "#44ccff",
             "Shocked"   => "#ffff44",
+            "Electrified" => "#44ccff",
             "Poisoned"  => "#44ff44",
             "Bleeding"  => "#ff4444",
             "Leech" or "LeechMana" => TransferEffectRegistry.GetConfig(name).TransferColor,
@@ -801,13 +802,20 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
 
     public string HpDisplay => IsDead ? "" : $"{Math.Max(0, Hp)}/{MaxHp}";
     public string TmDisplay => $"{Tm}";
-    public string TmBorderBrush => IsTmLocked ? "#ffffff" : "#333";
+    public string TmBorderBrush => _tmBarBorderBrush != "#333" ? _tmBarBorderBrush : IsTmLocked ? "#ffffff" : "#333";
 
     private string _hpBarBorderBrush = "#333";
     public string HpBarBorderBrush
     {
         get => _hpBarBorderBrush;
         set => SetField(ref _hpBarBorderBrush, value);
+    }
+
+    private string _tmBarBorderBrush = "#333";
+    public string TmBarBorderBrush
+    {
+        get => _tmBarBorderBrush;
+        set => SetField(ref _tmBarBorderBrush, value);
     }
 
     public string ManaDisplay => MaxMana > 0 ? $"{Math.Max(0, Mana)}" : "--";
@@ -1173,6 +1181,9 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
                 UpdateTmPipes();
                 break;
             case nameof(HpBarBorderBrush):
+                break;
+            case nameof(TmBarBorderBrush):
+                Raise(nameof(TmBorderBrush));
                 break;
             case nameof(ActiveEffects):
                 Raise(nameof(EffectsDisplay));

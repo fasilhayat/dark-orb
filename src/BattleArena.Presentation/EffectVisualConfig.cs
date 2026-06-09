@@ -9,6 +9,7 @@ public enum EffectVisualTarget
     None    = 0,
     HpBar   = 1,
     ManaBar = 2,
+    TmBar   = 4,
 }
 
 public static class EffectVisualConfig
@@ -28,9 +29,9 @@ public static class EffectVisualConfig
         ["Poisoned"]  = EffectVisualTarget.HpBar,
         ["Bleeding"]  = EffectVisualTarget.HpBar,
 
-        // TM-affecting effects -> card border only (HP bar border stays neutral)
-        ["Electrified"] = EffectVisualTarget.None,
-        ["Shocked"]   = EffectVisualTarget.None,
+        // TM-affecting effects -> blink TM bar border
+        ["Electrified"] = EffectVisualTarget.TmBar,
+        ["Shocked"]   = EffectVisualTarget.TmBar,
         ["Stun"]      = EffectVisualTarget.None,
         ["Frozen"]    = EffectVisualTarget.None,
         ["Freeze"]    = EffectVisualTarget.None,
@@ -39,8 +40,9 @@ public static class EffectVisualConfig
         ["Petrify"]   = EffectVisualTarget.None,
         ["Root"]      = EffectVisualTarget.None,
 
-        // Leech — HP + mana
-        ["Leech"]     = EffectVisualTarget.HpBar | EffectVisualTarget.ManaBar,
+        // Leech — HP only
+        ["Leech"]     = EffectVisualTarget.HpBar,
+        // LeechMana — Mana only
         ["LeechMana"] = EffectVisualTarget.ManaBar,
     };
 
@@ -54,4 +56,7 @@ public static class EffectVisualConfig
 
     public static bool AffectsManaBar(string effectName)
         => (GetVisualTarget(effectName) & EffectVisualTarget.ManaBar) == EffectVisualTarget.ManaBar;
+
+    public static bool AffectsTmBar(string effectName)
+        => (GetVisualTarget(effectName) & EffectVisualTarget.TmBar) == EffectVisualTarget.TmBar;
 }

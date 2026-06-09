@@ -28,10 +28,10 @@ public static class TransferEffectRegistry
         ["LeechMana"] = new TransferEffectConfig
         {
             EffectName          = "LeechMana",
-            TransferColor       = "#cc44ff",
-            ParticleColor       = "#aa44ff",
-            SourceGlowColor     = "#8800cc",
-            DestinationGlowColor = "#cc44ff",
+            TransferColor       = "#ff6644",
+            ParticleColor       = "#ff4444",
+            SourceGlowColor     = "#ff0000",
+            DestinationGlowColor = "#ff0000",
             ParticleIntensity   = 0.5,
             StreamThickness     = 2.5,
             SoundId             = "LeechTick",

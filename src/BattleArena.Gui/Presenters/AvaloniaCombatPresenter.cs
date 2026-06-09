@@ -60,6 +60,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         ["FumblePenalty"] = 500, ["Death"] = 1200, ["KnockedOut"] = 1200,
         ["PerfectParry"] = 800, ["DevastatingStrike"] = 1000, ["TotalReversal"] = 1000,
         ["DamagePreview"] = 800,
+        ["TurnMeterGain"] = 50,
     };
 
     public AvaloniaCombatPresenter(
@@ -361,8 +362,12 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         if (EffectVisualConfig.AffectsHpBar(effectName))
             card.HpBarBorderBrush = color;
 
+        card.TmBarBorderBrush = "#333";
+        if (EffectVisualConfig.AffectsTmBar(effectName))
+            card.TmBarBorderBrush = color;
+
         if (EffectVisualConfig.AffectsManaBar(effectName))
-            StartManaBarBlink(characterName, effectName);
+            StartManaBarBlink(characterName, effectName, color);
 
         StartFlickerTimer(characterName, color, darkColor, FlickerIntervalMs(effectName), effectName);
     }
@@ -390,8 +395,12 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                     if (EffectVisualConfig.AffectsHpBar(lastEffect))
                         card.HpBarBorderBrush = lastColor;
 
+                    card.TmBarBorderBrush = "#333";
+                    if (EffectVisualConfig.AffectsTmBar(lastEffect))
+                        card.TmBarBorderBrush = lastColor;
+
                     if (EffectVisualConfig.AffectsManaBar(lastEffect))
-                        StartManaBarBlink(characterName, lastEffect);
+                        StartManaBarBlink(characterName, lastEffect, lastColor);
 
                     StartFlickerTimer(characterName, lastColor, darkColor, FlickerIntervalMs(lastEffect), lastEffect);
                 }
@@ -407,6 +416,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     private void StartFlickerTimer(string characterName, string color, string darkColor, int intervalMs, string effectName)
     {
         var affectsHp = EffectVisualConfig.AffectsHpBar(effectName);
+        var affectsTm = EffectVisualConfig.AffectsTmBar(effectName);
         var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(intervalMs) };
         timer.Tick += (_, _) =>
         {
@@ -420,6 +430,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             var nextColor = c.PersistentBorderColor == color ? darkColor : color;
             c.PersistentBorderColor = nextColor;
             c.HpBarBorderBrush = affectsHp ? nextColor : "#333";
+            c.TmBarBorderBrush = affectsTm ? nextColor : "#333";
         };
         timer.Start();
         _effectFlickerTimers[characterName] = timer;
@@ -435,6 +446,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             {
                 card.PersistentBorderColor = null;
                 card.HpBarBorderBrush = "#333";
+                card.TmBarBorderBrush = "#333";
             }
         }
         _effectFlickerTimers.Clear();
@@ -449,6 +461,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                 card.ManaBarBorderBrush = "#333";
                 card.PersistentBorderColor = null;
                 card.HpBarBorderBrush = "#333";
+                card.TmBarBorderBrush = "#333";
             }
         }
         _manaBarBlinkTimers.Clear();
@@ -476,18 +489,16 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         {
             card.PersistentBorderColor = null;
             card.HpBarBorderBrush = "#333";
+            card.TmBarBorderBrush = "#333";
         }
     }
 
-    private void StartManaBarBlink(string characterName, string effectName)
+    private void StartManaBarBlink(string characterName, string effectName, string color)
     {
         StopManaBarBlink(characterName);
 
-        const string manaRed = "#ff3333";
         const string manaDefault = "#cc44cc";
-        const string borderRed = "#ff3333";
-        const string borderDefault = "#333";
-
+        var useBright = false;
         var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
         timer.Tick += (_, _) =>
         {
@@ -498,8 +509,9 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                 _manaBarBlinkTimers.Remove(characterName);
                 return;
             }
-            c.ManaBarColor = c.ManaBarColor == manaRed ? manaDefault : manaRed;
-            c.ManaBarBorderBrush = c.ManaBarBorderBrush == borderRed ? borderDefault : borderRed;
+            useBright = !useBright;
+            c.ManaBarColor = useBright ? color : manaDefault;
+            c.ManaBarBorderBrush = useBright ? color : "#333";
         };
         timer.Start();
         _manaBarBlinkTimers[characterName] = timer;
@@ -655,6 +667,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             "PetSummoned"        => [[Seg($"  \u2726 {e.SummonedPetName ?? "Unknown"} has been summoned!", Magenta)]],
             "PetExpired"         => [[Seg($"  \u2726 {e.SummonedPetName} fades away...", Gray)]],
             "SkippedTurn"        => [BuildSkippedTurnRow(e, state)],
+            "TurnMeterGain"      => [],
             "RoundStart"         => [BuildRoundStartRow(e)],
             "RoundEnd"           => [],
             "ManaRegen"          => [BuildManaRegenRow(e, state)],

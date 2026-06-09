@@ -165,8 +165,9 @@ public static class RosterLoader
                 Mitigation            = d.Mitigation,
                 MaxDexterityBonus     = d.MaxDexterityBonus,
                 MovementPenalty       = d.MovementPenalty,
-                TurnMeterCostReduction = d.TurnMeterCostReduction,
-                Resistances           = resistances
+            TurnMeterPenalty      = d.TurnMeterPenalty,
+            TurnMeterCostReduction = d.TurnMeterCostReduction,
+            Resistances           = resistances
             };
         }
         return result;
@@ -360,6 +361,7 @@ public static class RosterLoader
         public int                              Mitigation             { get; init; }
         public int                              MaxDexterityBonus      { get; init; }
         public int                              MovementPenalty        { get; init; }
+        public int                              TurnMeterPenalty       { get; init; }
         public int                              TurnMeterCostReduction { get; init; }
         public List<ResistanceBonusDto>?        Resistances            { get; init; }
     }
