@@ -186,6 +186,8 @@ public partial class MainWindow : Window
 
     private void StartCombat()
     {
+        TurnButton.IsVisible = true;
+        AutoPlayButton.IsVisible = true;
         _vm.ErrorMessage = "";
         SpeedSlider.Value = 1;
         _vm.Phase = "Combat";
@@ -773,6 +775,8 @@ public partial class MainWindow : Window
                         TurnButton.Content = "Turn based";
                         AutoPlayButton.Classes.Remove("waiting");
                         AutoPlayButton.Content = "Auto-play";
+                        TurnButton.IsVisible = false;
+                        AutoPlayButton.IsVisible = false;
                         NewCombatButton.IsVisible = true;
                     });
                 }
