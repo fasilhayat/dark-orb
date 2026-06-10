@@ -37,7 +37,7 @@ Core must not reference Application. Application must not reference Infrastructu
 
 ## 5. CombatSimulator architecture
 
-`CombatSimulator` (in `Application/Services/`) is now a thin orchestrator (~350 lines). Game logic lives in extracted processors under `Application/Services/Combat/`:
+`CombatSimulator` (in `Application/Services/`) is a thin orchestrator (~290 lines). Game logic lives in extracted processors under `Application/Services/Combat/`:
 
 | Processor | Responsibility |
 |-----------|---------------|
@@ -63,7 +63,7 @@ Formula: `d20 + AttackPower >= d20 + DefensePower`. **Never THAC0.**
 
 ## 7. Combat event types
 
-`EventType` is a plain string on `CombatLogEntry` — no enum. Common types: `RoundStart`, `TurnStart`, `Attack`, `Damage`, `DoTTick`, `HoTTick`, `LeechTick`, `Healed`, `EffectApplied`, `EffectResisted`, `EffectExpired`, `FumblePenalty`, `SkippedTurn`, `Death`, `KnockedOut`, `PerfectParry`, `DevastatingStrike`, `TotalReversal`, `Clash`, `ManaDeduct`, `ManaRegen`, `SpellQueued`, `SpellCharging`, `PetSummoned`, `PetExpired`, `Resurrection`. See `Application/Models/CombatLogEntry.cs` for all fields.
+`EventType` is a plain string on `CombatLogEntry` — no enum. Common types: `RoundStart`, `TurnMeterGain`, `TurnStart`, `Attack`, `Damage`, `DoTTick`, `HoTTick`, `LeechTick`, `Healed`, `EffectApplied`, `EffectResisted`, `EffectExpired`, `FumblePenalty`, `SkippedTurn`, `Move`, `Death`, `KnockedOut`, `PerfectParry`, `DevastatingStrike`, `TotalReversal`, `Clash`, `ManaDeduct`, `ManaRegen`, `SpellQueued`, `SpellCharging`, `SpellDisrupted`, `SpellLost`, `ConcentrationPass`, `InsufficientMana`, `PetSummoned`, `PetExpired`, `Resurrection`. See `.opencode/skills/combat-mechanics.md` for full detail.
 
 ## 8. API — CRUD only, no game logic
 
@@ -102,6 +102,7 @@ make test-coverage                                # coverlet, OpenCover format
 - Cyclomatic complexity <= 10 per method (`&&`/`||` counts as +1). 11–12 acceptable only where splitting would add params without reducing real complexity.
 - One public type per file (partial classes like `Demo.*` are the exception).
 - No magic numbers — named constants or enums.
+- **No reflection** — never use `System.Reflection`, `GetType().GetProperty()`, `SetValue()`, or any runtime type inspection to modify objects. If an `init`-only property blocks modification, create a new instance with the desired value instead.
 
 ## 12. Makefile commands (from `src/`)
 
@@ -126,7 +127,7 @@ Docker builds: `dotnet publish` runs on host, then `COPY` pre-built output. No N
 - **No `Directory.Build.props`** — each `.csproj` sets its own SDK, nullable, ImplicitUsings.
 - **`bugs-features/`** — numbered files representing pending work. Move to `done/<category>/` when complete where category is `bugs`, `features`, or `task`.
 - **`design/docs/`** — Game design docs. Keep in sync with SQL seed data (`.postgres-init/`).
-- **No `opencode.json`** — instructions come solely from this file.
+- **`.opencode/skills/`** — contains auxiliary technical references (combat mechanics, turn order, makefile orchestration, work intake, log analysis). These are loaded by OpenCode when tasks match their descriptions. AGENTS.md remains the canonical behavioural instruction file.
 
 ## 14. Doc update obligations
 

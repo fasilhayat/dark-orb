@@ -359,8 +359,12 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         card.PersistentBorderColor = color;
 
         card.HpBarBorderBrush = "#333";
+        card.HpBarFillOverride = null;
         if (EffectVisualConfig.AffectsHpBar(effectName))
+        {
             card.HpBarBorderBrush = color;
+            card.HpBarFillOverride = color;
+        }
 
         card.TmBarBorderBrush = "#333";
         if (EffectVisualConfig.AffectsTmBar(effectName))
@@ -392,8 +396,12 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                     card.PersistentBorderColor = lastColor;
 
                     card.HpBarBorderBrush = "#333";
+                    card.HpBarFillOverride = null;
                     if (EffectVisualConfig.AffectsHpBar(lastEffect))
+                    {
                         card.HpBarBorderBrush = lastColor;
+                        card.HpBarFillOverride = lastColor;
+                    }
 
                     card.TmBarBorderBrush = "#333";
                     if (EffectVisualConfig.AffectsTmBar(lastEffect))
@@ -430,6 +438,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             var nextColor = c.PersistentBorderColor == color ? darkColor : color;
             c.PersistentBorderColor = nextColor;
             c.HpBarBorderBrush = affectsHp ? nextColor : "#333";
+            c.HpBarFillOverride = affectsHp ? nextColor : null;
             c.TmBarBorderBrush = affectsTm ? nextColor : "#333";
         };
         timer.Start();
@@ -487,9 +496,10 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         var card = FindCard(characterName);
         if (card is not null)
         {
-            card.PersistentBorderColor = null;
-            card.HpBarBorderBrush = "#333";
-            card.TmBarBorderBrush = "#333";
+                card.PersistentBorderColor = null;
+                card.HpBarBorderBrush = "#333";
+                card.HpBarFillOverride = null;
+                card.TmBarBorderBrush = "#333";
         }
     }
 

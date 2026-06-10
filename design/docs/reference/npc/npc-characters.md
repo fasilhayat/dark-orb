@@ -87,7 +87,7 @@ A striking female elf rogue with pale silver skin, long dark hair tied in a high
 
 A petite, grinning kobold trader with bright green scales, a short snout, and oversized curious eyes. She wears a patchwork cloak made of mismatched cloth scraps tied together with twine, and under it a practical vest with many pockets. On her back rests a small, wheeled cart loaded with jumbled trinkets, fake gems, cracked scrolls, and one or two real-looking magical rings.
 
-> **Art prompt:** cartoon-ish fantasy or stylized D&D, bright colors, charming rogue.
+> **Art prompt:** Non cartoon-ish fantasy or stylized D&D, bright colors, charming rogue.
 
 **Attributes**
 

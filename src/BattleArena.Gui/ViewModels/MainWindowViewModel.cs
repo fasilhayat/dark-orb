@@ -8,6 +8,7 @@ using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using BattleArena.Core.Entities;
+using BattleArena.Gui.Models;
 using BattleArena.Presentation;
 
 namespace BattleArena.Gui.ViewModels;
@@ -126,6 +127,7 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsCombatPhase)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsApiMenuPhase)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsCharCreationPhase)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSpellPreviewPhase)));
             }
         }
     }
@@ -134,6 +136,7 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     public bool IsCombatPhase => Phase == "Combat";
     public bool IsApiMenuPhase => Phase == "ApiMenu";
     public bool IsCharCreationPhase => Phase == "CharCreation";
+    public bool IsSpellPreviewPhase => Phase == "SpellPreview";
 
     private string _scenario = "Duel";
     public string Scenario
@@ -166,6 +169,54 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     }
     public bool IsTurnBased => Mode == "TurnBased";
     public bool IsAutoMode => Mode == "Auto";
+
+    // ── Spell Preview ─────────────────────────────────────────
+
+    public ObservableCollection<CharacterDisplayItem> AvailableCasters { get; } = [];
+
+    private CharacterDisplayItem? _selectedCaster;
+    public CharacterDisplayItem? SelectedCaster
+    {
+        get => _selectedCaster;
+        set
+        {
+            if (SetField(ref _selectedCaster, value))
+            {
+                AvailableSpells.Clear();
+                if (value is not null)
+                {
+                    foreach (var spell in value.Character.MemorizedSpells)
+                        AvailableSpells.Add(new SpellDisplayItem(spell));
+                }
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanPreview)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedCasterName)));
+            }
+        }
+    }
+
+    public string SelectedCasterName => SelectedCaster?.Name ?? "";
+
+    public ObservableCollection<SpellDisplayItem> AvailableSpells { get; } = [];
+
+    private SpellDisplayItem? _selectedSpell;
+    public SpellDisplayItem? SelectedSpell
+    {
+        get => _selectedSpell;
+        set
+        {
+            if (SetField(ref _selectedSpell, value))
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanPreview)));
+        }
+    }
+
+    public bool CanPreview => SelectedCaster is not null && SelectedSpell is not null;
+
+    private bool _isPreviewing;
+    public bool IsPreviewing
+    {
+        get => _isPreviewing;
+        set => SetField(ref _isPreviewing, value);
+    }
 
     // ── Character Creation ────────────────────────────────────
 
@@ -1094,10 +1145,24 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DamagePreviewRemainder)));
     }
 
+    private string? _hpBarFillOverride;
+    public string? HpBarFillOverride
+    {
+        get => _hpBarFillOverride;
+        set
+        {
+            if (EqualityComparer<string?>.Default.Equals(_hpBarFillOverride, value)) return;
+            _hpBarFillOverride = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HpBarFillOverride)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HpBarColor)));
+        }
+    }
+
     public string HpBarColor
     {
         get
         {
+            if (_hpBarFillOverride is not null) return _hpBarFillOverride;
             if (IsDead) return "#666";
             var frac = (double)Math.Max(0, Hp) / Math.Max(1, MaxHp);
             return frac > 0.5 ? "#44cc44" : frac > 0.25 ? "#d4a017" : "#ff4444";

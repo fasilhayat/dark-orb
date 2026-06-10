@@ -15,6 +15,7 @@ using BattleArena.Core.Entities.Enums;
 using BattleArena.Gui.Data;
 using BattleArena.Gui.Models;
 using BattleArena.Gui.Presenters;
+using BattleArena.Gui.Services;
 using BattleArena.Gui.ViewModels;
 using BattleArena.Presentation;
 
@@ -37,6 +38,8 @@ public partial class MainWindow : Window
     private Party? _combatParty2;
     private List<Character> _apiRoster = [];
     private readonly ISoundPlayer? _soundPlayer;
+    private string _previousPhase = "MainMenu";
+    private bool _fromSpellPreview;
 
     public MainWindow()
     {
@@ -176,6 +179,17 @@ public partial class MainWindow : Window
     private void OnNewCombatClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         NewCombatButton.IsVisible = false;
+
+        if (_fromSpellPreview)
+        {
+            _presenter?.Stop();
+            _vm.PropertyChanged -= OnVmWaitingChanged;
+            _presenter = null;
+            _waitForNext?.Reset();
+            OnRunSpellPreviewClick(sender, e);
+            return;
+        }
+
         if (_team1.Count == 0 || _team2.Count == 0) return;
         _presenter?.Stop();
         _vm.PropertyChanged -= OnVmWaitingChanged;
@@ -231,7 +245,7 @@ public partial class MainWindow : Window
                 ArmorClass = pm.Character.Equipment.TotalArmorClass,
                 WeaponStats = FormatWeaponStats(pm.AttackSource),
                 MagicResistance = pm.Character.ComputeResistance(ResistanceType.Magic),
-                Hp = pm.Character.MaxHitPoints,
+                Hp = pm.Character.CurrentHitPoints,
                 Mana = pm.Character.CurrentMana,
                 CurrentWeapon = pm.AttackSource?.Name ?? "",
                 Portrait = PortraitResolver.GetPortrait(pm.Character.Name)
@@ -254,7 +268,7 @@ public partial class MainWindow : Window
                 ArmorClass = pm.Character.Equipment.TotalArmorClass,
                 WeaponStats = FormatWeaponStats(pm.AttackSource),
                 MagicResistance = pm.Character.ComputeResistance(ResistanceType.Magic),
-                Hp = pm.Character.MaxHitPoints,
+                Hp = pm.Character.CurrentHitPoints,
                 Mana = pm.Character.CurrentMana,
                 CurrentWeapon = pm.AttackSource?.Name ?? "",
                 Portrait = PortraitResolver.GetPortrait(pm.Character.Name)
@@ -293,6 +307,22 @@ public partial class MainWindow : Window
         _cts?.Dispose();
         _cts = null;
         _waitForNext = null;
+
+        if (_fromSpellPreview)
+        {
+            _fromSpellPreview = false;
+            _vm.Phase = "SpellPreview";
+            _vm.CombatLog.Clear();
+            _vm.Heroes.Clear();
+            _vm.Enemies.Clear();
+            _vm.IsRunning = false;
+            _vm.CombatOver = false;
+            _vm.Tick = 0;
+            _vm.RoundNumber = 0;
+            _vm.TickInRound = 0;
+            NewCombatButton.IsVisible = false;
+            return;
+        }
 
         _vm.Phase = "Setup";
         _vm.CombatLog.Clear();
@@ -839,7 +869,7 @@ public partial class MainWindow : Window
         {
             Name = c.Name,
             MaxHp = c.MaxHp,
-            Hp = c.MaxHp,
+            Hp = c.Hp,
             Level = c.Level,
             ClassName = c.ClassName,
             Sex = c.Sex,
@@ -935,6 +965,263 @@ public partial class MainWindow : Window
         var dice = $"{source.DamageCount}d{DieSides(source.DamageDie)}";
         return source.AttackBonus > 0 ? $"{dice}+{source.AttackBonus}" : dice;
     }
+
+    // ── Spell Preview Handlers ───────────────────────────────
+
+    private void OnSpellPreviewClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        _previousPhase = _vm.Phase;
+        _vm.Phase = "SpellPreview";
+        _vm.SelectedCaster = null;
+        _vm.SelectedSpell = null;
+        _vm.AvailableSpells.Clear();
+        _vm.AvailableCasters.Clear();
+
+        var casters = Roster.AllHeroes
+            .Where(c => c.MemorizedSpells.Count > 0 && PortraitResolver.HasPortrait(c.Name))
+            .Select(c => new CharacterDisplayItem(c))
+            .ToList();
+        foreach (var c in casters)
+            _vm.AvailableCasters.Add(c);
+    }
+
+    private void OnSpellPreviewCasterSelected(object? sender, SelectionChangedEventArgs e)
+    {
+        if (e.AddedItems.Count > 0 && e.AddedItems[0] is CharacterDisplayItem item)
+        {
+            _vm.SelectedCaster = item;
+            _vm.SelectedSpell = null;
+        }
+    }
+
+    private void OnSpellPreviewSpellSelected(object? sender, SelectionChangedEventArgs e)
+    {
+        if (e.AddedItems.Count > 0 && e.AddedItems[0] is SpellDisplayItem item)
+            _vm.SelectedSpell = item;
+    }
+
+    private async void OnRunSpellPreviewClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (_vm.SelectedCaster is null || _vm.SelectedSpell is null) return;
+        _vm.IsPreviewing = true;
+
+        RunPreviewButton.IsEnabled = false;
+
+        var caster = _vm.SelectedCaster.Character;
+        var dummy = Roster.AllDummies.FirstOrDefault(d => d.Name == "Practice Dummy");
+        if (dummy is null)
+        {
+            _vm.ErrorMessage = "Practice Dummy not found in roster.";
+            _vm.IsPreviewing = false;
+            return;
+        }
+
+        ResetCombatant(caster);
+        ResetCombatant(dummy);
+
+        var spell = PreparePreviewSpell(_vm.SelectedSpell.Spell);
+        dummy.MemorizedSpells.Clear();
+        dummy.Equipment = new ArmorSlots();
+        dummy.ActiveStatusEffects.Clear();
+        dummy.Race = null;
+        dummy.Subrace = null;
+
+        // Force all on-hit effects to land (preview wants to see the visuals)
+        foreach (var effect in spell.OnHitEffects)
+            effect.ApplicationChance = 100;
+
+        caster.CurrentHitPoints = caster.MaxHitPoints / 2;
+        dummy.CurrentHitPoints = dummy.MaxHitPoints / 2;
+
+        if (spell.IsHealing)
+            caster.TurnSpeed = 30;
+
+        var party1 = new Party { Name = caster.Name };
+        party1.Members.Add(new PartyMember
+        {
+            Character = caster,
+            AttackSource = Roster.GetAttackSource(caster)
+        });
+
+        var party2 = new Party { Name = "Target" };
+        party2.Members.Add(new PartyMember
+        {
+            Character = dummy,
+            AttackSource = Roster.GetAttackSource(dummy)
+        });
+
+        _combatParty1 = party1;
+        _combatParty2 = party2;
+        _fromSpellPreview = true;
+
+        TurnButton.IsVisible = true;
+        AutoPlayButton.IsVisible = true;
+        _vm.ErrorMessage = "";
+        SpeedSlider.Value = 1;
+        _vm.Phase = "Combat";
+        _vm.CombatLog.Clear();
+        foreach (var h in _vm.Heroes) h.EffectBars.Clear();
+        foreach (var enemy in _vm.Enemies) enemy.EffectBars.Clear();
+        _vm.Heroes.Clear();
+        _vm.Enemies.Clear();
+        _vm.ActiveActorName = "";
+        _vm.CombatOver = false;
+        _vm.Tick = 0;
+        _vm.RoundNumber = 0;
+        _vm.TickInRound = 0;
+        _vm.EngagementRange = "Melee";
+
+        PopulateCharacterCards(party1, party2);
+
+        var diceService = new LoggingDiceService();
+        var combatStats = new CombatStatsService();
+        var combatService = new CombatService(diceService, combatStats, [new RangeModifier()]);
+        var turnmeterService = new TurnmeterService();
+        var statusEffectService = new StatusEffectService();
+        var forcedSpell = new ForcedSpellDecisionSource(spell);
+        var autoSource = new AutoActionDecisionSource(diceService);
+
+        _cts = new CancellationTokenSource();
+        _waitForNext = new ManualResetEventSlim(false);
+        _vm.IsRunning = true;
+        NewCombatButton.IsVisible = false;
+        AutoPlayButton.Content = "Auto-play";
+        TurnButton.Content = "Next turn";
+
+        var simulator = new CombatSimulator(
+            combatService, turnmeterService, statusEffectService, diceService,
+            new LowestHpTargetSelector(), new LowestHpTargetSelector(),
+            forcedSpell, autoSource);
+
+        const int previewTicks = 12;
+        var result = await Task.Run(() => simulator.Simulate(party1, party2, previewTicks), _cts.Token);
+
+        result.DiceLog = diceService.DiceLog;
+        result.Log = CombatLogMerger.Merge(result.Log, result.DiceLog);
+
+        _waitForNext.Reset();
+
+        var charStates = new List<CharDisplayState>();
+        foreach (var c in _vm.Heroes)
+            charStates.Add(MakeState(c));
+        foreach (var c in _vm.Enemies)
+            charStates.Add(MakeState(c));
+
+        var layout = CombatLayout.From(
+            party1.Members.Select(m => m.Character.Name),
+            party2.Members.Select(m => m.Character.Name),
+            isDuel: true);
+
+        var state = new CombatDisplayState(charStates, layout, isApiMode: false);
+
+        _presenter = new AvaloniaCombatPresenter(_vm, _displayConfig, _waitForNext, Dispatcher.UIThread, _soundPlayer)
+        {
+            PacingMultiplier = SpeedSlider.Value,
+            AutoMode = false
+        };
+
+        var playbackToken = _cts.Token;
+        _ = Task.Run(() =>
+        {
+            try
+            {
+                CombatPlaybackEngine.PlayRealTime(result, state, _presenter);
+            }
+            finally
+            {
+                if (!playbackToken.IsCancellationRequested)
+                {
+                    Dispatcher.UIThread.Post(() =>
+                    {
+                        _vm.IsRunning = false;
+                        _vm.CombatOver = true;
+                        StopBlink();
+                        TurnButton.Classes.Remove("waiting");
+                        TurnButton.Content = "Turn based";
+                        AutoPlayButton.Classes.Remove("waiting");
+                        AutoPlayButton.Content = "Auto-play";
+                        TurnButton.IsVisible = false;
+                        AutoPlayButton.IsVisible = false;
+                        NewCombatButton.IsVisible = true;
+                    });
+                }
+            }
+        }, playbackToken);
+
+        _vm.IsPreviewing = false;
+        RunPreviewButton.IsEnabled = true;
+    }
+
+    private void OnBackToMainFromSpellPreviewClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        _presenter?.Stop();
+        _presenter = null;
+        _cts?.Cancel();
+        _waitForNext?.Set();
+        _waitForNext?.Dispose();
+        _cts?.Dispose();
+        _cts = null;
+        _waitForNext = null;
+
+        _fromSpellPreview = false;
+        _vm.Phase = _previousPhase;
+        _vm.CombatLog.Clear();
+        _vm.Heroes.Clear();
+        _vm.Enemies.Clear();
+        _vm.IsRunning = false;
+        _vm.CombatOver = false;
+        _vm.Tick = 0;
+        _vm.RoundNumber = 0;
+        _vm.TickInRound = 0;
+        _vm.SelectedCaster = null;
+        _vm.SelectedSpell = null;
+        _vm.AvailableSpells.Clear();
+        _vm.AvailableCasters.Clear();
+    }
+
+    private static Spell PreparePreviewSpell(Spell original)
+    {
+        if (original.IsHealing || original.ElementalType != ElementalType.None)
+            return original;
+
+        var mapped = MapDamageToElemental(original.DamageType);
+        if (mapped == ElementalType.None)
+            return original;
+
+        return new Spell
+        {
+            Id = original.Id,
+            Name = original.Name,
+            Description = original.Description,
+            School = original.School,
+            ManaCost = original.ManaCost,
+            TurnMeterCost = original.TurnMeterCost,
+            SpellLevel = original.SpellLevel,
+            DamageCount = original.DamageCount,
+            DamageDie = original.DamageDie,
+            DamageType = original.DamageType,
+            AttackType = original.AttackType,
+            AttackBonus = original.AttackBonus,
+            FlatDamageBonus = original.FlatDamageBonus,
+            ElementalType = mapped,
+            ElementalDamage = original.ElementalDamage,
+            Tags = original.Tags,
+            SummonedPet = original.SummonedPet,
+            OnHitEffects = original.OnHitEffects
+        };
+    }
+
+    private static ElementalType MapDamageToElemental(DamageType dmg) => dmg switch
+    {
+        DamageType.Fire => ElementalType.Fire,
+        DamageType.Ice => ElementalType.Ice,
+        DamageType.Lightning => ElementalType.Lightning,
+        DamageType.Acid => ElementalType.Poison,
+        DamageType.Poison => ElementalType.Poison,
+        DamageType.Holy => ElementalType.Holy,
+        DamageType.Shadow => ElementalType.Shadow,
+        _ => ElementalType.None
+    };
 
     private static List<CharacterDisplayItem> ToDisplayItems(List<Character> characters) =>
         characters

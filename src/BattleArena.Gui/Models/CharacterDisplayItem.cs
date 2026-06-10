@@ -15,6 +15,7 @@ public class CharacterDisplayItem : INotifyPropertyChanged
     public int Level => Character.Level;
     public int MaxHitPoints => Character.MaxHitPoints;
     public string RaceName => Character.Race?.Name ?? "";
+    public int SpellCount => Character.MemorizedSpells.Count;
 
     private int _teamSlot;
     public int TeamSlot
