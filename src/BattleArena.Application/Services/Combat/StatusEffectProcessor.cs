@@ -57,6 +57,8 @@ internal class StatusEffectProcessor
                 LeechTargetAfter   = actorState.Character.CurrentHitPoints,
                 LeechCasterAfter   = casterState.Character.CurrentHitPoints,
                 StatusEffectName   = leechEffect.Name,
+                EffectDuration     = leechEffect.Duration,
+                EffectStacks       = actorState.Character.ActiveStatusEffects.Count(e => e.Name == leechEffect.Name),
                 Message            = $"{actorState.Character.Name} loses {leechAmount} HP to {casterName}'s {leechEffect.Name}.  {casterName} gains {leechAmount} HP."
             });
         }
@@ -94,6 +96,8 @@ internal class StatusEffectProcessor
                 LeechTargetAfter   = actorState.Character.CurrentHitPoints,
                 LeechCasterAfter   = casterState.Character.CurrentHitPoints,
                 StatusEffectName   = effect.Name,
+                EffectDuration     = effect.Duration,
+                EffectStacks       = actorState.Character.ActiveStatusEffects.Count(e => e.Name == effect.Name),
                 Message            = $"{actorState.Character.Name} loses {leechAmount} HP to {casterName}'s {effect.Name}.  {casterName} gains {leechAmount} HP."
             });
         }
@@ -119,6 +123,8 @@ internal class StatusEffectProcessor
                 LeechTargetAfter   = actorState.Character.CurrentMana,
                 LeechCasterAfter   = casterState.Character.CurrentMana,
                 StatusEffectName   = effect.Name,
+                EffectDuration     = effect.Duration,
+                EffectStacks       = actorState.Character.ActiveStatusEffects.Count(e => e.Name == effect.Name),
                 Message            = $"{actorState.Character.Name} loses {actualDrain} mana to {casterName}'s {effect.Name}.  {casterName} gains {actualDrain} mana."
             });
         }
@@ -139,13 +145,15 @@ internal class StatusEffectProcessor
 
             await notify(new CombatLogEntry
             {
-                Tick             = tick,
-                ActorName        = actorState.Character.Name,
-                EventType        = "DoTTick",
-                DamageDealt      = dotDmg,
-                TargetHpAfter    = actorState.Character.CurrentHitPoints,
-                StatusEffectName = dotEffect.Name,
-                Message          = $"{actorState.Character.Name} suffers {dotDmg} {dotEffect.Name} damage."
+                Tick               = tick,
+                ActorName          = actorState.Character.Name,
+                EventType          = "DoTTick",
+                DamageDealt        = dotDmg,
+                TargetHpAfter      = actorState.Character.CurrentHitPoints,
+                StatusEffectName   = dotEffect.Name,
+                EffectDuration     = dotEffect.Duration,
+                EffectStacks       = actorState.Character.ActiveStatusEffects.Count(e => e.Name == dotEffect.Name),
+                Message            = $"{actorState.Character.Name} suffers {dotDmg} {dotEffect.Name} damage."
             });
 
             if (!defeated && actorState.Character.CurrentHitPoints <= 0)
@@ -168,13 +176,15 @@ internal class StatusEffectProcessor
 
         await notify(new CombatLogEntry
         {
-            Tick             = tick,
-            ActorName        = actorState.Character.Name,
-            EventType        = "DoTTick",
-            DamageDealt      = effect.DamagePerTurn,
-            TargetHpAfter    = actorState.Character.CurrentHitPoints,
-            StatusEffectName = effect.Name,
-            Message          = $"{actorState.Character.Name} suffers {effect.DamagePerTurn} {effect.Name} damage."
+            Tick               = tick,
+            ActorName          = actorState.Character.Name,
+            EventType          = "DoTTick",
+            DamageDealt        = effect.DamagePerTurn,
+            TargetHpAfter      = actorState.Character.CurrentHitPoints,
+            StatusEffectName   = effect.Name,
+            EffectDuration     = effect.Duration,
+            EffectStacks       = actorState.Character.ActiveStatusEffects.Count(e => e.Name == effect.Name),
+            Message            = $"{actorState.Character.Name} suffers {effect.DamagePerTurn} {effect.Name} damage."
         });
 
         if (actorState.Character.CurrentHitPoints <= 0)
@@ -204,14 +214,16 @@ internal class StatusEffectProcessor
 
             await notify(new CombatLogEntry
             {
-                Tick             = tick,
-                ActorName        = actorState.Character.Name,
-                EventType        = "HoTTick",
-                DamageDealt      = hotHeal,
-                TargetHpBefore   = hpBefore,
-                TargetHpAfter    = actorState.Character.CurrentHitPoints,
-                StatusEffectName = hotName,
-                Message          = $"{actorState.Character.Name} recovers {hotHeal} HP from {hotName}.  HP: {hpBefore} -> {actorState.Character.CurrentHitPoints}"
+                Tick               = tick,
+                ActorName          = actorState.Character.Name,
+                EventType          = "HoTTick",
+                DamageDealt        = hotHeal,
+                TargetHpBefore     = hpBefore,
+                TargetHpAfter      = actorState.Character.CurrentHitPoints,
+                StatusEffectName   = hotName,
+                EffectDuration     = hotEffect.Duration,
+                EffectStacks       = actorState.Character.ActiveStatusEffects.Count(e => e.Name == hotEffect.Name),
+                Message            = $"{actorState.Character.Name} recovers {hotHeal} HP from {hotName}.  HP: {hpBefore} -> {actorState.Character.CurrentHitPoints}"
             });
         }
     }
@@ -231,14 +243,16 @@ internal class StatusEffectProcessor
 
         await notify(new CombatLogEntry
         {
-            Tick             = tick,
-            ActorName        = actorState.Character.Name,
-            EventType        = "HoTTick",
-            DamageDealt      = hotHeal,
-            TargetHpBefore   = hpBefore,
-            TargetHpAfter    = actorState.Character.CurrentHitPoints,
-            StatusEffectName = hotName,
-            Message          = $"{actorState.Character.Name} recovers {hotHeal} HP from {hotName}.  HP: {hpBefore} -> {actorState.Character.CurrentHitPoints}"
+            Tick               = tick,
+            ActorName          = actorState.Character.Name,
+            EventType          = "HoTTick",
+            DamageDealt        = hotHeal,
+            TargetHpBefore     = hpBefore,
+            TargetHpAfter      = actorState.Character.CurrentHitPoints,
+            StatusEffectName   = hotName,
+            EffectDuration     = effect.Duration,
+            EffectStacks       = actorState.Character.ActiveStatusEffects.Count(e => e.Name == effect.Name),
+            Message            = $"{actorState.Character.Name} recovers {hotHeal} HP from {hotName}.  HP: {hpBefore} -> {actorState.Character.CurrentHitPoints}"
         });
     }
 
@@ -274,13 +288,16 @@ internal class StatusEffectProcessor
             _statusEffectService.Apply(caster, effect);
             await notify(new CombatLogEntry
             {
-                Tick             = tick,
-                ActorName        = caster.Name,
-                EventType        = "EffectApplied",
-                StatusEffectName = effect.Name,
-                AttackSourceName = spell.Name,
-                IsBuff           = true,
-                Message          = $"{caster.Name} gains {effect.Name} from {spell.Name}!"
+                Tick               = tick,
+                ActorName          = caster.Name,
+                EventType          = "EffectApplied",
+                StatusEffectName   = effect.Name,
+                AttackSourceName   = spell.Name,
+                IsBuff             = true,
+                EffectDuration     = effect.Duration,
+                EffectMaxDuration  = effect.Duration,
+                EffectStacks       = caster.ActiveStatusEffects.Count(e => e.Name == effect.Name),
+                Message            = $"{caster.Name} gains {effect.Name} from {spell.Name}!"
             });
         }
     }
@@ -296,11 +313,14 @@ internal class StatusEffectProcessor
         {
             await notify(new CombatLogEntry
             {
-                Tick             = tick,
-                ActorName        = target.Name,
-                EventType        = "EffectApplied",
-                StatusEffectName = effect.Name,
-                Message          = $"{target.Name} is afflicted with {effect.Name}!"
+                Tick               = tick,
+                ActorName          = target.Name,
+                EventType          = "EffectApplied",
+                StatusEffectName   = effect.Name,
+                EffectDuration     = effect.Duration,
+                EffectMaxDuration  = effect.Duration,
+                EffectStacks       = target.ActiveStatusEffects.Count(e => e.Name == effect.Name),
+                Message            = $"{target.Name} is afflicted with {effect.Name}!"
             });
         }
         else if (appResult.WasResisted)
@@ -330,12 +350,15 @@ internal class StatusEffectProcessor
         {
             await notify(new CombatLogEntry
             {
-                Tick             = tick,
-                ActorName        = target.Name,
-                EventType        = "EffectApplied",
-                StatusEffectName = effect.Name,
-                AttackSourceName = sourceName,
-                Message          = $"{target.Name} is afflicted with {effect.Name}!"
+                Tick               = tick,
+                ActorName          = target.Name,
+                EventType          = "EffectApplied",
+                StatusEffectName   = effect.Name,
+                AttackSourceName   = sourceName,
+                EffectDuration     = effect.Duration,
+                EffectMaxDuration  = effect.Duration,
+                EffectStacks       = target.ActiveStatusEffects.Count(e => e.Name == effect.Name),
+                Message            = $"{target.Name} is afflicted with {effect.Name}!"
             });
         }
         else if (result.WasResisted)

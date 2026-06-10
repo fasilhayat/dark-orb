@@ -48,6 +48,25 @@ public static class EffectVisualConfig
 
     public static bool IsDisplayed(string effectName) => _displayed.Contains(effectName);
 
+    public static string GetColor(string effectName)
+    {
+        if (CcVisualConfig.IsCcEffect(effectName))
+            return CcVisualConfig.GetColor(effectName);
+        return effectName switch
+        {
+            "Burning"   => "#ff6600",
+            "Ignite"    => "#ff4400",
+            "Frozen"    => "#44ccff",
+            "Freeze"    => "#44ccff",
+            "Shocked"   => "#ffff44",
+            "Electrified" => "#44ccff",
+            "Poisoned"  => "#44ff44",
+            "Bleeding"  => "#ff4444",
+            "Leech" or "LeechMana" => TransferEffectRegistry.GetConfig(effectName).TransferColor,
+            _           => "#88ccff",
+        };
+    }
+
     public static EffectVisualTarget GetVisualTarget(string effectName)
         => _targets.TryGetValue(effectName, out var target) ? target : EffectVisualTarget.None;
 

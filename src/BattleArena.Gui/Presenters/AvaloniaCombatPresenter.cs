@@ -807,24 +807,26 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     private static List<LogSegment> BuildDoTTickRow(CombatLogEntry e, CombatDisplayState state)
     {
         var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
+        var durationInfo = e.EffectDuration.HasValue ? $" [{e.EffectDuration}t]" : "";
         return
         [
             Seg("  \u2193 ", Yellow),
             Seg(e.ActorName, actorColor),
             Seg("  suffers  ", Gray),
             Seg($"{e.DamageDealt}", Red),
-            Seg($"  {e.StatusEffectName ?? "DoT"} damage", Yellow),
+            Seg($"  {e.StatusEffectName ?? "DoT"}{durationInfo} damage", Yellow),
         ];
     }
 
     private static List<LogSegment> BuildEffectAppliedRow(CombatLogEntry e, CombatDisplayState state)
     {
         var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
+        var stackInfo = e.EffectStacks > 1 ? $" x{e.EffectStacks}" : "";
         return
         [
             Seg("  \u2605 ", Yellow),
             Seg(e.ActorName, actorColor),
-            Seg($"  is afflicted with  {e.StatusEffectName}!", Yellow),
+            Seg($"  is afflicted with  {e.StatusEffectName}{stackInfo}!", Yellow),
         ];
     }
 

@@ -732,6 +732,8 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
         TmPipes = new ObservableCollection<IBrush>();
         for (var i = 0; i < TmTotalPipes; i++)
             TmPipes.Add(TmPipeEmpty);
+        EffectBars.CollectionChanged += (_, _) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasEffectBars)));
     }
 
     private int _hp;
@@ -841,6 +843,8 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
         }
     }
     public bool HasEffectsDisplay => EffectsDisplay is not null;
+
+    public bool HasEffectBars => EffectBars.Count > 0;
 
     public string EffectsColor
     {
@@ -1116,7 +1120,26 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
 
     public string ManaLabelColor => MaxMana > 0 ? "#999" : "#444";
 
-    private string SexDisplay => Sex switch { "F" => "Female", "M" => "Male", _ => "None" };
+    public string SexDisplay => Sex switch { "F" => "Female", "M" => "Male", _ => "None" };
+
+    public ObservableCollection<EffectBarViewModel> EffectBars { get; } = new();
+
+    private void UpdateEffectBars(IReadOnlyList<EffectDisplayData> effects)
+    {
+        var remaining = new HashSet<string>(effects.Select(e => e.Name));
+        var toRemove = EffectBars.Where(b => !remaining.Contains(b.Name)).ToList();
+        foreach (var remove in toRemove)
+            EffectBars.Remove(remove);
+
+        foreach (var ed in effects)
+        {
+            var existing = EffectBars.FirstOrDefault(b => b.Name == ed.Name);
+            if (existing is not null)
+                existing.UpdateFrom(ed);
+            else
+                EffectBars.Add(new EffectBarViewModel(ed));
+        }
+    }
 
     public void UpdateFrom(CharDisplayState s)
     {
@@ -1126,7 +1149,8 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
         IsAlive = s.IsAlive;
         IsTmLocked = s.IsTmLocked;
         CcStatus = s.CcStatus;
-        ActiveEffects = s.ActiveEffects.Count > 0 ? string.Join(", ", s.ActiveEffects) : "";
+        ActiveEffects = s.ActiveEffects.Count > 0 ? string.Join(", ", s.ActiveEffects.Select(e => e.Name)) : "";
+        UpdateEffectBars(s.ActiveEffects);
         if (!string.IsNullOrEmpty(s.Weapon))
             CurrentWeapon = s.Weapon;
     }
@@ -1233,6 +1257,72 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
         }
     }
 
+}
+
+public sealed class EffectBarViewModel : INotifyPropertyChanged
+{
+    public string Name { get; }
+    public string Color { get; private set; }
+
+    private int _duration;
+    public int Duration
+    {
+        get => _duration;
+        set
+        {
+            if (_duration == value) return;
+            _duration = value;
+            RaiseAll();
+        }
+    }
+
+    public int MaxDuration { get; private set; }
+    public double DurationFraction => MaxDuration > 0 ? Math.Clamp((double)Duration / MaxDuration, 0, 1) : 0;
+    public string DurationLabel => $"{Math.Max(0, Duration)}/{MaxDuration} ticks";
+
+    private int _stacks;
+    public int Stacks
+    {
+        get => _stacks;
+        set
+        {
+            if (_stacks == value) return;
+            _stacks = value;
+            RaiseAll();
+        }
+    }
+
+    public string Label => Stacks > 1 ? $"{Name} x{Stacks}" : Name;
+    public bool HasMultipleStacks => Stacks > 1;
+
+    public EffectBarViewModel(EffectDisplayData data)
+    {
+        Name = data.Name;
+        Color = data.Color;
+        _duration = data.Duration;
+        MaxDuration = data.MaxDuration;
+        _stacks = data.Stacks;
+    }
+
+    public void UpdateFrom(EffectDisplayData data)
+    {
+        Color = data.Color;
+        Duration = data.Duration;
+        MaxDuration = data.MaxDuration;
+        Stacks = data.Stacks;
+    }
+
+    private void RaiseAll()
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Duration)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Stacks)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Label)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasMultipleStacks)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DurationFraction)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DurationLabel)));
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
 }
 
 public sealed class LogSegment

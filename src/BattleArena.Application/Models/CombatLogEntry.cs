@@ -102,4 +102,10 @@ public class CombatLogEntry
     // (caster level significantly above spell level → Major visual tier).
     public int? SpellLevel { get; set; }
     public int? CasterLevel { get; set; }
+
+    // Populated on EffectApplied events — remaining and original duration
+    public int? EffectDuration { get; set; }
+    public int? EffectMaxDuration { get; set; }
+    // Populated on EffectApplied and DoTTick/HoTTick/LeechTick events — number of active instances
+    public int? EffectStacks { get; set; }
 }

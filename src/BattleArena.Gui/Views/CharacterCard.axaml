@@ -173,6 +173,38 @@
                        HorizontalAlignment="Center" VerticalAlignment="Center" />
           </Grid>
         </Border>
+
+        <!-- Effect bars: active DoT/HoT/debuff tracking with duration and stacks -->
+        <Border IsVisible="{Binding HasEffectBars}" Background="#0d0d1a" CornerRadius="3"
+                Padding="4,3" Margin="0,2,0,0">
+          <ItemsControl ItemsSource="{Binding EffectBars}">
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate>
+                <StackPanel Spacing="2" />
+              </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Grid ColumnDefinitions="Auto,*,Auto" Height="16">
+                  <TextBlock Grid.Column="0" Text="{Binding Label}" Foreground="{Binding Color}"
+                             FontSize="11" FontWeight="SemiBold" VerticalAlignment="Center"
+                             Margin="0,0,6,0" TextTrimming="CharacterEllipsis" />
+                  <Border Grid.Column="1" Background="#1a1a2e" CornerRadius="2" Height="10"
+                          VerticalAlignment="Center" ClipToBounds="True">
+                    <Border Background="{Binding Color}" CornerRadius="2" Height="10"
+                            HorizontalAlignment="Stretch" RenderTransformOrigin="0,0.5">
+                      <Border.RenderTransform>
+                        <ScaleTransform ScaleX="{Binding DurationFraction}" />
+                      </Border.RenderTransform>
+                    </Border>
+                  </Border>
+                  <TextBlock Grid.Column="2" Text="{Binding DurationLabel}" Foreground="#777"
+                             FontSize="10" VerticalAlignment="Center" Margin="4,0,0,0" />
+                </Grid>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </Border>
       </StackPanel>
 
       <!-- Overlay layer: death or status effects -->

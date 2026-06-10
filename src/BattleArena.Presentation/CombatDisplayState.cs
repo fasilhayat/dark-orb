@@ -101,12 +101,18 @@ public sealed class CombatDisplayState
 
             case "DoTTick":
                 if (_chars.TryGetValue(e.ActorName, out var dotSt))
+                {
                     dotSt.Hp = e.TargetHpAfter ?? Math.Max(dotSt.Hp - (e.DamageDealt ?? 0), -10);
+                    UpdateEffectOnTick(dotSt, e);
+                }
                 break;
 
             case "HoTTick":
                 if (_chars.TryGetValue(e.ActorName, out var hotSt))
+                {
                     hotSt.Hp = e.TargetHpAfter ?? Math.Min(hotSt.MaxHp, hotSt.Hp + (e.DamageDealt ?? 0));
+                    UpdateEffectOnTick(hotSt, e);
+                }
                 break;
 
             case "Healed":
@@ -127,6 +133,7 @@ public sealed class CombatDisplayState
                         leechTargetSt.Hp = e.LeechTargetAfter.Value;
                     else if (e.LeechResourceType == "Mana" && e.LeechTargetAfter.HasValue)
                         leechTargetSt.Mana = e.LeechTargetAfter.Value;
+                    UpdateEffectOnTick(leechTargetSt, e);
                 }
                 if (e.LeechCasterName is not null && _chars.TryGetValue(e.LeechCasterName, out var leechCasterSt))
                 {
@@ -160,8 +167,24 @@ public sealed class CombatDisplayState
                     && _chars.TryGetValue(e.ActorName, out var applySt)
                     && EffectVisualConfig.IsDisplayed(e.StatusEffectName))
                 {
-                    if (!applySt.ActiveEffects.Contains(e.StatusEffectName))
-                        applySt.ActiveEffects.Add(e.StatusEffectName);
+                    var existing = applySt.ActiveEffects.FirstOrDefault(d => d.Name == e.StatusEffectName);
+                    if (existing is not null)
+                    {
+                        existing.Duration = e.EffectDuration ?? existing.Duration;
+                        existing.MaxDuration = Math.Max(existing.MaxDuration, e.EffectMaxDuration ?? existing.Duration);
+                        existing.Stacks = e.EffectStacks ?? existing.Stacks + 1;
+                    }
+                    else
+                    {
+                        applySt.ActiveEffects.Add(new EffectDisplayData
+                        {
+                            Name = e.StatusEffectName,
+                            Duration = e.EffectDuration ?? 3,
+                            MaxDuration = e.EffectMaxDuration ?? e.EffectDuration ?? 3,
+                            Stacks = e.EffectStacks ?? 1,
+                            Color = EffectVisualConfig.GetColor(e.StatusEffectName),
+                        });
+                    }
                     if (CcVisualConfig.IsCcEffect(e.StatusEffectName))
                     {
                         applySt.IsTmLocked = true;
@@ -174,9 +197,9 @@ public sealed class CombatDisplayState
                 if (!string.IsNullOrWhiteSpace(e.StatusEffectName)
                     && _chars.TryGetValue(e.ActorName, out var expSt))
                 {
-                    expSt.ActiveEffects.Remove(e.StatusEffectName);
+                    expSt.ActiveEffects.RemoveAll(d => d.Name == e.StatusEffectName);
                     if (CcVisualConfig.IsCcEffect(e.StatusEffectName)
-                        && !expSt.ActiveEffects.Any(CcVisualConfig.IsCcEffect))
+                        && !expSt.ActiveEffects.Any(d => CcVisualConfig.IsCcEffect(d.Name)))
                     {
                         expSt.IsTmLocked = false;
                         expSt.CcStatus = null;
@@ -194,5 +217,44 @@ public sealed class CombatDisplayState
                 }
                 break;
         }
+    }
+
+    /// <summary>
+    /// Returns the names of all active effects (used by legacy string-based display).
+    /// </summary>
+    public IReadOnlyList<string> GetActiveEffectNames(string characterName)
+    {
+        if (_chars.TryGetValue(characterName, out var st))
+            return st.ActiveEffects.Select(d => d.Name).ToList();
+        return Array.Empty<string>();
+    }
+
+    /// <summary>
+    /// Returns true if the character has at least one active effect matching the predicate.
+    /// </summary>
+    public bool HasActiveEffect(string characterName, Func<string, bool> predicate)
+    {
+        if (_chars.TryGetValue(characterName, out var st))
+            return st.ActiveEffects.Any(d => predicate(d.Name));
+        return false;
+    }
+
+    /// <summary>
+    /// Updates effect duration (decrements by 1 for this tick) and stacks on
+    /// DoTTick / HoTTick / LeechTick events.
+    /// </summary>
+    private static void UpdateEffectOnTick(CharDisplayState st, CombatLogEntry e)
+    {
+        if (string.IsNullOrWhiteSpace(e.StatusEffectName)) return;
+        var effect = st.ActiveEffects.FirstOrDefault(d => d.Name == e.StatusEffectName);
+        if (effect is null) return;
+
+        if (e.EffectDuration.HasValue)
+            effect.Duration = Math.Max(0, e.EffectDuration.Value - 1);
+        else
+            effect.Duration = Math.Max(0, effect.Duration - 1);
+
+        if (e.EffectStacks.HasValue)
+            effect.Stacks = e.EffectStacks.Value;
     }
 }

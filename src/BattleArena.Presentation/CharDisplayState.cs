@@ -1,5 +1,14 @@
 namespace BattleArena.Presentation;
 
+public sealed class EffectDisplayData
+{
+    public required string Name { get; init; }
+    public int Duration { get; set; }
+    public int MaxDuration { get; set; }
+    public int Stacks { get; set; }
+    public string Color { get; set; } = "#88ccff";
+}
+
 public class CharDisplayState
 {
     public required string Name { get; init; }
@@ -21,5 +30,5 @@ public class CharDisplayState
     public int ArmorClass { get; init; }
     public int StrikeRating { get; init; }
     public int MagicResistance { get; init; }
-    public List<string> ActiveEffects { get; set; } = new();
+    public List<EffectDisplayData> ActiveEffects { get; set; } = new();
 }
