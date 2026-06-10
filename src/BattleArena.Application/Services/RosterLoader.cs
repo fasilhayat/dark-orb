@@ -224,6 +224,8 @@ public static class RosterLoader
             if (slots.Chest is not null || slots.RightHand is not null)
                 ch.Equipment = slots;
 
+            ch.RemainingCasts = ch.MaxCastsPerCombat;
+
             if (d.MemorizedSpells is { Count: > 0 })
             {
                 foreach (var spellName in d.MemorizedSpells)

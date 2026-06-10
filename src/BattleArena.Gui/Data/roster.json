@@ -165,6 +165,12 @@
       "spellLevel": 3, "turnMeterCost": 80, "manaCost": 25
     },
     {
+      "name": "Holy Nova",
+      "school": "Deity", "damageDie": "D8", "damageCount": 3,
+      "damageType": "Holy", "attackBonus": 3,
+      "spellLevel": 5, "turnMeterCost": 100, "manaCost": 55
+    },
+    {
       "name": "Invisibility",
       "school": "Mirage", "damageDie": "D4", "damageCount": 0,
       "damageType": "None", "attackBonus": 0,
@@ -210,7 +216,7 @@
       "strikeRating": 15, "turnSpeed": 8,
       "maxHitPoints": 45, "maxMana": 90,
       "equipment": { "chest": "Mithril Chain", "rightHand": "Long Sword" },
-      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Static Shock", "Magic Missile", "Shield", "Mirror Image", "Blink", "Lightning Bolt", "Invisibility"]
+      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Static Shock", "Magic Missile", "Shield", "Mirror Image", "Blink", "Lightning Bolt", "Invisibility", "Mind Siphon"]
     },
     {
       "name": "Sister Elira Vane", "level": 7,
@@ -268,7 +274,7 @@
       "strikeRating": 16, "turnSpeed": 8,
       "maxHitPoints": 84, "maxMana": 120,
       "equipment": { "chest": "Plate Armor", "rightHand": "Great Mace" },
-      "memorizedSpells": ["Smite", "Flame Strike", "Heal", "Mass Heal", "Bless", "Chasten"]
+      "memorizedSpells": ["Smite", "Flame Strike", "Heal", "Mass Heal", "Bless", "Chasten", "Holy Nova"]
     },
     {
       "name": "Lysander the Bard", "level": 7,

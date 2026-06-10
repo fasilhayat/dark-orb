@@ -192,6 +192,8 @@ public partial class MainWindow : Window
         SpeedSlider.Value = 1;
         _vm.Phase = "Combat";
         _vm.CombatLog.Clear();
+        foreach (var h in _vm.Heroes) h.EffectBars.Clear();
+        foreach (var e in _vm.Enemies) e.EffectBars.Clear();
         _vm.Heroes.Clear();
         _vm.Enemies.Clear();
         _vm.ActiveActorName = "";
@@ -890,6 +892,7 @@ public partial class MainWindow : Window
         c.CurrentHitPoints = c.MaxHitPoints;
         c.CurrentMana = c.MaxMana;
         c.ActiveStatusEffects.Clear();
+        c.RemainingCasts = c.MaxCastsPerCombat;
     }
 
     private void OnSpeedChanged(object? sender, Avalonia.Controls.Primitives.RangeBaseValueChangedEventArgs e)

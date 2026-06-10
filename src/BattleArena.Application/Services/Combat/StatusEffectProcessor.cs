@@ -28,7 +28,7 @@ internal class StatusEffectProcessor
         Func<CombatLogEntry, Task> notify)
     {
         foreach (var leechEffect in actorState.Character.ActiveStatusEffects
-            .Where(e => e.Type == StatusEffectType.Leech && e.LeechPerTurn > 0 && e.LeechResourceType == "HP")
+            .Where(e => e.Type == StatusEffectType.Leech && e.LeechPerTurn > 0)
             .OrderBy(e => e.ResolutionPriority)
             .ToList())
         {
@@ -36,31 +36,62 @@ internal class StatusEffectProcessor
             var casterState = states.FirstOrDefault(s => s.Character.Name == casterName);
             if (casterState is null || !casterState.Character.IsAlive) continue;
 
+            var resourceType = leechEffect.LeechResourceType ?? "HP";
             var leechAmount = leechEffect.LeechPerTurn;
 
-            var targetHpBefore = actorState.Character.CurrentHitPoints;
-            actorState.Character.CurrentHitPoints -= leechAmount;
-
-            var casterHpBefore = casterState.Character.CurrentHitPoints;
-            casterState.Character.CurrentHitPoints = Math.Min(
-                casterState.Character.MaxHitPoints,
-                casterHpBefore + leechAmount);
-
-            await notify(new CombatLogEntry
+            if (resourceType == "HP")
             {
-                Tick               = tick,
-                ActorName          = actorState.Character.Name,
-                EventType          = "LeechTick",
-                LeechAmount        = leechAmount,
-                LeechCasterName    = casterName,
-                LeechResourceType  = "HP",
-                LeechTargetAfter   = actorState.Character.CurrentHitPoints,
-                LeechCasterAfter   = casterState.Character.CurrentHitPoints,
-                StatusEffectName   = leechEffect.Name,
-                EffectDuration     = leechEffect.Duration,
-                EffectStacks       = actorState.Character.ActiveStatusEffects.Count(e => e.Name == leechEffect.Name),
-                Message            = $"{actorState.Character.Name} loses {leechAmount} HP to {casterName}'s {leechEffect.Name}.  {casterName} gains {leechAmount} HP."
-            });
+                var targetBefore = actorState.Character.CurrentHitPoints;
+                actorState.Character.CurrentHitPoints -= leechAmount;
+
+                var casterBefore = casterState.Character.CurrentHitPoints;
+                casterState.Character.CurrentHitPoints = Math.Min(
+                    casterState.Character.MaxHitPoints,
+                    casterBefore + leechAmount);
+
+                await notify(new CombatLogEntry
+                {
+                    Tick               = tick,
+                    ActorName          = actorState.Character.Name,
+                    EventType          = "LeechTick",
+                    LeechAmount        = leechAmount,
+                    LeechCasterName    = casterName,
+                    LeechResourceType  = "HP",
+                    LeechTargetAfter   = actorState.Character.CurrentHitPoints,
+                    LeechCasterAfter   = casterState.Character.CurrentHitPoints,
+                    StatusEffectName   = leechEffect.Name,
+                    EffectDuration     = leechEffect.Duration,
+                    EffectStacks       = actorState.Character.ActiveStatusEffects.Count(e => e.Name == leechEffect.Name),
+                    Message            = $"{actorState.Character.Name} loses {leechAmount} HP to {casterName}'s {leechEffect.Name}.  {casterName} gains {leechAmount} HP."
+                });
+            }
+            else if (resourceType == "Mana")
+            {
+                var targetBefore = actorState.Character.CurrentMana;
+                actorState.Character.CurrentMana = Math.Max(0, targetBefore - leechAmount);
+                var actualDrain = targetBefore - actorState.Character.CurrentMana;
+
+                var casterBefore = casterState.Character.CurrentMana;
+                casterState.Character.CurrentMana = Math.Min(
+                    casterState.Character.MaxMana,
+                    casterBefore + actualDrain);
+
+                await notify(new CombatLogEntry
+                {
+                    Tick               = tick,
+                    ActorName          = actorState.Character.Name,
+                    EventType          = "LeechTick",
+                    LeechAmount        = actualDrain,
+                    LeechCasterName    = casterName,
+                    LeechResourceType  = "Mana",
+                    LeechTargetAfter   = actorState.Character.CurrentMana,
+                    LeechCasterAfter   = casterState.Character.CurrentMana,
+                    StatusEffectName   = leechEffect.Name,
+                    EffectDuration     = leechEffect.Duration,
+                    EffectStacks       = actorState.Character.ActiveStatusEffects.Count(e => e.Name == leechEffect.Name),
+                    Message            = $"{actorState.Character.Name} loses {actualDrain} mana to {casterName}'s {leechEffect.Name}.  {casterName} gains {actualDrain} mana."
+                });
+            }
         }
     }
 

@@ -185,7 +185,7 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
               <DataTemplate>
-                <Grid ColumnDefinitions="Auto,*,Auto" Height="16">
+                <Grid ColumnDefinitions="90,*,Auto" Height="16">
                   <TextBlock Grid.Column="0" Text="{Binding Label}" Foreground="{Binding Color}"
                              FontSize="11" FontWeight="SemiBold" VerticalAlignment="Center"
                              Margin="0,0,6,0" TextTrimming="CharacterEllipsis" />

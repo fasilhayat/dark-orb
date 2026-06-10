@@ -117,6 +117,8 @@ internal class SpellProcessor
         Func<CombatLogEntry, Task> notify)
     {
         if (spell is null || spell.ManaCost <= 0) return;
+        if (actorState.Character.RemainingCasts > 0)
+            actorState.Character.RemainingCasts--;
         var before = actorState.Character.CurrentMana;
         actorState.Character.CurrentMana = Math.Max(0, before - spell.ManaCost);
         await notify(new CombatLogEntry

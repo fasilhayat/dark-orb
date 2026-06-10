@@ -74,6 +74,11 @@ public class Character
         }
     }
 
+    /// <summary>Total spell casts available per combat. Reset at combat start.</summary>
+    public int RemainingCasts { get; set; } = int.MaxValue;
+
+    public int MaxCastsPerCombat => 2 + Level / 3 + Equipment.TotalSpellSlotsBonus;
+
     public int SpellMemorizationSlots
     {
         get
@@ -303,8 +308,9 @@ public class Character
     /// Some spells (e.g., Smite) are restricted to specific classes.
     /// </summary>
     public bool CanCast(Spell spell) =>
-        !SpellClassRestrictions.TryGetValue(spell.Name, out var allowed)
-        || allowed.Contains(ClassName ?? string.Empty);
+        RemainingCasts > 0
+        && (!SpellClassRestrictions.TryGetValue(spell.Name, out var allowed)
+        || allowed.Contains(ClassName ?? string.Empty));
 
     public int ComputeSpellTurnMeterCost(Spell spell)
     {
