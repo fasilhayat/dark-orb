@@ -112,9 +112,9 @@ A petite, grinning kobold trader with bright green scales, a short snout, and ov
 
 Kaela Vornskald is built like a siege weapon made flesh — dense muscle across shoulders, arms, and core, the kind of physique earned through years of dragging steel through blood, not training halls or ceremony. She does not carry her strength as decoration; it is functional, economical, and always ready to break something that refuses to yield.
 
-Her dark hair is worn in a severe warrior's knot: tightly braided on the sides and pulled back into a thick, high tail bound with leather strips and bone rings. Her face is hard-lined, not pretty in any conventional sense, but compelling in the way a storm front is compelling: you do not admire it, you respect that it can ruin you.
+Her dark hair is worn in a severe warrior's knot: tightly braided on the sides and pulled back into a thick, high tail bound with leather strips and bone rings. Abs are showing. Her face is hard-lined, not pretty in any conventional sense, but compelling in the way a storm front is compelling: you do not admire it, you respect that it can ruin you.
 
-Her barbarian armor is light and revealing, enhancing her beauty as she looks like a war deity.
+Her barbarian armor is light and revealing, abdomen muscles are visible, enhancing her beauty as she looks like a war deity.
 
 **Attributes**
 
