@@ -178,6 +178,9 @@ public partial class MainWindow : Window
         NewCombatButton.IsVisible = false;
         if (_team1.Count == 0 || _team2.Count == 0) return;
         _presenter?.Stop();
+        _vm.PropertyChanged -= OnVmWaitingChanged;
+        _presenter = null;
+        _waitForNext?.Reset();
         StartCombat();
     }
 
@@ -719,6 +722,7 @@ public partial class MainWindow : Window
 
         result.DiceLog = diceService.DiceLog;
         result.Log = CombatLogMerger.Merge(result.Log, result.DiceLog);
+        DumpCombatLogFiles(result);
 
         _waitForNext.Reset();
 
@@ -758,8 +762,6 @@ public partial class MainWindow : Window
             }
             finally
             {
-                DumpCombatLogFiles(result);
-
                 if (!playbackToken.IsCancellationRequested)
                 {
                     Dispatcher.UIThread.Post(() =>

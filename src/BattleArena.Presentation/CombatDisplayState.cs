@@ -72,6 +72,13 @@ public sealed class CombatDisplayState
                     tsSt.Weapon = e.AttackSourceName ?? tsSt.Weapon;
                     tsSt.IsTmLocked = false;
                     tsSt.CcStatus = null;
+                    // Tick down all active effect display durations (engine already did TickAll)
+                    for (var i = tsSt.ActiveEffects.Count - 1; i >= 0; i--)
+                    {
+                        var eff = tsSt.ActiveEffects[i];
+                        if (eff.Duration > 0)
+                            eff.Duration--;
+                    }
                 }
                 if (e.TurnMeterSnapshot is not null)
                 {
