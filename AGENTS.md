@@ -64,7 +64,7 @@ Formula: `d20 + AttackPower >= d20 + DefensePower`. **Never THAC0.**
 
 ## 7. Combat event types
 
-`EventType` is a plain string on `CombatLogEntry` — not an enum. Common types: `RoundStart`, `TurnMeterGain`, `TurnStart`, `Attack`, `Damage`, `DoTTick`, `HoTTick`, `LeechTick`, `Healed`, `EffectApplied`, `EffectResisted`, `EffectExpired`, `FumblePenalty`, `SkippedTurn`, `Move`, `Death`, `KnockedOut`, `PerfectParry`, `DevastatingStrike`, `TotalReversal`, `Clash`, `ManaDeduct`, `ManaRegen`, `SpellQueued`, `SpellCharging`, `SpellDisrupted`, `SpellLost`, `ConcentrationPass`, `InsufficientMana`, `PetSummoned`, `PetExpired`, `Resurrection`. Full reference in `.opencode/skills/combat-mechanics.md`.
+`EventType` is a plain string on `CombatLogEntry` — not an enum. See `.opencode/skills/combat-mechanics.md` for the full list (~30 types: Attack, Damage, DoTTick, Healed, EffectApplied, PerfectParry, FumblePenalty, SpellDisrupted, etc.). Never introduce a new string without checking whether an existing one fits.
 
 ## 8. API — CRUD only, no game logic
 
@@ -89,7 +89,6 @@ dotnet test --filter "FullyQualifiedName~TestMethodName"  # single test
 - **Never** mock `CombatSimulator` — wire full real stack for diagnostics.
 - Acceptance tests (Reqnroll): Features → `Features/<Name>.feature`, steps → `StepDefinitions/<Name>Steps.cs`. Namespace: `BattleArena.ReqnrollTests.StepDefinitions`. **Never edit `*.feature.cs`** (auto-generated).
 - Dice-based acceptance tests use conservative bounds (p=0.8 with 100 trials → assert >= 60).
-- **Flaky test**: `PriestHealsThemselfAfterTakingDamage` — Sera starts at 42.8% HP, just above the 40% heal threshold. AI may or may not cast Heal depending on damage taken. Re-run if it fails.
 
 ## 11. Code style
 
