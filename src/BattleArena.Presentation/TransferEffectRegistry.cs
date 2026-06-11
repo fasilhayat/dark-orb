@@ -14,7 +14,7 @@ public static class TransferEffectRegistry
         ["Leech"] = new TransferEffectConfig
         {
             EffectName          = "Leech",
-            TransferColor       = "#ff6644",
+            TransferColor       = "#cc0000",
             ParticleColor       = "#ff4444",
             SourceGlowColor     = "#ff0000",
             DestinationGlowColor = "#ff0000",
@@ -28,7 +28,7 @@ public static class TransferEffectRegistry
         ["LeechMana"] = new TransferEffectConfig
         {
             EffectName          = "LeechMana",
-            TransferColor       = "#ff6644",
+            TransferColor       = "#bb0044",
             ParticleColor       = "#ff4444",
             SourceGlowColor     = "#ff0000",
             DestinationGlowColor = "#ff0000",
