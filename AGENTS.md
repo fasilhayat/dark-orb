@@ -86,7 +86,8 @@ The `/v1/combat/simulate` endpoint was removed. Combat runs locally via `CombatS
 dotnet test BattleArena.sln                       # full suite
 dotnet test --project UnitTests/BattleArena.UnitTests.csproj   # unit tests only
 dotnet test --filter "FullyQualifiedName~TestMethodName"        # single test
-make test-coverage                                # coverlet, OpenCover format
+dotnet test BattleArena.sln /p:CollectCoverage=true /p:CoverletOutputFormat=opencover  # coverage
+make test-coverage                                # same as above (shorthand)
 ```
 
 - Service tests → `Services/<Name>Tests.cs`. Diagnostics → `Diagnostics/CombatDiagnosticTests.cs`.
@@ -109,9 +110,13 @@ make test-coverage                                # coverlet, OpenCover format
 | Command | What it does |
 |---------|-------------|
 | `make test` | `dotnet test BattleArena.sln` |
-| `make test-coverage` | Tests with OpenCover |
-| `make gui-local` | Run Avalonia GUI standalone |
-| `make up-local` | DB + API in Docker. Demo via `make demo-local` |
+| `make test-coverage` | Tests with coverlet (opencover format) |
+| `make gui-local` | Run Avalonia GUI standalone (no DB needed) |
+| `make demo-local` | Run console demo on host (needs `make up-local` first) |
+| `make up-local` | DB + API in Docker, ports exposed |
+| `make down` | Tear down all Docker containers |
+| `make clean` | Down + wipe volumes + publish output |
+| `make build-local` | Publish API to `../publish` |
 | `make sync-instructions` | Copy AGENTS.md → `.github/copilot-instructions.md` |
 | `make install` | Clean Docker → test → up-local → demo |
 | `make clean-logs` | Delete `combat-logs/` |
@@ -127,7 +132,7 @@ Docker builds: `dotnet publish` runs on host, then `COPY` pre-built output. No N
 - **No `Directory.Build.props`** — each `.csproj` sets its own SDK, nullable, ImplicitUsings.
 - **`bugs-features/`** — numbered files representing pending work. Move to `done/<category>/` when complete where category is `bugs`, `features`, or `task`.
 - **`design/docs/`** — Game design docs. Keep in sync with SQL seed data (`.postgres-init/`).
-- **`.opencode/skills/`** — contains auxiliary technical references (combat mechanics, turn order, makefile orchestration, work intake, log analysis). These are loaded by OpenCode when tasks match their descriptions. AGENTS.md remains the canonical behavioural instruction file.
+- **`.opencode/skills/`** — auxiliary technical references loaded by OpenCode when tasks match their descriptions. AGENTS.md remains the canonical behavioural instruction file.
 
 ## 14. Doc update obligations
 
