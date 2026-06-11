@@ -37,7 +37,7 @@ Core must not reference Application. Application must not reference Infrastructu
 
 ## 5. CombatSimulator architecture
 
-`CombatSimulator` (in `Application/Services/`) is a thin orchestrator (~290 lines). Game logic lives in extracted processors under `Application/Services/Combat/`:
+`CombatSimulator` (in `Application/Services/`) is a thin orchestrator (~325 lines). Game logic lives in extracted processors under `Application/Services/Combat/`:
 
 | Processor | Responsibility |
 |-----------|---------------|
@@ -109,9 +109,11 @@ make test-coverage                                # coverlet, OpenCover format
 | Command | What it does |
 |---------|-------------|
 | `make test` | `dotnet test BattleArena.sln` |
-| `make test-coverage` | Tests with OpenCover |
-| `make gui-local` | Run Avalonia GUI standalone |
-| `make up-local` | DB + API in Docker. Demo via `make demo-local` |
+| `make test-coverage` | Coverlet, opencover format |
+| `make build-local` | Publish API to `../publish` |
+| `make gui-local` | Run Avalonia GUI standalone (no DB needed) |
+| `make up-local` | DB + API in Docker (requires build-local first). Demo via `make demo-local` |
+| `make demo-local` | Run demo on host (sets `DOTNET_ENVIRONMENT=LocalDev`) |
 | `make sync-instructions` | Copy AGENTS.md → `.github/copilot-instructions.md` |
 | `make install` | Clean Docker → test → up-local → demo |
 | `make clean-logs` | Delete `combat-logs/` |
