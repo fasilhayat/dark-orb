@@ -135,6 +135,15 @@
       "spellLevel": 1, "turnMeterCost": 60, "manaCost": 10
     },
     {
+      "name": "Haste",
+      "school": "Dominion", "damageDie": "D4", "damageCount": 0,
+      "damageType": "None", "attackBonus": 0,
+      "spellLevel": 3, "turnMeterCost": 70, "manaCost": 20,
+      "onHitEffects": [
+        { "name": "Haste", "type": "Buff", "target": "Caster", "duration": 3, "applicationChance": 100, "resistanceType": "None", "turnMeterModifier": 10 }
+      ]
+    },
+    {
       "name": "Magic Missile",
       "school": "Stormcraft", "damageDie": "D4", "damageCount": 3,
       "damageType": "Force", "attackBonus": 2,
@@ -216,7 +225,7 @@
       "strikeRating": 15, "turnSpeed": 8,
       "maxHitPoints": 45, "maxMana": 90,
       "equipment": { "chest": "Mithril Chain", "rightHand": "Long Sword" },
-      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Static Shock", "Magic Missile", "Shield", "Mirror Image", "Blink", "Lightning Bolt", "Invisibility", "Mind Siphon"]
+      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Static Shock", "Magic Missile", "Shield", "Mirror Image", "Blink", "Lightning Bolt", "Invisibility", "Mind Siphon", "Haste"]
     },
     {
       "name": "Sister Elira Vane", "level": 7,
@@ -274,7 +283,7 @@
       "strikeRating": 16, "turnSpeed": 8,
       "maxHitPoints": 84, "maxMana": 120,
       "equipment": { "chest": "Plate Armor", "rightHand": "Great Mace" },
-      "memorizedSpells": ["Smite", "Flame Strike", "Heal", "Mass Heal", "Bless", "Chasten", "Holy Nova"]
+      "memorizedSpells": ["Smite", "Flame Strike", "Heal", "Mass Heal", "Bless", "Chasten", "Holy Nova", "Haste"]
     },
     {
       "name": "Lysander the Bard", "level": 7,
@@ -290,7 +299,8 @@
       "race": "Elf", "classId": 7, "className": "Druid", "sex": "M",
       "strikeRating": 15, "turnSpeed": 5,
       "maxHitPoints": 160, "maxMana": 100,
-      "equipment": { "chest": "Padded Armor", "rightHand": "Mace" }
+      "equipment": { "chest": "Padded Armor", "rightHand": "Mace" },
+      "memorizedSpells": ["Haste"]
     },
     {
       "name": "Infernal Commander Maleth", "level": 18,
@@ -336,7 +346,7 @@
       "strikeRating": 14, "turnSpeed": 6,
       "maxHitPoints": 300, "maxMana": 100,
       "equipment": { "chest": "Plate Armor", "rightHand": "Long Sword" },
-      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Static Shock", "Smite", "Heal", "Mass Heal", "Mind Siphon"]
+      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Static Shock", "Smite", "Heal", "Mass Heal", "Mind Siphon", "Haste"]
     },
     {
       "name": "Practice Dummy", "level": 10,
@@ -345,7 +355,7 @@
       "strikeRating": 1, "turnSpeed": 4,
       "maxHitPoints": 500, "maxMana": 100,
       "equipment": { "chest": "Studded Leather" },
-      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Heal", "Mass Heal"]
+      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Heal", "Mass Heal", "Haste"]
     }
   ]
 }

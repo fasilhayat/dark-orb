@@ -88,6 +88,7 @@ FROM (VALUES
     ('Stormcraft', 'D6', 'Fire', 'Spell', 'Fireball',               30, 90, 3, 3, 2, 0, 'Fire',      0, 'Explosive ranged fire burst for clustered targets.  Tags: Offensive, AoE, Nuke'),
     ('Mirage', 'D4', 'None', 'Spell', 'Blink',                     20, 80, 3, 0, 0, 0, 'None',      0, 'Phasing displacement defense.  Tags: Blink, Defensive'),
     ('Dominion', 'D4', 'None', 'Spell', 'Slow',                    20, 80, 3, 0, 0, 0, 'None',      0, 'Reduces enemy tempo and action efficiency.  Tags: CC, Debuff, Turn-Meter Control'),
+    ('Dominion', 'D4', 'None', 'Spell', 'Haste',                   20, 70, 3, 0, 0, 0, 'None',      0, 'Accelerates a target, massively increasing turn meter gain for a short duration.  Tags: Buff, TM Uplift'),
     ('Umbramancy', 'D8', 'Shadow', 'Spell', 'Vampiric Touch',      25, 80, 3, 2, 2, 0, 'Shadow',    0, 'Melee life-drain spell that steals vitality.  Tags: Single-Target Damage, Leech'),
     ('Umbramancy', 'D4', 'None', 'Spell', 'Fear',                  22, 80, 4, 0, 0, 0, 'Shadow',    0, 'Sends enemies fleeing in panic.  Tags: CC, Debuff'),
     ('Stormcraft', 'D6', 'Ice', 'Spell', 'Ice Storm',              35, 90, 4, 4, 2, 0, 'Ice',       5, 'Area storm of cold and impact force.  Tags: Offensive, AoE'),
