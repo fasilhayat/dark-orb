@@ -39,16 +39,16 @@ Core must not reference Application. Application must not reference Infrastructu
 
 ## 5. CombatSimulator architecture
 
-`CombatSimulator` (in `Application/Services/`) is a thin orchestrator (~290 lines). Game logic lives in extracted processors under `Application/Services/Combat/`:
+`CombatSimulator` (`Application/Services/`) is a thin orchestrator (~325 lines). Game logic lives in `Application/Services/Combat/`:
 
 | Processor | Responsibility |
 |-----------|---------------|
 | `CombatLogger` | Builds all `CombatLogEntry` instances |
 | `VictoryEvaluator` | Checks defeat conditions, builds `CombatResult` |
-| `TurnMeterProcessor` | TM gain, mana regen, mana leech, defender TM boost |
-| `StatusEffectProcessor` | Leech, DoT, HoT, self-buffs, on-hit effects, resist rolls, fumble penalty, pet expiry, effect expiry |
-| `SpellProcessor` | Healing spells, mana deduction, spell queuing, pet summoning, spell disruption, concentration checks |
-| `AttackResolver` | Attack outcome dispatch, clash handling, hit processing |
+| `TurnMeterProcessor` | TM gain, mana regen/leech, defender TM boost |
+| `StatusEffectProcessor` | Leech, DoT, HoT, self-buffs, on-hit effects, resist rolls, fumble, pet/effect expiry |
+| `SpellProcessor` | Healing, mana deduction, spell queuing, pet summoning, disruption, concentration |
+| `AttackResolver` | Attack outcome dispatch, clash, hit processing |
 | `TurnProcessor` | Attack setup (queued spell / new attack), crowd control, target selection |
 | `CharacterExtensions` | `TryGetCrowdControlLabel`, status effect helpers |
 | `CombatSimulatorHelpers` | `BuildCombatantStates`, `GetActingOrder` |
@@ -62,21 +62,17 @@ Formula: `d20 + AttackPower >= d20 + DefensePower`. **Never THAC0.**
 - `StrikeRating` = higher is better. `ClassAccuracyBase = attacker.StrikeRating`.
 - `ArmorClass` = higher is more defensive. `EffectiveAC = equipment.TotalArmorClass`.
 - Any "lower SR is better" or `20 - X` is a THAC0 remnant — flag and fix.
+- Attack resolution: 7-case priority matrix — TotalReversal → DevastatingStrike → Clash → Fumble → Critical → PerfectParry → normal opposed roll. See `.opencode/skills/combat-mechanics.md`.
 
 ## 7. Combat event types
 
-`EventType` is a plain string on `CombatLogEntry` — no enum. Common types: `RoundStart`, `TurnMeterGain`, `TurnStart`, `Attack`, `Damage`, `DoTTick`, `HoTTick`, `LeechTick`, `Healed`, `EffectApplied`, `EffectResisted`, `EffectExpired`, `FumblePenalty`, `SkippedTurn`, `Move`, `Death`, `KnockedOut`, `PerfectParry`, `DevastatingStrike`, `TotalReversal`, `Clash`, `ManaDeduct`, `ManaRegen`, `SpellQueued`, `SpellCharging`, `SpellDisrupted`, `SpellLost`, `ConcentrationPass`, `InsufficientMana`, `PetSummoned`, `PetExpired`, `Resurrection`. See `.opencode/skills/combat-mechanics.md` for full detail.
+`EventType` is a plain string on `CombatLogEntry` — not an enum. See `.opencode/skills/combat-mechanics.md` for the full list (~30 types: Attack, Damage, DoTTick, Healed, EffectApplied, PerfectParry, FumblePenalty, SpellDisrupted, etc.). Never introduce a new string without checking whether an existing one fits.
 
 ## 8. API — CRUD only, no game logic
 
-The API (`BattleArena.Api`) is a pure CRUD layer over the database. It must NOT contain:
-- Dice rolling or randomness generation
-- Combat resolution or rule evaluation
-- Any game logic
+The API (`BattleArena.Api`) is a pure CRUD layer. It must NOT contain dice rolling, combat resolution, or any game logic. Dice rolls originate from `DiceService` in `Application` (seed-based, deterministic). `/v1/combat/simulate` was removed — combat runs locally via `CombatSimulator`.
 
-All dice rolls originate from `DiceService` in `Application` (seed-based, deterministic). The `LoggingDiceService` (used in GUI) logs every roll into `DiceLog` for the combat log.
-
-The `/v1/combat/simulate` endpoint was removed. Combat runs locally via `CombatSimulator`.
+Port 8585 in Docker. Health check at `/api/healthcheck` (exempt from API key). Swagger only in Development/LocalDev.
 
 ## 9. GUI — pure renderer
 
@@ -85,19 +81,17 @@ The `/v1/combat/simulate` endpoint was removed. Combat runs locally via `CombatS
 ## 10. Testing
 
 ```
-dotnet test BattleArena.sln                       # full suite
+make test                           # dotnet test BattleArena.sln
+make test-coverage                  # Coverlet, opencover format
 dotnet test --project UnitTests/BattleArena.UnitTests.csproj   # unit tests only
-dotnet test --filter "FullyQualifiedName~TestMethodName"        # single test
-dotnet test BattleArena.sln /p:CollectCoverage=true /p:CoverletOutputFormat=opencover  # coverage
-make test-coverage                                # same as above (shorthand)
+dotnet test --filter "FullyQualifiedName~TestMethodName"  # single test
 ```
 
 - Service tests → `Services/<Name>Tests.cs`. Diagnostics → `Diagnostics/CombatDiagnosticTests.cs`.
 - **Always** mock `IDiceService` when testing dice-dependent methods.
 - **Never** mock `CombatSimulator` — wire full real stack for diagnostics.
-- Acceptance tests (Reqnroll): Features → `Features/<Name>.feature`, steps → `StepDefinitions/<Name>Steps.cs`. Namespace: `BattleArena.ReqnrollTests.StepDefinitions`. Never edit `*.feature.cs` manually.
+- Acceptance tests (Reqnroll): Features → `Features/<Name>.feature`, steps → `StepDefinitions/<Name>Steps.cs`. Namespace: `BattleArena.ReqnrollTests.StepDefinitions`. **Never edit `*.feature.cs`** (auto-generated).
 - Dice-based acceptance tests use conservative bounds (p=0.8 with 100 trials → assert >= 60).
-- **Flaky test**: `PriestHealsThemselfAfterTakingDamage` — Sera starts at 42.8% HP, just above the 40% heal threshold. The AI may or may not cast Heal depending on damage taken. Re-run if it fails.
 
 ## 11. Code style
 
@@ -105,22 +99,27 @@ make test-coverage                                # same as above (shorthand)
 - Cyclomatic complexity <= 10 per method (`&&`/`||` counts as +1). 11–12 acceptable only where splitting would add params without reducing real complexity.
 - One public type per file (partial classes like `Demo.*` are the exception).
 - No magic numbers — named constants or enums.
-- **No reflection** — never use `System.Reflection`, `GetType().GetProperty()`, `SetValue()`, or any runtime type inspection to modify objects. If an `init`-only property blocks modification, create a new instance with the desired value instead.
+- **No reflection** — no `System.Reflection`, `GetType().GetProperty()`, `SetValue()`, or runtime type inspection. If an `init`-only property blocks modification, create a new instance.
 
 ## 12. Makefile commands (from `src/`)
 
 | Command | What it does |
 |---------|-------------|
 | `make test` | `dotnet test BattleArena.sln` |
-| `make test-coverage` | Tests with coverlet (opencover format) |
-| `make gui-local` | Run Avalonia GUI standalone (no DB needed) |
-| `make demo-local` | Run console demo on host (needs `make up-local` first) |
-| `make up-local` | DB + API in Docker, ports exposed |
-| `make down` | Tear down all Docker containers |
-| `make clean` | Down + wipe volumes + publish output |
+| `make test-coverage` | Coverlet, opencover format |
 | `make build-local` | Publish API to `../publish` |
-| `make sync-instructions` | Copy AGENTS.md → `.github/copilot-instructions.md` |
+| `make gui-local` | Run Avalonia GUI standalone (no DB needed) |
+| `make up-local` | DB + API in Docker (ports exposed). Demo: `make demo-local` |
+| `make up-dev` | DB + API + demo in Docker (interactive) |
+| `make up-test` | DB + API + demo in Docker (no host ports) |
+| `make up-preprod` / `make up-prod` | DB + API only (no host ports) |
+| `make demo-local` | Run demo on host (sets `DOTNET_ENVIRONMENT=LocalDev`) |
+| `make run-dev` | Re-run demo container (DB+API must already be up) |
+| `make down` | Stop all Docker containers |
+| `make clean` | Stop + wipe volumes + delete publish output |
 | `make install` | Clean Docker → test → up-local → demo |
+| `make install-gui` | Clean Docker → build → up-local → GUI |
+| `make sync-instructions` | Copy AGENTS.md → `.github/copilot-instructions.md` |
 | `make clean-logs` | Delete `combat-logs/` |
 
 Docker builds: `dotnet publish` runs on host, then `COPY` pre-built output. No NuGet restore inside containers.
@@ -128,16 +127,18 @@ Docker builds: `dotnet publish` runs on host, then `COPY` pre-built output. No N
 ## 13. Tooling quirks
 
 - **No EF Core** — raw Npgsql + custom `DbContext` wrapper.
-- **No CI** — `.github/workflows/` is empty. Run `dotnet test` locally.
+- **No CI** — `.github/workflows/` is empty. Run tests locally.
 - **API requires `X-Api-Key` header** — default `BA-DEV-2024-SECRET`.
-- **Swagger only in Development/LocalDev**.
 - **No `Directory.Build.props`** — each `.csproj` sets its own SDK, nullable, ImplicitUsings.
-- **`bugs-features/`** — numbered files representing pending work. Move to `done/<category>/` when complete where category is `bugs`, `features`, or `task`.
-- **`design/docs/`** — Game design docs. Keep in sync with SQL seed data (`.postgres-init/`).
-- **`.opencode/skills/`** — auxiliary technical references loaded by OpenCode when tasks match their descriptions. AGENTS.md remains the canonical behavioural instruction file.
+- **`bugs-features/`** — numbered files for pending work. Process in priority order: read → implement → test → mark `[x]` with summary → move to `done/<category>/` (category = `bugs`, `features`, or `task`).
+- **`design/docs/`** — game design docs. Must stay in sync with SQL seed data (`.postgres-init/`).
+- **`.opencode/skills/`** — auxiliary technical references (combat mechanics, turn order, makefile orchestration, work intake, log analysis). Loaded by OpenCode when tasks match.
+- **PostgreSQL init scripts** in `.postgres-init/` run alphabetically — naming (`01-`, `02-`, `03-`, `04-`) determines execution order.
+- **HP range**: 0 to -9 = KnockedOut, -10 or lower = Dead.
+- **Modifier pipeline** (`ICombatModifier`): priority bands 10=base/range, 20=environmental, 30=item/set/spell-buff.
 
 ## 14. Doc update obligations
 
 - **README.md**: update when new project, API endpoint, DB table, Makefile target, Docker service, or test framework change.
-- **design/docs/**: update when SQL seed adds races, classes, deities, pets, weapons, armor, spells, etc. Entries must match the DB exactly.
+- **design/docs/**: update when SQL seed adds races, classes, deities, pets, weapons, armor, spells. Entries must match the DB exactly.
 - **release-notes.md**: do NOT touch unless asked.
