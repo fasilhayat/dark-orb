@@ -265,6 +265,9 @@ internal class SpellProcessor
             });
         }
         await _statusEffectProcessor.ProcessSelfBuffsAsync(tick, actorState.Character, spell, notify);
+        var party = actorState.PartyIndex == 0 ? heroParty : enemyParty;
+        var partyMembers = party.Members.Select(m => m.Character).ToList();
+        await _statusEffectProcessor.ProcessPartyBuffsAsync(tick, actorState.Character, spell, partyMembers, notify);
         return null;
     }
 

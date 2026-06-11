@@ -333,6 +333,60 @@ internal class StatusEffectProcessor
         }
     }
 
+    public async Task ProcessPartyBuffsAsync(
+        int tick, Character caster, Spell spell, List<Character> partyMembers,
+        Func<CombatLogEntry, Task> notify)
+    {
+        foreach (var template in spell.OnHitEffects)
+        {
+            if (template.Target != EffectTarget.Party) continue;
+
+            var targets = template.Type == StatusEffectType.Debuff
+                ? new List<Character> { caster }
+                : partyMembers.Where(m => m.IsAlive).ToList();
+
+            foreach (var target in targets)
+            {
+                var effect = new StatusEffect
+                {
+                    Name                 = template.Name,
+                    Type                 = template.Type,
+                    Target               = template.Target,
+                    ResistanceType       = template.ResistanceType,
+                    ResistanceBonuses    = template.ResistanceBonuses,
+                    Duration             = template.Duration,
+                    DamagePerTurn        = template.DamagePerTurn,
+                    HealingPerTurn       = template.HealingPerTurn,
+                    AttackPowerModifier  = template.AttackPowerModifier,
+                    DefensePowerModifier = template.DefensePowerModifier,
+                    TurnMeterModifier    = template.TurnMeterModifier,
+                    ManaRegenModifier    = template.ManaRegenModifier,
+                    StackRule            = template.StackRule,
+                    ApplicationChance    = template.ApplicationChance,
+                    Source               = spell.Name,
+                    LeechPerTurn         = template.LeechPerTurn,
+                    LeechResourceType    = template.LeechResourceType ?? "HP",
+                    CasterName           = template.Type == StatusEffectType.Leech ? caster.Name : string.Empty
+                };
+
+                _statusEffectService.Apply(target, effect);
+                await notify(new CombatLogEntry
+                {
+                    Tick               = tick,
+                    ActorName          = target.Name,
+                    EventType          = "EffectApplied",
+                    StatusEffectName   = effect.Name,
+                    AttackSourceName   = spell.Name,
+                    IsBuff             = effect.Type == StatusEffectType.Buff,
+                    EffectDuration     = effect.Duration,
+                    EffectMaxDuration  = effect.Duration,
+                    EffectStacks       = target.ActiveStatusEffects.Count(e => e.Name == effect.Name),
+                    Message            = $"{target.Name} gains {effect.Name} from {spell.Name}!"
+                });
+            }
+        }
+    }
+
     public async Task TryApplyEffectAsync(
         int tick, Character target, StatusEffect effect,
         Func<CombatLogEntry, Task> notify)

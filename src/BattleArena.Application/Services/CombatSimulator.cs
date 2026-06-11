@@ -225,7 +225,14 @@ public class CombatSimulator : ICombatSimulator
             await _statusEffectProcessor.ApplyFumblePenaltyAsync(tick, actorState, result, notify);
 
             if (setup.Source is Spell spellWithBuffs && spellWithBuffs.OnHitEffects.Count > 0)
+            {
                 await _statusEffectProcessor.ProcessSelfBuffsAsync(tick, actorState.Character, spellWithBuffs, notify);
+                var partyMembers = states
+                    .Where(s => s.PartyIndex == actorState.PartyIndex)
+                    .Select(s => s.Character)
+                    .ToList();
+                await _statusEffectProcessor.ProcessPartyBuffsAsync(tick, actorState.Character, spellWithBuffs, partyMembers, notify);
+            }
 
             if (setup.Target.IsAlive || actorState.AttacksRemaining <= 0) continue;
 

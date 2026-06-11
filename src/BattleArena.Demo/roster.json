@@ -144,6 +144,16 @@
       ]
     },
     {
+      "name": "Mass Haste",
+      "school": "Dominion", "damageDie": "D4", "damageCount": 0,
+      "damageType": "None", "attackBonus": 0,
+      "spellLevel": 5, "turnMeterCost": 90, "manaCost": 35,
+      "onHitEffects": [
+        { "name": "Mass Haste", "type": "Buff", "target": "Party", "duration": 2, "applicationChance": 100, "resistanceType": "None", "turnMeterModifier": 6 },
+        { "name": "Haste Fatigue", "type": "Debuff", "target": "Caster", "duration": 2, "applicationChance": 100, "resistanceType": "None", "defensePowerModifier": -2 }
+      ]
+    },
+    {
       "name": "Magic Missile",
       "school": "Stormcraft", "damageDie": "D4", "damageCount": 3,
       "damageType": "Force", "attackBonus": 2,
@@ -283,7 +293,7 @@
       "strikeRating": 16, "turnSpeed": 8,
       "maxHitPoints": 84, "maxMana": 120,
       "equipment": { "chest": "Plate Armor", "rightHand": "Great Mace" },
-      "memorizedSpells": ["Smite", "Flame Strike", "Heal", "Mass Heal", "Bless", "Chasten", "Holy Nova", "Haste"]
+      "memorizedSpells": ["Smite", "Flame Strike", "Heal", "Mass Heal", "Bless", "Chasten", "Holy Nova", "Haste", "Mass Haste"]
     },
     {
       "name": "Lysander the Bard", "level": 7,
@@ -300,7 +310,7 @@
       "strikeRating": 15, "turnSpeed": 5,
       "maxHitPoints": 160, "maxMana": 100,
       "equipment": { "chest": "Padded Armor", "rightHand": "Mace" },
-      "memorizedSpells": ["Haste"]
+      "memorizedSpells": ["Haste", "Mass Haste"]
     },
     {
       "name": "Infernal Commander Maleth", "level": 18,
@@ -346,7 +356,7 @@
       "strikeRating": 14, "turnSpeed": 6,
       "maxHitPoints": 300, "maxMana": 100,
       "equipment": { "chest": "Plate Armor", "rightHand": "Long Sword" },
-      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Static Shock", "Smite", "Heal", "Mass Heal", "Mind Siphon", "Haste"]
+      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Static Shock", "Smite", "Heal", "Mass Heal", "Mind Siphon", "Haste", "Mass Haste"]
     },
     {
       "name": "Practice Dummy", "level": 10,
