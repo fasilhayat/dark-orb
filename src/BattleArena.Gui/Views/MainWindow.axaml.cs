@@ -17,6 +17,7 @@ using BattleArena.Gui.Models;
 using BattleArena.Gui.Presenters;
 using BattleArena.Gui.Services;
 using BattleArena.Gui.ViewModels;
+using BattleArena.Gui.ViewModels.World;
 using BattleArena.Presentation;
 
 namespace BattleArena.Gui.Views;
@@ -40,6 +41,7 @@ public partial class MainWindow : Window
     private readonly ISoundPlayer? _soundPlayer;
     private string _previousPhase = "MainMenu";
     private bool _fromSpellPreview;
+    private bool _combatFromWorld;
 
     public MainWindow()
     {
@@ -80,6 +82,49 @@ public partial class MainWindow : Window
         _soundPlayer = Directory.Exists(soundsDir)
             ? new AvaloniaSoundPlayer(soundsDir)
             : null;
+
+        WorldViewControl.CombatEncounterRequested += OnWorldCombatEncounter;
+    }
+
+    private void OnWorldCombatEncounter(string heroName, string enemyName)
+    {
+        var hero = Roster.AllHeroes.Find(c => c.Name == heroName);
+        var enemy = Roster.AllHeroes.Find(c => c.Name == enemyName);
+        if (hero is null || enemy is null) return;
+
+        _combatFromWorld = true;
+        StartWorldCombat(hero, enemy);
+    }
+
+    private void StartWorldCombat(Character hero, Character enemy)
+    {
+        TurnButton.IsVisible = true;
+        AutoPlayButton.IsVisible = true;
+        _vm.ErrorMessage = "";
+        SpeedSlider.Value = 1;
+        _vm.Phase = "Combat";
+        _vm.CombatLog.Clear();
+        _vm.Heroes.Clear();
+        _vm.Enemies.Clear();
+        _vm.ActiveActorName = "";
+        _vm.CombatOver = false;
+        _vm.Tick = 0;
+        _vm.RoundNumber = 0;
+        _vm.TickInRound = 0;
+
+        ResetCombatant(hero);
+        ResetCombatant(enemy);
+
+        var party1 = new Party();
+        party1.Members.Add(new PartyMember { Character = hero, AttackSource = Roster.GetAttackSource(hero) });
+        var party2 = new Party();
+        party2.Members.Add(new PartyMember { Character = enemy, AttackSource = Roster.GetAttackSource(enemy) });
+
+        _combatParty1 = party1;
+        _combatParty2 = party2;
+        _vm.EngagementRange = "Melee";
+
+        PopulateCharacterCards(party1, party2);
     }
 
     private async Task CheckApiReachabilityAsync()
@@ -365,6 +410,31 @@ public partial class MainWindow : Window
         DummyHeader.IsVisible = true;
     }
 
+    private void OnWorldClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        _vm.Phase = "World";
+    }
+
+    private void OnWorldHelpClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+    }
+
+    private void OnWorldInventoryClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+    }
+
+    private void OnWorldPartyClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+    }
+
+    private void OnWorldSaveClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+    }
+
+    private void OnWorldLoadClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+    }
+
     private void OnApiModeClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         _vm.Phase = "ApiMenu";
@@ -420,7 +490,16 @@ public partial class MainWindow : Window
         _cts = null;
         _waitForNext = null;
 
-        _vm.Phase = "MainMenu";
+        if (_combatFromWorld)
+        {
+            _combatFromWorld = false;
+            _vm.Phase = "World";
+        }
+        else
+        {
+            _vm.Phase = "MainMenu";
+        }
+
         _vm.CombatLog.Clear();
         _vm.Heroes.Clear();
         _vm.Enemies.Clear();

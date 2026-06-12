@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="BattleArena.Gui.Views.World.WorldView"
+             Background="#0a0a14">
+  <Grid RowDefinitions="*,Auto">
+    <Grid Grid.Row="0">
+      <Border x:Name="MapClipRegion" ClipToBounds="True" Background="#0a0a14"
+              PointerPressed="OnMapPointerPressed"
+              PointerMoved="OnMapPointerMoved"
+              PointerReleased="OnMapPointerReleased"
+              PointerWheelChanged="OnMapPointerWheelChanged">
+        <Canvas x:Name="MapCanvas" Background="Transparent" />
+      </Border>
+      <Border x:Name="AmbientOverlay" IsHitTestVisible="False" />
+      <Border x:Name="InteractionOverlay" IsHitTestVisible="False"
+              HorizontalAlignment="Center" VerticalAlignment="Top"
+              Background="#1a1a2ee0" CornerRadius="4" Padding="10,5"
+              BorderBrush="#555" BorderThickness="1" Margin="0,8,0,0">
+        <TextBlock x:Name="InteractionText" Foreground="#ffdd44" FontSize="13"
+                   FontWeight="Bold" Text="" />
+      </Border>
+    </Grid>
+    <Border Grid.Row="1" Background="#0d0d18" BorderBrush="#1a1a2e" BorderThickness="0,1,0,0" Padding="8,3">
+      <Grid ColumnDefinitions="Auto,*,Auto">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <TextBlock x:Name="ZoneNameText" Text=""
+                     Foreground="#aaa" FontSize="10" FontWeight="Bold" VerticalAlignment="Center" />
+          <TextBlock x:Name="HelpText"
+                     Text="WASD: move · Click: walk · E: interact · Drag: pan · Scroll: zoom"
+                     Foreground="#666" FontSize="10" VerticalAlignment="Center" />
+        </StackPanel>
+        <TextBlock Grid.Column="2" x:Name="TileInfoText"
+                   Text="" Foreground="#555" FontSize="10" VerticalAlignment="Center" />
+      </Grid>
+    </Border>
+  </Grid>
+</UserControl>

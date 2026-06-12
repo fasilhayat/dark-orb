@@ -9,6 +9,7 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using BattleArena.Core.Entities;
 using BattleArena.Gui.Models;
+using BattleArena.Gui.ViewModels.World;
 using BattleArena.Presentation;
 
 namespace BattleArena.Gui.ViewModels;
@@ -128,6 +129,7 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsApiMenuPhase)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsCharCreationPhase)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSpellPreviewPhase)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsWorldPhase)));
             }
         }
     }
@@ -137,6 +139,9 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     public bool IsApiMenuPhase => Phase == "ApiMenu";
     public bool IsCharCreationPhase => Phase == "CharCreation";
     public bool IsSpellPreviewPhase => Phase == "SpellPreview";
+    public bool IsWorldPhase => Phase == "World";
+
+    public WorldViewModel WorldViewModel { get; } = new();
 
     private string _scenario = "Duel";
     public string Scenario

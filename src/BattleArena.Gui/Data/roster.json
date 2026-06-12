@@ -66,19 +66,28 @@
       "name": "Fireball",
       "school": "Stormcraft", "damageDie": "D6", "damageCount": 3,
       "damageType": "Fire", "attackBonus": 2,
-      "spellLevel": 3, "turnMeterCost": 90, "manaCost": 50
+      "spellLevel": 3, "turnMeterCost": 90, "manaCost": 50,
+      "onHitEffects": [
+        { "name": "Burning", "type": "Fire", "target": "Target", "duration": 2, "applicationChance": 60, "resistanceType": "Fire", "damagePerTurn": 4 }
+      ]
     },
     {
       "name": "Ice Bolt",
       "school": "Stormcraft", "damageDie": "D8", "damageCount": 2,
       "damageType": "Ice", "attackBonus": 2,
-      "spellLevel": 2, "turnMeterCost": 80, "manaCost": 35
+      "spellLevel": 2, "turnMeterCost": 80, "manaCost": 35,
+      "onHitEffects": [
+        { "name": "Frozen", "type": "Ice", "target": "Target", "duration": 2, "applicationChance": 70, "resistanceType": "Cold" }
+      ]
     },
     {
       "name": "Shock",
       "school": "Stormcraft", "damageDie": "D6", "damageCount": 2,
       "damageType": "Lightning", "attackBonus": 2,
-      "spellLevel": 2, "turnMeterCost": 75, "manaCost": 20
+      "spellLevel": 2, "turnMeterCost": 75, "manaCost": 20,
+      "onHitEffects": [
+        { "name": "Shocked", "type": "Shock", "target": "Target", "duration": 1, "applicationChance": 50, "resistanceType": "Magic" }
+      ]
     },
     {
       "name": "Static Shock",
@@ -330,22 +339,22 @@
   ],
   "dummies": [
     {
-      "name": "Target Golem", "level": 10,
-      "strength": 16, "dexterity": 10, "stamina": 18, "intelligence": 14, "wisdom": 10, "charisma": 8,
+      "name": "Target Golem", "level": 14,
+      "strength": 18, "dexterity": 10, "stamina": 18, "intelligence": 16, "wisdom": 10, "charisma": 8,
       "race": "Human", "classId": 8, "className": "Fighter", "sex": "N",
-      "strikeRating": 14, "turnSpeed": 6,
-      "maxHitPoints": 300, "maxMana": 100,
+      "strikeRating": 16, "turnSpeed": 6,
+      "maxHitPoints": 400, "maxMana": 150,
       "equipment": { "chest": "Plate Armor", "rightHand": "Long Sword" },
       "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Static Shock", "Smite", "Heal", "Mass Heal", "Mind Siphon"]
     },
     {
       "name": "Practice Dummy", "level": 10,
-      "strength": 10, "dexterity": 10, "stamina": 10, "intelligence": 14, "wisdom": 10, "charisma": 10,
+      "strength": 1, "dexterity": 1, "stamina": 1, "intelligence": 1, "wisdom": 1, "charisma": 1,
       "race": "Human", "classId": 8, "className": "Fighter", "sex": "N",
       "strikeRating": 1, "turnSpeed": 4,
-      "maxHitPoints": 500, "maxMana": 100,
-      "equipment": { "chest": "Studded Leather" },
-      "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Heal", "Mass Heal"]
+      "maxHitPoints": 999, "maxMana": 999,
+      "equipment": {},
+      "memorizedSpells": []
     }
   ]
 }

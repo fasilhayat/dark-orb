@@ -42,4 +42,8 @@
     </Content>
     <AvaloniaResource Include="Assets\Misc\dark-orb.png" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\World\**\*" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>
