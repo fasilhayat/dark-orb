@@ -1,0 +1,16 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="BattleArena.Gui.Views.WorldMap.WorldMapView"
+             Background="#0a0a14">
+  <Grid RowDefinitions="*,Auto">
+    <Border Grid.Row="0" x:Name="MapClipRegion" ClipToBounds="True" Background="#0a0a14">
+      <Grid>
+        <Image x:Name="MapImage" Stretch="Uniform" />
+        <Canvas x:Name="MarkerCanvas" IsHitTestVisible="False" />
+      </Grid>
+    </Border>
+    <Border Grid.Row="1" Background="#0d0d18" BorderBrush="#1a1a2e" BorderThickness="0,1,0,0" Padding="8,3">
+      <TextBlock x:Name="StatusText" Text="Click a location to travel" Foreground="#777" FontSize="11" />
+    </Border>
+  </Grid>
+</UserControl>

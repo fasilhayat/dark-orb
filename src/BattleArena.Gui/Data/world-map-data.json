@@ -1,0 +1,30 @@
+{
+  "mapWidth": 1536,
+  "mapHeight": 1024,
+  "locations": [
+    {
+      "name": "Bitterstone",
+      "type": "town",
+      "screenX": 1035.0,
+      "screenY": 153.0
+    },
+    {
+      "name": "Aeltharion",
+      "type": "capital",
+      "screenX": 1035.0,
+      "screenY": 306.0
+    },
+    {
+      "name": "Seabreeze",
+      "type": "town",
+      "screenX": 1144.0,
+      "screenY": 459.0
+    }
+  ],
+  "roads": [
+    {
+      "from": 0,
+      "to": 1
+    }
+  ]
+}

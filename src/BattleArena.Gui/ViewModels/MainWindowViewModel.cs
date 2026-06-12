@@ -130,6 +130,8 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsCharCreationPhase)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSpellPreviewPhase)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsWorldPhase)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsWorldMapPhase)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLocationPhase)));
             }
         }
     }
@@ -139,9 +141,12 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     public bool IsApiMenuPhase => Phase == "ApiMenu";
     public bool IsCharCreationPhase => Phase == "CharCreation";
     public bool IsSpellPreviewPhase => Phase == "SpellPreview";
-    public bool IsWorldPhase => Phase == "World";
+    public bool IsWorldPhase => Phase == "Location" || Phase == "World";
+    public bool IsWorldMapPhase => Phase == "WorldMap";
+    public bool IsLocationPhase => Phase == "Location" || Phase == "World";
 
     public WorldViewModel WorldViewModel { get; } = new();
+    public BattleArena.Gui.ViewModels.WorldMap.WorldMapViewModel WorldMapVm { get; } = new();
 
     private string _scenario = "Duel";
     public string Scenario

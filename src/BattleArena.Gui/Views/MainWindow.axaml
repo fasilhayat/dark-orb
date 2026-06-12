@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:views="clr-namespace:BattleArena.Gui.Views"
         xmlns:world="clr-namespace:BattleArena.Gui.Views.World"
+        xmlns:worldmap="clr-namespace:BattleArena.Gui.Views.WorldMap"
         x:Class="BattleArena.Gui.Views.MainWindow"
         Title="BattleArena — Combat Simulation"
         MinWidth="900" MinHeight="600"
@@ -115,7 +116,7 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="24">
           <Button x:Name="DemoButton" Content="DEMO" Click="OnDemoClick"
                   Width="180" Height="60" FontSize="20" VerticalAlignment="Top" />
-          <Button x:Name="WorldButton" Content="WORLD" Click="OnWorldClick"
+          <Button x:Name="WorldButton" Content="MAP" Click="OnWorldMapClick"
                   Width="180" Height="60" FontSize="20" VerticalAlignment="Top" />
           <StackPanel VerticalAlignment="Top" Spacing="4">
             <Button x:Name="ApiModeButton" Content="API VERSION" Click="OnApiModeClick"
@@ -129,43 +130,40 @@
       </StackPanel>
     </Grid>
 
-    <!-- ── WORLD EXPLORATION PHASE ── -->
-    <Grid IsVisible="{Binding IsWorldPhase}" RowDefinitions="Auto,*,Auto" Background="#0d0d1a">
-      <!-- Row 0: Title bar -->
+    <!-- ── WORLD MAP PHASE ── -->
+    <Grid IsVisible="{Binding IsWorldMapPhase}" RowDefinitions="Auto,*,Auto" Background="#0d0d1a">
       <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Margin="8,4">
-        <TextBlock Grid.Column="0" Text="***  WORLD EXPLORATION  ***"
+        <TextBlock Grid.Column="0" Text="***  AELTHORIA  ***"
                    Foreground="#00bfff" FontSize="18" FontWeight="Bold"
                    VerticalAlignment="Center" />
         <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8">
-          <Button x:Name="WorldHelpButton" Content="?" Click="OnWorldHelpClick"
-                  Width="30" Height="30" FontSize="14"
-                  Background="#3a3a5c" BorderBrush="#555" />
           <Button Content="Back to Main Menu" Click="OnBackToMainClick"
                   Width="160" Height="30" FontSize="11"
                   Background="#5c3a3a" BorderBrush="#755" />
         </StackPanel>
       </Grid>
-
-      <!-- Row 1: Isometric world view -->
-      <world:WorldView Grid.Row="1" x:Name="WorldViewControl" DataContext="{Binding WorldViewModel}" />
-
-      <!-- Row 2: Bottom action bar -->
+      <worldmap:WorldMapView Grid.Row="1" x:Name="WorldMapViewControl" DataContext="{Binding WorldMapViewModel}" />
       <Border Grid.Row="2" Background="#0a0a14" BorderBrush="#1a1a2e" BorderThickness="0,1,0,0" Padding="8,4">
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="16">
-          <Button x:Name="WorldInventoryButton" Content="Inventory" Click="OnWorldInventoryClick"
-                  Width="100" Height="28" FontSize="11"
-                  IsEnabled="False" />
-          <Button x:Name="WorldPartyButton" Content="Party" Click="OnWorldPartyClick"
-                  Width="100" Height="28" FontSize="11"
-                  IsEnabled="False" />
-          <Button x:Name="WorldSaveButton" Content="Save" Click="OnWorldSaveClick"
-                  Width="100" Height="28" FontSize="11"
-                  IsEnabled="False" />
-          <Button x:Name="WorldLoadButton" Content="Load" Click="OnWorldLoadClick"
-                  Width="100" Height="28" FontSize="11"
-                  IsEnabled="False" />
-        </StackPanel>
+        <Button x:Name="EnterLocationButton" Content="Enter" Click="OnEnterLocationClick"
+                Width="100" Height="28" FontSize="11"
+                IsEnabled="{Binding WorldMapVm.HasSelection}"
+                HorizontalAlignment="Center" />
       </Border>
+    </Grid>
+
+    <!-- ── LOCATION PHASE (isometric view) ── -->
+    <Grid IsVisible="{Binding IsLocationPhase}" RowDefinitions="Auto,*,Auto" Background="#0d0d1a">
+      <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Margin="8,4">
+        <TextBlock Grid.Column="0" Text="***  LOCATION  ***"
+                   Foreground="#00bfff" FontSize="18" FontWeight="Bold"
+                   VerticalAlignment="Center" />
+        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8">
+          <Button Content="Back to World Map" Click="OnBackToWorldMapClick"
+                  Width="160" Height="30" FontSize="11"
+                  Background="#5c3a3a" BorderBrush="#755" />
+        </StackPanel>
+      </Grid>
+      <world:WorldView Grid.Row="1" x:Name="WorldViewControl" DataContext="{Binding WorldViewModel}" />
     </Grid>
 
     <!-- ── COMBAT PHASE ── -->

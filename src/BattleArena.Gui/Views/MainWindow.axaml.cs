@@ -18,6 +18,7 @@ using BattleArena.Gui.Presenters;
 using BattleArena.Gui.Services;
 using BattleArena.Gui.ViewModels;
 using BattleArena.Gui.ViewModels.World;
+using BattleArena.Gui.ViewModels.WorldMap;
 using BattleArena.Presentation;
 
 namespace BattleArena.Gui.Views;
@@ -410,29 +411,42 @@ public partial class MainWindow : Window
         DummyHeader.IsVisible = true;
     }
 
-    private void OnWorldClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private void OnWorldMapClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        _vm.Phase = "World";
+        _vm.Phase = "WorldMap";
+        EnterLocationButton.IsEnabled = _vm.WorldMapVm.SelectedLocation is not null;
     }
 
-    private void OnWorldHelpClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private void OnEnterLocationClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
+        var wm = _vm.WorldMapVm;
+        if (wm.SelectedLocation is null) return;
+
+        wm.LocationEntered += mapId =>
+        {
+            if (!string.IsNullOrEmpty(mapId))
+                _vm.Phase = "Location";
+        };
+
+        var mapId = wm.SelectedLocation.TargetMapId;
+        if (string.IsNullOrEmpty(mapId))
+        {
+            // Encounter with no target map — trigger combat
+            _combatFromWorld = true;
+            var hero = Roster.AllHeroes.Find(c => c.Name == "Ser Garrick Dawnshield");
+            var enemy = Roster.AllHeroes.Find(c => c.Name == "Lord Aethor Valeborn");
+            if (hero is not null && enemy is not null)
+                StartWorldCombat(hero, enemy);
+            return;
+        }
+
+        wm.EnterLocation();
     }
 
-    private void OnWorldInventoryClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private void OnBackToWorldMapClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-    }
-
-    private void OnWorldPartyClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-    }
-
-    private void OnWorldSaveClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-    }
-
-    private void OnWorldLoadClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
+        _vm.Phase = "WorldMap";
+        EnterLocationButton.IsEnabled = _vm.WorldMapVm.SelectedLocation is not null;
     }
 
     private void OnApiModeClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
