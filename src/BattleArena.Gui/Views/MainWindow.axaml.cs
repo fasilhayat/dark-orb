@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.Threading;
 using BattleArena.Application.Interfaces;
 using BattleArena.Application.Models;
@@ -411,42 +413,106 @@ public partial class MainWindow : Window
         DummyHeader.IsVisible = true;
     }
 
+    private static readonly (string Name, int MaxHp, int Hp)[] PartyMembers =
+    [
+        ("Ser Garrick Dawnshield", 96, 96),
+        ("Sister Elira Vane", 52, 52),
+        ("Vaelith Moonveil", 68, 68),
+        ("Finnick Bramblefoot", 44, 44),
+    ];
+
+    private void PopulatePartyPanel()
+    {
+        PartyPanel.Children.Clear();
+
+        foreach (var (name, maxHp, hp) in PartyMembers)
+        {
+            // Portrait — scaled to 25%
+            var portrait = PortraitResolver.GetPortrait(name);
+            var pw = 128.0;
+            if (portrait is not null)
+            {
+                var scale = 0.25;
+                pw = portrait.Size.Width * scale;
+                var ph = portrait.Size.Height * scale;
+                PartyPanel.Children.Add(new Avalonia.Controls.Image
+                {
+                    Source = portrait,
+                    Width = pw,
+                    Height = ph,
+                    Stretch = Avalonia.Media.Stretch.Fill,
+                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left,
+                    Margin = new Thickness(10, 2, 10, 0),
+                });
+            }
+            else
+            {
+                pw = 128;
+                PartyPanel.Children.Add(new Border
+                {
+                    Width = pw, Height = pw,
+                    Background = new SolidColorBrush(Color.Parse("#1a1a2e")),
+                    CornerRadius = new CornerRadius(4),
+                    Margin = new Thickness(10, 2, 10, 0),
+                    Child = new TextBlock
+                    {
+                        Text = name.Length > 0 ? name[0].ToString() : "?",
+                        Foreground = new SolidColorBrush(Colors.Gray),
+                        FontSize = 24,
+                        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                        VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+                    },
+                });
+            }
+
+            // Name on top
+            PartyPanel.Children.Add(new TextBlock
+            {
+                Text = name,
+                Foreground = new SolidColorBrush(Colors.White),
+                FontSize = 10,
+                FontWeight = FontWeight.Bold,
+                Margin = new Thickness(10, 6, 0, 0),
+            });
+
+            // HP bar — width matches portrait width exactly
+            var hpFraction = maxHp > 0 ? Math.Clamp((double)hp / maxHp, 0, 1) : 0;
+            var hpBar = new Border
+            {
+                Width = pw,
+                Height = 8,
+                Background = new SolidColorBrush(Color.Parse("#0a1a0a")),
+                BorderBrush = new SolidColorBrush(Color.Parse("#114411")),
+                BorderThickness = new Thickness(1),
+                Margin = new Thickness(10, 3, 10, 6),
+            };
+            var hpFill = new Border
+            {
+                Width = hpFraction * (pw - 2),
+                Height = 6,
+                Background = new SolidColorBrush(Color.Parse("#44cc44")),
+                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left,
+                VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+            };
+            hpBar.Child = hpFill;
+            PartyPanel.Children.Add(hpBar);
+        }
+    }
+
     private void OnWorldMapClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         _vm.Phase = "WorldMap";
-        EnterLocationButton.IsEnabled = _vm.WorldMapVm.SelectedLocation is not null;
     }
 
     private void OnEnterLocationClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        var wm = _vm.WorldMapVm;
-        if (wm.SelectedLocation is null) return;
-
-        wm.LocationEntered += mapId =>
-        {
-            if (!string.IsNullOrEmpty(mapId))
-                _vm.Phase = "Location";
-        };
-
-        var mapId = wm.SelectedLocation.TargetMapId;
-        if (string.IsNullOrEmpty(mapId))
-        {
-            // Encounter with no target map — trigger combat
-            _combatFromWorld = true;
-            var hero = Roster.AllHeroes.Find(c => c.Name == "Ser Garrick Dawnshield");
-            var enemy = Roster.AllHeroes.Find(c => c.Name == "Lord Aethor Valeborn");
-            if (hero is not null && enemy is not null)
-                StartWorldCombat(hero, enemy);
-            return;
-        }
-
-        wm.EnterLocation();
+        PopulatePartyPanel();
+        _vm.Phase = "Location";
     }
 
     private void OnBackToWorldMapClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         _vm.Phase = "WorldMap";
-        EnterLocationButton.IsEnabled = _vm.WorldMapVm.SelectedLocation is not null;
     }
 
     private void OnApiModeClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
