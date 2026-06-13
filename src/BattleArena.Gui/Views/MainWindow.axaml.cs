@@ -427,6 +427,16 @@ public partial class MainWindow : Window
 
         foreach (var (name, maxHp, hp) in PartyMembers)
         {
+            // Name on top
+            PartyPanel.Children.Add(new TextBlock
+            {
+                Text = name,
+                Foreground = new SolidColorBrush(Colors.White),
+                FontSize = 10,
+                FontWeight = FontWeight.Bold,
+                Margin = new Thickness(10, 6, 0, 0),
+            });
+
             // Portrait — scaled to 25%
             var portrait = PortraitResolver.GetPortrait(name);
             var pw = 128.0;
@@ -465,31 +475,22 @@ public partial class MainWindow : Window
                 });
             }
 
-            // Name on top
-            PartyPanel.Children.Add(new TextBlock
-            {
-                Text = name,
-                Foreground = new SolidColorBrush(Colors.White),
-                FontSize = 10,
-                FontWeight = FontWeight.Bold,
-                Margin = new Thickness(10, 6, 0, 0),
-            });
-
-            // HP bar — width matches portrait width exactly
+            // HP bar — width matches portrait width, flush left/right
             var hpFraction = maxHp > 0 ? Math.Clamp((double)hp / maxHp, 0, 1) : 0;
             var hpBar = new Border
             {
                 Width = pw,
-                Height = 8,
+                Height = 6,
                 Background = new SolidColorBrush(Color.Parse("#0a1a0a")),
                 BorderBrush = new SolidColorBrush(Color.Parse("#114411")),
                 BorderThickness = new Thickness(1),
-                Margin = new Thickness(10, 3, 10, 6),
+                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left,
+                Margin = new Thickness(10, 2, 10, 4),
             };
             var hpFill = new Border
             {
                 Width = hpFraction * (pw - 2),
-                Height = 6,
+                Height = 4,
                 Background = new SolidColorBrush(Color.Parse("#44cc44")),
                 HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left,
                 VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,

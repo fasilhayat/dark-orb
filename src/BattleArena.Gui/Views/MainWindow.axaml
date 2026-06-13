@@ -212,16 +212,15 @@
       <!-- Row 2: Bottom action bar -->
       <Border Grid.Row="2" Background="#0d0d18" BorderBrush="#2a1a0a" BorderThickness="0,1,0,0" Padding="6,3">
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="4">
-          <Button Content="⚔ Attack" Width="90" Height="24" FontSize="10" IsEnabled="False"
+          <Button Content="Attack" Width="80" Height="24" FontSize="10" IsEnabled="False"
                   Background="#3a1a1a" BorderBrush="#8b4444" />
-          <Button Content="🛡 Defend" Width="90" Height="24" FontSize="10" IsEnabled="False"
+          <Button Content="Defend" Width="80" Height="24" FontSize="10" IsEnabled="False"
                   Background="#1a2a1a" BorderBrush="#448b44" />
-          <Button Content="✦ Ability" Width="90" Height="24" FontSize="10" IsEnabled="False"
+          <Button Content="Ability" Width="80" Height="24" FontSize="10" IsEnabled="False"
                   Background="#1a1a3a" BorderBrush="#44448b" />
-          <Button Content="◆ Item" Width="90" Height="24" FontSize="10" IsEnabled="False"
+          <Button Content="Item" Width="80" Height="24" FontSize="10" IsEnabled="False"
                   Background="#2a1a3a" BorderBrush="#6b448b" />
-          <Rectangle Width="1" Fill="#2a1a0a" Margin="4,0" />
-          <Button Content="📖 Log" Width="70" Height="24" FontSize="10" IsEnabled="False"
+          <Button Content="Log" Width="60" Height="24" FontSize="10" IsEnabled="False"
                   Background="#1a1a1a" BorderBrush="#555" />
         </StackPanel>
       </Border>
