@@ -195,7 +195,7 @@ The world is governed by eight major deities, divided into two courts:
 
 **Aethelion** — The radiant father of light. He is the celestial realm of pure light and order, the first god to awaken at the dawn of creation. His domain is Heaven and Light, and he is worshipped by paladins, priests of order, and all who seek to bring justice to the world. His symbol is a radiant celestial crown with halo and light rays.
 
-**Astrara** — The guiding star mother. She watches over fate and the stars, illuminating the path of those who are lost. Her domain is Stars and Fate, and her symbol is a five-pointed guiding star sigil.
+**Astrara** — The guiding star mother. She watches over fate and the stars, illuminating the path of those who are lost. Her domain is Stars and Fate, and her symbol is a five-pointed guiding star sigil. Her priests are called **Tempest** — battle-priests who wear full helms and full plate mail, fighting under the guiding star.
 
 **Celestara** — The weaver of destiny. She governs time and the woven patterns of destiny in the night sky. Her domain is Destiny and Time, and her symbol is a connected star-map with lines.
 
@@ -278,37 +278,23 @@ When a divine caster (Priest, Druid, Paladin, Knight) wields a spell aligned wit
 
 | Deity | Affinity | Bonus |
 |-------|----------|-------|
-| **Aethelion** | Healing, Protection, Order | Healing spells restore +25% HP. Protection/Smite spells deal +1d4 radiant damage. |
-| **Astrara** | Stars, Fate, Guidance | Buff spells grant +1 AttackPower. Divination effects last +1 round. |
-| **Celestara** | Destiny, Time | Duration of time-aligned spells (Haste, Slow) extended by +1 round. |
-| **Lunara** | Moon, Magic, Tides | Mana cost reduced by -2 on aligned spells. Magic damage +1d4 on night-cycle. |
+| **Aethelion** | Healing, Protection, Order | Healing spells restore +25% HP. Protection spells last +1 round. Smite spells deal +1d4 radiant damage. |
+| **Astrara** | Stars, Fate, Guidance, Battle | Buff spells grant +1 AttackPower. Tempest (Astrara's priests) may equip full helms and full plate mail (normally restricted to Paladins/Knights). Chant, Remove Fear, Free Action gain +1 AttackPower for allies. |
+| **Celestara** | Destiny, Time, Barriers | Barrier and time-aligned spells (Haste, Slow, Blade Barrier) last +1 round. AC buffs gain +1 additional AC. |
+| **Lunara** | Moon, Magic, Tides | Mana cost reduced by -2 on aligned spells. Healing +1d4 during night cycle. Fire/Cold resistance +5 on full moon. |
 
 ### Dark Deity Bonuses (Shadow Court)
 
 | Deity | Affinity | Bonus |
 |-------|----------|-------|
-| **Ignaroth** | Fire, Destruction | Fire spells deal +1d6 fire damage. 10% chance to ignite target (1d4 afterburn). |
-| **Umbraex** | Darkness, Secrets | Shadow/Necrotic spells deal +1d6 shadow damage. Target suffers -1 DefensePower. |
-| **Veparix** | Deception, Illusion | Illusion/Confusion spells last +1 round. Application chance +5%. |
-| **Noctivane** | Shadow, Stealth | Stealth/Shadow attacks deal +1d6 bonus damage. Invisibility duration +1 round. |
+| **Ignaroth** | Fire, Destruction | Fire spells deal +1d6 fire damage. 10% chance to ignite target for 1d4. |
+| **Umbraex** | Darkness, Secrets, Shadow | Shadow spells deal +1d4 shadow damage. Control spells gain +1 round or -1 DefensePower. |
+| **Veparix** | Deception, Illusion | Illusion/control spells gain +5% application chance. Revealed targets suffer -2 DefensePower. |
+| **Noctivane** | Shadow, Stealth | Fear effects last +1 round. Stealth/shadow attacks deal +1d6 bonus damage. |
 
-### Neutral Deity Bonuses (Boundary)
+### Neutral Deity Bonus (Boundary)
 
 | Deity | Affinity | Bonus |
 |-------|----------|-------|
-| **Chronara** | Time, Stars, Balance | Offensive spells gain +1d6 bonus damage matching their type. Support spells gain +1 round duration or +10% effectiveness. Works equally on light and dark aligned spells. |
+| **Chronara** | Time, Balance, Nature | Offensive spells gain +1d6 bonus damage matching their type. Support/control spells gain +1 round duration or +10% effectiveness. Nature spells deal +1d4 nature damage. |
 
-### Spell Alignment Quick Reference
-
-Spells align to deities by their damage type, school, and effect:
-
-| Damage / School | Aligned Deities |
-|-----------------|-----------------|
-| Fire, Bludgeoning (destructive) | Ignaroth |
-| Radiant, Holy, Healing | Aethelion |
-| Shadow, Necrotic, Psychic | Umbraex, Noctivane |
-| Lightning, Cold, Stormcraft | Chronara (neutral), Lunara |
-| Illusion, Mirage, Mind-altering | Veparix |
-| Time, TM manipulation, Fate | Celestara, Astrara, Chronara |
-| Invisibility, Stealth, Blink | Noctivane, Veparix |
-| Protection, Armor, Wards | Aethelion, Celestara |
