@@ -930,27 +930,27 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 Priests gain broad early identity through blessings, healing, commands, wards, and spiritual battlefield control. Their later spells expand into miracles, barriers, supreme restoration, and holy devastation rather than generic arcane offense.
 
-| Spell | School | Spell Level | Access Layer | Access Tier | Minimum Level | Class | Damage Type | Afterburn | Tags |
+| Spell | Deity | Spell Level | Access Layer | Access Tier | Minimum Level | Class | Damage Type | Afterburn | Tags |
 |------|--------|-------------|-------------|-----------|---------------|-------|------------|-----------|------|
-| [Bless](#bless) | Deity | 1 | Class Core | Early | - | Priest, Paladin | None | Yes, duration buff. | Buff, AoE |
-| [Command](#command) | Deity | 1 | Class Core | Early | - | Priest, Paladin | None/Control | No. | CC |
-| [Cure Light Wounds](#cure-light-wounds) | Deity | 1 | Class Core | Early | - | Priest, Druid, Paladin | Healing | No direct after-effect beyond restored HP. | Healing |
-| [Protection from Evil](#protection-from-evil) | Deity | 1 | Class Core | Early | - | Priest, Paladin | None | No. | Defensive, Buff |
-| [Chasten](#chasten) | Deity | 1 | Core | Early | - | Priest | Radiant | No | Debuff |
-| [Sanctuary](#sanctuary) | Deity | 1 | Class Core | Early | - | Priest, Paladin | None | Yes, duration shield-state. | Defensive |
-| [Aid](#aid) | Deity | 2 | Class Core | Early | - | Priest, Paladin | None | Yes, duration support buff. | Buff |
-| [Chant](#chant) | Deity | 2 | Class Core | Early | - | Priest | None | Yes, duration aura. | Buff, Debuff |
-| [Hold Person](#hold-person) | Deity | 2/3 | Class Core | Mid | - | Priest | None/Control | No. | CC |
-| [Prayer](#prayer) | Deity | 3 | Class Core | Mid | - | Priest | None | Yes, duration field effect. | Buff, Debuff |
-| [Remove Paralysis](#remove-paralysis) | Deity | 3 | Class Core | Mid | - | Priest, Paladin | Cleanse | No. | Healing, Cleanse |
-| [Cure Serious Wounds](#cure-serious-wounds) | Deity | 4 | Class Core | Mid | - | Priest, Druid, Paladin | Healing | No. | Healing |
-| [Free Action](#free-action) | Deity | 4 | Class Core | Mid | - | Priest, Paladin | None | Yes, duration buff. | Defensive |
-| [Cure Critical Wounds](#cure-critical-wounds) | Deity | 5 | School Specialization | Late | - | Priest, Druid, Paladin | Healing | No. | Healing |
-| [Flame Strike](#flame-strike) | Deity | 5 | School Specialization | Late | - | Priest | Fire/Radiant | No explicit lingering burn. | Offensive, Nuke |
-| [Heal](#heal) | Deity | 6 | School Specialization | Late | - | Priest | Healing | No. | Healing |
-| [Blade Barrier](#blade-barrier) | Deity | 6 | School Specialization | Late | - | Priest | Physical/Magical | Yes, persistent hazard while active. | Offensive, Defensive, Barrier |
-| [Heroes' Feast](#heroes-feast) | Deity | 6 | School Specialization | Late | - | Priest | Buff | Yes, prebuff duration benefits. | Buff, AoE |
-| [Restoration](#restoration) | Deity | 7 | School Specialization | Late | - | Priest | Healing | No. | Healing, Cleanse |
+|[Bless](#bless)| Aethelion |1|Class Core|Early|-|Priest, Paladin|None|Yes, duration buff.|Buff, AoE|
+|[Command](#command)| Aethelion |1|Class Core|Early|-|Priest, Paladin|None/Control|No.|CC|
+|[Cure Light Wounds](#cure-light-wounds)| Aethelion |1|Class Core|Early|-|Priest, Druid, Paladin|Healing|No direct after-effect beyond restored HP.|Healing|
+|[Protection from Evil](#protection-from-evil)| Aethelion |1|Class Core|Early|-|Priest, Paladin|None|No.|Defensive, Buff|
+|[Chasten](#chasten)| Aethelion |1|Core|Early|-|Priest|Radiant|No|Debuff|
+|[Sanctuary](#sanctuary)| Aethelion |1|Class Core|Early|-|Priest, Paladin|None|Yes, duration shield-state.|Defensive|
+|[Aid](#aid)| Aethelion |2|Class Core|Early|-|Priest, Paladin|None|Yes, duration support buff.|Buff|
+|[Chant](#chant)| Chronara |2|Class Core|Early|-|Priest|None|Yes, duration aura.|Buff, Debuff|
+|[Hold Person](#hold-person)| Umbraex |2/3|Class Core|Mid|-|Priest|None/Control|No.|CC|
+|[Prayer](#prayer)| Astrara |3|Class Core|Mid|-|Priest|None|Yes, duration field effect.|Buff, Debuff|
+|[Remove Paralysis](#remove-paralysis)| Aethelion |3|Class Core|Mid|-|Priest, Paladin|Cleanse|No.|Healing, Cleanse|
+|[Cure Serious Wounds](#cure-serious-wounds)| Aethelion |4|Class Core|Mid|-|Priest, Druid, Paladin|Healing|No.|Healing|
+|[Free Action](#free-action)| Aethelion |4|Class Core|Mid|-|Priest, Paladin|None|Yes, duration buff.|Defensive|
+|[Cure Critical Wounds](#cure-critical-wounds)| Aethelion |5|School Specialization|Late|-|Priest, Druid, Paladin|Healing|No.|Healing|
+|[Flame Strike](#flame-strike)| Ignaroth |5|School Specialization|Late|-|Priest|Fire/Radiant|No explicit lingering burn.|Offensive, Nuke|
+|[Heal](#heal)| Aethelion |6|School Specialization|Late|-|Priest|Healing|No.|Healing|
+|[Blade Barrier](#blade-barrier)| Celestara |6|School Specialization|Late|-|Priest|Physical/Magical|Yes, persistent hazard while active.|Offensive, Defensive, Barrier|
+|[Heroes' Feast](#heroes-feast)| Aethelion |6|School Specialization|Late|-|Priest|Buff|Yes, prebuff duration benefits.|Buff, AoE|
+|[Restoration](#restoration)| Aethelion |7|School Specialization|Late|-|Priest|Healing|No.|Healing, Cleanse|
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1355,25 +1355,25 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 Druids begin with natural control and utility, then scale into storms, swarms, primal damage, and guardian summoning. Their battlefield identity should feel environmental and living rather than doctrinal or purely holy.
 
-| Spell | School | Spell Level | Access Layer | Access Tier | Minimum Level | Class | Damage Type | Afterburn | Tags |
+| Spell | Deity | Spell Level | Access Layer | Access Tier | Minimum Level | Class | Damage Type | Afterburn | Tags |
 |------|--------|-------------|-------------|-----------|---------------|-------|------------|-----------|------|
-| [Entangle](#entangle) | Deity | 1 | Class Core | Early | - | Druid, Priest | None/Control | Yes, persistent rooting zone while active. | CC, Root |
-| [Faerie Fire](#faerie-fire) | Deity | 1 | Class Core | Early | - | Druid, Priest | None/Reveal | Yes, duration reveal. | Debuff |
-| [Shillelagh](#shillelagh) | Deity | 1 | Class Core | Early | - | Druid | Physical/Magical | No. | Buff |
-| [Barkskin](#barkskin) | Deity | 2 | Class Core | Early | - | Druid, Priest | None | Yes, duration-based defensive skin. | Defensive |
-| [Goodberry](#goodberry) | Deity | 2 | Class Core | Early | - | Druid, Priest | Healing | No. | Healing |
-| [Heat Metal](#heat-metal) | Deity | 2 | Class Core | Early | - | Druid, Priest | Fire | Yes, continuing heat damage or pressure. | Debuff |
-| [Call Lightning](#call-lightning) | Deity | 3 | Class Core | Mid | - | Druid, Priest | Lightning | Yes in repeated-round use, though not burn. | Offensive |
-| [Hold Animal](#hold-animal) | Deity | 3 | Class Core | Mid | - | Druid, Priest | None/Control | Yes, duration root/paralysis. | CC |
-| [Call Woodland Beings](#call-woodland-beings) | Deity | 4 | School Specialization | Mid | - | Druid | Variable | Yes, summoned allies persist for duration. | Summoning |
-| [Giant Insect](#giant-insect) | Deity | 4 | School Specialization | Mid | - | Druid, Priest | Physical | Yes, transformed creatures persist for duration. | Summoning-lite |
-| [Insect Plague](#insect-plague) | Deity | 5 | School Specialization | Late | - | Druid, Priest | Physical/Poison-theme | Yes, persistent swarm presence. | Offensive, CC |
-| [Anti-Plant Shell](#anti-plant-shell) | Deity | 5 | School Specialization | Late | - | Druid, Priest | None | Yes, persistent shell. | Defensive |
-| [Fire Seeds](#fire-seeds) | Deity | 6 | School Specialization | Late | - | Druid | Fire | Sometimes, depending on trap-style implementation. | Offensive |
-| [Liveoak](#liveoak) | Deity | 6 | School Specialization | Late | - | Druid | Physical | Yes, awakened guardian persists. | Summoning |
-| [Creeping Doom](#creeping-doom) | Deity | 7 | School Specialization | Late | - | Druid | Physical | Yes, persistent swarm pressure. | Offensive, CC |
-| [Earthquake](#earthquake) | Deity | 7 | School Specialization | Late | - | Druid, Priest | Physical | Yes, persistent terrain disruption during effect. | Offensive, AoE |
-| [Turn Undead](#turn-undead) | Deity | 2 | Class Core | Early | - | Priest, Paladin, Knight | Holy | Yes, Fear (2 turns) | Offensive, CC |
+|[Entangle](#entangle)| Chronara |1|Class Core|Early|-|Druid, Priest|None/Control|Yes, persistent rooting zone while active.|CC, Root|
+|[Faerie Fire](#faerie-fire)| Veparix |1|Class Core|Early|-|Druid, Priest|None/Reveal|Yes, duration reveal.|Debuff|
+|[Shillelagh](#shillelagh)| Chronara |1|Class Core|Early|-|Druid|Physical/Magical|No.|Buff|
+|[Barkskin](#barkskin)| Celestara |2|Class Core|Early|-|Druid, Priest|None|Yes, duration-based defensive skin.|Defensive|
+|[Goodberry](#goodberry)| Lunara |2|Class Core|Early|-|Druid, Priest|Healing|No.|Healing|
+|[Heat Metal](#heat-metal)| Ignaroth |2|Class Core|Early|-|Druid, Priest|Fire|Yes, continuing heat damage or pressure.|Debuff|
+|[Call Lightning](#call-lightning)| Chronara |3|Class Core|Mid|-|Druid, Priest|Lightning|Yes in repeated-round use, though not burn.|Offensive|
+|[Hold Animal](#hold-animal)| Chronara |3|Class Core|Mid|-|Druid, Priest|None/Control|Yes, duration root/paralysis.|CC|
+|[Call Woodland Beings](#call-woodland-beings)| Chronara |4|School Specialization|Mid|-|Druid|Variable|Yes, summoned allies persist for duration.|Summoning|
+|[Giant Insect](#giant-insect)| Chronara |4|School Specialization|Mid|-|Druid, Priest|Physical|Yes, transformed creatures persist for duration.|Summoning-lite|
+|[Insect Plague](#insect-plague)| Umbraex |5|School Specialization|Late|-|Druid, Priest|Physical/Poison-theme|Yes, persistent swarm presence.|Offensive, CC|
+|[Anti-Plant Shell](#anti-plant-shell)| Celestara |5|School Specialization|Late|-|Druid, Priest|None|Yes, persistent shell.|Defensive|
+|[Fire Seeds](#fire-seeds)| Ignaroth |6|School Specialization|Late|-|Druid|Fire|Sometimes, depending on trap-style implementation.|Offensive|
+|[Liveoak](#liveoak)| Chronara |6|School Specialization|Late|-|Druid|Physical|Yes, awakened guardian persists.|Summoning|
+|[Creeping Doom](#creeping-doom)| Umbraex |7|School Specialization|Late|-|Druid|Physical|Yes, persistent swarm pressure.|Offensive, CC|
+|[Earthquake](#earthquake)| Chronara |7|School Specialization|Late|-|Druid, Priest|Physical|Yes, persistent terrain disruption during effect.|Offensive, AoE|
+|[Turn Undead](#turn-undead)| Aethelion |2|Class Core|Early|-|Priest, Paladin, Knight|Holy|Yes, Fear (2 turns)|Offensive, CC|
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1736,9 +1736,9 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 
 Paladins begin magical access around level 6 in Dark Orb and remain a narrow support caster with holy defenses, buffs, and companion protection. Their spell list intentionally avoids broad offensive identity and instead reinforces survivability, courage, and team stability.
 
-| Spell | School | Spell Level | Access Layer | Access Tier | Minimum Level | Class | Damage Type | Afterburn | Tags |
+| Spell | Deity | Spell Level | Access Layer | Access Tier | Minimum Level | Class | Damage Type | Afterburn | Tags |
 |------|--------|-------------|-------------|-----------|---------------|-------|------------|-----------|------|
-| [Bless](#bless) | Deity | 1 | Class Core | Early | - | Improves ally morale and combat readiness. |  |  |  |
+|[Bless](#bless)| Aethelion |1|Class Core|Early|-|Improves ally morale and combat readiness.||||
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1765,20 +1765,20 @@ Paladins begin magical access around level 6 in Dark Orb and remain a narrow sup
 
 Knights begin spell-like command magic around level 9 and should feel like tactical leaders using morale, discipline, banner magic, and resistance support. Their list is deliberately distinct from paladins even when both support allies.
 
-| Spell | School | Spell Level | Access Layer | Access Tier | Minimum Level | Class | Damage Type | Afterburn | Tags |
+| Spell | Deity | Spell Level | Access Layer | Access Tier | Minimum Level | Class | Damage Type | Afterburn | Tags |
 |------|--------|-------------|-------------|-----------|---------------|-------|------------|-----------|------|
-| [War Cry](#war-cry) | Deity | 1 | Class Core | Early | - | Knight, Paladin | Sonic/Morale | Short-duration momentum effect. | CC or Buff, Variant |
-| [Smite](#smite) | Deity | 1 | Class Core | Early | - | Knight | Radiant | No | Offensive |
-| [Rallying Cry](#rallying-cry) | Deity | 1 | Class Core | Early | - | Knight | Sonic/Morale | Short aura duration. | Buff, Variant |
-| [Steadfast Line](#steadfast-line) | Deity | 2 | Class Core | Early | - | Knight | None | Yes, short formation aura. | Buff, Variant |
-| [Banner of Resolve](#banner-of-resolve) | Deity | 2 | Class Core | Early | - | Knight | None | Yes, aura duration. | Buff, Variant |
-| [Iron Will Litany](#iron-will-litany) | Deity | 3 | Class Core | Mid | - | Knight | None | Yes, chant duration. | Defensive, Variant |
-| [Advance Signal](#advance-signal) | Deity | 3 | Class Core | Mid | - | Knight | None | Short-duration surge. | Buff, Variant |
-| [Haste](#haste) | Dominion | 3 | School Specialization | Mid | - | Knight | None/Buff | Yes, duration-based speed buff. | Buff, TM Uplift |
-| [Shielding Cadence](#shielding-cadence) | Deity | 3 | Class Core | Mid | - | Knight | None | Yes, cadence duration. | Defensive, Variant |
-| [Battle Hymn of Defiance](#battle-hymn-of-defiance) | Deity | 4 | School Specialization | Late | - | Knight | Sonic/Morale | Yes, anthem duration. | Buff, AoE, Variant |
-| [Arcane Defiance Banner](#arcane-defiance-banner) | Deity | 4 | School Specialization | Late | - | Knight | None | Yes, banner aura. | Defensive, Variant |
-| [Lionheart Command](#lionheart-command) | Deity | 4 | School Specialization | Late | - | Knight | Sonic/Morale | Yes, command duration. | Buff, Variant |
+|[War Cry](#war-cry)| Ignaroth |1|Class Core|Early|-|Knight, Paladin|Sonic/Morale|Short-duration momentum effect.|CC or Buff, Variant|
+|[Smite](#smite)| Aethelion |1|Class Core|Early|-|Knight|Radiant|No|Offensive|
+|[Rallying Cry](#rallying-cry)| Aethelion |1|Class Core|Early|-|Knight|Sonic/Morale|Short aura duration.|Buff, Variant|
+|[Steadfast Line](#steadfast-line)| Celestara |2|Class Core|Early|-|Knight|None|Yes, short formation aura.|Buff, Variant|
+|[Banner of Resolve](#banner-of-resolve)| Celestara |2|Class Core|Early|-|Knight|None|Yes, aura duration.|Buff, Variant|
+|[Iron Will Litany](#iron-will-litany)| Celestara |3|Class Core|Mid|-|Knight|None|Yes, chant duration.|Defensive, Variant|
+|[Advance Signal](#advance-signal)| Chronara |3|Class Core|Mid|-|Knight|None|Short-duration surge.|Buff, Variant|
+|[Haste](#haste)| Celestara |3|School Specialization|Mid|-|Knight|None/Buff|Yes, duration-based speed buff.|Buff, TM Uplift|
+|[Shielding Cadence](#shielding-cadence)| Celestara |3|Class Core|Mid|-|Knight|None|Yes, cadence duration.|Defensive, Variant|
+|[Battle Hymn of Defiance](#battle-hymn-of-defiance)| Chronara |4|School Specialization|Late|-|Knight|Sonic/Morale|Yes, anthem duration.|Buff, AoE, Variant|
+|[Arcane Defiance Banner](#arcane-defiance-banner)| Lunara |4|School Specialization|Late|-|Knight|None|Yes, banner aura.|Defensive, Variant|
+|[Lionheart Command](#lionheart-command)| Aethelion |4|School Specialization|Late|-|Knight|Sonic/Morale|Yes, command duration.|Buff, Variant|
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
