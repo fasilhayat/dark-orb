@@ -1231,3 +1231,4 @@ SELECT cron.schedule('vacuum_character', '0 2 * * 0', 'VACUUM ANALYZE arena_data
 -- Clean old cron logs daily (1am)
 SELECT cron.schedule('clean_cron_logs', '0 1 * * *',
     $$DELETE FROM cron.job_run_details WHERE end_time < NOW() - INTERVAL '5 days'$$);
+
