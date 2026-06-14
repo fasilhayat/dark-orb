@@ -26,6 +26,31 @@
 | Yellow portal | Blink/Teleport |
 | Brown summon circle | Summoning |
 
+## Batch 1 — First Sprite Sheet (Generated)
+
+| # | Spell | Class | Background | Class Symbol | Effect Indicator | Central Icon |
+|---|-------|-------|-----------|-------------|-----------------|--------------|
+| 1 | Magic Missile | Mage | Deep arcane blue/violet | Silver staff | Red flame | Three glowing arcane darts |
+| 2 | Armor | Mage | Deep arcane blue/violet | Silver staff | Blue shield + green up-arrow | Shimmering plate mail |
+| 3 | Burning Hands | Mage | Deep arcane blue/violet | Silver staff | Red flame + orange starburst | Fan of orange flame |
+| 4 | Sleep | Mage | Deep arcane blue/violet | Silver staff | Purple chains + orange starburst | Blue Zzz bubbles |
+| 5 | Invisibility | Mage | Deep arcane blue/violet | Silver staff | Gray eye | Ghostly transparent figure |
+| 6 | Fireball | Mage | Deep arcane blue/violet | Silver staff | Red flame + orange starburst | Exploding orange-red orb |
+| 7 | Haste | Mage | Deep arcane blue/violet | Silver staff | Green up-arrow | Green speed lines |
+| 8 | Slow | Mage | Deep arcane blue/violet | Silver staff | Purple chains + dark skull | Purple clock with downward arrow |
+| 9 | Confusion | Mage | Deep arcane blue/violet | Silver staff | Purple chains + orange starburst | Swirling multicolor spirals |
+| 10 | Feeblemind | Mage | Deep arcane blue/violet | Silver staff | Purple chains + dark skull | Cracked purple brain |
+| 11 | Bless | Priest | Warm divine gold/cream | Sun holy symbol | Green up-arrow + orange starburst | Golden radiant aura |
+| 12 | Cure Light Wounds | Priest | Warm divine gold/cream | Sun holy symbol | White cross | Soft green glow and bandage |
+| 13 | Protection from Evil | Priest | Warm divine gold/cream | Sun holy symbol | Blue shield + green up-arrow | Golden warding circle |
+| 14 | Hold Person | Priest | Warm divine gold/cream | Sun holy symbol | Purple chains | Glowing binding chains |
+| 15 | Flame Strike | Priest | Warm divine gold/cream | Sun holy symbol | Red flame | Pillar of divine fire |
+| 16 | Heal | Priest | Warm divine gold/cream | Sun holy symbol | White cross | Bright white cross |
+| 17 | Blade Barrier | Priest | Warm divine gold/cream | Sun holy symbol | Red flame + blue shield | Spinning silver blades |
+| 18 | Entangle | Druid | Rich forest green/brown | Oak leaf | Purple chains | Twisting green vines |
+| 19 | Call Lightning | Druid | Rich forest green/brown | Oak leaf | Red flame | Yellow bolt from storm cloud |
+| 20 | Smite | Paladin | Bright silver/white | Gauntlet | Red flame | Holy hammer strike |
+
 ## Batch 2 — Mage Base & Legacy (11 spells)
 
 | Spell | Background | Corner | Bottom-Right | Central Icon |

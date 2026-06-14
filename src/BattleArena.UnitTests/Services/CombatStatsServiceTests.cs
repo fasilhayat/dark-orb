@@ -197,4 +197,69 @@ public class CombatStatsServiceTests
         Assert.Equal(3, result.DefenseRacialModifiers);
         Assert.Equal(28, result.DefensePower);
     }
+
+    // ── Regression: LevelDefenseBonus is part of DefensePower ──────────────
+
+    [Fact]
+    public void ComputeDefenderStats_LevelDefenseBonusIncludedInDefensePower()
+    {
+        var defender = new Character
+        {
+            Level = 10,
+            Dexterity = 10,
+            Equipment = new ArmorSlots { Chest = new Armor { ArmorClass = 10 } },
+        };
+
+        var result = _sut.ComputeDefenderStats(defender);
+
+        Assert.Equal(10, result.EffectiveAC);
+        Assert.Equal(0, result.DexterityModifier);
+        Assert.Equal(5, result.LevelDefenseBonus);   // Level 10 / 2 = 5
+        Assert.Equal(15, result.DefensePower);        // AC 10 + DEX 0 + Level 5 = 15
+    }
+
+    [Fact]
+    public void ComputeDefenderStats_HigherLevelGivesMoreDefense()
+    {
+        var low = MakeDefender(5);
+        var high = MakeDefender(15);
+
+        var lowDp = _sut.ComputeDefenderStats(low).DefensePower;
+        var highDp = _sut.ComputeDefenderStats(high).DefensePower;
+
+        Assert.True(highDp > lowDp, $"Higher level should give more defense ({highDp} <= {lowDp})");
+    }
+
+    private static Character MakeDefender(int level) => new()
+    {
+        Level = level,
+        Dexterity = 10,
+        Equipment = new ArmorSlots { Chest = new Armor { ArmorClass = 10 } },
+    };
+
+    // ── Regression: Priest spells use Wisdom, Mage spells use Intelligence ──
+
+    [Fact]
+    public void PriestSpell_UsesWisdomNotIntelligence()
+    {
+        var priest = new Character { Intelligence = 8, Wisdom = 20 };
+        var spell = new Spell { School = SpellSchool.Deity, DamageType = DamageType.Holy }; // Deity = Priest school
+
+        var stats = _sut.ComputeAttackerStats(priest, spell);
+
+        Assert.False(spell.UsesIntelligence, "Deity spells should not use Intelligence");
+        Assert.Equal(5, stats.AttributeModifier); // WIS 20 → (20-10)/2 = 5
+    }
+
+    [Fact]
+    public void MageSpell_UsesIntelligence()
+    {
+        var mage = new Character { Intelligence = 20, Wisdom = 8 };
+        var spell = new Spell { School = SpellSchool.Stormcraft, DamageType = DamageType.Fire };
+
+        var stats = _sut.ComputeAttackerStats(mage, spell);
+
+        Assert.True(spell.UsesIntelligence, "Stormcraft spells should use Intelligence");
+        Assert.Equal(5, stats.AttributeModifier); // INT 20 → (20-10)/2 = 5
+    }
 }

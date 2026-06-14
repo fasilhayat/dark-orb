@@ -20,7 +20,11 @@ public class Spell : IAttackSource
     public int FlatDamageBonus { get; init; }
     public ElementalType ElementalType { get; init; } = ElementalType.None;
     public int ElementalDamage { get; init; }
-    public bool UsesIntelligence => true;
+    public bool UsesIntelligence => School switch
+    {
+        SpellSchool.Deity => false,
+        _ => true,
+    };
     public bool IsHealing => DamageType == DamageType.Healing;
     public bool IsGroupHeal => IsHealing && Name.Contains("Mass");
     public string Tags { get; init; } = string.Empty;

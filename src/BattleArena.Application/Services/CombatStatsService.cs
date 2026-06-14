@@ -70,6 +70,7 @@ public class CombatStatsService : ICombatStatsService
     private static int ResolveAttackerAbilityScore(Character attacker, IAttackSource source)
     {
         if (source.UsesIntelligence) return attacker.Intelligence;
+        if (source is Spell) return attacker.Wisdom;
         return source.AttackType == AttackType.Ranged ? attacker.Dexterity : attacker.Strength;
     }
 
@@ -118,7 +119,7 @@ public class CombatStatsService : ICombatStatsService
             DefensiveBuffs         = positiveBuffTotal + negativeDebuffs,
             DefenseRacialModifiers = (defender.Race?.Feats.Sum(f => f.DefenseBonus) ?? 0) + defender.Feats.Sum(f => f.DefenseBonus),
             DefenseItemSetBonuses  = 0,
-            LevelDefenseBonus      = defender.Level,
+            LevelDefenseBonus      = defender.Level / 2,
             MagicResistanceBonus   = 0
         };
     }
@@ -172,7 +173,7 @@ public class CombatStatsService : ICombatStatsService
             DefensiveBuffs         = positiveBuffTotal + negativeDebuffs,
             DefenseRacialModifiers = (defender.Race?.Feats.Sum(f => f.DefenseBonus) ?? 0) + defender.Feats.Sum(f => f.DefenseBonus),
             DefenseItemSetBonuses  = 0,
-            LevelDefenseBonus      = defender.Level,
+            LevelDefenseBonus      = defender.Level / 2,
             MagicResistanceBonus   = magicResistanceBonus
         };
     }
