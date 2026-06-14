@@ -814,17 +814,34 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         return list;
     }
 
+    private static IBrush EffectColor(string? effectName) =>
+        MakeBrush(effectName switch
+        {
+            "Burning" => "#ff6600",
+            "Ignite" => "#ff4400",
+            "Frozen" or "Freeze" => "#44ccff",
+            "Shocked" => "#ffff44",
+            "Electrified" => "#88ddff",
+            "Poisoned" => "#44ff44",
+            "Bleeding" => "#ff4444",
+            "Confused" => "#aaaaaa",
+            "Charmed" => "#ff88aa",
+            _ => "#88ccff",
+        });
+
     private static List<LogSegment> BuildDoTTickRow(CombatLogEntry e, CombatDisplayState state)
     {
         var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         var durationInfo = e.EffectDuration.HasValue ? $" [{e.EffectDuration}t]" : "";
+        var effectColor = EffectColor(e.StatusEffectName);
         return
         [
             Seg("  \u2193 ", Yellow),
             Seg(e.ActorName, actorColor),
             Seg("  suffers  ", Gray),
             Seg($"{e.DamageDealt}", Red),
-            Seg($"  {e.StatusEffectName ?? "DoT"}{durationInfo} damage", Yellow),
+            Seg($"  {e.StatusEffectName ?? "DoT"}", effectColor),
+            Seg($"{durationInfo} damage", effectColor),
         ];
     }
 
@@ -832,34 +849,43 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     {
         var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         var stackInfo = e.EffectStacks > 1 ? $" x{e.EffectStacks}" : "";
+        var effectColor = EffectColor(e.StatusEffectName);
         return
         [
-            Seg("  \u2605 ", Yellow),
+            Seg("  \u2605 ", effectColor),
             Seg(e.ActorName, actorColor),
-            Seg($"  is afflicted with  {e.StatusEffectName}{stackInfo}!", Yellow),
+            Seg("  is afflicted with  ", Gray),
+            Seg(e.StatusEffectName ?? "effect", effectColor),
+            Seg($"{stackInfo}!", effectColor),
         ];
     }
 
     private static List<LogSegment> BuildEffectResistedRow(CombatLogEntry e, CombatDisplayState state)
     {
         var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
+        var effectColor = EffectColor(e.StatusEffectName);
         return
         [
             Seg("  \u2713 ", Green),
             Seg(e.ActorName, actorColor),
             Seg("  resists  ", Gray),
-            Seg(e.StatusEffectName ?? "the effect", Green),
-            Seg($"   (rolled {e.ResistRoll} vs {e.ResistThreshold})", Gray),
+            Seg(e.StatusEffectName ?? "the effect", effectColor),
+            Seg("  (", White),
+            Seg($"rolled {e.ResistRoll}", effectColor),
+            Seg(" vs ", White),
+            Seg($"{e.ResistThreshold}", effectColor),
+            Seg(")", White),
         ];
     }
 
     private static List<LogSegment> BuildEffectExpiredRow(CombatLogEntry e, CombatDisplayState state)
     {
         var actorColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
+        var effectColor = EffectColor(e.StatusEffectName);
         return
         [
             Seg("  \u25cb ", Gray),
-            Seg(e.StatusEffectName ?? string.Empty, Green),
+            Seg(e.StatusEffectName ?? string.Empty, effectColor),
             Seg("  has worn off  ", Gray),
             Seg(e.ActorName, actorColor),
         ];
@@ -992,7 +1018,9 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             Seg($"{e.LeechCasterName}", casterColor),
             Seg("  gains  ", Gray),
             Seg($"{e.LeechAmount}", leechColor),
-            Seg($"  [{e.StatusEffectName}]", leechColor),
+            Seg("  [", White),
+            Seg(e.StatusEffectName ?? "Leech", leechColor),
+            Seg("]", White),
         ];
     }
 
