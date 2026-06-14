@@ -262,4 +262,93 @@ public class CombatStatsServiceTests
         Assert.True(spell.UsesIntelligence, "Stormcraft spells should use Intelligence");
         Assert.Equal(5, stats.AttributeModifier); // INT 20 → (20-10)/2 = 5
     }
+
+    // ── MAGIC RESISTANCE DEMONSTRATION ─────────────────────────
+
+    [Fact]
+    public void MagicResistance_ElfGetsPlus5BonusVsSpells()
+    {
+        var elf = new Character
+        {
+            Level = 10, Dexterity = 10, Wisdom = 10,
+            Race = new Race
+            {
+                Name = "Elf",
+                Feats = [new Feat { Resistances = [new ResistanceBonus(ResistanceType.Magic, 25)] }]
+            },
+            Equipment = new ArmorSlots { Chest = new Armor { ArmorClass = 10 } },
+        };
+        var human = new Character
+        {
+            Level = 10, Dexterity = 10, Wisdom = 10,
+            Equipment = new ArmorSlots { Chest = new Armor { ArmorClass = 10 } },
+        };
+
+        var spell = new Weapon { Name = "Fireball", AttackType = AttackType.Spell }; // triggers spell path
+
+        var elfDef = _sut.ComputeDefenderStats(elf, spell);
+        var humanDef = _sut.ComputeDefenderStats(human, spell);
+
+        // Both start with same base: Wisdom(10) mod=0 + Level 10/2=5 = 5 DP
+        // Elf adds MagicResistance: 25/5 = +5 → total DP = 10
+        // Human adds 0 → total DP = 5
+        Assert.Equal(5, elfDef.LevelDefenseBonus);
+        Assert.Equal(5, elfDef.MagicResistanceBonus);   // 25/5 = +5
+        Assert.Equal(10, elfDef.DefensePower);           // 0 + 0 + 5 + 5 = 10
+        Assert.Equal(5, humanDef.DefensePower);          // 0 + 0 + 5 + 0 = 5
+    }
+
+    [Fact]
+    public void MagicResistance_PhysicalAttacksUnaffected()
+    {
+        var elf = new Character
+        {
+            Level = 10, Dexterity = 10,
+            Race = new Race
+            {
+                Name = "Elf",
+                Feats = [new Feat { Resistances = [new ResistanceBonus(ResistanceType.Magic, 25)] }]
+            },
+            Equipment = new ArmorSlots { Chest = new Armor { ArmorClass = 14 } },
+        };
+
+        var melee = new Weapon { Name = "Sword", AttackType = AttackType.Melee };
+
+        var def = _sut.ComputeDefenderStats(elf, melee);
+
+        // Magic resistance does NOT apply vs physical attacks
+        Assert.Equal(0, def.MagicResistanceBonus);
+        Assert.Equal(14, def.EffectiveAC);
+    }
+
+    [Fact]
+    public void MagicResistance_EquipmentStackingGivesHigherBonus()
+    {
+        var elf = new Character
+        {
+            Level = 10, Wisdom = 10,
+            Race = new Race
+            {
+                Name = "Elf",
+                Feats = [new Feat { Resistances = [new ResistanceBonus(ResistanceType.Magic, 25)] }]
+            },
+            Equipment = new ArmorSlots
+            {
+                Chest = new Armor
+                {
+                    Name = "Mithril Chain",
+                    ArmorClass = 14, Mitigation = 2,
+                    Resistances = [new ResistanceBonus(ResistanceType.Magic, 5)]
+                },
+            },
+        };
+
+        var spell = new Weapon { Name = "Fireball", AttackType = AttackType.Spell };
+        var def = _sut.ComputeDefenderStats(elf, spell);
+
+        // Total magic resistance: 25 (racial) + 5 (armor) = 30
+        // MagicResistanceBonus: 30 / 5 = 6
+        Assert.Equal(6, def.MagicResistanceBonus);
+        Assert.Equal(11, def.DefensePower); // 0 + 0 + 5 + 6 = 11
+    }
 }
