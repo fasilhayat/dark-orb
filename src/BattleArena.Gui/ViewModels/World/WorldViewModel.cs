@@ -27,7 +27,7 @@ public class WorldViewModel : INotifyPropertyChanged
     public List<CombatantTile> Combatants { get; } =
     [
         new() { Name = "Ser Garrick Dawnshield", Position = new TilePosition(1, 3), IsHero = true, MaxHp = 96, CurrentHp = 96 },
-        new() { Name = "Sister Elira Vane",     Position = new TilePosition(1, 4), IsHero = true, MaxHp = 52, CurrentHp = 52 },
+        new() { Name = "Elira Vane",            Position = new TilePosition(1, 4), IsHero = true, MaxHp = 56, CurrentHp = 56 },
         new() { Name = "Vaelith Moonveil",      Position = new TilePosition(2, 2), IsHero = true, MaxHp = 68, CurrentHp = 68 },
         new() { Name = "Finnick Bramblefoot",   Position = new TilePosition(2, 5), IsHero = true, MaxHp = 44, CurrentHp = 44 },
         new() { Name = "Lord Aethor Valeborn",  Position = new TilePosition(10, 3), IsHero = false, MaxHp = 88, CurrentHp = 88 },

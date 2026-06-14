@@ -21,25 +21,27 @@
 
 | Deity | Title | Domain | Worshipped By |
 |-------|-------|--------|---------------|
-| **Aethelion** | The radiant father of light | Heaven, Light | Paladins, priests of order, judges, kings |
-| **Astrara** | The guiding star mother | Stars, Fate | Navigators, oracles, fortune-tellers |
-| **Celestara** | The weaver of destiny | Destiny, Time | Historians, prophets, time-keepers |
-| **Lunara** | The silver moon goddess | Moon, Magic, Tides | Mages, seers, priests of the moon |
+| **Aethelion** | The radiant father of light | Heaven, Light | Paladins, priests of order, Tempests, judges, kings |
+| **Astrara** | The guiding star mother | Stars, Fate | Navigators, oracles, fortune-tellers, Tempests |
+| **Celestara** | The weaver of destiny | Destiny, Time | Historians, prophets, time-keepers, Tempests |
+| **Lunara** | The silver moon goddess | Moon, Magic, Tides | Mages, seers, priests of the moon, Tempests |
 
 ## Dark Deities (Shadow Court)
 
 | Deity | Title | Domain | Worshipped By |
 |-------|-------|--------|---------------|
-| **Ignara** | The burning destroyer | Fire, Destruction | Berserkers, pyromancers, nihilists |
-| **Umbraex** | The void lord | Darkness, Secrets | Spies, occultists, keepers of forbidden knowledge |
-| **Veparix** | The deceptive mist | Deception, Illusion | Tricksters, spies, illusionists |
-| **Noctivane** | The shadow assassin god | Shadow, Stealth | Assassins, thieves, shadow mages |
+| **Ignara** | The burning destroyer | Fire, Destruction | Berserkers, pyromancers, nihilists, Tempests |
+| **Umbraex** | The void lord | Darkness, Secrets | Spies, occultists, keepers of forbidden knowledge, Tempests |
+| **Veparix** | The deceptive mist | Deception, Illusion | Tricksters, spies, illusionists, Tempests |
+| **Noctivane** | The shadow assassin god | Shadow, Stealth | Assassins, thieves, shadow mages, Tempests |
 
 ## Twilight Deities (Boundary)
 
 | Deity | Title | Domain | Worshipped By |
 |-------|-------|--------|---------------|
-| **Chronara** | The keeper of time | Time, Stars, Balance | Historians, prophets, time-keepers, those who seek balance |
+| **Chronara** | The keeper of time | Time, Stars, Balance | Historians, prophets, time-keepers, those who seek balance, Tempests |
+
+> **Tempest Class Note:** The Tempest class has unrestricted armor proficiency — they can wear plate mail (requires STR 14), just like the Priest class.
 
 ## Deity Spell Metadata
 

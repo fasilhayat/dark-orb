@@ -1226,7 +1226,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 | [Liveoak](#liveoak) | Chronara | 6 | School Specialization | Late | Druid 8 | Awakens or empowers a great tree guardian. | HP pressure, tank presence, and Movement blocking. | Druid | Physical | Summoning |
 | [Creeping Doom](#creeping-doom) | Umbraex | 7 | School Specialization | Late | Druid 9 | Devastating moving swarm that overwhelms enemies. | HP damage over time plus Movement denial by panic and pursuit pressure. | Druid | Physical | Offensive, CC |
 | [Earthquake](#earthquake) | Chronara | 7 | School Specialization | Late | Druid 9 | Wide-area terrain disruption and collapse threat. | HP damage, Movement disruption, and TM loss from knockdown or instability in variants. | Druid, Priest | Physical | Offensive, AoE |
-| [Turn Undead](#turn-undead) | Noctivane | 2 | Class Core | Early | Priest 3, Paladin 4, Knight 6 | Drives undead enemies away in fear. | Undead must resist or flee; holy damage to undead. | Priest, Paladin, Knight | Holy | Offensive, CC |
+| [Turn Undead](#turn-undead) | Aethelion | 2 | Class Core | Early | Priest 3, Paladin 4, Knight 6 | Drives undead enemies away in fear. | Undead must resist or flee; holy damage to undead. | Priest, Paladin, Knight | Holy | Offensive, CC |
 
 <span id="entangle"></span>
 ### Entangle
@@ -1525,13 +1525,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
-<tr><td style="border: none;">Noctivane</td><td style="border: none;">2</td><td style="border: none;">8</td><td style="border: none;">Holy</td><td style="border: none;">Priest, Paladin, Knight</td><td style="border: none;">Offensive, CC</td></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">2</td><td style="border: none;">8</td><td style="border: none;">Holy</td><td style="border: none;">Priest, Paladin, Knight</td><td style="border: none;">Offensive, CC</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest, Paladin, Knight Damage type: Holy. Yes, Fear (2 turns). Deity Bonus: (Aethelion, Noctivane) Noctivane: fear lasts +1 round.*
+*- Priest, Paladin, Knight Damage type: Holy. Yes, Fear (2 turns). Deity Bonus: (Aethelion) Turn Undead deals +1d4 radiant damage.*
 
 *Minimum Level: Priest 3, Paladin 4, Knight 6*
 
@@ -1557,7 +1557,7 @@ Paladins begin magical access around level 6 in Dark Orb and remain a narrow sup
 | [Free Action](#free-action-2) | Astrara | 4 | School Specialization | Late | Paladin 9 | Prevents roots, holds, and slows. | Movement immunity to control effects. | Paladin | None | Defensive |
 | [Protection from Evil, 10' Radius](#protection-from-evil-10-radius) | Celestara | 4 | School Specialization | Late | Paladin 9 | Group protection aura against evil. | Group defense, Armor Class support, and anti-control protection. | Paladin | None | Defensive, AoE |
 | [Holy Bulwark Variant](#holy-bulwark-variant) | Celestara | 4 | School Specialization | Late | Paladin 10 | Elite paladin ward for nearby allies. | Armor Class increase, Magic Resistance support, and brief TM stabilization. | Paladin | Radiant/None | Defensive, Variant |
-| [Paladin's Warcry Variant](#paladins-warcry-variant) | Ignara | 3 | School Specialization | Late | Paladin 9 | Inspiring holy battle-cry that rallies nearby allies. | Ally TM increase, fear resistance, and minor attack uplift in custom design. | Paladin | Sonic/Morale | Buff, AoE, Variant |
+| [Paladin's Warcry Variant](#paladins-warcry-variant) | Astrara | 3 | School Specialization | Late | Paladin 9 | Inspiring holy battle-cry that rallies nearby allies. | Ally TM increase, fear resistance, and minor attack uplift in custom design. | Paladin | Sonic/Morale | Buff, AoE, Variant |
 
 <span id="bless-2"></span>
 ### Bless
@@ -1838,13 +1838,13 @@ Elite paladin ward for nearby allies. Armor Class increase, Magic Resistance sup
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
-<tr><td style="border: none;">Ignara</td><td style="border: none;">3</td><td style="border: none;">12</td><td style="border: none;">Sonic/Morale</td><td style="border: none;">Paladin</td><td style="border: none;">Buff, AoE, Variant</td></tr>
+<tr><td style="border: none;">Astrara</td><td style="border: none;">3</td><td style="border: none;">12</td><td style="border: none;">Sonic/Morale</td><td style="border: none;">Paladin</td><td style="border: none;">Buff, AoE, Variant</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-Inspiring holy battle-cry that rallies nearby allies. Ally TM increase, fear resistance, and minor attack uplift in custom design. Damage type: Sonic/Morale. Short-duration momentum buff. Deity Bonus (Ignara): Fire spells deal +1d6 fire damage. 10% chance to ignite target for 1d4.
+Inspiring holy battle-cry that rallies nearby allies. Ally TM increase, fear resistance, and minor attack uplift in custom design. Damage type: Sonic/Morale. Short-duration momentum buff. Deity Bonus: (Astrara) Buff grants +1 AttackPower for allies.
 
 *Minimum Level: Paladin 9*
 
@@ -1855,7 +1855,7 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 
 | Spell | Deity | Spell Level | Access Layer | Access Tier | Minimum Level | Effect | Impact | Class | Damage Type | Tags |
 |---|---|---|---|---|---|---|---|---|---|---|
-| [War Cry](#war-cry) | Ignara | 1 | Class Core | Early | Knight 9 | Battle shout that shocks enemies or steels allies. | Offensive version causes TM disruption and panic in enemies; support version grants TM gain and fear resistance to allies. | Knight, Paladin | Sonic/Morale | CC or Buff, Variant |
+| [War Cry](#war-cry) | Aethelion | 1 | Class Core | Early | Knight 9 | Battle shout that shocks enemies or steels allies. | Offensive version causes TM disruption and panic in enemies; support version grants TM gain and fear resistance to allies. | Knight, Paladin | Sonic/Morale | CC or Buff, Variant |
 | [Smite](#smite-2) | Aethelion | 1 | Class Core | Early | Knight 6 | Divine strike vs enemies | HP dmg | Knight | Radiant | Offensive |
 | [Rallying Cry](#rallying-cry) | Aethelion | 1 | Class Core | Early | Knight 9 | Calls allies back into formation. | TM increase and morale restoration for companions. | Knight | Sonic/Morale | Buff, Variant |
 | [Steadfast Line](#steadfast-line) | Celestara | 2 | Class Core | Early | Knight 10 | Reinforces discipline and formation stability. | Movement resistance to forced displacement and TM stabilization. | Knight | None | Buff, Variant |
@@ -1877,13 +1877,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
-<tr><td style="border: none;">Ignara</td><td style="border: none;">1</td><td style="border: none;">5</td><td style="border: none;">Sonic/Morale</td><td style="border: none;">Knight, Paladin</td><td style="border: none;">CC or Buff, Variant</td></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">1</td><td style="border: none;">5</td><td style="border: none;">Sonic/Morale</td><td style="border: none;">Knight, Paladin</td><td style="border: none;">CC or Buff, Variant</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Knight, Paladin Damage type: Sonic/Morale. Short-duration momentum effect. Deity Bonus: (Ignara, Noctivane) Noctivane: fear effect on enemies.*
+*- Knight, Paladin Damage type: Sonic/Morale. Short-duration momentum effect. Deity Bonus: (Aethelion) Protection spells last +1 round.*
 
 *Minimum Level: Knight 9*
 <span id="smite-2"></span>

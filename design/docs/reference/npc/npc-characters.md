@@ -272,12 +272,12 @@ She fights with a slender enchanted longsword while weaving magic through rapid 
 
 ---
 
-## Sister Elira Vane
-*Human Priest, Level 7 — Healer / Exorcist*
+## Elira Vane
+*Human Tempest, Level 8 — Healer / Exorcist*
 
-<img src="portraits/sister-elira-vane.png" alt="Sister Elira Vane" width="150"/>
+<img src="portraits/elira-vane.png" alt="Elira Vane" width="150"/>
 
-Sister Elira Vane serves the Moon Temple as both healer and spiritual guide. Soft-spoken and calm, she is beloved by the common folk for tending plague victims during the Ash Fever outbreak without fear for her own life.
+Elira Vane is a Tempest of Astrara — a Star Knight — wielding both divine grace and thunderous fury. Soft-spoken and calm, she is beloved by the common folk for tending plague victims during the Ash Fever outbreak without fear for her own life.
 
 Behind her serenity lies iron resolve. Elira has performed dozens of exorcisms against shadow spirits and undead horrors that haunt forgotten crypts. She believes compassion is the greatest weapon against darkness.
 
@@ -289,16 +289,20 @@ She carries a silver censer that burns sacred incense during rituals and battle 
 
 | STR | DEX | STA | INT | WIS | CHA |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| 11  | 13  | 15  | 13  | 18  | 15  |
-| *0* | *+1*| *+2*| *+1*| *+4*| *+2*|
+| 14  | 13  | 15  | 13  | 18  | 15  |
+| *+2*| *+1*| *+2*| *+1*| *+4*| *+2*|
 
-**HP** 49 · **AC** 11 · **SR** 17 · **HD** 7D8
+**HP** 56 · **AC** 16 · **SR** 17 · **HD** 8D8
 
 **Equipment**
 - **Mace** — 1D6 Bludgeoning, 1H
 - **Silver Censer** — burns sacred incense (ritual tool, not a weapon)
 - **Padded Armor** (priestly robes) — AC 11, Light
+- **Chain Mail** — AC 16, Heavy
 - **Silver Cross of Hope** — Wis +1, Fear Resistance
+
+**Spells (4 memorized, 80 mana)**
+- Chasten, Heal, Turn Undead, Smite
 
 ---
 
@@ -456,7 +460,7 @@ Maleth was once an angel of the Silver Basilica who fell during the First Sunder
 | 8 | Elder Treant | Elf | Druid | 20 | Quest Giver | 14 | 12 | 16 | 16 | 20 | 15 | 160 | 13 | 15 |
 | 9 | Ser Garrick Dawnshield | Human | Paladin | 12 | Vanguard | 18 | 11 | 15 | 11 | 13 | 17 | 96 | 16 | 13 |
 | 10 | Vaelith Moonveil | Elf | Ftr/Mage | 9 | Arcane Duelist | 14 | 18 | 10 | 19 | 10 | 13 | 45 | 14 | 15 |
-| 11 | Sister Elira Vane | Human | Priest | 7 | Healer | 11 | 13 | 15 | 13 | 18 | 15 | 49 | 11 | 17 |
+| 11 | Elira Vane | Human | Tempest | 8 | Healer | 14 | 13 | 15 | 13 | 18 | 15 | 56 | 16 | 17 |
 | 12 | Lord Aethor Valeborn | Elf | Knight | 11 | Duelist | 16 | 16 | 14 | 14 | 10 | 15 | 88 | 16 | 13 |
 | 13 | Finnick Bramblefoot | Gladefolk | Rogue | 8 | Scout/Thief | 8 | 20 | 13 | 14 | 11 | 16 | 40 | 12 | 17 |
 | 14 | Korg Stonefist | Orc | Barbarian | 15 | Hostile | 21 | 10 | 18 | 8 | 8 | 8 | 165 | 16 | 14 |

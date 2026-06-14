@@ -313,7 +313,7 @@ public class CombatBenchmarkTests(ITestOutputHelper out_)
         {
             ("Ser Garrick (lvl 12 Paladin)",        12, 11, MakeSerGarrick,   MakeLordAethor),
             ("Kaela (lvl 10 Barbarian)",            10, 12, MakeKaela,        MakeGreta),
-            ("Sister Elira (lvl 7 Priest)",          7,  8, MakeSisterElira,  MakeFinnick),
+            ("Elira (lvl 8 Tempest)",                8,  8, MakeElira,        MakeFinnick),
             ("Lysander (lvl 7 Bard)",                7,  6, MakeLysander,     MakeMerchantVex),
             ("Old Man Kael (lvl 8 Priest)",          8, 20, MakeOldManKael,   MakeElderTreant),
             ("Infernal Commander (lvl 18 Knight)",  18, 14, MakeInfernal,     MakeGolem),
@@ -424,19 +424,19 @@ public class CombatBenchmarkTests(ITestOutputHelper out_)
         c.CurrentHitPoints = c.MaxHitPoints; return c;
     }
 
-    private static Character MakeSisterElira()
+    private static Character MakeElira()
     {
         var c = new Character
         {
-            Name = "Sister Elira Vane", Level = 7,
-            Strength = 11, Dexterity = 13, Stamina = 15,
+            Name = "Elira Vane", Level = 8,
+            Strength = 14, Dexterity = 13, Stamina = 16,
             Intelligence = 13, Wisdom = 18, Charisma = 15,
-            ClassName = "Priest", StrikeRating = 17, TurnSpeed = 8,
-            MaxHitPoints = 49, CurrentHitPoints = 49,
-            MaxMana = 70, CurrentMana = 70, RemainingCasts = 20,
+            ClassName = "Tempest", StrikeRating = 17, TurnSpeed = 8,
+            MaxHitPoints = 56, CurrentHitPoints = 56,
+            MaxMana = 80, CurrentMana = 80, RemainingCasts = 20,
             Equipment = new ArmorSlots
             {
-                Chest = new Armor { Name = "Padded Armor", ArmorClass = 11, Mitigation = 1 },
+                Chest = new Armor { Name = "Chain Mail", ArmorClass = 16, Mitigation = 3 },
                 RightHand = new Weapon { Name = "Mace", DamageDie = DieType.D6, DamageCount = 1,
                     DamageType = DamageType.Bludgeoning, AttackType = AttackType.Melee, AttackBonus = 1 },
             },
@@ -445,6 +445,7 @@ public class CombatBenchmarkTests(ITestOutputHelper out_)
                 new() { Name = "Chasten", DamageDie = DieType.D4, DamageCount = 1, AttackBonus = 0, DamageType = DamageType.Holy, School = SpellSchool.Deity, ManaCost = 10, SpellLevel = 1, AttackType = AttackType.Spell },
                 new() { Name = "Heal", DamageDie = DieType.D8, DamageCount = 2, AttackBonus = 0, DamageType = DamageType.Healing, School = SpellSchool.Deity, ManaCost = 25, SpellLevel = 6, AttackType = AttackType.Spell },
                 new() { Name = "Turn Undead", DamageDie = DieType.D6, DamageCount = 2, AttackBonus = 2, DamageType = DamageType.Holy, School = SpellSchool.Deity, ManaCost = 25, SpellLevel = 2, AttackType = AttackType.Spell },
+                new() { Name = "Smite", DamageDie = DieType.D8, DamageCount = 2, AttackBonus = 2, DamageType = DamageType.Holy, School = SpellSchool.Deity, ManaCost = 35, SpellLevel = 2, AttackType = AttackType.Spell },
             ],
         };
         c.CurrentHitPoints = c.MaxHitPoints; c.CurrentMana = c.MaxMana; return c;

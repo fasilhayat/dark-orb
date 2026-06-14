@@ -123,6 +123,12 @@
       "spellLevel": 1, "turnMeterCost": 60, "manaCost": 10
     },
     {
+      "name": "Turn Undead",
+      "school": "Deity", "damageDie": "D6", "damageCount": 2,
+      "damageType": "Holy", "attackBonus": 2,
+      "spellLevel": 2, "turnMeterCost": 80, "manaCost": 25
+    },
+    {
       "name": "Flame Strike",
       "school": "Deity", "damageDie": "D8", "damageCount": 3,
       "damageType": "Fire", "attackBonus": 2,
@@ -238,13 +244,13 @@
       "memorizedSpells": ["Fireball", "Ice Bolt", "Shock", "Static Shock", "Magic Missile", "Shield", "Mirror Image", "Blink", "Lightning Bolt", "Invisibility", "Mind Siphon", "Haste"]
     },
     {
-      "name": "Sister Elira Vane", "level": 7,
-      "strength": 11, "dexterity": 13, "stamina": 15, "intelligence": 13, "wisdom": 18, "charisma": 15,
-      "race": "Human", "classId": 4, "className": "Priest", "sex": "F",
+      "name": "Elira Vane", "level": 8,
+      "strength": 14, "dexterity": 13, "stamina": 16, "intelligence": 13, "wisdom": 18, "charisma": 15,
+      "race": "Human", "classId": 11, "className": "Tempest", "sex": "F",
       "strikeRating": 17, "turnSpeed": 8,
-      "maxHitPoints": 49, "maxMana": 70,
-      "equipment": { "chest": "Padded Armor", "rightHand": "Mace" },
-      "memorizedSpells": ["Chasten", "Heal"]
+      "maxHitPoints": 56, "maxMana": 80,
+      "equipment": { "chest": "Chain Mail", "rightHand": "Mace" },
+      "memorizedSpells": ["Chasten", "Heal", "Turn Undead", "Smite"]
     },
     {
       "name": "Lord Aethor Valeborn", "level": 11,
