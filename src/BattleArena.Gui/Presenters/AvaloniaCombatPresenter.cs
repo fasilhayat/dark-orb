@@ -130,6 +130,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                     if (width > 0.001)
                         AnimateDamagePreview(card, start - width, width);
                 }
+                _vm.AddOverlayMessage($"\u2212{ev.DamagePreviewAmount}", "#ff4444", "#ff4444");
                 return;
             }
 
@@ -143,6 +144,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                     if (width > 0.001)
                         AnimateHealGlow(card, start, width);
                 }
+                _vm.AddOverlayMessage($"+{ev.HealAmount}", "#44cc44", "#44cc44");
                 return;
             }
 

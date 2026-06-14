@@ -641,8 +641,13 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
 
     public void AddOverlayMessage(string text, string color)
     {
+        AddOverlayMessage(text, color, "#ffffff");
+    }
+
+    public void AddOverlayMessage(string text, string color, string mainForeground)
+    {
         _overlayCts ??= new CancellationTokenSource();
-        var msg = new OverlayMessageViewModel(text, color);
+        var msg = new OverlayMessageViewModel(text, color, mainForeground);
         OverlayMessages.Add(msg);
         msg.Animate(OnOverlayCompleted, _overlayCts.Token);
     }

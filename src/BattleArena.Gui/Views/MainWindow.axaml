@@ -438,7 +438,7 @@
               </TextBlock.RenderTransform>
             </TextBlock>
             <!-- Main layer -->
-            <TextBlock Text="{Binding Text}" Foreground="White" FontSize="28"
+            <TextBlock Text="{Binding Text}" Foreground="{Binding MainForeground}" FontSize="28"
                        FontWeight="Bold" Opacity="{Binding Opacity}"
                        TextWrapping="NoWrap"
                        RenderTransformOrigin="0.5,0.5">

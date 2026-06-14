@@ -169,7 +169,7 @@
               <Border Grid.Column="1" Background="#ff4444" CornerRadius="2"
                       Opacity="{Binding DamagePreviewOpacity}" />
             </Grid>
-            <!-- Heal glow overlay: green bar positioned at the HP boundary, not the root -->
+            <!-- Heal glow overlay: white bar at the HP boundary -->
             <Grid>
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding HealGlowStart, Converter={StaticResource GridLenConv}}" />
