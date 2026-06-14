@@ -12,7 +12,8 @@ using ViewModels.World;
 public partial class WorldView : UserControl
 {
     private WorldInputHandler? _input;
-    private TilePosition? _lastHovered;
+    private TilePosition? _lastHoveredCombatant;
+    private TilePosition? _lastHoveredTile;
 
     public WorldView()
     {
@@ -39,7 +40,6 @@ public partial class WorldView : UserControl
     }
 
     public event Action<string>? CombatantHovered;
-
     public Canvas GetMapCanvas() => MapCanvas;
 
     private void RenderMap(WorldViewModel vm)
@@ -47,7 +47,8 @@ public partial class WorldView : UserControl
         TileRenderer.RenderMap(vm.Map, MapCanvas);
         CharacterRenderer.RenderCombatants(vm.Combatants, vm.Map, MapCanvas);
         ZoneNameText.Text = vm.ZoneName;
-        _lastHovered = null;
+        _lastHoveredCombatant = null;
+        _lastHoveredTile = null;
         Dispatcher.UIThread.Post(() => CenterMap(vm), DispatcherPriority.Loaded);
     }
 
@@ -56,7 +57,6 @@ public partial class WorldView : UserControl
         var w = MapClipRegion.Bounds.Width;
         var h = MapClipRegion.Bounds.Height;
         if (w <= 0 || h <= 0) return;
-
         vm.Camera.CenterOn(MapCanvas.Width, MapCanvas.Height, w, h);
         ApplyTransform(vm);
     }
@@ -90,38 +90,62 @@ public partial class WorldView : UserControl
     {
         var (offsetX, offsetY) = TileRenderer.GetCanvasOffset(vm.Map);
 
-        CombatantTile? hovered = null;
+        // Check combatant hover first
+        CombatantTile? hoveredCombatant = null;
         foreach (var c in vm.Combatants)
         {
             var screen = IsometricCoordinateTranslator.TileToScreen(
                 c.Position, TileRenderer.TileWidth, TileRenderer.TileHeight);
             var cx = screen.X + offsetX;
             var cy = screen.Y + offsetY + TileRenderer.TileHeight / 2.0;
-
             var dx = canvasX - cx;
             var dy = canvasY - cy;
-            var dist = Math.Sqrt(dx * dx + dy * dy);
-
-            if (dist < 20)
+            if (Math.Sqrt(dx * dx + dy * dy) < 20)
             {
-                hovered = c;
+                hoveredCombatant = c;
                 break;
             }
         }
 
-        var newPos = hovered?.Position;
-        if (newPos == _lastHovered) return;
+        var newCombatantPos = hoveredCombatant?.Position;
+        if (newCombatantPos != _lastHoveredCombatant)
+        {
+            _lastHoveredCombatant = newCombatantPos;
+            CharacterRenderer.HoveredCombatant = newCombatantPos;
+            CharacterRenderer.RenderCombatants(vm.Combatants, vm.Map, MapCanvas);
+            CombatantHovered?.Invoke(hoveredCombatant?.Name ?? "");
+            TileInfoText.Text = hoveredCombatant is not null
+                ? $"{hoveredCombatant.Name}  HP: {hoveredCombatant.CurrentHp}/{hoveredCombatant.MaxHp}"
+                : "";
+        }
 
-        _lastHovered = newPos;
-        CharacterRenderer.HoveredCombatant = newPos;
-        CharacterRenderer.RenderCombatants(vm.Combatants, vm.Map, MapCanvas);
+        // Tile hover: when combatant is hovered, highlight their tile; else highlight cursor tile
+        TilePosition? tileToHighlight;
+        if (hoveredCombatant is not null)
+        {
+            tileToHighlight = hoveredCombatant.Position;
+        }
+        else
+        {
+            var tileSpace = new PixelPosition(canvasX - offsetX, canvasY - offsetY);
+            var tile = IsometricCoordinateTranslator.ScreenToTile(
+                new PixelPosition(tileSpace.X, tileSpace.Y - TileRenderer.TileHeight / 2.0),
+                TileRenderer.TileWidth, TileRenderer.TileHeight);
+            tileToHighlight = tile.TileX >= 0 && tile.TileX < vm.Map.Width &&
+                              tile.TileY >= 0 && tile.TileY < vm.Map.Height
+                ? tile : null;
+        }
 
-        if (hovered is not null)
-            CombatantHovered?.Invoke(hovered.Name);
+        if (tileToHighlight != _lastHoveredTile)
+        {
+            _lastHoveredTile = tileToHighlight;
+            TileRenderer.SetHoveredTile(tileToHighlight);
+        }
 
-        TileInfoText.Text = hovered is not null
-            ? $"{hovered.Name}  HP: {hovered.CurrentHp}/{hovered.MaxHp}"
-            : "";
+        if (hoveredCombatant is null && tileToHighlight is not null)
+        {
+            TileInfoText.Text = $"Tile ({tileToHighlight.Value.TileX}, {tileToHighlight.Value.TileY})";
+        }
     }
 
     private void OnMapPointerPressed(object? sender, PointerPressedEventArgs e)

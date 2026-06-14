@@ -69,7 +69,7 @@ public static class CharacterRenderer
             }
 
             Canvas.SetLeft(container, cx - ArrowWidth / 2.0);
-            Canvas.SetTop(container, cy - ArrowHeight / 2.0);
+            Canvas.SetTop(container, cy - ArrowHeight);
             target.Children.Add(container);
         }
     }

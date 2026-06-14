@@ -184,6 +184,33 @@
       "school": "Mirage", "damageDie": "D4", "damageCount": 0,
       "damageType": "None", "attackBonus": 0,
       "spellLevel": 2, "turnMeterCost": 70, "manaCost": 12
+    },
+    {
+      "name": "Mind Game",
+      "school": "Umbramancy", "damageDie": "D4", "damageCount": 1,
+      "damageType": "Shadow", "attackBonus": 0,
+      "spellLevel": 2, "turnMeterCost": 80, "manaCost": 25,
+      "onHitEffects": [
+        { "name": "Confused", "type": "Confusion", "target": "Target", "duration": 2, "applicationChance": 70, "resistanceType": "Magic" }
+      ]
+    },
+    {
+      "name": "Charm Person",
+      "school": "Mirage", "damageDie": "D4", "damageCount": 0,
+      "damageType": "None", "attackBonus": 0,
+      "spellLevel": 2, "turnMeterCost": 80, "manaCost": 30,
+      "onHitEffects": [
+        { "name": "Charmed", "type": "Charm", "target": "Target", "duration": 2, "applicationChance": 60, "resistanceType": "Magic" }
+      ]
+    },
+    {
+      "name": "Turn Undead",
+      "school": "Deity", "damageDie": "D6", "damageCount": 2,
+      "damageType": "Holy", "attackBonus": 2,
+      "spellLevel": 2, "turnMeterCost": 80, "manaCost": 25,
+      "onHitEffects": [
+        { "name": "Fear", "type": "Fear", "target": "Target", "duration": 2, "applicationChance": 80, "resistanceType": "Magic" }
+      ]
     }
   ],
 
@@ -234,7 +261,7 @@
       "strikeRating": 17, "turnSpeed": 8,
       "maxHitPoints": 49, "maxMana": 70,
       "equipment": { "chest": "Padded Armor", "rightHand": "Mace" },
-      "memorizedSpells": ["Chasten", "Heal"]
+      "memorizedSpells": ["Chasten", "Heal", "Turn Undead"]
     },
     {
       "name": "Lord Aethor Valeborn", "level": 11,
@@ -291,7 +318,8 @@
       "race": "Gladefolk", "classId": 6, "className": "Bard", "sex": "M",
       "strikeRating": 17, "turnSpeed": 10,
       "maxHitPoints": 35, "maxMana": 50,
-      "equipment": { "chest": "Studded Leather", "rightHand": "Short Sword", "offHand": "Dagger" }
+      "equipment": { "chest": "Studded Leather", "rightHand": "Short Sword", "offHand": "Dagger" },
+      "memorizedSpells": ["Mind Game", "Charm Person"]
     },
     {
       "name": "Elder Treant", "level": 20,

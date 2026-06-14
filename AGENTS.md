@@ -145,4 +145,5 @@ Docker builds: `dotnet publish` runs on host, then `COPY` pre-built output. No N
 
 - **README.md**: update when new project, API endpoint, DB table, Makefile target, Docker service, or test framework change.
 - **design/docs/**: update when SQL seed adds races, classes, deities, pets, weapons, armor, spells. Entries must match the DB exactly.
+- **design/docs/systems/spell-icon-design.md**: must stay in sync with the master spellbook and SQL seed data — every spell needs an icon spec entry.
 - **release-notes.md**: do NOT touch unless asked.

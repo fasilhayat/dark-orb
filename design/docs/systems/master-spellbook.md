@@ -233,6 +233,8 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 | Arc Lash Variant | Stormcraft | 3 | School Specialization | Mid | Mage 4 | Focused lightning lash that shocks one target intensely.[web:2] | HP damage plus Electrocute for TM loss or brief action delay.[web:2] | Mage [web:2] | Lightning [web:2] | Yes, electric aftershock in variant design.[web:2] | Single-Target Damage, TM Control, Variant |
 | Mirror Guard Variant | Mirage / Aegis | 3 | School Specialization | Mid | Mage 4 | Advanced mirror-image ward with partial retaliation or reflect chance.[web:2] | Defense through miss chance and possible Magic Resistance flavor in elite versions.[web:2] | Mage [web:2] | Illusory/None | Yes, images persist until broken.[web:2] | Defensive, Variant |
 | Greasefire Variant | Stormcraft / Mirage | 2 | School Specialization | Mid | Mage 3 | Custom variant that ignites a grease field into a burning slick.[web:25] | HP damage plus Movement denial on the slicked area.[web:25] | Mage [web:25] | Fire [web:25] | Yes, brief burning ground effect in variant design.[web:25] | Offensive, AoE, Variant |
+| Mind Game | Umbramancy | 2 | School Specialization | Mid | Mage 3 | Confuses the target, causing erratic behavior. | Random target selection, may skip turn or hit ally. | Mage | Shadow | Yes, Confused (gray) | CC, Debuff |
+| Charm Person | Mirage | 2 | School Specialization | Mid | Mage 4 | Charms a humanoid to fight as an ally. | Target switches sides for the duration. | Mage | None | Yes, Charmed (pink) | CC, Charm |
 
 ## Priest spellbook
 
@@ -282,6 +284,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 | Liveoak | Deity | 6 | School Specialization | Late | Druid 8 | Awakens or empowers a great tree guardian.[web:6] | HP pressure, tank presence, and Movement blocking.[web:6] | Druid [web:6] | Physical [web:6] | Yes, awakened guardian persists.[web:6] | Summoning |
 | Creeping Doom | Deity | 7 | School Specialization | Late | Druid 9 | Devastating moving swarm that overwhelms enemies.[web:6] | HP damage over time plus Movement denial by panic and pursuit pressure.[web:6] | Druid [web:6] | Physical [web:6] | Yes, persistent swarm pressure.[web:6] | Offensive, CC |
 | Earthquake | Deity | 7 | School Specialization | Late | Druid 9 | Wide-area terrain disruption and collapse threat.[web:6] | HP damage, Movement disruption, and TM loss from knockdown or instability in variants.[web:6] | Druid, Priest [web:6] | Physical [web:6] | Yes, persistent terrain disruption during effect.[web:6] | Offensive, AoE |
+| Turn Undead | Deity | 2 | Class Core | Early | Priest 3, Paladin 4, Knight 6 | Drives undead enemies away in fear. | Undead must resist or flee; holy damage to undead. | Priest, Paladin, Knight | Holy | Yes, Fear (2 turns) | Offensive, CC |
 
 ## Paladin spellbook
 

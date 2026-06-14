@@ -553,7 +553,7 @@ public partial class MainWindow : Window
         {
             if (child is Border border)
             {
-                var isTarget = border.Tag?.ToString() == name;
+                var isTarget = !string.IsNullOrEmpty(name) && border.Tag?.ToString() == name;
                 border.BorderBrush = new SolidColorBrush(
                     Color.Parse(isTarget ? "#d4a017" : "#1a1a2e"));
             }

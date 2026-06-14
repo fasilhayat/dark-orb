@@ -173,7 +173,10 @@ FROM (VALUES
     ('Deity', 'D4', 'None', 'Spell', 'Lionheart Command',        35, 100, 4, 0, 0, 0, 'None',     0, 'Supreme command that hardens allied resolve.  Tags: Buff, Variant'),
 
     -- Legacy roster spells (continued)
-    ('Deity', 'D6', 'Healing', 'Spell', 'Mass Heal',             50, 100, 4, 3, 0, 6, 'None',     0, 'Powerful group healing spell.  Tags: Healing, AoE')
+    ('Deity', 'D6', 'Healing', 'Spell', 'Mass Heal',             50, 100, 4, 3, 0, 6, 'None',     0, 'Powerful group healing spell.  Tags: Healing, AoE'),
+    ('Umbramancy', 'D4', 'Shadow', 'Spell', 'Mind Game',         25, 80, 2, 1, 0, 0, 'Shadow',    0, 'Confuses the target, causing erratic behavior.  Tags: CC, Debuff'),
+    ('Mirage', 'D4', 'None', 'Spell', 'Charm Person',            30, 80, 2, 0, 0, 0, 'None',     0, 'Charms a humanoid to fight as an ally.  Tags: CC, Charm'),
+    ('Deity', 'D6', 'Holy', 'Spell', 'Turn Undead',              25, 80, 2, 2, 2, 0, 'Holy',     0, 'Drives undead enemies away in fear.  Tags: Offensive, CC')
 ) AS s(school_name, die_name, dmg_type_name, atk_type_name, name, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage, description)
 JOIN arena_data.spell_school ss ON ss.name = s.school_name
 JOIN arena_data.die_type dd ON dd.name = s.die_name

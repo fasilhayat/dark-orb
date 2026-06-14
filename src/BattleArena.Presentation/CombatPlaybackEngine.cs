@@ -334,7 +334,9 @@ public static class CombatPlaybackEngine
             "Shocked" => "#ffff44",
             "Poisoned" => "#44ff44",
             "Bleeding" => "#ff4444",
-            "Electrified" => "#44ccff",
+            "Electrified" => "#88ddff",
+            "Confused" => "#aaaaaa",
+            "Charmed" => "#ff88aa",
             _ => TryGetTransferColor(effectName),
         };
     }

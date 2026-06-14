@@ -89,8 +89,8 @@ public static class TileRenderer
     {
         target.Children.Clear();
         TilePolygons.Clear();
-        _hoveredMap = map;
         _hoveredTile = null;
+        _hoveredMap = map;
 
         var (minX, maxX, minY, maxY) = GetMapBounds(map);
         var offsetX = -minX;
