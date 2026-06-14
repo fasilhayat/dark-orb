@@ -213,13 +213,13 @@ These are the low-tier spells most mages should have access to before school spe
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/01_magic_missile.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Stormcraft</td><td>1</td><td>5</td><td>1d4+1 per dart</td><td>Mage</td><td>Single-Target Damage, Nuke</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/01_magic_missile.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">1</td><td style="border: none;">5</td><td style="border: none;">1d4+1 per dart</td><td style="border: none;">Mage</td><td style="border: none;">Single-Target Damage, Nuke</td></tr>
 </table>
 </td>
 </tr>
@@ -232,13 +232,13 @@ These are the low-tier spells most mages should have access to before school spe
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/02_armor.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Aegis</td><td>1</td><td>10</td><td>None</td><td>Mage</td><td>Defensive, Buff</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/02_armor.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aegis</td><td style="border: none;">1</td><td style="border: none;">10</td><td style="border: none;">None</td><td style="border: none;">Mage</td><td style="border: none;">Defensive, Buff</td></tr>
 </table>
 </td>
 </tr>
@@ -251,13 +251,13 @@ These are the low-tier spells most mages should have access to before school spe
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Aegis</td><td>1</td><td>-</td><td></td><td>Mage</td><td>Defensive</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aegis</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Defensive</td></tr>
 </table>
 </td>
 </tr>
@@ -270,13 +270,13 @@ These are the low-tier spells most mages should have access to before school spe
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/03_burning_hands.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Stormcraft</td><td>1</td><td>5</td><td>1d4 per level Fire</td><td>Mage</td><td>Offensive, AoE</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/03_burning_hands.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">1</td><td style="border: none;">5</td><td style="border: none;">1d4 per level Fire</td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE</td></tr>
 </table>
 </td>
 </tr>
@@ -289,13 +289,13 @@ These are the low-tier spells most mages should have access to before school spe
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Mirage</td><td>1</td><td>-</td><td></td><td>Mage</td><td>CC, Slip, AoE</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">CC, Slip, AoE</td></tr>
 </table>
 </td>
 </tr>
@@ -308,13 +308,13 @@ These are the low-tier spells most mages should have access to before school spe
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/04_sleep.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Mirage</td><td>1</td><td>5</td><td>None</td><td>Mage</td><td>CC, AoE</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/04_sleep.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">1</td><td style="border: none;">5</td><td style="border: none;">None</td><td style="border: none;">Mage</td><td style="border: none;">CC, AoE</td></tr>
 </table>
 </td>
 </tr>
@@ -327,13 +327,13 @@ These are the low-tier spells most mages should have access to before school spe
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Mirage</td><td>1</td><td>-</td><td></td><td>Mage</td><td>CC, AoE</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">CC, AoE</td></tr>
 </table>
 </td>
 </tr>
@@ -346,13 +346,13 @@ These are the low-tier spells most mages should have access to before school spe
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Aegis / Mirage</td><td>1</td><td>-</td><td></td><td>Mage</td><td>Utility</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aegis / Mirage</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Utility</td></tr>
 </table>
 </td>
 </tr>
@@ -365,13 +365,13 @@ These are the low-tier spells most mages should have access to before school spe
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/05_invisibility.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Mirage</td><td>2</td><td>10</td><td>None</td><td>Mage</td><td>Invisibility</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/05_invisibility.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">2</td><td style="border: none;">10</td><td style="border: none;">None</td><td style="border: none;">Mage</td><td style="border: none;">Invisibility</td></tr>
 </table>
 </td>
 </tr>
@@ -384,13 +384,13 @@ These are the low-tier spells most mages should have access to before school spe
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Mirage</td><td>2</td><td>-</td><td></td><td>Mage</td><td>Defensive, Image</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Defensive, Image</td></tr>
 </table>
 </td>
 </tr>
@@ -403,13 +403,13 @@ These are the low-tier spells most mages should have access to before school spe
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Mirage / Dominion</td><td>2</td><td>-</td><td></td><td>Mage</td><td>CC, Root, AoE</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage / Dominion</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">CC, Root, AoE</td></tr>
 </table>
 </td>
 </tr>
@@ -422,13 +422,13 @@ These are the low-tier spells most mages should have access to before school spe
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Umbramancy / Mirage</td><td>2</td><td>-</td><td></td><td>Mage</td><td>CC, AoE</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbramancy / Mirage</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">CC, AoE</td></tr>
 </table>
 </td>
 </tr>
@@ -470,13 +470,13 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Stormcraft</td><td>3</td><td>-</td><td></td><td>Mage</td><td>Offensive, AoE, Nuke</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE, Nuke</td></tr>
 </table>
 </td>
 </tr>
@@ -489,13 +489,13 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/06_fireball.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Stormcraft</td><td>3</td><td>15</td><td>1d6 per level Fire</td><td>Mage</td><td>Offensive, AoE, Nuke</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/06_fireball.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">3</td><td style="border: none;">15</td><td style="border: none;">1d6 per level Fire</td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE, Nuke</td></tr>
 </table>
 </td>
 </tr>
@@ -508,13 +508,13 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Mirage</td><td>3</td><td>-</td><td></td><td>Mage</td><td>Blink, Defensive</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Blink, Defensive</td></tr>
 </table>
 </td>
 </tr>
@@ -527,13 +527,13 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/08_slow.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Dominion / Mirage</td><td>3</td><td>15</td><td>None</td><td>Mage</td><td>CC, Debuff, Turn-Meter Control</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/08_slow.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Dominion / Mirage</td><td style="border: none;">3</td><td style="border: none;">15</td><td style="border: none;">None</td><td style="border: none;">Mage</td><td style="border: none;">CC, Debuff, Turn-Meter Control</td></tr>
 </table>
 </td>
 </tr>
@@ -546,13 +546,13 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/07_haste.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Dominion</td><td>3</td><td>20</td><td>None</td><td>Mage, Paladin, Knight, Bard</td><td>Buff, TM Uplift</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/07_haste.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Dominion</td><td style="border: none;">3</td><td style="border: none;">20</td><td style="border: none;">None</td><td style="border: none;">Mage, Paladin, Knight, Bard</td><td style="border: none;">Buff, TM Uplift</td></tr>
 </table>
 </td>
 </tr>
@@ -565,13 +565,13 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Dominion</td><td>5</td><td>-</td><td></td><td>Mage, Priest, Druid</td><td>Buff, TM Uplift, Group</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Dominion</td><td style="border: none;">5</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage, Priest, Druid</td><td style="border: none;">Buff, TM Uplift, Group</td></tr>
 </table>
 </td>
 </tr>
@@ -584,13 +584,13 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Umbramancy</td><td>3</td><td>-</td><td></td><td>Mage</td><td>Single-Target Damage, Leech</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbramancy</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Single-Target Damage, Leech</td></tr>
 </table>
 </td>
 </tr>
@@ -603,13 +603,13 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Umbramancy / Dominion</td><td>4</td><td>-</td><td></td><td>Mage</td><td>CC, Debuff</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbramancy / Dominion</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">CC, Debuff</td></tr>
 </table>
 </td>
 </tr>
@@ -622,13 +622,13 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Stormcraft</td><td>4</td><td>-</td><td></td><td>Mage</td><td>Offensive, AoE</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE</td></tr>
 </table>
 </td>
 </tr>
@@ -641,13 +641,13 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/09_confusion.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Mirage / Dominion</td><td>4</td><td>15</td><td>None</td><td>Mage</td><td>CC, AoE</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/09_confusion.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage / Dominion</td><td style="border: none;">4</td><td style="border: none;">15</td><td style="border: none;">None</td><td style="border: none;">Mage</td><td style="border: none;">CC, AoE</td></tr>
 </table>
 </td>
 </tr>
@@ -660,13 +660,13 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Umbramancy</td><td>5</td><td>-</td><td></td><td>Mage</td><td>Offensive, AoE</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbramancy</td><td style="border: none;">5</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE</td></tr>
 </table>
 </td>
 </tr>
@@ -679,13 +679,13 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Stormcraft</td><td>5</td><td>-</td><td></td><td>Mage</td><td>Offensive, AoE, Nuke</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">5</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE, Nuke</td></tr>
 </table>
 </td>
 </tr>
@@ -698,13 +698,13 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/10_feeblemind.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Umbramancy</td><td>5</td><td>25</td><td>None</td><td>Mage</td><td>CC, Anti-Mage</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/10_feeblemind.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbramancy</td><td style="border: none;">5</td><td style="border: none;">25</td><td style="border: none;">None</td><td style="border: none;">Mage</td><td style="border: none;">CC, Anti-Mage</td></tr>
 </table>
 </td>
 </tr>
@@ -717,13 +717,13 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Stormcraft</td><td>7</td><td>-</td><td></td><td>Mage</td><td>Offensive, AoE, Nuke</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">7</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE, Nuke</td></tr>
 </table>
 </td>
 </tr>
@@ -736,13 +736,13 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Mirage</td><td>8</td><td>-</td><td></td><td>Mage</td><td>CC</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">8</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">CC</td></tr>
 </table>
 </td>
 </tr>
@@ -755,13 +755,13 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Umbramancy</td><td>4</td><td>-</td><td></td><td>Mage, Dark Priest</td><td>MP Leech, Variant</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbramancy</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage, Dark Priest</td><td style="border: none;">MP Leech, Variant</td></tr>
 </table>
 </td>
 </tr>
@@ -774,13 +774,13 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Stormcraft</td><td>3</td><td>-</td><td></td><td>Mage</td><td>Single-Target Damage, TM Control, Variant</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Single-Target Damage, TM Control, Variant</td></tr>
 </table>
 </td>
 </tr>
@@ -793,13 +793,13 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Mirage / Aegis</td><td>3</td><td>-</td><td></td><td>Mage</td><td>Defensive, Variant</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage / Aegis</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Defensive, Variant</td></tr>
 </table>
 </td>
 </tr>
@@ -812,13 +812,13 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Stormcraft / Mirage</td><td>2</td><td>-</td><td></td><td>Mage</td><td>Offensive, AoE, Variant</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft / Mirage</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE, Variant</td></tr>
 </table>
 </td>
 </tr>
@@ -831,13 +831,13 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Umbramancy</td><td>2</td><td>-</td><td></td><td>Mage</td><td>CC, Debuff</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbramancy</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">CC, Debuff</td></tr>
 </table>
 </td>
 </tr>
@@ -850,13 +850,13 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Mirage</td><td>2</td><td>-</td><td></td><td>Mage</td><td>CC, Charm</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">CC, Charm</td></tr>
 </table>
 </td>
 </tr>
@@ -896,13 +896,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/11_bless.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Aethelion</td><td>1</td><td>8</td><td>None</td><td>Priest, Paladin</td><td>Buff, AoE</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/11_bless.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">1</td><td style="border: none;">8</td><td style="border: none;">None</td><td style="border: none;">Priest, Paladin</td><td style="border: none;">Buff, AoE</td></tr>
 </table>
 </td>
 </tr>
@@ -915,13 +915,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Aethelion</td><td>1</td><td>-</td><td></td><td>Priest, Paladin</td><td>CC</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Paladin</td><td style="border: none;">CC</td></tr>
 </table>
 </td>
 </tr>
@@ -934,13 +934,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/12_cure_light_wounds.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Aethelion</td><td>1</td><td>6</td><td>1d8+1 Healing</td><td>Priest, Druid, Paladin</td><td>Healing</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/12_cure_light_wounds.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">1</td><td style="border: none;">6</td><td style="border: none;">1d8+1 Healing</td><td style="border: none;">Priest, Druid, Paladin</td><td style="border: none;">Healing</td></tr>
 </table>
 </td>
 </tr>
@@ -953,13 +953,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/13_protection_from_evil.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Aethelion</td><td>1</td><td>10</td><td>None</td><td>Priest, Paladin</td><td>Defensive, Buff</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/13_protection_from_evil.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">1</td><td style="border: none;">10</td><td style="border: none;">None</td><td style="border: none;">Priest, Paladin</td><td style="border: none;">Defensive, Buff</td></tr>
 </table>
 </td>
 </tr>
@@ -972,13 +972,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Aethelion</td><td>1</td><td>-</td><td></td><td>Priest</td><td>Debuff</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest</td><td style="border: none;">Debuff</td></tr>
 </table>
 </td>
 </tr>
@@ -991,13 +991,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Aethelion</td><td>1</td><td>-</td><td></td><td>Priest, Paladin</td><td>Defensive</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Paladin</td><td style="border: none;">Defensive</td></tr>
 </table>
 </td>
 </tr>
@@ -1010,13 +1010,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Aethelion</td><td>2</td><td>-</td><td></td><td>Priest, Paladin</td><td>Buff</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Paladin</td><td style="border: none;">Buff</td></tr>
 </table>
 </td>
 </tr>
@@ -1029,13 +1029,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Chronara</td><td>2</td><td>-</td><td></td><td>Priest</td><td>Buff, Debuff</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Chronara</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest</td><td style="border: none;">Buff, Debuff</td></tr>
 </table>
 </td>
 </tr>
@@ -1048,13 +1048,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/14_hold_person.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Umbraex</td><td>2</td><td>10</td><td>None</td><td>Priest</td><td>CC</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/14_hold_person.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbraex</td><td style="border: none;">2</td><td style="border: none;">10</td><td style="border: none;">None</td><td style="border: none;">Priest</td><td style="border: none;">CC</td></tr>
 </table>
 </td>
 </tr>
@@ -1067,13 +1067,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Astrara</td><td>3</td><td>-</td><td></td><td>Priest</td><td>Buff, Debuff</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Astrara</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest</td><td style="border: none;">Buff, Debuff</td></tr>
 </table>
 </td>
 </tr>
@@ -1086,13 +1086,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Aethelion</td><td>3</td><td>-</td><td></td><td>Priest, Paladin</td><td>Healing, Cleanse</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Paladin</td><td style="border: none;">Healing, Cleanse</td></tr>
 </table>
 </td>
 </tr>
@@ -1105,13 +1105,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Aethelion</td><td>4</td><td>-</td><td></td><td>Priest, Druid, Paladin</td><td>Healing</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Druid, Paladin</td><td style="border: none;">Healing</td></tr>
 </table>
 </td>
 </tr>
@@ -1124,13 +1124,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Aethelion</td><td>4</td><td>-</td><td></td><td>Priest, Paladin</td><td>Defensive</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Paladin</td><td style="border: none;">Defensive</td></tr>
 </table>
 </td>
 </tr>
@@ -1143,13 +1143,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Aethelion</td><td>5</td><td>-</td><td></td><td>Priest, Druid, Paladin</td><td>Healing</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">5</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Druid, Paladin</td><td style="border: none;">Healing</td></tr>
 </table>
 </td>
 </tr>
@@ -1162,13 +1162,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/15_flame_strike.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Ignaroth</td><td>5</td><td>20</td><td>1d6 per level Fire/Radiant</td><td>Priest</td><td>Offensive, Nuke</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/15_flame_strike.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Ignaroth</td><td style="border: none;">5</td><td style="border: none;">20</td><td style="border: none;">1d6 per level Fire/Radiant</td><td style="border: none;">Priest</td><td style="border: none;">Offensive, Nuke</td></tr>
 </table>
 </td>
 </tr>
@@ -1181,13 +1181,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/16_heal.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Aethelion</td><td>6</td><td>30</td><td>Cures all HP</td><td>Priest</td><td>Healing</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/16_heal.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">6</td><td style="border: none;">30</td><td style="border: none;">Cures all HP</td><td style="border: none;">Priest</td><td style="border: none;">Healing</td></tr>
 </table>
 </td>
 </tr>
@@ -1200,13 +1200,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/17_blade_barrier.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Celestara</td><td>6</td><td>25</td><td>1d6 per level Slashing</td><td>Priest</td><td>Offensive, Defensive, Barrier</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/17_blade_barrier.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Celestara</td><td style="border: none;">6</td><td style="border: none;">25</td><td style="border: none;">1d6 per level Slashing</td><td style="border: none;">Priest</td><td style="border: none;">Offensive, Defensive, Barrier</td></tr>
 </table>
 </td>
 </tr>
@@ -1219,13 +1219,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Aethelion</td><td>6</td><td>-</td><td></td><td>Priest</td><td>Buff, AoE</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">6</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest</td><td style="border: none;">Buff, AoE</td></tr>
 </table>
 </td>
 </tr>
@@ -1238,13 +1238,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Aethelion</td><td>7</td><td>-</td><td></td><td>Priest</td><td>Healing, Cleanse</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">7</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest</td><td style="border: none;">Healing, Cleanse</td></tr>
 </table>
 </td>
 </tr>
@@ -1282,13 +1282,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/18_entangle.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Chronara</td><td>1</td><td>5</td><td>None</td><td>Druid, Priest</td><td>CC, Root</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/18_entangle.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Chronara</td><td style="border: none;">1</td><td style="border: none;">5</td><td style="border: none;">None</td><td style="border: none;">Druid, Priest</td><td style="border: none;">CC, Root</td></tr>
 </table>
 </td>
 </tr>
@@ -1301,13 +1301,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Veparix</td><td>1</td><td>-</td><td></td><td>Druid, Priest</td><td>Debuff</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Veparix</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">Debuff</td></tr>
 </table>
 </td>
 </tr>
@@ -1320,13 +1320,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Chronara</td><td>1</td><td>-</td><td></td><td>Druid</td><td>Buff</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Chronara</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid</td><td style="border: none;">Buff</td></tr>
 </table>
 </td>
 </tr>
@@ -1339,13 +1339,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Celestara</td><td>2</td><td>-</td><td></td><td>Druid, Priest</td><td>Defensive</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Celestara</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">Defensive</td></tr>
 </table>
 </td>
 </tr>
@@ -1358,13 +1358,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Lunara</td><td>2</td><td>-</td><td></td><td>Druid, Priest</td><td>Healing</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Lunara</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">Healing</td></tr>
 </table>
 </td>
 </tr>
@@ -1377,13 +1377,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Ignaroth</td><td>2</td><td>-</td><td></td><td>Druid, Priest</td><td>Debuff</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Ignaroth</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">Debuff</td></tr>
 </table>
 </td>
 </tr>
@@ -1396,13 +1396,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/19_call_lightning.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Chronara</td><td>3</td><td>12</td><td>1d6 per level Lightning</td><td>Druid, Priest</td><td>Offensive</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/19_call_lightning.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Chronara</td><td style="border: none;">3</td><td style="border: none;">12</td><td style="border: none;">1d6 per level Lightning</td><td style="border: none;">Druid, Priest</td><td style="border: none;">Offensive</td></tr>
 </table>
 </td>
 </tr>
@@ -1415,13 +1415,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Chronara</td><td>3</td><td>-</td><td></td><td>Druid, Priest</td><td>CC</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Chronara</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">CC</td></tr>
 </table>
 </td>
 </tr>
@@ -1434,13 +1434,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Chronara</td><td>4</td><td>-</td><td></td><td>Druid</td><td>Summoning</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Chronara</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid</td><td style="border: none;">Summoning</td></tr>
 </table>
 </td>
 </tr>
@@ -1453,13 +1453,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Chronara</td><td>4</td><td>-</td><td></td><td>Druid, Priest</td><td>Summoning-lite</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Chronara</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">Summoning-lite</td></tr>
 </table>
 </td>
 </tr>
@@ -1472,13 +1472,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Umbraex</td><td>5</td><td>-</td><td></td><td>Druid, Priest</td><td>Offensive, CC</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbraex</td><td style="border: none;">5</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">Offensive, CC</td></tr>
 </table>
 </td>
 </tr>
@@ -1491,13 +1491,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Celestara</td><td>5</td><td>-</td><td></td><td>Druid, Priest</td><td>Defensive</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Celestara</td><td style="border: none;">5</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">Defensive</td></tr>
 </table>
 </td>
 </tr>
@@ -1510,13 +1510,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Ignaroth</td><td>6</td><td>-</td><td></td><td>Druid</td><td>Offensive</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Ignaroth</td><td style="border: none;">6</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid</td><td style="border: none;">Offensive</td></tr>
 </table>
 </td>
 </tr>
@@ -1529,13 +1529,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Chronara</td><td>6</td><td>-</td><td></td><td>Druid</td><td>Summoning</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Chronara</td><td style="border: none;">6</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid</td><td style="border: none;">Summoning</td></tr>
 </table>
 </td>
 </tr>
@@ -1548,13 +1548,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Umbraex</td><td>7</td><td>-</td><td></td><td>Druid</td><td>Offensive, CC</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbraex</td><td style="border: none;">7</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid</td><td style="border: none;">Offensive, CC</td></tr>
 </table>
 </td>
 </tr>
@@ -1567,13 +1567,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Chronara</td><td>7</td><td>-</td><td></td><td>Druid, Priest</td><td>Offensive, AoE</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Chronara</td><td style="border: none;">7</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">Offensive, AoE</td></tr>
 </table>
 </td>
 </tr>
@@ -1586,13 +1586,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Aethelion</td><td>2</td><td>-</td><td></td><td>Priest, Paladin, Knight</td><td>Offensive, CC</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Paladin, Knight</td><td style="border: none;">Offensive, CC</td></tr>
 </table>
 </td>
 </tr>
@@ -1614,13 +1614,13 @@ Paladins begin magical access around level 6 in Dark Orb and remain a narrow sup
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/11_bless.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Aethelion</td><td>1</td><td>8</td><td>None</td><td>Priest, Paladin</td><td>Buff, AoE</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/11_bless.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">1</td><td style="border: none;">8</td><td style="border: none;">None</td><td style="border: none;">Priest, Paladin</td><td style="border: none;">Buff, AoE</td></tr>
 </table>
 </td>
 </tr>
@@ -1653,13 +1653,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Ignaroth</td><td>1</td><td>-</td><td></td><td>Knight, Paladin</td><td>CC or Buff, Variant</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Ignaroth</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight, Paladin</td><td style="border: none;">CC or Buff, Variant</td></tr>
 </table>
 </td>
 </tr>
@@ -1672,13 +1672,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/20_smite.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Aethelion</td><td>1</td><td>8</td><td>1d8+1 Radiant</td><td>Paladin, Knight</td><td>Offensive</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/20_smite.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">1</td><td style="border: none;">8</td><td style="border: none;">1d8+1 Radiant</td><td style="border: none;">Paladin, Knight</td><td style="border: none;">Offensive</td></tr>
 </table>
 </td>
 </tr>
@@ -1691,13 +1691,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Aethelion</td><td>1</td><td>-</td><td></td><td>Knight</td><td>Buff, Variant</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Buff, Variant</td></tr>
 </table>
 </td>
 </tr>
@@ -1710,13 +1710,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Celestara</td><td>2</td><td>-</td><td></td><td>Knight</td><td>Buff, Variant</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Celestara</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Buff, Variant</td></tr>
 </table>
 </td>
 </tr>
@@ -1729,13 +1729,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Celestara</td><td>2</td><td>-</td><td></td><td>Knight</td><td>Buff, Variant</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Celestara</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Buff, Variant</td></tr>
 </table>
 </td>
 </tr>
@@ -1748,13 +1748,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Celestara</td><td>3</td><td>-</td><td></td><td>Knight</td><td>Defensive, Variant</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Celestara</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Defensive, Variant</td></tr>
 </table>
 </td>
 </tr>
@@ -1767,13 +1767,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Chronara</td><td>3</td><td>-</td><td></td><td>Knight</td><td>Buff, Variant</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Chronara</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Buff, Variant</td></tr>
 </table>
 </td>
 </tr>
@@ -1786,13 +1786,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/07_haste.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Dominion</td><td>3</td><td>20</td><td>None</td><td>Mage, Paladin, Knight, Bard</td><td>Buff, TM Uplift</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/07_haste.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Dominion</td><td style="border: none;">3</td><td style="border: none;">20</td><td style="border: none;">None</td><td style="border: none;">Mage, Paladin, Knight, Bard</td><td style="border: none;">Buff, TM Uplift</td></tr>
 </table>
 </td>
 </tr>
@@ -1805,13 +1805,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Celestara</td><td>3</td><td>-</td><td></td><td>Knight</td><td>Defensive, Variant</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Celestara</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Defensive, Variant</td></tr>
 </table>
 </td>
 </tr>
@@ -1824,13 +1824,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Chronara</td><td>4</td><td>-</td><td></td><td>Knight</td><td>Buff, AoE, Variant</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Chronara</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Buff, AoE, Variant</td></tr>
 </table>
 </td>
 </tr>
@@ -1843,13 +1843,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Lunara</td><td>4</td><td>-</td><td></td><td>Knight</td><td>Defensive, Variant</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Lunara</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Defensive, Variant</td></tr>
 </table>
 </td>
 </tr>
@@ -1862,13 +1862,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Aethelion</td><td>4</td><td>-</td><td></td><td>Knight</td><td>Buff, Variant</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Buff, Variant</td></tr>
 </table>
 </td>
 </tr>
@@ -1890,13 +1890,13 @@ These spells are migrated from the quick-reference index. School, class, and pro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Stormcraft</td><td>-</td><td>12</td><td>1D10 Fire</td><td>Mage</td><td>Offensive, AoE, Nuke</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">-</td><td style="border: none;">12</td><td style="border: none;">1D10 Fire</td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE, Nuke</td></tr>
 </table>
 </td>
 </tr>
@@ -1911,13 +1911,13 @@ These spells are migrated from the quick-reference index. School, class, and pro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Stormcraft</td><td>-</td><td>9</td><td>1D6 Acid</td><td>Mage</td><td>Offensive, AoE</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">-</td><td style="border: none;">9</td><td style="border: none;">1D6 Acid</td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE</td></tr>
 </table>
 </td>
 </tr>
@@ -1932,13 +1932,13 @@ These spells are migrated from the quick-reference index. School, class, and pro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Stormcraft</td><td>-</td><td>15</td><td>1D12 Fire</td><td>Mage</td><td>Offensive, AoE, Nuke</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">-</td><td style="border: none;">15</td><td style="border: none;">1D12 Fire</td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE, Nuke</td></tr>
 </table>
 </td>
 </tr>
@@ -1953,13 +1953,13 @@ These spells are migrated from the quick-reference index. School, class, and pro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Stormcraft</td><td>-</td><td>10</td><td>1D10 Lightning</td><td>Mage</td><td>Offensive, AoE</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">-</td><td style="border: none;">10</td><td style="border: none;">1D10 Lightning</td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE</td></tr>
 </table>
 </td>
 </tr>
@@ -1974,13 +1974,13 @@ These spells are migrated from the quick-reference index. School, class, and pro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Verdancy</td><td>-</td><td>7</td><td>1D6 Bludgeoning</td><td>Druid</td><td>Offensive, AoE</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Verdancy</td><td style="border: none;">-</td><td style="border: none;">7</td><td style="border: none;">1D6 Bludgeoning</td><td style="border: none;">Druid</td><td style="border: none;">Offensive, AoE</td></tr>
 </table>
 </td>
 </tr>
@@ -1995,13 +1995,13 @@ These spells are migrated from the quick-reference index. School, class, and pro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Mirage</td><td>-</td><td>6</td><td>—</td><td>Mage, Priest</td><td>CC, AoE</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">-</td><td style="border: none;">6</td><td style="border: none;">—</td><td style="border: none;">Mage, Priest</td><td style="border: none;">CC, AoE</td></tr>
 </table>
 </td>
 </tr>
@@ -2016,13 +2016,13 @@ These spells are migrated from the quick-reference index. School, class, and pro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Verdancy</td><td>-</td><td>7</td><td>1D4 Piercing</td><td>Druid</td><td>Offensive, DoT</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Verdancy</td><td style="border: none;">-</td><td style="border: none;">7</td><td style="border: none;">1D4 Piercing</td><td style="border: none;">Druid</td><td style="border: none;">Offensive, DoT</td></tr>
 </table>
 </td>
 </tr>
@@ -2037,13 +2037,13 @@ These spells are migrated from the quick-reference index. School, class, and pro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Umbramancy</td><td>-</td><td>8</td><td>—</td><td>Priest</td><td>CC, AoE</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbramancy</td><td style="border: none;">-</td><td style="border: none;">8</td><td style="border: none;">—</td><td style="border: none;">Priest</td><td style="border: none;">CC, AoE</td></tr>
 </table>
 </td>
 </tr>
@@ -2058,13 +2058,13 @@ These spells are migrated from the quick-reference index. School, class, and pro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Stormcraft</td><td>-</td><td>5</td><td>—</td><td>Mage</td><td>CC</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">-</td><td style="border: none;">5</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">CC</td></tr>
 </table>
 </td>
 </tr>
@@ -2079,13 +2079,13 @@ These spells are migrated from the quick-reference index. School, class, and pro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Mirage</td><td>-</td><td>8</td><td>—</td><td>Mage</td><td>CC</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">-</td><td style="border: none;">8</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">CC</td></tr>
 </table>
 </td>
 </tr>
@@ -2100,13 +2100,13 @@ These spells are migrated from the quick-reference index. School, class, and pro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Dominion</td><td>-</td><td>4</td><td>—</td><td>Knight</td><td>CC</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Dominion</td><td style="border: none;">-</td><td style="border: none;">4</td><td style="border: none;">—</td><td style="border: none;">Knight</td><td style="border: none;">CC</td></tr>
 </table>
 </td>
 </tr>
@@ -2121,13 +2121,13 @@ These spells are migrated from the quick-reference index. School, class, and pro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Stormcraft</td><td>-</td><td>7</td><td>—</td><td>Mage</td><td>CC</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">-</td><td style="border: none;">7</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">CC</td></tr>
 </table>
 </td>
 </tr>
@@ -2142,13 +2142,13 @@ These spells are migrated from the quick-reference index. School, class, and pro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Mirage</td><td>-</td><td>6</td><td>—</td><td>Mage</td><td>CC</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">-</td><td style="border: none;">6</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">CC</td></tr>
 </table>
 </td>
 </tr>
@@ -2163,13 +2163,13 @@ These spells are migrated from the quick-reference index. School, class, and pro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Dominion</td><td>-</td><td>5</td><td>—</td><td>Knight</td><td>CC, Debuff</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Dominion</td><td style="border: none;">-</td><td style="border: none;">5</td><td style="border: none;">—</td><td style="border: none;">Knight</td><td style="border: none;">CC, Debuff</td></tr>
 </table>
 </td>
 </tr>
@@ -2184,13 +2184,13 @@ These spells are migrated from the quick-reference index. School, class, and pro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Aethelion</td><td>-</td><td>0</td><td>—</td><td>Priest</td><td>Support</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">-</td><td style="border: none;">0</td><td style="border: none;">—</td><td style="border: none;">Priest</td><td style="border: none;">Support</td></tr>
 </table>
 </td>
 </tr>
@@ -2205,13 +2205,13 @@ These spells are migrated from the quick-reference index. School, class, and pro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Mirage</td><td>-</td><td>5</td><td>—</td><td>Mage</td><td>CC</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">-</td><td style="border: none;">5</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">CC</td></tr>
 </table>
 </td>
 </tr>
@@ -2226,13 +2226,13 @@ These spells are migrated from the quick-reference index. School, class, and pro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Verdancy</td><td>-</td><td>5</td><td>—</td><td>Druid</td><td>CC</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Verdancy</td><td style="border: none;">-</td><td style="border: none;">5</td><td style="border: none;">—</td><td style="border: none;">Druid</td><td style="border: none;">CC</td></tr>
 </table>
 </td>
 </tr>
@@ -2247,13 +2247,13 @@ These spells are migrated from the quick-reference index. School, class, and pro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Varied</td><td>-</td><td>12</td><td>—</td><td>Mage</td><td>Summon</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Varied</td><td style="border: none;">-</td><td style="border: none;">12</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">Summon</td></tr>
 </table>
 </td>
 </tr>
@@ -2269,13 +2269,13 @@ These spells are migrated from the quick-reference index. School, class, and pro
 
 <hr>
 
-<table>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="padding-right: 12px;"><img src="spell-icons/07_haste.png" width="120"/></td>
-<td>
-<table>
-<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Dominion</td><td>-</td><td>20</td><td>—</td><td>Mage, Paladin, Knight</td><td>Buff, TM Uplift</td></tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/07_haste.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Dominion</td><td style="border: none;">-</td><td style="border: none;">20</td><td style="border: none;">—</td><td style="border: none;">Mage, Paladin, Knight</td><td style="border: none;">Buff, TM Uplift</td></tr>
 </table>
 </td>
 </tr>
