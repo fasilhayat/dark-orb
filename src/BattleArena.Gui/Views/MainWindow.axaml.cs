@@ -444,16 +444,15 @@ public partial class MainWindow : Window
             });
 
             var portrait = PortraitResolver.GetPortrait(c.Name);
-            var pw = 128.0;
+            const double pw = 80;
+            const double ph = 120;
             if (portrait is not null)
             {
-                var scale = 0.25;
-                pw = portrait.Size.Width * scale;
                 var img = new Avalonia.Controls.Image
                 {
                     Source = portrait,
                     Width = pw,
-                    Height = portrait.Size.Height * scale,
+                    Height = ph,
                     Stretch = Avalonia.Media.Stretch.Fill,
                     HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left,
                     Margin = new Thickness(10, 2, 10, 0),
@@ -464,7 +463,6 @@ public partial class MainWindow : Window
             }
             else
             {
-                pw = 128;
                 var placeholder = new Border
                 {
                     Width = pw, Height = pw,

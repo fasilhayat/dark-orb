@@ -60,6 +60,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         ["FumblePenalty"] = 500, ["Death"] = 1200, ["KnockedOut"] = 1200,
         ["PerfectParry"] = 800, ["DevastatingStrike"] = 1000, ["TotalReversal"] = 1000,
         ["DamagePreview"] = 800,
+        ["HealPreview"] = 600,
         ["TurnMeterGain"] = 50,
     };
 
@@ -116,6 +117,32 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                     StartPersistentEffect(ev.ActorName, ev.EffectName, ev.Color);
                 else if (ev.EventType == "EffectExpired")
                     RemovePersistentEffect(ev.ActorName, ev.EffectName);
+                return;
+            }
+
+            if (ev.EventType == "DamagePreview")
+            {
+                var card = FindCard(ev.ActorName);
+                if (card is not null && card.MaxHp > 0)
+                {
+                    var start = (double)Math.Max(0, ev.HpBefore) / card.MaxHp;
+                    var width = Math.Min((double)ev.DamagePreviewAmount / card.MaxHp, start);
+                    if (width > 0.001)
+                        AnimateDamagePreview(card, start - width, width);
+                }
+                return;
+            }
+
+            if (ev.EventType == "HealPreview")
+            {
+                var card = FindCard(ev.ActorName);
+                if (card is not null && card.MaxHp > 0)
+                {
+                    var start = (double)Math.Max(0, ev.HpBefore) / card.MaxHp;
+                    var width = Math.Min((double)ev.HealAmount / card.MaxHp, 1.0 - start);
+                    if (width > 0.001)
+                        AnimateHealGlow(card, start, width);
+                }
                 return;
             }
 

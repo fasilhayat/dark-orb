@@ -79,6 +79,34 @@ public static class CombatPlaybackEngine
                         }
                     }
 
+                    if (entry.EventType == "Healed")
+                    {
+                        var healAmount = entry.DamageDealt ?? 0;
+                        if (healAmount > 0)
+                        {
+                            var targetState = state.TryGet(entry.ActorName);
+                            if (targetState is not null)
+                            {
+                                var beforeHp = targetState.Hp;
+                                var maxHp = targetState.MaxHp;
+                                bus.PublishNormal(new VisualEvent
+                                {
+                                    EventType = "HealPreview",
+                                    ActorName = entry.ActorName,
+                                    TargetName = entry.ActorName,
+                                    HealAmount = healAmount,
+                                    TargetMaxHp = maxHp,
+                                    HpBefore = beforeHp,
+                                    Color = "#44cc44",
+                                });
+
+                                var previewDelay = presenter.GetEventDelayMs("HealPreview");
+                                if (previewDelay > 0)
+                                    presenter.Wait(previewDelay);
+                            }
+                        }
+                    }
+
                     state.ApplyEvent(entry);
                 }
 
