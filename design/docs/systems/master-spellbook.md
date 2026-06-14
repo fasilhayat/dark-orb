@@ -225,7 +225,8 @@ These are the low-tier spells most mages should have access to before school spe
 </tr>
 </table>
 
-*The first incantation taught in every arcane academy — three flawless darts of pure force that never deviate from their mark. Three glowing darts of pure force that never miss — each deals 1d4+1 damage and strikes simultaneously with no attack roll required. Force damage bypasses most resistances and immunities. Base 3d4+3 at level 1, gaining +1 dart at levels 3, 5, and 7 (max 6d4+6). Guaranteed HP damage that cannot be dodged, parried, or blocked.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -246,7 +247,8 @@ These are the low-tier spells most mages should have access to before school spe
 </tr>
 </table>
 
-*A shimmering field of magical force wraps the caster in invisible plate. Creates a protective field granting a significant Armor Class bonus that stacks with worn armor. AC +6 at level 1, scaling +1 per 3 caster levels (max +10). The field lasts until dispelled or the caster rests.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -267,7 +269,8 @@ These are the low-tier spells most mages should have access to before school spe
 </tr>
 </table>
 
-*- Mage.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -288,7 +291,8 @@ These are the low-tier spells most mages should have access to before school spe
 </tr>
 </table>
 
-*A fan of roaring flame erupts from the caster's fingertips. A cone-shaped burst hits all targets in short range for 1d4 fire damage per caster level (max 5d4). No save for half. Base 1d4 at level 1, scaling +1d4 per level up to 5d4.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -309,7 +313,8 @@ These are the low-tier spells most mages should have access to before school spe
 </tr>
 </table>
 
-*- Mage Damage type: None/Control. Yes, persistent slippery zone.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -330,7 +335,8 @@ These are the low-tier spells most mages should have access to before school spe
 </tr>
 </table>
 
-*A cloud of shimmering blue motes drifts across the battlefield. Puts low-HP targets into magical slumber, affecting up to 4 HD of creatures total. Slumber breaks on damage or when the duration expires. Non-lethal crowd control that freezes TM.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -351,7 +357,8 @@ These are the low-tier spells most mages should have access to before school spe
 </tr>
 </table>
 
-*- Mage Damage type: Light/Control.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -372,7 +379,8 @@ These are the low-tier spells most mages should have access to before school spe
 </tr>
 </table>
 
-*- Mage.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -393,7 +401,8 @@ These are the low-tier spells most mages should have access to before school spe
 </tr>
 </table>
 
-*The caster or a touched ally fades from sight, becoming a whisper of refracted light. Renders the target completely invisible — attacks against them suffer a severe miss chance. The spell ends when the target attacks or casts an offensive spell.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -414,7 +423,8 @@ These are the low-tier spells most mages should have access to before school spe
 </tr>
 </table>
 
-*- Mage Yes, images persist until removed.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -435,7 +445,8 @@ These are the low-tier spells most mages should have access to before school spe
 </tr>
 </table>
 
-*- Mage Damage type: None/Control. Yes, persistent sticky field while active.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -456,7 +467,8 @@ These are the low-tier spells most mages should have access to before school spe
 </tr>
 </table>
 
-*- Mage Damage type: Poison/Control. Yes, persistent cloud zone.*
+
+
 
 ## Mage specialization
 
@@ -505,7 +517,8 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 </tr>
 </table>
 
-*- Mage Damage type: Lightning. Optional electric aftershock in variants.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -526,7 +539,8 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 </tr>
 </table>
 
-*A pea-sized bead of orange light streaks to the target point and erupts into a roaring sphere of flame. A wide-area explosion dealing 1d6 fire damage per caster level (cap 10d6) to all targets in a 20-foot radius. Cannot be shaped. Base 5d6 at level 5, scaling +1d6 per level to 10d6.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -547,7 +561,8 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 </tr>
 </table>
 
-*- Mage Yes, duration displacement effect.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -568,7 +583,8 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 </tr>
 </table>
 
-*A cloying purple haze settles over the target, weighing down their limbs. Reduces turn meter gain by 50%, halves movement speed, and applies -2 DefensePower. Duration 1 round per caster level. Deity Bonus: (Chronara) +1 round duration.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -589,7 +605,8 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 </tr>
 </table>
 
-*Time warps around the target as golden energy suffuses their limbs. Massively accelerates turn meter gain by 50% and grants +2 AttackPower and +2 DefensePower. Lasts 1 round per caster level (max 10 rounds). Deity Bonus: (Celestara) +1 round duration.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -610,7 +627,8 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 </tr>
 </table>
 
-*- Mage, Priest, Druid Damage type: None/Buff. Yes, duration-based speed buff. Caster suffers DefensePower debuff.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -631,7 +649,8 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 </tr>
 </table>
 
-*- Mage Damage type: Necrotic/Drain-theme. Leech effect instead of burn.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -652,7 +671,8 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 </tr>
 </table>
 
-*- Mage Damage type: None/Control.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -673,7 +693,8 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 </tr>
 </table>
 
-*- Mage Damage type: Cold/Physical.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -694,7 +715,8 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 </tr>
 </table>
 
-*Swirling ribbons of clashing colour erupt around the target. The target acts erratically — may attack allies, skip turns, or wander randomly each round. Lasts 1 round per caster level (max 6).*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -715,7 +737,8 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 </tr>
 </table>
 
-*- Mage Damage type: Poison. Yes, persistent cloud hazard.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -736,7 +759,8 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 </tr>
 </table>
 
-*- Mage Damage type: Cold.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -757,7 +781,8 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 </tr>
 </table>
 
-*A lance of pure psychic corruption pierces the target's consciousness. Devastating Intelligence and Wisdom drain drops mental stats to 1, making spellcasting impossible. Deals severe MP damage (2d6 x caster level).*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -778,7 +803,8 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 </tr>
 </table>
 
-*- Mage Damage type: Fire. No baseline burn rider.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -799,7 +825,8 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 </tr>
 </table>
 
-*- Mage Damage type: None/Control. Yes, exile duration.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -820,7 +847,8 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 </tr>
 </table>
 
-*- Mage, Dark Priest Damage type: Shadow/Drain. Yes, lingering mana suppression in variant design.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -841,7 +869,8 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 </tr>
 </table>
 
-*- Mage Damage type: Lightning. Yes, electric aftershock in variant design.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -862,7 +891,8 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 </tr>
 </table>
 
-*- Mage Damage type: Illusory/None. Yes, images persist until broken.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -883,7 +913,8 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 </tr>
 </table>
 
-*- Mage Damage type: Fire. Yes, brief burning ground effect in variant design.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -904,7 +935,8 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 </tr>
 </table>
 
-*- Mage Damage type: Shadow. Yes, Confused (gray).*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -925,7 +957,8 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 </tr>
 </table>
 
-*- Mage Yes, Charmed (pink).*
+
+
 
 ## Priest spellbook
 
@@ -972,7 +1005,8 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 </tr>
 </table>
 
-*The priest raises a holy symbol as golden light descends upon their allies. Allies in range gain +1 AttackPower, +10% turn meter rate, and +1 to all saving throws. Affects up to 6 allies. Deity Bonus: (Aethelion) +25% healing and +1 round duration.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -993,7 +1027,8 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 </tr>
 </table>
 
-*- Priest, Paladin Damage type: None/Control. Deity Bonus: (Umbraex, Aethelion) Umbraex: -1 DefensePower; Aethelion: +1 round.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1014,7 +1049,8 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 </tr>
 </table>
 
-*A soft green glow radiates from the healer's palms as wounds knit and bruises fade. Restores 1d8+1 hit points to a single target, scaling +1d8+1 per caster level (cap 5d8+5 at level 5). Deity Bonus: (Aethelion, Lunara) Lunara: +1d4 healing on night cycle.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1035,7 +1071,8 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 </tr>
 </table>
 
-*A shimmering golden ward encircles the target, deflecting the attentions of malevolent forces. Provides +2 AC and +2 saving throws against evil creatures. Grants immunity to mental control and possession. Deity Bonus: (Aethelion) +1 round duration and +2 AC.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1056,7 +1093,8 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 </tr>
 </table>
 
-*- Priest Damage type: Radiant. Deity Bonus: (Umbraex) +1d4 shadow damage.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1077,7 +1115,8 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 </tr>
 </table>
 
-*- Priest, Paladin Yes, duration shield-state. Deity Bonus: (Aethelion) +1 round duration.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1098,7 +1137,8 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 </tr>
 </table>
 
-*- Priest, Paladin Yes, duration support buff. Deity Bonus: (Aethelion) +5 temporary HP.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1119,7 +1159,8 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 </tr>
 </table>
 
-*- Priest Yes, duration aura. Deity Bonus: (Astrara) +1 round duration; +1 AttackPower for allies.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1140,7 +1181,8 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 </tr>
 </table>
 
-*Golden bands of divine light wrap around the target, locking their limbs in place. Paralyzes a humanoid target completely — no movement, no actions, no defense. Save each round to break free. Deity Bonus: (Umbraex, Veparix) Veparix: +5% hold chance.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1161,7 +1203,8 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 </tr>
 </table>
 
-*- Priest Yes, duration field effect. Deity Bonus: (Chronara, Astrara) Astrara: +1 AttackPower for allies.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1182,7 +1225,8 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 </tr>
 </table>
 
-*- Priest, Paladin Damage type: Cleanse. Deity Bonus: (Celestara) Also heals 1d4 HP.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1203,7 +1247,8 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 </tr>
 </table>
 
-*- Priest, Druid, Paladin Damage type: Healing. Deity Bonus: (Aethelion) +25% healing.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1224,7 +1269,8 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 </tr>
 </table>
 
-*- Priest, Paladin Yes, duration buff. Deity Bonus: (Astrara) +1 round duration; +1 AttackPower for target.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1245,7 +1291,8 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 </tr>
 </table>
 
-*- Priest, Druid, Paladin Damage type: Healing. Deity Bonus: (Aethelion) +25% healing.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1266,7 +1313,8 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 </tr>
 </table>
 
-*A pillar of divine fire descends from the heavens. A vertical column dealing 1d6 fire + 1d6 radiant damage per caster level (cap 15d6+15d6). Undead take double damage. Base 6d6+6d6 at level 6, scaling +1d6/+1d6 per level. Deity Bonus: (Ignara) +1d6 fire damage; 10% chance to ignite.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1287,7 +1335,8 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 </tr>
 </table>
 
-*The most powerful restorative miracle in the divine arsenal. Instantly restores the target to full health and cures blindness, deafness, paralysis, disease, and poison. Deity Bonus: (Aethelion, Lunara) Lunara adds mana restoration.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1308,7 +1357,8 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 </tr>
 </table>
 
-*A ring of spinning silver blades materializes, orbiting in a deadly dance. An immobile 20-foot ring dealing 1d6 slashing per caster level (cap 15d6) to any creature passing through. Lasts 1 round per level. Deity Bonus: (Celestara) +1 round duration.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1329,7 +1379,8 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 </tr>
 </table>
 
-*- Priest Damage type: Buff. Yes, prebuff duration benefits. Deity Bonus: (Aethelion, Lunara) Lunara adds mana restoration on full moon.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1350,7 +1401,8 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 </tr>
 </table>
 
-*- Priest Damage type: Healing. Deity Bonus: (Aethelion) Cures one additional random condition.*
+
+
 
 ## Druid spellbook
 
@@ -1395,7 +1447,8 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 </tr>
 </table>
 
-*The ground erupts with grasping vines and thick roots that snake around the legs of the unwary. Plants and roots grapple all creatures in a 40-foot radius — movement reduced to 0. Deity Bonus: (Chronara, Veparix) Veparix: +5% entanglement chance.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1416,7 +1469,8 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 </tr>
 </table>
 
-*- Druid, Priest Damage type: None/Reveal. Yes, duration reveal. Deity Bonus: (Veparix) +1 round reveal; -2 DefensePower on revealed target.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1437,7 +1491,8 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 </tr>
 </table>
 
-*- Druid Damage type: Physical/Magical. Deity Bonus: (Chronara) +1d4 nature damage.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1458,7 +1513,8 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 </tr>
 </table>
 
-*- Druid, Priest Yes, duration-based defensive skin. Deity Bonus: (Celestara) +1 additional AC.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1479,7 +1535,8 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 </tr>
 </table>
 
-*- Druid, Priest Damage type: Healing. Deity Bonus: (Lunara) +1 berry created; restores 1 mana per berry.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1500,7 +1557,8 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 </tr>
 </table>
 
-*- Druid, Priest Damage type: Fire. Yes, continuing heat damage or pressure. Deity Bonus: (Ignara) +1d6 fire damage; ignites target on critical.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1521,7 +1579,8 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 </tr>
 </table>
 
-*The druid raises a hand to the sky, summoning a storm bolt from the heavens. A 5-foot wide lightning bolt strikes from above for 1d6 per caster level (cap 10d6). Can be called each round while the storm lasts. Deity Bonus: (Chronara) +1d6 lightning damage.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1542,7 +1601,8 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 </tr>
 </table>
 
-*- Druid, Priest Damage type: None/Control. Yes, duration root/paralysis. Deity Bonus: (Chronara) +5% hold chance.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1563,7 +1623,8 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 </tr>
 </table>
 
-*- Druid Damage type: Variable. Yes, summoned allies persist for duration. Deity Bonus: (Chronara) Summoned ally has +10% HP.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1584,7 +1645,8 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 </tr>
 </table>
 
-*- Druid, Priest Damage type: Physical. Yes, transformed creatures persist for duration. Deity Bonus: (Chronara, Veparix) Veparix: +5% poison chance.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1605,7 +1667,8 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 </tr>
 </table>
 
-*- Druid, Priest Damage type: Physical/Poison-theme. Yes, persistent swarm presence. Deity Bonus: (Umbraex) +1 round duration; +1d4 poison.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1626,7 +1689,8 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 </tr>
 </table>
 
-*- Druid, Priest Yes, persistent shell. Deity Bonus: (Chronara) +1 round duration.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1647,7 +1711,8 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 </tr>
 </table>
 
-*- Druid Damage type: Fire. Sometimes, depending on trap-style implementation. Deity Bonus: (Ignara) +1d6 fire damage per seed.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1668,7 +1733,8 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 </tr>
 </table>
 
-*- Druid Damage type: Physical. Yes, awakened guardian persists. Deity Bonus: (Chronara) Guardian has +10% HP and +1 AC.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1689,7 +1755,8 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 </tr>
 </table>
 
-*- Druid Damage type: Physical. Yes, persistent swarm pressure. Deity Bonus: (Umbraex) +1 round duration; +1d4 poison.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1710,7 +1777,8 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 </tr>
 </table>
 
-*- Druid, Priest Damage type: Physical. Yes, persistent terrain disruption during effect. Deity Bonus: (Chronara, Ignara) Ignara: +1d6 fire damage on cracked ground.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1731,7 +1799,8 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 </tr>
 </table>
 
-*- Priest, Paladin, Knight Damage type: Holy. Yes, Fear (2 turns). Deity Bonus: (Aethelion, Noctivane) Noctivane: fear lasts +1 round.*
+
+
 
 ## Paladin spellbook
 
@@ -1760,7 +1829,8 @@ Paladins begin magical access around level 6 in Dark Orb and remain a narrow sup
 </tr>
 </table>
 
-*The priest raises a holy symbol as golden light descends upon their allies. Allies in range gain +1 AttackPower, +10% turn meter rate, and +1 to all saving throws. Affects up to 6 allies. Deity Bonus: (Aethelion) +25% healing and +1 round duration.*
+
+
 
 ## Knight spellbook
 
@@ -1800,7 +1870,8 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 </tr>
 </table>
 
-*- Knight, Paladin Damage type: Sonic/Morale. Short-duration momentum effect. Deity Bonus: (Ignara, Noctivane) Noctivane: fear effect on enemies.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1821,7 +1892,8 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 </tr>
 </table>
 
-*The paladin's weapon blazes with holy radiance as they strike — a single, decisive blow empowered by divine will. Empowers the next melee attack with +1d8 radiant damage (+1 per level). Double damage to undead and demons. Deity Bonus: (Aethelion) +1d4 radiant damage; double vs undead.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1842,7 +1914,8 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 </tr>
 </table>
 
-*- Knight Damage type: Sonic/Morale. Short aura duration.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1863,7 +1936,8 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 </tr>
 </table>
 
-*- Knight Yes, short formation aura. Deity Bonus: (Celestara) +1 round formation aura.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1884,7 +1958,8 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 </tr>
 </table>
 
-*- Knight Yes, aura duration. Deity Bonus: (Celestara) +1 round duration.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1905,7 +1980,8 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 </tr>
 </table>
 
-*- Knight Yes, chant duration. Deity Bonus: (Celestara) +5 Magic Resistance.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1926,7 +2002,8 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 </tr>
 </table>
 
-*- Knight Short-duration surge. Deity Bonus: (Chronara, Astrara) Astrara: +1 AttackPower on surge.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1947,7 +2024,8 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 </tr>
 </table>
 
-*Time warps around the target as golden energy suffuses their limbs. Massively accelerates turn meter gain by 50% and grants +2 AttackPower and +2 DefensePower. Lasts 1 round per caster level (max 10 rounds). Deity Bonus: (Celestara) +1 round duration.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1968,7 +2046,8 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 </tr>
 </table>
 
-*- Knight Yes, cadence duration. Deity Bonus: (Celestara) +1 AC; +1 round.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1989,7 +2068,8 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 </tr>
 </table>
 
-*- Knight Damage type: Sonic/Morale. Yes, anthem duration. Deity Bonus: (Chronara, Astrara) Astrara: +1 AttackPower for party.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -2010,7 +2090,8 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 </tr>
 </table>
 
-*- Knight Yes, banner aura. Deity Bonus: (Lunara) -2 mana cost; +5 Magic Resistance.*
+
+
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -2031,7 +2112,8 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 </tr>
 </table>
 
-*- Knight Damage type: Sonic/Morale. Yes, command duration. Deity Bonus: (Chronara) +1 round command duration.*
+
+
 
 ## Additional Common Spells
 
@@ -2060,7 +2142,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 </tr>
 </table>
 
-*A conflagration engulfs the area. HP damage*
+
+
 
 | [Acid Rain](#acid-rain) | Stormcraft | 1D6 Acid | 9 | Mage | Offensive, AoE |
 
@@ -2083,7 +2166,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 </tr>
 </table>
 
-*Corrosive rain burns all in the area. HP damage*
+
+
 
 | [Lava Hail](#lava-hail) | Stormcraft | 1D12 Fire | 15 | Mage | Offensive, AoE, Nuke |
 
@@ -2106,7 +2190,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 </tr>
 </table>
 
-*Molten rock rains from the sky. HP damage*
+
+
 
 | [Lightning Strike](#lightning-strike) | Stormcraft | 1D10 Lightning | 10 | Mage | Offensive, AoE |
 
@@ -2129,7 +2214,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 </tr>
 </table>
 
-*A bolt of lightning strikes from above. HP damage*
+
+
 
 | [Sand Storm](#sand-storm) | Verdancy | 1D6 Bludgeoning | 7 | Druid | Offensive, AoE |
 
@@ -2152,7 +2238,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 </tr>
 </table>
 
-*Blinding sand scours the battlefield. HP damage*
+
+
 
 | [Blinding Flash](#blinding-flash) | Mirage | — | 6 | Mage, Priest | CC, AoE |
 
@@ -2175,7 +2262,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 </tr>
 </table>
 
-*A brilliant flash blinds all who see it. TM disruption*
+
+
 
 | [Insect Swarm](#insect-swarm) | Verdancy | 1D4 Piercing | 7 | Druid | Offensive, DoT |
 
@@ -2198,7 +2286,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 </tr>
 </table>
 
-*A cloud of biting insects descends. HP damage, DoT*
+
+
 
 | [Fog of Despair](#fog-of-despair) | Umbramancy | — | 8 | Priest | CC, AoE |
 
@@ -2221,7 +2310,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 </tr>
 </table>
 
-*A choking fog that saps morale. TM disruption*
+
+
 
 | [Stun](#stun) | Stormcraft | — | 5 | Mage | CC |
 
@@ -2244,7 +2334,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 </tr>
 </table>
 
-*A concussive force that stuns the target. TM freeze*
+
+
 
 | [Charm Enemy](#charm-enemy) | Mirage | — | 8 | Mage | CC |
 
@@ -2267,7 +2358,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 </tr>
 </table>
 
-*Bends an enemy to your will. TM control*
+
+
 
 | [Taunt](#taunt) | Dominion | — | 4 | Knight | CC |
 
@@ -2290,7 +2382,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 </tr>
 </table>
 
-*Forces an enemy to attack you. TM disruption*
+
+
 
 | [Freeze](#freeze) | Stormcraft | — | 7 | Mage | CC |
 
@@ -2313,7 +2406,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 </tr>
 </table>
 
-*Encases the target in ice. TM freeze*
+
+
 
 | [Confuse](#confuse) | Mirage | — | 6 | Mage | CC |
 
@@ -2336,7 +2430,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 </tr>
 </table>
 
-*Makes the target act erratically. TM disruption*
+
+
 
 | [Provoke](#provoke) | Dominion | — | 5 | Knight | CC, Debuff |
 
@@ -2359,7 +2454,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 </tr>
 </table>
 
-*Enrages the target, reducing its defenses. Debuff*
+
+
 
 | [Sacrifice](#sacrifice) | Deity | — | 0 | Priest | Support |
 
@@ -2382,7 +2478,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 </tr>
 </table>
 
-*Sacrifice own HP to empower an ally. HP transfer*
+
+
 
 | [Blind](#blind) | Mirage | — | 5 | Mage | CC |
 
@@ -2405,7 +2502,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 </tr>
 </table>
 
-*Robs the target of sight. Debuff*
+
+
 
 | [Root](#root) | Verdancy | — | 5 | Druid | CC |
 
@@ -2428,7 +2526,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 </tr>
 </table>
 
-*Anchors the target to the ground. Movement denial*
+
+
 
 | [Summon Creature](#summon-creature) | Varied | — | 12 | Mage | Summon |
 
@@ -2451,7 +2550,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 </tr>
 </table>
 
-*Calls a creature to fight for you. Summoning*
+
+
 
 | [Fire Storm](#fire-storm) | Stormcraft | 1D10 Fire | 12 | Mage | Offensive, AoE, Nuke |
 
@@ -2474,7 +2574,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 </tr>
 </table>
 
-*A Stormcraft spell dealing 1D10 Fire damage. Costs 12 mana.*
+
+
 
 ## Variant design rules
 
