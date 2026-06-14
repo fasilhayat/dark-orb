@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ using BattleArena.Gui.Models;
 using BattleArena.Gui.Presenters;
 using BattleArena.Gui.Services;
 using BattleArena.Gui.ViewModels;
+using BattleArena.Gui.Rendering;
 using BattleArena.Gui.ViewModels.World;
 using BattleArena.Gui.ViewModels.WorldMap;
 using BattleArena.Presentation;
@@ -86,7 +88,6 @@ public partial class MainWindow : Window
             ? new AvaloniaSoundPlayer(soundsDir)
             : null;
 
-        WorldViewControl.CombatEncounterRequested += OnWorldCombatEncounter;
     }
 
     private void OnWorldCombatEncounter(string heroName, string enemyName)
@@ -413,52 +414,58 @@ public partial class MainWindow : Window
         DummyHeader.IsVisible = true;
     }
 
-    private static readonly (string Name, int MaxHp, int Hp)[] PartyMembers =
-    [
-        ("Ser Garrick Dawnshield", 96, 96),
-        ("Sister Elira Vane", 52, 52),
-        ("Vaelith Moonveil", 68, 68),
-        ("Finnick Bramblefoot", 44, 44),
-    ];
-
     private void PopulatePartyPanel()
     {
         PartyPanel.Children.Clear();
+        var heroes = _vm.WorldViewModel.Combatants.Where(c => c.IsHero).ToList();
 
-        foreach (var (name, maxHp, hp) in PartyMembers)
+        foreach (var c in heroes)
         {
-            // Name on top
-            PartyPanel.Children.Add(new TextBlock
+            var card = new Border
             {
-                Text = name,
+                Tag = c.Name,
+                Background = new SolidColorBrush(Color.Parse("#0d0d18")),
+                BorderBrush = new SolidColorBrush(Color.Parse("#1a1a2e")),
+                BorderThickness = new Thickness(1),
+                CornerRadius = new CornerRadius(4),
+                Padding = new Thickness(0, 0, 0, 4),
+                Margin = new Thickness(0, 2),
+            };
+
+            var stack = new StackPanel();
+
+            stack.Children.Add(new TextBlock
+            {
+                Text = c.Name,
                 Foreground = new SolidColorBrush(Colors.White),
                 FontSize = 10,
                 FontWeight = FontWeight.Bold,
                 Margin = new Thickness(10, 6, 0, 0),
             });
 
-            // Portrait — scaled to 25%
-            var portrait = PortraitResolver.GetPortrait(name);
+            var portrait = PortraitResolver.GetPortrait(c.Name);
             var pw = 128.0;
             if (portrait is not null)
             {
                 var scale = 0.25;
                 pw = portrait.Size.Width * scale;
-                var ph = portrait.Size.Height * scale;
-                PartyPanel.Children.Add(new Avalonia.Controls.Image
+                var img = new Avalonia.Controls.Image
                 {
                     Source = portrait,
                     Width = pw,
-                    Height = ph,
+                    Height = portrait.Size.Height * scale,
                     Stretch = Avalonia.Media.Stretch.Fill,
                     HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left,
                     Margin = new Thickness(10, 2, 10, 0),
-                });
+                };
+                img.PointerEntered += (_, _) => HighlightCombatantOnGrid(c.Name);
+                img.PointerExited += (_, _) => ClearGridHighlight();
+                stack.Children.Add(img);
             }
             else
             {
                 pw = 128;
-                PartyPanel.Children.Add(new Border
+                var placeholder = new Border
                 {
                     Width = pw, Height = pw,
                     Background = new SolidColorBrush(Color.Parse("#1a1a2e")),
@@ -466,17 +473,19 @@ public partial class MainWindow : Window
                     Margin = new Thickness(10, 2, 10, 0),
                     Child = new TextBlock
                     {
-                        Text = name.Length > 0 ? name[0].ToString() : "?",
+                        Text = c.Name.Length > 0 ? c.Name[0].ToString() : "?",
                         Foreground = new SolidColorBrush(Colors.Gray),
                         FontSize = 24,
                         HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
                         VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
                     },
-                });
+                };
+                placeholder.PointerEntered += (_, _) => HighlightCombatantOnGrid(c.Name);
+                placeholder.PointerExited += (_, _) => ClearGridHighlight();
+                stack.Children.Add(placeholder);
             }
 
-            // HP bar — width matches portrait width, flush left/right
-            var hpFraction = maxHp > 0 ? Math.Clamp((double)hp / maxHp, 0, 1) : 0;
+            var hpFraction = c.MaxHp > 0 ? Math.Clamp((double)c.CurrentHp / c.MaxHp, 0, 1) : 0;
             var hpBar = new Border
             {
                 Width = pw,
@@ -485,7 +494,7 @@ public partial class MainWindow : Window
                 BorderBrush = new SolidColorBrush(Color.Parse("#114411")),
                 BorderThickness = new Thickness(1),
                 HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left,
-                Margin = new Thickness(10, 2, 10, 4),
+                Margin = new Thickness(10, 2, 10, 0),
             };
             var hpFill = new Border
             {
@@ -496,8 +505,29 @@ public partial class MainWindow : Window
                 VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
             };
             hpBar.Child = hpFill;
-            PartyPanel.Children.Add(hpBar);
+            stack.Children.Add(hpBar);
+
+            card.Child = stack;
+            PartyPanel.Children.Add(card);
         }
+    }
+
+    private void HighlightCombatantOnGrid(string name)
+    {
+        var vm = _vm.WorldViewModel;
+        var combatant = vm.Combatants.FirstOrDefault(c => c.Name == name);
+        if (combatant is null) return;
+        CharacterRenderer.HoveredCombatant = combatant.Position;
+        CharacterRenderer.RenderCombatants(vm.Combatants, vm.Map, WorldViewControl.GetMapCanvas());
+        HighlightPartyPortrait(name);
+    }
+
+    private void ClearGridHighlight()
+    {
+        var vm = _vm.WorldViewModel;
+        CharacterRenderer.HoveredCombatant = null;
+        CharacterRenderer.RenderCombatants(vm.Combatants, vm.Map, WorldViewControl.GetMapCanvas());
+        HighlightPartyPortrait("");
     }
 
     private void OnWorldMapClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -508,7 +538,26 @@ public partial class MainWindow : Window
     private void OnEnterLocationClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         PopulatePartyPanel();
+        var enemies = _vm.WorldViewModel.Combatants.Where(c => !c.IsHero).Select(c => c.Name).ToList();
+        EnemyList.ItemsSource = enemies;
+        WorldViewControl.CombatantHovered += name =>
+        {
+            HighlightPartyPortrait(name);
+        };
         _vm.Phase = "Location";
+    }
+
+    private void HighlightPartyPortrait(string name)
+    {
+        foreach (var child in PartyPanel.Children)
+        {
+            if (child is Border border)
+            {
+                var isTarget = border.Tag?.ToString() == name;
+                border.BorderBrush = new SolidColorBrush(
+                    Color.Parse(isTarget ? "#d4a017" : "#1a1a2e"));
+            }
+        }
     }
 
     private void OnBackToWorldMapClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)

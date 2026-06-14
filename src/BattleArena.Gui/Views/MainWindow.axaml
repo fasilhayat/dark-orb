@@ -193,11 +193,11 @@
             <TextBlock Text="Plains" Foreground="#777" FontSize="10" />
             <Rectangle Height="1" Fill="#2a1a0a" Margin="0,2" />
 
-            <TextBlock Text="NEARBY" Foreground="#d4a017" FontSize="11" FontWeight="Bold" />
-            <ItemsControl x:Name="NearbyNpcList">
+            <TextBlock Text="ENEMIES" Foreground="#d4a017" FontSize="11" FontWeight="Bold" />
+            <ItemsControl x:Name="EnemyList">
               <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                  <TextBlock Text="{Binding}" Foreground="#999" FontSize="10" Margin="0,1" />
+                  <TextBlock Text="{Binding}" Foreground="#cc6666" FontSize="10" Margin="0,1" />
                 </DataTemplate>
               </ItemsControl.ItemTemplate>
             </ItemsControl>
