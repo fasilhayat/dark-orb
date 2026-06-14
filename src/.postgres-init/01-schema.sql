@@ -406,6 +406,7 @@ CREATE TABLE IF NOT EXISTS arena_data.spell (
     flat_damage_bonus INTEGER NOT NULL DEFAULT 0,
     elemental_type VARCHAR(50) DEFAULT 'None',
     elemental_damage INTEGER NOT NULL DEFAULT 0,
+    minimum_level SMALLINT DEFAULT 0,
     description TEXT DEFAULT ''
 );
 
@@ -1230,4 +1231,3 @@ SELECT cron.schedule('vacuum_character', '0 2 * * 0', 'VACUUM ANALYZE arena_data
 -- Clean old cron logs daily (1am)
 SELECT cron.schedule('clean_cron_logs', '0 1 * * *',
     $$DELETE FROM cron.job_run_details WHERE end_time < NOW() - INTERVAL '5 days'$$);
-

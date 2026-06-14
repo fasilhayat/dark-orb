@@ -195,18 +195,18 @@ These are the low-tier spells most mages should have access to before school spe
 
 | Spell | School | Spell Level | Access Layer | Access Tier | Minimum Level | Class | Tags |
 |------|--------|-------------|-------------|-----------|---------------|-------|------|
-| [Magic Missile](#magic-missile) | Stormcraft | 1 | Common Core | Early | - | Mage | Single-Target Damage, Nuke |
-| [Armor](#armor) | Aegis | 1 | Common Core | Early | - | Mage | Defensive, Buff |
-| [Shield](#shield) | Aegis | 1 | Common Core | Early | - | Mage | Defensive |
-| [Burning Hands](#burning-hands) | Stormcraft | 1 | Common Core | Early | - | Mage | Offensive, AoE |
-| [Grease](#grease) | Mirage | 1 | Common Core | Early | - | Mage | CC, Slip, AoE |
-| [Sleep](#sleep) | Mirage | 1 | Common Core | Early | - | Mage | CC, AoE |
-| [Color Spray](#color-spray) | Mirage | 1 | Common Core | Early | - | Mage | CC, AoE |
-| [Detect Magic](#detect-magic) | Aegis / Mirage | 1 | Common Core | Early | - | Mage | Utility |
-| [Invisibility](#invisibility) | Mirage | 2 | Common Core | Early | - | Mage | Invisibility |
-| [Mirror Image](#mirror-image) | Mirage | 2 | Common Core | Early | - | Mage | Defensive, Image |
-| [Web](#web) | Mirage / Dominion | 2 | Common Core | Early | - | Mage | CC, Root, AoE |
-| [Stinking Cloud](#stinking-cloud) | Umbramancy / Mirage | 2 | Common Core | Early | - | Mage | CC, AoE |
+| [Magic Missile](#magic-missile) | Stormcraft | 1 | Common Core | Early | Mage 1 | Mage |  |
+| [Armor](#armor) | Aegis | 1 | Common Core | Early | Mage 1 | Mage |  |
+| [Shield](#shield) | Aegis | 1 | Common Core | Early | Mage 1 | Mage |  |
+| [Burning Hands](#burning-hands) | Stormcraft | 1 | Common Core | Early | Mage 1 | Mage |  |
+| [Grease](#grease) | Mirage | 1 | Common Core | Early | Mage 1 | Mage |  |
+| [Sleep](#sleep) | Mirage | 1 | Common Core | Early | Mage 1 | Mage |  |
+| [Color Spray](#color-spray) | Mirage | 1 | Common Core | Early | Mage 1 | Mage |  |
+| [Detect Magic](#detect-magic) | Aegis / Mirage | 1 | Common Core | Early | Mage 1 | Mage |  |
+| [Invisibility](#invisibility) | Mirage | 2 | Common Core | Early | Mage 2 | Mage |  |
+| [Mirror Image](#mirror-image) | Mirage | 2 | Common Core | Early | Mage 2 | Mage |  |
+| [Web](#web) | Mirage / Dominion | 2 | Common Core | Early | Mage 2 | Mage |  |
+| [Stinking Cloud](#stinking-cloud) | Umbramancy / Mirage | 2 | Common Core | Early | Mage 2 | Mage |  |
 
 <span id="magic-missile"></span>
 ### Magic Missile
@@ -218,12 +218,14 @@ These are the low-tier spells most mages should have access to before school spe
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/01_magic_missile.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Stormcraft</td><td style="border: none;">1</td><td style="border: none;">5</td><td style="border: none;">1d4+1 per dart</td><td style="border: none;">Mage</td><td style="border: none;">Single-Target Damage, Nuke</td><td style="border: none;">No.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">1</td><td style="border: none;">5</td><td style="border: none;">1d4+1 per dart</td><td style="border: none;">Mage</td><td style="border: none;">Single-Target Damage, Nuke</td></tr>
 </table>
 </td>
 </tr>
 </table>
+
+*Minimum Level: Mage 1*
 
 *The first incantation taught in every arcane academy — three flawless darts of pure force that never deviate from their mark. Three glowing darts of pure force that never miss — each deals 1d4+1 damage and strikes simultaneously with no attack roll required. Force damage bypasses most resistances and immunities. Base 3d4+3 at level 1, gaining +1 dart at levels 3, 5, and 7 (max 6d4+6). Guaranteed HP damage that cannot be dodged, parried, or blocked.*
 
@@ -239,12 +241,14 @@ These are the low-tier spells most mages should have access to before school spe
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/02_armor.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Aegis</td><td style="border: none;">1</td><td style="border: none;">10</td><td style="border: none;">None</td><td style="border: none;">Mage</td><td style="border: none;">Defensive, Buff</td><td style="border: none;">No.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aegis</td><td style="border: none;">1</td><td style="border: none;">10</td><td style="border: none;">None</td><td style="border: none;">Mage</td><td style="border: none;">Defensive, Buff</td></tr>
 </table>
 </td>
 </tr>
 </table>
+
+*Minimum Level: Mage 1*
 
 *A shimmering field of magical force wraps the caster in invisible plate. Creates a protective field granting a significant Armor Class bonus that stacks with worn armor. AC +6 at level 1, scaling +1 per 3 caster levels (max +10). The field lasts until dispelled or the caster rests.*
 
@@ -260,14 +264,16 @@ These are the low-tier spells most mages should have access to before school spe
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Aegis</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Defensive</td><td style="border: none;">No.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aegis</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Mage.*
+*Minimum Level: Mage 1*
+
+*Mage 1 Mage.*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -281,14 +287,16 @@ These are the low-tier spells most mages should have access to before school spe
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/03_burning_hands.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Stormcraft</td><td style="border: none;">1</td><td style="border: none;">5</td><td style="border: none;">1d4 per level Fire</td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE</td><td style="border: none;">No clear persistent burn in baseline list.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">1</td><td style="border: none;">5</td><td style="border: none;">1d4 per level Fire</td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*A fan of roaring flame erupts from the caster's fingertips. A cone-shaped burst hits all targets in short range for 1d4 fire damage per caster level (max 5d4). No save for half. Base 1d4 at level 1, scaling +1d4 per level up to 5d4.*
+*Minimum Level: Mage 1*
+
+*A fan of roaring flame erupts from the caster's fingertips. A cone-shaped burst hits all targets in short range for 1d4 fire damage per caster level (max 5d4). No save for half. Base 1d4 at level 1, scaling +1d4 per level up to 5d4. Afterburn: No clear persistent burn..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -302,14 +310,16 @@ These are the low-tier spells most mages should have access to before school spe
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Mirage</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">CC, Slip, AoE</td><td style="border: none;">Yes, persistent slippery zone.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Mage Damage type: None/Control. Yes, persistent slippery zone.*
+*Minimum Level: Mage 1*
+
+*Mage 1 Mage Yes, persistent slippery zone. Afterburn: Yes, persistent slippery zone..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -323,14 +333,16 @@ These are the low-tier spells most mages should have access to before school spe
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/04_sleep.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Mirage</td><td style="border: none;">1</td><td style="border: none;">5</td><td style="border: none;">None</td><td style="border: none;">Mage</td><td style="border: none;">CC, AoE</td><td style="border: none;">Yes, duration disable.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">1</td><td style="border: none;">5</td><td style="border: none;">None</td><td style="border: none;">Mage</td><td style="border: none;">CC, AoE</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*A cloud of shimmering blue motes drifts across the battlefield. Puts low-HP targets into magical slumber, affecting up to 4 HD of creatures total. Slumber breaks on damage or when the duration expires. Non-lethal crowd control that freezes TM.*
+*Minimum Level: Mage 1*
+
+*A cloud of shimmering blue motes drifts across the battlefield. Puts low-HP targets into magical slumber, affecting up to 4 HD of creatures total. Slumber breaks on damage or when the duration expires. Non-lethal crowd control that freezes TM. Afterburn: Yes, duration disable..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -344,14 +356,16 @@ These are the low-tier spells most mages should have access to before school spe
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Mirage</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">CC, AoE</td><td style="border: none;">No.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Mage Damage type: Light/Control.*
+*Minimum Level: Mage 1*
+
+*Mage 1 Mage.*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -365,14 +379,16 @@ These are the low-tier spells most mages should have access to before school spe
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Aegis / Mirage</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Utility</td><td style="border: none;">No.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aegis / Mirage</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Mage.*
+*Minimum Level: Mage 1*
+
+*Mage 1 Mage.*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -386,14 +402,16 @@ These are the low-tier spells most mages should have access to before school spe
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/05_invisibility.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Mirage</td><td style="border: none;">2</td><td style="border: none;">10</td><td style="border: none;">None</td><td style="border: none;">Mage</td><td style="border: none;">Invisibility</td><td style="border: none;">Yes, duration stealth state.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">2</td><td style="border: none;">10</td><td style="border: none;">None</td><td style="border: none;">Mage</td><td style="border: none;">Invisibility</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*The caster or a touched ally fades from sight, becoming a whisper of refracted light. Renders the target completely invisible — attacks against them suffer a severe miss chance. The spell ends when the target attacks or casts an offensive spell.*
+*Minimum Level: Mage 2*
+
+*The caster or a touched ally fades from sight, becoming a whisper of refracted light. Renders the target completely invisible — attacks against them suffer a severe miss chance. The spell ends when the target attacks or casts an offensive spell. Afterburn: Yes, duration stealth state..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -407,14 +425,16 @@ These are the low-tier spells most mages should have access to before school spe
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Mirage</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Defensive, Image</td><td style="border: none;">Yes, images persist until removed.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Mage Yes, images persist until removed.*
+*Minimum Level: Mage 2*
+
+*Mage 2 Mage Yes, images persist until removed. Afterburn: Yes, images persist until removed..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -428,14 +448,16 @@ These are the low-tier spells most mages should have access to before school spe
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Mirage / Dominion</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">CC, Root, AoE</td><td style="border: none;">Yes, persistent sticky field while active.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage / Dominion</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Mage Damage type: None/Control. Yes, persistent sticky field while active.*
+*Minimum Level: Mage 2*
+
+*Mage 2 Mage Yes, persistent sticky field. Afterburn: Yes, persistent sticky field..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -449,14 +471,16 @@ These are the low-tier spells most mages should have access to before school spe
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Umbramancy / Mirage</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">CC, AoE</td><td style="border: none;">Yes, persistent cloud zone.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbramancy / Mirage</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Mage Damage type: Poison/Control. Yes, persistent cloud zone.*
+*Minimum Level: Mage 2*
+
+*Mage 2 Mage Yes, persistent cloud zone. Afterburn: Yes, persistent cloud zone..*
 
 ## Mage specialization
 
@@ -464,27 +488,27 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 | Spell | School | Spell Level | Access Layer | Access Tier | Minimum Level | Class | Tags |
 |------|--------|-------------|-------------|-----------|---------------|-------|------|
-| [Lightning Bolt](#lightning-bolt) | Stormcraft | 3 | School Specialization | Mid | - | Mage | Offensive, AoE, Nuke |
-| [Fireball](#fireball) | Stormcraft | 3 | School Specialization | Mid | - | Mage | Offensive, AoE, Nuke |
-| [Blink](#blink) | Mirage | 3 | School Specialization | Mid | - | Mage | Blink, Defensive |
-| [Slow](#slow) | Dominion / Mirage | 3 | School Specialization | Mid | - | Mage | CC, Debuff, Turn-Meter Control |
-| [Haste](#haste) | Dominion | 3 | School Specialization | Mid | - | Mage, Paladin, Knight, Bard | Buff, TM Uplift |
-| [Mass Haste](#mass-haste) | Dominion | 5 | School Specialization | Late | - | Mage, Priest, Druid | Buff, TM Uplift, Group |
-| [Vampiric Touch](#vampiric-touch) | Umbramancy | 3 | School Specialization | Mid | - | Mage | Single-Target Damage, Leech |
-| [Fear](#fear) | Umbramancy / Dominion | 4 | School Specialization | Mid | - | Mage | CC, Debuff |
-| [Ice Storm](#ice-storm) | Stormcraft | 4 | School Specialization | Mid | - | Mage | Offensive, AoE |
-| [Confusion](#confusion) | Mirage / Dominion | 4/7 | School Specialization | Late | - | Mage | CC, AoE |
-| [Cloudkill](#cloudkill) | Umbramancy | 5 | School Specialization | Late | - | Mage | Offensive, AoE |
-| [Cone of Cold](#cone-of-cold) | Stormcraft | 5 | School Specialization | Late | - | Mage | Offensive, AoE, Nuke |
-| [Feeblemind](#feeblemind) | Umbramancy | 5 | School Specialization | Late | - | Mage | CC, Anti-Mage |
-| [Delayed Blast Fireball](#delayed-blast-fireball) | Stormcraft | 7 | School Specialization | Late | - | Mage | Offensive, AoE, Nuke |
-| [Maze](#maze) | Mirage | 8 | School Specialization | Late | - | Mage | CC |
-| [Mind Siphon Variant](#mind-siphon-variant) | Umbramancy | 4 | School Specialization | Mid | - | Mage, Dark Priest | MP Leech, Variant |
-| [Arc Lash Variant](#arc-lash-variant) | Stormcraft | 3 | School Specialization | Mid | - | Mage | Single-Target Damage, TM Control, Variant |
-| [Mirror Guard Variant](#mirror-guard-variant) | Mirage / Aegis | 3 | School Specialization | Mid | - | Mage | Defensive, Variant |
-| [Greasefire Variant](#greasefire-variant) | Stormcraft / Mirage | 2 | School Specialization | Mid | - | Mage | Offensive, AoE, Variant |
-| [Mind Game](#mind-game) | Umbramancy | 2 | School Specialization | Mid | - | Mage | CC, Debuff |
-| [Charm Person](#charm-person) | Mirage | 2 | School Specialization | Mid | - | Mage | CC, Charm |
+| [Lightning Bolt](#lightning-bolt) | Stormcraft | 3 | School Specialization | Mid | Mage 4 | Mage |  |
+| [Fireball](#fireball) | Stormcraft | 3 | School Specialization | Mid | Mage 4 | Mage |  |
+| [Blink](#blink) | Mirage | 3 | School Specialization | Mid | Mage 4 | Mage |  |
+| [Slow](#slow) | Dominion / Mirage | 3 | School Specialization | Mid | Mage 4 | Mage |  |
+| [Haste](#haste) | Dominion | 3 | School Specialization | Mid | Mage 5 | Mage, Paladin, Knight, Bard |  |
+| [Mass Haste](#mass-haste) | Dominion | 5 | School Specialization | Late | Mage 7 | Mage, Priest, Druid |  |
+| [Vampiric Touch](#vampiric-touch) | Umbramancy | 3 | School Specialization | Mid | Mage 4 | Mage |  |
+| [Fear](#fear) | Umbramancy / Dominion | 4 | School Specialization | Mid | Mage 5 | Mage |  |
+| [Ice Storm](#ice-storm) | Stormcraft | 4 | School Specialization | Mid | Mage 5 | Mage |  |
+| [Confusion](#confusion) | Mirage / Dominion | 4/7 | School Specialization | Late | Mage 6 | Mage |  |
+| [Cloudkill](#cloudkill) | Umbramancy | 5 | School Specialization | Late | Mage 7 | Mage |  |
+| [Cone of Cold](#cone-of-cold) | Stormcraft | 5 | School Specialization | Late | Mage 7 | Mage |  |
+| [Feeblemind](#feeblemind) | Umbramancy | 5 | School Specialization | Late | Mage 7 | Mage |  |
+| [Delayed Blast Fireball](#delayed-blast-fireball) | Stormcraft | 7 | School Specialization | Late | Mage 9 | Mage |  |
+| [Maze](#maze) | Mirage | 8 | School Specialization | Late | Mage 10 | Mage |  |
+| [Mind Siphon Variant](#mind-siphon-variant) | Umbramancy | 4 | School Specialization | Mid | - | Mage, Dark Priest |  |
+| [Arc Lash Variant](#arc-lash-variant) | Stormcraft | 3 | School Specialization | Mid | - | Mage |  |
+| [Mirror Guard Variant](#mirror-guard-variant) | Mirage / Aegis | 3 | School Specialization | Mid | - | Mage |  |
+| [Greasefire Variant](#greasefire-variant) | Stormcraft / Mirage | 2 | School Specialization | Mid | - | Mage |  |
+| [Mind Game](#mind-game) | Umbramancy | 2 | School Specialization | Mid | Mage 3 | Mage |  |
+| [Charm Person](#charm-person) | Mirage | 2 | School Specialization | Mid | Mage 4 | Mage |  |
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -498,14 +522,16 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Stormcraft</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE, Nuke</td><td style="border: none;">Optional electric aftershock in variants.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Mage Damage type: Lightning. Optional electric aftershock in variants.*
+*Minimum Level: Mage 4*
+
+*Mage 4 Mage Optional electric aftershock. Afterburn: Optional electric aftershock..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -519,12 +545,14 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/06_fireball.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Stormcraft</td><td style="border: none;">3</td><td style="border: none;">15</td><td style="border: none;">1d6 per level Fire</td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE, Nuke</td><td style="border: none;">No in baseline effect text.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">3</td><td style="border: none;">15</td><td style="border: none;">1d6 per level Fire</td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE, Nuke</td></tr>
 </table>
 </td>
 </tr>
 </table>
+
+*Minimum Level: Mage 4*
 
 *A pea-sized bead of orange light streaks to the target point and erupts into a roaring sphere of flame. A wide-area explosion dealing 1d6 fire damage per caster level (cap 10d6) to all targets in a 20-foot radius. Cannot be shaped. Base 5d6 at level 5, scaling +1d6 per level to 10d6.*
 
@@ -540,14 +568,16 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Mirage</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Blink, Defensive</td><td style="border: none;">Yes, duration displacement effect.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Mage Yes, duration displacement effect.*
+*Minimum Level: Mage 4*
+
+*Mage 4 Mage Yes, duration displacement effect. Afterburn: Yes, duration displacement effect..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -561,14 +591,16 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/08_slow.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Dominion / Mirage</td><td style="border: none;">3</td><td style="border: none;">15</td><td style="border: none;">None</td><td style="border: none;">Mage</td><td style="border: none;">CC, Debuff, Turn-Meter Control</td><td style="border: none;">Yes, duration-based tempo suppression.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Dominion / Mirage</td><td style="border: none;">3</td><td style="border: none;">15</td><td style="border: none;">None</td><td style="border: none;">Mage</td><td style="border: none;">CC, Debuff, Turn-Meter Control</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*A cloying purple haze settles over the target, weighing down their limbs. Reduces turn meter gain by 50%, halves movement speed, and applies -2 DefensePower. Duration 1 round per caster level. Deity Bonus: (Chronara) +1 round duration.*
+*Minimum Level: Mage 4*
+
+*A cloying purple haze settles over the target, weighing down their limbs. Reduces turn meter gain by 50%, halves movement speed, and applies -2 DefensePower. Duration 1 round per caster level. Deity Bonus: (Chronara) +1 round duration. Afterburn: Yes, duration-based tempo suppression..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -582,14 +614,16 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/07_haste.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Dominion</td><td style="border: none;">3</td><td style="border: none;">20</td><td style="border: none;">None</td><td style="border: none;">Mage, Paladin, Knight, Bard</td><td style="border: none;">Buff, TM Uplift</td><td style="border: none;">Yes, duration-based speed buff.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Dominion</td><td style="border: none;">3</td><td style="border: none;">20</td><td style="border: none;">None</td><td style="border: none;">Mage, Paladin, Knight, Bard</td><td style="border: none;">Buff, TM Uplift</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*Time warps around the target as golden energy suffuses their limbs. Massively accelerates turn meter gain by 50% and grants +2 AttackPower and +2 DefensePower. Lasts 1 round per caster level (max 10 rounds). Deity Bonus: (Celestara) +1 round duration.*
+*Minimum Level: Mage 5*
+
+*Time warps around the target as golden energy suffuses their limbs. Massively accelerates turn meter gain by 50% and grants +2 AttackPower and +2 DefensePower. Lasts 1 round per caster level (max 10 rounds). Deity Bonus: (Celestara) +1 round duration. Afterburn: Yes, duration-based speed buff..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -603,14 +637,16 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Dominion</td><td style="border: none;">5</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage, Priest, Druid</td><td style="border: none;">Buff, TM Uplift, Group</td><td style="border: none;">Yes, duration-based speed buff. Caster suffers DefensePower debuff.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Dominion</td><td style="border: none;">5</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage, Priest, Druid</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Mage, Priest, Druid Damage type: None/Buff. Yes, duration-based speed buff. Caster suffers DefensePower debuff.*
+*Minimum Level: Mage 7*
+
+*Mage 7 Mage, Priest, Druid Yes, duration-based speed buff. Afterburn: Yes, duration-based speed buff..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -624,14 +660,16 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Umbramancy</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Single-Target Damage, Leech</td><td style="border: none;">Leech effect instead of burn.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbramancy</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Mage Damage type: Necrotic/Drain-theme. Leech effect instead of burn.*
+*Minimum Level: Mage 4*
+
+*Mage 4 Mage Leech effect. Afterburn: Leech effect..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -645,14 +683,16 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Umbramancy / Dominion</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">CC, Debuff</td><td style="border: none;">No.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbramancy / Dominion</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Mage Damage type: None/Control.*
+*Minimum Level: Mage 5*
+
+*Mage 5 Mage.*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -666,14 +706,16 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Stormcraft</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE</td><td style="border: none;">No.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Mage Damage type: Cold/Physical.*
+*Minimum Level: Mage 5*
+
+*Mage 5 Mage.*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -687,14 +729,16 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/09_confusion.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Mirage / Dominion</td><td style="border: none;">4</td><td style="border: none;">15</td><td style="border: none;">None</td><td style="border: none;">Mage</td><td style="border: none;">CC, AoE</td><td style="border: none;">Yes, duration-based control effect.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage / Dominion</td><td style="border: none;">4</td><td style="border: none;">15</td><td style="border: none;">None</td><td style="border: none;">Mage</td><td style="border: none;">CC, AoE</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*Swirling ribbons of clashing colour erupt around the target. The target acts erratically — may attack allies, skip turns, or wander randomly each round. Lasts 1 round per caster level (max 6).*
+*Minimum Level: Mage 6*
+
+*Swirling ribbons of clashing colour erupt around the target. The target acts erratically — may attack allies, skip turns, or wander randomly each round. Lasts 1 round per caster level (max 6). Afterburn: Yes, duration-based control effect..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -708,14 +752,16 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Umbramancy</td><td style="border: none;">5</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE</td><td style="border: none;">Yes, persistent cloud hazard.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbramancy</td><td style="border: none;">5</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Mage Damage type: Poison. Yes, persistent cloud hazard.*
+*Minimum Level: Mage 7*
+
+*Mage 7 Mage Yes, persistent cloud hazard. Afterburn: Yes, persistent cloud hazard..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -729,14 +775,16 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Stormcraft</td><td style="border: none;">5</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE, Nuke</td><td style="border: none;">No.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">5</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Mage Damage type: Cold.*
+*Minimum Level: Mage 7*
+
+*Mage 7 Mage.*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -750,14 +798,16 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/10_feeblemind.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Umbramancy</td><td style="border: none;">5</td><td style="border: none;">25</td><td style="border: none;">None</td><td style="border: none;">Mage</td><td style="border: none;">CC, Anti-Mage</td><td style="border: none;">Yes, lasting debilitation.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbramancy</td><td style="border: none;">5</td><td style="border: none;">25</td><td style="border: none;">None</td><td style="border: none;">Mage</td><td style="border: none;">CC, Anti-Mage</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*A lance of pure psychic corruption pierces the target's consciousness. Devastating Intelligence and Wisdom drain drops mental stats to 1, making spellcasting impossible. Deals severe MP damage (2d6 x caster level).*
+*Minimum Level: Mage 7*
+
+*A lance of pure psychic corruption pierces the target's consciousness. Devastating Intelligence and Wisdom drain drops mental stats to 1, making spellcasting impossible. Deals severe MP damage (2d6 x caster level). Afterburn: Yes, lasting debilitation..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -771,14 +821,16 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Stormcraft</td><td style="border: none;">7</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE, Nuke</td><td style="border: none;">No baseline burn rider.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">7</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Mage Damage type: Fire. No baseline burn rider.*
+*Minimum Level: Mage 9*
+
+*Mage 9 Mage.*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -792,14 +844,16 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Mirage</td><td style="border: none;">8</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">CC</td><td style="border: none;">Yes, exile duration.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">8</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Mage Damage type: None/Control. Yes, exile duration.*
+*Minimum Level: Mage 10*
+
+*Mage 10 Mage Yes, exile duration. Afterburn: Yes, exile duration..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -813,14 +867,14 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Umbramancy</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage, Dark Priest</td><td style="border: none;">MP Leech, Variant</td><td style="border: none;">Yes, lingering mana suppression in variant design.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbramancy</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage, Dark Priest</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Mage, Dark Priest Damage type: Shadow/Drain. Yes, lingering mana suppression in variant design.*
+*- Mage, Dark Priest.*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -834,14 +888,14 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Stormcraft</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Single-Target Damage, TM Control, Variant</td><td style="border: none;">Yes, electric aftershock in variant design.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Mage Damage type: Lightning. Yes, electric aftershock in variant design.*
+*- Mage.*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -855,14 +909,14 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Mirage / Aegis</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Defensive, Variant</td><td style="border: none;">Yes, images persist until broken.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage / Aegis</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Mage Damage type: Illusory/None. Yes, images persist until broken.*
+*- Mage.*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -876,14 +930,14 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Stormcraft / Mirage</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE, Variant</td><td style="border: none;">Yes, brief burning ground effect in variant design.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft / Mirage</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Mage Damage type: Fire. Yes, brief burning ground effect in variant design.*
+*- Mage.*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -897,14 +951,16 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Umbramancy</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">CC, Debuff</td><td style="border: none;">Yes, Confused (gray)</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbramancy</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Mage Damage type: Shadow. Yes, Confused (gray).*
+*Minimum Level: Mage 3*
+
+*Mage 3 Mage Yes, Confused (gray). Afterburn: Yes, Confused (gray)..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -918,14 +974,16 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Mirage</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;">CC, Charm</td><td style="border: none;">Yes, Charmed (pink)</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Mage</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Mage Yes, Charmed (pink).*
+*Minimum Level: Mage 4*
+
+*Mage 4 Mage Yes, Charmed (pink). Afterburn: Yes, Charmed (pink)..*
 
 ## Priest spellbook
 
@@ -933,25 +991,25 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 | Spell | Deity | Spell Level | Access Layer | Access Tier | Minimum Level | Class | Tags |
 |------|--------|-------------|-------------|-----------|---------------|-------|------|
-|[Bless](#bless)| Aethelion |1|Class Core|Early|-|Priest, Paladin|Buff, AoE|
-|[Command](#command)| Umbraex |1|Class Core|Early|-|Priest, Paladin|CC|
-|[Cure Light Wounds](#cure-light-wounds)| Aethelion |1|Class Core|Early|-|Priest, Druid, Paladin|Healing|
-|[Protection from Evil](#protection-from-evil)| Aethelion |1|Class Core|Early|-|Priest, Paladin|Defensive, Buff|
-|[Chasten](#chasten)| Umbraex |1|Core|Early|-|Priest|Debuff|
-|[Sanctuary](#sanctuary)| Aethelion |1|Class Core|Early|-|Priest, Paladin|Defensive|
-|[Aid](#aid)| Aethelion |2|Class Core|Early|-|Priest, Paladin|Buff|
-|[Chant](#chant)| Astrara |2|Class Core|Early|-|Priest|Buff, Debuff|
-|[Hold Person](#hold-person)| Umbraex |2/3|Class Core|Mid|-|Priest|CC|
-|[Prayer](#prayer)| Chronara |3|Class Core|Mid|-|Priest|Buff, Debuff|
-|[Remove Paralysis](#remove-paralysis)| Celestara |3|Class Core|Mid|-|Priest, Paladin|Healing, Cleanse|
-|[Cure Serious Wounds](#cure-serious-wounds)| Aethelion |4|Class Core|Mid|-|Priest, Druid, Paladin|Healing|
-|[Free Action](#free-action)| Astrara |4|Class Core|Mid|-|Priest, Paladin|Defensive|
-|[Cure Critical Wounds](#cure-critical-wounds)| Aethelion |5|School Specialization|Late|-|Priest, Druid, Paladin|Healing|
-|[Flame Strike](#flame-strike)| Ignara |5|School Specialization|Late|-|Priest|Offensive, Nuke|
-|[Heal](#heal)| Aethelion |6|School Specialization|Late|-|Priest|Healing|
-|[Blade Barrier](#blade-barrier)| Celestara |6|School Specialization|Late|-|Priest|Offensive, Defensive, Barrier|
-|[Heroes' Feast](#heroes-feast)| Aethelion |6|School Specialization|Late|-|Priest|Buff, AoE|
-|[Restoration](#restoration)| Aethelion |7|School Specialization|Late|-|Priest|Healing, Cleanse|
+|[Bless](#bless)| Aethelion |1|Class Core|Early|Priest 1|Priest, Paladin||
+|[Command](#command)| Umbraex |1|Class Core|Early|Priest 1|Priest, Paladin||
+|[Cure Light Wounds](#cure-light-wounds)| Aethelion |1|Class Core|Early|Priest 1|Priest, Druid, Paladin||
+|[Protection from Evil](#protection-from-evil)| Aethelion |1|Class Core|Early|Priest 1|Priest, Paladin||
+|[Chasten](#chasten)| Umbraex |1|Core|Early|1|Priest||
+|[Sanctuary](#sanctuary)| Aethelion |1|Class Core|Early|Priest 1|Priest, Paladin||
+|[Aid](#aid)| Aethelion |2|Class Core|Early|Priest 3|Priest, Paladin||
+|[Chant](#chant)| Astrara |2|Class Core|Early|Priest 3|Priest||
+|[Hold Person](#hold-person)| Umbraex |2/3|Class Core|Mid|Priest 4|Priest||
+|[Prayer](#prayer)| Chronara |3|Class Core|Mid|Priest 5|Priest||
+|[Remove Paralysis](#remove-paralysis)| Celestara |3|Class Core|Mid|Priest 5|Priest, Paladin||
+|[Cure Serious Wounds](#cure-serious-wounds)| Aethelion |4|Class Core|Mid|Priest 6|Priest, Druid, Paladin||
+|[Free Action](#free-action)| Astrara |4|Class Core|Mid|Priest 6|Priest, Paladin||
+|[Cure Critical Wounds](#cure-critical-wounds)| Aethelion |5|School Specialization|Late|Priest 7|Priest, Druid, Paladin||
+|[Flame Strike](#flame-strike)| Ignara |5|School Specialization|Late|Priest 7|Priest||
+|[Heal](#heal)| Aethelion |6|School Specialization|Late|Priest 8|Priest||
+|[Blade Barrier](#blade-barrier)| Celestara |6|School Specialization|Late|Priest 8|Priest||
+|[Heroes' Feast](#heroes-feast)| Aethelion |6|School Specialization|Late|Priest 8|Priest||
+|[Restoration](#restoration)| Aethelion |7|School Specialization|Late|Priest 9|Priest||
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -965,14 +1023,16 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/11_bless.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Deity</td><td style="border: none;">1</td><td style="border: none;">8</td><td style="border: none;">None</td><td style="border: none;">Priest, Paladin</td><td style="border: none;">Buff, AoE</td><td style="border: none;">Yes, duration buff.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Deity</td><td style="border: none;">1</td><td style="border: none;">8</td><td style="border: none;">None</td><td style="border: none;">Priest, Paladin</td><td style="border: none;">Buff, AoE</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*The priest raises a holy symbol as golden light descends upon their allies. Allies in range gain +1 AttackPower, +10% turn meter rate, and +1 to all saving throws. Affects up to 6 allies. Deity Bonus: (Aethelion) +25% healing and +1 round duration.*
+*Minimum Level: Priest 1*
+
+*The priest raises a holy symbol as golden light descends upon their allies. Allies in range gain +1 AttackPower, +10% turn meter rate, and +1 to all saving throws. Affects up to 6 allies. Deity Bonus: (Aethelion) +25% healing and +1 round duration. Afterburn: Yes, duration buff..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -986,14 +1046,16 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Umbraex</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Paladin</td><td style="border: none;">CC</td><td style="border: none;">No.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbraex</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Paladin</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest, Paladin Damage type: None/Control. Deity Bonus: (Umbraex, Aethelion) Umbraex: -1 DefensePower; Aethelion: +1 round.*
+*Minimum Level: Priest 1*
+
+*Priest 1 Priest, Paladin. Deity Bonus: (Umbraex, Aethelion) Umbraex: -1 DefensePower; Aethelion: +1 round.*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1007,12 +1069,14 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/12_cure_light_wounds.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Deity</td><td style="border: none;">1</td><td style="border: none;">6</td><td style="border: none;">1d8+1 Healing</td><td style="border: none;">Priest, Druid, Paladin</td><td style="border: none;">Healing</td><td style="border: none;">No direct after-effect beyond restored HP.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Deity</td><td style="border: none;">1</td><td style="border: none;">6</td><td style="border: none;">1d8+1 Healing</td><td style="border: none;">Priest, Druid, Paladin</td><td style="border: none;">Healing</td></tr>
 </table>
 </td>
 </tr>
 </table>
+
+*Minimum Level: Priest 1*
 
 *A soft green glow radiates from the healer's palms as wounds knit and bruises fade. Restores 1d8+1 hit points to a single target, scaling +1d8+1 per caster level (cap 5d8+5 at level 5). Deity Bonus: (Aethelion, Lunara) Lunara: +1d4 healing on night cycle.*
 
@@ -1028,12 +1092,14 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/13_protection_from_evil.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Deity</td><td style="border: none;">1</td><td style="border: none;">10</td><td style="border: none;">None</td><td style="border: none;">Priest, Paladin</td><td style="border: none;">Defensive, Buff</td><td style="border: none;">No.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Deity</td><td style="border: none;">1</td><td style="border: none;">10</td><td style="border: none;">None</td><td style="border: none;">Priest, Paladin</td><td style="border: none;">Defensive, Buff</td></tr>
 </table>
 </td>
 </tr>
 </table>
+
+*Minimum Level: Priest 1*
 
 *A shimmering golden ward encircles the target, deflecting the attentions of malevolent forces. Provides +2 AC and +2 saving throws against evil creatures. Grants immunity to mental control and possession. Deity Bonus: (Aethelion) +1 round duration and +2 AC.*
 
@@ -1049,14 +1115,16 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Umbraex</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest</td><td style="border: none;">Debuff</td><td style="border: none;">No</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbraex</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest Damage type: Radiant. Deity Bonus: (Umbraex) +1d4 shadow damage.*
+*Minimum Level: 1*
+
+*1 Priest. Deity Bonus: (Umbraex) +1d4 shadow damage.*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1070,14 +1138,16 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Aethelion</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Paladin</td><td style="border: none;">Defensive</td><td style="border: none;">Yes, duration shield-state.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Paladin</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest, Paladin Yes, duration shield-state. Deity Bonus: (Aethelion) +1 round duration.*
+*Minimum Level: Priest 1*
+
+*Priest 1 Priest, Paladin Yes, duration shield-state. Deity Bonus: (Aethelion) +1 round duration. Afterburn: Yes, duration shield-state..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1091,14 +1161,16 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Aethelion</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Paladin</td><td style="border: none;">Buff</td><td style="border: none;">Yes, duration support buff.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Paladin</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest, Paladin Yes, duration support buff. Deity Bonus: (Aethelion) +5 temporary HP.*
+*Minimum Level: Priest 3*
+
+*Priest 3 Priest, Paladin Yes, duration support buff. Deity Bonus: (Aethelion) +5 temporary HP. Afterburn: Yes, duration support buff..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1112,14 +1184,16 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Astrara</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest</td><td style="border: none;">Buff, Debuff</td><td style="border: none;">Yes, duration aura.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Astrara</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest Yes, duration aura. Deity Bonus: (Astrara) +1 round duration; +1 AttackPower for allies.*
+*Minimum Level: Priest 3*
+
+*Priest 3 Priest Yes, duration aura. Deity Bonus: (Astrara) +1 round duration; +1 AttackPower for allies. Afterburn: Yes, duration aura..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1133,12 +1207,14 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/14_hold_person.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Deity</td><td style="border: none;">2</td><td style="border: none;">10</td><td style="border: none;">None</td><td style="border: none;">Priest</td><td style="border: none;">CC</td><td style="border: none;">No.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Deity</td><td style="border: none;">2</td><td style="border: none;">10</td><td style="border: none;">None</td><td style="border: none;">Priest</td><td style="border: none;">CC</td></tr>
 </table>
 </td>
 </tr>
 </table>
+
+*Minimum Level: Priest 4*
 
 *Golden bands of divine light wrap around the target, locking their limbs in place. Paralyzes a humanoid target completely — no movement, no actions, no defense. Save each round to break free. Deity Bonus: (Umbraex, Veparix) Veparix: +5% hold chance.*
 
@@ -1154,14 +1230,16 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Chronara</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest</td><td style="border: none;">Buff, Debuff</td><td style="border: none;">Yes, duration field effect.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Chronara</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest Yes, duration field effect. Deity Bonus: (Chronara, Astrara) Astrara: +1 AttackPower for allies.*
+*Minimum Level: Priest 5*
+
+*Priest 5 Priest Yes, duration field effect. Deity Bonus: (Chronara, Astrara) Astrara: +1 AttackPower for allies. Afterburn: Yes, duration field effect..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1175,14 +1253,16 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Celestara</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Paladin</td><td style="border: none;">Healing, Cleanse</td><td style="border: none;">No.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Celestara</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Paladin</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest, Paladin Damage type: Cleanse. Deity Bonus: (Celestara) Also heals 1d4 HP.*
+*Minimum Level: Priest 5*
+
+*Priest 5 Priest, Paladin. Deity Bonus: (Celestara) Also heals 1d4 HP.*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1196,14 +1276,16 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Aethelion</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Druid, Paladin</td><td style="border: none;">Healing</td><td style="border: none;">No.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Druid, Paladin</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest, Druid, Paladin Damage type: Healing. Deity Bonus: (Aethelion) +25% healing.*
+*Minimum Level: Priest 6*
+
+*Priest 6 Priest, Druid, Paladin. Deity Bonus: (Aethelion) +25% healing.*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1217,14 +1299,16 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Astrara</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Paladin</td><td style="border: none;">Defensive</td><td style="border: none;">Yes, duration buff.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Astrara</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Paladin</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest, Paladin Yes, duration buff. Deity Bonus: (Astrara) +1 round duration; +1 AttackPower for target.*
+*Minimum Level: Priest 6*
+
+*Priest 6 Priest, Paladin Yes, duration buff. Deity Bonus: (Astrara) +1 round duration; +1 AttackPower for target. Afterburn: Yes, duration buff..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1238,14 +1322,16 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Aethelion</td><td style="border: none;">5</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Druid, Paladin</td><td style="border: none;">Healing</td><td style="border: none;">No.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">5</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Druid, Paladin</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest, Druid, Paladin Damage type: Healing. Deity Bonus: (Aethelion) +25% healing.*
+*Minimum Level: Priest 7*
+
+*Priest 7 Priest, Druid, Paladin. Deity Bonus: (Aethelion) +25% healing.*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1259,12 +1345,14 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/15_flame_strike.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Deity</td><td style="border: none;">5</td><td style="border: none;">20</td><td style="border: none;">1d6 per level Fire/Radiant</td><td style="border: none;">Priest</td><td style="border: none;">Offensive, Nuke</td><td style="border: none;">No explicit lingering burn.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Deity</td><td style="border: none;">5</td><td style="border: none;">20</td><td style="border: none;">1d6 per level Fire/Radiant</td><td style="border: none;">Priest</td><td style="border: none;">Offensive, Nuke</td></tr>
 </table>
 </td>
 </tr>
 </table>
+
+*Minimum Level: Priest 7*
 
 *A pillar of divine fire descends from the heavens. A vertical column dealing 1d6 fire + 1d6 radiant damage per caster level (cap 15d6+15d6). Undead take double damage. Base 6d6+6d6 at level 6, scaling +1d6/+1d6 per level. Deity Bonus: (Ignara) +1d6 fire damage; 10% chance to ignite.*
 
@@ -1280,12 +1368,14 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/16_heal.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Deity</td><td style="border: none;">6</td><td style="border: none;">30</td><td style="border: none;">Cures all HP</td><td style="border: none;">Priest</td><td style="border: none;">Healing</td><td style="border: none;">No.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Deity</td><td style="border: none;">6</td><td style="border: none;">30</td><td style="border: none;">Cures all HP</td><td style="border: none;">Priest</td><td style="border: none;">Healing</td></tr>
 </table>
 </td>
 </tr>
 </table>
+
+*Minimum Level: Priest 8*
 
 *The most powerful restorative miracle in the divine arsenal. Instantly restores the target to full health and cures blindness, deafness, paralysis, disease, and poison. Deity Bonus: (Aethelion, Lunara) Lunara adds mana restoration.*
 
@@ -1301,14 +1391,16 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/17_blade_barrier.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Deity</td><td style="border: none;">6</td><td style="border: none;">25</td><td style="border: none;">1d6 per level Slashing</td><td style="border: none;">Priest</td><td style="border: none;">Offensive, Defensive, Barrier</td><td style="border: none;">Yes, persistent hazard while active.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Deity</td><td style="border: none;">6</td><td style="border: none;">25</td><td style="border: none;">1d6 per level Slashing</td><td style="border: none;">Priest</td><td style="border: none;">Offensive, Defensive, Barrier</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*A ring of spinning silver blades materializes, orbiting in a deadly dance. An immobile 20-foot ring dealing 1d6 slashing per caster level (cap 15d6) to any creature passing through. Lasts 1 round per level. Deity Bonus: (Celestara) +1 round duration.*
+*Minimum Level: Priest 8*
+
+*A ring of spinning silver blades materializes, orbiting in a deadly dance. An immobile 20-foot ring dealing 1d6 slashing per caster level (cap 15d6) to any creature passing through. Lasts 1 round per level. Deity Bonus: (Celestara) +1 round duration. Afterburn: Yes, persistent hazard..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1322,14 +1414,16 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Aethelion</td><td style="border: none;">6</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest</td><td style="border: none;">Buff, AoE</td><td style="border: none;">Yes, prebuff duration benefits.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">6</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest Damage type: Buff. Yes, prebuff duration benefits. Deity Bonus: (Aethelion, Lunara) Lunara adds mana restoration on full moon.*
+*Minimum Level: Priest 8*
+
+*Priest 8 Priest Yes, prebuff duration benefits. Deity Bonus: (Aethelion, Lunara) Lunara adds mana restoration on full moon. Afterburn: Yes, prebuff duration benefits..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1343,14 +1437,16 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Aethelion</td><td style="border: none;">7</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest</td><td style="border: none;">Healing, Cleanse</td><td style="border: none;">No.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">7</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest Damage type: Healing. Deity Bonus: (Aethelion) Cures one additional random condition.*
+*Minimum Level: Priest 9*
+
+*Priest 9 Priest. Deity Bonus: (Aethelion) Cures one additional random condition.*
 
 ## Druid spellbook
 
@@ -1358,23 +1454,23 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 
 | Spell | Deity | Spell Level | Access Layer | Access Tier | Minimum Level | Class | Tags |
 |------|--------|-------------|-------------|-----------|---------------|-------|------|
-|[Entangle](#entangle)| Chronara |1|Class Core|Early|-|Druid, Priest|CC, Root|
-|[Faerie Fire](#faerie-fire)| Veparix |1|Class Core|Early|-|Druid, Priest|Debuff|
-|[Shillelagh](#shillelagh)| Chronara |1|Class Core|Early|-|Druid|Buff|
-|[Barkskin](#barkskin)| Celestara |2|Class Core|Early|-|Druid, Priest|Defensive|
-|[Goodberry](#goodberry)| Lunara |2|Class Core|Early|-|Druid, Priest|Healing|
-|[Heat Metal](#heat-metal)| Ignara |2|Class Core|Early|-|Druid, Priest|Debuff|
-|[Call Lightning](#call-lightning)| Chronara |3|Class Core|Mid|-|Druid, Priest|Offensive|
-|[Hold Animal](#hold-animal)| Chronara |3|Class Core|Mid|-|Druid, Priest|CC|
-|[Call Woodland Beings](#call-woodland-beings)| Chronara |4|School Specialization|Mid|-|Druid|Summoning|
-|[Giant Insect](#giant-insect)| Chronara |4|School Specialization|Mid|-|Druid, Priest|Summoning-lite|
-|[Insect Plague](#insect-plague)| Umbraex |5|School Specialization|Late|-|Druid, Priest|Offensive, CC|
-|[Anti-Plant Shell](#anti-plant-shell)| Chronara |5|School Specialization|Late|-|Druid, Priest|Defensive|
-|[Fire Seeds](#fire-seeds)| Ignara |6|School Specialization|Late|-|Druid|Offensive|
-|[Liveoak](#liveoak)| Chronara |6|School Specialization|Late|-|Druid|Summoning|
-|[Creeping Doom](#creeping-doom)| Umbraex |7|School Specialization|Late|-|Druid|Offensive, CC|
-|[Earthquake](#earthquake)| Chronara |7|School Specialization|Late|-|Druid, Priest|Offensive, AoE|
-|[Turn Undead](#turn-undead)| Aethelion |2|Class Core|Early|-|Priest, Paladin, Knight|Offensive, CC|
+|[Entangle](#entangle)| Chronara |1|Class Core|Early|Druid 1|Druid, Priest||
+|[Faerie Fire](#faerie-fire)| Veparix |1|Class Core|Early|Druid 1|Druid, Priest||
+|[Shillelagh](#shillelagh)| Chronara |1|Class Core|Early|Druid 1|Druid||
+|[Barkskin](#barkskin)| Celestara |2|Class Core|Early|Druid 3|Druid, Priest||
+|[Goodberry](#goodberry)| Lunara |2|Class Core|Early|Druid 3|Druid, Priest||
+|[Heat Metal](#heat-metal)| Ignara |2|Class Core|Early|Druid 3|Druid, Priest||
+|[Call Lightning](#call-lightning)| Chronara |3|Class Core|Mid|Druid 5|Druid, Priest||
+|[Hold Animal](#hold-animal)| Chronara |3|Class Core|Mid|Druid 5|Druid, Priest||
+|[Call Woodland Beings](#call-woodland-beings)| Chronara |4|School Specialization|Mid|Druid 6|Druid||
+|[Giant Insect](#giant-insect)| Chronara |4|School Specialization|Mid|Druid 6|Druid, Priest||
+|[Insect Plague](#insect-plague)| Umbraex |5|School Specialization|Late|Druid 7|Druid, Priest||
+|[Anti-Plant Shell](#anti-plant-shell)| Chronara |5|School Specialization|Late|Druid 7|Druid, Priest||
+|[Fire Seeds](#fire-seeds)| Ignara |6|School Specialization|Late|Druid 8|Druid||
+|[Liveoak](#liveoak)| Chronara |6|School Specialization|Late|Druid 8|Druid||
+|[Creeping Doom](#creeping-doom)| Umbraex |7|School Specialization|Late|Druid 9|Druid||
+|[Earthquake](#earthquake)| Chronara |7|School Specialization|Late|Druid 9|Druid, Priest||
+|[Turn Undead](#turn-undead)| Aethelion |2|Class Core|Early|Priest 3; Paladin 4; Knight 6|Priest, Paladin, Knight||
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1388,14 +1484,16 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/18_entangle.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Deity</td><td style="border: none;">1</td><td style="border: none;">5</td><td style="border: none;">None</td><td style="border: none;">Druid, Priest</td><td style="border: none;">CC, Root</td><td style="border: none;">Yes, persistent rooting zone while active.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Deity</td><td style="border: none;">1</td><td style="border: none;">5</td><td style="border: none;">None</td><td style="border: none;">Druid, Priest</td><td style="border: none;">CC, Root</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*The ground erupts with grasping vines and thick roots that snake around the legs of the unwary. Plants and roots grapple all creatures in a 40-foot radius — movement reduced to 0. Deity Bonus: (Chronara, Veparix) Veparix: +5% entanglement chance.*
+*Minimum Level: Druid 1*
+
+*The ground erupts with grasping vines and thick roots that snake around the legs of the unwary. Plants and roots grapple all creatures in a 40-foot radius — movement reduced to 0. Deity Bonus: (Chronara, Veparix) Veparix: +5% entanglement chance. Afterburn: Yes, persistent rooting zone..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1409,14 +1507,16 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Veparix</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">Debuff</td><td style="border: none;">Yes, duration reveal.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Veparix</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid, Priest Damage type: None/Reveal. Yes, duration reveal. Deity Bonus: (Veparix) +1 round reveal; -2 DefensePower on revealed target.*
+*Minimum Level: Druid 1*
+
+*Druid 1 Druid, Priest Yes, duration reveal. Deity Bonus: (Veparix) +1 round reveal; -2 DefensePower on revealed target. Afterburn: Yes, duration reveal..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1430,14 +1530,16 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Chronara</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid</td><td style="border: none;">Buff</td><td style="border: none;">No.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Chronara</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid Damage type: Physical/Magical. Deity Bonus: (Chronara) +1d4 nature damage.*
+*Minimum Level: Druid 1*
+
+*Druid 1 Druid. Deity Bonus: (Chronara) +1d4 nature damage.*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1451,14 +1553,16 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Celestara</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">Defensive</td><td style="border: none;">Yes, duration-based defensive skin.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Celestara</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid, Priest Yes, duration-based defensive skin. Deity Bonus: (Celestara) +1 additional AC.*
+*Minimum Level: Druid 3*
+
+*Druid 3 Druid, Priest Yes, duration-based defensive skin. Deity Bonus: (Celestara) +1 additional AC. Afterburn: Yes, duration-based defensive skin..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1472,14 +1576,16 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Lunara</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">Healing</td><td style="border: none;">No.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Lunara</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid, Priest Damage type: Healing. Deity Bonus: (Lunara) +1 berry created; restores 1 mana per berry.*
+*Minimum Level: Druid 3*
+
+*Druid 3 Druid, Priest. Deity Bonus: (Lunara) +1 berry created; restores 1 mana per berry.*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1493,14 +1599,16 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Ignara</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">Debuff</td><td style="border: none;">Yes, continuing heat damage or pressure.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Ignara</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid, Priest Damage type: Fire. Yes, continuing heat damage or pressure. Deity Bonus: (Ignara) +1d6 fire damage; ignites target on critical.*
+*Minimum Level: Druid 3*
+
+*Druid 3 Druid, Priest Yes, continuing heat. Deity Bonus: (Ignara) +1d6 fire damage; ignites target on critical. Afterburn: Yes, continuing heat..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1514,14 +1622,16 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/19_call_lightning.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Deity</td><td style="border: none;">3</td><td style="border: none;">12</td><td style="border: none;">1d6 per level Lightning</td><td style="border: none;">Druid, Priest</td><td style="border: none;">Offensive</td><td style="border: none;">Yes in repeated-round use, though not burn.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Deity</td><td style="border: none;">3</td><td style="border: none;">12</td><td style="border: none;">1d6 per level Lightning</td><td style="border: none;">Druid, Priest</td><td style="border: none;">Offensive</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*The druid raises a hand to the sky, summoning a storm bolt from the heavens. A 5-foot wide lightning bolt strikes from above for 1d6 per caster level (cap 10d6). Can be called each round while the storm lasts. Deity Bonus: (Chronara) +1d6 lightning damage.*
+*Minimum Level: Druid 5*
+
+*The druid raises a hand to the sky, summoning a storm bolt from the heavens. A 5-foot wide lightning bolt strikes from above for 1d6 per caster level (cap 10d6). Can be called each round while the storm lasts. Deity Bonus: (Chronara) +1d6 lightning damage. Afterburn: Yes, repeated-round use..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1535,14 +1645,16 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Chronara</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">CC</td><td style="border: none;">Yes, duration root/paralysis.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Chronara</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid, Priest Damage type: None/Control. Yes, duration root/paralysis. Deity Bonus: (Chronara) +5% hold chance.*
+*Minimum Level: Druid 5*
+
+*Druid 5 Druid, Priest Yes, duration root. Deity Bonus: (Chronara) +5% hold chance. Afterburn: Yes, duration root..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1556,14 +1668,16 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Chronara</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid</td><td style="border: none;">Summoning</td><td style="border: none;">Yes, summoned allies persist for duration.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Chronara</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid Damage type: Variable. Yes, summoned allies persist for duration. Deity Bonus: (Chronara) Summoned ally has +10% HP.*
+*Minimum Level: Druid 6*
+
+*Druid 6 Druid Yes, summoned allies. Deity Bonus: (Chronara) Summoned ally has +10% HP. Afterburn: Yes, summoned allies..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1577,14 +1691,16 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Chronara</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">Summoning-lite</td><td style="border: none;">Yes, transformed creatures persist for duration.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Chronara</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid, Priest Damage type: Physical. Yes, transformed creatures persist for duration. Deity Bonus: (Chronara, Veparix) Veparix: +5% poison chance.*
+*Minimum Level: Druid 6*
+
+*Druid 6 Druid, Priest Yes, transformed creatures. Deity Bonus: (Chronara, Veparix) Veparix: +5% poison chance. Afterburn: Yes, transformed creatures..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1598,14 +1714,16 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Umbraex</td><td style="border: none;">5</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">Offensive, CC</td><td style="border: none;">Yes, persistent swarm presence.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbraex</td><td style="border: none;">5</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid, Priest Damage type: Physical/Poison-theme. Yes, persistent swarm presence. Deity Bonus: (Umbraex) +1 round duration; +1d4 poison.*
+*Minimum Level: Druid 7*
+
+*Druid 7 Druid, Priest Yes, persistent swarm. Deity Bonus: (Umbraex) +1 round duration; +1d4 poison. Afterburn: Yes, persistent swarm..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1619,14 +1737,16 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Chronara</td><td style="border: none;">5</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">Defensive</td><td style="border: none;">Yes, persistent shell.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Chronara</td><td style="border: none;">5</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid, Priest Yes, persistent shell. Deity Bonus: (Chronara) +1 round duration.*
+*Minimum Level: Druid 7*
+
+*Druid 7 Druid, Priest Yes, persistent shell. Deity Bonus: (Chronara) +1 round duration. Afterburn: Yes, persistent shell..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1640,14 +1760,16 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Ignara</td><td style="border: none;">6</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid</td><td style="border: none;">Offensive</td><td style="border: none;">Sometimes, depending on trap-style implementation.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Ignara</td><td style="border: none;">6</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid Damage type: Fire. Sometimes, depending on trap-style implementation. Deity Bonus: (Ignara) +1d6 fire damage per seed.*
+*Minimum Level: Druid 8*
+
+*Druid 8 Druid Sometimes, trap-style. Deity Bonus: (Ignara) +1d6 fire damage per seed. Afterburn: Sometimes, trap-style..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1661,14 +1783,16 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Chronara</td><td style="border: none;">6</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid</td><td style="border: none;">Summoning</td><td style="border: none;">Yes, awakened guardian persists.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Chronara</td><td style="border: none;">6</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid Damage type: Physical. Yes, awakened guardian persists. Deity Bonus: (Chronara) Guardian has +10% HP and +1 AC.*
+*Minimum Level: Druid 8*
+
+*Druid 8 Druid Yes, awakened guardian. Deity Bonus: (Chronara) Guardian has +10% HP and +1 AC. Afterburn: Yes, awakened guardian..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1682,14 +1806,16 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Umbraex</td><td style="border: none;">7</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid</td><td style="border: none;">Offensive, CC</td><td style="border: none;">Yes, persistent swarm pressure.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbraex</td><td style="border: none;">7</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid Damage type: Physical. Yes, persistent swarm pressure. Deity Bonus: (Umbraex) +1 round duration; +1d4 poison.*
+*Minimum Level: Druid 9*
+
+*Druid 9 Druid Yes, persistent swarm. Deity Bonus: (Umbraex) +1 round duration; +1d4 poison. Afterburn: Yes, persistent swarm..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1703,14 +1829,16 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Chronara</td><td style="border: none;">7</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">Offensive, AoE</td><td style="border: none;">Yes, persistent terrain disruption during effect.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Chronara</td><td style="border: none;">7</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid, Priest Damage type: Physical. Yes, persistent terrain disruption during effect. Deity Bonus: (Chronara, Ignara) Ignara: +1d6 fire damage on cracked ground.*
+*Minimum Level: Druid 9*
+
+*Druid 9 Druid, Priest Yes, persistent terrain disruption. Deity Bonus: (Chronara, Ignara) Ignara: +1d6 fire damage on cracked ground. Afterburn: Yes, persistent terrain disruption..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1724,14 +1852,16 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Aethelion</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Paladin, Knight</td><td style="border: none;">Offensive, CC</td><td style="border: none;">Yes, Fear (2 turns)</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Paladin, Knight</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest, Paladin, Knight Damage type: Holy. Yes, Fear (2 turns). Deity Bonus: (Aethelion, Noctivane) Noctivane: fear lasts +1 round.*
+*Minimum Level: Priest 3; Paladin 4; Knight 6*
+
+*Priest 3; Paladin 4; Knight 6 Priest, Paladin, Knight Yes, Fear (2 turns). Deity Bonus: (Aethelion, Noctivane) Noctivane: fear lasts +1 round. Afterburn: Yes, Fear (2 turns)..*
 
 ## Paladin spellbook
 
@@ -1739,7 +1869,7 @@ Paladins begin magical access around level 6 in Dark Orb and remain a narrow sup
 
 | Spell | Deity | Spell Level | Access Layer | Access Tier | Minimum Level | Class | Tags |
 |------|--------|-------------|-------------|-----------|---------------|-------|------|
-|[Bless](#bless)| Aethelion |1|Class Core|Early|-|Improves ally morale and combat readiness.||
+|[Bless](#bless)| Aethelion |1|Class Core|Early|Priest 1|Improves ally morale and combat readiness.||
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1753,14 +1883,16 @@ Paladins begin magical access around level 6 in Dark Orb and remain a narrow sup
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/11_bless.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Deity</td><td style="border: none;">1</td><td style="border: none;">8</td><td style="border: none;">None</td><td style="border: none;">Priest, Paladin</td><td style="border: none;">Buff, AoE</td><td style="border: none;"></td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Deity</td><td style="border: none;">1</td><td style="border: none;">8</td><td style="border: none;">None</td><td style="border: none;">Priest, Paladin</td><td style="border: none;">Buff, AoE</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*The priest raises a holy symbol as golden light descends upon their allies. Allies in range gain +1 AttackPower, +10% turn meter rate, and +1 to all saving throws. Affects up to 6 allies. Deity Bonus: (Aethelion) +25% healing and +1 round duration.*
+*Minimum Level: Priest 1*
+
+*The priest raises a holy symbol as golden light descends upon their allies. Allies in range gain +1 AttackPower, +10% turn meter rate, and +1 to all saving throws. Affects up to 6 allies. Deity Bonus: (Aethelion) +25% healing and +1 round duration. Afterburn: Yes, duration buff..*
 
 ## Knight spellbook
 
@@ -1768,18 +1900,18 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 
 | Spell | Deity | Spell Level | Access Layer | Access Tier | Minimum Level | Class | Tags |
 |------|--------|-------------|-------------|-----------|---------------|-------|------|
-|[War Cry](#war-cry)| Ignara |1|Class Core|Early|-|Knight, Paladin|CC or Buff, Variant|
-|[Smite](#smite)| Aethelion |1|Class Core|Early|-|Knight|Offensive|
-| [Rallying Cry](#rallying-cry) | Aethelion | 1 | Class Core | Early | - | Knight | Buff, Variant |
-|[Steadfast Line](#steadfast-line)| Celestara |2|Class Core|Early|-|Knight|Buff, Variant|
-|[Banner of Resolve](#banner-of-resolve)| Celestara |2|Class Core|Early|-|Knight|Buff, Variant|
-|[Iron Will Litany](#iron-will-litany)| Celestara |3|Class Core|Mid|-|Knight|Defensive, Variant|
-|[Advance Signal](#advance-signal)| Chronara |3|Class Core|Mid|-|Knight|Buff, Variant|
-|[Haste](#haste)| Celestara |3|School Specialization|Mid|-|Knight|Buff, TM Uplift|
-|[Shielding Cadence](#shielding-cadence)| Celestara |3|Class Core|Mid|-|Knight|Defensive, Variant|
-|[Battle Hymn of Defiance](#battle-hymn-of-defiance)| Chronara |4|School Specialization|Late|-|Knight|Buff, AoE, Variant|
-|[Arcane Defiance Banner](#arcane-defiance-banner)| Lunara |4|School Specialization|Late|-|Knight|Defensive, Variant|
-|[Lionheart Command](#lionheart-command)| Chronara |4|School Specialization|Late|-|Knight|Buff, Variant|
+|[War Cry](#war-cry)| Ignara |1|Class Core|Early|Knight 9|Knight, Paladin||
+|[Smite](#smite)| Aethelion |1|Class Core|Early|Paladin 6; Knight 6|Knight||
+| [Rallying Cry](#rallying-cry) | Aethelion | 1 | Class Core | Early | Knight 9 | Knight |  |
+|[Steadfast Line](#steadfast-line)| Celestara |2|Class Core|Early|Knight 10|Knight||
+|[Banner of Resolve](#banner-of-resolve)| Celestara |2|Class Core|Early|Knight 10|Knight||
+|[Iron Will Litany](#iron-will-litany)| Celestara |3|Class Core|Mid|Knight 11|Knight||
+|[Advance Signal](#advance-signal)| Chronara |3|Class Core|Mid|Knight 11|Knight||
+|[Haste](#haste)| Celestara |3|School Specialization|Mid|Mage 5|Knight||
+|[Shielding Cadence](#shielding-cadence)| Celestara |3|Class Core|Mid|Knight 12|Knight||
+|[Battle Hymn of Defiance](#battle-hymn-of-defiance)| Chronara |4|School Specialization|Late|Knight 12|Knight||
+|[Arcane Defiance Banner](#arcane-defiance-banner)| Lunara |4|School Specialization|Late|Knight 13|Knight||
+|[Lionheart Command](#lionheart-command)| Chronara |4|School Specialization|Late|Knight 13|Knight||
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1793,14 +1925,16 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Ignara</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight, Paladin</td><td style="border: none;">CC or Buff, Variant</td><td style="border: none;">Short-duration momentum effect.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Ignara</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight, Paladin</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Knight, Paladin Damage type: Sonic/Morale. Short-duration momentum effect. Deity Bonus: (Ignara, Noctivane) Noctivane: fear effect on enemies.*
+*Minimum Level: Knight 9*
+
+*Knight 9 Knight, Paladin Short-duration momentum effect. Deity Bonus: (Ignara, Noctivane) Noctivane: fear effect on enemies. Afterburn: Short-duration momentum effect..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1814,12 +1948,14 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/20_smite.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Deity</td><td style="border: none;">1</td><td style="border: none;">8</td><td style="border: none;">1d8+1 Radiant</td><td style="border: none;">Paladin, Knight</td><td style="border: none;">Offensive</td><td style="border: none;">No</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Deity</td><td style="border: none;">1</td><td style="border: none;">8</td><td style="border: none;">1d8+1 Radiant</td><td style="border: none;">Paladin, Knight</td><td style="border: none;">Offensive</td></tr>
 </table>
 </td>
 </tr>
 </table>
+
+*Minimum Level: Paladin 6; Knight 6*
 
 *The paladin's weapon blazes with holy radiance as they strike — a single, decisive blow empowered by divine will. Empowers the next melee attack with +1d8 radiant damage (+1 per level). Double damage to undead and demons. Deity Bonus: (Aethelion) +1d4 radiant damage; double vs undead.*
 
@@ -1835,14 +1971,16 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Aethelion</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Buff, Variant</td><td style="border: none;">Short aura duration.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Knight Damage type: Sonic/Morale. Short aura duration.*
+*Minimum Level: Knight 9*
+
+*Knight 9 Knight Short aura duration. Afterburn: Short aura duration..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1856,14 +1994,16 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Celestara</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Buff, Variant</td><td style="border: none;">Yes, short formation aura.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Celestara</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Knight Yes, short formation aura. Deity Bonus: (Celestara) +1 round formation aura.*
+*Minimum Level: Knight 10*
+
+*Knight 10 Knight Yes, short formation aura. Deity Bonus: (Celestara) +1 round formation aura. Afterburn: Yes, short formation aura..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1877,14 +2017,16 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Celestara</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Buff, Variant</td><td style="border: none;">Yes, aura duration.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Celestara</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Knight Yes, aura duration. Deity Bonus: (Celestara) +1 round duration.*
+*Minimum Level: Knight 10*
+
+*Knight 10 Knight Yes, aura duration. Deity Bonus: (Celestara) +1 round duration. Afterburn: Yes, aura duration..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1898,14 +2040,16 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Celestara</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Defensive, Variant</td><td style="border: none;">Yes, chant duration.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Celestara</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Knight Yes, chant duration. Deity Bonus: (Celestara) +5 Magic Resistance.*
+*Minimum Level: Knight 11*
+
+*Knight 11 Knight Yes, chant duration. Deity Bonus: (Celestara) +5 Magic Resistance. Afterburn: Yes, chant duration..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1919,14 +2063,16 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Chronara</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Buff, Variant</td><td style="border: none;">Short-duration surge.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Chronara</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Knight Short-duration surge. Deity Bonus: (Chronara, Astrara) Astrara: +1 AttackPower on surge.*
+*Minimum Level: Knight 11*
+
+*Knight 11 Knight Short-duration surge. Deity Bonus: (Chronara, Astrara) Astrara: +1 AttackPower on surge. Afterburn: Short-duration surge..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1940,14 +2086,16 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/07_haste.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Dominion</td><td style="border: none;">3</td><td style="border: none;">20</td><td style="border: none;">None</td><td style="border: none;">Mage, Paladin, Knight, Bard</td><td style="border: none;">Buff, TM Uplift</td><td style="border: none;">Yes, duration-based speed buff.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Dominion</td><td style="border: none;">3</td><td style="border: none;">20</td><td style="border: none;">None</td><td style="border: none;">Mage, Paladin, Knight, Bard</td><td style="border: none;">Buff, TM Uplift</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*Time warps around the target as golden energy suffuses their limbs. Massively accelerates turn meter gain by 50% and grants +2 AttackPower and +2 DefensePower. Lasts 1 round per caster level (max 10 rounds). Deity Bonus: (Celestara) +1 round duration.*
+*Minimum Level: Mage 5*
+
+*Time warps around the target as golden energy suffuses their limbs. Massively accelerates turn meter gain by 50% and grants +2 AttackPower and +2 DefensePower. Lasts 1 round per caster level (max 10 rounds). Deity Bonus: (Celestara) +1 round duration. Afterburn: Yes, duration-based speed buff..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1961,14 +2109,16 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Celestara</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Defensive, Variant</td><td style="border: none;">Yes, cadence duration.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Celestara</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Knight Yes, cadence duration. Deity Bonus: (Celestara) +1 AC; +1 round.*
+*Minimum Level: Knight 12*
+
+*Knight 12 Knight Yes, cadence duration. Deity Bonus: (Celestara) +1 AC; +1 round. Afterburn: Yes, cadence duration..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1982,14 +2132,16 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Chronara</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Buff, AoE, Variant</td><td style="border: none;">Yes, anthem duration.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Chronara</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Knight Damage type: Sonic/Morale. Yes, anthem duration. Deity Bonus: (Chronara, Astrara) Astrara: +1 AttackPower for party.*
+*Minimum Level: Knight 12*
+
+*Knight 12 Knight Yes, anthem duration. Deity Bonus: (Chronara, Astrara) Astrara: +1 AttackPower for party. Afterburn: Yes, anthem duration..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -2003,14 +2155,16 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Lunara</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Defensive, Variant</td><td style="border: none;">Yes, banner aura.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Lunara</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Knight Yes, banner aura. Deity Bonus: (Lunara) -2 mana cost; +5 Magic Resistance.*
+*Minimum Level: Knight 13*
+
+*Knight 13 Knight Yes, banner aura. Deity Bonus: (Lunara) -2 mana cost; +5 Magic Resistance. Afterburn: Yes, banner aura..*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -2024,14 +2178,16 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Chronara</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Buff, Variant</td><td style="border: none;">Yes, command duration.</td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Chronara</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;"></td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Knight Damage type: Sonic/Morale. Yes, command duration. Deity Bonus: (Chronara) +1 round command duration.*
+*Minimum Level: Knight 13*
+
+*Knight 13 Knight Yes, command duration. Deity Bonus: (Chronara) +1 round command duration. Afterburn: Yes, command duration..*
 
 ## Additional Common Spells
 
@@ -2053,8 +2209,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Stormcraft</td><td style="border: none;">-</td><td style="border: none;">12</td><td style="border: none;">1D10 Fire</td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE, Nuke</td><td style="border: none;"></td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">-</td><td style="border: none;">12</td><td style="border: none;">1D10 Fire</td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE, Nuke</td></tr>
 </table>
 </td>
 </tr>
@@ -2076,8 +2232,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Stormcraft</td><td style="border: none;">-</td><td style="border: none;">9</td><td style="border: none;">1D6 Acid</td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE</td><td style="border: none;"></td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">-</td><td style="border: none;">9</td><td style="border: none;">1D6 Acid</td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE</td></tr>
 </table>
 </td>
 </tr>
@@ -2099,8 +2255,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Stormcraft</td><td style="border: none;">-</td><td style="border: none;">15</td><td style="border: none;">1D12 Fire</td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE, Nuke</td><td style="border: none;"></td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">-</td><td style="border: none;">15</td><td style="border: none;">1D12 Fire</td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE, Nuke</td></tr>
 </table>
 </td>
 </tr>
@@ -2122,8 +2278,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Stormcraft</td><td style="border: none;">-</td><td style="border: none;">10</td><td style="border: none;">1D10 Lightning</td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE</td><td style="border: none;"></td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">-</td><td style="border: none;">10</td><td style="border: none;">1D10 Lightning</td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE</td></tr>
 </table>
 </td>
 </tr>
@@ -2145,8 +2301,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Verdancy</td><td style="border: none;">-</td><td style="border: none;">7</td><td style="border: none;">1D6 Bludgeoning</td><td style="border: none;">Druid</td><td style="border: none;">Offensive, AoE</td><td style="border: none;"></td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Verdancy</td><td style="border: none;">-</td><td style="border: none;">7</td><td style="border: none;">1D6 Bludgeoning</td><td style="border: none;">Druid</td><td style="border: none;">Offensive, AoE</td></tr>
 </table>
 </td>
 </tr>
@@ -2168,8 +2324,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Mirage</td><td style="border: none;">-</td><td style="border: none;">6</td><td style="border: none;">—</td><td style="border: none;">Mage, Priest</td><td style="border: none;">CC, AoE</td><td style="border: none;"></td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">-</td><td style="border: none;">6</td><td style="border: none;">—</td><td style="border: none;">Mage, Priest</td><td style="border: none;">CC, AoE</td></tr>
 </table>
 </td>
 </tr>
@@ -2191,8 +2347,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Verdancy</td><td style="border: none;">-</td><td style="border: none;">7</td><td style="border: none;">1D4 Piercing</td><td style="border: none;">Druid</td><td style="border: none;">Offensive, DoT</td><td style="border: none;"></td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Verdancy</td><td style="border: none;">-</td><td style="border: none;">7</td><td style="border: none;">1D4 Piercing</td><td style="border: none;">Druid</td><td style="border: none;">Offensive, DoT</td></tr>
 </table>
 </td>
 </tr>
@@ -2214,8 +2370,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Umbramancy</td><td style="border: none;">-</td><td style="border: none;">8</td><td style="border: none;">—</td><td style="border: none;">Priest</td><td style="border: none;">CC, AoE</td><td style="border: none;"></td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbramancy</td><td style="border: none;">-</td><td style="border: none;">8</td><td style="border: none;">—</td><td style="border: none;">Priest</td><td style="border: none;">CC, AoE</td></tr>
 </table>
 </td>
 </tr>
@@ -2237,8 +2393,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Stormcraft</td><td style="border: none;">-</td><td style="border: none;">5</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">CC</td><td style="border: none;"></td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">-</td><td style="border: none;">5</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">CC</td></tr>
 </table>
 </td>
 </tr>
@@ -2260,8 +2416,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Mirage</td><td style="border: none;">-</td><td style="border: none;">8</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">CC</td><td style="border: none;"></td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">-</td><td style="border: none;">8</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">CC</td></tr>
 </table>
 </td>
 </tr>
@@ -2283,8 +2439,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Dominion</td><td style="border: none;">-</td><td style="border: none;">4</td><td style="border: none;">—</td><td style="border: none;">Knight</td><td style="border: none;">CC</td><td style="border: none;"></td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Dominion</td><td style="border: none;">-</td><td style="border: none;">4</td><td style="border: none;">—</td><td style="border: none;">Knight</td><td style="border: none;">CC</td></tr>
 </table>
 </td>
 </tr>
@@ -2306,8 +2462,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Stormcraft</td><td style="border: none;">-</td><td style="border: none;">7</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">CC</td><td style="border: none;"></td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">-</td><td style="border: none;">7</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">CC</td></tr>
 </table>
 </td>
 </tr>
@@ -2329,8 +2485,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Mirage</td><td style="border: none;">-</td><td style="border: none;">6</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">CC</td><td style="border: none;"></td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">-</td><td style="border: none;">6</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">CC</td></tr>
 </table>
 </td>
 </tr>
@@ -2352,8 +2508,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Dominion</td><td style="border: none;">-</td><td style="border: none;">5</td><td style="border: none;">—</td><td style="border: none;">Knight</td><td style="border: none;">CC, Debuff</td><td style="border: none;"></td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Dominion</td><td style="border: none;">-</td><td style="border: none;">5</td><td style="border: none;">—</td><td style="border: none;">Knight</td><td style="border: none;">CC, Debuff</td></tr>
 </table>
 </td>
 </tr>
@@ -2375,8 +2531,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Deity</td><td style="border: none;">-</td><td style="border: none;">0</td><td style="border: none;">—</td><td style="border: none;">Priest</td><td style="border: none;">Support</td><td style="border: none;"></td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Deity</td><td style="border: none;">-</td><td style="border: none;">0</td><td style="border: none;">—</td><td style="border: none;">Priest</td><td style="border: none;">Support</td></tr>
 </table>
 </td>
 </tr>
@@ -2398,8 +2554,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Mirage</td><td style="border: none;">-</td><td style="border: none;">5</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">CC</td><td style="border: none;"></td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">-</td><td style="border: none;">5</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">CC</td></tr>
 </table>
 </td>
 </tr>
@@ -2421,8 +2577,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Verdancy</td><td style="border: none;">-</td><td style="border: none;">5</td><td style="border: none;">—</td><td style="border: none;">Druid</td><td style="border: none;">CC</td><td style="border: none;"></td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Verdancy</td><td style="border: none;">-</td><td style="border: none;">5</td><td style="border: none;">—</td><td style="border: none;">Druid</td><td style="border: none;">CC</td></tr>
 </table>
 </td>
 </tr>
@@ -2444,8 +2600,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Varied</td><td style="border: none;">-</td><td style="border: none;">12</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">Summon</td><td style="border: none;"></td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Varied</td><td style="border: none;">-</td><td style="border: none;">12</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">Summon</td></tr>
 </table>
 </td>
 </tr>
@@ -2467,8 +2623,8 @@ These spells are migrated from the quick-reference index. School, class, and pro
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th><th style="border: none;">Afterburn</th></tr>
-<tr><td style="border: none;">Stormcraft</td><td style="border: none;">-</td><td style="border: none;">12</td><td style="border: none;">1D10 Fire</td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE, Nuke</td><td style="border: none;"></td></tr>
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">-</td><td style="border: none;">12</td><td style="border: none;">1D10 Fire</td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE, Nuke</td></tr>
 </table>
 </td>
 </tr>

@@ -66,8 +66,8 @@ ON CONFLICT (name) DO NOTHING;
 -- All spells from dark-orb-master-spellbook.md
 -- ============================================================
 
-INSERT INTO arena_data.spell (school_id, damage_die_id, damage_type_id, attack_type_id, name, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage, description)
-SELECT ss.id, dd.id, dt.id, at.id, s.name, s.mana_cost, s.turn_meter_cost, s.spell_level, s.damage_count, s.attack_bonus, s.flat_damage_bonus, s.elemental_type, s.elemental_damage, s.description
+INSERT INTO arena_data.spell (school_id, damage_die_id, damage_type_id, attack_type_id, name, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage, minimum_level, description)
+SELECT ss.id, dd.id, dt.id, at.id, s.name, s.mana_cost, s.turn_meter_cost, s.spell_level, s.damage_count, s.attack_bonus, s.flat_damage_bonus, s.elemental_type, s.elemental_damage, s.minimum_level, s.description
 FROM (VALUES
     -- Mage Common Core (level 1-2)
     ('Stormcraft', 'D4', 'Force', 'Spell', 'Magic Missile',    10, 60, 1, 3, 2, 0, 'Force',    0, 'Reliable force darts that strike true.  Tags: Single-Target Damage, Nuke'),
@@ -177,7 +177,7 @@ FROM (VALUES
     ('Umbramancy', 'D4', 'Shadow', 'Spell', 'Mind Game',         25, 80, 2, 1, 0, 0, 'Shadow',    0, 'Confuses the target, causing erratic behavior.  Tags: CC, Debuff'),
     ('Mirage', 'D4', 'None', 'Spell', 'Charm Person',            30, 80, 2, 0, 0, 0, 'None',     0, 'Charms a humanoid to fight as an ally.  Tags: CC, Charm'),
     ('Deity', 'D6', 'Holy', 'Spell', 'Turn Undead',              25, 80, 2, 2, 2, 0, 'Holy',     0, 'Drives undead enemies away in fear.  Tags: Offensive, CC')
-) AS s(school_name, die_name, dmg_type_name, atk_type_name, name, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage, description)
+) AS s(school_name, die_name, dmg_type_name, atk_type_name, name, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage, minimum_level, description)
 JOIN arena_data.spell_school ss ON ss.name = s.school_name
 JOIN arena_data.die_type dd ON dd.name = s.die_name
 JOIN arena_data.damage_type dt ON dt.name = s.dmg_type_name
