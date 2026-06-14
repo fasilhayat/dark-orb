@@ -901,7 +901,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/11_bless.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Aethelion</td><td style="border: none;">1</td><td style="border: none;">8</td><td style="border: none;">None</td><td style="border: none;">Priest, Paladin</td><td style="border: none;">Buff, AoE</td></tr>
 </table>
 </td>
@@ -920,7 +920,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Aethelion</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Paladin</td><td style="border: none;">CC</td></tr>
 </table>
 </td>
@@ -939,7 +939,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/12_cure_light_wounds.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Aethelion</td><td style="border: none;">1</td><td style="border: none;">6</td><td style="border: none;">1d8+1 Healing</td><td style="border: none;">Priest, Druid, Paladin</td><td style="border: none;">Healing</td></tr>
 </table>
 </td>
@@ -958,7 +958,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/13_protection_from_evil.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Aethelion</td><td style="border: none;">1</td><td style="border: none;">10</td><td style="border: none;">None</td><td style="border: none;">Priest, Paladin</td><td style="border: none;">Defensive, Buff</td></tr>
 </table>
 </td>
@@ -977,7 +977,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Aethelion</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest</td><td style="border: none;">Debuff</td></tr>
 </table>
 </td>
@@ -996,7 +996,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Aethelion</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Paladin</td><td style="border: none;">Defensive</td></tr>
 </table>
 </td>
@@ -1015,7 +1015,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Aethelion</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Paladin</td><td style="border: none;">Buff</td></tr>
 </table>
 </td>
@@ -1034,7 +1034,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Chronara</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest</td><td style="border: none;">Buff, Debuff</td></tr>
 </table>
 </td>
@@ -1053,7 +1053,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/14_hold_person.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Umbraex</td><td style="border: none;">2</td><td style="border: none;">10</td><td style="border: none;">None</td><td style="border: none;">Priest</td><td style="border: none;">CC</td></tr>
 </table>
 </td>
@@ -1072,7 +1072,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Astrara</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest</td><td style="border: none;">Buff, Debuff</td></tr>
 </table>
 </td>
@@ -1091,7 +1091,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Aethelion</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Paladin</td><td style="border: none;">Healing, Cleanse</td></tr>
 </table>
 </td>
@@ -1110,7 +1110,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Aethelion</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Druid, Paladin</td><td style="border: none;">Healing</td></tr>
 </table>
 </td>
@@ -1129,7 +1129,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Aethelion</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Paladin</td><td style="border: none;">Defensive</td></tr>
 </table>
 </td>
@@ -1148,7 +1148,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Aethelion</td><td style="border: none;">5</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Druid, Paladin</td><td style="border: none;">Healing</td></tr>
 </table>
 </td>
@@ -1167,7 +1167,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/15_flame_strike.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Ignaroth</td><td style="border: none;">5</td><td style="border: none;">20</td><td style="border: none;">1d6 per level Fire/Radiant</td><td style="border: none;">Priest</td><td style="border: none;">Offensive, Nuke</td></tr>
 </table>
 </td>
@@ -1186,7 +1186,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/16_heal.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Aethelion</td><td style="border: none;">6</td><td style="border: none;">30</td><td style="border: none;">Cures all HP</td><td style="border: none;">Priest</td><td style="border: none;">Healing</td></tr>
 </table>
 </td>
@@ -1205,7 +1205,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/17_blade_barrier.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Celestara</td><td style="border: none;">6</td><td style="border: none;">25</td><td style="border: none;">1d6 per level Slashing</td><td style="border: none;">Priest</td><td style="border: none;">Offensive, Defensive, Barrier</td></tr>
 </table>
 </td>
@@ -1224,7 +1224,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Aethelion</td><td style="border: none;">6</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest</td><td style="border: none;">Buff, AoE</td></tr>
 </table>
 </td>
@@ -1243,7 +1243,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Aethelion</td><td style="border: none;">7</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest</td><td style="border: none;">Healing, Cleanse</td></tr>
 </table>
 </td>
@@ -1287,7 +1287,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/18_entangle.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Chronara</td><td style="border: none;">1</td><td style="border: none;">5</td><td style="border: none;">None</td><td style="border: none;">Druid, Priest</td><td style="border: none;">CC, Root</td></tr>
 </table>
 </td>
@@ -1306,7 +1306,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Veparix</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">Debuff</td></tr>
 </table>
 </td>
@@ -1325,7 +1325,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Chronara</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid</td><td style="border: none;">Buff</td></tr>
 </table>
 </td>
@@ -1344,7 +1344,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Celestara</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">Defensive</td></tr>
 </table>
 </td>
@@ -1363,7 +1363,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Lunara</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">Healing</td></tr>
 </table>
 </td>
@@ -1382,7 +1382,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Ignaroth</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">Debuff</td></tr>
 </table>
 </td>
@@ -1401,7 +1401,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/19_call_lightning.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Chronara</td><td style="border: none;">3</td><td style="border: none;">12</td><td style="border: none;">1d6 per level Lightning</td><td style="border: none;">Druid, Priest</td><td style="border: none;">Offensive</td></tr>
 </table>
 </td>
@@ -1420,7 +1420,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Chronara</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">CC</td></tr>
 </table>
 </td>
@@ -1439,7 +1439,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Chronara</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid</td><td style="border: none;">Summoning</td></tr>
 </table>
 </td>
@@ -1458,7 +1458,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Chronara</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">Summoning-lite</td></tr>
 </table>
 </td>
@@ -1477,7 +1477,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Umbraex</td><td style="border: none;">5</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">Offensive, CC</td></tr>
 </table>
 </td>
@@ -1496,7 +1496,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Celestara</td><td style="border: none;">5</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">Defensive</td></tr>
 </table>
 </td>
@@ -1515,7 +1515,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Ignaroth</td><td style="border: none;">6</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid</td><td style="border: none;">Offensive</td></tr>
 </table>
 </td>
@@ -1534,7 +1534,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Chronara</td><td style="border: none;">6</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid</td><td style="border: none;">Summoning</td></tr>
 </table>
 </td>
@@ -1553,7 +1553,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Umbraex</td><td style="border: none;">7</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid</td><td style="border: none;">Offensive, CC</td></tr>
 </table>
 </td>
@@ -1572,7 +1572,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Chronara</td><td style="border: none;">7</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Druid, Priest</td><td style="border: none;">Offensive, AoE</td></tr>
 </table>
 </td>
@@ -1591,7 +1591,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Aethelion</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Priest, Paladin, Knight</td><td style="border: none;">Offensive, CC</td></tr>
 </table>
 </td>
@@ -1619,7 +1619,7 @@ Paladins begin magical access around level 6 in Dark Orb and remain a narrow sup
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/11_bless.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Aethelion</td><td style="border: none;">1</td><td style="border: none;">8</td><td style="border: none;">None</td><td style="border: none;">Priest, Paladin</td><td style="border: none;">Buff, AoE</td></tr>
 </table>
 </td>
@@ -1658,7 +1658,7 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Ignaroth</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight, Paladin</td><td style="border: none;">CC or Buff, Variant</td></tr>
 </table>
 </td>
@@ -1677,7 +1677,7 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/20_smite.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Aethelion</td><td style="border: none;">1</td><td style="border: none;">8</td><td style="border: none;">1d8+1 Radiant</td><td style="border: none;">Paladin, Knight</td><td style="border: none;">Offensive</td></tr>
 </table>
 </td>
@@ -1696,7 +1696,7 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Aethelion</td><td style="border: none;">1</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Buff, Variant</td></tr>
 </table>
 </td>
@@ -1715,7 +1715,7 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Celestara</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Buff, Variant</td></tr>
 </table>
 </td>
@@ -1734,7 +1734,7 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Celestara</td><td style="border: none;">2</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Buff, Variant</td></tr>
 </table>
 </td>
@@ -1753,7 +1753,7 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Celestara</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Defensive, Variant</td></tr>
 </table>
 </td>
@@ -1772,7 +1772,7 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Chronara</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Buff, Variant</td></tr>
 </table>
 </td>
@@ -1810,7 +1810,7 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Celestara</td><td style="border: none;">3</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Defensive, Variant</td></tr>
 </table>
 </td>
@@ -1829,7 +1829,7 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Chronara</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Buff, AoE, Variant</td></tr>
 </table>
 </td>
@@ -1848,7 +1848,7 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Lunara</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Defensive, Variant</td></tr>
 </table>
 </td>
@@ -1867,7 +1867,7 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
-<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
 <tr><td style="border: none;">Aethelion</td><td style="border: none;">4</td><td style="border: none;">-</td><td style="border: none;"></td><td style="border: none;">Knight</td><td style="border: none;">Buff, Variant</td></tr>
 </table>
 </td>
