@@ -267,3 +267,48 @@ The world is governed by eight major deities, divided into two courts:
 ## 5. Leveling & Experience
 
 See [`../systems/leveling-plan.md`](../systems/leveling-plan.md) for the full leveling and XP system.
+
+---
+
+## 6. Deity Bonus System
+
+When a divine caster (Priest, Druid, Paladin, Knight) wields a spell aligned with their patron deity's domain, they gain an extra bonus. All divine casters can learn any deity's spells, but the bonus only applies when the spell matches their deity's traits.
+
+### Light Deity Bonuses (Sky Court)
+
+| Deity | Affinity | Bonus |
+|-------|----------|-------|
+| **Aethelion** | Healing, Protection, Order | Healing spells restore +25% HP. Protection/Smite spells deal +1d4 radiant damage. |
+| **Astrara** | Stars, Fate, Guidance | Buff spells grant +1 AttackPower. Divination effects last +1 round. |
+| **Celestara** | Destiny, Time | Duration of time-aligned spells (Haste, Slow) extended by +1 round. |
+| **Lunara** | Moon, Magic, Tides | Mana cost reduced by -2 on aligned spells. Magic damage +1d4 on night-cycle. |
+
+### Dark Deity Bonuses (Shadow Court)
+
+| Deity | Affinity | Bonus |
+|-------|----------|-------|
+| **Ignaroth** | Fire, Destruction | Fire spells deal +1d6 fire damage. 10% chance to ignite target (1d4 afterburn). |
+| **Umbraex** | Darkness, Secrets | Shadow/Necrotic spells deal +1d6 shadow damage. Target suffers -1 DefensePower. |
+| **Veparix** | Deception, Illusion | Illusion/Confusion spells last +1 round. Application chance +5%. |
+| **Noctivane** | Shadow, Stealth | Stealth/Shadow attacks deal +1d6 bonus damage. Invisibility duration +1 round. |
+
+### Neutral Deity Bonuses (Boundary)
+
+| Deity | Affinity | Bonus |
+|-------|----------|-------|
+| **Chronara** | Time, Stars, Balance | Offensive spells gain +1d6 bonus damage matching their type. Support spells gain +1 round duration or +10% effectiveness. Works equally on light and dark aligned spells. |
+
+### Spell Alignment Quick Reference
+
+Spells align to deities by their damage type, school, and effect:
+
+| Damage / School | Aligned Deities |
+|-----------------|-----------------|
+| Fire, Bludgeoning (destructive) | Ignaroth |
+| Radiant, Holy, Healing | Aethelion |
+| Shadow, Necrotic, Psychic | Umbraex, Noctivane |
+| Lightning, Cold, Stormcraft | Chronara (neutral), Lunara |
+| Illusion, Mirage, Mind-altering | Veparix |
+| Time, TM manipulation, Fate | Celestara, Astrara, Chronara |
+| Invisibility, Stealth, Blink | Noctivane, Veparix |
+| Protection, Armor, Wards | Aethelion, Celestara |

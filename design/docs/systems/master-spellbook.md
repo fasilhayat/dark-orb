@@ -105,7 +105,7 @@ These classes **do not** use spell schools as their primary identity system. Sch
 
 ### Canonical deities
 
-Deities are defined in [`../reference/deities.md`](../reference/deities.md). The authoritative list:
+Deities are defined in [`../reference/deities.md`](#../reference/deities.md). The authoritative list:
 
 #### Light deities (Sky / Heaven aligned)
 
@@ -197,16 +197,16 @@ These are the low-tier spells most mages should have access to before school spe
 |------|--------|-------------|-------------|-----------|---------------|-------|------------|-----------|------|
 | [Magic Missile](#magic-missile) | Stormcraft | 1 | Common Core | Early | - | Mage | Force | No. | Single-Target Damage, Nuke |
 | [Armor](#armor) | Aegis | 1 | Common Core | Early | - | Mage | None | No. | Defensive, Buff |
-| Shield | Aegis | 1 | Common Core | Early | - | Mage | None | No. | Defensive |
+| [Shield](#shield) | Aegis | 1 | Common Core | Early | - | Mage | None | No. | Defensive |
 | [Burning Hands](#burning-hands) | Stormcraft | 1 | Common Core | Early | - | Mage | Fire | No clear persistent burn in baseline list. | Offensive, AoE |
-| Grease | Mirage | 1 | Common Core | Early | - | Mage | None/Control | Yes, persistent slippery zone. | CC, Slip, AoE |
+| [Grease](#grease) | Mirage | 1 | Common Core | Early | - | Mage | None/Control | Yes, persistent slippery zone. | CC, Slip, AoE |
 | [Sleep](#sleep) | Mirage | 1 | Common Core | Early | - | Mage | None/Control | Yes, duration disable. | CC, AoE |
-| Color Spray | Mirage | 1 | Common Core | Early | - | Mage | Light/Control | No. | CC, AoE |
-| Detect Magic | Aegis / Mirage | 1 | Common Core | Early | - | Mage | None | No. | Utility |
+| [Color Spray](#color-spray) | Mirage | 1 | Common Core | Early | - | Mage | Light/Control | No. | CC, AoE |
+| [Detect Magic](#detect-magic) | Aegis / Mirage | 1 | Common Core | Early | - | Mage | None | No. | Utility |
 | [Invisibility](#invisibility) | Mirage | 2 | Common Core | Early | - | Mage | None | Yes, duration stealth state. | Invisibility |
-| Mirror Image | Mirage | 2 | Common Core | Early | - | Mage | None | Yes, images persist until removed. | Defensive, Image |
-| Web | Mirage / Dominion | 2 | Common Core | Early | - | Mage | None/Control | Yes, persistent sticky field while active. | CC, Root, AoE |
-| Stinking Cloud | Umbramancy / Mirage | 2 | Common Core | Early | - | Mage | Poison/Control | Yes, persistent cloud zone. | CC, AoE |
+| [Mirror Image](#mirror-image) | Mirage | 2 | Common Core | Early | - | Mage | None | Yes, images persist until removed. | Defensive, Image |
+| [Web](#web) | Mirage / Dominion | 2 | Common Core | Early | - | Mage | None/Control | Yes, persistent sticky field while active. | CC, Root, AoE |
+| [Stinking Cloud](#stinking-cloud) | Umbramancy / Mirage | 2 | Common Core | Early | - | Mage | Poison/Control | Yes, persistent cloud zone. | CC, AoE |
 
 <span id="magic-missile"></span>
 ### Magic Missile
@@ -443,27 +443,27 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 | Spell | School | Spell Level | Access Layer | Access Tier | Minimum Level | Class | Damage Type | Afterburn | Tags |
 |------|--------|-------------|-------------|-----------|---------------|-------|------------|-----------|------|
-| Lightning Bolt | Stormcraft | 3 | School Specialization | Mid | - | Mage | Lightning | Optional electric aftershock in variants. | Offensive, AoE, Nuke |
+| [Lightning Bolt](#lightning-bolt) | Stormcraft | 3 | School Specialization | Mid | - | Mage | Lightning | Optional electric aftershock in variants. | Offensive, AoE, Nuke |
 | [Fireball](#fireball) | Stormcraft | 3 | School Specialization | Mid | - | Mage | Fire | No in baseline effect text. | Offensive, AoE, Nuke |
-| Blink | Mirage | 3 | School Specialization | Mid | - | Mage | None | Yes, duration displacement effect. | Blink, Defensive |
+| [Blink](#blink) | Mirage | 3 | School Specialization | Mid | - | Mage | None | Yes, duration displacement effect. | Blink, Defensive |
 | [Slow](#slow) | Dominion / Mirage | 3 | School Specialization | Mid | - | Mage | None/Control | Yes, duration-based tempo suppression. | CC, Debuff, Turn-Meter Control |
 | [Haste](#haste) | Dominion | 3 | School Specialization | Mid | - | Mage, Paladin, Knight, Bard | None/Buff | Yes, duration-based speed buff. | Buff, TM Uplift |
-| Mass Haste | Dominion | 5 | School Specialization | Late | - | Mage, Priest, Druid | None/Buff | Yes, duration-based speed buff. Caster suffers DefensePower debuff. | Buff, TM Uplift, Group |
-| Vampiric Touch | Umbramancy | 3 | School Specialization | Mid | - | Mage | Necrotic/Drain-theme | Leech effect instead of burn. | Single-Target Damage, Leech |
-| Fear | Umbramancy / Dominion | 4 | School Specialization | Mid | - | Mage | None/Control | No. | CC, Debuff |
-| Ice Storm | Stormcraft | 4 | School Specialization | Mid | - | Mage | Cold/Physical | No. | Offensive, AoE |
+| [Mass Haste](#mass-haste) | Dominion | 5 | School Specialization | Late | - | Mage, Priest, Druid | None/Buff | Yes, duration-based speed buff. Caster suffers DefensePower debuff. | Buff, TM Uplift, Group |
+| [Vampiric Touch](#vampiric-touch) | Umbramancy | 3 | School Specialization | Mid | - | Mage | Necrotic/Drain-theme | Leech effect instead of burn. | Single-Target Damage, Leech |
+| [Fear](#fear) | Umbramancy / Dominion | 4 | School Specialization | Mid | - | Mage | None/Control | No. | CC, Debuff |
+| [Ice Storm](#ice-storm) | Stormcraft | 4 | School Specialization | Mid | - | Mage | Cold/Physical | No. | Offensive, AoE |
 | [Confusion](#confusion) | Mirage / Dominion | 4/7 | School Specialization | Late | - | Mage | None/Control | Yes, duration-based control effect. | CC, AoE |
-| Cloudkill | Umbramancy | 5 | School Specialization | Late | - | Mage | Poison | Yes, persistent cloud hazard. | Offensive, AoE |
-| Cone of Cold | Stormcraft | 5 | School Specialization | Late | - | Mage | Cold | No. | Offensive, AoE, Nuke |
+| [Cloudkill](#cloudkill) | Umbramancy | 5 | School Specialization | Late | - | Mage | Poison | Yes, persistent cloud hazard. | Offensive, AoE |
+| [Cone of Cold](#cone-of-cold) | Stormcraft | 5 | School Specialization | Late | - | Mage | Cold | No. | Offensive, AoE, Nuke |
 | [Feeblemind](#feeblemind) | Umbramancy | 5 | School Specialization | Late | - | Mage | None/Anti-Mage | Yes, lasting debilitation. | CC, Anti-Mage |
-| Delayed Blast Fireball | Stormcraft | 7 | School Specialization | Late | - | Mage | Fire | No baseline burn rider. | Offensive, AoE, Nuke |
-| Maze | Mirage | 8 | School Specialization | Late | - | Mage | None/Control | Yes, exile duration. | CC |
-| Mind Siphon Variant | Umbramancy | 4 | School Specialization | Mid | - | Mage, Dark Priest | Shadow/Drain | Yes, lingering mana suppression in variant design. | MP Leech, Variant |
-| Arc Lash Variant | Stormcraft | 3 | School Specialization | Mid | - | Mage | Lightning | Yes, electric aftershock in variant design. | Single-Target Damage, TM Control, Variant |
-| Mirror Guard Variant | Mirage / Aegis | 3 | School Specialization | Mid | - | Mage | Illusory/None | Yes, images persist until broken. | Defensive, Variant |
-| Greasefire Variant | Stormcraft / Mirage | 2 | School Specialization | Mid | - | Mage | Fire | Yes, brief burning ground effect in variant design. | Offensive, AoE, Variant |
-| Mind Game | Umbramancy | 2 | School Specialization | Mid | - | Mage | Shadow | Yes, Confused (gray) | CC, Debuff |
-| Charm Person | Mirage | 2 | School Specialization | Mid | - | Mage | None | Yes, Charmed (pink) | CC, Charm |
+| [Delayed Blast Fireball](#delayed-blast-fireball) | Stormcraft | 7 | School Specialization | Late | - | Mage | Fire | No baseline burn rider. | Offensive, AoE, Nuke |
+| [Maze](#maze) | Mirage | 8 | School Specialization | Late | - | Mage | None/Control | Yes, exile duration. | CC |
+| [Mind Siphon Variant](#mind-siphon-variant) | Umbramancy | 4 | School Specialization | Mid | - | Mage, Dark Priest | Shadow/Drain | Yes, lingering mana suppression in variant design. | MP Leech, Variant |
+| [Arc Lash Variant](#arc-lash-variant) | Stormcraft | 3 | School Specialization | Mid | - | Mage | Lightning | Yes, electric aftershock in variant design. | Single-Target Damage, TM Control, Variant |
+| [Mirror Guard Variant](#mirror-guard-variant) | Mirage / Aegis | 3 | School Specialization | Mid | - | Mage | Illusory/None | Yes, images persist until broken. | Defensive, Variant |
+| [Greasefire Variant](#greasefire-variant) | Stormcraft / Mirage | 2 | School Specialization | Mid | - | Mage | Fire | Yes, brief burning ground effect in variant design. | Offensive, AoE, Variant |
+| [Mind Game](#mind-game) | Umbramancy | 2 | School Specialization | Mid | - | Mage | Shadow | Yes, Confused (gray) | CC, Debuff |
+| [Charm Person](#charm-person) | Mirage | 2 | School Specialization | Mid | - | Mage | None | Yes, Charmed (pink) | CC, Charm |
 
 <span id="lightning-bolt"></span>
 ### Lightning Bolt
@@ -539,7 +539,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 </tr>
 </table>
 
-*A cloying purple haze settles over the target, weighing down their limbs. Reduces turn meter gain by 50%, halves movement speed, and applies -2 DefensePower. Duration 1 round per caster level.*
+*A cloying purple haze settles over the target, weighing down their limbs. Reduces turn meter gain by 50%, halves movement speed, and applies -2 DefensePower. Duration 1 round per caster level. Deity Bonus: (Chronara, Celestara) +1 round duration.*
 
 <span id="haste"></span>
 ### Haste
@@ -558,7 +558,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 </tr>
 </table>
 
-*Time warps around the target as golden energy suffuses their limbs. Massively accelerates turn meter gain by 50% and grants +2 AttackPower and +2 DefensePower. Lasts 1 round per caster level (max 10 rounds).*
+*Time warps around the target as golden energy suffuses their limbs. Massively accelerates turn meter gain by 50% and grants +2 AttackPower and +2 DefensePower. Lasts 1 round per caster level (max 10 rounds). Deity Bonus: (Celestara, Chronara) +1 round duration.*
 
 <span id="mass-haste"></span>
 ### Mass Haste
@@ -872,24 +872,24 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 | Spell | School | Spell Level | Access Layer | Access Tier | Minimum Level | Class | Damage Type | Afterburn | Tags |
 |------|--------|-------------|-------------|-----------|---------------|-------|------------|-----------|------|
 | [Bless](#bless) | Deity | 1 | Class Core | Early | - | Priest, Paladin | None | Yes, duration buff. | Buff, AoE |
-| Command | Deity | 1 | Class Core | Early | - | Priest, Paladin | None/Control | No. | CC |
+| [Command](#command) | Deity | 1 | Class Core | Early | - | Priest, Paladin | None/Control | No. | CC |
 | [Cure Light Wounds](#cure-light-wounds) | Deity | 1 | Class Core | Early | - | Priest, Druid, Paladin | Healing | No direct after-effect beyond restored HP. | Healing |
 | [Protection from Evil](#protection-from-evil) | Deity | 1 | Class Core | Early | - | Priest, Paladin | None | No. | Defensive, Buff |
-| Chasten | Deity | 1 | Core | Early | - | Priest | Radiant | No | Debuff |
-| Sanctuary | Deity | 1 | Class Core | Early | - | Priest, Paladin | None | Yes, duration shield-state. | Defensive |
-| Aid | Deity | 2 | Class Core | Early | - | Priest, Paladin | None | Yes, duration support buff. | Buff |
-| Chant | Deity | 2 | Class Core | Early | - | Priest | None | Yes, duration aura. | Buff, Debuff |
+| [Chasten](#chasten) | Deity | 1 | Core | Early | - | Priest | Radiant | No | Debuff |
+| [Sanctuary](#sanctuary) | Deity | 1 | Class Core | Early | - | Priest, Paladin | None | Yes, duration shield-state. | Defensive |
+| [Aid](#aid) | Deity | 2 | Class Core | Early | - | Priest, Paladin | None | Yes, duration support buff. | Buff |
+| [Chant](#chant) | Deity | 2 | Class Core | Early | - | Priest | None | Yes, duration aura. | Buff, Debuff |
 | [Hold Person](#hold-person) | Deity | 2/3 | Class Core | Mid | - | Priest | None/Control | No. | CC |
-| Prayer | Deity | 3 | Class Core | Mid | - | Priest | None | Yes, duration field effect. | Buff, Debuff |
-| Remove Paralysis | Deity | 3 | Class Core | Mid | - | Priest, Paladin | Cleanse | No. | Healing, Cleanse |
-| Cure Serious Wounds | Deity | 4 | Class Core | Mid | - | Priest, Druid, Paladin | Healing | No. | Healing |
-| Free Action | Deity | 4 | Class Core | Mid | - | Priest, Paladin | None | Yes, duration buff. | Defensive |
-| Cure Critical Wounds | Deity | 5 | School Specialization | Late | - | Priest, Druid, Paladin | Healing | No. | Healing |
+| [Prayer](#prayer) | Deity | 3 | Class Core | Mid | - | Priest | None | Yes, duration field effect. | Buff, Debuff |
+| [Remove Paralysis](#remove-paralysis) | Deity | 3 | Class Core | Mid | - | Priest, Paladin | Cleanse | No. | Healing, Cleanse |
+| [Cure Serious Wounds](#cure-serious-wounds) | Deity | 4 | Class Core | Mid | - | Priest, Druid, Paladin | Healing | No. | Healing |
+| [Free Action](#free-action) | Deity | 4 | Class Core | Mid | - | Priest, Paladin | None | Yes, duration buff. | Defensive |
+| [Cure Critical Wounds](#cure-critical-wounds) | Deity | 5 | School Specialization | Late | - | Priest, Druid, Paladin | Healing | No. | Healing |
 | [Flame Strike](#flame-strike) | Deity | 5 | School Specialization | Late | - | Priest | Fire/Radiant | No explicit lingering burn. | Offensive, Nuke |
 | [Heal](#heal) | Deity | 6 | School Specialization | Late | - | Priest | Healing | No. | Healing |
 | [Blade Barrier](#blade-barrier) | Deity | 6 | School Specialization | Late | - | Priest | Physical/Magical | Yes, persistent hazard while active. | Offensive, Defensive, Barrier |
-| Heroes' Feast | Deity | 6 | School Specialization | Late | - | Priest | Buff | Yes, prebuff duration benefits. | Buff, AoE |
-| Restoration | Deity | 7 | School Specialization | Late | - | Priest | Healing | No. | Healing, Cleanse |
+| [Heroes' Feast](#heroes-feast) | Deity | 6 | School Specialization | Late | - | Priest | Buff | Yes, prebuff duration benefits. | Buff, AoE |
+| [Restoration](#restoration) | Deity | 7 | School Specialization | Late | - | Priest | Healing | No. | Healing, Cleanse |
 
 <span id="bless"></span>
 ### Bless
@@ -902,13 +902,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>1</td><td>8</td><td>None</td><td>Priest, Paladin</td><td>Buff, AoE</td></tr>
+<tr><td>Aethelion</td><td>1</td><td>8</td><td>None</td><td>Priest, Paladin</td><td>Buff, AoE</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*The priest raises a holy symbol as golden light descends upon their allies. Allies in range gain +1 AttackPower, +10% turn meter rate, and +1 to all saving throws. Affects up to 6 allies.*
+*The priest raises a holy symbol as golden light descends upon their allies. Allies in range gain +1 AttackPower, +10% turn meter rate, and +1 to all saving throws. Affects up to 6 allies. Deity Bonus: (Aethelion) +25% healing and +1 round duration.*
 
 <span id="command"></span>
 ### Command
@@ -921,13 +921,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>1</td><td>-</td><td></td><td>Priest, Paladin</td><td>CC</td></tr>
+<tr><td>Aethelion</td><td>1</td><td>-</td><td></td><td>Priest, Paladin</td><td>CC</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest, Paladin Damage type: None/Control.*
+*- Priest, Paladin Damage type: None/Control. Deity Bonus: (Aethelion, Umbraex) Aethelion: +1 round; Umbraex: -1 DefensePower.*
 
 <span id="cure-light-wounds"></span>
 ### Cure Light Wounds
@@ -940,13 +940,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>1</td><td>6</td><td>1d8+1 Healing</td><td>Priest, Druid, Paladin</td><td>Healing</td></tr>
+<tr><td>Aethelion</td><td>1</td><td>6</td><td>1d8+1 Healing</td><td>Priest, Druid, Paladin</td><td>Healing</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*A soft green glow radiates from the healer's palms as wounds knit and bruises fade. Restores 1d8+1 hit points to a single target, scaling +1d8+1 per caster level (cap 5d8+5 at level 5).*
+*A soft green glow radiates from the healer's palms as wounds knit and bruises fade. Restores 1d8+1 hit points to a single target, scaling +1d8+1 per caster level (cap 5d8+5 at level 5). Deity Bonus: (Aethelion, Lunara) +25% healing on full moon cycles.*
 
 <span id="protection-from-evil"></span>
 ### Protection from Evil
@@ -959,13 +959,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>1</td><td>10</td><td>None</td><td>Priest, Paladin</td><td>Defensive, Buff</td></tr>
+<tr><td>Aethelion</td><td>1</td><td>10</td><td>None</td><td>Priest, Paladin</td><td>Defensive, Buff</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*A shimmering golden ward encircles the target, deflecting the attentions of malevolent forces. Provides +2 AC and +2 saving throws against evil creatures. Grants immunity to mental control and possession.*
+*A shimmering golden ward encircles the target, deflecting the attentions of malevolent forces. Provides +2 AC and +2 saving throws against evil creatures. Grants immunity to mental control and possession. Deity Bonus: (Aethelion) +1 round duration and +2 additional AC.*
 
 <span id="chasten"></span>
 ### Chasten
@@ -978,13 +978,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>1</td><td>-</td><td></td><td>Priest</td><td>Debuff</td></tr>
+<tr><td>Aethelion</td><td>1</td><td>-</td><td></td><td>Priest</td><td>Debuff</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest Damage type: Radiant.*
+*- Priest Damage type: Radiant. Deity Bonus: (Aethelion, Umbraex) Aethelion: +1d4 radiant; Umbraex: +1d4 shadow.*
 
 <span id="sanctuary"></span>
 ### Sanctuary
@@ -997,13 +997,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>1</td><td>-</td><td></td><td>Priest, Paladin</td><td>Defensive</td></tr>
+<tr><td>Aethelion</td><td>1</td><td>-</td><td></td><td>Priest, Paladin</td><td>Defensive</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest, Paladin Yes, duration shield-state.*
+*- Priest, Paladin Yes, duration shield-state. Deity Bonus: (Aethelion, Celestara) +1 round duration.*
 
 <span id="aid"></span>
 ### Aid
@@ -1016,13 +1016,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>2</td><td>-</td><td></td><td>Priest, Paladin</td><td>Buff</td></tr>
+<tr><td>Aethelion</td><td>2</td><td>-</td><td></td><td>Priest, Paladin</td><td>Buff</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest, Paladin Yes, duration support buff.*
+*- Priest, Paladin Yes, duration support buff. Deity Bonus: (Aethelion) +5 temporary HP.*
 
 <span id="chant"></span>
 ### Chant
@@ -1035,13 +1035,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>2</td><td>-</td><td></td><td>Priest</td><td>Buff, Debuff</td></tr>
+<tr><td>Chronara</td><td>2</td><td>-</td><td></td><td>Priest</td><td>Buff, Debuff</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest Yes, duration aura.*
+*- Priest Yes, duration aura. Deity Bonus: (Chronara, Astrara) +1 round duration.*
 
 <span id="hold-person"></span>
 ### Hold Person
@@ -1054,13 +1054,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>2</td><td>10</td><td>None</td><td>Priest</td><td>CC</td></tr>
+<tr><td>Umbraex</td><td>2</td><td>10</td><td>None</td><td>Priest</td><td>CC</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*Golden bands of divine light wrap around the target, locking their limbs in place. Paralyzes a humanoid target completely — no movement, no actions, no defense. Save each round to break free.*
+*Golden bands of divine light wrap around the target, locking their limbs in place. Paralyzes a humanoid target completely — no movement, no actions, no defense. Save each round to break free. Deity Bonus: (Umbraex, Veparix) Veparix: +5% hold chance; Umbraex: -1 DefensePower.*
 
 <span id="prayer"></span>
 ### Prayer
@@ -1073,13 +1073,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>3</td><td>-</td><td></td><td>Priest</td><td>Buff, Debuff</td></tr>
+<tr><td>Astrara</td><td>3</td><td>-</td><td></td><td>Priest</td><td>Buff, Debuff</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest Yes, duration field effect.*
+*- Priest Yes, duration field effect. Deity Bonus: (Astrara, Chronara) Astrara: +1 AttackPower; Chronara: +1 round.*
 
 <span id="remove-paralysis"></span>
 ### Remove Paralysis
@@ -1092,13 +1092,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>3</td><td>-</td><td></td><td>Priest, Paladin</td><td>Healing, Cleanse</td></tr>
+<tr><td>Aethelion</td><td>3</td><td>-</td><td></td><td>Priest, Paladin</td><td>Healing, Cleanse</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest, Paladin Damage type: Cleanse.*
+*- Priest, Paladin Damage type: Cleanse. Deity Bonus: (Aethelion) Heals 1d4 HP on removal.*
 
 <span id="cure-serious-wounds"></span>
 ### Cure Serious Wounds
@@ -1111,13 +1111,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>4</td><td>-</td><td></td><td>Priest, Druid, Paladin</td><td>Healing</td></tr>
+<tr><td>Aethelion</td><td>4</td><td>-</td><td></td><td>Priest, Druid, Paladin</td><td>Healing</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest, Druid, Paladin Damage type: Healing.*
+*- Priest, Druid, Paladin Damage type: Healing. Deity Bonus: (Aethelion) +25% healing.*
 
 <span id="free-action"></span>
 ### Free Action
@@ -1130,13 +1130,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>4</td><td>-</td><td></td><td>Priest, Paladin</td><td>Defensive</td></tr>
+<tr><td>Aethelion</td><td>4</td><td>-</td><td></td><td>Priest, Paladin</td><td>Defensive</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest, Paladin Yes, duration buff.*
+*- Priest, Paladin Yes, duration buff. Deity Bonus: (Aethelion, Celestara) +1 round duration.*
 
 <span id="cure-critical-wounds"></span>
 ### Cure Critical Wounds
@@ -1149,13 +1149,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>5</td><td>-</td><td></td><td>Priest, Druid, Paladin</td><td>Healing</td></tr>
+<tr><td>Aethelion</td><td>5</td><td>-</td><td></td><td>Priest, Druid, Paladin</td><td>Healing</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest, Druid, Paladin Damage type: Healing.*
+*- Priest, Druid, Paladin Damage type: Healing. Deity Bonus: (Aethelion) +25% healing.*
 
 <span id="flame-strike"></span>
 ### Flame Strike
@@ -1168,13 +1168,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>5</td><td>20</td><td>1d6 per level Fire/Radiant</td><td>Priest</td><td>Offensive, Nuke</td></tr>
+<tr><td>Ignaroth</td><td>5</td><td>20</td><td>1d6 per level Fire/Radiant</td><td>Priest</td><td>Offensive, Nuke</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*A pillar of divine fire descends from the heavens. A vertical column dealing 1d6 fire + 1d6 radiant damage per caster level (cap 15d6+15d6). Undead take double damage. Base 6d6+6d6 at level 6, scaling +1d6/+1d6 per level.*
+*A pillar of divine fire descends from the heavens. A vertical column dealing 1d6 fire + 1d6 radiant damage per caster level (cap 15d6+15d6). Undead take double damage. Base 6d6+6d6 at level 6, scaling +1d6/+1d6 per level. Deity Bonus: (Ignaroth) +1d6 fire damage; 10% chance to ignite for 1d4.*
 
 <span id="heal"></span>
 ### Heal
@@ -1187,13 +1187,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>6</td><td>30</td><td>Cures all HP</td><td>Priest</td><td>Healing</td></tr>
+<tr><td>Aethelion</td><td>6</td><td>30</td><td>Cures all HP</td><td>Priest</td><td>Healing</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*The most powerful restorative miracle in the divine arsenal. Instantly restores the target to full health and cures blindness, deafness, paralysis, disease, and poison.*
+*The most powerful restorative miracle in the divine arsenal. Instantly restores the target to full health and cures blindness, deafness, paralysis, disease, and poison. Deity Bonus: (Aethelion, Lunara) Fully heals all conditions; Lunara adds mana restoration.*
 
 <span id="blade-barrier"></span>
 ### Blade Barrier
@@ -1206,13 +1206,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>6</td><td>25</td><td>1d6 per level Slashing</td><td>Priest</td><td>Offensive, Defensive, Barrier</td></tr>
+<tr><td>Celestara</td><td>6</td><td>25</td><td>1d6 per level Slashing</td><td>Priest</td><td>Offensive, Defensive, Barrier</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*A ring of spinning silver blades materializes, orbiting in a deadly dance. An immobile 20-foot ring dealing 1d6 slashing per caster level (cap 15d6) to any creature passing through. Lasts 1 round per level.*
+*A ring of spinning silver blades materializes, orbiting in a deadly dance. An immobile 20-foot ring dealing 1d6 slashing per caster level (cap 15d6) to any creature passing through. Lasts 1 round per level. Deity Bonus: (Celestara, Umbraex) +1 round duration.*
 
 <span id="heroes-feast"></span>
 ### Heroes' Feast
@@ -1225,13 +1225,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>6</td><td>-</td><td></td><td>Priest</td><td>Buff, AoE</td></tr>
+<tr><td>Aethelion</td><td>6</td><td>-</td><td></td><td>Priest</td><td>Buff, AoE</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest Damage type: Buff. Yes, prebuff duration benefits.*
+*- Priest Damage type: Buff. Yes, prebuff duration benefits. Deity Bonus: (Aethelion, Lunara) +10 temporary HP on full moon.*
 
 <span id="restoration"></span>
 ### Restoration
@@ -1244,13 +1244,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>7</td><td>-</td><td></td><td>Priest</td><td>Healing, Cleanse</td></tr>
+<tr><td>Aethelion</td><td>7</td><td>-</td><td></td><td>Priest</td><td>Healing, Cleanse</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest Damage type: Healing.*
+*- Priest Damage type: Healing. Deity Bonus: (Aethelion) Also cures one additional random condition.*
 
 
 ## Druid spellbook
@@ -1260,22 +1260,22 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 | Spell | School | Spell Level | Access Layer | Access Tier | Minimum Level | Class | Damage Type | Afterburn | Tags |
 |------|--------|-------------|-------------|-----------|---------------|-------|------------|-----------|------|
 | [Entangle](#entangle) | Deity | 1 | Class Core | Early | - | Druid, Priest | None/Control | Yes, persistent rooting zone while active. | CC, Root |
-| Faerie Fire | Deity | 1 | Class Core | Early | - | Druid, Priest | None/Reveal | Yes, duration reveal. | Debuff |
-| Shillelagh | Deity | 1 | Class Core | Early | - | Druid | Physical/Magical | No. | Buff |
-| Barkskin | Deity | 2 | Class Core | Early | - | Druid, Priest | None | Yes, duration-based defensive skin. | Defensive |
-| Goodberry | Deity | 2 | Class Core | Early | - | Druid, Priest | Healing | No. | Healing |
-| Heat Metal | Deity | 2 | Class Core | Early | - | Druid, Priest | Fire | Yes, continuing heat damage or pressure. | Debuff |
+| [Faerie Fire](#faerie-fire) | Deity | 1 | Class Core | Early | - | Druid, Priest | None/Reveal | Yes, duration reveal. | Debuff |
+| [Shillelagh](#shillelagh) | Deity | 1 | Class Core | Early | - | Druid | Physical/Magical | No. | Buff |
+| [Barkskin](#barkskin) | Deity | 2 | Class Core | Early | - | Druid, Priest | None | Yes, duration-based defensive skin. | Defensive |
+| [Goodberry](#goodberry) | Deity | 2 | Class Core | Early | - | Druid, Priest | Healing | No. | Healing |
+| [Heat Metal](#heat-metal) | Deity | 2 | Class Core | Early | - | Druid, Priest | Fire | Yes, continuing heat damage or pressure. | Debuff |
 | [Call Lightning](#call-lightning) | Deity | 3 | Class Core | Mid | - | Druid, Priest | Lightning | Yes in repeated-round use, though not burn. | Offensive |
-| Hold Animal | Deity | 3 | Class Core | Mid | - | Druid, Priest | None/Control | Yes, duration root/paralysis. | CC |
-| Call Woodland Beings | Deity | 4 | School Specialization | Mid | - | Druid | Variable | Yes, summoned allies persist for duration. | Summoning |
-| Giant Insect | Deity | 4 | School Specialization | Mid | - | Druid, Priest | Physical | Yes, transformed creatures persist for duration. | Summoning-lite |
-| Insect Plague | Deity | 5 | School Specialization | Late | - | Druid, Priest | Physical/Poison-theme | Yes, persistent swarm presence. | Offensive, CC |
-| Anti-Plant Shell | Deity | 5 | School Specialization | Late | - | Druid, Priest | None | Yes, persistent shell. | Defensive |
-| Fire Seeds | Deity | 6 | School Specialization | Late | - | Druid | Fire | Sometimes, depending on trap-style implementation. | Offensive |
-| Liveoak | Deity | 6 | School Specialization | Late | - | Druid | Physical | Yes, awakened guardian persists. | Summoning |
-| Creeping Doom | Deity | 7 | School Specialization | Late | - | Druid | Physical | Yes, persistent swarm pressure. | Offensive, CC |
-| Earthquake | Deity | 7 | School Specialization | Late | - | Druid, Priest | Physical | Yes, persistent terrain disruption during effect. | Offensive, AoE |
-| Turn Undead | Deity | 2 | Class Core | Early | - | Priest, Paladin, Knight | Holy | Yes, Fear (2 turns) | Offensive, CC |
+| [Hold Animal](#hold-animal) | Deity | 3 | Class Core | Mid | - | Druid, Priest | None/Control | Yes, duration root/paralysis. | CC |
+| [Call Woodland Beings](#call-woodland-beings) | Deity | 4 | School Specialization | Mid | - | Druid | Variable | Yes, summoned allies persist for duration. | Summoning |
+| [Giant Insect](#giant-insect) | Deity | 4 | School Specialization | Mid | - | Druid, Priest | Physical | Yes, transformed creatures persist for duration. | Summoning-lite |
+| [Insect Plague](#insect-plague) | Deity | 5 | School Specialization | Late | - | Druid, Priest | Physical/Poison-theme | Yes, persistent swarm presence. | Offensive, CC |
+| [Anti-Plant Shell](#anti-plant-shell) | Deity | 5 | School Specialization | Late | - | Druid, Priest | None | Yes, persistent shell. | Defensive |
+| [Fire Seeds](#fire-seeds) | Deity | 6 | School Specialization | Late | - | Druid | Fire | Sometimes, depending on trap-style implementation. | Offensive |
+| [Liveoak](#liveoak) | Deity | 6 | School Specialization | Late | - | Druid | Physical | Yes, awakened guardian persists. | Summoning |
+| [Creeping Doom](#creeping-doom) | Deity | 7 | School Specialization | Late | - | Druid | Physical | Yes, persistent swarm pressure. | Offensive, CC |
+| [Earthquake](#earthquake) | Deity | 7 | School Specialization | Late | - | Druid, Priest | Physical | Yes, persistent terrain disruption during effect. | Offensive, AoE |
+| [Turn Undead](#turn-undead) | Deity | 2 | Class Core | Early | - | Priest, Paladin, Knight | Holy | Yes, Fear (2 turns) | Offensive, CC |
 
 <span id="entangle"></span>
 ### Entangle
@@ -1288,13 +1288,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>1</td><td>5</td><td>None</td><td>Druid, Priest</td><td>CC, Root</td></tr>
+<tr><td>Chronara</td><td>1</td><td>5</td><td>None</td><td>Druid, Priest</td><td>CC, Root</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*The ground erupts with grasping vines and thick roots that snake around the legs of the unwary. Plants and roots grapple all creatures in a 40-foot radius — movement reduced to 0.*
+*The ground erupts with grasping vines and thick roots that snake around the legs of the unwary. Plants and roots grapple all creatures in a 40-foot radius — movement reduced to 0. Deity Bonus: (Chronara, Veparix) +5% root chance; +1 round duration.*
 
 <span id="faerie-fire"></span>
 ### Faerie Fire
@@ -1307,13 +1307,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>1</td><td>-</td><td></td><td>Druid, Priest</td><td>Debuff</td></tr>
+<tr><td>Veparix</td><td>1</td><td>-</td><td></td><td>Druid, Priest</td><td>Debuff</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid, Priest Damage type: None/Reveal. Yes, duration reveal.*
+*- Druid, Priest Damage type: None/Reveal. Yes, duration reveal. Deity Bonus: (Veparix, Lunara) +1 round reveal duration.*
 
 <span id="shillelagh"></span>
 ### Shillelagh
@@ -1326,13 +1326,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>1</td><td>-</td><td></td><td>Druid</td><td>Buff</td></tr>
+<tr><td>Chronara</td><td>1</td><td>-</td><td></td><td>Druid</td><td>Buff</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid Damage type: Physical/Magical.*
+*- Druid Damage type: Physical/Magical. Deity Bonus: (Chronara) +1d4 nature damage.*
 
 <span id="barkskin"></span>
 ### Barkskin
@@ -1345,13 +1345,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>2</td><td>-</td><td></td><td>Druid, Priest</td><td>Defensive</td></tr>
+<tr><td>Celestara</td><td>2</td><td>-</td><td></td><td>Druid, Priest</td><td>Defensive</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid, Priest Yes, duration-based defensive skin.*
+*- Druid, Priest Yes, duration-based defensive skin. Deity Bonus: (Celestara, Aethelion) +1 additional AC.*
 
 <span id="goodberry"></span>
 ### Goodberry
@@ -1364,13 +1364,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>2</td><td>-</td><td></td><td>Druid, Priest</td><td>Healing</td></tr>
+<tr><td>Lunara</td><td>2</td><td>-</td><td></td><td>Druid, Priest</td><td>Healing</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid, Priest Damage type: Healing.*
+*- Druid, Priest Damage type: Healing. Deity Bonus: (Lunara, Aethelion) +1 berry created.*
 
 <span id="heat-metal"></span>
 ### Heat Metal
@@ -1383,13 +1383,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>2</td><td>-</td><td></td><td>Druid, Priest</td><td>Debuff</td></tr>
+<tr><td>Ignaroth</td><td>2</td><td>-</td><td></td><td>Druid, Priest</td><td>Debuff</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid, Priest Damage type: Fire. Yes, continuing heat damage or pressure.*
+*- Druid, Priest Damage type: Fire. Yes, continuing heat damage or pressure. Deity Bonus: (Ignaroth) +1d6 fire damage; ignites target on critical.*
 
 <span id="call-lightning"></span>
 ### Call Lightning
@@ -1402,13 +1402,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>3</td><td>12</td><td>1d6 per level Lightning</td><td>Druid, Priest</td><td>Offensive</td></tr>
+<tr><td>Chronara</td><td>3</td><td>12</td><td>1d6 per level Lightning</td><td>Druid, Priest</td><td>Offensive</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*The druid raises a hand to the sky, summoning a storm bolt from the heavens. A 5-foot wide lightning bolt strikes from above for 1d6 per caster level (cap 10d6). Can be called each round while the storm lasts.*
+*The druid raises a hand to the sky, summoning a storm bolt from the heavens. A 5-foot wide lightning bolt strikes from above for 1d6 per caster level (cap 10d6). Can be called each round while the storm lasts. Deity Bonus: (Chronara, Lunara) Chronara: +1d6 lightning; Lunara: -2 mana cost.*
 
 <span id="hold-animal"></span>
 ### Hold Animal
@@ -1421,13 +1421,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>3</td><td>-</td><td></td><td>Druid, Priest</td><td>CC</td></tr>
+<tr><td>Chronara</td><td>3</td><td>-</td><td></td><td>Druid, Priest</td><td>CC</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid, Priest Damage type: None/Control. Yes, duration root/paralysis.*
+*- Druid, Priest Damage type: None/Control. Yes, duration root/paralysis. Deity Bonus: (Chronara, Veparix) +5% hold chance.*
 
 <span id="call-woodland-beings"></span>
 ### Call Woodland Beings
@@ -1440,13 +1440,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>4</td><td>-</td><td></td><td>Druid</td><td>Summoning</td></tr>
+<tr><td>Chronara</td><td>4</td><td>-</td><td></td><td>Druid</td><td>Summoning</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid Damage type: Variable. Yes, summoned allies persist for duration.*
+*- Druid Damage type: Variable. Yes, summoned allies persist for duration. Deity Bonus: (Chronara, Lunara) Summoned ally has +10% HP.*
 
 <span id="giant-insect"></span>
 ### Giant Insect
@@ -1459,13 +1459,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>4</td><td>-</td><td></td><td>Druid, Priest</td><td>Summoning-lite</td></tr>
+<tr><td>Chronara</td><td>4</td><td>-</td><td></td><td>Druid, Priest</td><td>Summoning-lite</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid, Priest Damage type: Physical. Yes, transformed creatures persist for duration.*
+*- Druid, Priest Damage type: Physical. Yes, transformed creatures persist for duration. Deity Bonus: (Chronara, Veparix) Summoned insect deals +1d4 poison.*
 
 <span id="insect-plague"></span>
 ### Insect Plague
@@ -1478,13 +1478,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>5</td><td>-</td><td></td><td>Druid, Priest</td><td>Offensive, CC</td></tr>
+<tr><td>Umbraex</td><td>5</td><td>-</td><td></td><td>Druid, Priest</td><td>Offensive, CC</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid, Priest Damage type: Physical/Poison-theme. Yes, persistent swarm presence.*
+*- Druid, Priest Damage type: Physical/Poison-theme. Yes, persistent swarm presence. Deity Bonus: (Umbraex, Chronara) +1 round duration.*
 
 <span id="anti-plant-shell"></span>
 ### Anti-Plant Shell
@@ -1497,13 +1497,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>5</td><td>-</td><td></td><td>Druid, Priest</td><td>Defensive</td></tr>
+<tr><td>Celestara</td><td>5</td><td>-</td><td></td><td>Druid, Priest</td><td>Defensive</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid, Priest Yes, persistent shell.*
+*- Druid, Priest Yes, persistent shell. Deity Bonus: (Celestara, Aethelion) +1 round duration.*
 
 <span id="fire-seeds"></span>
 ### Fire Seeds
@@ -1516,13 +1516,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>6</td><td>-</td><td></td><td>Druid</td><td>Offensive</td></tr>
+<tr><td>Ignaroth</td><td>6</td><td>-</td><td></td><td>Druid</td><td>Offensive</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid Damage type: Fire. Sometimes, depending on trap-style implementation.*
+*- Druid Damage type: Fire. Sometimes, depending on trap-style implementation. Deity Bonus: (Ignaroth) +1d6 fire damage per seed.*
 
 <span id="liveoak"></span>
 ### Liveoak
@@ -1535,13 +1535,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>6</td><td>-</td><td></td><td>Druid</td><td>Summoning</td></tr>
+<tr><td>Chronara</td><td>6</td><td>-</td><td></td><td>Druid</td><td>Summoning</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid Damage type: Physical. Yes, awakened guardian persists.*
+*- Druid Damage type: Physical. Yes, awakened guardian persists. Deity Bonus: (Chronara, Lunara) Guardian has +10% HP and +1 AC.*
 
 <span id="creeping-doom"></span>
 ### Creeping Doom
@@ -1554,13 +1554,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>7</td><td>-</td><td></td><td>Druid</td><td>Offensive, CC</td></tr>
+<tr><td>Umbraex</td><td>7</td><td>-</td><td></td><td>Druid</td><td>Offensive, CC</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid Damage type: Physical. Yes, persistent swarm pressure.*
+*- Druid Damage type: Physical. Yes, persistent swarm pressure. Deity Bonus: (Umbraex, Chronara) +1 round duration.*
 
 <span id="earthquake"></span>
 ### Earthquake
@@ -1573,13 +1573,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>7</td><td>-</td><td></td><td>Druid, Priest</td><td>Offensive, AoE</td></tr>
+<tr><td>Chronara</td><td>7</td><td>-</td><td></td><td>Druid, Priest</td><td>Offensive, AoE</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid, Priest Damage type: Physical. Yes, persistent terrain disruption during effect.*
+*- Druid, Priest Damage type: Physical. Yes, persistent terrain disruption during effect. Deity Bonus: (Ignaroth, Chronara) +1d6 physical damage; +1 round terrain disruption.*
 
 <span id="turn-undead"></span>
 ### Turn Undead
@@ -1592,13 +1592,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>2</td><td>-</td><td></td><td>Priest, Paladin, Knight</td><td>Offensive, CC</td></tr>
+<tr><td>Aethelion</td><td>2</td><td>-</td><td></td><td>Priest, Paladin, Knight</td><td>Offensive, CC</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Priest, Paladin, Knight Damage type: Holy. Yes, Fear (2 turns).*
+*- Priest, Paladin, Knight Damage type: Holy. Yes, Fear (2 turns). Deity Bonus: (Aethelion, Noctivane) Aethelion: +2d6 holy; Noctivane: fear lasts +1 round.*
 
 
 ## Paladin spellbook
@@ -1620,13 +1620,13 @@ Paladins begin magical access around level 6 in Dark Orb and remain a narrow sup
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>1</td><td>8</td><td>None</td><td>Priest, Paladin</td><td>Buff, AoE</td></tr>
+<tr><td>Aethelion</td><td>1</td><td>8</td><td>None</td><td>Priest, Paladin</td><td>Buff, AoE</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*The priest raises a holy symbol as golden light descends upon their allies. Allies in range gain +1 AttackPower, +10% turn meter rate, and +1 to all saving throws. Affects up to 6 allies.*
+*The priest raises a holy symbol as golden light descends upon their allies. Allies in range gain +1 AttackPower, +10% turn meter rate, and +1 to all saving throws. Affects up to 6 allies. Deity Bonus: (Aethelion) +25% healing and +1 round duration.*
 
 
 ## Knight spellbook
@@ -1635,18 +1635,18 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 
 | Spell | School | Spell Level | Access Layer | Access Tier | Minimum Level | Class | Damage Type | Afterburn | Tags |
 |------|--------|-------------|-------------|-----------|---------------|-------|------------|-----------|------|
-| War Cry | Deity | 1 | Class Core | Early | - | Knight, Paladin | Sonic/Morale | Short-duration momentum effect. | CC or Buff, Variant |
+| [War Cry](#war-cry) | Deity | 1 | Class Core | Early | - | Knight, Paladin | Sonic/Morale | Short-duration momentum effect. | CC or Buff, Variant |
 | [Smite](#smite) | Deity | 1 | Class Core | Early | - | Knight | Radiant | No | Offensive |
-| Rallying Cry | Deity | 1 | Class Core | Early | - | Knight | Sonic/Morale | Short aura duration. | Buff, Variant |
-| Steadfast Line | Deity | 2 | Class Core | Early | - | Knight | None | Yes, short formation aura. | Buff, Variant |
-| Banner of Resolve | Deity | 2 | Class Core | Early | - | Knight | None | Yes, aura duration. | Buff, Variant |
-| Iron Will Litany | Deity | 3 | Class Core | Mid | - | Knight | None | Yes, chant duration. | Defensive, Variant |
-| Advance Signal | Deity | 3 | Class Core | Mid | - | Knight | None | Short-duration surge. | Buff, Variant |
+| [Rallying Cry](#rallying-cry) | Deity | 1 | Class Core | Early | - | Knight | Sonic/Morale | Short aura duration. | Buff, Variant |
+| [Steadfast Line](#steadfast-line) | Deity | 2 | Class Core | Early | - | Knight | None | Yes, short formation aura. | Buff, Variant |
+| [Banner of Resolve](#banner-of-resolve) | Deity | 2 | Class Core | Early | - | Knight | None | Yes, aura duration. | Buff, Variant |
+| [Iron Will Litany](#iron-will-litany) | Deity | 3 | Class Core | Mid | - | Knight | None | Yes, chant duration. | Defensive, Variant |
+| [Advance Signal](#advance-signal) | Deity | 3 | Class Core | Mid | - | Knight | None | Short-duration surge. | Buff, Variant |
 | [Haste](#haste) | Dominion | 3 | School Specialization | Mid | - | Knight | None/Buff | Yes, duration-based speed buff. | Buff, TM Uplift |
-| Shielding Cadence | Deity | 3 | Class Core | Mid | - | Knight | None | Yes, cadence duration. | Defensive, Variant |
-| Battle Hymn of Defiance | Deity | 4 | School Specialization | Late | - | Knight | Sonic/Morale | Yes, anthem duration. | Buff, AoE, Variant |
-| Arcane Defiance Banner | Deity | 4 | School Specialization | Late | - | Knight | None | Yes, banner aura. | Defensive, Variant |
-| Lionheart Command | Deity | 4 | School Specialization | Late | - | Knight | Sonic/Morale | Yes, command duration. | Buff, Variant |
+| [Shielding Cadence](#shielding-cadence) | Deity | 3 | Class Core | Mid | - | Knight | None | Yes, cadence duration. | Defensive, Variant |
+| [Battle Hymn of Defiance](#battle-hymn-of-defiance) | Deity | 4 | School Specialization | Late | - | Knight | Sonic/Morale | Yes, anthem duration. | Buff, AoE, Variant |
+| [Arcane Defiance Banner](#arcane-defiance-banner) | Deity | 4 | School Specialization | Late | - | Knight | None | Yes, banner aura. | Defensive, Variant |
+| [Lionheart Command](#lionheart-command) | Deity | 4 | School Specialization | Late | - | Knight | Sonic/Morale | Yes, command duration. | Buff, Variant |
 
 <span id="war-cry"></span>
 ### War Cry
@@ -1659,13 +1659,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>1</td><td>-</td><td></td><td>Knight, Paladin</td><td>CC or Buff, Variant</td></tr>
+<tr><td>Ignaroth</td><td>1</td><td>-</td><td></td><td>Knight, Paladin</td><td>CC or Buff, Variant</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Knight, Paladin Damage type: Sonic/Morale. Short-duration momentum effect.*
+*- Knight, Paladin Damage type: Sonic/Morale. Short-duration momentum effect. Deity Bonus: (Ignaroth, Chronara) Ignaroth: +1d6 sonic; Chronara: +1 round TM disruption.*
 
 <span id="smite"></span>
 ### Smite
@@ -1678,13 +1678,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>1</td><td>8</td><td>1d8+1 Radiant</td><td>Paladin, Knight</td><td>Offensive</td></tr>
+<tr><td>Aethelion</td><td>1</td><td>8</td><td>1d8+1 Radiant</td><td>Paladin, Knight</td><td>Offensive</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*The paladin's weapon blazes with holy radiance as they strike — a single, decisive blow empowered by divine will. Empowers the next melee attack with +1d8 radiant damage (+1 per level). Double damage to undead and demons.*
+*The paladin's weapon blazes with holy radiance as they strike — a single, decisive blow empowered by divine will. Empowers the next melee attack with +1d8 radiant damage (+1 per level). Double damage to undead and demons. Deity Bonus: (Aethelion, Ignaroth) Aethelion: +1d4 radiant; Ignaroth: +1d6 fire.*
 
 <span id="rallying-cry"></span>
 ### Rallying Cry
@@ -1697,13 +1697,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>1</td><td>-</td><td></td><td>Knight</td><td>Buff, Variant</td></tr>
+<tr><td>Aethelion</td><td>1</td><td>-</td><td></td><td>Knight</td><td>Buff, Variant</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Knight Damage type: Sonic/Morale. Short aura duration.*
+*- Knight Damage type: Sonic/Morale. Short aura duration. Deity Bonus: (Aethelion, Celestara) +10% TM gain.*
 
 <span id="steadfast-line"></span>
 ### Steadfast Line
@@ -1716,13 +1716,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>2</td><td>-</td><td></td><td>Knight</td><td>Buff, Variant</td></tr>
+<tr><td>Celestara</td><td>2</td><td>-</td><td></td><td>Knight</td><td>Buff, Variant</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Knight Yes, short formation aura.*
+*- Knight Yes, short formation aura. Deity Bonus: (Celestara, Aethelion) +1 round formation aura.*
 
 <span id="banner-of-resolve"></span>
 ### Banner of Resolve
@@ -1735,13 +1735,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>2</td><td>-</td><td></td><td>Knight</td><td>Buff, Variant</td></tr>
+<tr><td>Celestara</td><td>2</td><td>-</td><td></td><td>Knight</td><td>Buff, Variant</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Knight Yes, aura duration.*
+*- Knight Yes, aura duration. Deity Bonus: (Aethelion, Celestara) +1 round duration.*
 
 <span id="iron-will-litany"></span>
 ### Iron Will Litany
@@ -1754,13 +1754,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>3</td><td>-</td><td></td><td>Knight</td><td>Defensive, Variant</td></tr>
+<tr><td>Celestara</td><td>3</td><td>-</td><td></td><td>Knight</td><td>Defensive, Variant</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Knight Yes, chant duration.*
+*- Knight Yes, chant duration. Deity Bonus: (Celestara, Aethelion) +5 Magic Resistance.*
 
 <span id="advance-signal"></span>
 ### Advance Signal
@@ -1773,13 +1773,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>3</td><td>-</td><td></td><td>Knight</td><td>Buff, Variant</td></tr>
+<tr><td>Chronara</td><td>3</td><td>-</td><td></td><td>Knight</td><td>Buff, Variant</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Knight Short-duration surge.*
+*- Knight Short-duration surge. Deity Bonus: (Chronara, Astrara) +1 round TM surge.*
 
 <span id="haste"></span>
 ### Haste
@@ -1798,7 +1798,7 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 </tr>
 </table>
 
-*Time warps around the target as golden energy suffuses their limbs. Massively accelerates turn meter gain by 50% and grants +2 AttackPower and +2 DefensePower. Lasts 1 round per caster level (max 10 rounds).*
+*Time warps around the target as golden energy suffuses their limbs. Massively accelerates turn meter gain by 50% and grants +2 AttackPower and +2 DefensePower. Lasts 1 round per caster level (max 10 rounds). Deity Bonus: (Celestara, Chronara) +1 round duration.*
 
 <span id="shielding-cadence"></span>
 ### Shielding Cadence
@@ -1811,13 +1811,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>3</td><td>-</td><td></td><td>Knight</td><td>Defensive, Variant</td></tr>
+<tr><td>Celestara</td><td>3</td><td>-</td><td></td><td>Knight</td><td>Defensive, Variant</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Knight Yes, cadence duration.*
+*- Knight Yes, cadence duration. Deity Bonus: (Celestara, Aethelion) +1 additional AC.*
 
 <span id="battle-hymn-of-defiance"></span>
 ### Battle Hymn of Defiance
@@ -1830,13 +1830,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>4</td><td>-</td><td></td><td>Knight</td><td>Buff, AoE, Variant</td></tr>
+<tr><td>Chronara</td><td>4</td><td>-</td><td></td><td>Knight</td><td>Buff, AoE, Variant</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Knight Damage type: Sonic/Morale. Yes, anthem duration.*
+*- Knight Damage type: Sonic/Morale. Yes, anthem duration. Deity Bonus: (Chronara, Astrara) +1 round anthem duration.*
 
 <span id="arcane-defiance-banner"></span>
 ### Arcane Defiance Banner
@@ -1849,13 +1849,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>4</td><td>-</td><td></td><td>Knight</td><td>Defensive, Variant</td></tr>
+<tr><td>Lunara</td><td>4</td><td>-</td><td></td><td>Knight</td><td>Defensive, Variant</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Knight Yes, banner aura.*
+*- Knight Yes, banner aura. Deity Bonus: (Celestara, Lunara) +5 Magic Resistance; -2 mana cost.*
 
 <span id="lionheart-command"></span>
 ### Lionheart Command
@@ -1868,13 +1868,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Deity</td><td>4</td><td>-</td><td></td><td>Knight</td><td>Buff, Variant</td></tr>
+<tr><td>Aethelion</td><td>4</td><td>-</td><td></td><td>Knight</td><td>Buff, Variant</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Knight Damage type: Sonic/Morale. Yes, command duration.*
+*- Knight Damage type: Sonic/Morale. Yes, command duration. Deity Bonus: (Aethelion, Chronara) +1 round command duration; +1 AttackPower.*
 
 
 ## Additional Common Spells
@@ -1883,7 +1883,407 @@ These spells are migrated from the quick-reference index. School, class, and pro
 
 | Spell | School | Damage | Mana | Class | Tags |
 |------|--------|--------|------|-------|------|
+| [Fire Storm](#fire-storm) | Stormcraft | 1D10 Fire | 12 | Mage | Offensive, AoE, Nuke |
+
+<span id="fire-storm"></span>
+### Fire Storm
+
+<hr>
+
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Stormcraft</td><td>-</td><td>12</td><td>1D10 Fire</td><td>Mage</td><td>Offensive, AoE, Nuke</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*A conflagration engulfs the area. HP damage*
+
+| [Acid Rain](#acid-rain) | Stormcraft | 1D6 Acid | 9 | Mage | Offensive, AoE |
+
+<span id="acid-rain"></span>
+### Acid Rain
+
+<hr>
+
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Stormcraft</td><td>-</td><td>9</td><td>1D6 Acid</td><td>Mage</td><td>Offensive, AoE</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*Corrosive rain burns all in the area. HP damage*
+
+| [Lava Hail](#lava-hail) | Stormcraft | 1D12 Fire | 15 | Mage | Offensive, AoE, Nuke |
+
+<span id="lava-hail"></span>
+### Lava Hail
+
+<hr>
+
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Stormcraft</td><td>-</td><td>15</td><td>1D12 Fire</td><td>Mage</td><td>Offensive, AoE, Nuke</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*Molten rock rains from the sky. HP damage*
+
+| [Lightning Strike](#lightning-strike) | Stormcraft | 1D10 Lightning | 10 | Mage | Offensive, AoE |
+
+<span id="lightning-strike"></span>
+### Lightning Strike
+
+<hr>
+
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Stormcraft</td><td>-</td><td>10</td><td>1D10 Lightning</td><td>Mage</td><td>Offensive, AoE</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*A bolt of lightning strikes from above. HP damage*
+
+| [Sand Storm](#sand-storm) | Verdancy | 1D6 Bludgeoning | 7 | Druid | Offensive, AoE |
+
+<span id="sand-storm"></span>
+### Sand Storm
+
+<hr>
+
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Verdancy</td><td>-</td><td>7</td><td>1D6 Bludgeoning</td><td>Druid</td><td>Offensive, AoE</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*Blinding sand scours the battlefield. HP damage*
+
+| [Blinding Flash](#blinding-flash) | Mirage | — | 6 | Mage, Priest | CC, AoE |
+
+<span id="blinding-flash"></span>
+### Blinding Flash
+
+<hr>
+
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Mirage</td><td>-</td><td>6</td><td>—</td><td>Mage, Priest</td><td>CC, AoE</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*A brilliant flash blinds all who see it. TM disruption*
+
+| [Insect Swarm](#insect-swarm) | Verdancy | 1D4 Piercing | 7 | Druid | Offensive, DoT |
+
+<span id="insect-swarm"></span>
+### Insect Swarm
+
+<hr>
+
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Verdancy</td><td>-</td><td>7</td><td>1D4 Piercing</td><td>Druid</td><td>Offensive, DoT</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*A cloud of biting insects descends. HP damage, DoT*
+
+| [Fog of Despair](#fog-of-despair) | Umbramancy | — | 8 | Priest | CC, AoE |
+
+<span id="fog-of-despair"></span>
+### Fog of Despair
+
+<hr>
+
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Umbramancy</td><td>-</td><td>8</td><td>—</td><td>Priest</td><td>CC, AoE</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*A choking fog that saps morale. TM disruption*
+
+| [Stun](#stun) | Stormcraft | — | 5 | Mage | CC |
+
+<span id="stun"></span>
+### Stun
+
+<hr>
+
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Stormcraft</td><td>-</td><td>5</td><td>—</td><td>Mage</td><td>CC</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*A concussive force that stuns the target. TM freeze*
+
+| [Charm Enemy](#charm-enemy) | Mirage | — | 8 | Mage | CC |
+
+<span id="charm-enemy"></span>
+### Charm Enemy
+
+<hr>
+
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Mirage</td><td>-</td><td>8</td><td>—</td><td>Mage</td><td>CC</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*Bends an enemy to your will. TM control*
+
+| [Taunt](#taunt) | Dominion | — | 4 | Knight | CC |
+
+<span id="taunt"></span>
+### Taunt
+
+<hr>
+
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Dominion</td><td>-</td><td>4</td><td>—</td><td>Knight</td><td>CC</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*Forces an enemy to attack you. TM disruption*
+
+| [Freeze](#freeze) | Stormcraft | — | 7 | Mage | CC |
+
+<span id="freeze"></span>
+### Freeze
+
+<hr>
+
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Stormcraft</td><td>-</td><td>7</td><td>—</td><td>Mage</td><td>CC</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*Encases the target in ice. TM freeze*
+
+| [Confuse](#confuse) | Mirage | — | 6 | Mage | CC |
+
+<span id="confuse"></span>
+### Confuse
+
+<hr>
+
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Mirage</td><td>-</td><td>6</td><td>—</td><td>Mage</td><td>CC</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*Makes the target act erratically. TM disruption*
+
+| [Provoke](#provoke) | Dominion | — | 5 | Knight | CC, Debuff |
+
+<span id="provoke"></span>
+### Provoke
+
+<hr>
+
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Dominion</td><td>-</td><td>5</td><td>—</td><td>Knight</td><td>CC, Debuff</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*Enrages the target, reducing its defenses. Debuff*
+
+| [Sacrifice](#sacrifice) | Deity | — | 0 | Priest | Support |
+
+<span id="sacrifice"></span>
+### Sacrifice
+
+<hr>
+
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Aethelion</td><td>-</td><td>0</td><td>—</td><td>Priest</td><td>Support</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*Sacrifice own HP to empower an ally. HP transfer*
+
+| [Blind](#blind) | Mirage | — | 5 | Mage | CC |
+
+<span id="blind"></span>
+### Blind
+
+<hr>
+
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Mirage</td><td>-</td><td>5</td><td>—</td><td>Mage</td><td>CC</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*Robs the target of sight. Debuff*
+
+| [Root](#root) | Verdancy | — | 5 | Druid | CC |
+
+<span id="root"></span>
+### Root
+
+<hr>
+
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Verdancy</td><td>-</td><td>5</td><td>—</td><td>Druid</td><td>CC</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*Anchors the target to the ground. Movement denial*
+
+| [Summon Creature](#summon-creature) | Varied | — | 12 | Mage | Summon |
+
+<span id="summon-creature"></span>
+### Summon Creature
+
+<hr>
+
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Varied</td><td>-</td><td>12</td><td>—</td><td>Mage</td><td>Summon</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*Calls a creature to fight for you. Summoning*
+
+
 | [Haste](#haste) | Dominion | — | 20 | Mage, Paladin, Knight | Buff, TM Uplift |
+
+<span id="haste"></span>
+### Haste
+
+<hr>
+
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/07_haste.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Dominion</td><td>-</td><td>20</td><td>—</td><td>Mage, Paladin, Knight</td><td>Buff, TM Uplift</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*Time warps around the target as golden energy suffuses their limbs. Massively accelerates turn meter gain by 50% and grants +2 AttackPower and +2 DefensePower. Lasts 1 round per caster level (max 10 rounds).*
+
+
 
 ## Variant design rules
 
