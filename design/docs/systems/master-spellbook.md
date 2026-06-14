@@ -213,11 +213,17 @@ These are the low-tier spells most mages should have access to before school spe
 
 <hr>
 
-<img src="spell-icons/01_magic_missile.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Stormcraft | 1 | 5 | 1d4+1 per dart | Mage | Single-Target Damage, Nuke |
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/01_magic_missile.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Stormcraft</td><td>1</td><td>5</td><td>1d4+1 per dart</td><td>Mage</td><td>Single-Target Damage, Nuke</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
 *The first incantation taught in every arcane academy — three flawless darts of pure force that never deviate from their mark. Three glowing darts of pure force that never miss — each deals 1d4+1 damage and strikes simultaneously with no attack roll required. Force damage bypasses most resistances and immunities. Base 3d4+3 at level 1, gaining +1 dart at levels 3, 5, and 7 (max 6d4+6). Guaranteed HP damage that cannot be dodged, parried, or blocked.*
 
@@ -226,11 +232,17 @@ These are the low-tier spells most mages should have access to before school spe
 
 <hr>
 
-<img src="spell-icons/02_armor.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Aegis | 1 | 10 | None | Mage | Defensive, Buff |
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/02_armor.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Aegis</td><td>1</td><td>10</td><td>None</td><td>Mage</td><td>Defensive, Buff</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
 *A shimmering field of magical force wraps the caster in invisible plate. Creates a protective field granting a significant Armor Class bonus that stacks with worn armor. AC +6 at level 1, scaling +1 per 3 caster levels (max +10). The field lasts until dispelled or the caster rests.*
 
@@ -239,24 +251,36 @@ These are the low-tier spells most mages should have access to before school spe
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Aegis</td><td>1</td><td>-</td><td></td><td>Mage</td><td>Defensive</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Aegis | 1 | - |  | Mage | Defensive |
-
-*Mage 1 Mage.*
+*- Mage.*
 
 <span id="burning-hands"></span>
 ### Burning Hands
 
 <hr>
 
-<img src="spell-icons/03_burning_hands.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Stormcraft | 1 | 5 | 1d4 per level Fire | Mage | Offensive, AoE |
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/03_burning_hands.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Stormcraft</td><td>1</td><td>5</td><td>1d4 per level Fire</td><td>Mage</td><td>Offensive, AoE</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
 *A fan of roaring flame erupts from the caster's fingertips. A cone-shaped burst hits all targets in short range for 1d4 fire damage per caster level (max 5d4). No save for half. Base 1d4 at level 1, scaling +1d4 per level up to 5d4.*
 
@@ -265,24 +289,36 @@ These are the low-tier spells most mages should have access to before school spe
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Mirage</td><td>1</td><td>-</td><td></td><td>Mage</td><td>CC, Slip, AoE</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Mirage | 1 | - |  | Mage | CC, Slip, AoE |
-
-*Mage 1 Mage Damage type: None/Control. Yes, persistent slippery zone.*
+*- Mage Damage type: None/Control. Yes, persistent slippery zone.*
 
 <span id="sleep"></span>
 ### Sleep
 
 <hr>
 
-<img src="spell-icons/04_sleep.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Mirage | 1 | 5 | None | Mage | CC, AoE |
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/04_sleep.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Mirage</td><td>1</td><td>5</td><td>None</td><td>Mage</td><td>CC, AoE</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
 *A cloud of shimmering blue motes drifts across the battlefield. Puts low-HP targets into magical slumber, affecting up to 4 HD of creatures total. Slumber breaks on damage or when the duration expires. Non-lethal crowd control that freezes TM.*
 
@@ -291,37 +327,55 @@ These are the low-tier spells most mages should have access to before school spe
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Mirage</td><td>1</td><td>-</td><td></td><td>Mage</td><td>CC, AoE</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Mirage | 1 | - |  | Mage | CC, AoE |
-
-*Mage 1 Mage Damage type: Light/Control.*
+*- Mage Damage type: Light/Control.*
 
 <span id="detect-magic"></span>
 ### Detect Magic
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Aegis / Mirage</td><td>1</td><td>-</td><td></td><td>Mage</td><td>Utility</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Aegis / Mirage | 1 | - |  | Mage | Utility |
-
-*Mage 1 Mage.*
+*- Mage.*
 
 <span id="invisibility"></span>
 ### Invisibility
 
 <hr>
 
-<img src="spell-icons/05_invisibility.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Mirage | 2 | 10 | None | Mage | Invisibility |
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/05_invisibility.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Mirage</td><td>2</td><td>10</td><td>None</td><td>Mage</td><td>Invisibility</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
 *The caster or a touched ally fades from sight, becoming a whisper of refracted light. Renders the target completely invisible — attacks against them suffer a severe miss chance. The spell ends when the target attacks or casts an offensive spell.*
 
@@ -330,39 +384,57 @@ These are the low-tier spells most mages should have access to before school spe
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Mirage</td><td>2</td><td>-</td><td></td><td>Mage</td><td>Defensive, Image</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Mirage | 2 | - |  | Mage | Defensive, Image |
-
-*Mage 2 Mage Yes, images persist until removed.*
+*- Mage Yes, images persist until removed.*
 
 <span id="web"></span>
 ### Web
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Mirage / Dominion</td><td>2</td><td>-</td><td></td><td>Mage</td><td>CC, Root, AoE</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Mirage / Dominion | 2 | - |  | Mage | CC, Root, AoE |
-
-*Mage 2 Mage Damage type: None/Control. Yes, persistent sticky field while active.*
+*- Mage Damage type: None/Control. Yes, persistent sticky field while active.*
 
 <span id="stinking-cloud"></span>
 ### Stinking Cloud
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Umbramancy / Mirage</td><td>2</td><td>-</td><td></td><td>Mage</td><td>CC, AoE</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Umbramancy / Mirage | 2 | - |  | Mage | CC, AoE |
-
-*Mage 2 Mage Damage type: Poison/Control. Yes, persistent cloud zone.*
+*- Mage Damage type: Poison/Control. Yes, persistent cloud zone.*
 
 
 ## Mage specialization
@@ -398,24 +470,36 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Stormcraft</td><td>3</td><td>-</td><td></td><td>Mage</td><td>Offensive, AoE, Nuke</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Stormcraft | 3 | - |  | Mage | Offensive, AoE, Nuke |
-
-*Mage 4 Mage Damage type: Lightning. Optional electric aftershock in variants.*
+*- Mage Damage type: Lightning. Optional electric aftershock in variants.*
 
 <span id="fireball"></span>
 ### Fireball
 
 <hr>
 
-<img src="spell-icons/06_fireball.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Stormcraft | 3 | 15 | 1d6 per level Fire | Mage | Offensive, AoE, Nuke |
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/06_fireball.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Stormcraft</td><td>3</td><td>15</td><td>1d6 per level Fire</td><td>Mage</td><td>Offensive, AoE, Nuke</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
 *A pea-sized bead of orange light streaks to the target point and erupts into a roaring sphere of flame. A wide-area explosion dealing 1d6 fire damage per caster level (cap 10d6) to all targets in a 20-foot radius. Cannot be shaped. Base 5d6 at level 5, scaling +1d6 per level to 10d6.*
 
@@ -424,24 +508,36 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Mirage</td><td>3</td><td>-</td><td></td><td>Mage</td><td>Blink, Defensive</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Mirage | 3 | - |  | Mage | Blink, Defensive |
-
-*Mage 4 Mage Yes, duration displacement effect.*
+*- Mage Yes, duration displacement effect.*
 
 <span id="slow"></span>
 ### Slow
 
 <hr>
 
-<img src="spell-icons/08_slow.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Dominion / Mirage | 3 | 15 | None | Mage | CC, Debuff, Turn-Meter Control |
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/08_slow.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Dominion / Mirage</td><td>3</td><td>15</td><td>None</td><td>Mage</td><td>CC, Debuff, Turn-Meter Control</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
 *A cloying purple haze settles over the target, weighing down their limbs. Reduces turn meter gain by 50%, halves movement speed, and applies -2 DefensePower. Duration 1 round per caster level.*
 
@@ -450,11 +546,17 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<img src="spell-icons/07_haste.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Dominion | 3 | 20 | None | Mage, Paladin, Knight, Bard | Buff, TM Uplift |
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/07_haste.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Dominion</td><td>3</td><td>20</td><td>None</td><td>Mage, Paladin, Knight, Bard</td><td>Buff, TM Uplift</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
 *Time warps around the target as golden energy suffuses their limbs. Massively accelerates turn meter gain by 50% and grants +2 AttackPower and +2 DefensePower. Lasts 1 round per caster level (max 10 rounds).*
 
@@ -463,63 +565,93 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Dominion</td><td>5</td><td>-</td><td></td><td>Mage, Priest, Druid</td><td>Buff, TM Uplift, Group</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Dominion | 5 | - |  | Mage, Priest, Druid | Buff, TM Uplift, Group |
-
-*Mage 7 Mage, Priest, Druid Damage type: None/Buff. Yes, duration-based speed buff. Caster suffers DefensePower debuff.*
+*- Mage, Priest, Druid Damage type: None/Buff. Yes, duration-based speed buff. Caster suffers DefensePower debuff.*
 
 <span id="vampiric-touch"></span>
 ### Vampiric Touch
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Umbramancy</td><td>3</td><td>-</td><td></td><td>Mage</td><td>Single-Target Damage, Leech</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Umbramancy | 3 | - |  | Mage | Single-Target Damage, Leech |
-
-*Mage 4 Mage Damage type: Necrotic/Drain-theme. Leech effect instead of burn.*
+*- Mage Damage type: Necrotic/Drain-theme. Leech effect instead of burn.*
 
 <span id="fear"></span>
 ### Fear
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Umbramancy / Dominion</td><td>4</td><td>-</td><td></td><td>Mage</td><td>CC, Debuff</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Umbramancy / Dominion | 4 | - |  | Mage | CC, Debuff |
-
-*Mage 5 Mage Damage type: None/Control.*
+*- Mage Damage type: None/Control.*
 
 <span id="ice-storm"></span>
 ### Ice Storm
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Stormcraft</td><td>4</td><td>-</td><td></td><td>Mage</td><td>Offensive, AoE</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Stormcraft | 4 | - |  | Mage | Offensive, AoE |
-
-*Mage 5 Mage Damage type: Cold/Physical.*
+*- Mage Damage type: Cold/Physical.*
 
 <span id="confusion"></span>
 ### Confusion
 
 <hr>
 
-<img src="spell-icons/09_confusion.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Mirage / Dominion | 4 | 15 | None | Mage | CC, AoE |
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/09_confusion.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Mirage / Dominion</td><td>4</td><td>15</td><td>None</td><td>Mage</td><td>CC, AoE</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
 *Swirling ribbons of clashing colour erupt around the target. The target acts erratically — may attack allies, skip turns, or wander randomly each round. Lasts 1 round per caster level (max 6).*
 
@@ -528,37 +660,55 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Umbramancy</td><td>5</td><td>-</td><td></td><td>Mage</td><td>Offensive, AoE</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Umbramancy | 5 | - |  | Mage | Offensive, AoE |
-
-*Mage 7 Mage Damage type: Poison. Yes, persistent cloud hazard.*
+*- Mage Damage type: Poison. Yes, persistent cloud hazard.*
 
 <span id="cone-of-cold"></span>
 ### Cone of Cold
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Stormcraft</td><td>5</td><td>-</td><td></td><td>Mage</td><td>Offensive, AoE, Nuke</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Stormcraft | 5 | - |  | Mage | Offensive, AoE, Nuke |
-
-*Mage 7 Mage Damage type: Cold.*
+*- Mage Damage type: Cold.*
 
 <span id="feeblemind"></span>
 ### Feeblemind
 
 <hr>
 
-<img src="spell-icons/10_feeblemind.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Umbramancy | 5 | 25 | None | Mage | CC, Anti-Mage |
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/10_feeblemind.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Umbramancy</td><td>5</td><td>25</td><td>None</td><td>Mage</td><td>CC, Anti-Mage</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
 *A lance of pure psychic corruption pierces the target's consciousness. Devastating Intelligence and Wisdom drain drops mental stats to 1, making spellcasting impossible. Deals severe MP damage (2d6 x caster level).*
 
@@ -567,104 +717,152 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Stormcraft</td><td>7</td><td>-</td><td></td><td>Mage</td><td>Offensive, AoE, Nuke</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Stormcraft | 7 | - |  | Mage | Offensive, AoE, Nuke |
-
-*Mage 9 Mage Damage type: Fire. No baseline burn rider.*
+*- Mage Damage type: Fire. No baseline burn rider.*
 
 <span id="maze"></span>
 ### Maze
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Mirage</td><td>8</td><td>-</td><td></td><td>Mage</td><td>CC</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Mirage | 8 | - |  | Mage | CC |
-
-*Mage 10 Mage Damage type: None/Control. Yes, exile duration.*
+*- Mage Damage type: None/Control. Yes, exile duration.*
 
 <span id="mind-siphon-variant"></span>
 ### Mind Siphon Variant
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Umbramancy</td><td>4</td><td>-</td><td></td><td>Mage, Dark Priest</td><td>MP Leech, Variant</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Umbramancy | 4 | - |  | Mage, Dark Priest | MP Leech, Variant |
-
-*Mage 5 Mage, Dark Priest Damage type: Shadow/Drain. Yes, lingering mana suppression in variant design.*
+*- Mage, Dark Priest Damage type: Shadow/Drain. Yes, lingering mana suppression in variant design.*
 
 <span id="arc-lash-variant"></span>
 ### Arc Lash Variant
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Stormcraft</td><td>3</td><td>-</td><td></td><td>Mage</td><td>Single-Target Damage, TM Control, Variant</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Stormcraft | 3 | - |  | Mage | Single-Target Damage, TM Control, Variant |
-
-*Mage 4 Mage Damage type: Lightning. Yes, electric aftershock in variant design.*
+*- Mage Damage type: Lightning. Yes, electric aftershock in variant design.*
 
 <span id="mirror-guard-variant"></span>
 ### Mirror Guard Variant
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Mirage / Aegis</td><td>3</td><td>-</td><td></td><td>Mage</td><td>Defensive, Variant</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Mirage / Aegis | 3 | - |  | Mage | Defensive, Variant |
-
-*Mage 4 Mage Damage type: Illusory/None. Yes, images persist until broken.*
+*- Mage Damage type: Illusory/None. Yes, images persist until broken.*
 
 <span id="greasefire-variant"></span>
 ### Greasefire Variant
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Stormcraft / Mirage</td><td>2</td><td>-</td><td></td><td>Mage</td><td>Offensive, AoE, Variant</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Stormcraft / Mirage | 2 | - |  | Mage | Offensive, AoE, Variant |
-
-*Mage 3 Mage Damage type: Fire. Yes, brief burning ground effect in variant design.*
+*- Mage Damage type: Fire. Yes, brief burning ground effect in variant design.*
 
 <span id="mind-game"></span>
 ### Mind Game
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Umbramancy</td><td>2</td><td>-</td><td></td><td>Mage</td><td>CC, Debuff</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Umbramancy | 2 | - |  | Mage | CC, Debuff |
-
-*Mage 3 Mage Damage type: Shadow. Yes, Confused (gray).*
+*- Mage Damage type: Shadow. Yes, Confused (gray).*
 
 <span id="charm-person"></span>
 ### Charm Person
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Mirage</td><td>2</td><td>-</td><td></td><td>Mage</td><td>CC, Charm</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Mirage | 2 | - |  | Mage | CC, Charm |
-
-*Mage 4 Mage Yes, Charmed (pink).*
+*- Mage Yes, Charmed (pink).*
 
 
 ## Priest spellbook
@@ -698,11 +896,17 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<img src="spell-icons/11_bless.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 1 | 8 | None | Priest, Paladin | Buff, AoE |
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/11_bless.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>1</td><td>8</td><td>None</td><td>Priest, Paladin</td><td>Buff, AoE</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
 *The priest raises a holy symbol as golden light descends upon their allies. Allies in range gain +1 AttackPower, +10% turn meter rate, and +1 to all saving throws. Affects up to 6 allies.*
 
@@ -711,24 +915,36 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>1</td><td>-</td><td></td><td>Priest, Paladin</td><td>CC</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 1 | - |  | Priest, Paladin | CC |
-
-*Priest 1 Priest, Paladin Damage type: None/Control.*
+*- Priest, Paladin Damage type: None/Control.*
 
 <span id="cure-light-wounds"></span>
 ### Cure Light Wounds
 
 <hr>
 
-<img src="spell-icons/12_cure_light_wounds.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 1 | 6 | 1d8+1 Healing | Priest, Druid, Paladin | Healing |
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/12_cure_light_wounds.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>1</td><td>6</td><td>1d8+1 Healing</td><td>Priest, Druid, Paladin</td><td>Healing</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
 *A soft green glow radiates from the healer's palms as wounds knit and bruises fade. Restores 1d8+1 hit points to a single target, scaling +1d8+1 per caster level (cap 5d8+5 at level 5).*
 
@@ -737,11 +953,17 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<img src="spell-icons/13_protection_from_evil.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 1 | 10 | None | Priest, Paladin | Defensive, Buff |
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/13_protection_from_evil.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>1</td><td>10</td><td>None</td><td>Priest, Paladin</td><td>Defensive, Buff</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
 *A shimmering golden ward encircles the target, deflecting the attentions of malevolent forces. Provides +2 AC and +2 saving throws against evil creatures. Grants immunity to mental control and possession.*
 
@@ -750,63 +972,93 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>1</td><td>-</td><td></td><td>Priest</td><td>Debuff</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 1 | - |  | Priest | Debuff |
-
-*1 Priest Damage type: Radiant.*
+*- Priest Damage type: Radiant.*
 
 <span id="sanctuary"></span>
 ### Sanctuary
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>1</td><td>-</td><td></td><td>Priest, Paladin</td><td>Defensive</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 1 | - |  | Priest, Paladin | Defensive |
-
-*Priest 1 Priest, Paladin Yes, duration shield-state.*
+*- Priest, Paladin Yes, duration shield-state.*
 
 <span id="aid"></span>
 ### Aid
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>2</td><td>-</td><td></td><td>Priest, Paladin</td><td>Buff</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 2 | - |  | Priest, Paladin | Buff |
-
-*Priest 3 Priest, Paladin Yes, duration support buff.*
+*- Priest, Paladin Yes, duration support buff.*
 
 <span id="chant"></span>
 ### Chant
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>2</td><td>-</td><td></td><td>Priest</td><td>Buff, Debuff</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 2 | - |  | Priest | Buff, Debuff |
-
-*Priest 3 Priest Yes, duration aura.*
+*- Priest Yes, duration aura.*
 
 <span id="hold-person"></span>
 ### Hold Person
 
 <hr>
 
-<img src="spell-icons/14_hold_person.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 2 | 10 | None | Priest | CC |
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/14_hold_person.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>2</td><td>10</td><td>None</td><td>Priest</td><td>CC</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
 *Golden bands of divine light wrap around the target, locking their limbs in place. Paralyzes a humanoid target completely — no movement, no actions, no defense. Save each round to break free.*
 
@@ -815,76 +1067,112 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>3</td><td>-</td><td></td><td>Priest</td><td>Buff, Debuff</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 3 | - |  | Priest | Buff, Debuff |
-
-*Priest 5 Priest Yes, duration field effect.*
+*- Priest Yes, duration field effect.*
 
 <span id="remove-paralysis"></span>
 ### Remove Paralysis
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>3</td><td>-</td><td></td><td>Priest, Paladin</td><td>Healing, Cleanse</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 3 | - |  | Priest, Paladin | Healing, Cleanse |
-
-*Priest 5 Priest, Paladin Damage type: Cleanse.*
+*- Priest, Paladin Damage type: Cleanse.*
 
 <span id="cure-serious-wounds"></span>
 ### Cure Serious Wounds
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>4</td><td>-</td><td></td><td>Priest, Druid, Paladin</td><td>Healing</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 4 | - |  | Priest, Druid, Paladin | Healing |
-
-*Priest 6 Priest, Druid, Paladin Damage type: Healing.*
+*- Priest, Druid, Paladin Damage type: Healing.*
 
 <span id="free-action"></span>
 ### Free Action
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>4</td><td>-</td><td></td><td>Priest, Paladin</td><td>Defensive</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 4 | - |  | Priest, Paladin | Defensive |
-
-*Priest 6 Priest, Paladin Yes, duration buff.*
+*- Priest, Paladin Yes, duration buff.*
 
 <span id="cure-critical-wounds"></span>
 ### Cure Critical Wounds
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>5</td><td>-</td><td></td><td>Priest, Druid, Paladin</td><td>Healing</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 5 | - |  | Priest, Druid, Paladin | Healing |
-
-*Priest 7 Priest, Druid, Paladin Damage type: Healing.*
+*- Priest, Druid, Paladin Damage type: Healing.*
 
 <span id="flame-strike"></span>
 ### Flame Strike
 
 <hr>
 
-<img src="spell-icons/15_flame_strike.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 5 | 20 | 1d6 per level Fire/Radiant | Priest | Offensive, Nuke |
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/15_flame_strike.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>5</td><td>20</td><td>1d6 per level Fire/Radiant</td><td>Priest</td><td>Offensive, Nuke</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
 *A pillar of divine fire descends from the heavens. A vertical column dealing 1d6 fire + 1d6 radiant damage per caster level (cap 15d6+15d6). Undead take double damage. Base 6d6+6d6 at level 6, scaling +1d6/+1d6 per level.*
 
@@ -893,11 +1181,17 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<img src="spell-icons/16_heal.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 6 | 30 | Cures all HP | Priest | Healing |
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/16_heal.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>6</td><td>30</td><td>Cures all HP</td><td>Priest</td><td>Healing</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
 *The most powerful restorative miracle in the divine arsenal. Instantly restores the target to full health and cures blindness, deafness, paralysis, disease, and poison.*
 
@@ -906,11 +1200,17 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<img src="spell-icons/17_blade_barrier.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 6 | 25 | 1d6 per level Slashing | Priest | Offensive, Defensive, Barrier |
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/17_blade_barrier.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>6</td><td>25</td><td>1d6 per level Slashing</td><td>Priest</td><td>Offensive, Defensive, Barrier</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
 *A ring of spinning silver blades materializes, orbiting in a deadly dance. An immobile 20-foot ring dealing 1d6 slashing per caster level (cap 15d6) to any creature passing through. Lasts 1 round per level.*
 
@@ -919,26 +1219,38 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>6</td><td>-</td><td></td><td>Priest</td><td>Buff, AoE</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 6 | - |  | Priest | Buff, AoE |
-
-*Priest 8 Priest Damage type: Buff. Yes, prebuff duration benefits.*
+*- Priest Damage type: Buff. Yes, prebuff duration benefits.*
 
 <span id="restoration"></span>
 ### Restoration
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>7</td><td>-</td><td></td><td>Priest</td><td>Healing, Cleanse</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 7 | - |  | Priest | Healing, Cleanse |
-
-*Priest 9 Priest Damage type: Healing.*
+*- Priest Damage type: Healing.*
 
 
 ## Druid spellbook
@@ -970,11 +1282,17 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 
 <hr>
 
-<img src="spell-icons/18_entangle.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 1 | 5 | None | Druid, Priest | CC, Root |
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/18_entangle.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>1</td><td>5</td><td>None</td><td>Druid, Priest</td><td>CC, Root</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
 *The ground erupts with grasping vines and thick roots that snake around the legs of the unwary. Plants and roots grapple all creatures in a 40-foot radius — movement reduced to 0.*
 
@@ -983,76 +1301,112 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>1</td><td>-</td><td></td><td>Druid, Priest</td><td>Debuff</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 1 | - |  | Druid, Priest | Debuff |
-
-*Druid 1 Druid, Priest Damage type: None/Reveal. Yes, duration reveal.*
+*- Druid, Priest Damage type: None/Reveal. Yes, duration reveal.*
 
 <span id="shillelagh"></span>
 ### Shillelagh
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>1</td><td>-</td><td></td><td>Druid</td><td>Buff</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 1 | - |  | Druid | Buff |
-
-*Druid 1 Druid Damage type: Physical/Magical.*
+*- Druid Damage type: Physical/Magical.*
 
 <span id="barkskin"></span>
 ### Barkskin
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>2</td><td>-</td><td></td><td>Druid, Priest</td><td>Defensive</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 2 | - |  | Druid, Priest | Defensive |
-
-*Druid 3 Druid, Priest Yes, duration-based defensive skin.*
+*- Druid, Priest Yes, duration-based defensive skin.*
 
 <span id="goodberry"></span>
 ### Goodberry
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>2</td><td>-</td><td></td><td>Druid, Priest</td><td>Healing</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 2 | - |  | Druid, Priest | Healing |
-
-*Druid 3 Druid, Priest Damage type: Healing.*
+*- Druid, Priest Damage type: Healing.*
 
 <span id="heat-metal"></span>
 ### Heat Metal
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>2</td><td>-</td><td></td><td>Druid, Priest</td><td>Debuff</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 2 | - |  | Druid, Priest | Debuff |
-
-*Druid 3 Druid, Priest Damage type: Fire. Yes, continuing heat damage or pressure.*
+*- Druid, Priest Damage type: Fire. Yes, continuing heat damage or pressure.*
 
 <span id="call-lightning"></span>
 ### Call Lightning
 
 <hr>
 
-<img src="spell-icons/19_call_lightning.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 3 | 12 | 1d6 per level Lightning | Druid, Priest | Offensive |
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/19_call_lightning.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>3</td><td>12</td><td>1d6 per level Lightning</td><td>Druid, Priest</td><td>Offensive</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
 *The druid raises a hand to the sky, summoning a storm bolt from the heavens. A 5-foot wide lightning bolt strikes from above for 1d6 per caster level (cap 10d6). Can be called each round while the storm lasts.*
 
@@ -1061,130 +1415,190 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>3</td><td>-</td><td></td><td>Druid, Priest</td><td>CC</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 3 | - |  | Druid, Priest | CC |
-
-*Druid 5 Druid, Priest Damage type: None/Control. Yes, duration root/paralysis.*
+*- Druid, Priest Damage type: None/Control. Yes, duration root/paralysis.*
 
 <span id="call-woodland-beings"></span>
 ### Call Woodland Beings
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>4</td><td>-</td><td></td><td>Druid</td><td>Summoning</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 4 | - |  | Druid | Summoning |
-
-*Druid 6 Druid Damage type: Variable. Yes, summoned allies persist for duration.*
+*- Druid Damage type: Variable. Yes, summoned allies persist for duration.*
 
 <span id="giant-insect"></span>
 ### Giant Insect
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>4</td><td>-</td><td></td><td>Druid, Priest</td><td>Summoning-lite</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 4 | - |  | Druid, Priest | Summoning-lite |
-
-*Druid 6 Druid, Priest Damage type: Physical. Yes, transformed creatures persist for duration.*
+*- Druid, Priest Damage type: Physical. Yes, transformed creatures persist for duration.*
 
 <span id="insect-plague"></span>
 ### Insect Plague
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>5</td><td>-</td><td></td><td>Druid, Priest</td><td>Offensive, CC</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 5 | - |  | Druid, Priest | Offensive, CC |
-
-*Druid 7 Druid, Priest Damage type: Physical/Poison-theme. Yes, persistent swarm presence.*
+*- Druid, Priest Damage type: Physical/Poison-theme. Yes, persistent swarm presence.*
 
 <span id="anti-plant-shell"></span>
 ### Anti-Plant Shell
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>5</td><td>-</td><td></td><td>Druid, Priest</td><td>Defensive</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 5 | - |  | Druid, Priest | Defensive |
-
-*Druid 7 Druid, Priest Yes, persistent shell.*
+*- Druid, Priest Yes, persistent shell.*
 
 <span id="fire-seeds"></span>
 ### Fire Seeds
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>6</td><td>-</td><td></td><td>Druid</td><td>Offensive</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 6 | - |  | Druid | Offensive |
-
-*Druid 8 Druid Damage type: Fire. Sometimes, depending on trap-style implementation.*
+*- Druid Damage type: Fire. Sometimes, depending on trap-style implementation.*
 
 <span id="liveoak"></span>
 ### Liveoak
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>6</td><td>-</td><td></td><td>Druid</td><td>Summoning</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 6 | - |  | Druid | Summoning |
-
-*Druid 8 Druid Damage type: Physical. Yes, awakened guardian persists.*
+*- Druid Damage type: Physical. Yes, awakened guardian persists.*
 
 <span id="creeping-doom"></span>
 ### Creeping Doom
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>7</td><td>-</td><td></td><td>Druid</td><td>Offensive, CC</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 7 | - |  | Druid | Offensive, CC |
-
-*Druid 9 Druid Damage type: Physical. Yes, persistent swarm pressure.*
+*- Druid Damage type: Physical. Yes, persistent swarm pressure.*
 
 <span id="earthquake"></span>
 ### Earthquake
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>7</td><td>-</td><td></td><td>Druid, Priest</td><td>Offensive, AoE</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 7 | - |  | Druid, Priest | Offensive, AoE |
-
-*Druid 9 Druid, Priest Damage type: Physical. Yes, persistent terrain disruption during effect.*
+*- Druid, Priest Damage type: Physical. Yes, persistent terrain disruption during effect.*
 
 <span id="turn-undead"></span>
 ### Turn Undead
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>2</td><td>-</td><td></td><td>Priest, Paladin, Knight</td><td>Offensive, CC</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 2 | - |  | Priest, Paladin, Knight | Offensive, CC |
-
-*Priest 3, Paladin 4, Knight 6 Priest, Paladin, Knight Damage type: Holy. Yes, Fear (2 turns).*
+*- Priest, Paladin, Knight Damage type: Holy. Yes, Fear (2 turns).*
 
 
 ## Paladin spellbook
@@ -1200,11 +1614,17 @@ Paladins begin magical access around level 6 in Dark Orb and remain a narrow sup
 
 <hr>
 
-<img src="spell-icons/11_bless.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 1 | 8 | None | Priest, Paladin | Buff, AoE |
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/11_bless.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>1</td><td>8</td><td>None</td><td>Priest, Paladin</td><td>Buff, AoE</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
 *The priest raises a holy symbol as golden light descends upon their allies. Allies in range gain +1 AttackPower, +10% turn meter rate, and +1 to all saving throws. Affects up to 6 allies.*
 
@@ -1233,24 +1653,36 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>1</td><td>-</td><td></td><td>Knight, Paladin</td><td>CC or Buff, Variant</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 1 | - |  | Knight, Paladin | CC or Buff, Variant |
-
-*Knight 9 Knight, Paladin Damage type: Sonic/Morale. Short-duration momentum effect.*
+*- Knight, Paladin Damage type: Sonic/Morale. Short-duration momentum effect.*
 
 <span id="smite"></span>
 ### Smite
 
 <hr>
 
-<img src="spell-icons/20_smite.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 1 | 8 | 1d8+1 Radiant | Paladin, Knight | Offensive |
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/20_smite.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>1</td><td>8</td><td>1d8+1 Radiant</td><td>Paladin, Knight</td><td>Offensive</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
 *The paladin's weapon blazes with holy radiance as they strike — a single, decisive blow empowered by divine will. Empowers the next melee attack with +1d8 radiant damage (+1 per level). Double damage to undead and demons.*
 
@@ -1259,76 +1691,112 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>1</td><td>-</td><td></td><td>Knight</td><td>Buff, Variant</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 1 | - |  | Knight | Buff, Variant |
-
-*Knight 9 Knight Damage type: Sonic/Morale. Short aura duration.*
+*- Knight Damage type: Sonic/Morale. Short aura duration.*
 
 <span id="steadfast-line"></span>
 ### Steadfast Line
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>2</td><td>-</td><td></td><td>Knight</td><td>Buff, Variant</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 2 | - |  | Knight | Buff, Variant |
-
-*Knight 10 Knight Yes, short formation aura.*
+*- Knight Yes, short formation aura.*
 
 <span id="banner-of-resolve"></span>
 ### Banner of Resolve
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>2</td><td>-</td><td></td><td>Knight</td><td>Buff, Variant</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 2 | - |  | Knight | Buff, Variant |
-
-*Knight 10 Knight Yes, aura duration.*
+*- Knight Yes, aura duration.*
 
 <span id="iron-will-litany"></span>
 ### Iron Will Litany
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>3</td><td>-</td><td></td><td>Knight</td><td>Defensive, Variant</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 3 | - |  | Knight | Defensive, Variant |
-
-*Knight 11 Knight Yes, chant duration.*
+*- Knight Yes, chant duration.*
 
 <span id="advance-signal"></span>
 ### Advance Signal
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>3</td><td>-</td><td></td><td>Knight</td><td>Buff, Variant</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 3 | - |  | Knight | Buff, Variant |
-
-*Knight 11 Knight Short-duration surge.*
+*- Knight Short-duration surge.*
 
 <span id="haste"></span>
 ### Haste
 
 <hr>
 
-<img src="spell-icons/07_haste.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Dominion | 3 | 20 | None | Mage, Paladin, Knight, Bard | Buff, TM Uplift |
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/07_haste.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Dominion</td><td>3</td><td>20</td><td>None</td><td>Mage, Paladin, Knight, Bard</td><td>Buff, TM Uplift</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
 *Time warps around the target as golden energy suffuses their limbs. Massively accelerates turn meter gain by 50% and grants +2 AttackPower and +2 DefensePower. Lasts 1 round per caster level (max 10 rounds).*
 
@@ -1337,52 +1805,76 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>3</td><td>-</td><td></td><td>Knight</td><td>Defensive, Variant</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 3 | - |  | Knight | Defensive, Variant |
-
-*Knight 12 Knight Yes, cadence duration.*
+*- Knight Yes, cadence duration.*
 
 <span id="battle-hymn-of-defiance"></span>
 ### Battle Hymn of Defiance
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>4</td><td>-</td><td></td><td>Knight</td><td>Buff, AoE, Variant</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 4 | - |  | Knight | Buff, AoE, Variant |
-
-*Knight 12 Knight Damage type: Sonic/Morale. Yes, anthem duration.*
+*- Knight Damage type: Sonic/Morale. Yes, anthem duration.*
 
 <span id="arcane-defiance-banner"></span>
 ### Arcane Defiance Banner
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>4</td><td>-</td><td></td><td>Knight</td><td>Defensive, Variant</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 4 | - |  | Knight | Defensive, Variant |
-
-*Knight 13 Knight Yes, banner aura.*
+*- Knight Yes, banner aura.*
 
 <span id="lionheart-command"></span>
 ### Lionheart Command
 
 <hr>
 
-<img src="spell-icons/_placeholder.png" width="120"/>
+<table>
+<tr>
+<td style="padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td>
+<table>
+<tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
+<tr><td>Deity</td><td>4</td><td>-</td><td></td><td>Knight</td><td>Buff, Variant</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | 4 | - |  | Knight | Buff, Variant |
-
-*Knight 13 Knight Damage type: Sonic/Morale. Yes, command duration.*
+*- Knight Damage type: Sonic/Morale. Yes, command duration.*
 
 
 ## Additional Common Spells
@@ -1392,291 +1884,6 @@ These spells are migrated from the quick-reference index. School, class, and pro
 | Spell | School | Damage | Mana | Class | Tags |
 |------|--------|--------|------|-------|------|
 | [Haste](#haste) | Dominion | — | 20 | Mage, Paladin, Knight | Buff, TM Uplift |
-
-<span id="haste"></span>
-### Haste
-
-<hr>
-
-<img src="spell-icons/07_haste.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Dominion | - | 20 | — | Mage, Paladin, Knight | Buff, TM Uplift |
-
-*Time warps around the target as golden energy suffuses their limbs. Massively accelerates turn meter gain by 50% and grants +2 AttackPower and +2 DefensePower. Lasts 1 round per caster level (max 10 rounds).*
-
-| Fire Storm | Stormcraft | 1D10 Fire | 12 | Mage | Offensive, AoE, Nuke |
-
-<span id="fire-storm"></span>
-### Fire Storm
-
-<hr>
-
-<img src="spell-icons/_placeholder.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Stormcraft | - | 12 | 1D10 Fire | Mage | Offensive, AoE, Nuke |
-
-*Stormcraft.*
-
-| Acid Rain | Stormcraft | 1D6 Acid | 9 | Mage | Offensive, AoE |
-
-<span id="acid-rain"></span>
-### Acid Rain
-
-<hr>
-
-<img src="spell-icons/_placeholder.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Stormcraft | - | 9 | 1D6 Acid | Mage | Offensive, AoE |
-
-*Stormcraft.*
-
-| Lava Hail | Stormcraft | 1D12 Fire | 15 | Mage | Offensive, AoE, Nuke |
-
-<span id="lava-hail"></span>
-### Lava Hail
-
-<hr>
-
-<img src="spell-icons/_placeholder.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Stormcraft | - | 15 | 1D12 Fire | Mage | Offensive, AoE, Nuke |
-
-*Stormcraft.*
-
-| Lightning Strike | Stormcraft | 1D10 Lightning | 10 | Mage | Offensive, AoE |
-
-<span id="lightning-strike"></span>
-### Lightning Strike
-
-<hr>
-
-<img src="spell-icons/_placeholder.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Stormcraft | - | 10 | 1D10 Lightning | Mage | Offensive, AoE |
-
-*Stormcraft.*
-
-| Sand Storm | Verdancy | 1D6 Bludgeoning | 7 | Druid | Offensive, AoE |
-
-<span id="sand-storm"></span>
-### Sand Storm
-
-<hr>
-
-<img src="spell-icons/_placeholder.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Verdancy | - | 7 | 1D6 Bludgeoning | Druid | Offensive, AoE |
-
-*Verdancy.*
-
-| Blinding Flash | Mirage | — | 6 | Mage, Priest | CC, AoE |
-
-<span id="blinding-flash"></span>
-### Blinding Flash
-
-<hr>
-
-<img src="spell-icons/_placeholder.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Mirage | - | 6 | — | Mage, Priest | CC, AoE |
-
-*Mirage.*
-
-| Insect Swarm | Verdancy | 1D4 Piercing | 7 | Druid | Offensive, DoT |
-
-<span id="insect-swarm"></span>
-### Insect Swarm
-
-<hr>
-
-<img src="spell-icons/_placeholder.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Verdancy | - | 7 | 1D4 Piercing | Druid | Offensive, DoT |
-
-*Verdancy.*
-
-| Fog of Despair | Umbramancy | — | 8 | Priest | CC, AoE |
-
-<span id="fog-of-despair"></span>
-### Fog of Despair
-
-<hr>
-
-<img src="spell-icons/_placeholder.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Umbramancy | - | 8 | — | Priest | CC, AoE |
-
-*Umbramancy.*
-
-| Stun | Stormcraft | — | 5 | Mage | CC |
-
-<span id="stun"></span>
-### Stun
-
-<hr>
-
-<img src="spell-icons/_placeholder.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Stormcraft | - | 5 | — | Mage | CC |
-
-*Stormcraft.*
-
-| Charm Enemy | Mirage | — | 8 | Mage | CC |
-
-<span id="charm-enemy"></span>
-### Charm Enemy
-
-<hr>
-
-<img src="spell-icons/_placeholder.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Mirage | - | 8 | — | Mage | CC |
-
-*Mirage.*
-
-| Taunt | Dominion | — | 4 | Knight | CC |
-
-<span id="taunt"></span>
-### Taunt
-
-<hr>
-
-<img src="spell-icons/_placeholder.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Dominion | - | 4 | — | Knight | CC |
-
-*Dominion.*
-
-| Freeze | Stormcraft | — | 7 | Mage | CC |
-
-<span id="freeze"></span>
-### Freeze
-
-<hr>
-
-<img src="spell-icons/_placeholder.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Stormcraft | - | 7 | — | Mage | CC |
-
-*Stormcraft.*
-
-| Confuse | Mirage | — | 6 | Mage | CC |
-
-<span id="confuse"></span>
-### Confuse
-
-<hr>
-
-<img src="spell-icons/_placeholder.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Mirage | - | 6 | — | Mage | CC |
-
-*Mirage.*
-
-| Provoke | Dominion | — | 5 | Knight | CC, Debuff |
-
-<span id="provoke"></span>
-### Provoke
-
-<hr>
-
-<img src="spell-icons/_placeholder.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Dominion | - | 5 | — | Knight | CC, Debuff |
-
-*Dominion.*
-
-| Sacrifice | Deity | — | 0 | Priest | Support |
-
-<span id="sacrifice"></span>
-### Sacrifice
-
-<hr>
-
-<img src="spell-icons/_placeholder.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Deity | - | 0 | — | Priest | Support |
-
-*Deity.*
-
-| Blind | Mirage | — | 5 | Mage | CC |
-
-<span id="blind"></span>
-### Blind
-
-<hr>
-
-<img src="spell-icons/_placeholder.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Mirage | - | 5 | — | Mage | CC |
-
-*Mirage.*
-
-| Root | Verdancy | — | 5 | Druid | CC |
-
-<span id="root"></span>
-### Root
-
-<hr>
-
-<img src="spell-icons/_placeholder.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Verdancy | - | 5 | — | Druid | CC |
-
-*Verdancy.*
-
-| Summon Creature | Varied | — | 12 | Mage | Summon |
-
-<span id="summon-creature"></span>
-### Summon Creature
-
-<hr>
-
-<img src="spell-icons/_placeholder.png" width="120"/>
-
-| School | Level | Mana | Damage | Class | Tags |
-|--------|-------|------|--------|-------|------|
-| Varied | - | 12 | — | Mage | Summon |
-
-*Varied.*
-
-
 
 ## Variant design rules
 
