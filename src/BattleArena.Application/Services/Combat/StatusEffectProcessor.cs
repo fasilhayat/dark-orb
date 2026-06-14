@@ -509,7 +509,13 @@ internal class StatusEffectProcessor
         }
 
         if (spell.ElementalType != ElementalType.None)
-            await TryApplyElementalDoTAsync(tick, target, spell, notify);
+        {
+            var dotName = GetElementalDoTName(spell.ElementalType);
+            var hasMatchingEffect = dotName is not null &&
+                spell.OnHitEffects.Any(e => e.Name == dotName);
+            if (!hasMatchingEffect)
+                await TryApplyElementalDoTAsync(tick, target, spell, notify);
+        }
     }
 
     // Per-effect overload (for refactored callers that use IAttackSource).
@@ -549,6 +555,15 @@ internal class StatusEffectProcessor
     }
 
     private int RollDie(DieType die) => _dice.Roll(die);
+
+    private static string? GetElementalDoTName(ElementalType type) => type switch
+    {
+        ElementalType.Fire => "Burning",
+        ElementalType.Ice => "Chilled",
+        ElementalType.Lightning => "Shocked",
+        ElementalType.Poison => "Poisoned",
+        _ => null
+    };
 
     public async Task TryApplyElementalDoTAsync(
         int tick, Character target, Spell spell,

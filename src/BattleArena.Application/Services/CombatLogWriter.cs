@@ -189,7 +189,7 @@ public static class CombatLogWriter
                     break;
 
                 case "EffectApplied":
-                    sb.AppendLine($"           Effect   [{e.StatusEffectName}] applied to {e.ActorName}  (duration {e.Message.GetDurationFromMessage()} turns)");
+                    sb.AppendLine($"           Effect   [{e.StatusEffectName}] applied to {e.ActorName}  (duration {e.EffectDuration?.ToString() ?? "?"} turns)");
                     break;
 
                 case "EffectResisted":
@@ -390,19 +390,4 @@ public static class CombatLogWriter
     }
 }
 
-// ── Extension helpers ─────────────────────────────────────────────────────────
 
-internal static class CombatLogStringExtensions
-{
-    // Extract duration number from a message like "Burning applied for 3 turns" → "3"
-    // Falls back to "?" if not parseable.
-    internal static string GetDurationFromMessage(this string msg)
-    {
-        if (string.IsNullOrEmpty(msg)) return "?";
-        var parts = msg.Split(' ');
-        for (int i = 0; i < parts.Length - 1; i++)
-            if (parts[i].Equals("for", StringComparison.OrdinalIgnoreCase) && int.TryParse(parts[i + 1], out _))
-                return parts[i + 1];
-        return "?";
-    }
-}
