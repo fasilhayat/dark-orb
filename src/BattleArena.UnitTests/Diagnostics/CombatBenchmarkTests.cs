@@ -286,8 +286,8 @@ public class CombatBenchmarkTests(ITestOutputHelper out_)
         out_.WriteLine($"║  BENCHMARK: {result.Label,-40} ║");
         out_.WriteLine($"╠══════════════════════════════════════════════╣");
         out_.WriteLine($"║  Trials:       {result.TotalTrials,6}                      ║");
-        out_.WriteLine($"║  Golem wins:   {result.HeroWins,6} ({result.HeroWinRate,5:F1}%)           ║");
-        out_.WriteLine($"║  Dummy wins:   {result.EnemyWins,6} ({result.EnemyWinRate,5:F1}%)           ║");
+        out_.WriteLine($"║  Golem wins:   {result.HeroWins,6} ({result.HeroWinRate,5:F1}%)      ║");
+        out_.WriteLine($"║  Dummy wins:   {result.EnemyWins,6} ({result.EnemyWinRate,5:F1}%)         ║");
         out_.WriteLine($"║  Avg ticks:    {result.AvgTicks,6:F1}                    ║");
         out_.WriteLine($"║  Avg dmg/combat: {result.AvgDamagePerCombat,6:F0}               ║");
         out_.WriteLine($"║  Avg dmg/hit:  {result.AvgDamagePerHit,6:F1}                 ║");
