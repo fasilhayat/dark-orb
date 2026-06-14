@@ -195,18 +195,83 @@ These are the low-tier spells most mages should have access to before school spe
 
 | Spell | School | Spell Level | Access Layer | Access Tier | Minimum Level | Effect | Impact | Class | Damage Type | Afterburn | Tags |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| <img src="spell-icons/01_magic_missile.png" width="24" align="center"/> Magic Missile | Stormcraft | 1 | Common Core | Early | Mage 1 | Reliable force darts that strike true.[web:2] | HP damage.[web:2] | Mage [web:2] | Force [web:2] | No.[web:2] | Single-Target Damage, Nuke |
-| <img src="spell-icons/02_armor.png" width="24" align="center"/> Armor | Aegis | 1 | Common Core | Early | Mage 1 | Magical armor that improves survivability.[web:2] | Armor Class increase.[web:2] | Mage [web:2] | None [web:2] | No.[web:2] | Defensive, Buff |
+| [Magic Missile](#magic-missile) | Stormcraft | 1 | Common Core | Early | Mage 1 | Reliable force darts that strike true.[web:2] | HP damage.[web:2] | Mage [web:2] | Force [web:2] | No.[web:2] | Single-Target Damage, Nuke |
+| [Armor](#armor) | Aegis | 1 | Common Core | Early | Mage 1 | Magical armor that improves survivability.[web:2] | Armor Class increase.[web:2] | Mage [web:2] | None [web:2] | No.[web:2] | Defensive, Buff |
 | Shield | Aegis | 1 | Common Core | Early | Mage 1 | Magical shield against attacks and missiles.[web:2] | Armor Class increase and projectile defense.[web:2] | Mage [web:2] | None [web:2] | No.[web:2] | Defensive |
-| <img src="spell-icons/03_burning_hands.png" width="24" align="center"/> Burning Hands | Stormcraft | 1 | Common Core | Early | Mage 1 | Short cone of flame that scorches nearby enemies.[web:2] | HP damage.[web:2] | Mage [web:2] | Fire [web:2] | No clear persistent burn in baseline list.[web:2] | Offensive, AoE |
+| [Burning Hands](#burning-hands) | Stormcraft | 1 | Common Core | Early | Mage 1 | Short cone of flame that scorches nearby enemies.[web:2] | HP damage.[web:2] | Mage [web:2] | Fire [web:2] | No clear persistent burn in baseline list.[web:2] | Offensive, AoE |
 | Grease | Mirage | 1 | Common Core | Early | Mage 1 | Slippery coating that causes falls and handling failure.[web:25] | Movement disruption and TM loss from slips or recovery delay.[web:25] | Mage [web:25] | None/Control [web:25] | Yes, persistent slippery zone.[web:25] | CC, Slip, AoE |
-| <img src="spell-icons/04_sleep.png" width="24" align="center"/> Sleep | Mirage | 1 | Common Core | Early | Mage 1 | Puts weaker targets into magical sleep.[web:2] | TM freeze and action denial.[web:2] | Mage [web:2] | None/Control [web:2] | Yes, duration disable.[web:2] | CC, AoE |
+| [Sleep](#sleep) | Mirage | 1 | Common Core | Early | Mage 1 | Puts weaker targets into magical sleep.[web:2] | TM freeze and action denial.[web:2] | Mage [web:2] | None/Control [web:2] | Yes, duration disable.[web:2] | CC, AoE |
 | Color Spray | Mirage | 1 | Common Core | Early | Mage 1 | Cone of sensory overload that blinds, stuns, or drops weak targets.[web:2] | TM loss and action denial.[web:2] | Mage [web:2] | Light/Control [web:2] | No.[web:2] | CC, AoE |
 | Detect Magic | Aegis / Mirage | 1 | Common Core | Early | Mage 1 | Reveals magical auras and enchantments.[web:2] | Utility and magical threat awareness.[web:2] | Mage [web:2] | None [web:2] | No.[web:2] | Utility |
-| <img src="spell-icons/05_invisibility.png" width="24" align="center"/> Invisibility | Mirage | 2 | Common Core | Early | Mage 2 | Makes a target unseen until broken.[web:2] | Targeting denial and survivability increase.[web:2] | Mage [web:2] | None [web:2] | Yes, duration stealth state.[web:2] | Invisibility |
+| [Invisibility](#invisibility) | Mirage | 2 | Common Core | Early | Mage 2 | Makes a target unseen until broken.[web:2] | Targeting denial and survivability increase.[web:2] | Mage [web:2] | None [web:2] | Yes, duration stealth state.[web:2] | Invisibility |
 | Mirror Image | Mirage | 2 | Common Core | Early | Mage 2 | Creates illusory duplicates to absorb attacks.[web:2] | Defensive miss chance and survivability increase.[web:2] | Mage [web:2] | None [web:2] | Yes, images persist until removed.[web:2] | Defensive, Image |
 | Web | Mirage / Dominion | 2 | Common Core | Early | Mage 2 | Sticky strands trap and hinder enemies in an area.[web:21][web:16] | Movement reduction or root; TM suppression through trapping.[web:21][web:16] | Mage [web:21] | None/Control [web:21] | Yes, persistent sticky field while active.[web:21][web:16] | CC, Root, AoE |
 | Stinking Cloud | Umbramancy / Mirage | 2 | Common Core | Early | Mage 2 | Nauseating cloud that disrupts actions in its area.[web:2] | TM suppression, action failure, and Movement denial by zone pressure.[web:2] | Mage [web:2] | Poison/Control [web:2] | Yes, persistent cloud zone.[web:2] | CC, AoE |
+
+
+### Magic Missile <img src="spell-icons/01_magic_missile.png" width="24" align="center"/>
+
+| School | Level | Mana | Damage | Class | Tags |
+|--------|-------|------|--------|-------|------|
+| Stormcraft | 1 | 5 | 1d4+1 Force | Mage | Single-Target Damage, Nuke |
+
+*The first incantation taught in every arcane academy — three flawless darts of pure force that never deviate from their mark. Invented by the archmage Thyra Solspire during the Meridian Wars, its elegant simplicity has saved more apprentices than any shield spell. A spellcaster who masters Magic Missile has taken the first true step into the arcane arts.*
+
+**Effect:** Three glowing darts strike the target automatically. No attack roll needed — force damage bypasses most resistances. Additional darts manifest at caster levels 3, 5, and 7.
+
+**Impact:** HP damage.
+
+
+### Armor <img src="spell-icons/02_armor.png" width="24" align="center"/>
+
+| School | Level | Mana | Damage | Class | Tags |
+|--------|-------|------|--------|-------|------|
+| Aegis | 1 | 10 | None | Mage | Defensive, Buff |
+
+*A shimmering field of magical force wraps the caster in invisible plate. First codified by the dwarven runesmiths of Khaz-Vorn, this spell has been adapted by every magical tradition in Aelthoria. The sensation is like stepping into a suit of silk-lined steel — protective, yet never restricting.*
+
+**Effect:** Raises the caster's Armor Class by a significant margin. Stacks with worn armor but does not replace it. Duration scales with caster level.
+
+**Impact:** Armor Class increase.
+
+
+### Burning Hands <img src="spell-icons/03_burning_hands.png" width="24" align="center"/>
+
+| School | Level | Mana | Damage | Class | Tags |
+|--------|-------|------|--------|-------|------|
+| Stormcraft | 1 | 5 | 1d4 Fire | Mage | Offensive, AoE |
+
+*A fan of roaring flame erupts from the caster's fingertips — the signature spell of pyromancers and the first lesson in aggressive magic. The fire is hot enough to ignite cloth, wood, and hair, leaving the acrid smell of brimstone in its wake. Veteran mages learn to control the spread; novices are advised to stand clear of allies.*
+
+**Effect:** Cone-shaped fire burst hits all targets in a short range. Each target takes fire damage with no save for half — positioning is everything.
+
+**Impact:** HP damage.
+
+
+### Sleep <img src="spell-icons/04_sleep.png" width="24" align="center"/>
+
+| School | Level | Mana | Damage | Class | Tags |
+|--------|-------|------|--------|-------|------|
+| Mirage | 1 | 5 | None | Mage | CC, AoE |
+
+*A cloud of shimmering blue motes drifts across the battlefield, each one a whisper of forgotten lullabies. Creatures caught in the haze feel their eyelids grow heavy as the world fades to soft twilight. The spell cannot discriminate completely — allies in the area may also feel the tug of slumber if they are not braced for it.*
+
+**Effect:** Puts low-HP targets into magical sleep. Affected targets cannot act until damaged or the duration expires. Affects a group of targets based on total hit dice.
+
+**Impact:** TM freeze and action denial.
+
+
+### Invisibility <img src="spell-icons/05_invisibility.png" width="24" align="center"/>
+
+| School | Level | Mana | Damage | Class | Tags |
+|--------|-------|------|--------|-------|------|
+| Mirage | 2 | 10 | None | Mage | Invisibility |
+
+*The caster or a touched ally fades from sight, becoming a whisper of refracted light. True invisibility is a rare gift — most illusionists spend years perfecting the weave before it holds against motion. Once the invisible creature attacks, the spell collapses, but until then they are a ghost upon the battlefield.*
+
+**Effect:** Renders the target completely invisible. Attacks against the target have a high miss chance. Spell ends when the target attacks or casts an offensive spell.
+
+**Impact:** Targeting denial and survivability increase.
 
 ## Mage specialization
 
@@ -215,18 +280,18 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 | Spell | School | Spell Level | Access Layer | Access Tier | Minimum Level | Effect | Impact | Class | Damage Type | Afterburn | Tags |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | Lightning Bolt | Stormcraft | 3 | School Specialization | Mid | Mage 4 | Straight-line lightning blast through enemies.[web:2] | HP damage; Electrocute variants can add TM loss or brief stun pressure.[web:2] | Mage [web:2] | Lightning [web:2] | Optional electric aftershock in variants.[web:2] | Offensive, AoE, Nuke |
-| <img src="spell-icons/06_fireball.png" width="24" align="center"/> Fireball | Stormcraft | 3 | School Specialization | Mid | Mage 4 | Explosive ranged fire burst for clustered targets.[web:2] | HP damage to all victims in blast radius.[web:2] | Mage [web:2] | Fire [web:2] | No in baseline effect text.[web:2] | Offensive, AoE, Nuke |
+| [Fireball](#fireball) | Stormcraft | 3 | School Specialization | Mid | Mage 4 | Explosive ranged fire burst for clustered targets.[web:2] | HP damage to all victims in blast radius.[web:2] | Mage [web:2] | Fire [web:2] | No in baseline effect text.[web:2] | Offensive, AoE, Nuke |
 | Blink | Mirage | 3 | School Specialization | Mid | Mage 4 | Phasing displacement defense.[web:2] | Strong hit avoidance and mobility defense.[web:2] | Mage [web:2] | None [web:2] | Yes, duration displacement effect.[web:2] | Blink, Defensive |
-| <img src="spell-icons/08_slow.png" width="24" align="center"/> Slow | Dominion / Mirage | 3 | School Specialization | Mid | Mage 4 | Reduces enemy tempo and action efficiency.[web:2] | TM reduction and Movement reduction.[web:2] | Mage [web:2] | None/Control [web:2] | Yes, duration-based tempo suppression.[web:2] | CC, Debuff, Turn-Meter Control |
-| <img src="spell-icons/07_haste.png" width="24" align="center"/> Haste | Dominion | 3 | School Specialization | Mid | Mage 5 | Accelerates a target, massively increasing turn meter gain.[web:2] | TM acceleration and action frequency increase.[web:2] | Mage, Paladin, Knight, Bard [web:2] | None/Buff [web:2] | Yes, duration-based speed buff.[web:2] | Buff, TM Uplift |
+| [Slow](#slow) | Dominion / Mirage | 3 | School Specialization | Mid | Mage 4 | Reduces enemy tempo and action efficiency.[web:2] | TM reduction and Movement reduction.[web:2] | Mage [web:2] | None/Control [web:2] | Yes, duration-based tempo suppression.[web:2] | CC, Debuff, Turn-Meter Control |
+| [Haste](#haste) | Dominion | 3 | School Specialization | Mid | Mage 5 | Accelerates a target, massively increasing turn meter gain.[web:2] | TM acceleration and action frequency increase.[web:2] | Mage, Paladin, Knight, Bard [web:2] | None/Buff [web:2] | Yes, duration-based speed buff.[web:2] | Buff, TM Uplift |
 | Mass Haste | Dominion | 5 | School Specialization | Late | Mage 7 | Accelerates all party members, boosting turn meter gain. Inflicts Haste Fatigue (DefensePower -2) on the caster. | Party-wide TM acceleration with a caster defense penalty. | Mage, Priest, Druid | None/Buff | Yes, duration-based speed buff. Caster suffers DefensePower debuff. | Buff, TM Uplift, Group |
 | Vampiric Touch | Umbramancy | 3 | School Specialization | Mid | Mage 4 | Melee life-drain spell that steals vitality.[web:2] | Victim loses HP; caster gains HP or sustain value in adaptation.[web:2] | Mage [web:2] | Necrotic/Drain-theme [web:2] | Leech effect instead of burn.[web:2] | Single-Target Damage, Leech |
 | Fear | Umbramancy / Dominion | 4 | School Specialization | Mid | Mage 5 | Sends enemies fleeing in panic.[web:2] | TM disorder and forced Movement away from threat source.[web:2] | Mage [web:2] | None/Control [web:2] | No.[web:2] | CC, Debuff |
 | Ice Storm | Stormcraft | 4 | School Specialization | Mid | Mage 5 | Area storm of cold and impact force.[web:2] | HP damage and possible Movement reduction in variant implementations.[web:2] | Mage [web:2] | Cold/Physical [web:2] | No.[web:2] | Offensive, AoE |
-| <img src="spell-icons/09_confusion.png" width="24" align="center"/> Confusion | Mirage / Dominion | 4/7 | School Specialization | Late | Mage 6 | Scrambles enemy behavior and target selection.[web:6][web:2] | TM unreliability, wasted turns, and positional chaos.[web:6][web:2] | Mage [web:2] | None/Control [web:2] | Yes, duration-based control effect.[web:2] | CC, AoE |
+| [Confusion](#confusion) | Mirage / Dominion | 4/7 | School Specialization | Late | Mage 6 | Scrambles enemy behavior and target selection.[web:6][web:2] | TM unreliability, wasted turns, and positional chaos.[web:6][web:2] | Mage [web:2] | None/Control [web:2] | Yes, duration-based control effect.[web:2] | CC, AoE |
 | Cloudkill | Umbramancy | 5 | School Specialization | Late | Mage 7 | Expanding poisonous cloud that fills space and kills or weakens creatures.[web:2] | HP damage over time and Movement denial through zone pressure.[web:2] | Mage [web:2] | Poison [web:2] | Yes, persistent cloud hazard.[web:2] | Offensive, AoE |
 | Cone of Cold | Stormcraft | 5 | School Specialization | Late | Mage 7 | Heavy cone-shaped cold burst.[web:2] | HP damage; can support Movement slow in variant forms.[web:2] | Mage [web:2] | Cold [web:2] | No.[web:2] | Offensive, AoE, Nuke |
-| <img src="spell-icons/10_feeblemind.png" width="24" align="center"/> Feeblemind | Umbramancy | 5 | School Specialization | Late | Mage 7 | Cripples caster or intellectual function.[web:2] | MP pressure, anti-caster shutdown, and reduced magical threat output.[web:2] | Mage [web:2] | None/Anti-Mage [web:2] | Yes, lasting debilitation.[web:2] | CC, Anti-Mage |
+| [Feeblemind](#feeblemind) | Umbramancy | 5 | School Specialization | Late | Mage 7 | Cripples caster or intellectual function.[web:2] | MP pressure, anti-caster shutdown, and reduced magical threat output.[web:2] | Mage [web:2] | None/Anti-Mage [web:2] | Yes, lasting debilitation.[web:2] | CC, Anti-Mage |
 | Delayed Blast Fireball | Stormcraft | 7 | School Specialization | Late | Mage 9 | Timed explosive fire spell for setup nuking.[web:2] | Massive HP damage with delayed detonation pressure.[web:2] | Mage [web:2] | Fire [web:2] | No baseline burn rider.[web:2] | Offensive, AoE, Nuke |
 | Maze | Mirage | 8 | School Specialization | Late | Mage 10 | Temporarily removes a target from the battlefield.[web:2] | TM removal through temporary battlefield exile.[web:2] | Mage [web:2] | None/Control [web:2] | Yes, exile duration.[web:2] | CC |
 | Mind Siphon Variant | Umbramancy | 4 | School Specialization | Mid | Mage 5 | Dark anti-mage variant that drains magical reserves.[web:2][web:48] | MP damage or MP leech against spellcasters; can also reduce Magic Resistance in elite versions.[web:2][web:48] | Mage, Dark Priest | Shadow/Drain | Yes, lingering mana suppression in variant design.[web:2][web:48] | MP Leech, Variant |
@@ -236,31 +301,187 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 | Mind Game | Umbramancy | 2 | School Specialization | Mid | Mage 3 | Confuses the target, causing erratic behavior. | Random target selection, may skip turn or hit ally. | Mage | Shadow | Yes, Confused (gray) | CC, Debuff |
 | Charm Person | Mirage | 2 | School Specialization | Mid | Mage 4 | Charms a humanoid to fight as an ally. | Target switches sides for the duration. | Mage | None | Yes, Charmed (pink) | CC, Charm |
 
+
+### Fireball <img src="spell-icons/06_fireball.png" width="24" align="center"/>
+
+| School | Level | Mana | Damage | Class | Tags |
+|--------|-------|------|--------|-------|------|
+| Stormcraft | 3 | 15 | 1d6/level Fire | Mage | Offensive, AoE, Nuke |
+
+*A pea-sized bead of orange light streaks to the target point and erupts into a roaring sphere of flame. Few spells inspire as much caution — its blast radius is infamous for catching friend and foe alike. The fire mage Kaelen Brightscar once joked that Fireball taught more wizards geometry than any theorem ever could.*
+
+**Effect:** Wide-area explosion dealing heavy fire damage to all in its radius. Damage scales with caster level. Cannot be shaped — allies in the blast are hit too.
+
+**Impact:** HP damage to all victims in blast radius.
+
+
+### Haste <img src="spell-icons/07_haste.png" width="24" align="center"/>
+
+| School | Level | Mana | Damage | Class | Tags |
+|--------|-------|------|--------|-------|------|
+| Dominion | 3 | 20 | None | Mage, Paladin, Knight, Bard | Buff, TM Uplift |
+
+*Time warps around the target as golden energy suffuses their limbs. Every motion becomes fluid, every decision instant. The spell taxes the caster's concentration heavily, which is why few mages cast it lightly. On the battlefield, a Hasted warrior moves like a blur, striking twice before the enemy blinks.*
+
+**Effect:** Massively accelerates the target's turn meter gain, allowing more frequent actions. Lasts for a limited duration.
+
+**Impact:** TM acceleration and action frequency increase.
+
+
+### Slow <img src="spell-icons/08_slow.png" width="24" align="center"/>
+
+| School | Level | Mana | Damage | Class | Tags |
+|--------|-------|------|--------|-------|------|
+| Dominion / Mirage | 3 | 15 | None | Mage | CC, Debuff, Turn-Meter Control |
+
+*A cloying purple haze settles over the target, weighing down their limbs and dulling their thoughts. Time seems to crawl — each movement takes twice the effort. The spell is the inverted twin of Haste, and mastering both is considered a mark of a truly rounded mage.*
+
+**Effect:** Reduces the target's turn meter gain drastically. Also reduces movement speed. Duration-based suppression.
+
+**Impact:** TM reduction and Movement reduction.
+
+
+### Confusion <img src="spell-icons/09_confusion.png" width="24" align="center"/>
+
+| School | Level | Mana | Damage | Class | Tags |
+|--------|-------|------|--------|-------|------|
+| Mirage / Dominion | 4 | 15 | None | Mage | CC, AoE |
+
+*Swirling ribbons of clashing colour erupt around the target, flooding their senses with contradictory impulses. Friend becomes foe, left becomes right, and action freezes into indecision. The spell has been banned in three city-states for its unpredictable nature — but on the battlefield, chaos is a weapon like any other.*
+
+**Effect:** Target acts erratically — may attack allies, skip turns, or wander randomly. Area version affects multiple targets at higher level.
+
+**Impact:** TM unreliability, wasted turns, and positional chaos.
+
+
+### Feeblemind <img src="spell-icons/10_feeblemind.png" width="24" align="center"/>
+
+| School | Level | Mana | Damage | Class | Tags |
+|--------|-------|------|--------|-------|------|
+| Umbramancy | 5 | 25 | None | Mage | CC, Anti-Mage |
+
+*A lance of pure psychic corruption pierces the target's consciousness, unravelling thoughts like a frayed tapestry. The mind reels, coils, and collapses into a fog of confusion. Designed specifically to neutralize powerful enemy spellcasters, Feeblemind is the Umbramancer's answer to an archmage they cannot match in a fair duel.*
+
+**Effect:** Devastating intelligence and wisdom drain. Spellcasters hit by this lose the ability to cast spells for the duration. Severe MP damage.
+
+**Impact:** MP pressure, anti-caster shutdown, and reduced magical threat output.
+
 ## Priest spellbook
 
 Priests gain broad early identity through blessings, healing, commands, wards, and spiritual battlefield control.[web:6] Their later spells expand into miracles, barriers, supreme restoration, and holy devastation rather than generic arcane offense.[web:6][web:73]
 
 | Spell | School | Spell Level | Access Layer | Access Tier | Minimum Level | Effect | Impact | Class | Damage Type | Afterburn | Tags |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| <img src="spell-icons/11_bless.png" width="24" align="center"/> Bless | Deity | 1 | Class Core | Early | Priest 1 | Improves ally morale and combat performance.[web:6] | TM uplift in custom pacing systems and general support.[web:6] | Priest, Paladin [web:6] | None [web:6] | Yes, duration buff.[web:6] | Buff, AoE |
+| [Bless](#bless) | Deity | 1 | Class Core | Early | Priest 1 | Improves ally morale and combat performance.[web:6] | TM uplift in custom pacing systems and general support.[web:6] | Priest, Paladin [web:6] | None [web:6] | Yes, duration buff.[web:6] | Buff, AoE |
 | Command | Deity | 1 | Class Core | Early | Priest 1 | One-word forced action disrupting the target briefly.[web:6] | TM disruption and action loss for the victim.[web:6] | Priest, Paladin [web:6] | None/Control [web:6] | No.[web:6] | CC |
-| <img src="spell-icons/12_cure_light_wounds.png" width="24" align="center"/> Cure Light Wounds | Deity | 1 | Class Core | Early | Priest 1 | Basic divine healing.[web:6] | HP restoration.[web:6] | Priest, Druid, Paladin [web:6] | Healing [web:6] | No direct after-effect beyond restored HP.[web:6] | Healing |
-| <img src="spell-icons/13_protection_from_evil.png" width="24" align="center"/> Protection from Evil | Deity | 1 | Class Core | Early | Priest 1 | Defensive ward against evil influence and attacks.[web:6] | Armor Class improvement and defensive resistance versus evil threats.[web:6] | Priest, Paladin [web:6] | None [web:6] | No.[web:6] | Defensive, Buff |
+| [Cure Light Wounds](#cure-light-wounds) | Deity | 1 | Class Core | Early | Priest 1 | Basic divine healing.[web:6] | HP restoration.[web:6] | Priest, Druid, Paladin [web:6] | Healing [web:6] | No direct after-effect beyond restored HP.[web:6] | Healing |
+| [Protection from Evil](#protection-from-evil) | Deity | 1 | Class Core | Early | Priest 1 | Defensive ward against evil influence and attacks.[web:6] | Armor Class improvement and defensive resistance versus evil threats.[web:6] | Priest, Paladin [web:6] | None [web:6] | No.[web:6] | Defensive, Buff |
 | Chasten | Deity | 1 | Core | Early | 1 | Weakens sinful/hostile targets | TM loss / debuff | Priest | Radiant | No | Debuff |
 | Sanctuary | Deity | 1 | Class Core | Early | Priest 1 | Makes hostile creatures less likely or unable to attack the protected subject directly.[web:6] | Defensive targeting denial and effective survivability increase.[web:6] | Priest, Paladin [web:6] | None [web:6] | Yes, duration shield-state.[web:6] | Defensive |
 | Aid | Deity | 2 | Class Core | Early | Priest 3 | Supportive blessing that improves staying power.[web:6] | Effective HP increase and morale support.[web:6] | Priest, Paladin [web:6] | None [web:6] | Yes, duration support buff.[web:6] | Buff |
 | Chant | Deity | 2 | Class Core | Early | Priest 3 | Battlefield prayer that aids allies and hinders enemies.[web:6] | Ally TM support, enemy TM drag, and battle momentum shift.[web:6] | Priest [web:6] | None [web:6] | Yes, duration aura.[web:6] | Buff, Debuff |
-| <img src="spell-icons/14_hold_person.png" width="24" align="center"/> Hold Person | Deity | 2/3 | Class Core | Mid | Priest 4 | Paralyzes humanoid targets.[web:6][web:2] | TM freeze and Movement set to zero while held.[web:6][web:2] | Priest [web:6] | None/Control [web:6] | No.[web:6] | CC |
+| [Hold Person](#hold-person) | Deity | 2/3 | Class Core | Mid | Priest 4 | Paralyzes humanoid targets.[web:6][web:2] | TM freeze and Movement set to zero while held.[web:6][web:2] | Priest [web:6] | None/Control [web:6] | No.[web:6] | CC |
 | Prayer | Deity | 3 | Class Core | Mid | Priest 5 | Broad ally buff plus enemy penalty effect.[web:6] | Teamwide tempo advantage, including custom TM uplift for allies and drag for foes.[web:6] | Priest [web:6] | None [web:6] | Yes, duration field effect.[web:6] | Buff, Debuff |
 | Remove Paralysis | Deity | 3 | Class Core | Mid | Priest 5 | Frees allies from paralysis.[web:6] | Restores Movement and TM gain by ending paralysis.[web:6] | Priest, Paladin [web:6] | Cleanse [web:6] | No.[web:6] | Healing, Cleanse |
 | Cure Serious Wounds | Deity | 4 | Class Core | Mid | Priest 6 | Stronger direct healing.[web:6] | HP restoration.[web:6] | Priest, Druid, Paladin [web:6] | Healing [web:6] | No.[web:6] | Healing |
 | Free Action | Deity | 4 | Class Core | Mid | Priest 6 | Prevents many movement-impairing effects.[web:6] | Movement immunity to many roots, holds, or slows.[web:6] | Priest, Paladin [web:6] | None [web:6] | Yes, duration buff.[web:6] | Defensive |
 | Cure Critical Wounds | Deity | 5 | School Specialization | Late | Priest 7 | Large heal for severe injuries.[web:6] | HP restoration.[web:6] | Priest, Druid, Paladin [web:6] | Healing [web:6] | No.[web:6] | Healing |
-| <img src="spell-icons/15_flame_strike.png" width="24" align="center"/> Flame Strike | Deity | 5 | School Specialization | Late | Priest 7 | Vertical divine column of holy fire.[web:6] | HP damage and holy offensive pressure.[web:6] | Priest [web:6] | Fire/Radiant [web:6] | No explicit lingering burn.[web:6] | Offensive, Nuke |
-| <img src="spell-icons/16_heal.png" width="24" align="center"/> Heal | Deity | 6 | School Specialization | Late | Priest 8 | Major restorative miracle.[web:6] | Major HP restoration and condition recovery.[web:6] | Priest [web:6] | Healing [web:6] | No.[web:6] | Healing |
-| <img src="spell-icons/17_blade_barrier.png" width="24" align="center"/> Blade Barrier | Deity | 6 | School Specialization | Late | Priest 8 | Immobile wall or ring of whirling blades around a point.[web:18][web:6] | HP damage and Movement denial by forcing enemies to stop, reroute, or suffer repeated contact damage.[web:18][web:6] | Priest [web:18][web:6] | Physical/Magical [web:18] | Yes, persistent hazard while active.[web:18][web:6] | Offensive, Defensive, Barrier |
+| [Flame Strike](#flame-strike) | Deity | 5 | School Specialization | Late | Priest 7 | Vertical divine column of holy fire.[web:6] | HP damage and holy offensive pressure.[web:6] | Priest [web:6] | Fire/Radiant [web:6] | No explicit lingering burn.[web:6] | Offensive, Nuke |
+| [Heal](#heal) | Deity | 6 | School Specialization | Late | Priest 8 | Major restorative miracle.[web:6] | Major HP restoration and condition recovery.[web:6] | Priest [web:6] | Healing [web:6] | No.[web:6] | Healing |
+| [Blade Barrier](#blade-barrier) | Deity | 6 | School Specialization | Late | Priest 8 | Immobile wall or ring of whirling blades around a point.[web:18][web:6] | HP damage and Movement denial by forcing enemies to stop, reroute, or suffer repeated contact damage.[web:18][web:6] | Priest [web:18][web:6] | Physical/Magical [web:18] | Yes, persistent hazard while active.[web:18][web:6] | Offensive, Defensive, Barrier |
 | Heroes' Feast | Deity | 6 | School Specialization | Late | Priest 8 | Group pre-battle meal with strong support benefits.[web:6] | Teamwide survivability, morale, and resilience increase.[web:6] | Priest [web:6] | Buff [web:6] | Yes, prebuff duration benefits.[web:6] | Buff, AoE |
 | Restoration | Deity | 7 | School Specialization | Late | Priest 9 | Repairs severe spiritual or life-force harm.[web:6] | Restores magical stability and cleanses severe debuffs.[web:6] | Priest [web:6] | Healing [web:6] | No.[web:6] | Healing, Cleanse |
+
+
+### Bless <img src="spell-icons/11_bless.png" width="24" align="center"/>
+
+| School | Level | Mana | Damage | Class | Tags |
+|--------|-------|------|--------|-------|------|
+| Deity | 1 | 8 | None | Priest, Paladin | Buff, AoE |
+
+*The priest raises a holy symbol as golden light descends upon their allies like a warm dawn. Each touched comrade feels a surge of confidence — their strikes land truer, their steps feel lighter. The Blessing of Aethelion has been invoked on every major battlefield in Aelthorian history, from the Siege of Dawnspire to the Shadowmere Incursion.*
+
+**Effect:** Allies in range gain a morale bonus to attack rolls and turn meter gain. Lasts for the duration of the engagement.
+
+**Impact:** TM uplift and combat support.
+
+
+### Cure Light Wounds <img src="spell-icons/12_cure_light_wounds.png" width="24" align="center"/>
+
+| School | Level | Mana | Damage | Class | Tags |
+|--------|-------|------|--------|-------|------|
+| Deity | 1 | 6 | 1d8+1 Healing | Priest, Druid, Paladin | Healing |
+
+*A soft green glow radiates from the healer's palms as wounds knit and bruises fade. The most fundamental prayer of the healing arts — every acolyte learns it before their first vigil. Though humble in power, Cure Light Wounds has saved more lives across Aelthoria than all the grand miracles combined.*
+
+**Effect:** Restores a moderate amount of hit points to a single target. Cannot exceed the target's maximum HP.
+
+**Impact:** HP restoration.
+
+
+### Protection from Evil <img src="spell-icons/13_protection_from_evil.png" width="24" align="center"/>
+
+| School | Level | Mana | Damage | Class | Tags |
+|--------|-------|------|--------|-------|------|
+| Deity | 1 | 10 | None | Priest, Paladin | Defensive, Buff |
+
+*A shimmering golden ward encircles the target, deflecting the attentions of malevolent forces. The spell does not merely protect the body — it fortifies the spirit against possession, coercion, and the unnatural dread that accompanies dark creatures. The priesthood of Celestara made this spell a cornerstone of their rites.*
+
+**Effect:** Provides a defensive bonus against evil-aligned creatures. Grants resistance to mental control, fear, and possession effects.
+
+**Impact:** Armor Class improvement and defensive resistance versus evil threats.
+
+
+### Hold Person <img src="spell-icons/14_hold_person.png" width="24" align="center"/>
+
+| School | Level | Mana | Damage | Class | Tags |
+|--------|-------|------|--------|-------|------|
+| Deity | 2 | 10 | None | Priest | CC |
+
+*Golden bands of divine light wrap around the target, locking their limbs in place. The victim remains fully conscious — aware, terrified, and utterly unable to move. Interrogators value this spell as much as healers do; on the battlefield it turns a rampaging warrior into a statue waiting for a hammer.*
+
+**Effect:** Paralyzes a humanoid target completely. No movement, no actions, no defense. A save is permitted each round to break free.
+
+**Impact:** TM freeze and Movement set to zero while held.
+
+
+### Flame Strike <img src="spell-icons/15_flame_strike.png" width="24" align="center"/>
+
+| School | Level | Mana | Damage | Class | Tags |
+|--------|-------|------|--------|-------|------|
+| Deity | 5 | 20 | 1d6/level Fire/Radiant | Priest | Offensive, Nuke |
+
+*A pillar of divine fire descends from the heavens, righteous and terrible. The flames burn with holy light — they sear the wicked and leave the righteous untouched. The first Flame Strike was called down by the High Priestess Elara during the Purge of Blackmarsh, cleansing an entire swamp of undead in a single blinding column.*
+
+**Effect:** Vertical column of holy fire dealing heavy fire + radiant damage. Damage scales with caster level.
+
+**Impact:** HP damage and holy offensive pressure.
+
+
+### Heal <img src="spell-icons/16_heal.png" width="24" align="center"/>
+
+| School | Level | Mana | Damage | Class | Tags |
+|--------|-------|------|--------|-------|------|
+| Deity | 6 | 30 | Cures all HP | Priest | Healing |
+
+*The most powerful restorative miracle in the divine arsenal — a surge of pure life energy that washes over the target like a tidal wave of warmth. Broken bones reknit, organs regenerate, and the grievously wounded are brought back from death's doorstep. Only the most devoted priests are trusted with this spell.*
+
+**Effect:** Instantly restores the target to full health. Also cures most status conditions, blindness, and paralysis.
+
+**Impact:** Major HP restoration and condition recovery.
+
+
+### Blade Barrier <img src="spell-icons/17_blade_barrier.png" width="24" align="center"/>
+
+| School | Level | Mana | Damage | Class | Tags |
+|--------|-------|------|--------|-------|------|
+| Deity | 6 | 25 | 1d6/level Slashing | Priest | Offensive, Defensive, Barrier |
+
+*A ring of spinning silver blades materializes, orbiting in a deadly dance. The blades move with a mind of their own, striking anything that dares approach. The spell is as much a work of art as a weapon — the precision of the whirling edges speaks to centuries of divine craftsmanship.*
+
+**Effect:** Creates an immobile wall or ring of spinning blades. Any creature passing through takes heavy slashing damage.
+
+**Impact:** HP damage and Movement denial. Persistent hazard while active.
 
 ## Druid spellbook
 
@@ -268,13 +489,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 
 | Spell | School | Spell Level | Access Layer | Access Tier | Minimum Level | Effect | Impact | Class | Damage Type | Afterburn | Tags |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| <img src="spell-icons/18_entangle.png" width="24" align="center"/> Entangle | Deity | 1 | Class Core | Early | Druid 1 | Plants twist around creatures in the area and restrain them.[web:6][web:23] | Movement reduction or full root; TM loss in variant implementations.[web:23][web:6] | Druid, Priest [web:6][web:23] | None/Control [web:23] | Yes, persistent rooting zone while active.[web:23][web:6] | CC, Root |
+| [Entangle](#entangle) | Deity | 1 | Class Core | Early | Druid 1 | Plants twist around creatures in the area and restrain them.[web:6][web:23] | Movement reduction or full root; TM loss in variant implementations.[web:23][web:6] | Druid, Priest [web:6][web:23] | None/Control [web:23] | Yes, persistent rooting zone while active.[web:23][web:6] | CC, Root |
 | Faerie Fire | Deity | 1 | Class Core | Early | Druid 1 | Outlines targets, countering stealth and concealment.[web:6] | Reduced evasiveness and easier targeting; lowers effective defensive concealment.[web:6] | Druid, Priest [web:6] | None/Reveal [web:6] | Yes, duration reveal.[web:6] | Debuff |
 | Shillelagh | Deity | 1 | Class Core | Early | Druid 1 | Enchants a club or staff to hit harder.[web:6] | Raises weapon HP damage output.[web:6] | Druid [web:6] | Physical/Magical [web:6] | No.[web:6] | Buff |
 | Barkskin | Deity | 2 | Class Core | Early | Druid 3 | Skin becomes as tough as bark, improving base Armor Class.[web:46] | Armor Class increase and slight defensive resilience increase.[web:46] | Druid, Priest [web:46] | None [web:46] | Yes, duration-based defensive skin.[web:46] | Defensive |
 | Goodberry | Deity | 2 | Class Core | Early | Druid 3 | Creates restorative berries.[web:6] | HP restoration and sustain support.[web:6] | Druid, Priest [web:6] | Healing [web:6] | No.[web:6] | Healing |
 | Heat Metal | Deity | 2 | Class Core | Early | Druid 3 | Punishes armored enemies through escalating heat.[web:6] | HP damage over time, pain pressure, and possible Movement disruption.[web:6] | Druid, Priest [web:6] | Fire [web:6] | Yes, continuing heat damage or pressure.[web:6] | Debuff |
-| <img src="spell-icons/19_call_lightning.png" width="24" align="center"/> Call Lightning | Deity | 3 | Class Core | Mid | Druid 5 | Repeated lightning strikes called from a storm.[web:6] | HP damage; ideal for variants with Electrocute, TM loss, or anti-metal bonus damage.[web:6] | Druid, Priest [web:6] | Lightning [web:6] | Yes in repeated-round use, though not burn.[web:6] | Offensive |
+| [Call Lightning](#call-lightning) | Deity | 3 | Class Core | Mid | Druid 5 | Repeated lightning strikes called from a storm.[web:6] | HP damage; ideal for variants with Electrocute, TM loss, or anti-metal bonus damage.[web:6] | Druid, Priest [web:6] | Lightning [web:6] | Yes in repeated-round use, though not burn.[web:6] | Offensive |
 | Hold Animal | Deity | 3 | Class Core | Mid | Druid 5 | Immobilizes beasts.[web:6] | TM freeze and Movement set to zero.[web:6] | Druid, Priest [web:6] | None/Control [web:6] | Yes, duration root/paralysis.[web:6] | CC |
 | Call Woodland Beings | Deity | 4 | School Specialization | Mid | Druid 6 | Brings nature spirits or woodland allies.[web:6] | HP pressure, support utility, or CC depending on ally type.[web:6] | Druid [web:6] | Variable [web:6] | Yes, summoned allies persist for duration.[web:6] | Summoning |
 | Giant Insect | Deity | 4 | School Specialization | Mid | Druid 6 | Enlarges vermin into combat-capable forms.[web:6] | HP pressure and Movement denial through large bodies.[web:6] | Druid, Priest [web:6] | Physical [web:6] | Yes, transformed creatures persist for duration.[web:6] | Summoning-lite |
@@ -286,29 +507,68 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 | Earthquake | Deity | 7 | School Specialization | Late | Druid 9 | Wide-area terrain disruption and collapse threat.[web:6] | HP damage, Movement disruption, and TM loss from knockdown or instability in variants.[web:6] | Druid, Priest [web:6] | Physical [web:6] | Yes, persistent terrain disruption during effect.[web:6] | Offensive, AoE |
 | Turn Undead | Deity | 2 | Class Core | Early | Priest 3, Paladin 4, Knight 6 | Drives undead enemies away in fear. | Undead must resist or flee; holy damage to undead. | Priest, Paladin, Knight | Holy | Yes, Fear (2 turns) | Offensive, CC |
 
+
+### Entangle <img src="spell-icons/18_entangle.png" width="24" align="center"/>
+
+| School | Level | Mana | Damage | Class | Tags |
+|--------|-------|------|--------|-------|------|
+| Deity | 1 | 5 | None | Druid, Priest | CC, Root |
+
+*The ground erupts with grasping vines, thick roots, and thorny tendrils that snake around the legs of the unwary. Druids of the Verdant Circle speak of the spell as a conversation with the earth itself — asking it to hold, rather than command it to obey. The vines respond with enthusiasm.*
+
+**Effect:** Plants and roots rise up to grapple creatures in the area. Movement is severely reduced or prevented entirely. Duration-based rooting zone.
+
+**Impact:** Movement reduction or full root; TM loss in some implementations.
+
+
+### Call Lightning <img src="spell-icons/19_call_lightning.png" width="24" align="center"/>
+
+| School | Level | Mana | Damage | Class | Tags |
+|--------|-------|------|--------|-------|------|
+| Deity | 3 | 12 | 1d6/level Lightning | Druid, Priest | Offensive |
+
+*The druid raises a hand to the sky, summoning a storm bolt from the heavens. A crack of thunder announces the strike a heartbeat before the blinding blue-white lance descends. The spell requires open sky — underground or enclosed spaces cannot anchor the storm. Stormcaller druids have been known to fight entire battles within summoned tempests.*
+
+**Effect:** A lightning bolt strikes a target from above. Can be called repeatedly each round while the storm persists. Metal armor increases damage.
+
+**Impact:** HP damage.
+
 ## Paladin spellbook
 
 Paladins begin magical access around level 6 in Dark Orb and remain a narrow support caster with holy defenses, buffs, and companion protection.[web:34] Their spell list intentionally avoids broad offensive identity and instead reinforces survivability, courage, and team stability.[web:34]
 
 | Spell | School | Spell Level | Access Layer | Access Tier | Minimum Level | Effect | Impact | Class | Damage Type | Afterburn | Tags |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| Bless | Deity | 1 | Class Core | Early | Paladin 6 | Improves ally morale and combat readiness.[web:6] | TM uplift and combat support.
+| [Bless](#bless) | Deity | 1 | Class Core | Early | Paladin 6 | Improves ally morale and combat readiness.[web:6] | TM uplift and combat support.
 [web:6] | Paladin [web:6] | None [web:6] | Yes, duration buff.[web:6] | Buff, AoE |
-| <img src="spell-icons/20_smite.png" width="24" align="center"/> Smite | Deity | 1 | Class Core | Early | Paladin 6 | Divine strike vs enemies | HP dmg | Paladin | Radiant | No | Offensive |
-| Cure Light Wounds | Deity | 1 | Class Core | Early | Paladin 6 | Basic holy healing.[web:6] | HP restoration.[web:6] | Paladin [web:6] | Healing [web:6] | No.[web:6] | Healing |
+| [Smite](#smite) | Deity | 1 | Class Core | Early | Paladin 6 | Divine strike vs enemies | HP dmg | Paladin | Radiant | No | Offensive |
+| [Cure Light Wounds](#cure-light-wounds) | Deity | 1 | Class Core | Early | Paladin 6 | Basic holy healing.[web:6] | HP restoration.[web:6] | Paladin [web:6] | Healing [web:6] | No.[web:6] | Healing |
 | Remove Fear | Deity | 1 | Class Core | Early | Paladin 6 | Clears fear and bolsters courage.[web:6] | TM stabilization and panic protection.[web:6] | Paladin [web:6] | None [web:6] | No major after-effect beyond morale protection.[web:6] | Buff, Cleanse |
-| Protection from Evil | Deity | 1 | Class Core | Early | Paladin 6 | Defensive ward against evil influence and attacks.[web:6] | Armor Class support and defensive resistance.[web:6] | Paladin [web:6] | None [web:6] | No.[web:6] | Defensive |
+| [Protection from Evil](#protection-from-evil) | Deity | 1 | Class Core | Early | Paladin 6 | Defensive ward against evil influence and attacks.[web:6] | Armor Class support and defensive resistance.[web:6] | Paladin [web:6] | None [web:6] | No.[web:6] | Defensive |
 | Aid | Deity | 2 | Class Core | Early | Paladin 7 | Supportive blessing with extra staying power.[web:6] | Effective HP increase and morale support.[web:6] | Paladin [web:6] | None [web:6] | Yes, duration support buff.[web:6] | Buff |
 | Barkskin | Deity | 2 | Class Core | Early | Paladin 7 | Toughens skin like bark in Dark Orb's holy-nature support blend.[web:46] | Armor Class increase and resilience increase.[web:46] | Paladin | None [web:46] | Yes, duration-based defensive skin.[web:46] | Defensive, Variant |
 | Resist Fire/Resist Cold | Deity | 2 | Class Core | Mid | Paladin 7 | Grants elemental resistance.[web:6] | Effective HP increase versus selected damage type.[web:6] | Paladin [web:6] | None [web:6] | Yes, duration buff.[web:6] | Defensive |
 | Chant | Deity | 2 | Class Core | Mid | Paladin 8 | Holy chant that steadies allies and pressures foes.[web:6] | Ally TM support and enemy tempo drag.[web:6] | Paladin | None [web:6] | Yes, duration aura.[web:6] | Buff, Debuff, Variant |
 | Remove Paralysis | Deity | 3 | Class Core | Mid | Paladin 8 | Frees allies from paralysis.[web:6] | Restores Movement and TM gain by ending paralysis.[web:6] | Paladin [web:6] | Cleanse [web:6] | No.[web:6] | Cleanse |
-| Haste | Dominion | 3 | School Specialization | Mid | Paladin 9 | Accelerates a target, massively increasing turn meter gain. | TM acceleration. | Paladin | None/Buff | Yes, duration-based speed buff. | Buff, TM Uplift |
+| [Haste](#haste) | Dominion | 3 | School Specialization | Mid | Paladin 9 | Accelerates a target, massively increasing turn meter gain. | TM acceleration. | Paladin | None/Buff | Yes, duration-based speed buff. | Buff, TM Uplift |
 | Magical Vestment | Deity | 3 | Class Core | Mid | Paladin 8 | Enhances armor or shield quality with divine power.[web:6] | Armor Class increase.[web:6] | Paladin [web:6] | None [web:6] | Yes, duration buff.[web:6] | Buff, Defensive |
 | Free Action | Deity | 4 | School Specialization | Late | Paladin 9 | Prevents roots, holds, and slows.[web:6] | Movement immunity to control effects.[web:6] | Paladin [web:6] | None [web:6] | Yes, duration buff.[web:6] | Defensive |
 | Protection from Evil, 10' Radius | Deity | 4 | School Specialization | Late | Paladin 9 | Group protection aura against evil.[web:6] | Group defense, Armor Class support, and anti-control protection.[web:6] | Paladin [web:6] | None [web:6] | Yes, persistent aura duration.[web:6] | Defensive, AoE |
 | Holy Bulwark Variant | Deity | 4 | School Specialization | Late | Paladin 10 | Elite paladin ward for nearby allies.[web:34][web:48] | Armor Class increase, Magic Resistance support, and brief TM stabilization.[web:34][web:48] | Paladin | Radiant/None | Yes, aura duration.[web:34][web:48] | Defensive, Variant |
 | Paladin's Warcry Variant | Deity | 3 | School Specialization | Late | Paladin 9 | Inspiring holy battle-cry that rallies nearby allies.[web:47][web:6] | Ally TM increase, fear resistance, and minor attack uplift in custom design.[web:47][web:6] | Paladin [web:47][web:6] | Sonic/Morale | Short-duration momentum buff.[web:47] | Buff, AoE, Variant |
+
+
+### Smite <img src="spell-icons/20_smite.png" width="24" align="center"/>
+
+| School | Level | Mana | Damage | Class | Tags |
+|--------|-------|------|--------|-------|------|
+| Deity | 1 | 8 | 1d8+1 Radiant | Paladin, Knight | Offensive |
+
+*The paladin's weapon blazes with holy radiance as they strike — a single, decisive blow empowered by divine will. Unlike a spell woven from arcane threads, Smite is a moment of perfect faith made manifest. The Order of the Dawnbringer teaches that a Smite is not an attack but a prayer delivered through steel.*
+
+**Effect:** Empowers the next melee attack with holy damage. Deals bonus damage to undead and demonic foes.
+
+**Impact:** HP damage; bonus versus undead/demons.
 
 ## Knight spellbook
 
@@ -317,13 +577,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 | Spell | School | Spell Level | Access Layer | Access Tier | Minimum Level | Effect | Impact | Class | Damage Type | Afterburn | Tags |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | War Cry | Deity | 1 | Class Core | Early | Knight 9 | Battle shout that shocks enemies or steels allies.[web:47] | Offensive version causes TM disruption and panic in enemies; support version grants TM gain and fear resistance to allies.[web:47] | Knight, Paladin [web:47] | Sonic/Morale | Short-duration momentum effect.[web:47] | CC or Buff, Variant |
-| Smite | Deity | 1 | Class Core | Early | Knight 6 | Divine strike vs enemies | HP dmg | Knight | Radiant | No | Offensive |
+| [Smite](#smite) | Deity | 1 | Class Core | Early | Knight 6 | Divine strike vs enemies | HP dmg | Knight | Radiant | No | Offensive |
 | Rallying Cry | Deity | 1 | Class Core | Early | Knight 9 | Calls allies back into formation.[web:47] | TM increase and morale restoration for companions.[web:47] | Knight [web:47] | Sonic/Morale | Short aura duration.[web:47] | Buff, Variant |
 | Steadfast Line | Deity | 2 | Class Core | Early | Knight 10 | Reinforces discipline and formation stability.[web:47][web:48] | Movement resistance to forced displacement and TM stabilization.[web:47][web:48] | Knight | None | Yes, short formation aura.[web:47][web:48] | Buff, Variant |
 | Banner of Resolve | Deity | 2 | Class Core | Early | Knight 10 | Banner magic that hardens allied will.[web:47][web:48] | Fear resistance, TM uplift, and morale support.[web:47][web:48] | Knight | None | Yes, aura duration.[web:47][web:48] | Buff, Variant |
 | Iron Will Litany | Deity | 3 | Class Core | Mid | Knight 11 | Litany of discipline against hostile magic.[web:48] | Magic Resistance increase and anti-panic support.[web:48] | Knight | None | Yes, chant duration.[web:48] | Defensive, Variant |
 | Advance Signal | Deity | 3 | Class Core | Mid | Knight 11 | Tactical call to press the attack.[web:47][web:48] | Ally TM increase and Movement boost for an advance.[web:47][web:48] | Knight | None | Short-duration surge.[web:47][web:48] | Buff, Variant |
-| Haste | Dominion | 3 | School Specialization | Mid | Knight 12 | Accelerates a target, massively increasing turn meter gain. | TM acceleration. | Knight | None/Buff | Yes, duration-based speed buff. | Buff, TM Uplift |
+| [Haste](#haste) | Dominion | 3 | School Specialization | Mid | Knight 12 | Accelerates a target, massively increasing turn meter gain. | TM acceleration. | Knight | None/Buff | Yes, duration-based speed buff. | Buff, TM Uplift |
 | Shielding Cadence | Deity | 3 | Class Core | Mid | Knight 12 | Rhythmic command that improves survival in formation.[web:48] | Armor Class increase and partial Magic Resistance support.[web:48] | Knight | None | Yes, cadence duration.[web:48] | Defensive, Variant |
 | Battle Hymn of Defiance | Deity | 4 | School Specialization | Late | Knight 12 | Powerful morale chant for large engagements.[web:47][web:48] | Teamwide TM uplift, panic immunity, and combat resilience.[web:47][web:48] | Knight | Sonic/Morale | Yes, anthem duration.[web:47][web:48] | Buff, AoE, Variant |
 | Arcane Defiance Banner | Deity | 4 | School Specialization | Late | Knight 13 | Elite banner ward against sorcery.[web:48] | Group Magic Resistance increase and magical pressure reduction.[web:48] | Knight | None | Yes, banner aura.[web:48] | Defensive, Variant |
@@ -335,7 +595,7 @@ These spells are migrated from the quick-reference index. School, class, and pro
 
 | Spell | School | Description | Damage | Mana | Impact | Class | Tags |
 |-------|--------|-------------|:------:|:----:|--------|-------|------|
-| Haste | Dominion | Accelerates a target, doubling turn meter gain for a short duration. | — | 20 | TM acceleration | Mage, Paladin, Knight | Buff, TM Uplift |
+| [Haste](#haste) | Dominion | Accelerates a target, doubling turn meter gain for a short duration. | — | 20 | TM acceleration | Mage, Paladin, Knight | Buff, TM Uplift |
 | Fire Storm | Stormcraft | A conflagration engulfs the area. | 1D10 Fire | 12 | HP damage | Mage | Offensive, AoE, Nuke |
 | Acid Rain | Stormcraft | Corrosive rain burns all in the area. | 1D6 Acid | 9 | HP damage | Mage | Offensive, AoE |
 | Lava Hail | Stormcraft | Molten rock rains from the sky. | 1D12 Fire | 15 | HP damage | Mage | Offensive, AoE, Nuke |
