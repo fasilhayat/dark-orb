@@ -250,19 +250,19 @@ public class CombatBenchmarkTests(ITestOutputHelper out_)
         var lines = new[]
         {
             "",
-            $"╔══════════════════════════════════════════════╗",
-            $"║  BENCHMARK: {result.Label,-40} ║",
-            $"╠══════════════════════════════════════════════╣",
-            $"║  Trials:       {result.TotalTrials,6}                      ║",
-            $"║  Luna wins:    {result.HeroWins,6} ({result.HeroWinRate,5:F1}%)           ║",
-            $"║  Vaelith wins: {result.EnemyWins,6} ({result.EnemyWinRate,5:F1}%)           ║",
-            $"║  Avg ticks:    {result.AvgTicks,6:F1}                    ║",
-            $"║  Avg dmg/combat: {result.AvgDamagePerCombat,6:F0}               ║",
-            $"║  Hit rate:     {result.HitRate,6:F1}%                  ║",
-            $"║  Crit rate:    {result.CritRate,6:F1}%                  ║",
-            $"║  Fumble rate:  {result.FumbleRate,6:F1}%                  ║",
-            $"║  Spell casts:  {result.TotalSpellCasts,6}                   ║",
-            $"╚══════════════════════════════════════════════╝",
+            $"╔═════════════════════════════════════════════════════════════════════════╗",
+            $"║  BENCHMARK: {result.Label,-40}                                          ║",
+            $"╠═════════════════════════════════════════════════════════════════════════╣",
+            $"║  Trials:       {result.TotalTrials,6}                                   ║",
+            $"║  Luna wins:    {result.HeroWins,6} ({result.HeroWinRate,5:F1}%)         ║",
+            $"║  Vaelith wins: {result.EnemyWins,6} ({result.EnemyWinRate,5:F1}%)       ║",
+            $"║  Avg ticks:    {result.AvgTicks,6:F1}                                   ║",
+            $"║  Avg dmg/combat: {result.AvgDamagePerCombat,6:F0}                       ║",
+            $"║  Hit rate:     {result.HitRate,6:F1}%                                   ║",
+            $"║  Crit rate:    {result.CritRate,6:F1}%                                  ║",
+            $"║  Fumble rate:  {result.FumbleRate,6:F1}%                                ║",
+            $"║  Spell casts:  {result.TotalSpellCasts,6}                               ║",
+            $"╚═════════════════════════════════════════════════════════════════════════╝",
         };
         foreach (var l in lines) out_.WriteLine(l);
         try { File.AppendAllLines(LogPath, lines); } catch { }
@@ -282,20 +282,20 @@ public class CombatBenchmarkTests(ITestOutputHelper out_)
         var result = RunBenchmark("Golem (lvl 14) vs Dummy (lvl 10)", golem, dummy);
 
         out_.WriteLine("");
-        out_.WriteLine($"╔══════════════════════════════════════════════╗");
-        out_.WriteLine($"║  BENCHMARK: {result.Label,-40} ║");
-        out_.WriteLine($"╠══════════════════════════════════════════════╣");
-        out_.WriteLine($"║  Trials:       {result.TotalTrials,6}                      ║");
+        out_.WriteLine($"╔══════════════════════════════════════════════════════════════════════╗");
+        out_.WriteLine($"║  BENCHMARK: {result.Label,-40}                                       ║");
+        out_.WriteLine($"╠══════════════════════════════════════════════════════════════════════╣");
+        out_.WriteLine($"║  Trials:       {result.TotalTrials,6}                                ║");
         out_.WriteLine($"║  Golem wins:   {result.HeroWins,6} ({result.HeroWinRate,5:F1}%)      ║");
-        out_.WriteLine($"║  Dummy wins:   {result.EnemyWins,6} ({result.EnemyWinRate,5:F1}%)         ║");
-        out_.WriteLine($"║  Avg ticks:    {result.AvgTicks,6:F1}                    ║");
-        out_.WriteLine($"║  Avg dmg/combat: {result.AvgDamagePerCombat,6:F0}               ║");
-        out_.WriteLine($"║  Avg dmg/hit:  {result.AvgDamagePerHit,6:F1}                 ║");
-        out_.WriteLine($"║  Hit rate:     {result.HitRate,6:F1}%                  ║");
-        out_.WriteLine($"║  Crit rate:    {result.CritRate,6:F1}%                  ║");
-        out_.WriteLine($"║  Fumble rate:  {result.FumbleRate,6:F1}%                  ║");
-        out_.WriteLine($"║  Spell casts:  {result.TotalSpellCasts,6}                   ║");
-        out_.WriteLine($"╚══════════════════════════════════════════════╝");
+        out_.WriteLine($"║  Dummy wins:   {result.EnemyWins,6} ({result.EnemyWinRate,5:F1}%)    ║");
+        out_.WriteLine($"║  Avg ticks:    {result.AvgTicks,6:F1}                                ║");
+        out_.WriteLine($"║  Avg dmg/combat: {result.AvgDamagePerCombat,6:F0}                    ║");
+        out_.WriteLine($"║  Avg dmg/hit:  {result.AvgDamagePerHit,6:F1}                         ║");
+        out_.WriteLine($"║  Hit rate:     {result.HitRate,6:F1}%                                ║");
+        out_.WriteLine($"║  Crit rate:    {result.CritRate,6:F1}%                               ║");
+        out_.WriteLine($"║  Fumble rate:  {result.FumbleRate,6:F1}%                             ║");
+        out_.WriteLine($"║  Spell casts:  {result.TotalSpellCasts,6}                            ║");
+        out_.WriteLine($"╚══════════════════════════════════════════════════════════════════════╝");
 
         // Regression: Golem should defeat a defenseless dummy
         Assert.True(result.HeroWinRate >= 80,
@@ -309,33 +309,33 @@ public class CombatBenchmarkTests(ITestOutputHelper out_)
     {
         var trials = 200; // fewer trials per matchup to keep test fast
 
-        var matchups = new[]
+        var matchups = new (string Label, int HeroLevel, int EnemyLevel, Func<Character> HeroFactory, Func<Character> EnemyFactory)[]
         {
-            ("Ser Garrick (lvl 12 Paladin)",        "Lord Aethor (lvl 11 Knight)",      MakeSerGarrick(),   MakeLordAethor()),
-            ("Kaela (lvl 10 Barbarian)",            "Greta (lvl 12 Fighter)",          MakeKaela(),        MakeGreta()),
-            ("Sister Elira (lvl 7 Priest)",         "Finnick (lvl 8 Rogue)",           MakeSisterElira(),  MakeFinnick()),
-            ("Lysander (lvl 7 Bard)",               "Merchant Vex (lvl 6 Rogue)",      MakeLysander(),     MakeMerchantVex()),
-            ("Old Man Kael (lvl 8 Priest)",         "Elder Treant (lvl 20 Druid)",     MakeOldManKael(),   MakeElderTreant()),
-            ("Infernal Commander (lvl 18 Knight)",  "Target Golem (lvl 14)",           MakeInfernal(),     MakeGolem()),
+            ("Ser Garrick (lvl 12 Paladin)",        12, 11, MakeSerGarrick,   MakeLordAethor),
+            ("Kaela (lvl 10 Barbarian)",            10, 12, MakeKaela,        MakeGreta),
+            ("Sister Elira (lvl 7 Priest)",          7,  8, MakeSisterElira,  MakeFinnick),
+            ("Lysander (lvl 7 Bard)",                7,  6, MakeLysander,     MakeMerchantVex),
+            ("Old Man Kael (lvl 8 Priest)",          8, 20, MakeOldManKael,   MakeElderTreant),
+            ("Infernal Commander (lvl 18 Knight)",  18, 14, MakeInfernal,     MakeGolem),
         };
 
         out_.WriteLine("");
         out_.WriteLine("======= COMPREHENSIVE BALANCE REPORT =======");
-        out_.WriteLine("Matchup                        Wins  Rate% Ticks  Dmg Spells");
+        out_.WriteLine("Matchup                        Wins  Rate% Ticks  Dmg Spells  OK?");
 
-        var allGood = true;
-        foreach (var (label, _, hero, enemy) in matchups)
+        var issues = 0;
+        foreach (var (label, hl, el, hf, ef) in matchups)
         {
+            var (hero, enemy) = (hf(), ef());
             var r = RunBenchmark(label, hero, enemy, trials);
-            var rateStr = $"{r.HeroWinRate,5:F1}%";
-            var mark = r.HeroWinRate >= 50 ? " " : "⚠";
-            out_.WriteLine($"  {r.Label,-45} {r.HeroWins,6} {rateStr,7} {r.AvgTicks,6:F0} {r.AvgDamagePerCombat,5:F0} {r.TotalSpellCasts,5}");
-            if (r.HeroWinRate < 50 && r.HeroWinRate > 0)
-                allGood = false;
+            var higherWon = (hl >= el && r.HeroWinRate >= 50) || (el >= hl && r.HeroWinRate <= 50);
+            var ok = higherWon || r.HeroWinRate == 50; // 50% is a draw, acceptable
+            if (!ok) issues++;
+            out_.WriteLine($"  {r.Label,-45} {r.HeroWins,6} {r.HeroWinRate,6:F1}% {r.AvgTicks,6:F0} {r.AvgDamagePerCombat,5:F0} {r.TotalSpellCasts,5} {(ok ? "✓" : "✗")}");
         }
 
         out_.WriteLine("==========================================");
-        Assert.True(allGood, "One or more matchups had the lower-level character winning more often");
+        Assert.True(issues == 0, $"{issues} matchup(s) had the lower-level character winning more often than the higher-level character");
     }
 
     // ── Additional character factories ───────────────────────────
