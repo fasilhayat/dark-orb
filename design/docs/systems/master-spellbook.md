@@ -128,7 +128,7 @@ Chronara watches stars ignite and shadows burn out without ever taking a side. S
 
 | Deity | Title | Domain |
 |-------|-------|--------|
-| **Ignaroth** | The burning destroyer | Fire, Destruction |
+| **Ignara** | The burning destroyer | Fire, Destruction |
 | **Umbraex** | The void lord | Darkness, Secrets |
 | **Veparix** | The deceptive mist | Deception, Illusion |
 | **Noctivane** | The shadow assassin god | Shadow, Stealth |
@@ -947,7 +947,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 |[Cure Serious Wounds](#cure-serious-wounds)| Aethelion |4|Class Core|Mid|-|Priest, Druid, Paladin|Healing|No.|Healing|
 |[Free Action](#free-action)| Astrara |4|Class Core|Mid|-|Priest, Paladin|None|Yes, duration buff.|Defensive|
 |[Cure Critical Wounds](#cure-critical-wounds)| Aethelion |5|School Specialization|Late|-|Priest, Druid, Paladin|Healing|No.|Healing|
-|[Flame Strike](#flame-strike)| Ignaroth |5|School Specialization|Late|-|Priest|Fire/Radiant|No explicit lingering burn.|Offensive, Nuke|
+|[Flame Strike](#flame-strike)| Ignara |5|School Specialization|Late|-|Priest|Fire/Radiant|No explicit lingering burn.|Offensive, Nuke|
 |[Heal](#heal)| Aethelion |6|School Specialization|Late|-|Priest|Healing|No.|Healing|
 |[Blade Barrier](#blade-barrier)| Celestara |6|School Specialization|Late|-|Priest|Physical/Magical|Yes, persistent hazard while active.|Offensive, Defensive, Barrier|
 |[Heroes' Feast](#heroes-feast)| Aethelion |6|School Specialization|Late|-|Priest|Buff|Yes, prebuff duration benefits.|Buff, AoE|
@@ -1260,13 +1260,13 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Ignaroth</td><td>5</td><td>20</td><td>1d6 per level Fire/Radiant</td><td>Priest</td><td>Offensive, Nuke</td></tr>
+<tr><td>Ignara</td><td>5</td><td>20</td><td>1d6 per level Fire/Radiant</td><td>Priest</td><td>Offensive, Nuke</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*A pillar of divine fire descends from the heavens. A vertical column dealing 1d6 fire + 1d6 radiant damage per caster level (cap 15d6+15d6). Undead take double damage. Base 6d6+6d6 at level 6, scaling +1d6/+1d6 per level. Deity Bonus: (Ignaroth) +1d6 fire damage; 10% chance to ignite.*
+*A pillar of divine fire descends from the heavens. A vertical column dealing 1d6 fire + 1d6 radiant damage per caster level (cap 15d6+15d6). Undead take double damage. Base 6d6+6d6 at level 6, scaling +1d6/+1d6 per level. Deity Bonus: (Ignara) +1d6 fire damage; 10% chance to ignite.*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1363,14 +1363,14 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 |[Shillelagh](#shillelagh)| Chronara |1|Class Core|Early|-|Druid|Physical/Magical|No.|Buff|
 |[Barkskin](#barkskin)| Celestara |2|Class Core|Early|-|Druid, Priest|None|Yes, duration-based defensive skin.|Defensive|
 |[Goodberry](#goodberry)| Lunara |2|Class Core|Early|-|Druid, Priest|Healing|No.|Healing|
-|[Heat Metal](#heat-metal)| Ignaroth |2|Class Core|Early|-|Druid, Priest|Fire|Yes, continuing heat damage or pressure.|Debuff|
+|[Heat Metal](#heat-metal)| Ignara |2|Class Core|Early|-|Druid, Priest|Fire|Yes, continuing heat damage or pressure.|Debuff|
 |[Call Lightning](#call-lightning)| Chronara |3|Class Core|Mid|-|Druid, Priest|Lightning|Yes in repeated-round use, though not burn.|Offensive|
 |[Hold Animal](#hold-animal)| Chronara |3|Class Core|Mid|-|Druid, Priest|None/Control|Yes, duration root/paralysis.|CC|
 |[Call Woodland Beings](#call-woodland-beings)| Chronara |4|School Specialization|Mid|-|Druid|Variable|Yes, summoned allies persist for duration.|Summoning|
 |[Giant Insect](#giant-insect)| Chronara |4|School Specialization|Mid|-|Druid, Priest|Physical|Yes, transformed creatures persist for duration.|Summoning-lite|
 |[Insect Plague](#insect-plague)| Umbraex |5|School Specialization|Late|-|Druid, Priest|Physical/Poison-theme|Yes, persistent swarm presence.|Offensive, CC|
 |[Anti-Plant Shell](#anti-plant-shell)| Chronara |5|School Specialization|Late|-|Druid, Priest|None|Yes, persistent shell.|Defensive|
-|[Fire Seeds](#fire-seeds)| Ignaroth |6|School Specialization|Late|-|Druid|Fire|Sometimes, depending on trap-style implementation.|Offensive|
+|[Fire Seeds](#fire-seeds)| Ignara |6|School Specialization|Late|-|Druid|Fire|Sometimes, depending on trap-style implementation.|Offensive|
 |[Liveoak](#liveoak)| Chronara |6|School Specialization|Late|-|Druid|Physical|Yes, awakened guardian persists.|Summoning|
 |[Creeping Doom](#creeping-doom)| Umbraex |7|School Specialization|Late|-|Druid|Physical|Yes, persistent swarm pressure.|Offensive, CC|
 |[Earthquake](#earthquake)| Chronara |7|School Specialization|Late|-|Druid, Priest|Physical|Yes, persistent terrain disruption during effect.|Offensive, AoE|
@@ -1494,13 +1494,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Ignaroth</td><td>2</td><td>-</td><td></td><td>Druid, Priest</td><td>Debuff</td></tr>
+<tr><td>Ignara</td><td>2</td><td>-</td><td></td><td>Druid, Priest</td><td>Debuff</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid, Priest Damage type: Fire. Yes, continuing heat damage or pressure. Deity Bonus: (Ignaroth) +1d6 fire damage; ignites target on critical.*
+*- Druid, Priest Damage type: Fire. Yes, continuing heat damage or pressure. Deity Bonus: (Ignara) +1d6 fire damage; ignites target on critical.*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1641,13 +1641,13 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Ignaroth</td><td>6</td><td>-</td><td></td><td>Druid</td><td>Offensive</td></tr>
+<tr><td>Ignara</td><td>6</td><td>-</td><td></td><td>Druid</td><td>Offensive</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Druid Damage type: Fire. Sometimes, depending on trap-style implementation. Deity Bonus: (Ignaroth) +1d6 fire damage per seed.*
+*- Druid Damage type: Fire. Sometimes, depending on trap-style implementation. Deity Bonus: (Ignara) +1d6 fire damage per seed.*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1710,7 +1710,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 </tr>
 </table>
 
-*- Druid, Priest Damage type: Physical. Yes, persistent terrain disruption during effect. Deity Bonus: (Chronara, Ignaroth) Ignaroth: +1d6 fire damage on cracked ground.*
+*- Druid, Priest Damage type: Physical. Yes, persistent terrain disruption during effect. Deity Bonus: (Chronara, Ignara) Ignara: +1d6 fire damage on cracked ground.*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 
@@ -1768,7 +1768,7 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 
 | Spell | Deity | Spell Level | Access Layer | Access Tier | Minimum Level | Class | Damage Type | Afterburn | Tags |
 |------|--------|-------------|-------------|-----------|---------------|-------|------------|-----------|------|
-|[War Cry](#war-cry)| Ignaroth |1|Class Core|Early|-|Knight, Paladin|Sonic/Morale|Short-duration momentum effect.|CC or Buff, Variant|
+|[War Cry](#war-cry)| Ignara |1|Class Core|Early|-|Knight, Paladin|Sonic/Morale|Short-duration momentum effect.|CC or Buff, Variant|
 |[Smite](#smite)| Aethelion |1|Class Core|Early|-|Knight|Radiant|No|Offensive|
 | [Rallying Cry](#rallying-cry) | Aethelion | 1 | Class Core | Early | - | Knight | Sonic/Morale | Short aura duration. | Buff, Variant |
 |[Steadfast Line](#steadfast-line)| Celestara |2|Class Core|Early|-|Knight|None|Yes, short formation aura.|Buff, Variant|
@@ -1794,13 +1794,13 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <td>
 <table>
 <tr><th>School</th><th>Level</th><th>Mana</th><th>Damage</th><th>Class</th><th>Tags</th></tr>
-<tr><td>Ignaroth</td><td>1</td><td>-</td><td></td><td>Knight, Paladin</td><td>CC or Buff, Variant</td></tr>
+<tr><td>Ignara</td><td>1</td><td>-</td><td></td><td>Knight, Paladin</td><td>CC or Buff, Variant</td></tr>
 </table>
 </td>
 </tr>
 </table>
 
-*- Knight, Paladin Damage type: Sonic/Morale. Short-duration momentum effect. Deity Bonus: (Ignaroth, Noctivane) Noctivane: fear effect on enemies.*
+*- Knight, Paladin Damage type: Sonic/Morale. Short-duration momentum effect. Deity Bonus: (Ignara, Noctivane) Noctivane: fear effect on enemies.*
 
 <hr style="border: none; border-top: 1px solid #444; margin: 24px 0;">
 

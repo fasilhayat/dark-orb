@@ -495,7 +495,7 @@ FROM (VALUES
     ('Astrara',    'Light',   'The guiding star mother who illuminates fate.',               'Stars, Fate'),
     ('Celestara',  'Light',   'The weaver of destiny in the night sky.',                     'Destiny, Time'),
     ('Lunara',     'Light',   'The silver moon goddess governing tides and magic.',          'Moon, Magic, Tides'),
-    ('Ignaroth',   'Dark',    'The burning destroyer of flame and destruction.',             'Fire, Destruction'),
+    ('Ignara',   'Dark',    'The burning destroyer of flame and destruction.',             'Fire, Destruction'),
     ('Umbraex',    'Dark',    'The void lord from which all shadows are born.',              'Darkness, Secrets'),
     ('Veparix',    'Dark',    'The deceptive mist of illusion and obscured truths.',         'Deception, Illusion'),
     ('Noctivane',  'Dark',    'The shadow assassin god of stealth and the realm between.',   'Shadow, Stealth'),

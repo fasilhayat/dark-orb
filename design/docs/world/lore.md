@@ -203,7 +203,7 @@ The world is governed by eight major deities, divided into two courts:
 
 ### The Shadow Court (Evil)
 
-**Ignaroth** — The burning destroyer. He embodies the consuming flame of destruction and rebirth, and is worshipped by those who seek to tear down the old to make way for the new. His domain is Fire and Destruction, and his symbol is a consuming flame with a rebirth spiral.
+**Ignara** — The burning destroyer. She embodies the consuming flame of destruction and rebirth, and is worshipped by those who seek to tear down the old to make way for the new. Her domain is Fire and Destruction, and her symbol is a consuming flame with a rebirth spiral.
 
 **Umbraex** — The void lord. He is the darkness from which all shadows are born, the keeper of secrets best left unknown. His domain is Darkness and Secrets, and his symbol is an eclipse with an empty eye and shadow rings.
 
@@ -287,7 +287,7 @@ When a divine caster (Priest, Druid, Paladin, Knight) wields a spell aligned wit
 
 | Deity | Affinity | Bonus |
 |-------|----------|-------|
-| **Ignaroth** | Fire, Destruction | Fire spells deal +1d6 fire damage. 10% chance to ignite target for 1d4. |
+| **Ignara** | Fire, Destruction | Fire spells deal +1d6 fire damage. 10% chance to ignite target for 1d4. |
 | **Umbraex** | Darkness, Secrets, Shadow | Shadow spells deal +1d4 shadow damage. Control spells gain +1 round or -1 DefensePower. |
 | **Veparix** | Deception, Illusion | Illusion/control spells gain +5% application chance. Revealed targets suffer -2 DefensePower. |
 | **Noctivane** | Shadow, Stealth | Fear effects last +1 round. Stealth/shadow attacks deal +1d6 bonus damage. |
