@@ -209,67 +209,78 @@ These are the low-tier spells most mages should have access to before school spe
 | Stinking Cloud | Umbramancy / Mirage | 2 | Common Core | Early | Mage 2 | Nauseating cloud that disrupts actions in its area.[web:2] | TM suppression, action failure, and Movement denial by zone pressure.[web:2] | Mage [web:2] | Poison/Control [web:2] | Yes, persistent cloud zone.[web:2] | CC, AoE |
 
 
-### Magic Missile <img src="spell-icons/01_magic_missile.png" width="24" align="center"/>
+<span id="magic-missile"></span>
+### Magic Missile <img src="spell-icons/01_magic_missile.png" width="200" align="center"/>
 
 | School | Level | Mana | Damage | Class | Tags |
 |--------|-------|------|--------|-------|------|
-| Stormcraft | 1 | 5 | 1d4+1 Force | Mage | Single-Target Damage, Nuke |
+| Stormcraft | 1 | 5 | 1d4+1 per dart | Mage | Single-Target Damage, Nuke |
 
-*The first incantation taught in every arcane academy — three flawless darts of pure force that never deviate from their mark. Invented by the archmage Thyra Solspire during the Meridian Wars, its elegant simplicity has saved more apprentices than any shield spell. A spellcaster who masters Magic Missile has taken the first true step into the arcane arts.*
+*The first incantation taught in every arcane academy — three flawless darts of pure force that never deviate from their mark. Invented by the archmage Thyra Solspire during the Meridian Wars, its elegant simplicity has saved more apprentices than any shield spell.*
 
-**Effect:** Three glowing darts strike the target automatically. No attack roll needed — force damage bypasses most resistances. Additional darts manifest at caster levels 3, 5, and 7.
+**Effect:** Three glowing darts of pure force that never miss. Each dart deals 1d4+1 damage and strikes simultaneously — no attack roll required. Force damage bypasses most resistances and immunities.
 
-**Impact:** HP damage.
+**Damage Dice:** Base 3d4+3 at level 1. Gains +1 dart at levels 3, 5, 7 (max 6d4+6). Scales every 2 levels.
 
+**Impact:** HP damage. Guaranteed hit — cannot be dodged, parried, or blocked.
 
-### Armor <img src="spell-icons/02_armor.png" width="24" align="center"/>
+<span id="armor"></span>
+### Armor <img src="spell-icons/02_armor.png" width="200" align="center"/>
 
 | School | Level | Mana | Damage | Class | Tags |
 |--------|-------|------|--------|-------|------|
 | Aegis | 1 | 10 | None | Mage | Defensive, Buff |
 
-*A shimmering field of magical force wraps the caster in invisible plate. First codified by the dwarven runesmiths of Khaz-Vorn, this spell has been adapted by every magical tradition in Aelthoria. The sensation is like stepping into a suit of silk-lined steel — protective, yet never restricting.*
+*A shimmering field of magical force wraps the caster in invisible plate. First codified by the dwarven runesmiths of Khaz-Vorn, this spell has been adapted by every magical tradition in Aelthoria.*
 
-**Effect:** Raises the caster's Armor Class by a significant margin. Stacks with worn armor but does not replace it. Duration scales with caster level.
+**Effect:** Creates a protective field of magical armor around the caster, granting a significant Armor Class bonus. Stacks with worn armor — does not replace it. The field lasts until dispelled or the caster rests.
 
-**Impact:** Armor Class increase.
+**Damage Dice:** No damage. Purely defensive — AC +6 at level 1, scaling +1 per 3 caster levels (max +10).
 
+**Impact:** Armor Class increase. Improves survivability against physical attacks.
 
-### Burning Hands <img src="spell-icons/03_burning_hands.png" width="24" align="center"/>
+<span id="burning-hands"></span>
+### Burning Hands <img src="spell-icons/03_burning_hands.png" width="200" align="center"/>
 
 | School | Level | Mana | Damage | Class | Tags |
 |--------|-------|------|--------|-------|------|
-| Stormcraft | 1 | 5 | 1d4 Fire | Mage | Offensive, AoE |
+| Stormcraft | 1 | 5 | 1d4 per level Fire | Mage | Offensive, AoE |
 
-*A fan of roaring flame erupts from the caster's fingertips — the signature spell of pyromancers and the first lesson in aggressive magic. The fire is hot enough to ignite cloth, wood, and hair, leaving the acrid smell of brimstone in its wake. Veteran mages learn to control the spread; novices are advised to stand clear of allies.*
+*A fan of roaring flame erupts from the caster's fingertips — the signature spell of pyromancers and the first lesson in aggressive magic. The fire ignites cloth, wood, and hair, leaving the acrid smell of brimstone in its wake.*
 
-**Effect:** Cone-shaped fire burst hits all targets in a short range. Each target takes fire damage with no save for half — positioning is everything.
+**Effect:** Cone-shaped burst of fire hits all targets in a short range. Each target takes 1d4 fire damage per caster level (max 5d4). No save for half — positioning is critical.
 
-**Impact:** HP damage.
+**Damage Dice:** Base 1d4 at level 1, scales +1d4 per level (cap 5d4 at level 5). Fire damage — reduced by fire resistance.
 
+**Impact:** HP damage. Hits all enemies in a 60-degree cone, 15-foot range.
 
-### Sleep <img src="spell-icons/04_sleep.png" width="24" align="center"/>
+<span id="sleep"></span>
+### Sleep <img src="spell-icons/04_sleep.png" width="200" align="center"/>
 
 | School | Level | Mana | Damage | Class | Tags |
 |--------|-------|------|--------|-------|------|
 | Mirage | 1 | 5 | None | Mage | CC, AoE |
 
-*A cloud of shimmering blue motes drifts across the battlefield, each one a whisper of forgotten lullabies. Creatures caught in the haze feel their eyelids grow heavy as the world fades to soft twilight. The spell cannot discriminate completely — allies in the area may also feel the tug of slumber if they are not braced for it.*
+*A cloud of shimmering blue motes drifts across the battlefield, each one a whisper of forgotten lullabies. Creatures caught in the haze feel their eyelids grow heavy as the world fades to soft twilight.*
 
-**Effect:** Puts low-HP targets into magical sleep. Affected targets cannot act until damaged or the duration expires. Affects a group of targets based on total hit dice.
+**Effect:** Puts low-HP targets into magical slumber. Affects up to 4 HD of creatures total (e.g., four 1-HD enemies or one 4-HD enemy). Slumber breaks on damage or when the duration expires.
 
-**Impact:** TM freeze and action denial.
+**Damage Dice:** No damage. Non-lethal CC — targets are removed from combat for the duration. No save against creatures under 5 HD.
 
+**Impact:** TM freeze and action denial. Single cast can disable multiple weak targets.
 
-### Invisibility <img src="spell-icons/05_invisibility.png" width="24" align="center"/>
+<span id="invisibility"></span>
+### Invisibility <img src="spell-icons/05_invisibility.png" width="200" align="center"/>
 
 | School | Level | Mana | Damage | Class | Tags |
 |--------|-------|------|--------|-------|------|
 | Mirage | 2 | 10 | None | Mage | Invisibility |
 
-*The caster or a touched ally fades from sight, becoming a whisper of refracted light. True invisibility is a rare gift — most illusionists spend years perfecting the weave before it holds against motion. Once the invisible creature attacks, the spell collapses, but until then they are a ghost upon the battlefield.*
+*The caster or a touched ally fades from sight, becoming a whisper of refracted light. True invisibility is a rare gift — most illusionists spend years perfecting the weave before it holds against motion.*
 
-**Effect:** Renders the target completely invisible. Attacks against the target have a high miss chance. Spell ends when the target attacks or casts an offensive spell.
+**Effect:** Renders the target completely invisible. Attacks against the invisible target suffer a severe miss chance. The spell ends when the target attacks or casts an offensive spell.
+
+**Damage Dice:** No damage. Defensive utility — grants effective immunity to direct-targeted attacks until broken.
 
 **Impact:** Targeting denial and survivability increase.
 
@@ -302,69 +313,80 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 | Charm Person | Mirage | 2 | School Specialization | Mid | Mage 4 | Charms a humanoid to fight as an ally. | Target switches sides for the duration. | Mage | None | Yes, Charmed (pink) | CC, Charm |
 
 
-### Fireball <img src="spell-icons/06_fireball.png" width="24" align="center"/>
+<span id="fireball"></span>
+### Fireball <img src="spell-icons/06_fireball.png" width="200" align="center"/>
 
 | School | Level | Mana | Damage | Class | Tags |
 |--------|-------|------|--------|-------|------|
-| Stormcraft | 3 | 15 | 1d6/level Fire | Mage | Offensive, AoE, Nuke |
+| Stormcraft | 3 | 15 | 1d6 per level Fire | Mage | Offensive, AoE, Nuke |
 
-*A pea-sized bead of orange light streaks to the target point and erupts into a roaring sphere of flame. Few spells inspire as much caution — its blast radius is infamous for catching friend and foe alike. The fire mage Kaelen Brightscar once joked that Fireball taught more wizards geometry than any theorem ever could.*
+*A pea-sized bead of orange light streaks to the target point and erupts into a roaring sphere of flame. The fire mage Kaelen Brightscar once joked that Fireball taught more wizards geometry than any theorem ever could.*
 
-**Effect:** Wide-area explosion dealing heavy fire damage to all in its radius. Damage scales with caster level. Cannot be shaped — allies in the blast are hit too.
+**Effect:** Wide-area explosion dealing 1d6 fire damage per caster level (cap 10d6) to all targets in a 20-foot radius. Cannot be shaped — allies in the blast are hit too.
 
-**Impact:** HP damage to all victims in blast radius.
+**Damage Dice:** Base 5d6 at level 5 (min level), scales +1d6 per level (cap 10d6 at level 10). Fire damage — half on save.
 
+**Impact:** HP damage to all victims in blast radius. The signature nuke spell.
 
-### Haste <img src="spell-icons/07_haste.png" width="24" align="center"/>
+<span id="haste"></span>
+### Haste <img src="spell-icons/07_haste.png" width="200" align="center"/>
 
 | School | Level | Mana | Damage | Class | Tags |
 |--------|-------|------|--------|-------|------|
 | Dominion | 3 | 20 | None | Mage, Paladin, Knight, Bard | Buff, TM Uplift |
 
-*Time warps around the target as golden energy suffuses their limbs. Every motion becomes fluid, every decision instant. The spell taxes the caster's concentration heavily, which is why few mages cast it lightly. On the battlefield, a Hasted warrior moves like a blur, striking twice before the enemy blinks.*
+*Time warps around the target as golden energy suffuses their limbs. Every motion becomes fluid, every decision instant. On the battlefield, a Hasted warrior moves like a blur, striking twice before the enemy blinks.*
 
-**Effect:** Massively accelerates the target's turn meter gain, allowing more frequent actions. Lasts for a limited duration.
+**Effect:** Massively accelerates the target's turn meter gain (+50% TM rate), allowing more frequent actions. Also grants +2 AttackPower and +2 DefensePower for the duration.
 
-**Impact:** TM acceleration and action frequency increase.
+**Damage Dice:** No damage. TM acceleration = more actions per combat. Duration 1 round per caster level (max 10 rounds).
 
+**Impact:** TM acceleration, AttackPower +2, DefensePower +2.
 
-### Slow <img src="spell-icons/08_slow.png" width="24" align="center"/>
+<span id="slow"></span>
+### Slow <img src="spell-icons/08_slow.png" width="200" align="center"/>
 
 | School | Level | Mana | Damage | Class | Tags |
 |--------|-------|------|--------|-------|------|
 | Dominion / Mirage | 3 | 15 | None | Mage | CC, Debuff, Turn-Meter Control |
 
-*A cloying purple haze settles over the target, weighing down their limbs and dulling their thoughts. Time seems to crawl — each movement takes twice the effort. The spell is the inverted twin of Haste, and mastering both is considered a mark of a truly rounded mage.*
+*A cloying purple haze settles over the target, weighing down their limbs and dulling their thoughts. Time seems to crawl — each movement takes twice the effort.*
 
-**Effect:** Reduces the target's turn meter gain drastically. Also reduces movement speed. Duration-based suppression.
+**Effect:** Reduces the target's turn meter gain by 50%. Also reduces movement speed and applies -2 DefensePower. The target can resist each round to break the effect early.
 
-**Impact:** TM reduction and Movement reduction.
+**Damage Dice:** No damage. TM suppression — effectively halves the target's action frequency. Duration 1 round per caster level.
 
+**Impact:** TM reduction, Movement reduction, DefensePower -2.
 
-### Confusion <img src="spell-icons/09_confusion.png" width="24" align="center"/>
+<span id="confusion"></span>
+### Confusion <img src="spell-icons/09_confusion.png" width="200" align="center"/>
 
 | School | Level | Mana | Damage | Class | Tags |
 |--------|-------|------|--------|-------|------|
 | Mirage / Dominion | 4 | 15 | None | Mage | CC, AoE |
 
-*Swirling ribbons of clashing colour erupt around the target, flooding their senses with contradictory impulses. Friend becomes foe, left becomes right, and action freezes into indecision. The spell has been banned in three city-states for its unpredictable nature — but on the battlefield, chaos is a weapon like any other.*
+*Swirling ribbons of clashing colour erupt around the target, flooding their senses with contradictory impulses. The spell has been banned in three city-states for its unpredictable nature.*
 
-**Effect:** Target acts erratically — may attack allies, skip turns, or wander randomly. Area version affects multiple targets at higher level.
+**Effect:** Target acts erratically — may attack allies, skip turns, or wander randomly each round. No save on first application; a save is permitted each subsequent round to recover.
+
+**Damage Dice:** No damage. Pure CC — target loses control of their actions for 1 round per caster level (max 6 rounds).
 
 **Impact:** TM unreliability, wasted turns, and positional chaos.
 
-
-### Feeblemind <img src="spell-icons/10_feeblemind.png" width="24" align="center"/>
+<span id="feeblemind"></span>
+### Feeblemind <img src="spell-icons/10_feeblemind.png" width="200" align="center"/>
 
 | School | Level | Mana | Damage | Class | Tags |
 |--------|-------|------|--------|-------|------|
 | Umbramancy | 5 | 25 | None | Mage | CC, Anti-Mage |
 
-*A lance of pure psychic corruption pierces the target's consciousness, unravelling thoughts like a frayed tapestry. The mind reels, coils, and collapses into a fog of confusion. Designed specifically to neutralize powerful enemy spellcasters, Feeblemind is the Umbramancer's answer to an archmage they cannot match in a fair duel.*
+*A lance of pure psychic corruption pierces the target's consciousness, unravelling thoughts like a frayed tapestry. Designed to neutralize powerful enemy spellcasters.*
 
-**Effect:** Devastating intelligence and wisdom drain. Spellcasters hit by this lose the ability to cast spells for the duration. Severe MP damage.
+**Effect:** Devastating Intelligence and Wisdom drain. The target's mental stats drop to 1, making spellcasting impossible for the duration. Severe MP damage is also dealt.
 
-**Impact:** MP pressure, anti-caster shutdown, and reduced magical threat output.
+**Damage Dice:** No direct HP damage. MP damage = 2d6 × caster level (ignores resistances). Caster shutdown — cannot cast spells.
+
+**Impact:** MP pressure, anti-caster shutdown. CC that specifically cripples enemy mages/spellcasters.
 
 ## Priest spellbook
 
@@ -393,95 +415,110 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 | Restoration | Deity | 7 | School Specialization | Late | Priest 9 | Repairs severe spiritual or life-force harm.[web:6] | Restores magical stability and cleanses severe debuffs.[web:6] | Priest [web:6] | Healing [web:6] | No.[web:6] | Healing, Cleanse |
 
 
-### Bless <img src="spell-icons/11_bless.png" width="24" align="center"/>
+<span id="bless"></span>
+### Bless <img src="spell-icons/11_bless.png" width="200" align="center"/>
 
 | School | Level | Mana | Damage | Class | Tags |
 |--------|-------|------|--------|-------|------|
 | Deity | 1 | 8 | None | Priest, Paladin | Buff, AoE |
 
-*The priest raises a holy symbol as golden light descends upon their allies like a warm dawn. Each touched comrade feels a surge of confidence — their strikes land truer, their steps feel lighter. The Blessing of Aethelion has been invoked on every major battlefield in Aelthorian history, from the Siege of Dawnspire to the Shadowmere Incursion.*
+*The priest raises a holy symbol as golden light descends upon their allies like a warm dawn. The Blessing of Aethelion has been invoked on every major battlefield in Aelthorian history.*
 
-**Effect:** Allies in range gain a morale bonus to attack rolls and turn meter gain. Lasts for the duration of the engagement.
+**Effect:** Allies in range gain +1 to attack rolls and +10% turn meter gain. Bless lasts for the duration of the encounter and affects up to 6 allies.
 
-**Impact:** TM uplift and combat support.
+**Damage Dice:** No damage. Buff — +1 AttackPower, +10% TM rate, +1 saving throws for all allies in range.
 
+**Impact:** TM uplift and combat support. Party-wide morale bonus.
 
-### Cure Light Wounds <img src="spell-icons/12_cure_light_wounds.png" width="24" align="center"/>
+<span id="cure-light-wounds"></span>
+### Cure Light Wounds <img src="spell-icons/12_cure_light_wounds.png" width="200" align="center"/>
 
 | School | Level | Mana | Damage | Class | Tags |
 |--------|-------|------|--------|-------|------|
 | Deity | 1 | 6 | 1d8+1 Healing | Priest, Druid, Paladin | Healing |
 
-*A soft green glow radiates from the healer's palms as wounds knit and bruises fade. The most fundamental prayer of the healing arts — every acolyte learns it before their first vigil. Though humble in power, Cure Light Wounds has saved more lives across Aelthoria than all the grand miracles combined.*
+*A soft green glow radiates from the healer's palms as wounds knit and bruises fade. The most fundamental prayer of the healing arts — every acolyte learns it before their first vigil.*
 
-**Effect:** Restores a moderate amount of hit points to a single target. Cannot exceed the target's maximum HP.
+**Effect:** Restores 1d8+1 hit points to a single target. Cannot exceed the target's maximum HP. At higher levels, the healing amount increases (1d8+1 per caster level, cap 5d8+5).
 
-**Impact:** HP restoration.
+**Damage Dice:** Base 1d8+1 at level 1, scales +1d8+1 per level (cap 5d8+5 at level 5). Healing type — positive energy.
 
+**Impact:** HP restoration. The most reliable early-game heal.
 
-### Protection from Evil <img src="spell-icons/13_protection_from_evil.png" width="24" align="center"/>
+<span id="protection-from-evil"></span>
+### Protection from Evil <img src="spell-icons/13_protection_from_evil.png" width="200" align="center"/>
 
 | School | Level | Mana | Damage | Class | Tags |
 |--------|-------|------|--------|-------|------|
 | Deity | 1 | 10 | None | Priest, Paladin | Defensive, Buff |
 
-*A shimmering golden ward encircles the target, deflecting the attentions of malevolent forces. The spell does not merely protect the body — it fortifies the spirit against possession, coercion, and the unnatural dread that accompanies dark creatures. The priesthood of Celestara made this spell a cornerstone of their rites.*
+*A shimmering golden ward encircles the target, deflecting the attentions of malevolent forces. The priesthood of Celestara made this spell a cornerstone of their rites.*
 
-**Effect:** Provides a defensive bonus against evil-aligned creatures. Grants resistance to mental control, fear, and possession effects.
+**Effect:** Provides +2 AC and +2 saving throws against evil-aligned creatures. Grants immunity to mental control, fear, and possession from evil sources. Blocks summoned evil creatures from touching the target.
+
+**Damage Dice:** No damage. Purely defensive — +2 AC vs evil, +2 saves vs evil, immunity to mental control.
 
 **Impact:** Armor Class improvement and defensive resistance versus evil threats.
 
-
-### Hold Person <img src="spell-icons/14_hold_person.png" width="24" align="center"/>
+<span id="hold-person"></span>
+### Hold Person <img src="spell-icons/14_hold_person.png" width="200" align="center"/>
 
 | School | Level | Mana | Damage | Class | Tags |
 |--------|-------|------|--------|-------|------|
 | Deity | 2 | 10 | None | Priest | CC |
 
-*Golden bands of divine light wrap around the target, locking their limbs in place. The victim remains fully conscious — aware, terrified, and utterly unable to move. Interrogators value this spell as much as healers do; on the battlefield it turns a rampaging warrior into a statue waiting for a hammer.*
+*Golden bands of divine light wrap around the target, locking their limbs in place. The victim remains fully conscious — aware, terrified, and utterly unable to move.*
 
-**Effect:** Paralyzes a humanoid target completely. No movement, no actions, no defense. A save is permitted each round to break free.
+**Effect:** Paralyzes a humanoid target completely — no movement, no actions, no defense. The target may attempt a save each round to break free. Only affects humanoids (not beasts, undead, or monsters).
 
-**Impact:** TM freeze and Movement set to zero while held.
+**Damage Dice:** No damage. Pure paralysis — target is helpless. Duration 1 round per caster level (max 6 rounds). Save each round to break.
 
+**Impact:** TM freeze and Movement set to zero. Target is completely disabled while held.
 
-### Flame Strike <img src="spell-icons/15_flame_strike.png" width="24" align="center"/>
+<span id="flame-strike"></span>
+### Flame Strike <img src="spell-icons/15_flame_strike.png" width="200" align="center"/>
 
 | School | Level | Mana | Damage | Class | Tags |
 |--------|-------|------|--------|-------|------|
-| Deity | 5 | 20 | 1d6/level Fire/Radiant | Priest | Offensive, Nuke |
+| Deity | 5 | 20 | 1d6 per level Fire/Radiant | Priest | Offensive, Nuke |
 
-*A pillar of divine fire descends from the heavens, righteous and terrible. The flames burn with holy light — they sear the wicked and leave the righteous untouched. The first Flame Strike was called down by the High Priestess Elara during the Purge of Blackmarsh, cleansing an entire swamp of undead in a single blinding column.*
+*A pillar of divine fire descends from the heavens, righteous and terrible. The flames burn with holy light — they sear the wicked and leave the righteous untouched.*
 
-**Effect:** Vertical column of holy fire dealing heavy fire + radiant damage. Damage scales with caster level.
+**Effect:** Vertical column of holy fire dealing 1d6 fire + 1d6 radiant damage per caster level (cap 15d6). Undead take double damage. The column is 30 feet tall and 10 feet wide.
 
-**Impact:** HP damage and holy offensive pressure.
+**Damage Dice:** Base 6d6 fire + 6d6 radiant at level 6 (min level), scales +1d6/+1d6 per level (cap 15d6+15d6). Half damage on save.
 
+**Impact:** HP damage. Holy fire — double damage against undead and demons.
 
-### Heal <img src="spell-icons/16_heal.png" width="24" align="center"/>
+<span id="heal"></span>
+### Heal <img src="spell-icons/16_heal.png" width="200" align="center"/>
 
 | School | Level | Mana | Damage | Class | Tags |
 |--------|-------|------|--------|-------|------|
 | Deity | 6 | 30 | Cures all HP | Priest | Healing |
 
-*The most powerful restorative miracle in the divine arsenal — a surge of pure life energy that washes over the target like a tidal wave of warmth. Broken bones reknit, organs regenerate, and the grievously wounded are brought back from death's doorstep. Only the most devoted priests are trusted with this spell.*
+*The most powerful restorative miracle in the divine arsenal — a surge of pure life energy that washes over the target like a tidal wave of warmth. Only the most devoted priests are trusted with this spell.*
 
-**Effect:** Instantly restores the target to full health. Also cures most status conditions, blindness, and paralysis.
+**Effect:** Instantly restores the target to full health. Also cures blindness, deafness, paralysis, disease, and poison. Removes all status effects from the target.
 
-**Impact:** Major HP restoration and condition recovery.
+**Damage Dice:** No damage dice. Heals for the target's maximum HP minus current HP. Always fully heals regardless of caster level.
 
+**Impact:** Major HP restoration and condition recovery. The ultimate single-target heal.
 
-### Blade Barrier <img src="spell-icons/17_blade_barrier.png" width="24" align="center"/>
+<span id="blade-barrier"></span>
+### Blade Barrier <img src="spell-icons/17_blade_barrier.png" width="200" align="center"/>
 
 | School | Level | Mana | Damage | Class | Tags |
 |--------|-------|------|--------|-------|------|
-| Deity | 6 | 25 | 1d6/level Slashing | Priest | Offensive, Defensive, Barrier |
+| Deity | 6 | 25 | 1d6 per level Slashing | Priest | Offensive, Defensive, Barrier |
 
-*A ring of spinning silver blades materializes, orbiting in a deadly dance. The blades move with a mind of their own, striking anything that dares approach. The spell is as much a work of art as a weapon — the precision of the whirling edges speaks to centuries of divine craftsmanship.*
+*A ring of spinning silver blades materializes, orbiting in a deadly dance. The blades move with a mind of their own, striking anything that dares approach.*
 
-**Effect:** Creates an immobile wall or ring of spinning blades. Any creature passing through takes heavy slashing damage.
+**Effect:** Creates an immobile 20-foot diameter ring of spinning blades. Any creature passing through takes 1d6 slashing damage per caster level (cap 15d6). The barrier lasts 1 round per level.
 
-**Impact:** HP damage and Movement denial. Persistent hazard while active.
+**Damage Dice:** Base 7d6 at level 7 (min level), scales +1d6 per level (cap 15d6 at level 15). Slashing damage — physical resistance applies.
+
+**Impact:** HP damage and Movement denial. Persistent hazard that blocks passage.
 
 ## Druid spellbook
 
@@ -508,30 +545,35 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 | Turn Undead | Deity | 2 | Class Core | Early | Priest 3, Paladin 4, Knight 6 | Drives undead enemies away in fear. | Undead must resist or flee; holy damage to undead. | Priest, Paladin, Knight | Holy | Yes, Fear (2 turns) | Offensive, CC |
 
 
-### Entangle <img src="spell-icons/18_entangle.png" width="24" align="center"/>
+<span id="entangle"></span>
+### Entangle <img src="spell-icons/18_entangle.png" width="200" align="center"/>
 
 | School | Level | Mana | Damage | Class | Tags |
 |--------|-------|------|--------|-------|------|
 | Deity | 1 | 5 | None | Druid, Priest | CC, Root |
 
-*The ground erupts with grasping vines, thick roots, and thorny tendrils that snake around the legs of the unwary. Druids of the Verdant Circle speak of the spell as a conversation with the earth itself — asking it to hold, rather than command it to obey. The vines respond with enthusiasm.*
+*The ground erupts with grasping vines, thick roots, and thorny tendrils that snake around the legs of the unwary. Druids speak of the spell as a conversation with the earth itself.*
 
-**Effect:** Plants and roots rise up to grapple creatures in the area. Movement is severely reduced or prevented entirely. Duration-based rooting zone.
+**Effect:** Plants and roots rise up in a 40-foot radius circle, grappling all creatures in the area. Movement is reduced to 0. Affected creatures cannot cast spells with somatic components.
 
-**Impact:** Movement reduction or full root; TM loss in some implementations.
+**Damage Dice:** No damage. Root — prevents movement. A save each round allows half movement. Duration 1 round per caster level.
 
+**Impact:** Movement reduction or full root. TM loss from struggling to break free.
 
-### Call Lightning <img src="spell-icons/19_call_lightning.png" width="24" align="center"/>
+<span id="call-lightning"></span>
+### Call Lightning <img src="spell-icons/19_call_lightning.png" width="200" align="center"/>
 
 | School | Level | Mana | Damage | Class | Tags |
 |--------|-------|------|--------|-------|------|
-| Deity | 3 | 12 | 1d6/level Lightning | Druid, Priest | Offensive |
+| Deity | 3 | 12 | 1d6 per level Lightning | Druid, Priest | Offensive |
 
-*The druid raises a hand to the sky, summoning a storm bolt from the heavens. A crack of thunder announces the strike a heartbeat before the blinding blue-white lance descends. The spell requires open sky — underground or enclosed spaces cannot anchor the storm. Stormcaller druids have been known to fight entire battles within summoned tempests.*
+*The druid raises a hand to the sky, summoning a storm bolt from the heavens. A crack of thunder announces the strike before the blinding blue-white lance descends.*
 
-**Effect:** A lightning bolt strikes a target from above. Can be called repeatedly each round while the storm persists. Metal armor increases damage.
+**Effect:** A 5-foot wide lightning bolt strikes a target from above, dealing 1d6 lightning damage per caster level (cap 10d6). Can be called once per round for the storm's duration. Targets in metal armor take +1 damage per die.
 
-**Impact:** HP damage.
+**Damage Dice:** Base 3d6 at level 3 (min level), scales +1d6 per level (cap 10d6 at level 10). Lightning damage — bonus vs metal armor.
+
+**Impact:** HP damage. Sustained offense — can be re-cast each round while the storm lasts.
 
 ## Paladin spellbook
 
@@ -558,17 +600,20 @@ Paladins begin magical access around level 6 in Dark Orb and remain a narrow sup
 | Paladin's Warcry Variant | Deity | 3 | School Specialization | Late | Paladin 9 | Inspiring holy battle-cry that rallies nearby allies.[web:47][web:6] | Ally TM increase, fear resistance, and minor attack uplift in custom design.[web:47][web:6] | Paladin [web:47][web:6] | Sonic/Morale | Short-duration momentum buff.[web:47] | Buff, AoE, Variant |
 
 
-### Smite <img src="spell-icons/20_smite.png" width="24" align="center"/>
+<span id="smite"></span>
+### Smite <img src="spell-icons/20_smite.png" width="200" align="center"/>
 
 | School | Level | Mana | Damage | Class | Tags |
 |--------|-------|------|--------|-------|------|
 | Deity | 1 | 8 | 1d8+1 Radiant | Paladin, Knight | Offensive |
 
-*The paladin's weapon blazes with holy radiance as they strike — a single, decisive blow empowered by divine will. Unlike a spell woven from arcane threads, Smite is a moment of perfect faith made manifest. The Order of the Dawnbringer teaches that a Smite is not an attack but a prayer delivered through steel.*
+*The paladin's weapon blazes with holy radiance as they strike — a single, decisive blow empowered by divine will. The Order of the Dawnbringer teaches that a Smite is an act of faith made manifest.*
 
-**Effect:** Empowers the next melee attack with holy damage. Deals bonus damage to undead and demonic foes.
+**Effect:** Empowers the next melee attack with +1d8 radiant damage (+1 per paladin level). Deals double damage to undead and demonic foes. The smite is declared before the attack roll.
 
-**Impact:** HP damage; bonus versus undead/demons.
+**Damage Dice:** Base 1d8+1 +1/level on next melee hit. Double damage vs undead, demons, and evil outsiders.
+
+**Impact:** HP damage. Single-target, single-strike burst. Best used against evil/undead enemies.
 
 ## Knight spellbook
 
