@@ -1,7 +1,7 @@
+namespace BattleArena.Gui.ViewModels.WorldMap;
+
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-
-namespace BattleArena.Gui.ViewModels.WorldMap;
 
 using System.IO;
 using System.Text.Json;

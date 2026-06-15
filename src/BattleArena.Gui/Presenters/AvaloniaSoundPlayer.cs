@@ -1,3 +1,5 @@
+namespace BattleArena.Gui.Presenters;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -5,8 +7,6 @@ using System.IO;
 using System.Media;
 using System.Threading.Tasks;
 using BattleArena.Application.Interfaces;
-
-namespace BattleArena.Gui.Presenters;
 
 internal sealed class AvaloniaSoundPlayer : ISoundPlayer
 {

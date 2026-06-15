@@ -1,3 +1,5 @@
+namespace BattleArena.Gui.ViewModels;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,8 +13,6 @@ using BattleArena.Core.Entities;
 using BattleArena.Gui.Models;
 using BattleArena.Gui.ViewModels.World;
 using BattleArena.Presentation;
-
-namespace BattleArena.Gui.ViewModels;
 
 public sealed class MainWindowViewModel : INotifyPropertyChanged
 {

@@ -1,9 +1,9 @@
+namespace BattleArena.Gui;
+
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using BattleArena.Core.Entities;
-
-namespace BattleArena.Gui;
 
 internal sealed class BattleArenaApiClient
 {

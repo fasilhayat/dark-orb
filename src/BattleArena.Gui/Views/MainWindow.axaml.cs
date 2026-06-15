@@ -1,3 +1,5 @@
+namespace BattleArena.Gui.Views;
+
 using System;
 using System.IO;
 using System.Linq;
@@ -24,8 +26,6 @@ using BattleArena.Gui.Rendering;
 using BattleArena.Gui.ViewModels.World;
 using BattleArena.Gui.ViewModels.WorldMap;
 using BattleArena.Presentation;
-
-namespace BattleArena.Gui.Views;
 
 public partial class MainWindow : Window
 {

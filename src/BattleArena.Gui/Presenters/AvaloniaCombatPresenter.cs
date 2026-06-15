@@ -1,3 +1,5 @@
+namespace BattleArena.Gui.Presenters;
+
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -9,8 +11,6 @@ using BattleArena.Application.Models;
 using BattleArena.Application.Services;
 using BattleArena.Gui.ViewModels;
 using BattleArena.Presentation;
-
-namespace BattleArena.Gui.Presenters;
 
 internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 {

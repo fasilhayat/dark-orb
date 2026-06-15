@@ -510,13 +510,29 @@ Implementation requires a separate user-approved task.
 
 ## Acceptance Criteria
 
-- [ ] Repository scanned for magic strings
-- [ ] Logical categories identified
-- [ ] Enum candidates identified
-- [ ] Constant candidates identified
-- [ ] Unsafe conversions documented
-- [ ] Risk assessment completed
-- [ ] Testing strategy defined
-- [ ] Migration phases proposed
-- [ ] No code modified
-- [ ] Awaiting explicit user approval before execution
+- [x] Repository scanned for magic strings
+- [x] Logical categories identified
+- [x] Enum candidates identified
+- [x] Constant candidates identified
+- [x] Unsafe conversions documented
+- [x] Risk assessment completed
+- [x] Testing strategy defined
+- [x] Migration phases proposed
+- [x] No code modified
+- [x] Awaiting explicit user approval before execution
+
+---
+
+## Child Tasks (Actionable Fixes)
+
+| # | Task | Category | Sites | Status |
+|---|------|----------|-------|--------|
+| 15 | EventType to Typed Constants | EventType strings | ~75 | Draft |
+| 18 | Unify Spell Color Detection | Spell/effect color duplication | ~50 | Draft |
+| 20 | Phase Strings to Static Constants | UI phase transitions | 30 | Draft |
+| 21 | Sound IDs to Static Constants | Sound effect identifiers | ~70 | Draft |
+| 22 | LeechResourceType to Static Constants | "HP"/"Mana" strings | 20+ | Draft |
+| 23 | CC Labels to Static Constants | "stunned"/"rooted"/"feared" | 7 | Draft |
+| 24 | Race/Class Name Comparisons to Enum | "Elf"/"Half-Elf"/"Mage" | 3 | Draft |
+| 25 | AttackResult Flags to AttackOutcome Enum | 6 boolean flags | ~80 | Draft |
+| 26 | Hex Colors to Centralized Config | ~100 hex color strings | ~100 | Draft |

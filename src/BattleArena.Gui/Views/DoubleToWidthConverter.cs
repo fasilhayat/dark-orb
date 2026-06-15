@@ -1,8 +1,8 @@
+namespace BattleArena.Gui.Views;
+
 using System;
 using System.Globalization;
 using Avalonia.Data.Converters;
-
-namespace BattleArena.Gui.Views;
 
 internal sealed class DoubleToWidthConverter : IValueConverter
 {

@@ -1,7 +1,7 @@
+namespace BattleArena.Gui;
+
 using System;
 using Avalonia;
-
-namespace BattleArena.Gui;
 
 public static class Program
 {

@@ -1,7 +1,7 @@
+namespace BattleArena.Gui;
+
 using System.Collections.Generic;
 using Avalonia.Media.Imaging;
-
-namespace BattleArena.Gui;
 
 internal static class PortraitResolver
 {

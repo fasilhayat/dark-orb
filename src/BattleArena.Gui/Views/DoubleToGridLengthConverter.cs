@@ -1,9 +1,9 @@
+namespace BattleArena.Gui.Views;
+
 using System;
 using System.Globalization;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
-
-namespace BattleArena.Gui.Views;
 
 internal sealed class DoubleToGridLengthConverter : IValueConverter
 {

@@ -1,3 +1,5 @@
+namespace BattleArena.Gui;
+
 using System;
 using Avalonia;
 using Avalonia.Controls;
@@ -5,8 +7,6 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using BattleArena.Gui.Views;
-
-namespace BattleArena.Gui;
 
 public partial class App : Avalonia.Application
 {

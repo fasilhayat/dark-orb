@@ -1,9 +1,9 @@
+namespace BattleArena.Gui.Models;
+
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Avalonia.Media.Imaging;
 using BattleArena.Core.Entities;
-
-namespace BattleArena.Gui.Models;
 
 public class CharacterDisplayItem : INotifyPropertyChanged
 {

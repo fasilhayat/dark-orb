@@ -1,10 +1,10 @@
+namespace BattleArena.Gui.ViewModels;
+
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-
-namespace BattleArena.Gui.ViewModels;
 
 public sealed class OverlayMessageViewModel : INotifyPropertyChanged
 {

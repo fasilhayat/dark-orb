@@ -1,11 +1,11 @@
+namespace BattleArena.Gui;
+
 using System;
 using System.Collections.Generic;
 using BattleArena.Application.Interfaces;
 using BattleArena.Application.Models;
 using BattleArena.Application.Services;
 using BattleArena.Core.Entities.Enums;
-
-namespace BattleArena.Gui;
 
 /// <summary>
 /// Wraps <see cref="DiceService"/> and records every meaningful roll as a

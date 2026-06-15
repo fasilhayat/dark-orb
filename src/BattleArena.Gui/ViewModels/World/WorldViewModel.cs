@@ -1,7 +1,7 @@
+namespace BattleArena.Gui.ViewModels.World;
+
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-
-namespace BattleArena.Gui.ViewModels.World;
 
 using Models.World;
 using Rendering;

@@ -1,9 +1,9 @@
+namespace BattleArena.Gui.Views;
+
 using System;
 using System.Globalization;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
-
-namespace BattleArena.Gui.Views;
 
 internal sealed class SelectedButtonConverter : IMultiValueConverter
 {
