@@ -31,6 +31,9 @@
     <Content Include="Data\roster.json" Link="roster.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\world-map-data.json" Link="world-map-data.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -41,5 +44,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <AvaloniaResource Include="Assets\Misc\dark-orb.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\World\**\*" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Assets\WorldMap\**\*" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

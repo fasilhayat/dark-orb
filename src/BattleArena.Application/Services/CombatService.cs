@@ -232,8 +232,9 @@ public class CombatService : ICombatService
         var scaledBase = isCritical ? baseDamage * 2 : baseDamage;
         scaledBase = (int)(scaledBase * ctx.DamageMultiplier);
 
+        var armorMitigation = (int)(defender.Equipment.TotalMitigation * (1.0 + defender.Level / 10.0));
         var finalDamage = Math.Max(0,
-            (int)(scaledBase * typeMultiplier) - defender.Equipment.TotalMitigation + source.ElementalDamage + ctx.DamageDelta);
+            (int)(scaledBase * typeMultiplier) - armorMitigation + source.ElementalDamage + ctx.DamageDelta);
 
         return new DamageContext
         {

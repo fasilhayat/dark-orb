@@ -21,7 +21,7 @@ public static class LevelProgression
     public static ClassArchetype Archetype(string className) => className switch
     {
         "Barbarian" or "Fighter" or "Knight" or "Paladin" or "Ranger" => ClassArchetype.Martial,
-        "Mage" or "Priest" or "Druid" => ClassArchetype.Caster,
+        "Mage" or "Priest" or "Druid" or "Tempest" => ClassArchetype.Caster,
         "Rogue" or "Bard" => ClassArchetype.Hybrid,
         _ => ClassArchetype.Martial
     };
@@ -29,7 +29,7 @@ public static class LevelProgression
     public static ClassArchetype Archetype(int classId) => classId switch
     {
         1 or 2 or 3 or 8 or 10 => ClassArchetype.Martial,
-        4 or 5 or 7 => ClassArchetype.Caster,
+        4 or 5 or 7 or 11 => ClassArchetype.Caster,
         6 or 9 => ClassArchetype.Hybrid,
         _ => ClassArchetype.Martial
     };
@@ -106,7 +106,7 @@ public static class LevelProgression
         return 1;
     }
 
-    /// <summary>Hit die sides for each class (indexed by ClassId 1-9).</summary>
+    /// <summary>Hit die sides for each class (indexed by ClassId 1-11).</summary>
     public static int HitDieSides(int classId) => classId switch
     {
         1 => 12,  // Barbarian (unchanged)
@@ -118,6 +118,7 @@ public static class LevelProgression
         7 => 10,  // Druid (was d8)
         8 => 10,  // Fighter (unchanged)
         9 => 8,   // Rogue (was d6)
+        11 => 10, // Tempest (battle-priest, d10)
         _ => 8
     };
 
@@ -177,12 +178,14 @@ public static class LevelProgression
          2,  // 8 Fighter
          1,  // 9 Rogue
          2,  // 10 Ranger
+         1,  // 11 Tempest
         ];
 
     /// <summary>Bow attacks per turn (0 = no special bonus).</summary>
     private static readonly int[] _bowAttacksPerTurn =
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  // 0-9
          3,  // 10 Ranger (3 attacks with bow)
+         0,  // 11 Tempest
         ];
 
     /// <summary>
@@ -200,6 +203,7 @@ public static class LevelProgression
          null,      // 8 Fighter
          null,      // 9 Rogue
          null,      // 10 Ranger
+         null,      // 11 Tempest (unrestricted — the special exception)
         ];
 
     /// <summary>Whether each class can dual-wield.</summary>
@@ -215,6 +219,7 @@ public static class LevelProgression
          true,   // 8 Fighter
          true,   // 9 Rogue (short sword + dagger or 2 daggers)
          true,   // 10 Ranger (2 shortswords or shortsword + dagger)
+         false,  // 11 Tempest
         ];
 
     /// <summary>
@@ -233,6 +238,7 @@ public static class LevelProgression
          0.5,  // 8 Fighter (half cost)
          1.0,  // 9 Rogue
          0.0,  // 10 Ranger (no cost)
+         1.0,  // 11 Tempest
         ];
 
     /// <summary>Two-handed weapon attack bonus by class.</summary>
@@ -248,6 +254,7 @@ public static class LevelProgression
          0,  // 8 Fighter
          0,  // 9 Rogue
          0,  // 10 Ranger
+         2,  // 11 Tempest (battle-priest, mace/warhammer training)
         ];
 
     /// <summary>Shield bonus damage by class.</summary>
@@ -263,6 +270,7 @@ public static class LevelProgression
          0,  // 8 Fighter
          0,  // 9 Rogue
          0,  // 10 Ranger
+         0,  // 11 Tempest
         ];
 
     /// <summary>Ranged attack bonus by class.</summary>

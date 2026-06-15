@@ -39,40 +39,68 @@ public static class CombatPlaybackEngine
                     if (entry.EventType == "Damage")
                     {
                         var wasCrit = WasFromCriticalHit(turnEvents, i);
-                        var showPreview = wasCrit
+                        var showBar = wasCrit
                             || MeetsDevastationThreshold(entry, state, config.DevastationThresholdPercent);
 
-                        if (showPreview)
+                        var totalDamage = entry.DamageDealt ?? 0;
+                        var targetName = entry.ActorName;
+
+                        while (i + 1 < turnEvents.Count
+                            && turnEvents[i + 1].EventType == "Damage"
+                            && turnEvents[i + 1].ActorName == targetName)
                         {
-                            var totalDamage = entry.DamageDealt ?? 0;
-                            var targetName = entry.ActorName;
+                            i++;
+                            totalDamage += turnEvents[i].DamageDealt ?? 0;
+                        }
 
-                            while (i + 1 < turnEvents.Count
-                                && turnEvents[i + 1].EventType == "Damage"
-                                && turnEvents[i + 1].ActorName == targetName)
+                        var targetState = state.TryGet(targetName);
+                        if (targetState is not null && totalDamage > 0)
+                        {
+                            var previewAmount = Math.Min(totalDamage, Math.Max(0, targetState.Hp));
+                            var overlay = wasCrit ? "\u00d72 CRIT!" : "";
+                            bus.PublishNormal(new VisualEvent
                             {
-                                i++;
-                                totalDamage += turnEvents[i].DamageDealt ?? 0;
+                                EventType = "DamagePreview",
+                                ActorName = targetName,
+                                TargetName = targetName,
+                                OverlayText = overlay,
+                                Color = wasCrit ? "#ff44ff" : "#ffffff",
+                                DamagePreviewAmount = previewAmount,
+                                TargetMaxHp = targetState.MaxHp,
+                                HpBefore = targetState.Hp,
+                            });
+
+                            if (showBar)
+                            {
+                                var previewDelay = presenter.GetEventDelayMs("DamagePreview");
+                                if (previewDelay > 0)
+                                    presenter.Wait(previewDelay);
                             }
+                        }
+                    }
 
-                            var targetState = state.TryGet(targetName);
-                            if (targetState is not null && totalDamage > 0)
+                    if (entry.EventType == "Healed")
+                    {
+                        var healAmount = entry.DamageDealt ?? 0;
+                        if (healAmount > 0)
+                        {
+                            var targetState = state.TryGet(entry.ActorName);
+                            if (targetState is not null)
                             {
-                                var previewAmount = Math.Min(totalDamage, Math.Max(0, targetState.Hp));
-                                var overlay = wasCrit ? "\u00d72 CRIT!" : "";
+                                var beforeHp = targetState.Hp;
+                                var maxHp = targetState.MaxHp;
                                 bus.PublishNormal(new VisualEvent
                                 {
-                                    EventType = "DamagePreview",
-                                    ActorName = targetName,
-                                    TargetName = targetName,
-                                    OverlayText = overlay,
-                                    Color = wasCrit ? "#ff44ff" : "#ffffff",
-                                    DamagePreviewAmount = previewAmount,
-                                    TargetMaxHp = targetState.MaxHp,
-                                    HpBefore = targetState.Hp,
+                                    EventType = "HealPreview",
+                                    ActorName = entry.ActorName,
+                                    TargetName = entry.ActorName,
+                                    HealAmount = healAmount,
+                                    TargetMaxHp = maxHp,
+                                    HpBefore = beforeHp,
+                                    Color = "#44cc44",
                                 });
 
-                                var previewDelay = presenter.GetEventDelayMs("DamagePreview");
+                                var previewDelay = presenter.GetEventDelayMs("HealPreview");
                                 if (previewDelay > 0)
                                     presenter.Wait(previewDelay);
                             }
@@ -334,7 +362,9 @@ public static class CombatPlaybackEngine
             "Shocked" => "#ffff44",
             "Poisoned" => "#44ff44",
             "Bleeding" => "#ff4444",
-            "Electrified" => "#44ccff",
+            "Electrified" => "#88ddff",
+            "Confused" => "#aaaaaa",
+            "Charmed" => "#ff88aa",
             _ => TryGetTransferColor(effectName),
         };
     }
@@ -600,9 +630,11 @@ public static class CombatPlaybackEngine
                 if ((entry.DamageDealt ?? 0) > 0)
                 {
                     var targetName = entry.TargetName ?? entry.ActorName;
-                    var overlay = entry.IsSpell && !string.IsNullOrEmpty(entry.AttackSourceName)
+                    var amountPart = $"+{entry.DamageDealt}";
+                    var spellPart = entry.IsSpell && !string.IsNullOrEmpty(entry.AttackSourceName)
                         ? entry.AttackSourceName.ToUpperInvariant()
-                        : $"HEALED +{entry.DamageDealt}";
+                        : null;
+                    var overlay = spellPart is not null ? $"{spellPart} {amountPart}" : $"HEALED {amountPart}";
                     bus.PublishNormal(new VisualEvent
                     {
                         EventType = entry.EventType,

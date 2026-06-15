@@ -147,7 +147,7 @@ internal class AttackResolver
                 Message = $"[DEVASTATING STRIKE] {actorState.Character.Name} shatters {target.Name}'s guard! x3 damage!"
             });
 
-        if (setup.Source is Spell hitSpell)
+        if (target.CurrentHitPoints > 0 && setup.Source is Spell hitSpell)
             await _statusEffectProcessor.ProcessOnHitEffectsAsync(tick, actorState.Character, target, hitSpell, notify);
 
         await _spellProcessor.ProcessSpellDisruptionAsync(tick, setup, result, stateMap, notify);

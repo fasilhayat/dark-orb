@@ -14,6 +14,7 @@ public sealed class OverlayMessageViewModel : INotifyPropertyChanged
     public double OffsetX { get; }
     public double OffsetY { get; }
     public string Color { get; }
+    public string MainForeground { get; }
 
     private double _opacity;
     public double Opacity
@@ -61,10 +62,11 @@ public sealed class OverlayMessageViewModel : INotifyPropertyChanged
     private readonly double _endScale;
     private readonly double _startScale;
 
-    public OverlayMessageViewModel(string text, string color)
+    public OverlayMessageViewModel(string text, string color, string? mainForeground = null)
     {
         Text = text;
         Color = color;
+        MainForeground = mainForeground ?? "#ffffff";
 
         lock (Rng)
         {

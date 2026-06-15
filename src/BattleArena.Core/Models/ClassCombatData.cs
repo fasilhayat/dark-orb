@@ -6,7 +6,7 @@ using Core.Entities.Enums;
 /// Static lookup for class combat data (attacks per turn, armor restrictions, etc.).
 /// Used as fallback when PlayerClass is not loaded from the database.
 /// Must stay in sync with PlayerClass DB seed data.
-/// Class IDs: 1=Barbarian, 2=Knight, 3=Paladin, 4=Priest, 5=Mage, 6=Bard, 7=Druid, 8=Fighter, 9=Rogue, 10=Ranger
+/// Class IDs: 1=Barbarian, 2=Knight, 3=Paladin, 4=Priest, 5=Mage, 6=Bard, 7=Druid, 8=Fighter, 9=Rogue, 10=Ranger, 11=Tempest
 /// </summary>
 public static class ClassCombatData
 {
@@ -22,11 +22,13 @@ public static class ClassCombatData
          2,  // 8 Fighter
          1,  // 9 Rogue
          2,  // 10 Ranger
+         1,  // 11 Tempest
         ];
 
     private static readonly int[] _bowAttacksPerTurn =
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  // 0-9
          3,  // 10 Ranger
+         0,  // 11 Tempest
         ];
 
     private static readonly string?[] _armorRestrictions =
@@ -41,6 +43,7 @@ public static class ClassCombatData
          null,      // 8 Fighter
          null,      // 9 Rogue
          null,      // 10 Ranger
+         null,      // 11 Tempest (unrestricted — the special exception)
         ];
 
     private static readonly bool[] _canDualWield =
@@ -55,6 +58,7 @@ public static class ClassCombatData
          true,   // 8 Fighter
          true,   // 9 Rogue
          true,   // 10 Ranger
+         false,  // 11 Tempest
         ];
 
     private static readonly double[] _weaponSwitchCostMultiplier =
@@ -69,6 +73,7 @@ public static class ClassCombatData
          0.5,  // 8 Fighter
          1.0,  // 9 Rogue
          0.0,  // 10 Ranger
+         1.0,  // 11 Tempest
         ];
 
     private static readonly int[] _twoHandedWeaponBonus =
@@ -83,6 +88,7 @@ public static class ClassCombatData
          0,  // 8 Fighter
          0,  // 9 Rogue
          0,  // 10 Ranger
+         2,  // 11 Tempest (battle-priest, mace/warhammer training)
         ];
 
     private static readonly int[] _shieldBonusDamage =
@@ -97,6 +103,7 @@ public static class ClassCombatData
          0,  // 8 Fighter
          0,  // 9 Rogue
          0,  // 10 Ranger
+         0,  // 11 Tempest
         ];
 
     private static readonly int[] _rangedAttackBonus =
@@ -111,6 +118,7 @@ public static class ClassCombatData
          0,  // 8 Fighter
          0,  // 9 Rogue
          1,  // 10 Ranger
+         0,  // 11 Tempest
         ];
 
     public static int AttacksPerTurn(int classId) =>

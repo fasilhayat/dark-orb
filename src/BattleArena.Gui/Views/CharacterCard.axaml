@@ -44,16 +44,27 @@
                          FontWeight="Bold" FontSize="15"
                          TextTrimming="CharacterEllipsis" />
             </StackPanel>
-            <TextBlock Text="{Binding CurrentWeapon}" Foreground="White"
-                       FontStyle="Italic" FontSize="12" />
             <Grid ColumnDefinitions="*,Auto">
-              <TextBlock Grid.Column="0" Text="{Binding InfoLine}" Foreground="White"
-                         FontSize="12" VerticalAlignment="Center" />
-              <TextBlock Grid.Column="1" Text="{Binding EffectsDisplay}" FontSize="12"
-                         Foreground="{Binding EffectsColor}" FontStyle="Italic"
-                         IsVisible="{Binding HasEffectsDisplay}"
-                         VerticalAlignment="Center" Margin="8,0,0,0" />
+              <TextBlock Grid.Column="0" Text="{Binding CurrentWeapon}" Foreground="White"
+                         FontStyle="Italic" FontSize="12" VerticalAlignment="Center" />
+              <ItemsControl Grid.Column="1" ItemsSource="{Binding EffectNames}"
+                            IsVisible="{Binding HasEffectsDisplay}"
+                            VerticalAlignment="Center">
+                <ItemsControl.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" Spacing="4" />
+                  </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <TextBlock Text="{Binding Label}" Foreground="{Binding Color}"
+                               FontStyle="Italic" FontSize="12" />
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
             </Grid>
+            <TextBlock Text="{Binding InfoLine}" Foreground="White"
+                       FontSize="12" />
 
             <!-- Stacked combat stats -->
             <Border Background="#16162a" CornerRadius="3" Padding="0,2" Margin="0,0,0,0">
@@ -148,17 +159,17 @@
                 <ScaleTransform ScaleX="{Binding HpFraction}" />
               </Border.RenderTransform>
             </Border>
-            <!-- Damage preview overlay: white bar at right edge of current HP -->
+            <!-- Damage preview overlay: red bar at right edge of current HP -->
             <Grid>
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding DamagePreviewStart, Converter={StaticResource GridLenConv}}" />
                 <ColumnDefinition Width="{Binding DamagePreviewFraction, Converter={StaticResource GridLenConv}}" />
                 <ColumnDefinition Width="{Binding DamagePreviewRemainder, Converter={StaticResource GridLenConv}}" />
               </Grid.ColumnDefinitions>
-              <Border Grid.Column="1" Background="#ffffff" CornerRadius="2"
+              <Border Grid.Column="1" Background="#ff4444" CornerRadius="2"
                       Opacity="{Binding DamagePreviewOpacity}" />
             </Grid>
-            <!-- Heal glow overlay: white bar positioned at the HP boundary, not the root -->
+            <!-- Heal glow overlay: white bar at the HP boundary -->
             <Grid>
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding HealGlowStart, Converter={StaticResource GridLenConv}}" />

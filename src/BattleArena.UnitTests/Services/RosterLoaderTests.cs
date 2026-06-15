@@ -82,7 +82,7 @@ public class RosterLoaderTests : IDisposable
         Assert.Contains(data.Heroes, c => c.Name == "Kaela Vornskald");
         Assert.Contains(data.Heroes, c => c.Name == "Ser Garrick Dawnshield");
         Assert.Contains(data.Heroes, c => c.Name == "Vaelith Moonveil");
-        Assert.Contains(data.Heroes, c => c.Name == "Sister Elira Vane");
+        Assert.Contains(data.Heroes, c => c.Name == "Elira Vane");
         Assert.Contains(data.Heroes, c => c.Name == "Lord Aethor Valeborn");
         Assert.Contains(data.Heroes, c => c.Name == "Finnick Bramblefoot");
         Assert.Contains(data.Heroes, c => c.Name == "Old Man Kael");
@@ -142,14 +142,18 @@ public class RosterLoaderTests : IDisposable
         Assert.Equal("Mithril Chain", vaelith.Equipment.Chest!.Name);
         Assert.Equal(14,              vaelith.Equipment.Chest.ArmorClass);
 
-        // ── Sister Elira Vane — priest (healer) ─────────────────────────────────
-        var elira = data.Heroes.First(c => c.Name == "Sister Elira Vane");
-        Assert.Equal(2, elira.MemorizedSpells.Count);
+        // ── Elira Vane — Tempest battle-priest ───────────────────────────────────
+        var elira = data.Heroes.First(c => c.Name == "Elira Vane");
+        Assert.Equal(4, elira.MemorizedSpells.Count);
         Assert.Contains(elira.MemorizedSpells, s => s.Name == "Chasten");
         Assert.Contains(elira.MemorizedSpells, s => s.Name == "Heal");
-        Assert.Equal(70, elira.MaxMana);
+        Assert.Contains(elira.MemorizedSpells, s => s.Name == "Turn Undead");
+        Assert.Contains(elira.MemorizedSpells, s => s.Name == "Smite");
+        Assert.Equal(80, elira.MaxMana);
+        Assert.Equal(11, elira.ClassId);
+        Assert.Equal("Tempest", elira.ClassName);
         Assert.Equal("Mace", elira.Equipment.RightHand!.Name);
-        Assert.Equal("Padded Armor", elira.Equipment.Chest!.Name);
+        Assert.Equal("Chain Mail", elira.Equipment.Chest!.Name);
 
         // ── Finnick Bramblefoot — Gladefolk rogue ───────────────────────────────
         var finnick = data.Heroes.First(c => c.Name == "Finnick Bramblefoot");

@@ -1,10 +1,13 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.Threading;
 using BattleArena.Application.Interfaces;
 using BattleArena.Application.Models;
@@ -17,6 +20,9 @@ using BattleArena.Gui.Models;
 using BattleArena.Gui.Presenters;
 using BattleArena.Gui.Services;
 using BattleArena.Gui.ViewModels;
+using BattleArena.Gui.Rendering;
+using BattleArena.Gui.ViewModels.World;
+using BattleArena.Gui.ViewModels.WorldMap;
 using BattleArena.Presentation;
 
 namespace BattleArena.Gui.Views;
@@ -40,6 +46,7 @@ public partial class MainWindow : Window
     private readonly ISoundPlayer? _soundPlayer;
     private string _previousPhase = "MainMenu";
     private bool _fromSpellPreview;
+    private bool _combatFromWorld;
 
     public MainWindow()
     {
@@ -80,6 +87,48 @@ public partial class MainWindow : Window
         _soundPlayer = Directory.Exists(soundsDir)
             ? new AvaloniaSoundPlayer(soundsDir)
             : null;
+
+    }
+
+    private void OnWorldCombatEncounter(string heroName, string enemyName)
+    {
+        var hero = Roster.AllHeroes.Find(c => c.Name == heroName);
+        var enemy = Roster.AllHeroes.Find(c => c.Name == enemyName);
+        if (hero is null || enemy is null) return;
+
+        _combatFromWorld = true;
+        StartWorldCombat(hero, enemy);
+    }
+
+    private void StartWorldCombat(Character hero, Character enemy)
+    {
+        TurnButton.IsVisible = true;
+        AutoPlayButton.IsVisible = true;
+        _vm.ErrorMessage = "";
+        SpeedSlider.Value = 1;
+        _vm.Phase = "Combat";
+        _vm.CombatLog.Clear();
+        _vm.Heroes.Clear();
+        _vm.Enemies.Clear();
+        _vm.ActiveActorName = "";
+        _vm.CombatOver = false;
+        _vm.Tick = 0;
+        _vm.RoundNumber = 0;
+        _vm.TickInRound = 0;
+
+        ResetCombatant(hero);
+        ResetCombatant(enemy);
+
+        var party1 = new Party();
+        party1.Members.Add(new PartyMember { Character = hero, AttackSource = Roster.GetAttackSource(hero) });
+        var party2 = new Party();
+        party2.Members.Add(new PartyMember { Character = enemy, AttackSource = Roster.GetAttackSource(enemy) });
+
+        _combatParty1 = party1;
+        _combatParty2 = party2;
+        _vm.EngagementRange = "Melee";
+
+        PopulateCharacterCards(party1, party2);
     }
 
     private async Task CheckApiReachabilityAsync()
@@ -365,6 +414,155 @@ public partial class MainWindow : Window
         DummyHeader.IsVisible = true;
     }
 
+    private void PopulatePartyPanel()
+    {
+        PartyPanel.Children.Clear();
+        var heroes = _vm.WorldViewModel.Combatants.Where(c => c.IsHero).ToList();
+
+        foreach (var c in heroes)
+        {
+            var card = new Border
+            {
+                Tag = c.Name,
+                Background = new SolidColorBrush(Color.Parse("#0d0d18")),
+                BorderBrush = new SolidColorBrush(Color.Parse("#1a1a2e")),
+                BorderThickness = new Thickness(1),
+                CornerRadius = new CornerRadius(4),
+                Padding = new Thickness(0, 0, 0, 4),
+                Margin = new Thickness(0, 2),
+            };
+
+            var stack = new StackPanel();
+
+            stack.Children.Add(new TextBlock
+            {
+                Text = c.Name,
+                Foreground = new SolidColorBrush(Colors.White),
+                FontSize = 10,
+                FontWeight = FontWeight.Bold,
+                Margin = new Thickness(10, 6, 0, 0),
+            });
+
+            var portrait = PortraitResolver.GetPortrait(c.Name);
+            const double pw = 80;
+            const double ph = 120;
+            if (portrait is not null)
+            {
+                var img = new Avalonia.Controls.Image
+                {
+                    Source = portrait,
+                    Width = pw,
+                    Height = ph,
+                    Stretch = Avalonia.Media.Stretch.Fill,
+                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left,
+                    Margin = new Thickness(10, 2, 10, 0),
+                };
+                img.PointerEntered += (_, _) => HighlightCombatantOnGrid(c.Name);
+                img.PointerExited += (_, _) => ClearGridHighlight();
+                stack.Children.Add(img);
+            }
+            else
+            {
+                var placeholder = new Border
+                {
+                    Width = pw, Height = pw,
+                    Background = new SolidColorBrush(Color.Parse("#1a1a2e")),
+                    CornerRadius = new CornerRadius(4),
+                    Margin = new Thickness(10, 2, 10, 0),
+                    Child = new TextBlock
+                    {
+                        Text = c.Name.Length > 0 ? c.Name[0].ToString() : "?",
+                        Foreground = new SolidColorBrush(Colors.Gray),
+                        FontSize = 24,
+                        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                        VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+                    },
+                };
+                placeholder.PointerEntered += (_, _) => HighlightCombatantOnGrid(c.Name);
+                placeholder.PointerExited += (_, _) => ClearGridHighlight();
+                stack.Children.Add(placeholder);
+            }
+
+            var hpFraction = c.MaxHp > 0 ? Math.Clamp((double)c.CurrentHp / c.MaxHp, 0, 1) : 0;
+            var hpBar = new Border
+            {
+                Width = pw,
+                Height = 6,
+                Background = new SolidColorBrush(Color.Parse("#0a1a0a")),
+                BorderBrush = new SolidColorBrush(Color.Parse("#114411")),
+                BorderThickness = new Thickness(1),
+                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left,
+                Margin = new Thickness(10, 2, 10, 0),
+            };
+            var hpFill = new Border
+            {
+                Width = hpFraction * (pw - 2),
+                Height = 4,
+                Background = new SolidColorBrush(Color.Parse("#44cc44")),
+                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left,
+                VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+            };
+            hpBar.Child = hpFill;
+            stack.Children.Add(hpBar);
+
+            card.Child = stack;
+            PartyPanel.Children.Add(card);
+        }
+    }
+
+    private void HighlightCombatantOnGrid(string name)
+    {
+        var vm = _vm.WorldViewModel;
+        var combatant = vm.Combatants.FirstOrDefault(c => c.Name == name);
+        if (combatant is null) return;
+        CharacterRenderer.HoveredCombatant = combatant.Position;
+        CharacterRenderer.RenderCombatants(vm.Combatants, vm.Map, WorldViewControl.GetMapCanvas());
+        HighlightPartyPortrait(name);
+    }
+
+    private void ClearGridHighlight()
+    {
+        var vm = _vm.WorldViewModel;
+        CharacterRenderer.HoveredCombatant = null;
+        CharacterRenderer.RenderCombatants(vm.Combatants, vm.Map, WorldViewControl.GetMapCanvas());
+        HighlightPartyPortrait("");
+    }
+
+    private void OnWorldMapClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        _vm.Phase = "WorldMap";
+    }
+
+    private void OnEnterLocationClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        PopulatePartyPanel();
+        var enemies = _vm.WorldViewModel.Combatants.Where(c => !c.IsHero).Select(c => c.Name).ToList();
+        EnemyList.ItemsSource = enemies;
+        WorldViewControl.CombatantHovered += name =>
+        {
+            HighlightPartyPortrait(name);
+        };
+        _vm.Phase = "Location";
+    }
+
+    private void HighlightPartyPortrait(string name)
+    {
+        foreach (var child in PartyPanel.Children)
+        {
+            if (child is Border border)
+            {
+                var isTarget = !string.IsNullOrEmpty(name) && border.Tag?.ToString() == name;
+                border.BorderBrush = new SolidColorBrush(
+                    Color.Parse(isTarget ? "#d4a017" : "#1a1a2e"));
+            }
+        }
+    }
+
+    private void OnBackToWorldMapClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        _vm.Phase = "WorldMap";
+    }
+
     private void OnApiModeClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         _vm.Phase = "ApiMenu";
@@ -420,7 +618,16 @@ public partial class MainWindow : Window
         _cts = null;
         _waitForNext = null;
 
-        _vm.Phase = "MainMenu";
+        if (_combatFromWorld)
+        {
+            _combatFromWorld = false;
+            _vm.Phase = "World";
+        }
+        else
+        {
+            _vm.Phase = "MainMenu";
+        }
+
         _vm.CombatLog.Clear();
         _vm.Heroes.Clear();
         _vm.Enemies.Clear();

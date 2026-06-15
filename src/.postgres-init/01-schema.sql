@@ -406,6 +406,7 @@ CREATE TABLE IF NOT EXISTS arena_data.spell (
     flat_damage_bonus INTEGER NOT NULL DEFAULT 0,
     elemental_type VARCHAR(50) DEFAULT 'None',
     elemental_damage INTEGER NOT NULL DEFAULT 0,
+    minimum_level SMALLINT DEFAULT 0,
     description TEXT DEFAULT ''
 );
 

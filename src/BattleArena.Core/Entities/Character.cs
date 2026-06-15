@@ -300,7 +300,10 @@ public class Character
     /// </summary>
     private static readonly Dictionary<string, HashSet<string>> SpellClassRestrictions = new()
     {
-        ["Smite"] = ["Paladin", "Knight"]
+        ["Smite"] = ["Paladin", "Knight"],
+        ["Mind Game"] = ["Mage", "Bard", "Priest"],
+        ["Charm Person"] = ["Mage", "Bard", "Priest"],
+        ["Turn Undead"] = ["Priest", "Paladin", "Knight"],
     };
 
     /// <summary>

@@ -10,7 +10,7 @@ internal static class PortraitResolver
         ["Kaela Vornskald"] = "kaela-vornskald.png",
         ["Ser Garrick Dawnshield"] = "ser-garrick-dawnshield.png",
         ["Vaelith Moonveil"] = "vaelith-moonveil.png",
-        ["Sister Elira Vane"] = "sister-elira-vane.png",
+        ["Elira Vane"] = "elira-vane.png",
         ["Lord Aethor Valeborn"] = "lord-aethor-valeborn.png",
         ["Finnick Bramblefoot"] = "finnick-quickfingers-bramblefoot.png",
         ["Korg Stonefist"] = "korg-stonefist.png",

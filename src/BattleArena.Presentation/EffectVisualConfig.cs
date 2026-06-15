@@ -19,6 +19,8 @@ public static class EffectVisualConfig
         "Burning", "Ignite", "Frozen", "Freeze", "Shocked", "Stun",
         "Sleep", "Fear", "Petrify", "Poisoned", "Bleeding", "Leech", "LeechMana",
         "Electrified",
+        "Confused",
+        "Charmed",
     };
 
     private static readonly Dictionary<string, EffectVisualTarget> _targets = new(StringComparer.OrdinalIgnoreCase)
@@ -31,6 +33,8 @@ public static class EffectVisualConfig
 
         // TM-affecting effects -> blink TM bar border
         ["Electrified"] = EffectVisualTarget.TmBar,
+        ["Confused"]    = EffectVisualTarget.TmBar,
+        ["Charmed"]     = EffectVisualTarget.ManaBar,
         ["Shocked"]   = EffectVisualTarget.TmBar,
         ["Stun"]      = EffectVisualTarget.None,
         ["Frozen"]    = EffectVisualTarget.None,
@@ -59,10 +63,12 @@ public static class EffectVisualConfig
             "Frozen"    => "#44ccff",
             "Freeze"    => "#44ccff",
             "Shocked"   => "#ffff44",
-            "Electrified" => "#44ccff",
+            "Electrified" => "#88ddff",
             "Poisoned"  => "#44ff44",
             "Bleeding"  => "#ff4444",
             "Leech" or "LeechMana" => TransferEffectRegistry.GetConfig(effectName).TransferColor,
+            "Confused"  => "#aaaaaa",
+            "Charmed"   => "#ff88aa",
             _           => "#88ccff",
         };
     }

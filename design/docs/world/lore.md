@@ -195,7 +195,7 @@ The world is governed by eight major deities, divided into two courts:
 
 **Aethelion** — The radiant father of light. He is the celestial realm of pure light and order, the first god to awaken at the dawn of creation. His domain is Heaven and Light, and he is worshipped by paladins, priests of order, and all who seek to bring justice to the world. His symbol is a radiant celestial crown with halo and light rays.
 
-**Astrara** — The guiding star mother. She watches over fate and the stars, illuminating the path of those who are lost. Her domain is Stars and Fate, and her symbol is a five-pointed guiding star sigil.
+**Astrara** — The guiding star mother. She watches over fate and the stars, illuminating the path of those who are lost. Her domain is Stars and Fate, and her symbol is a five-pointed guiding star sigil. Her priests are called **Tempest** — battle-priests who wear full helms and full plate mail, fighting under the guiding star.
 
 **Celestara** — The weaver of destiny. She governs time and the woven patterns of destiny in the night sky. Her domain is Destiny and Time, and her symbol is a connected star-map with lines.
 
@@ -203,7 +203,7 @@ The world is governed by eight major deities, divided into two courts:
 
 ### The Shadow Court (Evil)
 
-**Ignaroth** — The burning destroyer. He embodies the consuming flame of destruction and rebirth, and is worshipped by those who seek to tear down the old to make way for the new. His domain is Fire and Destruction, and his symbol is a consuming flame with a rebirth spiral.
+**Ignara** — The burning destroyer. She embodies the consuming flame of destruction and rebirth, and is worshipped by those who seek to tear down the old to make way for the new. Her domain is Fire and Destruction, and her symbol is a consuming flame with a rebirth spiral.
 
 **Umbraex** — The void lord. He is the darkness from which all shadows are born, the keeper of secrets best left unknown. His domain is Darkness and Secrets, and his symbol is an eclipse with an empty eye and shadow rings.
 
@@ -267,3 +267,34 @@ The world is governed by eight major deities, divided into two courts:
 ## 5. Leveling & Experience
 
 See [`../systems/leveling-plan.md`](../systems/leveling-plan.md) for the full leveling and XP system.
+
+---
+
+## 6. Deity Bonus System
+
+When a divine caster (Priest, Druid, Paladin, Knight) wields a spell aligned with their patron deity's domain, they gain an extra bonus. All divine casters can learn any deity's spells, but the bonus only applies when the spell matches their deity's traits.
+
+### Light Deity Bonuses (Sky Court)
+
+| Deity | Affinity | Bonus |
+|-------|----------|-------|
+| **Aethelion** | Healing, Protection, Order | Healing spells restore +25% HP. Protection spells last +1 round. Smite spells deal +1d4 radiant damage. |
+| **Astrara** | Stars, Fate, Guidance, Battle | Buff spells grant +1 AttackPower. Tempest (Astrara's priests) may equip full helms and full plate mail (normally restricted to Paladins/Knights). Chant, Remove Fear, Free Action gain +1 AttackPower for allies. |
+| **Celestara** | Destiny, Time, Barriers | Barrier and time-aligned spells (Haste, Slow, Blade Barrier) last +1 round. AC buffs gain +1 additional AC. |
+| **Lunara** | Moon, Magic, Tides | Mana cost reduced by -2 on aligned spells. Healing +1d4 during night cycle. Fire/Cold resistance +5 on full moon. |
+
+### Dark Deity Bonuses (Shadow Court)
+
+| Deity | Affinity | Bonus |
+|-------|----------|-------|
+| **Ignara** | Fire, Destruction | Fire spells deal +1d6 fire damage. 10% chance to ignite target for 1d4. |
+| **Umbraex** | Darkness, Secrets, Shadow | Shadow spells deal +1d4 shadow damage. Control spells gain +1 round or -1 DefensePower. |
+| **Veparix** | Deception, Illusion | Illusion/control spells gain +5% application chance. Revealed targets suffer -2 DefensePower. |
+| **Noctivane** | Shadow, Stealth | Fear effects last +1 round. Stealth/shadow attacks deal +1d6 bonus damage. |
+
+### Neutral Deity Bonus (Boundary)
+
+| Deity | Affinity | Bonus |
+|-------|----------|-------|
+| **Chronara** | Time, Balance, Nature | Offensive spells gain +1d6 bonus damage matching their type. Support/control spells gain +1 round duration or +10% effectiveness. Nature spells deal +1d4 nature damage. |
+

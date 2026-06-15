@@ -78,13 +78,19 @@ public class AutoActionDecisionSource : IActionDecisionSource
                 return Task.FromResult<IAttackSource?>(cheapSpell);
         }
 
-        // ── STAGE 4: Offensive — pick best damage spell ────────────
+        // ── STAGE 4: Offensive — pick a random damage spell ──────
         if (dmgSpells.Count > 0)
         {
-            var best = dmgSpells
-                .OrderByDescending(s => ScoreDamageSpell(actor, s, enemyCount))
-                .First();
-            return Task.FromResult<IAttackSource?>(best);
+            var scored = dmgSpells
+                .Select(s => (Spell: s, Score: ScoreDamageSpell(actor, s, enemyCount)))
+                .OrderByDescending(x => x.Score)
+                .ToList();
+
+            // Consider only spells within 80% of the top score, then pick randomly
+            var topScore = scored[0].Score;
+            var candidates = scored.Where(x => x.Score >= topScore * 0.8).ToList();
+            var picked = candidates[Random.Shared.Next(candidates.Count)];
+            return Task.FromResult<IAttackSource?>(picked.Spell);
         }
 
         // ── STAGE 5: Weapon fallback ───────────────────────────────

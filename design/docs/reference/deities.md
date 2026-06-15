@@ -9,7 +9,7 @@
 | 2 | **Astrara** | Light | Sky (Heaven) | Stars, Fate — guiding stars illuminating fate | Five-pointed guiding star sigil |
 | 3 | **Celestara** | Light | Sky (Heaven) | Destiny, Time — woven destiny patterns in night sky | Connected star-map with lines |
 | 4 | **Lunara** | Light | Sky (Heaven) | Moon, Magic, Tides — silver orb governing tides and magic | Silver crescent with arcane curves |
-| 5 | **Ignaroth** | Dark | Shadow (Elemental) | Fire, Destruction — consuming flame of destruction and rebirth | Consuming flame with rebirth spiral |
+| 5 | **Ignara** | Dark | Shadow (Elemental) | Fire, Destruction — consuming flame of destruction and rebirth | Consuming flame with rebirth spiral |
 | 6 | **Umbraex** | Dark | Shadow (Shadow) | Darkness, Secrets — void from which shadows are born | Eclipse with empty eye and shadow rings |
 | 7 | **Veparix** | Dark | Shadow (Shadow) | Deception, Illusion — veil of deception and obscured truths | Layered drifting wisps forming veil |
 | 8 | **Noctivane** | Dark | Shadow (Shadow) | Shadow, Stealth — realm between light/dark, home to assassins | Stealth crescent with concealed blade |
@@ -21,25 +21,27 @@
 
 | Deity | Title | Domain | Worshipped By |
 |-------|-------|--------|---------------|
-| **Aethelion** | The radiant father of light | Heaven, Light | Paladins, priests of order, judges, kings |
-| **Astrara** | The guiding star mother | Stars, Fate | Navigators, oracles, fortune-tellers |
-| **Celestara** | The weaver of destiny | Destiny, Time | Historians, prophets, time-keepers |
-| **Lunara** | The silver moon goddess | Moon, Magic, Tides | Mages, seers, priests of the moon |
+| **Aethelion** | The radiant father of light | Heaven, Light | Paladins, priests of order, Tempests, judges, kings |
+| **Astrara** | The guiding star mother | Stars, Fate | Navigators, oracles, fortune-tellers, Tempests |
+| **Celestara** | The weaver of destiny | Destiny, Time | Historians, prophets, time-keepers, Tempests |
+| **Lunara** | The silver moon goddess | Moon, Magic, Tides | Mages, seers, priests of the moon, Tempests |
 
 ## Dark Deities (Shadow Court)
 
 | Deity | Title | Domain | Worshipped By |
 |-------|-------|--------|---------------|
-| **Ignaroth** | The burning destroyer | Fire, Destruction | Berserkers, pyromancers, nihilists |
-| **Umbraex** | The void lord | Darkness, Secrets | Spies, occultists, keepers of forbidden knowledge |
-| **Veparix** | The deceptive mist | Deception, Illusion | Tricksters, spies, illusionists |
-| **Noctivane** | The shadow assassin god | Shadow, Stealth | Assassins, thieves, shadow mages |
+| **Ignara** | The burning destroyer | Fire, Destruction | Berserkers, pyromancers, nihilists, Tempests |
+| **Umbraex** | The void lord | Darkness, Secrets | Spies, occultists, keepers of forbidden knowledge, Tempests |
+| **Veparix** | The deceptive mist | Deception, Illusion | Tricksters, spies, illusionists, Tempests |
+| **Noctivane** | The shadow assassin god | Shadow, Stealth | Assassins, thieves, shadow mages, Tempests |
 
 ## Twilight Deities (Boundary)
 
 | Deity | Title | Domain | Worshipped By |
 |-------|-------|--------|---------------|
-| **Chronara** | The keeper of time | Time, Stars, Balance | Historians, prophets, time-keepers, those who seek balance |
+| **Chronara** | The keeper of time | Time, Stars, Balance | Historians, prophets, time-keepers, those who seek balance, Tempests |
+
+> **Tempest Class Note:** The Tempest class has unrestricted armor proficiency — they can wear plate mail (requires STR 14), just like the Priest class.
 
 ## Deity Spell Metadata
 

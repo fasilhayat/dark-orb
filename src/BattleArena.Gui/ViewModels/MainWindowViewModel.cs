@@ -9,6 +9,7 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using BattleArena.Core.Entities;
 using BattleArena.Gui.Models;
+using BattleArena.Gui.ViewModels.World;
 using BattleArena.Presentation;
 
 namespace BattleArena.Gui.ViewModels;
@@ -128,6 +129,9 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsApiMenuPhase)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsCharCreationPhase)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSpellPreviewPhase)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsWorldPhase)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsWorldMapPhase)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLocationPhase)));
             }
         }
     }
@@ -137,6 +141,12 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     public bool IsApiMenuPhase => Phase == "ApiMenu";
     public bool IsCharCreationPhase => Phase == "CharCreation";
     public bool IsSpellPreviewPhase => Phase == "SpellPreview";
+    public bool IsWorldPhase => Phase == "Location" || Phase == "World";
+    public bool IsWorldMapPhase => Phase == "WorldMap";
+    public bool IsLocationPhase => Phase == "Location" || Phase == "World";
+
+    public WorldViewModel WorldViewModel { get; } = new();
+    public BattleArena.Gui.ViewModels.WorldMap.WorldMapViewModel WorldMapVm { get; } = new();
 
     private string _scenario = "Duel";
     public string Scenario
@@ -631,8 +641,13 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
 
     public void AddOverlayMessage(string text, string color)
     {
+        AddOverlayMessage(text, color, "#ffffff");
+    }
+
+    public void AddOverlayMessage(string text, string color, string mainForeground)
+    {
         _overlayCts ??= new CancellationTokenSource();
-        var msg = new OverlayMessageViewModel(text, color);
+        var msg = new OverlayMessageViewModel(text, color, mainForeground);
         OverlayMessages.Add(msg);
         msg.Animate(OnOverlayCompleted, _overlayCts.Token);
     }
@@ -785,6 +800,8 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
             TmPipes.Add(TmPipeEmpty);
         EffectBars.CollectionChanged += (_, _) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasEffectBars)));
+        EffectNames.CollectionChanged += (_, _) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasEffectsDisplay)));
     }
 
     private int _hp;
@@ -893,7 +910,7 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
             return null;
         }
     }
-    public bool HasEffectsDisplay => EffectsDisplay is not null;
+    public bool HasEffectsDisplay => EffectNames.Count > 0;
 
     public bool HasEffectBars => EffectBars.Count > 0;
 
@@ -1188,6 +1205,21 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
     public string SexDisplay => Sex switch { "F" => "Female", "M" => "Male", _ => "None" };
 
     public ObservableCollection<EffectBarViewModel> EffectBars { get; } = new();
+    public ObservableCollection<EffectNameDisplay> EffectNames { get; } = new();
+
+    private void UpdateEffectNames(IReadOnlyList<EffectDisplayData> effects)
+    {
+        var remaining = new HashSet<string>(effects.Select(e => e.Name));
+        var toRemove = EffectNames.Where(n => !remaining.Contains(n.Name)).ToList();
+        foreach (var r in toRemove) EffectNames.Remove(r);
+
+        foreach (var ed in effects)
+        {
+            var existing = EffectNames.FirstOrDefault(n => n.Name == ed.Name);
+            if (existing is null)
+                EffectNames.Add(new EffectNameDisplay(ed.Name, ed.Color));
+        }
+    }
 
     private void UpdateEffectBars(IReadOnlyList<EffectDisplayData> effects)
     {
@@ -1216,6 +1248,16 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
         CcStatus = s.CcStatus;
         ActiveEffects = s.ActiveEffects.Count > 0 ? string.Join(", ", s.ActiveEffects.Select(e => e.Name)) : "";
         UpdateEffectBars(s.ActiveEffects);
+        UpdateEffectNames(s.ActiveEffects);
+        // Handle CC status (Stun, Fear, etc.)
+        var ccToRemove = EffectNames.Where(n => CcVisualConfig.IsCcEffect(n.Name) && n.Name != s.CcStatus).ToList();
+        foreach (var r in ccToRemove) EffectNames.Remove(r);
+        if (!string.IsNullOrEmpty(s.CcStatus))
+        {
+            var ccColor = CcVisualConfig.GetColor(s.CcStatus) ?? "#ffaa00";
+            if (!EffectNames.Any(n => n.Name == s.CcStatus))
+                EffectNames.Add(new EffectNameDisplay(s.CcStatus, ccColor));
+        }
         if (!string.IsNullOrEmpty(s.Weapon))
             CurrentWeapon = s.Weapon;
     }
@@ -1394,6 +1436,14 @@ public sealed class LogSegment
 {
     public string Text { get; init; } = "";
     public IBrush? Brush { get; init; }
+}
+
+public sealed class EffectNameDisplay
+{
+    public string Name { get; }
+    public string Color { get; }
+    public string Label => $"({Name})";
+    public EffectNameDisplay(string name, string color) { Name = name; Color = color; }
 }
 
 public sealed class LogEntryViewModel

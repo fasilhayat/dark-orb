@@ -83,9 +83,9 @@ introduce a new string without checking existing ones in the skill file above.
 
 ## 9. API — CRUD only, no game logic
 
-`BattleArena.Api` is a pure CRUD layer. No dice rolling, combat resolution, or
-game logic. `DiceService` (seed-based, deterministic) lives in `Application`.
-`/v1/combat/simulate` was removed — combat runs locally via `CombatSimulator`.
+The API (`BattleArena.Api`) is a pure CRUD layer. Must NOT contain dice rolling, combat resolution, or any game logic. Dice rolls originate from `DiceService` in `Application` (seed-based, deterministic). `CombatEndpoint.cs` is intentionally empty — combat runs locally via `CombatSimulator`.
+
+Registered endpoint groups in `Program.cs`: `CombatEndpoints` (removed), `CharacterEndpoints`, `EquipmentEndpoints`, `AccessoriesEndpoints`, `NpcEndpoints`, `LoreEndpoints`. Lore serves `/v1/classes`, `/v1/subraces`, `/v1/deities`, `/v1/pets`, `/v1/spells`, `/v1/schools`, `/v1/bestiary`.
 
 Port 8585 in Docker. Health check at `/api/healthcheck` (exempt from API key).
 Swagger only in Development/LocalDev.
@@ -136,8 +136,8 @@ dotnet test --filter "FullyQualifiedName~TestMethodName"  # single test
 | `make run-dev` | Re-run demo container (DB+API must be up) |
 | `make install` | Clean Docker → test → up-local → demo |
 | `make install-gui` | Clean Docker → build → up-local → GUI |
-| `make install-dev` | Clean + `dotnet clean` + test + dev-up |
-| `make redo-local` | Clean + build + up-local + demo-local |
+| `make install-dev` | Clean + dotnet clean + test + dev-up |
+| `make redo-local` | Clean + build + up-local + demo |
 | `make sync-instructions` | Copy AGENTS.md → `.github/copilot-instructions.md` |
 | `make clean-logs` | Delete `combat-logs/` |
 | `make down` | Stop all Docker containers |
@@ -152,14 +152,18 @@ dotnet test --filter "FullyQualifiedName~TestMethodName"  # single test
 - **No CI** — `.github/workflows/` is empty.
 - **API requires `X-Api-Key` header** — default `BA-DEV-2024-SECRET`.
 - **No `Directory.Build.props`** — each `.csproj` sets its own SDK, nullable, ImplicitUsings.
-- **`bugs-features/`** — numbered files. Process: read → implement → test → mark `[x]`
-  with summary → move to `done/<category>/`.
-- **`design/docs/`** — game design docs. Must stay in sync with SQL seed
-  (`src/.postgres-init/`).
-- **`.opencode/skills/`** — loaded by OpenCode on matching tasks. Includes combat
-  mechanics, turn order, makefile orchestration, work intake, log analysis.
-- **PostgreSQL init** at `src/.postgres-init/` runs alphabetically (`01-`, `02-`, `03-`, `04-`).
-- **HP**: 0 to -9 = KnockedOut, -10 or lower = Dead.
-- **Modifier pipeline** (`ICombatModifier`): priority bands 10=base/range,
-  20=environmental, 30=item/set/spell-buff.
-- **`.env.example`** at `src/.env.example`. Copy to `src/.env` and set `ENV=localdev`.
+- **Setup**: copy `src/.env.example` to `src/.env` to choose an environment (defaults to `localdev`).
+- **`bugs-features/`** — numbered files for pending work. Process in priority order: read → implement → test → mark `[x]` with summary → move to `done/<category>/` (category = `bugs`, `features`, or `task`).
+- **`design/docs/`** — game design docs. Must stay in sync with SQL seed data (`.postgres-init/`).
+- **`.opencode/skills/`** — auxiliary technical references (combat mechanics, turn order, makefile orchestration, work intake, log analysis). Loaded by OpenCode when tasks match.
+- **Coverage**: `coverlet.runsettings` excludes `BattleArena.Api.Program` and `BattleArena.Api.AddServices` from coverage.
+- **PostgreSQL init scripts** in `.postgres-init/` run alphabetically — naming (`01-`, `02-`, `03-`, `04-`) determines execution order.
+- **HP range**: 0 to -9 = KnockedOut, -10 or lower = Dead.
+- **Modifier pipeline** (`ICombatModifier`): priority bands 10=base/range, 20=environmental, 30=item/set/spell-buff.
+
+## 15. Doc update obligations
+
+- **README.md**: update when new project, API endpoint, DB table, Makefile target, Docker service, or test framework change.
+- **design/docs/**: update when SQL seed adds races, classes, deities, pets, weapons, armor, spells. Entries must match the DB exactly.
+- **design/docs/systems/spell-icon-design.md**: must stay in sync with the master spellbook and SQL seed data — every spell needs an icon spec entry.
+- **release-notes.md**: do NOT touch unless asked.
