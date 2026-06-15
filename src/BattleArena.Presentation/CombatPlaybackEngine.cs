@@ -488,14 +488,28 @@ public static class CombatPlaybackEngine
                 if (entry.StatusEffectName is not null)
                 {
                     var targetName = entry.TargetName ?? entry.ActorName;
+                    var effectColor = GetPersistentColor(entry.StatusEffectName);
                     bus.PublishNormal(new VisualEvent
                     {
                         EventType = entry.EventType,
                         ActorName = entry.ActorName,
                         TargetName = targetName,
                         OverlayText = entry.StatusEffectName.ToUpperInvariant(),
-                        Color = GetPersistentColor(entry.StatusEffectName),
+                        Color = effectColor,
+                        MainForeground = effectColor,
                     });
+                    if (entry.DamageDealt > 0)
+                    {
+                        bus.PublishNormal(new VisualEvent
+                        {
+                            EventType = "DoTDamage",
+                            ActorName = entry.ActorName,
+                            TargetName = targetName,
+                            OverlayText = $"-{entry.DamageDealt}",
+                            Color = effectColor,
+                            MainForeground = effectColor,
+                        });
+                    }
                 }
                 break;
 

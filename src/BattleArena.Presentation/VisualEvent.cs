@@ -9,6 +9,8 @@ public sealed class VisualEvent
     public string Color { get; init; } = "#44ff44";
     public int DurationMs { get; init; } = 1500;
 
+    public string MainForeground { get; init; } = "#ffffff";
+
     public string? EffectName { get; init; }
     public bool IsPersistent { get; init; }
     public int HealAmount { get; init; }

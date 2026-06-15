@@ -153,7 +153,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                 FlashBorder(ev.TargetName, ev.Color);
 
             if (!string.IsNullOrEmpty(ev.OverlayText))
-                _vm.AddOverlayMessage(ev.OverlayText, ev.Color);
+                _vm.AddOverlayMessage(ev.OverlayText, ev.Color, ev.MainForeground);
         });
     }
 
@@ -166,7 +166,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                 FlashBorder(ev.TargetName, ev.Color);
 
             if (!string.IsNullOrEmpty(ev.OverlayText))
-                _vm.AddOverlayMessage(ev.OverlayText, ev.Color);
+                _vm.AddOverlayMessage(ev.OverlayText, ev.Color, ev.MainForeground);
         });
     }
 
@@ -179,7 +179,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                 FlashBorder(ev.TargetName, ev.Color);
 
             if (!string.IsNullOrEmpty(ev.OverlayText))
-                _vm.AddOverlayMessage(ev.OverlayText, ev.Color);
+                _vm.AddOverlayMessage(ev.OverlayText, ev.Color, ev.MainForeground);
         });
 
         var adjusted = (int)(ev.DurationMs * _pacingMultiplier);
