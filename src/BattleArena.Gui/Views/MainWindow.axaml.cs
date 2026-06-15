@@ -315,9 +315,14 @@ public partial class MainWindow : Window
 
     private void PopulateCharacterCards(Party party1, Party party2)
     {
+        HeroesPanel.Children.Clear();
+        EnemiesPanel.Children.Clear();
+        _vm.Heroes.Clear();
+        _vm.Enemies.Clear();
+
         foreach (var pm in party1.Members)
         {
-            _vm.Heroes.Add(new CharCardViewModel
+            var vm = new CharCardViewModel
             {
                 Name = pm.Character.Name,
                 MaxHp = pm.Character.MaxHitPoints,
@@ -336,11 +341,19 @@ public partial class MainWindow : Window
                 Mana = pm.Character.CurrentMana,
                 CurrentWeapon = pm.AttackSource?.Name ?? "",
                 Portrait = PortraitResolver.GetPortrait(pm.Character.Name)
+            };
+            _vm.Heroes.Add(vm);
+            var card = new CharacterCard { DataContext = vm };
+            HeroesPanel.Children.Add(new Viewbox
+            {
+                Stretch = Stretch.Uniform,
+                Margin = new Thickness(2),
+                Child = card
             });
         }
         foreach (var pm in party2.Members)
         {
-            _vm.Enemies.Add(new CharCardViewModel
+            var vm = new CharCardViewModel
             {
                 Name = pm.Character.Name,
                 MaxHp = pm.Character.MaxHitPoints,
@@ -359,6 +372,14 @@ public partial class MainWindow : Window
                 Mana = pm.Character.CurrentMana,
                 CurrentWeapon = pm.AttackSource?.Name ?? "",
                 Portrait = PortraitResolver.GetPortrait(pm.Character.Name)
+            };
+            _vm.Enemies.Add(vm);
+            var card = new CharacterCard { DataContext = vm };
+            EnemiesPanel.Children.Add(new Viewbox
+            {
+                Stretch = Stretch.Uniform,
+                Margin = new Thickness(2),
+                Child = card
             });
         }
         RecalcCardLayout();
@@ -370,10 +391,20 @@ public partial class MainWindow : Window
         {
             var sideWidth = (CombatCardGrid.Bounds.Width - 76) / 2.0;
             _vm.RecalcSideLayout(sideWidth, CombatCardGrid.Bounds.Height);
-            HeroesCards.Width = _vm.HeroLayoutCentered ? double.NaN : sideWidth;
-            EnemiesCards.Width = _vm.EnemyLayoutCentered ? double.NaN : sideWidth;
-            HeroesCards.HorizontalAlignment = _vm.HeroAlignment;
-            EnemiesCards.HorizontalAlignment = _vm.EnemyAlignment;
+
+            var cardWidth = _vm.HeroSideScale * 380.0;
+            HeroesPanel.Width = _vm.HeroLayoutCentered ? double.NaN : sideWidth;
+            HeroesPanel.HorizontalAlignment = _vm.HeroAlignment;
+            foreach (var child in HeroesPanel.Children)
+                if (child is Viewbox vb)
+                    vb.Width = cardWidth;
+
+            cardWidth = _vm.EnemySideScale * 380.0;
+            EnemiesPanel.Width = _vm.EnemyLayoutCentered ? double.NaN : sideWidth;
+            EnemiesPanel.HorizontalAlignment = _vm.EnemyAlignment;
+            foreach (var child in EnemiesPanel.Children)
+                if (child is Viewbox vb)
+                    vb.Width = cardWidth;
         }
     }
 

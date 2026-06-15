@@ -256,66 +256,54 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         foreach (var h in Heroes) h.CardScale = HeroSideScale;
         foreach (var e in Enemies) e.CardScale = EnemySideScale;
 
-        HeroLayoutCentered = Heroes.Count <= 4;
-        EnemyLayoutCentered = Enemies.Count <= 4;
-        HeroAlignment = Heroes.Count <= 4 ? HorizontalAlignment.Right : HorizontalAlignment.Stretch;
-        EnemyAlignment = Enemies.Count <= 4 ? HorizontalAlignment.Left : HorizontalAlignment.Stretch;
+        // When cards fit in one row at computed scale → auto-width + right/left alignment.
+        // When rows > 1 needed → constrained width + stretch so wrapping works correctly.
+        var heroNeedsWrap = Heroes.Count > heroCols;
+        var enemyNeedsWrap = Enemies.Count > enemyCols;
+        HeroLayoutCentered = !heroNeedsWrap;
+        EnemyLayoutCentered = !enemyNeedsWrap;
+        HeroAlignment = heroNeedsWrap ? HorizontalAlignment.Stretch : HorizontalAlignment.Right;
+        EnemyAlignment = enemyNeedsWrap ? HorizontalAlignment.Stretch : HorizontalAlignment.Left;
     }
 
     private static (double scale, int cols) ComputeClashScale(
         double availableWidth, double availableHeight, int count)
     {
-        if (count <= 4) return (1.0, 1);
-
         const int maxCols = 3;
         const double margin = 4.0;
+        const double spacing = 8.0;
 
-        // Minimum card width to prevent more than maxCols per row.
-        // (maxCols+1) * (cardWidth + margin) > availableWidth
-        var minCardWidth = availableWidth / (maxCols + 1.0) - margin + 0.5;
-        var minWidthScale = Math.Clamp(minCardWidth / CardWidthAtFullScale, MinScale, 1.0);
+        if (count <= 0 || availableWidth <= 0 || availableHeight <= 0)
+            return (MinScale, 1);
 
-        // Iterate: scale determines cards-per-row, which determines rows,
-        // which determines height-scale, which feeds back into scale.
-        var scale = 1.0;
-        for (var iter = 0; iter < 10; iter++)
+        // Try 1..maxCols columns and pick the one with the largest scale
+        // that satisfies BOTH width and height constraints.
+        var bestScale = MinScale;
+        var bestCols = 1;
+
+        for (var cols = 1; cols <= maxCols; cols++)
         {
-            var cardsPerRow = Math.Max(1,
-                (int)(availableWidth / (CardWidthAtFullScale * scale + margin)));
-            cardsPerRow = Math.Min(cardsPerRow, maxCols);
+            // Width constraint: scale that makes `cols` fit horizontally
+            var widthScale = (availableWidth - (cols - 1) * margin)
+                           / (cols * CardWidthAtFullScale);
 
-            var rows = (int)Math.Ceiling((double)count / cardsPerRow);
-            var heightScale = (availableHeight - (rows - 1) * CardSpacing)
+            // Height constraint: scale that makes `ceil(count/cols)` rows fit vertically
+            var rows = (int)Math.Ceiling((double)count / cols);
+            var heightScale = (availableHeight - (rows - 1) * spacing)
                             / (rows * CardHeightAtFullScale);
 
-            // Pick the larger of the two constraints:
-            //   widthScale  → cards must be at least this wide (≤ maxCols per row)
-            //   heightScale → cards must be at most this tall (fit vertically)
-            var newScale = Math.Max(heightScale, minWidthScale);
-            newScale = Math.Clamp(newScale, MinScale, 1.0);
+            // Both constraints must be satisfied → pick the smaller
+            var scale = Math.Min(widthScale, heightScale);
+            scale = Math.Clamp(scale, MinScale, 1.0);
 
-            if (Math.Abs(newScale - scale) < 0.001) break;
-            scale = newScale;
+            if (scale > bestScale)
+            {
+                bestScale = scale;
+                bestCols = cols;
+            }
         }
 
-        // Final height check — if the width constraint makes cards too tall,
-        // fall back to height-constrained scale (may exceed maxCols per row).
-        var finalCardsPerRow = Math.Max(1,
-            (int)(availableWidth / (CardWidthAtFullScale * scale + margin)));
-        var finalRows = (int)Math.Ceiling((double)count / finalCardsPerRow);
-        var finalHeight = finalRows * CardHeightAtFullScale * scale
-                        + (finalRows - 1) * CardSpacing;
-
-        if (finalHeight > availableHeight)
-        {
-            var fallbackScale = (availableHeight - (finalRows - 1) * CardSpacing)
-                              / (finalRows * CardHeightAtFullScale);
-            scale = Math.Clamp(fallbackScale, MinScale, 1.0);
-            finalCardsPerRow = Math.Max(1,
-                (int)(availableWidth / (CardWidthAtFullScale * scale + margin)));
-        }
-
-        return (scale, Math.Min(finalCardsPerRow, maxCols));
+        return (bestScale, bestCols);
     }
 
     // ── Spell Preview ─────────────────────────────────────────

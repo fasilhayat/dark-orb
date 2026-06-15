@@ -19,7 +19,6 @@
     <views:NotNullConverter x:Key="NotNullConverter" />
     <views:GreaterThanZeroConverter x:Key="GreaterThanZeroConverter" />
     <views:SelectedButtonConverter x:Key="SelectedButtonConverter" />
-    <views:BoolToAlignmentConverter x:Key="BoolToAlignConv" />
   </Window.Resources>
 
   <Window.Styles>
@@ -278,21 +277,9 @@
       <!-- Row 2: Character cards side by side -->
       <Grid Grid.Row="2" Margin="0,4">
         <Grid x:Name="CombatCardGrid" ColumnDefinitions="*,Auto,Auto,Auto,*">
-          <ItemsControl x:Name="HeroesCards" Grid.Column="0" ItemsSource="{Binding Heroes}"
-                        ClipToBounds="True">
-            <ItemsControl.ItemsPanel>
-              <ItemsPanelTemplate>
-                <WrapPanel Orientation="Horizontal" />
-              </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-              <DataTemplate>
-                <Viewbox Stretch="Uniform" Width="{Binding ScaledCardWidth}" Margin="2">
-                  <views:CharacterCard DataContext="{Binding}" Margin="0" />
-                </Viewbox>
-              </DataTemplate>
-            </ItemsControl.ItemTemplate>
-          </ItemsControl>
+          <Grid Grid.Column="0" ClipToBounds="True">
+            <WrapPanel x:Name="HeroesPanel" Orientation="Horizontal" />
+          </Grid>
 
           <Border Grid.Column="1" Width="3" Background="#333" Margin="4,0" />
 
@@ -311,21 +298,9 @@
 
           <Border Grid.Column="3" Width="3" Background="#333" Margin="4,0" />
 
-          <ItemsControl x:Name="EnemiesCards" Grid.Column="4" ItemsSource="{Binding Enemies}"
-                        ClipToBounds="True">
-            <ItemsControl.ItemsPanel>
-              <ItemsPanelTemplate>
-                <WrapPanel Orientation="Horizontal" />
-              </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-              <DataTemplate>
-                <Viewbox Stretch="Uniform" Width="{Binding ScaledCardWidth}" Margin="2">
-                  <views:CharacterCard DataContext="{Binding}" Margin="0" />
-                </Viewbox>
-              </DataTemplate>
-            </ItemsControl.ItemTemplate>
-          </ItemsControl>
+          <Grid Grid.Column="4" ClipToBounds="True">
+            <WrapPanel x:Name="EnemiesPanel" Orientation="Horizontal" />
+          </Grid>
         </Grid>
       </Grid>
 
