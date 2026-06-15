@@ -180,6 +180,127 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     public bool IsTurnBased => Mode == "TurnBased";
     public bool IsAutoMode => Mode == "Auto";
 
+    // ── Dynamic Card Scaling ──────────────────────────────────
+
+    private const double CardWidthAtFullScale = 380.0;
+    private const double CardHeightAtFullScale = 240.0;
+    private const double CardSpacing = 8.0;
+    private const double MinScale = 0.35;
+
+    private double _heroSideScale = 1.0;
+    public double HeroSideScale
+    {
+        get => _heroSideScale;
+        set => SetField(ref _heroSideScale, Math.Clamp(value, MinScale, 1.0));
+    }
+
+    private double _enemySideScale = 1.0;
+    public double EnemySideScale
+    {
+        get => _enemySideScale;
+        set => SetField(ref _enemySideScale, Math.Clamp(value, MinScale, 1.0));
+    }
+
+    private int _heroColumns = 1;
+    public int HeroColumns
+    {
+        get => _heroColumns;
+        set => SetField(ref _heroColumns, value);
+    }
+
+    private int _enemyColumns = 1;
+    public int EnemyColumns
+    {
+        get => _enemyColumns;
+        set => SetField(ref _enemyColumns, value);
+    }
+
+    private bool _heroLayoutCentered = true;
+    public bool HeroLayoutCentered
+    {
+        get => _heroLayoutCentered;
+        set => SetField(ref _heroLayoutCentered, value);
+    }
+
+    private bool _enemyLayoutCentered = true;
+    public bool EnemyLayoutCentered
+    {
+        get => _enemyLayoutCentered;
+        set => SetField(ref _enemyLayoutCentered, value);
+    }
+
+    public void RecalcSideLayout(double availableWidth, double availableHeight)
+    {
+        var (heroScale, heroCols) = ComputeClashScale(availableWidth, availableHeight, Heroes.Count);
+        var (enemyScale, enemyCols) = ComputeClashScale(availableWidth, availableHeight, Enemies.Count);
+        HeroSideScale = heroScale;
+        EnemySideScale = enemyScale;
+        HeroColumns = heroCols;
+        EnemyColumns = enemyCols;
+
+        foreach (var h in Heroes) h.CardScale = HeroSideScale;
+        foreach (var e in Enemies) e.CardScale = EnemySideScale;
+
+        HeroLayoutCentered = Heroes.Count <= 4;
+        EnemyLayoutCentered = Enemies.Count <= 4;
+    }
+
+    private static (double scale, int cols) ComputeClashScale(
+        double availableWidth, double availableHeight, int count)
+    {
+        if (count <= 4) return (1.0, 1);
+
+        const int maxCols = 3;
+        const double margin = 4.0;
+
+        // Minimum card width to prevent more than maxCols per row.
+        // (maxCols+1) * (cardWidth + margin) > availableWidth
+        var minCardWidth = availableWidth / (maxCols + 1.0) - margin + 0.5;
+        var minWidthScale = Math.Clamp(minCardWidth / CardWidthAtFullScale, MinScale, 1.0);
+
+        // Iterate: scale determines cards-per-row, which determines rows,
+        // which determines height-scale, which feeds back into scale.
+        var scale = 1.0;
+        for (var iter = 0; iter < 10; iter++)
+        {
+            var cardsPerRow = Math.Max(1,
+                (int)(availableWidth / (CardWidthAtFullScale * scale + margin)));
+            cardsPerRow = Math.Min(cardsPerRow, maxCols);
+
+            var rows = (int)Math.Ceiling((double)count / cardsPerRow);
+            var heightScale = (availableHeight - (rows - 1) * CardSpacing)
+                            / (rows * CardHeightAtFullScale);
+
+            // Pick the larger of the two constraints:
+            //   widthScale  → cards must be at least this wide (≤ maxCols per row)
+            //   heightScale → cards must be at most this tall (fit vertically)
+            var newScale = Math.Max(heightScale, minWidthScale);
+            newScale = Math.Clamp(newScale, MinScale, 1.0);
+
+            if (Math.Abs(newScale - scale) < 0.001) break;
+            scale = newScale;
+        }
+
+        // Final height check — if the width constraint makes cards too tall,
+        // fall back to height-constrained scale (may exceed maxCols per row).
+        var finalCardsPerRow = Math.Max(1,
+            (int)(availableWidth / (CardWidthAtFullScale * scale + margin)));
+        var finalRows = (int)Math.Ceiling((double)count / finalCardsPerRow);
+        var finalHeight = finalRows * CardHeightAtFullScale * scale
+                        + (finalRows - 1) * CardSpacing;
+
+        if (finalHeight > availableHeight)
+        {
+            var fallbackScale = (availableHeight - (finalRows - 1) * CardSpacing)
+                              / (finalRows * CardHeightAtFullScale);
+            scale = Math.Clamp(fallbackScale, MinScale, 1.0);
+            finalCardsPerRow = Math.Max(1,
+                (int)(availableWidth / (CardWidthAtFullScale * scale + margin)));
+        }
+
+        return (scale, Math.Min(finalCardsPerRow, maxCols));
+    }
+
     // ── Spell Preview ─────────────────────────────────────────
 
     public ObservableCollection<CharacterDisplayItem> AvailableCasters { get; } = [];
@@ -776,6 +897,22 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
 
     public bool HasPortrait => Portrait is not null;
     public bool PortraitIsNull => Portrait is null;
+
+    private double _cardScale = 1.0;
+    public double CardScale
+    {
+        get => _cardScale;
+        set
+        {
+            var clamped = Math.Clamp(value, 0.35, 1.0);
+            if (Math.Abs(_cardScale - clamped) < 0.001) return;
+            _cardScale = clamped;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CardScale)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ScaledCardWidth)));
+        }
+    }
+
+    public double ScaledCardWidth => _cardScale * 380.0;
 
     public CharCardViewModel()
     {

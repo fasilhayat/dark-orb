@@ -111,6 +111,12 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     {
         _dispatcher.Post(() =>
         {
+            if (ev.EventType == "ClearPersistent")
+            {
+                StopPersistentEffect(ev.ActorName);
+                return;
+            }
+
             if (ev.IsPersistent && ev.EffectName is not null)
             {
                 if (ev.EventType == "EffectApplied")
@@ -712,6 +718,9 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             "ManaRegen"          => [BuildManaRegenRow(e, state)],
             "ManaDeduct"         => [BuildManaDeductRow(e, state)],
             "ApiCall"            => [[Seg("  \u26a1 ", Cyan), Seg(e.Message, DarkGray)]],
+            "Death"              => [BuildDeathRow(e)],
+            "KnockedOut"         => [BuildKnockedOutRow(e)],
+            "TurnEnd"            => [],
             _                    => [[Seg($"  [{e.EventType}] {e.Message}", Gray)]]
         };
 

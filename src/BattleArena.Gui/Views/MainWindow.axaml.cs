@@ -93,6 +93,7 @@ public partial class MainWindow : Window
             ? new AvaloniaSoundPlayer(soundsDir)
             : null;
 
+        CombatCardGrid.SizeChanged += OnCombatCardAreaSizeChanged;
     }
 
     private void OnWorldCombatEncounter(string heroName, string enemyName)
@@ -360,6 +361,24 @@ public partial class MainWindow : Window
                 Portrait = PortraitResolver.GetPortrait(pm.Character.Name)
             });
         }
+        RecalcCardLayout();
+    }
+
+    private void RecalcCardLayout()
+    {
+        if (CombatCardGrid.Bounds.Width > 0 && CombatCardGrid.Bounds.Height > 0)
+        {
+            var sideWidth = (CombatCardGrid.Bounds.Width - 76) / 2.0;
+            _vm.RecalcSideLayout(sideWidth, CombatCardGrid.Bounds.Height);
+            HeroesCards.Width = _vm.HeroLayoutCentered ? double.NaN : sideWidth;
+            EnemiesCards.Width = _vm.EnemyLayoutCentered ? double.NaN : sideWidth;
+        }
+    }
+
+    private void OnCombatCardAreaSizeChanged(object? sender, SizeChangedEventArgs e)
+    {
+        if (_vm.IsCombatPhase)
+            RecalcCardLayout();
     }
 
     private static Party BuildParty(List<CharacterDisplayItem?> team)

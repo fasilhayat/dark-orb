@@ -86,7 +86,7 @@
       "damageType": "Lightning", "attackBonus": 2,
       "spellLevel": 2, "turnMeterCost": 75, "manaCost": 20,
       "onHitEffects": [
-        { "name": "Shocked", "type": "Shock", "target": "Target", "duration": 1, "applicationChance": 50, "resistanceType": "Magic" }
+        { "name": "Electrified", "type": "Shock", "target": "Target", "duration": 1, "applicationChance": 50, "resistanceType": "Magic" }
       ]
     },
     {
@@ -95,7 +95,7 @@
       "damageType": "Lightning", "attackBonus": 2,
       "spellLevel": 2, "turnMeterCost": 80, "manaCost": 30,
       "onHitEffects": [
-        { "name": "Electrified", "type": "Shock", "target": "Target", "duration": 2, "applicationChance": 100, "resistanceType": "Magic" }
+        { "name": "Shocked", "type": "Shock", "target": "Target", "duration": 2, "applicationChance": 100, "resistanceType": "Magic" }
       ]
     },
     {

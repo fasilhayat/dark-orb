@@ -122,7 +122,7 @@ public class RosterLoaderTests : IDisposable
 
         // ── Vaelith Moonveil — arcane fighter (spellcaster) ─────────────────────
         var vaelith = data.Heroes.First(c => c.Name == "Vaelith Moonveil");
-        Assert.Equal(12, vaelith.MemorizedSpells.Count);
+        Assert.Equal(11, vaelith.MemorizedSpells.Count);
         Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Fireball");
         Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Ice Bolt");
         Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Shock");
@@ -134,7 +134,6 @@ public class RosterLoaderTests : IDisposable
         Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Lightning Bolt");
         Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Mind Siphon");
         Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Invisibility");
-        Assert.Contains(vaelith.MemorizedSpells, s => s.Name == "Haste");
         Assert.Equal(90,   vaelith.MaxMana);
         Assert.Equal(90,   vaelith.CurrentMana);
         Assert.Equal("Elf", vaelith.Race?.Name);
@@ -187,10 +186,10 @@ public class RosterLoaderTests : IDisposable
 
         // ── Target Golem — test dummy ────────────────────────────────────────────
         var golem = data.Dummies.First(c => c.Name == "Target Golem");
-        Assert.Equal(10,   golem.Level);
-        Assert.Equal(300,  golem.MaxHitPoints);
-        Assert.Equal(100,  golem.MaxMana);
-        Assert.Equal(16,   golem.Strength);
+        Assert.Equal(14,   golem.Level);
+        Assert.Equal(400,  golem.MaxHitPoints);
+        Assert.Equal(150,  golem.MaxMana);
+        Assert.Equal(18,   golem.Strength);
         Assert.Equal(10,   golem.Dexterity);
         Assert.Equal("Human",  golem.Race?.Name);
         Assert.Equal(8,    golem.ClassId);          // Fighter
@@ -203,21 +202,17 @@ public class RosterLoaderTests : IDisposable
         Assert.Contains(golem.MemorizedSpells, s => s.Name == "Shock");
         Assert.Contains(golem.MemorizedSpells, s => s.Name == "Smite");
 
-        // ── Practice Dummy — resilient caster target ──────────────────────────────
+        // ── Practice Dummy — pure target dummy with no gear or spells ──────────────
         var dummy = data.Dummies.First(c => c.Name == "Practice Dummy");
         Assert.Equal(10,   dummy.Level);
-        Assert.Equal(500,  dummy.MaxHitPoints);
-        Assert.Equal(100,  dummy.MaxMana);
+        Assert.Equal(999,  dummy.MaxHitPoints);
+        Assert.Equal(999,  dummy.MaxMana);
         Assert.Equal(1,    dummy.StrikeRating);
         Assert.Equal(4,    dummy.TurnSpeed);
-        Assert.Equal(14,   dummy.Intelligence);
-        Assert.Equal("Studded Leather", dummy.Equipment.Chest!.Name);
+        Assert.Equal(1,    dummy.Intelligence);
+        Assert.Null(dummy.Equipment.Chest);
         Assert.Null(dummy.Equipment.RightHand);
-        Assert.Contains(dummy.MemorizedSpells, s => s.Name == "Fireball");
-        Assert.Contains(dummy.MemorizedSpells, s => s.Name == "Ice Bolt");
-        Assert.Contains(dummy.MemorizedSpells, s => s.Name == "Shock");
-        Assert.Contains(dummy.MemorizedSpells, s => s.Name == "Heal");
-        Assert.Contains(dummy.MemorizedSpells, s => s.Name == "Mass Heal");
+        Assert.Empty(dummy.MemorizedSpells);
     }
 
     // ── Edge cases ───────────────────────────────────────────────────────────────

@@ -192,6 +192,8 @@ internal class StatusEffectProcessor
                 await notify(_logger.BuildDefeatEntry(tick, actorState.Character));
                 defeated = true;
             }
+
+            if (defeated) break;
         }
         return defeated;
     }
@@ -560,7 +562,7 @@ internal class StatusEffectProcessor
     {
         ElementalType.Fire => "Burning",
         ElementalType.Ice => "Chilled",
-        ElementalType.Lightning => "Shocked",
+        ElementalType.Lightning => "Electrified",
         ElementalType.Poison => "Poisoned",
         _ => null
     };

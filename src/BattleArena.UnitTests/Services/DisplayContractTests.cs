@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 /// <summary>
 /// Guards two invariants that are easy to accidentally break:
-///   1. All required combat event types are wired up in ConsoleCombatPresenter.BuildHandlers,
+///   1. All required combat event types are wired up in AvaloniaCombatPresenter.BuildRows,
 ///      so no event is silently dropped during playback.
 ///   2. ApiCall events are ordered BEFORE the Attack event they produced,
 ///      so dice rolls appear before the resolved outcome on screen.
@@ -43,17 +43,17 @@ public class DisplayContractTests
     [InlineData("ManaDeduct")]
     [InlineData("PetSummoned")]
     [InlineData("PetExpired")]
-    public void ConsoleCombatPresenter_RegistersHandler_For(string eventType)
+    public void AvaloniaCombatPresenter_RegistersHandler_For(string eventType)
     {
         var presenterFile = Path.Combine(
-            FindRepoRoot(), "BattleArena.Demo", "ConsoleCombatPresenter.cs");
+            FindRepoRoot(), "BattleArena.Gui", "Presenters", "AvaloniaCombatPresenter.cs");
 
         var source = File.ReadAllText(presenterFile);
-        var pattern = new Regex($@"\[""{eventType}""\]\s*=\s*Handle\w+");
+        var pattern = new Regex($@"""{eventType}""\s*=>");
 
         Assert.True(pattern.IsMatch(source),
-            $"No handler registered for '{eventType}' in ConsoleCombatPresenter.BuildHandlers. " +
-            $"Add [\"{eventType}\"] = Handle... to the dictionary.");
+            $"No handler registered for '{eventType}' in AvaloniaCombatPresenter.BuildRows. " +
+            $"Add \"{eventType}\" => to the switch expression.");
     }
 
     // ── 2. ApiCall events are ordered before Attack in the merged log ──────────
