@@ -37,7 +37,8 @@ public partial class MainWindow : Window
     private AvaloniaCombatPresenter? _presenter;
     private readonly List<CharacterDisplayItem?> _team1 = [];
     private readonly List<CharacterDisplayItem?> _team2 = [];
-    private int _teamSize = 1;
+    private int _heroTeamSize = 1;
+    private int _enemyTeamSize = 1;
     private bool _useApi;
     private BattleArenaApiClient? _apiClient;
     private Party? _combatParty1;
@@ -62,6 +63,10 @@ public partial class MainWindow : Window
         DummyListBox.ItemsSource = ToDisplayItems(Roster.AllDummies);
         DuelButton.IsEnabled = false;
         SelectionHint.Text = "Select Team 1 — 0/1";
+        HeroTeamSizeSlider.IsVisible = false;
+        EnemyTeamSizeSlider.IsVisible = false;
+        HeroTeamSizeLabel.IsVisible = false;
+        EnemyTeamSizeLabel.IsVisible = false;
 
         try
         {
@@ -142,7 +147,12 @@ public partial class MainWindow : Window
         _vm.Scenario = "Duel";
         DuelButton.IsEnabled = false;
         ClashButton.IsEnabled = true;
-        _teamSize = 1;
+        _heroTeamSize = 1;
+        _enemyTeamSize = 1;
+        HeroTeamSizeSlider.IsVisible = false;
+        EnemyTeamSizeSlider.IsVisible = false;
+        HeroTeamSizeLabel.IsVisible = false;
+        EnemyTeamSizeLabel.IsVisible = false;
         ClearSelection();
     }
 
@@ -151,7 +161,12 @@ public partial class MainWindow : Window
         _vm.Scenario = "Party";
         DuelButton.IsEnabled = true;
         ClashButton.IsEnabled = false;
-        _teamSize = 1;
+        _heroTeamSize = (int)HeroTeamSizeSlider.Value;
+        _enemyTeamSize = (int)EnemyTeamSizeSlider.Value;
+        HeroTeamSizeSlider.IsVisible = true;
+        EnemyTeamSizeSlider.IsVisible = true;
+        HeroTeamSizeLabel.IsVisible = true;
+        EnemyTeamSizeLabel.IsVisible = true;
         ClearSelection();
     }
 
@@ -165,21 +180,21 @@ public partial class MainWindow : Window
         _team1.Clear();
         _team2.Clear();
         _vm.CanProceed = false;
-        SelectionHint.Text = $"Select Team 1 — 0/{_teamSize}";
+        SelectionHint.Text = $"Select Team 1 — 0/{_heroTeamSize}";
     }
 
     private void UpdateSelectionHint()
     {
-        var team1Full = _team1.Count >= _teamSize;
-        var team2Full = _team2.Count >= _teamSize;
+        var team1Full = _team1.Count >= _heroTeamSize;
+        var team2Full = _team2.Count >= _enemyTeamSize;
         _vm.CanProceed = team1Full && team2Full;
 
         if (!team1Full)
-            SelectionHint.Text = $"Select Team 1 — {_team1.Count}/{_teamSize}";
+            SelectionHint.Text = $"Select Team 1 — {_team1.Count}/{_heroTeamSize}";
         else if (!team2Full)
-            SelectionHint.Text = $"Select Team 2 — {_team2.Count}/{_teamSize}";
+            SelectionHint.Text = $"Select Team 2 — {_team2.Count}/{_enemyTeamSize}";
         else
-            SelectionHint.Text = $"All {_teamSize * 2} champions selected!  Press PROCEED.";
+            SelectionHint.Text = $"All teams ready!  Press PROCEED.";
     }
 
     private void OnHeroSelected(object? sender, SelectionChangedEventArgs e)
@@ -199,12 +214,12 @@ public partial class MainWindow : Window
         }
 
         // Assign to first team with room
-        if (_team1.Count < _teamSize)
+        if (_team1.Count < _heroTeamSize)
         {
             item.TeamSlot = 1;
             _team1.Add(item);
         }
-        else if (_team2.Count < _teamSize)
+        else if (_team2.Count < _enemyTeamSize)
         {
             item.TeamSlot = 2;
             _team2.Add(item);
@@ -212,6 +227,28 @@ public partial class MainWindow : Window
         else return; // both teams full
 
         UpdateSelectionHint();
+    }
+
+    private void OnHeroTeamSizeChanged(object? sender, Avalonia.Controls.Primitives.RangeBaseValueChangedEventArgs e)
+    {
+        var val = (int)e.NewValue;
+        HeroTeamSizeLabel.Text = val.ToString();
+        if (_vm.Scenario == "Party")
+        {
+            _heroTeamSize = val;
+            ClearSelection();
+        }
+    }
+
+    private void OnEnemyTeamSizeChanged(object? sender, Avalonia.Controls.Primitives.RangeBaseValueChangedEventArgs e)
+    {
+        var val = (int)e.NewValue;
+        EnemyTeamSizeLabel.Text = val.ToString();
+        if (_vm.Scenario == "Party")
+        {
+            _enemyTeamSize = val;
+            ClearSelection();
+        }
     }
 
     private void OnDismissErrorClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -405,6 +442,12 @@ public partial class MainWindow : Window
         NewCombatButton.IsVisible = false;
         _combatParty1 = null;
         _combatParty2 = null;
+        _heroTeamSize = 1;
+        _enemyTeamSize = 1;
+        HeroTeamSizeSlider.IsVisible = false;
+        EnemyTeamSizeSlider.IsVisible = false;
+        HeroTeamSizeLabel.IsVisible = false;
+        EnemyTeamSizeLabel.IsVisible = false;
         ClearSelection();
         DuelButton.IsEnabled = false;
         ClashButton.IsEnabled = true;
@@ -654,6 +697,12 @@ public partial class MainWindow : Window
         _useApi = true;
         _vm.Scenario = "Duel";
         _vm.Phase = "Setup";
+        _heroTeamSize = 1;
+        _enemyTeamSize = 1;
+        HeroTeamSizeSlider.IsVisible = false;
+        EnemyTeamSizeSlider.IsVisible = false;
+        HeroTeamSizeLabel.IsVisible = false;
+        EnemyTeamSizeLabel.IsVisible = false;
         HeroListBox.ItemsSource = null;
         HeroListBox.ItemsSource = ToDisplayItems(_apiRoster);
         DummyListBox.IsVisible = false;
@@ -679,6 +728,12 @@ public partial class MainWindow : Window
         _useApi = true;
         _vm.Scenario = "Party";
         _vm.Phase = "Setup";
+        _heroTeamSize = (int)HeroTeamSizeSlider.Value;
+        _enemyTeamSize = (int)EnemyTeamSizeSlider.Value;
+        HeroTeamSizeSlider.IsVisible = true;
+        EnemyTeamSizeSlider.IsVisible = true;
+        HeroTeamSizeLabel.IsVisible = true;
+        EnemyTeamSizeLabel.IsVisible = true;
         HeroListBox.ItemsSource = null;
         HeroListBox.ItemsSource = ToDisplayItems(_apiRoster);
         DummyListBox.ItemsSource = ToDisplayItems(Roster.AllDummies);
@@ -945,7 +1000,7 @@ public partial class MainWindow : Window
         var layout = CombatLayout.From(
             party1.Members.Select(m => m.Character.Name),
             party2.Members.Select(m => m.Character.Name),
-            isDuel: true);
+            isDuel: _heroTeamSize == 1 && _enemyTeamSize == 1);
 
         var state = new CombatDisplayState(charStates, layout, isApiMode: _useApi);
 
@@ -1300,7 +1355,10 @@ public partial class MainWindow : Window
             new LowestHpTargetSelector(), new LowestHpTargetSelector(),
             forcedSpell, autoSource);
 
-        const int previewTicks = 12;
+        var maxEffectDuration = spell.OnHitEffects.Count > 0
+            ? spell.OnHitEffects.Max(e => e.Duration)
+            : 0;
+        var previewTicks = 8 + maxEffectDuration + 1;
         var result = await Task.Run(() => simulator.Simulate(party1, party2, previewTicks), _cts.Token);
 
         result.DiceLog = diceService.DiceLog;
