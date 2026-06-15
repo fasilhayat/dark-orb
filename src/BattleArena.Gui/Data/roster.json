@@ -122,7 +122,7 @@
       "damageType": "Shadow", "attackBonus": 0,
       "spellLevel": 3, "turnMeterCost": 85, "manaCost": 30,
       "onHitEffects": [
-        { "name": "Leech", "type": "Leech", "target": "Target", "duration": 3, "applicationChance": 80, "resistanceType": "Shadow", "leechPerTurn": 6, "leechResourceType": "Mana" }
+        { "name": "LeechMana", "type": "Leech", "target": "Target", "duration": 3, "applicationChance": 80, "resistanceType": "Shadow", "leechPerTurn": 6, "leechResourceType": "Mana" }
       ]
     },
     {
