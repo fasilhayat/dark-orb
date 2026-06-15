@@ -27,4 +27,10 @@
     <ProjectReference Include="..\BattleArena.Presentation\BattleArena.Presentation.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="..\BattleArena.Gui\gui-display-contract.json" Link="gui-display-contract.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

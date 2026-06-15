@@ -98,6 +98,14 @@
     <Style Selector="#SpellPreviewSpellList ListBoxItem:pointerover /template/ ContentPresenter">
       <Setter Property="Background" Value="#1a2a0e" />
     </Style>
+
+    <!-- Team-colored slider thumbs -->
+    <Style Selector="Slider#HeroTeamSizeSlider /template/ Thumb">
+      <Setter Property="Background" Value="#1E88E5" />
+    </Style>
+    <Style Selector="Slider#EnemyTeamSizeSlider /template/ Thumb">
+      <Setter Property="Background" Value="#E53935" />
+    </Style>
   </Window.Styles>
 
   <Grid Margin="8">
@@ -133,7 +141,7 @@
     <!-- ── WORLD MAP PHASE ── -->
     <Grid IsVisible="{Binding IsWorldMapPhase}" RowDefinitions="Auto,*,Auto" Background="#0d0d1a">
       <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Margin="8,4">
-        <TextBlock Grid.Column="0" Text="***  AELTHORIA  ***"
+        <TextBlock Grid.Column="0" Text="AELTHORIA"
                    Foreground="#00bfff" FontSize="18" FontWeight="Bold"
                    VerticalAlignment="Center" />
         <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8">
@@ -231,7 +239,7 @@
 
       <!-- Row 0: Title -->
       <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,4">
-        <TextBlock Grid.Column="0" Text="***  BATTLE ARENA  —  COMBAT SIMULATION  ***"
+        <TextBlock Grid.Column="0" Text="BATTLE ARENA — COMBAT SIMULATION"
                    Foreground="#00bfff" FontSize="18" FontWeight="Bold"
                    HorizontalAlignment="Center" />
         <Border Grid.Column="1" Background="#6a3a8a" CornerRadius="3" Padding="6,2"
@@ -478,7 +486,8 @@
                      VerticalAlignment="Center" />
           <Slider x:Name="HeroTeamSizeSlider" Minimum="1" Maximum="6" Value="3"
                   Width="100" Height="20" TickFrequency="1" TickPlacement="BottomRight"
-                  IsSnapToTickEnabled="True" ValueChanged="OnHeroTeamSizeChanged" />
+                  IsSnapToTickEnabled="True" ValueChanged="OnHeroTeamSizeChanged"
+                  Foreground="#1E88E5" />
           <TextBlock x:Name="HeroTeamSizeLabel" Text="3" Foreground="#88bbff" FontSize="12"
                      VerticalAlignment="Center" Width="16" />
         </StackPanel>
@@ -487,7 +496,8 @@
                      VerticalAlignment="Center" />
           <Slider x:Name="EnemyTeamSizeSlider" Minimum="1" Maximum="30" Value="3"
                   Width="160" Height="20" TickFrequency="1" TickPlacement="BottomRight"
-                  IsSnapToTickEnabled="True" ValueChanged="OnEnemyTeamSizeChanged" />
+                  IsSnapToTickEnabled="True" ValueChanged="OnEnemyTeamSizeChanged"
+                  Foreground="#E53935" />
           <TextBlock x:Name="EnemyTeamSizeLabel" Text="3" Foreground="#ff8888" FontSize="12"
                      VerticalAlignment="Center" Width="24" />
         </StackPanel>

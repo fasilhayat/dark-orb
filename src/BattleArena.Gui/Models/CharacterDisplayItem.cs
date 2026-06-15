@@ -40,8 +40,8 @@ public class CharacterDisplayItem : INotifyPropertyChanged
     public string SelectionLabel => IsSelected ? $"TEAM {_teamSlot}" : "";
     public string SelectionBadgeColor => _teamSlot switch
     {
-        1 => "#E53935",
-        2 => "#1E88E5",
+        1 => "#1E88E5",
+        2 => "#E53935",
         _ => ""
     };
 

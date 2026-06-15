@@ -35,8 +35,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="..\BattleArena.Demo\roster.json" />
-    <Content Include="..\BattleArena.Demo\roster.json" Link="roster.json">
+    <None Remove="..\BattleArena.Gui\Data\roster.json" />
+    <Content Include="..\BattleArena.Gui\Data\roster.json" Link="roster.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
