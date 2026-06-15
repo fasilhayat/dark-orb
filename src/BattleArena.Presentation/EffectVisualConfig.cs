@@ -2,6 +2,7 @@ namespace BattleArena.Presentation;
 
 using System;
 using System.Collections.Generic;
+using BattleArena.Core.Entities.Enums;
 
 [Flags]
 public enum EffectVisualTarget
@@ -71,6 +72,49 @@ public static class EffectVisualConfig
             "Charmed"   => "#ff88aa",
             _           => "#88ccff",
         };
+    }
+
+    public static string GetElementColor(ElementalType type) => type switch
+    {
+        ElementalType.Fire => "#ff6600",
+        ElementalType.Ice => "#44ccff",
+        ElementalType.Lightning => "#ffff44",
+        ElementalType.Poison => "#44ff44",
+        ElementalType.Holy => "#ffffaa",
+        ElementalType.Shadow => "#aa44aa",
+        ElementalType.Acid => "#44ff44",
+        _ => "#ffffff",
+    };
+
+    public static string? GetElementDoTName(ElementalType type) => type switch
+    {
+        ElementalType.Fire => "Burning",
+        ElementalType.Ice => "Chilled",
+        ElementalType.Lightning => "Shocked",
+        ElementalType.Poison => "Poisoned",
+        _ => null,
+    };
+
+    public static string GetSpellOverlayColor(string spellName)
+    {
+        var lower = spellName.ToLowerInvariant();
+        if (lower.Contains("fire") || lower.Contains("flame") || lower.Contains("burn") || lower.Contains("inferno"))
+            return "#ff6600";
+        if (lower.Contains("ice") || lower.Contains("frost") || lower.Contains("freeze") || lower.Contains("cold"))
+            return "#44ccff";
+        if (lower.Contains("shock") || lower.Contains("lightning") || lower.Contains("thunder") || lower.Contains("spark"))
+            return "#ffff44";
+        if (lower.Contains("heal") || lower.Contains("cure") || lower.Contains("bless") || lower.Contains("restore"))
+            return "#44cc44";
+        if (lower.Contains("stun") || lower.Contains("sleep") || lower.Contains("fear") || lower.Contains("charm"))
+            return "#cc44cc";
+        if (lower.Contains("poison") || lower.Contains("acid"))
+            return "#44ff44";
+        if (lower.Contains("arcane") || lower.Contains("magic") || lower.Contains("mystic"))
+            return "#cc88ff";
+        if (lower.Contains("shield") || lower.Contains("armor") || lower.Contains("ward") || lower.Contains("protect"))
+            return "#88aaff";
+        return "#ffffff";
     }
 
     public static EffectVisualTarget GetVisualTarget(string effectName)

@@ -844,19 +844,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     }
 
     private static IBrush EffectColor(string? effectName) =>
-        MakeBrush(effectName switch
-        {
-            "Burning" => "#ff6600",
-            "Ignite" => "#ff4400",
-            "Frozen" or "Freeze" => "#44ccff",
-            "Shocked" => "#ffff44",
-            "Electrified" => "#88ddff",
-            "Poisoned" => "#44ff44",
-            "Bleeding" => "#ff4444",
-            "Confused" => "#aaaaaa",
-            "Charmed" => "#ff88aa",
-            _ => "#88ccff",
-        });
+        MakeBrush(EffectVisualConfig.GetColor(effectName ?? ""));
 
     private static List<LogSegment> BuildDoTTickRow(CombatLogEntry e, CombatDisplayState state)
     {

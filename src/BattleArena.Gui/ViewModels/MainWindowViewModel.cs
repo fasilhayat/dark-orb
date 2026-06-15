@@ -754,24 +754,8 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
     private static readonly IBrush TmPipeEmpty = new SolidColorBrush(Color.Parse("#1a1a2e"));
     private static readonly IBrush TmPipeLocked = new SolidColorBrush(Color.Parse("#ffffff"));
 
-    private static string GetEffectColor(string name)
-    {
-        if (CcVisualConfig.IsCcEffect(name))
-            return CcVisualConfig.GetColor(name);
-        return name switch
-        {
-            "Burning"   => "#ff6600",
-            "Ignite"    => "#ff4400",
-            "Frozen"    => "#44ccff",
-            "Freeze"    => "#44ccff",
-            "Shocked"   => "#ffff44",
-            "Electrified" => "#44ccff",
-            "Poisoned"  => "#44ff44",
-            "Bleeding"  => "#ff4444",
-            "Leech" or "LeechMana" => TransferEffectRegistry.GetConfig(name).TransferColor,
-            _           => "#88ccff",
-        };
-    }
+    private static string GetEffectColor(string name) =>
+        EffectVisualConfig.GetColor(name);
 
     public ObservableCollection<IBrush> TmPipes { get; }
 

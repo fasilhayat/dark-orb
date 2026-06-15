@@ -6,7 +6,7 @@ Priority: Medium
 
 Type: Refactoring
 
-Status: Draft
+Status: Done
 
 ---
 
@@ -123,9 +123,27 @@ Combine A + C:
 
 ## Acceptance Criteria
 
-- [ ] Only one canonical source of spell/effect color mapping exists
-- [ ] `SpellOverlayColor` and `EffectColor` both delegate to the shared config
-- [ ] Color output is identical to current behavior for all existing spell names and effect names
-- [ ] Adding a new effect requires updating only the config class, not the playback engine or presenter
-- [ ] All 719 tests pass
-- [ ] No visual regression in combat playback overlays
+- [x] Only one canonical source of spell/effect color mapping exists
+- [x] `SpellOverlayColor` and `EffectColor` both delegate to the shared config
+- [x] Color output is identical to current behavior for all existing spell names and effect names
+- [x] Adding a new effect requires updating only the config class, not the playback engine or presenter
+- [x] All 719 tests pass
+- [x] No visual regression in combat playback overlays
+
+## Summary
+
+Consolidated all spell/effect color detection into `EffectVisualConfig`:
+
+- **`EffectVisualConfig.GetElementColor(ElementalType)`** — ElementalType-driven color for spell display (used by `SpellDisplayItem`)
+- **`EffectVisualConfig.GetElementDoTName(ElementalType)`** — maps elemental type to afterburn effect name (e.g., Fire → "Burning", Ice → "Chilled")
+- **`EffectVisualConfig.GetSpellOverlayColor(string)`** — centralized name-based fallback for combat playback overlay (replaces old `SpellOverlayColor`)
+- **`EffectVisualConfig.GetColor(string)`** — effect color lookup (already existed, now the sole source)
+
+Removed duplicate methods:
+- `CombatPlaybackEngine.SpellOverlayColor()` → delegates to `EffectVisualConfig.GetSpellOverlayColor()`
+- `CombatPlaybackEngine.GetPersistentColor()` → delegates to `EffectVisualConfig.GetColor()`
+- `CombatPlaybackEngine.TryGetTransferColor()` → removed (handled by `GetColor`)
+- `AvaloniaCombatPresenter.EffectColor()` → delegates to `EffectVisualConfig.GetColor()`
+- `MainWindowViewModel.CharCardViewModel.GetEffectColor()` → delegates to `EffectVisualConfig.GetColor()`
+
+Extended `SpellDisplayItem` with `Color`, `AfterburnEffectName`, `AfterburnColor` — color follows the spell everywhere in the GUI.

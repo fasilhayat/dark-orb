@@ -303,27 +303,8 @@ public static class CombatPlaybackEngine
         }
     }
 
-    private static string SpellOverlayColor(string spellName)
-    {
-        var lower = spellName.ToLowerInvariant();
-        if (lower.Contains("fire") || lower.Contains("flame") || lower.Contains("burn") || lower.Contains("inferno"))
-            return "#ff6600";
-        if (lower.Contains("ice") || lower.Contains("frost") || lower.Contains("freeze") || lower.Contains("cold"))
-            return "#44ccff";
-        if (lower.Contains("shock") || lower.Contains("lightning") || lower.Contains("thunder") || lower.Contains("spark"))
-            return "#ffff44";
-        if (lower.Contains("heal") || lower.Contains("cure") || lower.Contains("bless") || lower.Contains("restore"))
-            return "#44cc44";
-        if (lower.Contains("stun") || lower.Contains("sleep") || lower.Contains("fear") || lower.Contains("charm"))
-            return "#cc44cc";
-        if (lower.Contains("poison") || lower.Contains("acid"))
-            return "#44ff44";
-        if (lower.Contains("arcane") || lower.Contains("magic") || lower.Contains("mystic"))
-            return "#cc88ff";
-        if (lower.Contains("shield") || lower.Contains("armor") || lower.Contains("ward") || lower.Contains("protect"))
-            return "#88aaff";
-        return "#ffffff";
-    }
+    private static string SpellOverlayColor(string spellName) =>
+        EffectVisualConfig.GetSpellOverlayColor(spellName);
 
     private static bool WasFromCriticalHit(IReadOnlyList<CombatLogEntry> turnEvents, int damageIndex)
     {
@@ -349,31 +330,8 @@ public static class CombatPlaybackEngine
         return damageAmount * 100 >= targetState.MaxHp * devastationThresholdPercent;
     }
 
-    private static string GetPersistentColor(string effectName)
-    {
-        if (CcVisualConfig.IsCcEffect(effectName))
-            return CcVisualConfig.GetColor(effectName);
-        return effectName switch
-        {
-            "Burning" => "#ff6600",
-            "Ignite" => "#ff4400",
-            "Frozen" => "#44ccff",
-            "Freeze" => "#44ccff",
-            "Shocked" => "#ffff44",
-            "Poisoned" => "#44ff44",
-            "Bleeding" => "#ff4444",
-            "Electrified" => "#88ddff",
-            "Confused" => "#aaaaaa",
-            "Charmed" => "#ff88aa",
-            _ => TryGetTransferColor(effectName),
-        };
-    }
-
-    private static string TryGetTransferColor(string effectName)
-    {
-        var config = TransferEffectRegistry.GetConfig(effectName);
-        return config.TransferColor;
-    }
+    private static string GetPersistentColor(string effectName) =>
+        EffectVisualConfig.GetColor(effectName);
 
     private static void EmitCombatSounds(VisualEventBus bus, CombatLogEntry entry)
     {

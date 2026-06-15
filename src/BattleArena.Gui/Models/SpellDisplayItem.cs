@@ -2,6 +2,7 @@ namespace BattleArena.Gui.Models;
 
 using Core.Entities;
 using Core.Entities.Enums;
+using BattleArena.Presentation;
 
 public sealed class SpellDisplayItem
 {
@@ -9,6 +10,9 @@ public sealed class SpellDisplayItem
 
     public Spell Spell { get; }
     public string Name => Spell.Name;
+    public string Color => EffectVisualConfig.GetElementColor(Spell.ElementalType);
+    public string? AfterburnEffectName => EffectVisualConfig.GetElementDoTName(Spell.ElementalType);
+    public string AfterburnColor => AfterburnEffectName is { } name ? EffectVisualConfig.GetColor(name) : "#ffffff";
     public string DamageInfo
     {
         get
