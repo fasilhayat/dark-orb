@@ -3,167 +3,92 @@
 > Canonical source. After editing, run `make sync-instructions` from `src/`
 > to mirror to `.github/copilot-instructions.md` (GitHub Copilot).
 
-## 1. Never commit without approval
+## Commands
 
-Do not create commits or push branches unless the user explicitly says so.
-
-## 2. Working directory
-
-All `make` commands run from `src/`. Dockerfile is at `src/Dockerfile`, not root.
-The solution file is `src/BattleArena.sln`.
-
-## 3. Test-failure analysis
-
-Understand what contract a test asserts before modifying it. Fix the implementation
-if it violated the contract. Only update the test if it is genuinely stale.
-
-## 4. Project vocabulary
-
-| Term | Meaning |
-|------|---------|
-| **Combat** | A single simulated encounter |
-| **Battle** | Higher-level campaign concept — reserved, not implemented |
-
-Use **Combat** for simulation engine code. Never call a fight a "battle" in code.
-
-## 5. Solution structure
-
-| Project | Role | Dependencies |
-|---------|------|-------------|
-| `Core` | Domain entities, enums, interfaces | none |
-| `Application` | Services, interfaces, models | Core only |
-| `Infrastructure` | Repositories, DbContext | Core only |
-| `Api` | ASP.NET CRUD endpoints | Application + Infrastructure |
-| `Demo` | Console app | Application + Core + Presentation |
-| `Presentation` | GUI-agnostic playback engine, `ICombatPresenter` | Core + Application |
-| `Gui` | Avalonia bridge | Application + Core + Presentation |
-| `UnitTests` | xUnit + NSubstitute | — |
-| `AcceptanceTests` | Reqnroll BDD | — |
-
-Build order: Core → {Application, Infrastructure} → everything else.
-Core must never reference Application or Infrastructure. Application must never
-reference Infrastructure.
-
-## 6. Combat engine architecture
-
-`CombatSimulator` (`Application/Services/`) is a thin orchestrator. Game logic
-lives in `Application/Services/Combat/`:
-
-| Processor | Responsibility |
-|-----------|---------------|
-| `CombatLogger` | Builds all `CombatLogEntry` instances |
-| `VictoryEvaluator` | Defeat conditions, `CombatResult` |
-| `TurnMeterProcessor` | TM gain, mana regen/leech, defender TM boost |
-| `StatusEffectProcessor` | Leech, DoT, HoT, self-buffs, on-hit, resist, fumble, pet/effect expiry |
-| `SpellProcessor` | Healing, mana, spell queuing, pet summoning, disruption, concentration |
-| `AttackResolver` | Attack outcome dispatch, clash, hit processing |
-| `TurnProcessor` | Attack setup, crowd control, target selection |
-| `CharacterExtensions` | Status effect helpers |
-| `CombatSimulatorHelpers` | `BuildCombatantStates`, `GetActingOrder` |
-
-State models (`internal`): `CombatantState`, `QueuedSpellInfo`, `ActorSetup`.
-
-Full formulas (attack resolution, damage, turn meter, status effects, healing,
-terrain, visual/sound pipeline) at `.opencode/skills/combat-mechanics.md`.
-
-## 7. Combat system — modern opposed-roll D&D
-
-Formula: `d20 + AttackPower >= d20 + DefensePower`. **Never THAC0.**
-
-- `StrikeRating` = higher is better. `ArmorClass` = higher is more defensive.
-- Any "lower SR is better" or `20 - X` code is a THAC0 remnant — flag and fix.
-- Attack resolution: 7-case priority matrix (TotalReversal → DevastatingStrike →
-  Clash → Fumble → Critical → PerfectParry → normal opposed roll).
-
-## 8. Event types
-
-`EventType` is a plain `string` on `CombatLogEntry` — not an enum. ~30 types
-(Attack, Damage, DoTTick, Healed, EffectApplied, PerfectParry, etc.). Never
-introduce a new string without checking existing ones in the skill file above.
-
-## 9. API — CRUD only, no game logic
-
-The API (`BattleArena.Api`) is a pure CRUD layer. Must NOT contain dice rolling, combat resolution, or any game logic. Dice rolls originate from `DiceService` in `Application` (seed-based, deterministic). `CombatEndpoint.cs` is intentionally empty — combat runs locally via `CombatSimulator`.
-
-Registered endpoint groups in `Program.cs`: `CombatEndpoints` (removed), `CharacterEndpoints`, `EquipmentEndpoints`, `AccessoriesEndpoints`, `NpcEndpoints`, `LoreEndpoints`. Lore serves `/v1/classes`, `/v1/subraces`, `/v1/deities`, `/v1/pets`, `/v1/spells`, `/v1/schools`, `/v1/bestiary`.
-
-Port 8585 in Docker. Health check at `/api/healthcheck` (exempt from API key).
-Swagger only in Development/LocalDev.
-
-## 10. GUI — pure renderer
-
-`BattleArena.Gui` (Avalonia) must never contain combat logic. `ICombatPresenter`
-(in `Presentation`) is the only rendering contract.
-
-## 11. Testing
-
-```makefile
-make test                           # all tests
-make test-coverage                  # Coverlet, opencover format
-dotnet test --project UnitTests/BattleArena.UnitTests.csproj   # unit tests only
-dotnet test --filter "FullyQualifiedName~TestMethodName"  # single test
-```
-
-- **Always** mock `IDiceService` when testing dice-dependent methods.
-- **Never** mock `CombatSimulator` — wire full real stack for diagnostics.
-- Acceptance tests: `Features/<Name>.feature`, steps in `StepDefinitions/<Name>Steps.cs`.
-  Namespace `BattleArena.ReqnrollTests.StepDefinitions`. **Never edit `*.feature.cs`** (auto-generated).
-- Dice-based acceptance tests use conservative bounds (p=0.8 with 100 trials → assert >= 60).
-
-## 12. Code style
-
-- `namespace` before `using` in hand-written code.
-- Cyclomatic complexity ≤ 10 per method (`&&`/`||` counts as +1).
-- One public type per file (partial classes like `Demo.*` are the exception).
-- No magic numbers — named constants or enums.
-- **No reflection** — no `System.Reflection`, `GetType().GetProperty()`, `SetValue()`,
-  or runtime type inspection. If an `init`-only property blocks modification, create
-  a new instance.
-
-## 13. Makefile commands
+All `make` commands run from `src/`. Solution: `src/BattleArena.sln`.
+Dockerfile: `src/Dockerfile` (not root).
 
 | Command | Action |
 |---------|--------|
 | `make test` | `dotnet test BattleArena.sln` |
 | `make test-coverage` | Coverlet + opencover |
-| `make build-local` | Publish API to `../publish` |
 | `make up-local` | DB + API in Docker (ports exposed) + `make demo-local` |
 | `make up-dev` | DB + API + demo in Docker (interactive) |
 | `make up-test` | DB + API + demo in Docker (no host ports) |
-| `make up-preprod` / `make up-prod` | DB + API only (no host ports) |
-| `make demo-local` | Run demo on host (`DOTNET_ENVIRONMENT=LocalDev`) |
 | `make gui-local` | Avalonia GUI standalone (no DB needed) |
-| `make run-dev` | Re-run demo container (DB+API must be up) |
-| `make install` | Clean Docker → test → up-local → demo |
-| `make install-gui` | Clean Docker → build → up-local → GUI |
-| `make install-dev` | Clean + dotnet clean + test + dev-up |
-| `make redo-local` | Clean + build + up-local + demo |
+| `make demo-local` | Run demo on host (`DOTNET_ENVIRONMENT=LocalDev`) |
 | `make sync-instructions` | Copy AGENTS.md → `.github/copilot-instructions.md` |
-| `make clean-logs` | Delete `combat-logs/` |
-| `make down` | Stop all Docker containers |
-| `make clean` | Stop + wipe volumes + delete publish output |
 
-## 14. Tooling quirks
+Run single test: `dotnet test --filter "FullyQualifiedName~TestMethodName"`
+Run unit tests only: `dotnet test --project UnitTests/BattleArena.UnitTests.csproj`
 
-- **Makefile targets are Windows-only** — uses `pwsh`, `cmd /C`, `powershell`.
-- **Docker builds**: `dotnet publish` on host, then `COPY` pre-built output
-  (`src/Dockerfile`). No NuGet restore inside containers.
+## Project structure
+
+Build order: Core → {Application, Infrastructure} → everything else.
+Core must never reference Application or Infrastructure. Application must never reference Infrastructure.
+
+| Project | Role | Depends |
+|---------|------|---------|
+| Core | Domain entities, enums, interfaces | none |
+| Application | Services, interfaces, models | Core only |
+| Infrastructure | Repositories, DbContext | Core only |
+| Api | ASP.NET CRUD endpoints | Application + Infrastructure |
+| Demo | Console app | Application + Core + Presentation |
+| Presentation | GUI-agnostic playback, `ICombatPresenter` | Core + Application |
+| Gui | Avalonia bridge, no combat logic | Application + Core + Presentation |
+| UnitTests | xUnit + NSubstitute | — |
+| AcceptanceTests | Reqnroll BDD | — |
+
+## Combat engine
+
+`CombatSimulator` (`Application/Services/`) orchestrates. Game logic in `Application/Services/Combat/`:
+
+`CombatLogger`, `VictoryEvaluator`, `TurnMeterProcessor`, `StatusEffectProcessor`,
+`SpellProcessor`, `AttackResolver`, `TurnProcessor`, `CharacterExtensions`, `CombatSimulatorHelpers`
+
+State models (internal): `CombatantState`, `QueuedSpellInfo`, `ActorSetup`.
+
+**Attack resolution** (opposed roll, never THAC0):
+`d20 + AttackPower >= d20 + DefensePower`. Priority: TotalReversal → DevastatingStrike → Clash → Fumble → Critical → PerfectParry → normal opposed roll. `StrikeRating` higher = better. `ArmorClass` higher = more defensive.
+
+**HP**: >0 alive, 0 to -9 = KnockedOut, -10 or lower = Dead.
+
+**EventType** is a plain `string` on `CombatLogEntry` — not an enum.
+
+## Constraints
+
+- **API**: pure CRUD — no dice rolling, combat resolution, or game logic. Endpoint groups: Character, Equipment, Accessories, Npc, Lore. Health check at `/api/healthcheck`. Port 8585. Swagger only in Development/LocalDev. Requires `X-Api-Key` header.
+- **GUI** (Avalonia): must never contain combat logic. `ICombatPresenter` in `Presentation` is the only rendering contract.
+- **DiceService**: seed-based, deterministic. Seed via `Random.Shared.Next()` or explicit constructor.
 - **No EF Core** — raw Npgsql + custom `DbContext` wrapper.
-- **No CI** — `.github/workflows/` is empty.
-- **API requires `X-Api-Key` header** — default `BA-DEV-2024-SECRET`.
-- **No `Directory.Build.props`** — each `.csproj` sets its own SDK, nullable, ImplicitUsings.
-- **Setup**: copy `src/.env.example` to `src/.env` to choose an environment (defaults to `localdev`).
-- **`bugs-features/`** — numbered files for pending work. Process in priority order: read → implement → test → mark `[x]` with summary → move to `done/<category>/` (category = `bugs`, `features`, or `task`).
-- **`design/docs/`** — game design docs. Must stay in sync with SQL seed data (`.postgres-init/`).
-- **`.opencode/skills/`** — auxiliary technical references (combat mechanics, turn order, makefile orchestration, work intake, log analysis). Loaded by OpenCode when tasks match.
-- **Coverage**: `coverlet.runsettings` excludes `BattleArena.Api.Program` and `BattleArena.Api.AddServices` from coverage.
-- **PostgreSQL init scripts** in `.postgres-init/` run alphabetically — naming (`01-`, `02-`, `03-`, `04-`) determines execution order.
-- **HP range**: 0 to -9 = KnockedOut, -10 or lower = Dead.
+- **No CI**, no `Directory.Build.props`.
+- **Makefile targets are Windows-only** — uses `pwsh`, `cmd`, `powershell`.
+- **Docker builds**: `dotnet publish` on host, then `COPY` pre-built output. No NuGet restore inside containers.
+- **PostgreSQL init** in `.postgres-init/` runs alphabetically (`01-schema.sql`, `02-seed-data.sql`, etc.).
+- **Setup**: copy `src/.env.example` to `src/.env` to choose environment (defaults to `localdev`).
 - **Modifier pipeline** (`ICombatModifier`): priority bands 10=base/range, 20=environmental, 30=item/set/spell-buff.
 
-## 15. Doc update obligations
+## Testing quirks
 
-- **README.md**: update when new project, API endpoint, DB table, Makefile target, Docker service, or test framework change.
-- **design/docs/**: update when SQL seed adds races, classes, deities, pets, weapons, armor, spells. Entries must match the DB exactly.
-- **design/docs/systems/spell-icon-design.md**: must stay in sync with the master spellbook and SQL seed data — every spell needs an icon spec entry.
+- **Always** mock `IDiceService` when testing dice-dependent methods.
+- **Never** mock `CombatSimulator` — wire full real stack for diagnostics.
+- **Acceptance tests**: `Features/<Name>.feature`, steps in `StepDefinitions/<Name>Steps.cs`.
+  Namespace `BattleArena.ReqnrollTests.StepDefinitions`. Never edit `*.feature.cs` (auto-generated).
+- **Dice-based acceptance tests**: conservative bounds (p=0.8 with 100 trials → assert >= 60).
+- `coverlet.runsettings` excludes `BattleArena.Api.Program` and `BattleArena.Api.AddServices` from coverage.
+
+## Code style
+
+- `namespace` before `using` in hand-written code.
+- No reflection (no `System.Reflection`, `GetType().GetProperty()`, `SetValue()`).
+
+## Bugs-features workflow
+
+`bugs-features/` — numbered files. Process in priority order: read → implement → test → mark `[x]` with summary → move to `done/<category>/` (category = `bugs`, `features`, or `task`).
+
+## Doc sync obligations
+
+- **README.md**: update for new project, API endpoint, DB table, Makefile target, Docker service, or test framework change.
+- **design/docs/**: update when SQL seed data changes. Must match DB exactly.
+- **design/docs/systems/spell-icon-design.md**: stay in sync with master spellbook and SQL seed.
 - **release-notes.md**: do NOT touch unless asked.
