@@ -1,12 +1,12 @@
 # BattleArena — AI instructions (OpenCode)
 
 > Canonical source. After editing, run `make sync-instructions` from `src/`
-> to mirror to `.github/copilot-instructions.md` (GitHub Copilot).
+> to mirror to `.github/copilot-instructions.md`.
 
 ## Commands
 
 All `make` commands run from `src/`. Solution: `src/BattleArena.sln`.
-Dockerfile: `src/Dockerfile` (not root).
+Dockerfile: `src/Dockerfile` (not root). NuGet config: repo-root `nuget.config`.
 
 | Command | Action |
 |---------|--------|
@@ -15,23 +15,27 @@ Dockerfile: `src/Dockerfile` (not root).
 | `make up-local` | DB + API in Docker (ports exposed) + `make demo-local` |
 | `make up-dev` | DB + API + demo in Docker (interactive) |
 | `make up-test` | DB + API + demo in Docker (no host ports) |
+| `make up-preprod` / `make up-prod` | DB + API only |
+| `make down` | Stop all environment containers |
+| `make clean` | Down + wipe volumes + delete publish output |
 | `make gui-local` | Avalonia GUI standalone (no DB needed) |
 | `make demo-local` | Run demo on host (`DOTNET_ENVIRONMENT=LocalDev`) |
+| `make publish` / `make publish-demo` | Host-side build for Docker |
 | `make sync-instructions` | Copy AGENTS.md → `.github/copilot-instructions.md` |
 
-Run single test: `dotnet test --filter "FullyQualifiedName~TestMethodName"`
-Run unit tests only: `dotnet test --project UnitTests/BattleArena.UnitTests.csproj`
+Single test: `dotnet test --filter "FullyQualifiedName~TestMethodName"`
+Unit tests only: `dotnet test --project BattleArena.UnitTests/BattleArena.UnitTests.csproj`
 
 ## Project structure
 
 Build order: Core → {Application, Infrastructure} → everything else.
-Core must never reference Application or Infrastructure. Application must never reference Infrastructure.
+Core never references Application/Infrastructure. Application never references Infrastructure.
 
 | Project | Role | Depends |
 |---------|------|---------|
 | Core | Domain entities, enums, interfaces | none |
 | Application | Services, interfaces, models | Core only |
-| Infrastructure | Repositories, DbContext | Core only |
+| Infrastructure | Repositories, DbContext (raw Npgsql, no EF Core) | Core only |
 | Api | ASP.NET CRUD endpoints | Application + Infrastructure |
 | Demo | Console app | Application + Core + Presentation |
 | Presentation | GUI-agnostic playback, `ICombatPresenter` | Core + Application |
@@ -41,10 +45,11 @@ Core must never reference Application or Infrastructure. Application must never 
 
 ## Combat engine
 
-`CombatSimulator` (`Application/Services/`) orchestrates. Game logic in `Application/Services/Combat/`:
-
-`CombatLogger`, `VictoryEvaluator`, `TurnMeterProcessor`, `StatusEffectProcessor`,
-`SpellProcessor`, `AttackResolver`, `TurnProcessor`, `CharacterExtensions`, `CombatSimulatorHelpers`
+`CombatSimulator` (`Application/Services/`) orchestrates via services in
+`Application/Services/Combat/`: `CombatLogger`, `VictoryEvaluator`,
+`TurnMeterProcessor`, `StatusEffectProcessor`, `SpellProcessor`,
+`AttackResolver`, `TurnProcessor`, `CharacterExtensions`,
+`CombatSimulatorHelpers`.
 
 State models (internal): `CombatantState`, `QueuedSpellInfo`, `ActorSetup`.
 
@@ -60,13 +65,12 @@ State models (internal): `CombatantState`, `QueuedSpellInfo`, `ActorSetup`.
 - **API**: pure CRUD — no dice rolling, combat resolution, or game logic. Endpoint groups: Character, Equipment, Accessories, Npc, Lore. Health check at `/api/healthcheck`. Port 8585. Swagger only in Development/LocalDev. Requires `X-Api-Key` header.
 - **GUI** (Avalonia): must never contain combat logic. `ICombatPresenter` in `Presentation` is the only rendering contract.
 - **DiceService**: seed-based, deterministic. Seed via `Random.Shared.Next()` or explicit constructor.
-- **No EF Core** — raw Npgsql + custom `DbContext` wrapper.
+- **No EF Core** — raw Npgsql + custom `DbContext` wrapper in Infrastructure.
 - **No CI**, no `Directory.Build.props`.
 - **Makefile targets are Windows-only** — uses `pwsh`, `cmd`, `powershell`.
 - **Docker builds**: `dotnet publish` on host, then `COPY` pre-built output. No NuGet restore inside containers.
-- **PostgreSQL init** in `.postgres-init/` runs alphabetically (`01-schema.sql`, `02-seed-data.sql`, etc.).
+- **PostgreSQL init** in `src/.postgres-init/` runs alphabetically (`01-schema.sql`, `02-seed-data.sql`, `03-characters.sql`, `04-bestiary.sql`).
 - **Setup**: copy `src/.env.example` to `src/.env` to choose environment (defaults to `localdev`).
-- **Modifier pipeline** (`ICombatModifier`): priority bands 10=base/range, 20=environmental, 30=item/set/spell-buff.
 
 ## Testing quirks
 
