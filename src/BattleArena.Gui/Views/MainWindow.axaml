@@ -279,7 +279,6 @@
       <Grid Grid.Row="2" Margin="0,4">
         <Grid x:Name="CombatCardGrid" ColumnDefinitions="*,Auto,Auto,Auto,*">
           <ItemsControl x:Name="HeroesCards" Grid.Column="0" ItemsSource="{Binding Heroes}"
-                        HorizontalAlignment="{Binding HeroLayoutCentered, Converter={StaticResource BoolToAlignConv}}"
                         ClipToBounds="True">
             <ItemsControl.ItemsPanel>
               <ItemsPanelTemplate>
@@ -313,7 +312,6 @@
           <Border Grid.Column="3" Width="3" Background="#333" Margin="4,0" />
 
           <ItemsControl x:Name="EnemiesCards" Grid.Column="4" ItemsSource="{Binding Enemies}"
-                        HorizontalAlignment="{Binding EnemyLayoutCentered, Converter={StaticResource BoolToAlignConv}}"
                         ClipToBounds="True">
             <ItemsControl.ItemsPanel>
               <ItemsPanelTemplate>

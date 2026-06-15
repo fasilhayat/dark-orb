@@ -372,6 +372,8 @@ public partial class MainWindow : Window
             _vm.RecalcSideLayout(sideWidth, CombatCardGrid.Bounds.Height);
             HeroesCards.Width = _vm.HeroLayoutCentered ? double.NaN : sideWidth;
             EnemiesCards.Width = _vm.EnemyLayoutCentered ? double.NaN : sideWidth;
+            HeroesCards.HorizontalAlignment = _vm.HeroAlignment;
+            EnemiesCards.HorizontalAlignment = _vm.EnemyAlignment;
         }
     }
 

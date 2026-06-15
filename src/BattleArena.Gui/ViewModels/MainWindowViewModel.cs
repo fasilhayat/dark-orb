@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Avalonia;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using BattleArena.Core.Entities;
@@ -229,6 +230,20 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         set => SetField(ref _enemyLayoutCentered, value);
     }
 
+    private HorizontalAlignment _heroAlignment = HorizontalAlignment.Right;
+    public HorizontalAlignment HeroAlignment
+    {
+        get => _heroAlignment;
+        set => SetField(ref _heroAlignment, value);
+    }
+
+    private HorizontalAlignment _enemyAlignment = HorizontalAlignment.Left;
+    public HorizontalAlignment EnemyAlignment
+    {
+        get => _enemyAlignment;
+        set => SetField(ref _enemyAlignment, value);
+    }
+
     public void RecalcSideLayout(double availableWidth, double availableHeight)
     {
         var (heroScale, heroCols) = ComputeClashScale(availableWidth, availableHeight, Heroes.Count);
@@ -243,6 +258,8 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
 
         HeroLayoutCentered = Heroes.Count <= 4;
         EnemyLayoutCentered = Enemies.Count <= 4;
+        HeroAlignment = Heroes.Count <= 4 ? HorizontalAlignment.Right : HorizontalAlignment.Stretch;
+        EnemyAlignment = Enemies.Count <= 4 ? HorizontalAlignment.Left : HorizontalAlignment.Stretch;
     }
 
     private static (double scale, int cols) ComputeClashScale(
