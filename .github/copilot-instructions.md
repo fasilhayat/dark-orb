@@ -4,6 +4,10 @@
 > This copy exists solely because GitHub Copilot reads `.github/copilot-instructions.md`.
 > Edit `AGENTS.md`, then run `make sync-instructions` to update this file.
 
+**Stale Makefile targets** (Demo project was removed in commit `d63b1ef`):
+`up-dev`, `up-test`, `demo-local`, `publish-demo`, `install`, `install-dev`,
+`redo-local`, `run-dev` — all reference the deleted `BattleArena.Demo` project.
+
 ## Commands
 
 All `make` commands run from `src/`. Solution: `src/BattleArena.sln`.
@@ -13,15 +17,12 @@ Dockerfile: `src/Dockerfile` (not root). NuGet config: repo-root `nuget.config`.
 |---------|--------|
 | `make test` | `dotnet test BattleArena.sln` |
 | `make test-coverage` | Coverlet + opencover |
-| `make up-local` | DB + API in Docker (ports exposed) + `make demo-local` |
-| `make up-dev` | DB + API + demo in Docker (interactive) |
-| `make up-test` | DB + API + demo in Docker (no host ports) |
+| `make up-local` | DB + API in Docker (ports exposed) |
 | `make up-preprod` / `make up-prod` | DB + API only |
 | `make down` | Stop all environment containers |
 | `make clean` | Down + wipe volumes + delete publish output |
 | `make gui-local` | Avalonia GUI standalone (no DB needed) |
-| `make demo-local` | Run demo on host (`DOTNET_ENVIRONMENT=LocalDev`) |
-| `make publish` / `make publish-demo` | Host-side build for Docker |
+| `make publish` | Host-side publish for Docker |
 | `make sync-instructions` | Copy AGENTS.md → `.github/copilot-instructions.md` |
 
 Single test: `dotnet test --filter "FullyQualifiedName~TestMethodName"`
@@ -38,7 +39,6 @@ Core never references Application/Infrastructure. Application never references I
 | Application | Services, interfaces, models | Core only |
 | Infrastructure | Repositories, DbContext (raw Npgsql, no EF Core) | Core only |
 | Api | ASP.NET CRUD endpoints | Application + Infrastructure |
-| Demo | Console app | Application + Core + Presentation |
 | Presentation | GUI-agnostic playback, `ICombatPresenter` | Core + Application |
 | Gui | Avalonia bridge, no combat logic | Application + Core + Presentation |
 | UnitTests | xUnit + NSubstitute | — |

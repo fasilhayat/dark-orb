@@ -375,7 +375,7 @@ Reveals magical auras and enchantments. Utility and magical threat awareness.
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/33_mirro_image.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -747,7 +747,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/32_arc_lash.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -783,7 +783,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/34_grease_fire.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -801,7 +801,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/35_mind_game.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -819,7 +819,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/36_charm_person.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -883,7 +883,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/37_command.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -937,7 +937,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <span id="chasten"></span>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/38_chasten.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -953,9 +953,10 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <span id="sanctuary"></span>
 ### Sanctuary
 <hr>
+<span id="sanctuary"></span>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/39_sanctuary.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -973,7 +974,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/40_aid.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -991,7 +992,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/41_chant.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1027,7 +1028,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/42_prayer.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1045,7 +1046,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/43_remove_paralysis.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1063,7 +1064,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/44_cure_serious_wounds.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1081,7 +1082,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/45_free_action.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1099,7 +1100,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/46_cure_critical_wounds.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1171,7 +1172,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/47_heroes_feast.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1189,7 +1190,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/48_restoration.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1251,7 +1252,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/50_fairie_fire.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1269,7 +1270,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/51_shillelagh.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1521,7 +1522,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/49_turn_undead.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1654,7 +1655,7 @@ Clears fear and bolsters courage. TM stabilization and panic protection. Deity B
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/40_aid.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>

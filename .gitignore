@@ -49,3 +49,4 @@ src/logs/api-calls.log
 /combat-logs
 /src/BattleArena.Gui/Assets/Sounds/Background/*.mp3
 /scripts
+design/docs/systems/master-spellbook.md.bak
