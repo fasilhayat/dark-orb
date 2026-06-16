@@ -205,6 +205,9 @@ These are the low-tier spells most mages should have access to before school spe
 | [Detect Magic](#detect-magic) | Aegis / Mirage | 1 | Common Core | Early | Mage 1 | Reveals magical auras and enchantments. | Utility and magical threat awareness. | Mage | None | Utility |
 | [Invisibility](#invisibility) | Mirage | 2 | Common Core | Early | Mage 2 | Makes a target unseen until broken. | Targeting denial and survivability increase. | Mage | None | Invisibility |
 | [Mirror Image](#mirror-image) | Mirage | 2 | Common Core | Early | Mage 2 | Creates illusory duplicates to absorb attacks. | Defensive miss chance and survivability increase. | Mage | None | Defensive, Image |
+| [Ice Bolt](#ice-bolt) | Stormcraft | 2 | Common Core | Early | Mage 2 | A bolt of ice that freezes the target. | HP damage; Ice afterburn can slow or chill. | Mage | Ice | Single-Target Damage |
+| [Shock](#shock) | Stormcraft | 2 | Common Core | Early | Mage 2 | A jolt of electrical energy. | HP damage; Shocked afterburn reduces TM gain. | Mage | Lightning | Single-Target Damage |
+| [Static Shock](#static-shock) | Stormcraft | 2 | Common Core | Early | Mage 2 | A charged static shock that leaves lasting effects. | HP damage; stronger Shocked afterburn with Electrified. | Mage | Lightning | Single-Target Damage, Debuff |
 | [Web](#web) | Mirage / Dominion | 2 | Common Core | Early | Mage 2 | Sticky strands trap and hinder enemies in an area. | Movement reduction or root; TM suppression through trapping. | Mage | None/Control | CC, Root, AoE |
 | [Stinking Cloud](#stinking-cloud) | Umbramancy / Mirage | 2 | Common Core | Early | Mage 2 | Nauseating cloud that disrupts actions in its area. | TM suppression, action failure, and Movement denial by zone pressure. | Mage | Poison/Control | CC, AoE |
 
@@ -424,7 +427,60 @@ Reveals magical auras and enchantments. Utility and magical threat awareness.
 *- Mage Damage type: Poison/Control. Yes, persistent cloud zone.*
 
 *Minimum Level: Mage 2*
+<span id="ice-bolt"></span>
+### Ice Bolt
+<hr>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/28_ice_bolt.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">2</td><td style="border: none;">35</td><td style="border: none;">Ice</td><td style="border: none;">Mage</td><td style="border: none;">Single-Target Damage</td></tr>
+</table>
+</td>
+</tr>
+</table>
 
+*A bolt of ice that freezes the target. Deals 2d8 ice damage at base, scaling +2d8 per level. Ice afterburn can slow the target or chill on critical.*
+
+*Minimum Level: Mage 2*
+<span id="shock"></span>
+### Shock
+<hr>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/29_shock.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">2</td><td style="border: none;">20</td><td style="border: none;">Lightning</td><td style="border: none;">Mage</td><td style="border: none;">Single-Target Damage</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*A jolt of electrical energy. Deals 2d6 lightning damage at base, scaling +2d6 per level. Shocked afterburn reduces turn meter gain for the target.*
+
+*Minimum Level: Mage 2*
+<span id="static-shock"></span>
+### Static Shock
+<hr>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/30_static_shock.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">2</td><td style="border: none;">30</td><td style="border: none;">Lightning</td><td style="border: none;">Mage</td><td style="border: none;">Single-Target Damage, Debuff</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*A charged static shock that leaves lasting effects. Deals 1d6 lightning damage at base, scaling +1d6 per level. Inflicts Electrified (100% chance) which reduces turn meter gain and can chain to nearby targets.*
+
+*Minimum Level: Mage 2*
 
 ## Mage specialization
 
@@ -459,7 +515,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/31_lightning_bolt.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -495,7 +551,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/53_blink.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -549,7 +605,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/52_mass_haste.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -567,7 +623,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/54_vampiric_touch.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -585,7 +641,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/55_fear.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -603,7 +659,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/56_ice_storm.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -639,7 +695,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/57_cloud_kill.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -657,7 +713,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/58_cone_of_cold.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -711,7 +767,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/59_maze.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -729,7 +785,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/60_mind_siphon.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -765,7 +821,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/33_mirror_guard.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1252,7 +1308,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/50_fairie_fire.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/50_faerie_fire.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>

@@ -27,6 +27,12 @@ Dockerfile: `src/Dockerfile` (not root). NuGet config: repo-root `nuget.config`.
 Single test: `dotnet test --filter "FullyQualifiedName~TestMethodName"`
 Unit tests only: `dotnet test --project BattleArena.UnitTests/BattleArena.UnitTests.csproj`
 
+## OpenCode skills
+
+`.opencode/skills/` contains 5 skill files the agent should use when relevant:
+`work-intake.md` (loads pending work from `bugs-features/`), `combat-mechanics.md`,
+`combat-log-analysis.md`, `combat-order.md`, `makefile-orchestration.md`.
+
 ## Project structure
 
 Build order: Core → {Application, Infrastructure} → everything else.
@@ -51,10 +57,10 @@ Core never references Application/Infrastructure. Application never references I
 `AttackResolver`, `TurnProcessor`, `CharacterExtensions`,
 `CombatSimulatorHelpers`.
 
-State models (internal): `CombatantState`, `QueuedSpellInfo`, `ActorSetup`.
+State models: `CombatantState`, `QueuedSpellInfo` (`Application/Models/Combat/`); `ActorSetup` (`Application/Services/Combat/`, `internal`).
 
 **Attack resolution** (opposed roll, never THAC0):
-`d20 + AttackPower >= d20 + DefensePower`. Priority: TotalReversal → DevastatingStrike → Clash → Fumble → Critical → PerfectParry → normal opposed roll. `StrikeRating` higher = better. `ArmorClass` higher = more defensive.
+`d20 + AttackPower >= d20 + DefensePower`. Priority in `CombatService.ResolveAttack()`: TotalReversal → DevastatingStrike → Fumble → Critical → PerfectParry → normal. Clash is a separate code path in `AttackResolver.ProcessClashAsync()` (triggered when both rolls are equal). `StrikeRating` higher = better. `ArmorClass` higher = more defensive.
 
 **HP**: >0 alive, 0 to -9 = KnockedOut, -10 or lower = Dead.
 
@@ -88,7 +94,7 @@ State models (internal): `CombatantState`, `QueuedSpellInfo`, `ActorSetup`.
 
 ## Bugs-features workflow
 
-`bugs-features/` — numbered files. Process in priority order: read → implement → test → mark `[x]` with summary → move to `done/<category>/` (category = `bugs`, `features`, or `task`).
+`bugs-features/` — numbered files. Process in priority order: read → implement → test → mark `[x]` with summary → move to `bugs-features/done/<category>/` (category = `bugs`, `features`, or `task`).
 
 ## Doc sync obligations
 
