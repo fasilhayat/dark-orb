@@ -249,7 +249,7 @@ These are the low-tier spells most mages should have access to before school spe
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/21_shield.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -285,7 +285,7 @@ Magical shield against attacks and missiles. Armor Class increase and projectile
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/22_grease.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -321,7 +321,7 @@ Magical shield against attacks and missiles. Armor Class increase and projectile
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/23_color_spray.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -339,7 +339,7 @@ Magical shield against attacks and missiles. Armor Class increase and projectile
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/24_detect_magic.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -375,7 +375,7 @@ Reveals magical auras and enchantments. Utility and magical threat awareness.
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/33_mirro_image.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/25_mirror_image.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -393,7 +393,7 @@ Reveals magical auras and enchantments. Utility and magical threat awareness.
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/26_web.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -411,7 +411,7 @@ Reveals magical auras and enchantments. Utility and magical threat awareness.
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/27_stinking_cloud.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
