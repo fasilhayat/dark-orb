@@ -210,6 +210,10 @@ These are the low-tier spells most mages should have access to before school spe
 | [Static Shock](#static-shock) | Stormcraft | 2 | Common Core | Early | Mage 2 | A charged static shock that leaves lasting effects. | HP damage; stronger Shocked afterburn with Electrified. | Mage | Lightning | Single-Target Damage, Debuff |
 | [Web](#web) | Mirage / Dominion | 2 | Common Core | Early | Mage 2 | Sticky strands trap and hinder enemies in an area. | Movement reduction or root; TM suppression through trapping. | Mage | None/Control | CC, Root, AoE |
 | [Stinking Cloud](#stinking-cloud) | Umbramancy / Mirage | 2 | Common Core | Early | Mage 2 | Nauseating cloud that disrupts actions in its area. | TM suppression, action failure, and Movement denial by zone pressure. | Mage | Poison/Control | CC, AoE |
+| [Shadow Bolt](#shadow-bolt) | Umbramancy | 1 | Common Core | Early | Mage 2 | A bolt of dark energy that drains vitality on contact. | HP damage; Shadow afterburn can suppress TM gain. | Mage | Shadow | Single-Target Damage |
+| [Chill Touch](#chill-touch) | Umbramancy | 1 | Common Core | Early | Mage 2 | Necrotic touch that harms and prevents healing. | HP damage; prevents HP restoration for one turn. | Mage | Shadow | Single-Target Damage, Debuff |
+| [Blur](#blur) | Mirage | 2 | Common Core | Early | Mage 3 | Distorts the targets image, causing attackers to miss frequently. | Defensive miss chance; increases effective survivability. | Mage | None | Defensive, Buff |
+| [Enlarge](#enlarge) | Dominion | 2 | Common Core | Early | Mage 3 | Doubles the targets size, increasing damage output and Armor Class. | Physical damage buff and AC increase for one ally. | Mage | None | Buff |
 
 <span id="magic-missile"></span>
 ### Magic Missile
@@ -509,6 +513,16 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 | [Greasefire Variant](#greasefire-variant) | Stormcraft / Mirage | 2 | School Specialization | Mid | Mage 3 | Custom variant that ignites a grease field into a burning slick. | HP damage plus Movement denial on the slicked area. | Mage | Fire | Offensive, AoE, Variant |
 | [Mind Game](#mind-game) | Umbramancy | 2 | School Specialization | Mid | Mage 3 | Confuses the target, causing erratic behavior. | Random target selection, may skip turn or hit ally. | Mage | Shadow | CC, Debuff |
 | [Charm Person](#charm-person) | Mirage | 2 | School Specialization | Mid | Mage 4 | Charms a humanoid to fight as an ally. | Target switches sides for the duration. | Mage | None | CC, Charm |
+| [Dispel Magic](#dispel-magic) | Aegis | 3 | School Specialization | Mid | Mage 4 | Removes magical effects and buffs from a target. | Strips active buffs, debuffs, or ongoing spell effects. | Mage | None | Utility, Anti-Mage |
+| [Stoneskin](#stoneskin) | Aegis | 3 | School Specialization | Mid | Mage 5 | Target gains strong resistance to physical damage for several turns. | Physical damage reduction; effective AC boost against normal attacks. | Mage | None | Defensive, Buff |
+| [Counterspell](#counterspell) | Aegis | 4 | School Specialization | Mid | Mage 7 | Interrupts and negates an enemy spell as it is being cast. | Spell cancellation; denies enemy mana expenditure and turn investment. | Mage | None | Defensive, Anti-Mage |
+| [Blight](#blight) | Umbramancy | 3 | School Specialization | Mid | Mage 4 | Withers living targets with spreading necrotic rot. | HP damage over time; strong against high-HP organic targets. | Mage | Shadow | Offensive, DoT |
+| [Animate Dead](#animate-dead) | Umbramancy | 4 | School Specialization | Mid | Mage 6 | Raises a fallen enemy as an undead ally for several turns. | Adds a temporary undead combatant to the party. | Mage | None | Summoning, Necromancy |
+| [Phantasmal Killer](#phantasmal-killer) | Mirage | 4 | School Specialization | Mid | Mage 7 | A terrifying vision deals psychic damage and inflicts Fear. | HP damage plus Fear status; double threat against non-resistant targets. | Mage | Psychic | Offensive, CC |
+| [Polymorph](#polymorph) | Dominion | 4 | School Specialization | Mid | Mage 7 | Transforms a creature into a helpless animal form for a duration. | Removes enemy from combat effectively; strongest single-target CC. | Mage | None | CC |
+| [Dominate Person](#dominate-person) | Dominion | 5 | School Specialization | Late | Mage 8 | Seizes full mental control of a humanoid for a duration. | Target fights for the caster; stronger and longer than Charm Person. | Mage | None | CC, Charm |
+| [Globe of Invulnerability](#globe-of-invulnerability) | Aegis | 5 | School Specialization | Late | Mage 9 | Creates a zone of magic resistance protecting nearby allies. | Party-wide spell resistance bubble; negates most incoming spells. | Mage | None | Defensive, AoE |
+| [Chain Lightning](#chain-lightning) | Stormcraft | 4 | School Specialization | Mid | Mage 7 | Lightning bolt that arcs between up to three targets in sequence. | HP damage to three targets; Electrocute can add TM loss to each. | Mage | Lightning | Offensive, AoE, Nuke |
 
 <span id="lightning-bolt"></span>
 ### Lightning Bolt
@@ -889,6 +903,272 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 
 *Minimum Level: Mage 4*
 
+<span id="shadow-bolt"></span>
+### Shadow Bolt
+<hr>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/120_shadow_bolt.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbramancy</td><td style="border: none;">1</td><td style="border: none;">8</td><td style="border: none;">Shadow</td><td style="border: none;">Mage</td><td style="border: none;">Single-Target Damage</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*A sinuous bolt of shadow energy leaps from the casters palm, darkening the air as it streaks toward its target. Deals 1D6+2 Shadow damage. Shadow afterburn reduces the targets TM gain by 10% for one turn. Entry-level dark magic; cheaper than Vampiric Touch but lacks the leech component.*
+
+*Minimum Level: Mage 2*
+
+<span id="chill-touch"></span>
+### Chill Touch
+<hr>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/121_chill_touch.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbramancy</td><td style="border: none;">1</td><td style="border: none;">8</td><td style="border: none;">Shadow (Melee)</td><td style="border: none;">Mage</td><td style="border: none;">Single-Target Damage, Debuff</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*A ghostly pale hand reaches forward, leaving frost where it grips. The target cannot regain hit points on their next turn. Deals 1D4+1 Shadow damage and applies the Chilled status, suppressing any healing received for one round. Works only in melee range.*
+
+*Minimum Level: Mage 2*
+
+<span id="blur"></span>
+### Blur
+<hr>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/122_blur.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">2</td><td style="border: none;">15</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">Defensive, Buff</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*The casters or targets outline becomes unstable — edges smearing, position doubling. Attackers suffer a 20% miss chance on all physical attacks for 3 rounds. Does not affect spells or area effects. Stacks poorly with Mirror Image since both are illusion-based miss defenses.*
+
+*Minimum Level: Mage 3*
+
+<span id="enlarge"></span>
+### Enlarge
+<hr>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/123_enlarge.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Dominion</td><td style="border: none;">2</td><td style="border: none;">15</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">Buff</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*The subject swells to twice their normal height, armor splitting at seams as raw power floods through them. Target gains +2 AttackPower, +1 AC, and melee reach increases. Lasts 3 rounds. Counterpart Reduce (not yet implemented) would halve size and stats.*
+
+*Minimum Level: Mage 3*
+
+<span id="dispel-magic"></span>
+### Dispel Magic
+<hr>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/124_dispel_magic.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aegis</td><td style="border: none;">3</td><td style="border: none;">20</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">Utility, Anti-Mage</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*A precise unraveling of magical weave — the mage gestures and active spells on the target simply cease. Removes up to one ongoing magical effect per casting. On contested dispel (enemy buffed higher than casters level), the effect persists. Invaluable against armored mages and warded enemies.*
+
+*Minimum Level: Mage 4*
+
+<span id="stoneskin"></span>
+### Stoneskin
+<hr>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/125_stoneskin.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aegis</td><td style="border: none;">3</td><td style="border: none;">25</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">Defensive, Buff</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*The subjects skin hardens to the texture and density of granite, leaving grey-tinged patches across arms and face. Reduces all incoming physical damage by 3 for 4 rounds. Does not protect against elemental, magical, or psychic damage. Stacks with Armor and Shield.*
+
+*Minimum Level: Mage 5*
+
+<span id="counterspell"></span>
+### Counterspell
+<hr>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/126_counterspell.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aegis</td><td style="border: none;">4</td><td style="border: none;">30</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">Defensive, Anti-Mage</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*The mage recognizes the pattern in the enemys incantation and speaks its counter-rune — the spell folds in on itself before it leaves the casters hands. When an enemy begins casting, this can be declared to negate it entirely. Requires knowing the tier of the incoming spell; higher-tier spells require more skill to counter.*
+
+*Minimum Level: Mage 7*
+
+<span id="blight"></span>
+### Blight
+<hr>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/127_blight.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbramancy</td><td style="border: none;">3</td><td style="border: none;">25</td><td style="border: none;">Shadow</td><td style="border: none;">Mage</td><td style="border: none;">Offensive, DoT</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*Dark energy seeps through skin and sinew, killing cells in spreading rings. Deals 3D6+2 Shadow damage over 2 rounds (applied at end of each of the targets turns). Biological creatures take full damage; undead and constructs are immune. Strong against high-HP tanks and regenerating enemies.*
+
+*Minimum Level: Mage 4*
+
+<span id="animate-dead"></span>
+### Animate Dead
+<hr>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/128_animate_dead.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Umbramancy</td><td style="border: none;">4</td><td style="border: none;">35</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">Summoning, Necromancy</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*The mage reaches out toward a fallen foe, dark threads knitting bone and sinew back into motion without restoring the spark of life. A creature that died this combat rises as a skeletal or zombie version of itself. The undead acts on the mages side but cannot use its original spells or special abilities. Lasts 4 rounds or until destroyed.*
+
+*Minimum Level: Mage 6*
+
+<span id="phantasmal-killer"></span>
+### Phantasmal Killer
+<hr>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/129_phantasmal_killer.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Mirage</td><td style="border: none;">4</td><td style="border: none;">30</td><td style="border: none;">Psychic</td><td style="border: none;">Mage</td><td style="border: none;">Offensive, CC</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*The caster reaches into the targets mind and sculpts their deepest dread — a thing of shadow and teeth visible only to the victim. Deals 2D8+2 Psychic damage. On a failed will save, the target also gains the Feared status (forced movement away from caster, -2 AttackPower). Immune to targets with the Fearless trait.*
+
+*Minimum Level: Mage 7*
+
+<span id="polymorph"></span>
+### Polymorph
+<hr>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/130_polymorph.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Dominion</td><td style="border: none;">4</td><td style="border: none;">30</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">CC</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*The arcane words distort reality around the target — limbs reshaping, voice silenced, mind reduced to animal instinct. Transforms target into a small harmless animal (sheep, toad, or similar) for up to 3 rounds. The target retains their HP total but cannot cast spells, use abilities, or make effective attacks. Dispel Magic or taking damage above a threshold ends the effect early.*
+
+*Minimum Level: Mage 7*
+
+<span id="dominate-person"></span>
+### Dominate Person
+<hr>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/131_dominate_person.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Dominion</td><td style="border: none;">5</td><td style="border: none;">40</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">CC, Charm</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*Not merely charmed — owned. The casters will replaces the targets own; they act as if they have always been the casters most loyal ally. Target fights for the caster for 3 rounds. Unlike Charm Person, the target will attack their former allies. A dominated target that takes severe damage may attempt to break free. Humanoids only.*
+
+*Minimum Level: Mage 8*
+
+<span id="globe-of-invulnerability"></span>
+### Globe of Invulnerability
+<hr>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/132_globe_of_invulnerability.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aegis</td><td style="border: none;">5</td><td style="border: none;">45</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">Defensive, AoE</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*A shimmering sphere of force erupts around the mage, deflecting arcane energies into harmless light. All spells of level 4 or lower that target creatures within the globe fail automatically for 3 rounds. Affects allies inside the globe equally. Higher-level spells penetrate normally. The globe cannot be moved.*
+
+*Minimum Level: Mage 9*
+
+<span id="chain-lightning"></span>
+### Chain Lightning
+<hr>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/133_chain_lightning.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Stormcraft</td><td style="border: none;">4</td><td style="border: none;">35</td><td style="border: none;">Lightning</td><td style="border: none;">Mage</td><td style="border: none;">Offensive, AoE, Nuke</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*A bolt strikes the primary target, then leaps to the nearest enemy, then leaps again — each arc slightly weaker but no less lethal. Deals 3D6+2 Lightning damage to the primary target; 2D6 to the second and third targets in sequence. Electrocute afterburn on the primary; secondary targets may or may not inherit the status. Ideal for clustered enemies.*
+
+*Minimum Level: Mage 7*
+
 
 ## Priest spellbook
 
@@ -916,6 +1196,8 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 | [Blade Barrier](#blade-barrier) | Celestara | 6 | School Specialization | Late | Priest 8 | Immobile wall or ring of whirling blades around a point. | HP damage and Movement denial by forcing enemies to stop, reroute, or suffer repeated contact damage. | Priest | Physical/Magical | Offensive, Defensive, Barrier |
 | [Heroes Feast](#heroes-feast) | Aethelion | 6 | School Specialization | Late | Priest 8 | Group pre-battle meal with strong support benefits. | Teamwide survivability, morale, and resilience increase. | Priest | Buff | Buff, AoE |
 | [Restoration](#restoration) | Aethelion | 7 | School Specialization | Late | Priest 9 | Repairs severe spiritual or life-force harm. | Restores magical stability and cleanses severe debuffs. | Priest | Healing | Healing, Cleanse |
+| [Spiritual Weapon](#spiritual-weapon) | Aethelion | 2 | Class Core | Early | Priest 3 | Summons a floating divine weapon that strikes each round. | Consistent HP damage each turn without spending an action. | Priest | Holy | Summoning, Offensive |
+| [Raise Dead](#raise-dead) | Aethelion | 5 | School Specialization | Late | Priest 9 | Restores a fallen ally to life mid-battle at great mana cost. | Revives a KO or dead ally with partial HP. | Priest | None | Healing, Revive |
 
 <span id="bless"></span>
 ### Bless
@@ -1279,6 +1561,44 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 *Minimum Level: Priest 9*
 
+<span id="spiritual-weapon"></span>
+### Spiritual Weapon
+<hr>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/134_spiritual_weapon.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">2</td><td style="border: none;">20</td><td style="border: none;">Holy</td><td style="border: none;">Priest</td><td style="border: none;">Summoning, Offensive</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*A glowing divine weapon — shaped like a longsword, hammer, or whatever form the deity favors — materializes beside the priest and begins attacking. Each round, the Spiritual Weapon attacks once independently, dealing 1D6+2 Holy damage. It lasts 3 rounds, occupies no action to maintain, and cannot be targeted by normal attacks but is dismissed by Dispel Magic.*
+
+*Minimum Level: Priest 3*
+
+<span id="raise-dead"></span>
+### Raise Dead
+<hr>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/135_raise_dead.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">5</td><td style="border: none;">60</td><td style="border: none;">—</td><td style="border: none;">Priest</td><td style="border: none;">Healing, Revive</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*The priest calls the spirit back from wherever it has gone — a supreme act of faith that costs dearly in mana and focus. Restores a KnockedOut or Dead ally to 1D8+4 HP. The revived ally acts at the bottom of the turn order that round with one fewer action. Cannot revive a creature destroyed by disintegration or similar total-annihilation effects.*
+
+*Minimum Level: Priest 9*
+
 
 ## Druid spellbook
 
@@ -1303,6 +1623,8 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 | [Creeping Doom](#creeping-doom) | Umbraex | 7 | School Specialization | Late | Druid 9 | Devastating moving swarm that overwhelms enemies. | HP damage over time plus Movement denial by panic and pursuit pressure. | Druid | Physical | Offensive, CC |
 | [Earthquake](#earthquake) | Chronara | 7 | School Specialization | Late | Druid 9 | Wide-area terrain disruption and collapse threat. | HP damage, Movement disruption, and TM loss from knockdown or instability in variants. | Druid, Priest | Physical | Offensive, AoE |
 | [Turn Undead](#turn-undead) | Aethelion | 2 | Class Core | Early | Priest 3, Paladin 4, Knight 6 | Drives undead enemies away in fear. | Undead must resist or flee; holy damage to undead. | Priest, Paladin, Knight | Holy | Offensive, CC |
+| [Spike Growth](#spike-growth) | Chronara | 2 | Class Core | Early | Druid 3 | Covers ground in sharp spikes that punish anyone moving through. | HP damage-on-movement zone; terrain denial and kiting tool. | Druid, Priest | Physical | Terrain, DoT, AoE |
+| [Wall of Thorns](#wall-of-thorns) | Chronara | 5 | School Specialization | Late | Druid 7 | Creates a barrier of thorns blocking movement and dealing damage on contact. | Movement denial and HP damage to any creature that attempts to cross. | Druid | Physical | Terrain, Barrier, AoE |
 
 <span id="entangle"></span>
 ### Entangle
@@ -1610,6 +1932,44 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 *- Priest, Paladin, Knight Damage type: Holy. Yes, Fear (2 turns). Deity Bonus: (Aethelion) Turn Undead deals +1d4 radiant damage.*
 
 *Minimum Level: Priest 3, Paladin 4, Knight 6*
+
+<span id="spike-growth"></span>
+### Spike Growth
+<hr>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/136_spike_growth.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Chronara</td><td style="border: none;">2</td><td style="border: none;">15</td><td style="border: none;">Physical</td><td style="border: none;">Druid, Priest</td><td style="border: none;">Terrain, DoT, AoE</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*The druid plants their staff and sharp bone-white spikes erupt from the earth, carpeting an area in needle-like growth invisible in tall grass. Any creature moving through the zone takes 1D4 Physical damage per 5 feet of movement. The zone lasts 3 rounds. Excellent for forcing enemies to route around terrain or punishing rushdown.*
+
+*Minimum Level: Druid 3*
+
+<span id="wall-of-thorns"></span>
+### Wall of Thorns
+<hr>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/137_wall_of_thorns.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Chronara</td><td style="border: none;">5</td><td style="border: none;">40</td><td style="border: none;">Physical</td><td style="border: none;">Druid</td><td style="border: none;">Terrain, Barrier, AoE</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*Thick briars explode from the soil and twist into a wall of razor thorns up to 10 feet high and 60 feet long. The wall blocks movement entirely; a creature forcing through takes 3D6 Physical damage and moves at quarter speed for one round. Lasts until the end of combat or until Dispel Magic removes it. Ideal for splitting enemy formations.*
+
+*Minimum Level: Druid 7*
 
 
 ## Paladin spellbook

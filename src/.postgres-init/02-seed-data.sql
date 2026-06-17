@@ -197,7 +197,39 @@ FROM (VALUES
     ('Dominion',   'D4',  'None', 'Ranged', 'Provoke',           5, 60, 1, 0, 0, 0, 'None',      1, 'Enrages the target, reducing its defenses.  Tags: CC, Debuff'),
     ('Verdancy',   'D4',  'None', 'Ranged', 'Root',              5, 60, 1, 0, 0, 0, 'None',      1, 'Anchors the target to the ground.  Tags: CC'),
     ('Deity',      'D4',  'None', 'None', 'Sacrifice',         0, 60, 1, 0, 0, 0, 'None',      1, 'Sacrifice own HP to empower an ally.  Tags: Support'),
-    ('Verdancy',   'D4',  'None', 'None', 'Summon Creature',  12, 70, 3, 0, 0, 0, 'None',      1, 'Calls a creature to fight for you.  Tags: Summon')
+    ('Verdancy',   'D4',  'None', 'None', 'Summon Creature',  12, 70, 3, 0, 0, 0, 'None',      1, 'Calls a creature to fight for you.  Tags: Summon'),
+
+    -- New Aegis spells (abjuration gap-fill)
+    ('Aegis', 'D4', 'None', 'Ranged', 'Dispel Magic',        20, 80, 3, 0, 0, 0, 'None',      4, 'Removes magical effects and buffs from a target.  Tags: Utility, Anti-Mage'),
+    ('Aegis', 'D4', 'None', 'None',   'Stoneskin',           25, 80, 3, 0, 0, 0, 'None',      5, 'Target gains strong resistance to physical damage for several turns.  Tags: Defensive, Buff'),
+    ('Aegis', 'D4', 'None', 'Ranged', 'Counterspell',        30, 100, 4, 0, 0, 0, 'None',     7, 'Interrupts and negates an enemy spell as it is being cast.  Tags: Defensive, Anti-Mage'),
+    ('Aegis', 'D4', 'None', 'None',   'Globe of Invulnerability', 45, 120, 5, 0, 0, 0, 'None', 9, 'Creates a zone of magic resistance protecting nearby allies.  Tags: Defensive, AoE'),
+
+    -- New Umbramancy spells (low-level dark damage entry)
+    ('Umbramancy', 'D6', 'Shadow', 'Ranged', 'Shadow Bolt',   8, 60, 1, 1, 2, 0, 'Shadow',    2, 'A bolt of dark energy that drains vitality on contact.  Tags: Single-Target Damage'),
+    ('Umbramancy', 'D4', 'Shadow', 'Melee',  'Chill Touch',   8, 60, 1, 1, 1, 0, 'Shadow',    2, 'Necrotic touch that harms and prevents healing for one turn.  Tags: Single-Target Damage, Debuff'),
+    ('Umbramancy', 'D6', 'Shadow', 'Ranged', 'Blight',       25, 80, 3, 3, 2, 0, 'Shadow',    4, 'Withers living targets with spreading necrotic rot.  Tags: Offensive, DoT'),
+    ('Umbramancy', 'D4', 'None',   'None',   'Animate Dead', 35, 100, 4, 0, 0, 0, 'None',     6, 'Raises a fallen enemy as an undead ally for several turns.  Tags: Summoning, Necromancy'),
+
+    -- New Dominion spells (transmutation gap-fill)
+    ('Dominion', 'D4', 'None', 'None',   'Enlarge',          15, 70, 2, 0, 0, 0, 'None',      3, 'Doubles the targets size, increasing damage output and Armor Class.  Tags: Buff'),
+    ('Dominion', 'D4', 'None', 'Ranged', 'Polymorph',        30, 100, 4, 0, 0, 0, 'None',     7, 'Transforms a creature into a helpless animal form for a duration.  Tags: CC'),
+    ('Dominion', 'D4', 'None', 'Ranged', 'Dominate Person',  40, 110, 5, 0, 0, 0, 'None',     8, 'Seizes full mental control of a humanoid for a duration.  Tags: CC, Charm'),
+
+    -- New Mirage spells (defensive illusion gap-fill)
+    ('Mirage', 'D4', 'None',    'None',   'Blur',             15, 70, 2, 0, 0, 0, 'None',     3, 'Distorts the targets image, causing attackers to miss frequently.  Tags: Defensive, Buff'),
+    ('Mirage', 'D8', 'Psychic', 'Ranged', 'Phantasmal Killer', 30, 90, 4, 2, 2, 0, 'Psychic', 7, 'A terrifying vision deals psychic damage and inflicts Fear.  Tags: Offensive, CC'),
+
+    -- New Priest spells
+    ('Deity', 'D6', 'Holy', 'None', 'Spiritual Weapon',      20, 70, 2, 1, 2, 0, 'Holy',      3, 'Summons a floating divine weapon that strikes each round.  Tags: Summoning, Offensive'),
+    ('Deity', 'D4', 'None', 'None', 'Raise Dead',            60, 120, 5, 0, 0, 0, 'None',     9, 'Restores a fallen ally to life mid-battle at great mana cost.  Tags: Healing, Revive'),
+
+    -- New Druid spells (terrain control gap-fill)
+    ('Verdancy', 'D4', 'Physical', 'None', 'Spike Growth',   15, 70, 2, 0, 0, 0, 'None',      3, 'Covers ground in sharp spikes that punish anyone moving through.  Tags: Terrain, DoT, AoE'),
+    ('Verdancy', 'D6', 'Physical', 'None', 'Wall of Thorns', 40, 100, 5, 0, 0, 0, 'None',     7, 'Creates a barrier of thorns blocking movement and dealing damage.  Tags: Terrain, Barrier, AoE'),
+
+    -- New Stormcraft spell (multi-target lightning)
+    ('Stormcraft', 'D6', 'Lightning', 'Ranged', 'Chain Lightning', 35, 90, 4, 3, 2, 0, 'Lightning', 7, 'Lightning bolt that arcs between up to three targets in sequence.  Tags: Offensive, AoE, Nuke')
 ) AS s(school_name, die_name, dmg_type_name, atk_type_name, name, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage, minimum_level, description)
 JOIN arena_data.spell_school ss ON ss.name = s.school_name
 JOIN arena_data.die_type dd ON dd.name = s.die_name
