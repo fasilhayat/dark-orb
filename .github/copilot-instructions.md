@@ -42,13 +42,14 @@ Core never references Application/Infrastructure. Application never references I
 | Project | Role | Depends |
 |---------|------|---------|
 | Core | Domain entities, enums, interfaces | none |
-| Application | Services, interfaces, models | Core only |
+| Application | Services, interfaces, models; includes `LevelingService` (XP/leveling) and `CombatSimulatorFactory` | Core only |
 | Infrastructure | Repositories, DbContext (raw Npgsql, no EF Core) | Core only |
 | Api | ASP.NET CRUD endpoints | Application + Infrastructure |
 | Presentation | GUI-agnostic playback, `ICombatPresenter` | Core + Application |
 | Gui | Avalonia bridge, no combat logic | Application + Core + Presentation |
 | UnitTests | xUnit + NSubstitute | — |
 | AcceptanceTests | Reqnroll BDD | — |
+| Demo | Source removed (commit `d63b1ef`); `bin/obj` artifacts remain; stale Makefile targets still reference it | — |
 
 ## Combat engine
 
@@ -69,7 +70,7 @@ State models: `CombatantState`, `QueuedSpellInfo` (`Application/Models/Combat/`)
 
 ## Constraints
 
-- **API**: pure CRUD — no dice rolling, combat resolution, or game logic. Endpoint groups: Character, Equipment, Accessories, Npc, Lore. Health check at `/api/healthcheck`. Port 8585. Swagger only in Development/LocalDev. Requires `X-Api-Key` header.
+- **API**: pure CRUD — no dice rolling, combat resolution, or game logic. Endpoint groups: Character, Equipment, Accessories, Npc, Lore. `CombatEndpoint.cs` exists as a tombstone (logic moved to engine — do not add game logic there). Health check at `/api/healthcheck`. Port 8585. Swagger only in Development/LocalDev. Requires `X-Api-Key` header.
 - **GUI** (Avalonia): must never contain combat logic. `ICombatPresenter` in `Presentation` is the only rendering contract.
 - **DiceService**: seed-based, deterministic. Seed via `Random.Shared.Next()` or explicit constructor.
 - **No EF Core** — raw Npgsql + custom `DbContext` wrapper in Infrastructure.
