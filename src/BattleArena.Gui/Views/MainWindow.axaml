@@ -277,7 +277,7 @@
       <!-- Row 2: Character cards side by side -->
       <Grid Grid.Row="2" Margin="0,4">
         <Grid x:Name="CombatCardGrid" ColumnDefinitions="*,Auto,Auto,Auto,*">
-          <Grid Grid.Column="0" ClipToBounds="True">
+          <Grid x:Name="HeroGrid" Grid.Column="0" HorizontalAlignment="Right">
             <WrapPanel x:Name="HeroesPanel" Orientation="Horizontal" />
           </Grid>
 
@@ -298,7 +298,7 @@
 
           <Border Grid.Column="3" Width="3" Background="#333" Margin="4,0" />
 
-          <Grid Grid.Column="4" ClipToBounds="True">
+          <Grid x:Name="EnemyGrid" Grid.Column="4" HorizontalAlignment="Left">
             <WrapPanel x:Name="EnemiesPanel" Orientation="Horizontal" />
           </Grid>
         </Grid>

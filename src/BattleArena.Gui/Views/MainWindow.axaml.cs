@@ -389,19 +389,28 @@ public partial class MainWindow : Window
     {
         if (CombatCardGrid.Bounds.Width > 0 && CombatCardGrid.Bounds.Height > 0)
         {
-            var sideWidth = (CombatCardGrid.Bounds.Width - 76) / 2.0;
+            var defs = CombatCardGrid.ColumnDefinitions;
+            var autoWidth = (defs.Count >= 4)
+                ? defs[1].ActualWidth + defs[2].ActualWidth + defs[3].ActualWidth
+                : 76.0;
+            var sideWidth = (CombatCardGrid.Bounds.Width - autoWidth) / 2.0;
             _vm.RecalcSideLayout(sideWidth, CombatCardGrid.Bounds.Height);
 
             var cardWidth = _vm.HeroSideScale * 380.0;
-            HeroesPanel.Width = _vm.HeroLayoutCentered ? double.NaN : sideWidth;
-            HeroesPanel.HorizontalAlignment = _vm.HeroAlignment;
+            var constrainWidth = (defs.Count >= 1) ? defs[0].ActualWidth : sideWidth;
+            if (!_vm.HeroLayoutCentered)
+                HeroesPanel.MaxWidth = constrainWidth;
+            else
+                HeroesPanel.ClearValue(WrapPanel.MaxWidthProperty);
             foreach (var child in HeroesPanel.Children)
                 if (child is Viewbox vb)
                     vb.Width = cardWidth;
 
             cardWidth = _vm.EnemySideScale * 380.0;
-            EnemiesPanel.Width = _vm.EnemyLayoutCentered ? double.NaN : sideWidth;
-            EnemiesPanel.HorizontalAlignment = _vm.EnemyAlignment;
+            if (!_vm.EnemyLayoutCentered)
+                EnemiesPanel.MaxWidth = constrainWidth;
+            else
+                EnemiesPanel.ClearValue(WrapPanel.MaxWidthProperty);
             foreach (var child in EnemiesPanel.Children)
                 if (child is Viewbox vb)
                     vb.Width = cardWidth;

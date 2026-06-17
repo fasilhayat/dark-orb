@@ -262,8 +262,8 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         var enemyNeedsWrap = Enemies.Count > enemyCols;
         HeroLayoutCentered = !heroNeedsWrap;
         EnemyLayoutCentered = !enemyNeedsWrap;
-        HeroAlignment = heroNeedsWrap ? HorizontalAlignment.Stretch : HorizontalAlignment.Right;
-        EnemyAlignment = enemyNeedsWrap ? HorizontalAlignment.Stretch : HorizontalAlignment.Left;
+        HeroAlignment = HorizontalAlignment.Right;
+        EnemyAlignment = HorizontalAlignment.Left;
     }
 
     private static (double scale, int cols) ComputeClashScale(
