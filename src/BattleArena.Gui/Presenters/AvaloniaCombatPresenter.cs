@@ -370,11 +370,8 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         });
     }
 
-    private static int FlickerIntervalMs(string effectName) => effectName switch
-    {
-        "Stun" => 800,
-        _ => 300,
-    };
+    private static int FlickerIntervalMs(string effectName) =>
+        EffectVisualConfig.GetEffectAnimation(effectName).IntervalMs();
 
     private void StartPersistentEffect(string characterName, string effectName, string color)
     {
