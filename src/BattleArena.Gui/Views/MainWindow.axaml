@@ -295,9 +295,9 @@
       <!-- Row 2: Bottom row — controls left, title center, combat log right -->
       <Grid Grid.Row="2" Margin="0,4">
         <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="7*" />
-          <ColumnDefinition Width="5*" />
-          <ColumnDefinition Width="7*" />
+          <ColumnDefinition Width="9*" />
+          <ColumnDefinition Width="6*" />
+          <ColumnDefinition Width="9*" />
         </Grid.ColumnDefinitions>
 
         <!-- Left: Controls -->

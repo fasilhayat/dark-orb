@@ -458,6 +458,7 @@ public partial class MainWindow : Window
         if (_fromSpellPreview)
         {
             _fromSpellPreview = false;
+            SpeedSlider.Value = 1;
             _vm.Phase = "SpellPreview";
             _vm.CombatLog.Clear();
             _vm.Heroes.Clear();
@@ -472,6 +473,7 @@ public partial class MainWindow : Window
             return;
         }
 
+        SpeedSlider.Value = 1;
         _vm.Phase = "Setup";
         _vm.CombatLog.Clear();
         _vm.Heroes.Clear();
