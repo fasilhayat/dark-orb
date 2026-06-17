@@ -22,8 +22,6 @@ BattleArena is a homebrew fantasy RPG backend and data model for a Dungeons & Dr
   - Domain entities and shared contracts
 - `BattleArena.Infrastructure`
   - PostgreSQL data access, repositories, and database context
-- `BattleArena.Demo`
-  - Console-based demo app for running turn-based and real-time combats with narrated playback
 - `BattleArena.Presentation`
   - GUI-agnostic presentation layer — playback engine, display state, ICombatPresenter contract (depends on Core + Application)
 - `BattleArena.Gui`
