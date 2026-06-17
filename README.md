@@ -1,4 +1,4 @@
-# BattleArena
+# Dark-Orb BattleArena
 
 BattleArena is a homebrew fantasy RPG backend and data model for a Dungeons & Dragons-inspired combat and character system. The solution includes a PostgreSQL-backed data layer, a .NET 8 Web API, and a world lore reference that feeds the content used by the application.
 
