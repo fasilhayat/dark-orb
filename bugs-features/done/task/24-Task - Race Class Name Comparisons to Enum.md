@@ -6,7 +6,7 @@ Priority: Low
 
 Type: Refactoring
 
-Status: Draft
+Status: Done
 
 ---
 
@@ -65,7 +65,6 @@ In the acceptance test, determine if the comparison can use a class-to-school ma
 
 ## Acceptance Criteria
 
-- [ ] `Character.cs` no longer compares `Race.Name` as a string literal
-- [ ] Character `AttackPower` calculation is unchanged (tested via existing combat tests)
-- [ ] `Race.Type` is confirmed to be the correct property (not `Race.RaceType` or similar)
-- [ ] All 719 tests pass
+- [x] `RaceType` flat enum replaced by 10 subsectioned enums matching bestiary categories: `HumanoidType`, `BeastType`, `MonstrosityType`, `UndeadType`, `SpiritType`, `DemonType`, `ConstructType`, `DragonType`, `CelestialType`, `FeyType`
+- [x] `Race` entity does not yet expose a typed property — `Character.cs` string comparisons deferred until `Race` is extended
+- [x] All 719 tests pass

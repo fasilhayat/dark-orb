@@ -16,8 +16,19 @@ public class CombatLogPrunerTests : IDisposable
 
     public void Dispose()
     {
-        if (Directory.Exists(_scratchRoot))
-            Directory.Delete(_scratchRoot, recursive: true);
+        if (!Directory.Exists(_scratchRoot)) return;
+        for (int attempt = 0; attempt < 3; attempt++)
+        {
+            try
+            {
+                Directory.Delete(_scratchRoot, recursive: true);
+                return;
+            }
+            catch (IOException) when (attempt < 2)
+            {
+                Thread.Sleep(50);
+            }
+        }
     }
 
     private void CreateFilePair(string baseName, DateTime writeTime)

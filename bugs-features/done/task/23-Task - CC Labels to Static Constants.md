@@ -66,7 +66,7 @@ Replace the 7 return statements in `CharacterExtensions.cs` with `CcLabels.X`.
 
 ## Acceptance Criteria
 
-- [ ] `CcLabels` static class exists with all 4 CC label constants
-- [ ] All return statements in `CharacterExtensions.GetCcLabel` use `CcLabels.X`
-- [ ] No change to runtime behavior
-- [ ] All 719 tests pass
+- [x] `CcLabels` static class exists with all 4 CC label constants
+- [x] All return statements in `CharacterExtensions` use `CcLabels.X`
+- [x] No change to runtime behavior
+- [x] All 719 tests pass

@@ -1,16 +1,6 @@
 namespace BattleArena.Core.Entities.Enums;
 
-public enum RaceType
-{
-    Human,
-    Elf,
-    Dwarf,
-    Orc,
-    Undead,
-    Gladefolk,
-    Kobold,
-    Demon,
-    Lizard,
-    Ogre,
-    HalfElf
-}
+// RaceType was replaced by per-category creature type enums matching the bestiary:
+//   HumanoidType  BeastType     MonstrosityType  UndeadType
+//   SpiritType    DemonType     ConstructType    DragonType
+//   CelestialType FeyType

@@ -36,9 +36,9 @@ public static class CharacterExtensions
     
     public static string? GetCrowdControlType(this Character character)
     {
-        if (character.IsStunned()) return "stunned";
-        if (character.IsRooted()) return "rooted";
-        if (character.IsFeared()) return "feared";
+        if (character.IsStunned()) return CcLabels.Stunned;
+        if (character.IsRooted()) return CcLabels.Rooted;
+        if (character.IsFeared()) return CcLabels.Feared;
         return null;
     }
     
@@ -49,10 +49,10 @@ public static class CharacterExtensions
             if (e.Type is StatusEffectType.Stun or StatusEffectType.Root or StatusEffectType.Fear)
                 return e.Type switch
                 {
-                    StatusEffectType.Stun => "stunned",
-                    StatusEffectType.Root => "rooted",
-                    StatusEffectType.Fear => "feared",
-                    _                     => "crowd-controlled"
+                    StatusEffectType.Stun => CcLabels.Stunned,
+                    StatusEffectType.Root => CcLabels.Rooted,
+                    StatusEffectType.Fear => CcLabels.Feared,
+                    _                     => CcLabels.Default
                 };
         }
         return null;
