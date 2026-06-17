@@ -237,22 +237,10 @@
     </Grid>
 
     <!-- ── COMBAT PHASE ── -->
-    <Grid IsVisible="{Binding IsCombatPhase}" RowDefinitions="Auto,Auto,*,150,Auto">
+    <Grid IsVisible="{Binding IsCombatPhase}" RowDefinitions="Auto,*,Auto">
 
-      <!-- Row 0: Title -->
-      <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,4">
-        <TextBlock Grid.Column="0" Text="BATTLE ARENA — COMBAT SIMULATION"
-                   Foreground="#00bfff" FontSize="18" FontWeight="Bold"
-                   HorizontalAlignment="Center" />
-        <Border Grid.Column="1" Background="#6a3a8a" CornerRadius="3" Padding="6,2"
-                BorderBrush="#8a5aaa" BorderThickness="1"
-                VerticalAlignment="Center" IsVisible="{Binding IsApiMode}">
-          <TextBlock Text="API MODE" Foreground="#e0d0f0" FontSize="10" FontWeight="Bold" />
-        </Border>
-      </Grid>
-
-      <!-- Row 1: Round progress bar -->
-      <Border Grid.Row="1" BorderBrush="#333" BorderThickness="1" CornerRadius="3"
+      <!-- Row 0: Round progress bar -->
+      <Border Grid.Row="0" BorderBrush="#333" BorderThickness="1" CornerRadius="3"
               Background="#0d0d1a" Height="28" Margin="0,0,0,2">
         <Grid>
           <Grid.ColumnDefinitions>
@@ -274,8 +262,8 @@
         </Grid>
       </Border>
 
-      <!-- Row 2: Character cards side by side -->
-      <Grid Grid.Row="2" Margin="0,4">
+      <!-- Row 1: Character cards side by side -->
+      <Grid Grid.Row="1" Margin="0,4">
         <Grid x:Name="CombatCardGrid" ColumnDefinitions="*,Auto,Auto,Auto,*">
           <Grid x:Name="HeroGrid" Grid.Column="0" HorizontalAlignment="Right">
             <WrapPanel x:Name="HeroesPanel" Orientation="Horizontal" />
@@ -304,89 +292,112 @@
         </Grid>
       </Grid>
 
-      <!-- Row 3: Combat log -->
-      <Border Grid.Row="3" BorderBrush="#333" BorderThickness="1" CornerRadius="3"
-              Background="#0a0a1a" Margin="0,4">
-        <Grid RowDefinitions="Auto,*">
-          <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="6,2">
-            <TextBlock Grid.Column="0" Text="COMBAT LOG" Foreground="#888" FontSize="11"
-                       FontWeight="Bold" VerticalAlignment="Center" />
-            <Button Grid.Column="1" x:Name="CopyLogButton" Content="Copy" Click="OnCopyLogClick"
-                    Width="50" Height="20" FontSize="10" Padding="4,0"
-                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
-          </Grid>
-          <ListBox x:Name="CombatLogListBox" Grid.Row="1" ItemsSource="{Binding CombatLog}"
-                   Background="Transparent" BorderThickness="0"
-                   ScrollViewer.VerticalScrollBarVisibility="Auto">
-            <ListBox.ItemTemplate>
-              <DataTemplate>
-                <ItemsControl ItemsSource="{Binding Segments}"
-                              Margin="4,0">
-                  <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                      <StackPanel Orientation="Horizontal" />
-                    </ItemsPanelTemplate>
-                  </ItemsControl.ItemsPanel>
-                  <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                      <TextBlock Text="{Binding Text}" Foreground="{Binding Brush}"
-                                 FontSize="12" TextWrapping="NoWrap" />
-                    </DataTemplate>
-                  </ItemsControl.ItemTemplate>
-                </ItemsControl>
-              </DataTemplate>
-            </ListBox.ItemTemplate>
-          </ListBox>
-        </Grid>
-      </Border>
+      <!-- Row 2: Bottom row — controls left, title center, combat log right -->
+      <Grid Grid.Row="2" Margin="0,4">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="7*" />
+          <ColumnDefinition Width="5*" />
+          <ColumnDefinition Width="7*" />
+        </Grid.ColumnDefinitions>
 
-      <!-- Row 4: Control bar -->
-      <Border Grid.Row="4" BorderBrush="#333" BorderThickness="1" CornerRadius="3"
-              Padding="8,4" Background="#1a1a2e">
-        <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
-          <Button x:Name="StartButton" Content="Back to Setup" Click="OnBackToSetupClick"
-                  Width="110" Height="28" FontSize="11"
-                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
-          <Button x:Name="TurnButton" Content="Turn based" Click="OnTurnClick"
-                  Width="130" Height="28" FontSize="11"
-                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
-            <Button.Styles>
-              <Style Selector="Button">
-                <Setter Property="Background" Value="#3a3a5c" />
-              </Style>
-              <Style Selector="Button.waiting">
-                <Setter Property="Background" Value="#0088ff" />
-                <Setter Property="BorderBrush" Value="#44aaff" />
-              </Style>
-            </Button.Styles>
-          </Button>
-          <Button x:Name="AutoPlayButton" Content="Auto-play" Click="OnAutoPlayClick"
-                  Width="100" Height="28" FontSize="11"
-                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
-            <Button.Styles>
-              <Style Selector="Button">
-                <Setter Property="Background" Value="#3a3a5c" />
-              </Style>
-              <Style Selector="Button.waiting">
-                <Setter Property="Background" Value="#0088ff" />
-                <Setter Property="BorderBrush" Value="#44aaff" />
-              </Style>
-            </Button.Styles>
-          </Button>
-          <Separator Width="1" Background="#444" Margin="4,0" />
-          <Button x:Name="NewCombatButton" Content="New Combat" Click="OnNewCombatClick"
-                  Width="100" Height="28" FontSize="11" IsVisible="False"
-                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                  Background="#3a5c3a" BorderBrush="#575" />
-          <TextBlock Text="Speed:" Foreground="#999" VerticalAlignment="Center" FontSize="12" />
-          <Slider x:Name="SpeedSlider" Width="120" Minimum="0" Maximum="3"
-                  Value="1" TickFrequency="1" IsSnapToTickEnabled="True"
-                  VerticalAlignment="Center" ValueChanged="OnSpeedChanged" />
-          <TextBlock x:Name="SpeedLabel" Text="Normal" Foreground="#88bbff" FontSize="12"
-                     FontWeight="Bold" VerticalAlignment="Center" Width="60"
-                     TextAlignment="Center" />
-        </StackPanel>
-      </Border>
+        <!-- Left: Controls -->
+        <Border Grid.Column="0" BorderBrush="#333" BorderThickness="1" CornerRadius="3"
+                Padding="10,6" Background="#1a1a2e" VerticalAlignment="Stretch">
+          <StackPanel Orientation="Vertical" Spacing="6" VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+              <Button x:Name="StartButton" Content="Back to Setup" Click="OnBackToSetupClick"
+                      Width="100" Height="28" FontSize="11"
+                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+              <Button x:Name="TurnButton" Content="Turn based" Click="OnTurnClick"
+                      Width="120" Height="28" FontSize="11"
+                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                <Button.Styles>
+                  <Style Selector="Button">
+                    <Setter Property="Background" Value="#3a3a5c" />
+                  </Style>
+                  <Style Selector="Button.waiting">
+                    <Setter Property="Background" Value="#0088ff" />
+                    <Setter Property="BorderBrush" Value="#44aaff" />
+                  </Style>
+                </Button.Styles>
+              </Button>
+              <Button x:Name="AutoPlayButton" Content="Auto-play" Click="OnAutoPlayClick"
+                      Width="90" Height="28" FontSize="11"
+                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                <Button.Styles>
+                  <Style Selector="Button">
+                    <Setter Property="Background" Value="#3a3a5c" />
+                  </Style>
+                  <Style Selector="Button.waiting">
+                    <Setter Property="Background" Value="#0088ff" />
+                    <Setter Property="BorderBrush" Value="#44aaff" />
+                  </Style>
+                </Button.Styles>
+              </Button>
+              <Separator x:Name="NewCombatSeparator" Width="1" Background="#444" Margin="4,0" IsVisible="False" />
+              <Button x:Name="NewCombatButton" Content="New Combat" Click="OnNewCombatClick"
+                      Width="90" Height="28" FontSize="11" IsVisible="False"
+                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                      Background="#3a5c3a" BorderBrush="#575" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+              <TextBlock Text="Speed:" Foreground="#999" VerticalAlignment="Center" FontSize="12" />
+              <Slider x:Name="SpeedSlider" Width="100" Minimum="0" Maximum="3"
+                      Value="1" TickFrequency="1" IsSnapToTickEnabled="True"
+                      VerticalAlignment="Center" ValueChanged="OnSpeedChanged" />
+              <TextBlock x:Name="SpeedLabel" Text="Normal" Foreground="#88bbff" FontSize="12"
+                         FontWeight="Bold" VerticalAlignment="Center" Width="60"
+                         TextAlignment="Center" />
+            </StackPanel>
+          </StackPanel>
+        </Border>
+
+        <!-- Center: Title -->
+        <Border Grid.Column="1" BorderBrush="#333" BorderThickness="1" CornerRadius="3"
+                Background="#1a1a2e" Margin="6,0,0,0" Padding="20,4"
+                VerticalAlignment="Stretch">
+          <TextBlock Text="BATTLE ARENA — COMBAT SIMULATION"
+                     Foreground="#00bfff" FontSize="15" FontWeight="Bold"
+                     VerticalAlignment="Center" HorizontalAlignment="Center"
+                     TextWrapping="Wrap" TextAlignment="Center" />
+        </Border>
+
+        <!-- Right: Combat log -->
+        <Border Grid.Column="2" BorderBrush="#333" BorderThickness="1" CornerRadius="3"
+                Background="#0a0a1a" Margin="6,0,0,0" Height="130">
+          <Grid RowDefinitions="Auto,*">
+            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="6,2">
+              <TextBlock Grid.Column="0" Text="COMBAT LOG" Foreground="#888" FontSize="11"
+                         FontWeight="Bold" VerticalAlignment="Center" />
+              <Button Grid.Column="1" x:Name="CopyLogButton" Content="Copy" Click="OnCopyLogClick"
+                      Width="40" Height="18" FontSize="9" Padding="4,0"
+                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+            </Grid>
+            <ListBox x:Name="CombatLogListBox" Grid.Row="1" ItemsSource="{Binding CombatLog}"
+                     Background="Transparent" BorderThickness="0"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto">
+              <ListBox.ItemTemplate>
+                <DataTemplate>
+                  <ItemsControl ItemsSource="{Binding Segments}"
+                                Margin="4,0">
+                    <ItemsControl.ItemsPanel>
+                      <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                      </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate>
+                        <TextBlock Text="{Binding Text}" Foreground="{Binding Brush}"
+                                   FontSize="11" TextWrapping="NoWrap" />
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ItemsControl>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
+          </Grid>
+        </Border>
+      </Grid>
 
     </Grid>
 

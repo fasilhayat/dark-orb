@@ -266,6 +266,7 @@ public partial class MainWindow : Window
     private void OnNewCombatClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         NewCombatButton.IsVisible = false;
+        NewCombatSeparator.IsVisible = false;
 
         if (_fromSpellPreview)
         {
@@ -467,6 +468,7 @@ public partial class MainWindow : Window
             _vm.RoundNumber = 0;
             _vm.TickInRound = 0;
             NewCombatButton.IsVisible = false;
+            NewCombatSeparator.IsVisible = false;
             return;
         }
 
@@ -480,6 +482,7 @@ public partial class MainWindow : Window
         _vm.RoundNumber = 0;
         _vm.TickInRound = 0;
         NewCombatButton.IsVisible = false;
+        NewCombatSeparator.IsVisible = false;
         ClearSelection();
     }
 
@@ -500,6 +503,7 @@ public partial class MainWindow : Window
         AutoPlayButton.Classes.Remove("waiting");
         AutoPlayButton.Content = "Auto-play";
         NewCombatButton.IsVisible = false;
+        NewCombatSeparator.IsVisible = false;
         _combatParty1 = null;
         _combatParty2 = null;
         _heroTeamSize = 1;
@@ -1048,6 +1052,7 @@ public partial class MainWindow : Window
         _waitForNext = new ManualResetEventSlim(false);
         _vm.IsRunning = true;
         NewCombatButton.IsVisible = false;
+        NewCombatSeparator.IsVisible = false;
         AutoPlayButton.Content = "Auto-play";
         TurnButton.Content = "Next turn";
 
@@ -1132,6 +1137,7 @@ public partial class MainWindow : Window
                         TurnButton.IsVisible = false;
                         AutoPlayButton.IsVisible = false;
                         NewCombatButton.IsVisible = true;
+                        NewCombatSeparator.IsVisible = true;
                     });
                 }
             }
@@ -1407,6 +1413,7 @@ public partial class MainWindow : Window
         _waitForNext = new ManualResetEventSlim(false);
         _vm.IsRunning = true;
         NewCombatButton.IsVisible = false;
+        NewCombatSeparator.IsVisible = false;
         AutoPlayButton.Content = "Auto-play";
         TurnButton.Content = "Next turn";
 
@@ -1468,6 +1475,7 @@ public partial class MainWindow : Window
                         TurnButton.IsVisible = false;
                         AutoPlayButton.IsVisible = false;
                         NewCombatButton.IsVisible = true;
+                        NewCombatSeparator.IsVisible = true;
                     });
                 }
             }
