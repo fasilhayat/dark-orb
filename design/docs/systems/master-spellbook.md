@@ -912,8 +912,9 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 | [Cure Critical Wounds](#cure-critical-wounds) | Aethelion | 5 | School Specialization | Late | Priest 7 | Large heal for severe injuries. | HP restoration. | Priest, Druid, Paladin | Healing | Healing |
 | [Flame Strike](#flame-strike) | Ignara | 5 | School Specialization | Late | Priest 7 | Vertical divine column of holy fire. | HP damage and holy offensive pressure. | Priest | Fire/Radiant | Offensive, Nuke |
 | [Heal](#heal) | Aethelion | 6 | School Specialization | Late | Priest 8 | Major restorative miracle. | Major HP restoration and condition recovery. | Priest | Healing | Healing |
+| [Mass Heal](#mass-heal) | Aethelion | 4 | School Specialization | Late | Priest 7 | Powerful group healing spell. | HP restoration for all allies. | Priest | Healing | Healing, AoE |
 | [Blade Barrier](#blade-barrier) | Celestara | 6 | School Specialization | Late | Priest 8 | Immobile wall or ring of whirling blades around a point. | HP damage and Movement denial by forcing enemies to stop, reroute, or suffer repeated contact damage. | Priest | Physical/Magical | Offensive, Defensive, Barrier |
-| [Heroes' Feast](#heroes-feast) | Aethelion | 6 | School Specialization | Late | Priest 8 | Group pre-battle meal with strong support benefits. | Teamwide survivability, morale, and resilience increase. | Priest | Buff | Buff, AoE |
+| [Heroes Feast](#heroes-feast) | Aethelion | 6 | School Specialization | Late | Priest 8 | Group pre-battle meal with strong support benefits. | Teamwide survivability, morale, and resilience increase. | Priest | Buff | Buff, AoE |
 | [Restoration](#restoration) | Aethelion | 7 | School Specialization | Late | Priest 9 | Repairs severe spiritual or life-force harm. | Restores magical stability and cleanses severe debuffs. | Priest | Healing | Healing, Cleanse |
 
 <span id="bless"></span>
@@ -1205,6 +1206,24 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 *The most powerful restorative miracle in the divine arsenal. Instantly restores the target to full health and cures blindness, deafness, paralysis, disease, and poison. Deity Bonus: (Aethelion, Lunara) Lunara adds mana restoration.*
 
 *Minimum Level: Priest 8*
+<span id="mass-heal"></span>
+### Mass Heal
+<hr>
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none;">
+<table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
+<tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
+<tr><td style="border: none;">Aethelion</td><td style="border: none;">4</td><td style="border: none;">50</td><td style="border: none;">3D6+6 Healing</td><td style="border: none;">Priest</td><td style="border: none;">Healing, AoE</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+*Channels a wave of divine energy across the battlefield, restoring HP to all allies simultaneously. A cornerstone group heal for late-tier priests when the party needs wide recovery.*
+
+*Minimum Level: Priest 7*
 <span id="blade-barrier"></span>
 ### Blade Barrier
 <hr>
@@ -1224,7 +1243,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 
 *Minimum Level: Priest 8*
 <span id="heroes-feast"></span>
-### Heroes' Feast
+### Heroes Feast
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
@@ -1612,9 +1631,9 @@ Paladins begin magical access around level 6 in Dark Orb and remain a narrow sup
 | [Haste](#haste-2) | Celestara | 3 | School Specialization | Mid | Paladin 9 | Accelerates a target, massively increasing turn meter gain. | TM acceleration. | Paladin | None/Buff | Buff, TM Uplift |
 | [Magical Vestment](#magical-vestment) | Celestara | 3 | Class Core | Mid | Paladin 8 | Enhances armor or shield quality with divine power. | Armor Class increase. | Paladin | None | Buff, Defensive |
 | [Free Action](#free-action-2) | Astrara | 4 | School Specialization | Late | Paladin 9 | Prevents roots, holds, and slows. | Movement immunity to control effects. | Paladin | None | Defensive |
-| [Protection from Evil, 10' Radius](#protection-from-evil-10-radius) | Celestara | 4 | School Specialization | Late | Paladin 9 | Group protection aura against evil. | Group defense, Armor Class support, and anti-control protection. | Paladin | None | Defensive, AoE |
+| [Protection from Evil 10ft](#protection-from-evil-10-radius) | Celestara | 4 | School Specialization | Late | Paladin 9 | Group protection aura against evil. | Group defense, Armor Class support, and anti-control protection. | Paladin | None | Defensive, AoE |
 | [Holy Bulwark Variant](#holy-bulwark-variant) | Celestara | 4 | School Specialization | Late | Paladin 10 | Elite paladin ward for nearby allies. | Armor Class increase, Magic Resistance support, and brief TM stabilization. | Paladin | Radiant/None | Defensive, Variant |
-| [Paladin's Warcry Variant](#paladins-warcry-variant) | Astrara | 3 | School Specialization | Late | Paladin 9 | Inspiring holy battle-cry that rallies nearby allies. | Ally TM increase, fear resistance, and minor attack uplift in custom design. | Paladin | Sonic/Morale | Buff, AoE, Variant |
+| [Paladin Warcry Variant](#paladins-warcry-variant) | Astrara | 3 | School Specialization | Late | Paladin 9 | Inspiring holy battle-cry that rallies nearby allies. | Ally TM increase, fear resistance, and minor attack uplift in custom design. | Paladin | Sonic/Morale | Buff, AoE, Variant |
 
 <span id="bless-2"></span>
 ### Bless
@@ -1851,7 +1870,7 @@ Enhances armor or shield quality with divine power. Armor Class increase. Yes, d
 
 *Minimum Level: Paladin 9*
 <span id="protection-from-evil-10-radius"></span>
-### Protection from Evil, 10' Radius
+### Protection from Evil 10ft
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
@@ -1887,7 +1906,7 @@ Elite paladin ward for nearby allies. Armor Class increase, Magic Resistance sup
 
 *Minimum Level: Paladin 10*
 <span id="paladins-warcry-variant"></span>
-### Paladin's Warcry Variant
+### Paladin Warcry Variant
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
@@ -2167,7 +2186,7 @@ These spells are migrated from the quick-reference index. School, class, and pro
 | [Sacrifice](#sacrifice) | Deity | Sacrifice own HP to empower an ally. | — | 0 | HP transfer | Priest | Support |
 | [Blind](#blind) | Mirage | Robs the target of sight. | — | 5 | Debuff | Mage | CC |
 | [Root](#root) | Verdancy | Anchors the target to the ground. | — | 5 | Movement denial | Druid | CC |
-| [Summon Creature](#summon-creature) | Varied | Calls a creature to fight for you. | — | 12 | Summoning | Mage | Summon |
+| [Summon Creature](#summon-creature) | Verdancy | Calls a creature to fight for you. | — | 12 | Summoning | Mage, Druid | Summon |
 
 <span id="haste-4"></span>
 ### Haste
@@ -2466,7 +2485,7 @@ Anchors the target to the ground. Movement denial
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
-<tr><td style="border: none;">Varied</td><td style="border: none;">?</td><td style="border: none;">12</td><td style="border: none;">—</td><td style="border: none;">Mage</td><td style="border: none;">Summon</td></tr>
+<tr><td style="border: none;">Verdancy</td><td style="border: none;">3</td><td style="border: none;">12</td><td style="border: none;">—</td><td style="border: none;">Mage, Druid</td><td style="border: none;">Summon</td></tr>
 </table>
 </td>
 </tr>
