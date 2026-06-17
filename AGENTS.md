@@ -1,16 +1,16 @@
 # BattleArena — AI instructions (OpenCode)
 
 > Canonical source. Edit here, then run `make sync-instructions` from `src/`
-> to mirror to `.github/copilot-instructions.md`.
+> to mirror to `.github/copilot-instructions.md` (GitHub Copilot reads that copy).
 
-**Stale Makefile + README content** (Demo `.csproj` deleted in `d63b1ef`; only `bin/obj` remain):
+**Stale Makefile targets** (Demo `.csproj` deleted in `d63b1ef`):
 `up-dev`, `up-test`, `demo-local`, `publish-demo`, `install`, `install-dev`,
-`redo-local`, `run-dev` — all fail because `BattleArena.Demo.csproj` is gone.
-These targets and their README mentions are misleading. Avoid them.
+`redo-local`, `run-dev`, `dev-up` — all fail because `BattleArena.Demo.csproj`
+is gone. `install-gui` is fine (references `BattleArena.Gui`).
 
 ## Commands
 
-All from `src/`. Solution: `src/BattleArena.sln`. .NET 8, `ImplicitUsings` enabled project-wide.
+All from `src/`. Solution: `src/BattleArena.sln`. .NET 8, `ImplicitUsings` + `Nullable` enabled project-wide.
 
 | Command | Action |
 |---------|--------|
@@ -21,7 +21,7 @@ All from `src/`. Solution: `src/BattleArena.sln`. .NET 8, `ImplicitUsings` enabl
 | `make down` | Stop all environment containers |
 | `make clean` | Down + wipe volumes + delete `../publish` |
 | `make gui-local` | Avalonia GUI standalone (no DB needed) |
-| `make publish` | Host-side `dotnet publish Api` to `../publish` (required before `up-*`) |
+| `make publish` | Host-side `dotnet publish Api` to `../publish` (required before any `up-*`) |
 | `make sync-instructions` | Copy AGENTS.md → `.github/copilot-instructions.md` |
 | `make clean-logs` | Delete generated `combat-logs/` files |
 
@@ -42,14 +42,14 @@ Core never references Application/Infrastructure. Application never references I
 | Project | Role | Depends |
 |---------|------|---------|
 | Core | Domain entities, enums, interfaces | none |
-| Application | Services, interfaces, models (includes `LevelingService`, `CombatSimulatorFactory`) | Core |
+| Application | Services, interfaces, models (includes `LevelingService`, `CombatService`, `CombatSimulatorFactory`) | Core |
 | Infrastructure | Repositories, raw Npgsql `DbContext` (no EF Core) | Core |
 | Api | ASP.NET CRUD endpoints, `AddServices.cs` wires DI | Application + Infrastructure |
-| Presentation | GUI-agnostic playback, `ICombatPresenter` | Core + Application |
+| Presentation | GUI-agnostic playback engine, `ICombatPresenter` | Core + Application |
 | Gui | Avalonia bridge, no combat logic | Application + Core + Presentation |
 | UnitTests | xUnit + NSubstitute | Application + Core + Presentation + Gui |
 | AcceptanceTests | Reqnroll BDD | Application + Core + Presentation |
-| Demo | .csproj deleted (`d63b1ef`); `bin/obj` remain; targets fail | — |
+| Demo | .csproj deleted (`d63b1ef`); `bin/obj` remain; many Makefile targets fail | — |
 
 ## Constraints
 
@@ -86,7 +86,7 @@ HP: >0 alive, 0 to −9 KnockedOut, −10 or lower Dead.
 
 ## Bugs-features workflow
 
-`bugs-features/` — numbered files. Process in priority order: read → implement → test → mark `[x]` with summary → move to `bugs-features/done/<category>/` (category = `bugs`, `features`, or `task`).
+`bugs-features/` — process in priority order: read → implement → test → mark `[x]` with summary → move to `bugs-features/done/<category>/` (category = `bugs`, `features`, or `task`).
 
 ## Doc sync obligations
 
