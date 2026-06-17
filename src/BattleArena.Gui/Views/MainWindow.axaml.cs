@@ -48,6 +48,7 @@ public partial class MainWindow : Window
     private string _previousPhase = "MainMenu";
     private bool _fromSpellPreview;
     private bool _combatFromWorld;
+    private double _pendingPacingMultiplier = 1.0;
 
     public MainWindow()
     {
@@ -111,7 +112,6 @@ public partial class MainWindow : Window
         TurnButton.IsVisible = true;
         AutoPlayButton.IsVisible = true;
         _vm.ErrorMessage = "";
-        SpeedSlider.Value = 1;
         _vm.Phase = "Combat";
         _vm.CombatLog.Clear();
         _vm.Heroes.Clear();
@@ -290,7 +290,6 @@ public partial class MainWindow : Window
         TurnButton.IsVisible = true;
         AutoPlayButton.IsVisible = true;
         _vm.ErrorMessage = "";
-        SpeedSlider.Value = 1;
         _vm.Phase = "Combat";
         _vm.CombatLog.Clear();
         foreach (var h in _vm.Heroes) h.EffectBars.Clear();
@@ -1085,7 +1084,7 @@ public partial class MainWindow : Window
 
         _presenter = new AvaloniaCombatPresenter(_vm, _displayConfig, _waitForNext, Dispatcher.UIThread, _soundPlayer)
         {
-            PacingMultiplier = SpeedSlider.Value,
+            PacingMultiplier = _pendingPacingMultiplier,
             AutoMode = _vm.Mode == "Auto"
         };
 
@@ -1267,6 +1266,7 @@ public partial class MainWindow : Window
             3 => "Turbo",
             _ => "Normal"
         };
+        _pendingPacingMultiplier = pacing;
         if (_presenter is not null)
             _presenter.PacingMultiplier = pacing;
     }
@@ -1380,7 +1380,6 @@ public partial class MainWindow : Window
         TurnButton.IsVisible = true;
         AutoPlayButton.IsVisible = true;
         _vm.ErrorMessage = "";
-        SpeedSlider.Value = 1;
         _vm.Phase = "Combat";
         _vm.CombatLog.Clear();
         foreach (var h in _vm.Heroes) h.EffectBars.Clear();
@@ -1442,7 +1441,7 @@ public partial class MainWindow : Window
 
         _presenter = new AvaloniaCombatPresenter(_vm, _displayConfig, _waitForNext, Dispatcher.UIThread, _soundPlayer)
         {
-            PacingMultiplier = SpeedSlider.Value,
+            PacingMultiplier = _pendingPacingMultiplier,
             AutoMode = false
         };
 
