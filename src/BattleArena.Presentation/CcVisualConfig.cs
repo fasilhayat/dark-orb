@@ -7,7 +7,7 @@ public static class CcVisualConfig
     private static readonly Dictionary<string, CcEffectVisual> _effects = new()
     {
         ["Stun"]    = new("#d4a017", SpellAnimation.Blink, "STUNNED"),
-        ["Hold"]    = new("#d4a017", SpellAnimation.Blink, "HELD"),
+        ["Hold"]    = new("#ff88aa", SpellAnimation.Blink, "HELD"),
         ["Freeze"]  = new("#44ccff", SpellAnimation.Blink, "FROZEN"),
         ["Sleep"]   = new("#aa44ff", SpellAnimation.Blink, "ASLEEP"),
         ["Petrify"] = new("#888888", SpellAnimation.Blink, "PETRIFIED"),

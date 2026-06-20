@@ -408,7 +408,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
         if (CcVisualConfig.IsCcEffect(effectName))
         {
-            StartMovementLockBlink(characterName);
+            StartMovementLockBlink(characterName, color);
             card.IsMovementLocked = true;
         }
 
@@ -601,11 +601,11 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         }
     }
 
-    private void StartMovementLockBlink(string characterName)
+    private void StartMovementLockBlink(string characterName, string color)
     {
         StopMovementLockBlink(characterName);
 
-        var isWhite = false;
+        var useColor = false;
         var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(400) };
         timer.Tick += (_, _) =>
         {
@@ -616,8 +616,8 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                 _movementLockTimers.Remove(characterName);
                 return;
             }
-            isWhite = !isWhite;
-            c.MovementLockColor = isWhite ? "#ffffff" : "#888888";
+            useColor = !useColor;
+            c.MovementLockColor = useColor ? color : "#ffffff";
         };
         timer.Start();
         _movementLockTimers[characterName] = timer;
