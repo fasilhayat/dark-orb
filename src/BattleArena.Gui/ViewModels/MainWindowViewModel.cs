@@ -1065,8 +1065,8 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
     public string ActiveGlowBorderBrush => IsActiveTurn ? ActiveGlowWhite : "transparent";
     public string ActiveGlowBoxShadow => IsActiveTurn ? ActiveGlowBoxShadowValue : "none";
 
-    private string _movementLockColor = "#ffffff";
-    public string MovementLockColor
+    private IBrush _movementLockColor = Brushes.White;
+    public IBrush MovementLockColor
     {
         get => _movementLockColor;
         set => SetField(ref _movementLockColor, value);

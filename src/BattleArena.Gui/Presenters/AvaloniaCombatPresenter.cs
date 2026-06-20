@@ -527,7 +527,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             kvp.Value.Stop();
             var card = FindCard(kvp.Key);
             if (card is not null)
-                card.MovementLockColor = "#ffffff";
+                card.MovementLockColor = Brushes.White;
         }
         _movementLockTimers.Clear();
 
@@ -605,6 +605,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     {
         StopMovementLockBlink(characterName);
 
+        var effectBrush = new SolidColorBrush(Color.Parse(color));
         var useColor = false;
         var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(400) };
         timer.Tick += (_, _) =>
@@ -617,7 +618,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                 return;
             }
             useColor = !useColor;
-            c.MovementLockColor = useColor ? color : "#ffffff";
+            c.MovementLockColor = useColor ? effectBrush : Brushes.White;
         };
         timer.Start();
         _movementLockTimers[characterName] = timer;
@@ -633,7 +634,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
         var card = FindCard(characterName);
         if (card is not null)
-            card.MovementLockColor = "#ffffff";
+            card.MovementLockColor = Brushes.White;
     }
 
     private void AnimateHealGlow(CharCardViewModel card, double start, double width)

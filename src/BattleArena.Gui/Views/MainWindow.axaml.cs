@@ -1361,6 +1361,36 @@ public partial class MainWindow : Window
         foreach (var effect in spell.OnHitEffects)
             effect.ApplicationChance = 100;
 
+        // Elemental DoTs (Burning, Poisoned, etc.) are created dynamically by
+        // TryApplyElementalDoTAsync with hardcoded ApplicationChance=60 — the
+        // loop above doesn't catch them.  Add the matching DoT as an explicit
+        // on-hit effect so preview always shows it.
+        if (spell.ElementalType != ElementalType.None)
+        {
+            var dotName = EffectVisualConfig.GetElementDoTName(spell.ElementalType);
+            if (dotName is not null && !spell.OnHitEffects.Any(e => e.Name == dotName))
+            {
+                spell.OnHitEffects.Add(new StatusEffect
+                {
+                    Name = dotName,
+                    Type = StatusEffectType.DamageOverTime,
+                    Target = EffectTarget.Target,
+                    Duration = 3,
+                    ApplicationChance = 100,
+                });
+            }
+        }
+
+        // Practice Dummy has no defence — any attack always hits.
+        dummy.ActiveStatusEffects.Add(new StatusEffect
+        {
+            Name = "Vulnerable",
+            Type = StatusEffectType.Debuff,
+            Duration = 999,
+            DefensePowerModifier = -100,
+            ApplicationChance = 100,
+        });
+
         caster.CurrentHitPoints = caster.MaxHitPoints / 2;
         dummy.CurrentHitPoints = dummy.MaxHitPoints / 2;
 
@@ -1429,16 +1459,20 @@ public partial class MainWindow : Window
             : 0;
         var ticksToCast = (int)Math.Ceiling((double)spell.TurnMeterCost / Math.Max(1, caster.TurnSpeed));
 
-        // Convert effect duration (in turns) to engine ticks.
-        // The target needs to fill 100 TM per turn; each acting turn
-        // decrements duration by 2 (once in CC handler, once in acting handler).
+        // After the spell lands, the dummy gains ~3 TM/tick and needs ~34 ticks
+        // for one full turn.  Run at least 3 dummy-turns so the effect is visible.
         var dummyTmGain = Math.Max(1,
             dummy.TurnSpeed + (dummy.Dexterity - 10) / 2
             + LevelProgression.TurnMeterLevelBonus(dummy.Level, LevelProgression.Archetype(dummy.ClassName)));
-        var ticksPerTurn = (int)Math.Ceiling(100.0 / dummyTmGain);
+        var ticksPerDummyTurn = (int)Math.Ceiling(100.0 / dummyTmGain);
+        const int MinDummyTurns = 3;
+        var minPreviewTicks = MinDummyTurns * ticksPerDummyTurn;
+
+        // For effects with a turn-based Duration, extend further so they expire.
+        // Each acting turn decrements duration by 2 (CC handler + acting handler).
         var effectTurns = (maxEffectDuration + 1) / 2;
-        var ticksForEffect = effectTurns * ticksPerTurn;
-        var previewTicks = ticksToCast + ticksForEffect + 10;
+        var ticksForEffect = effectTurns * ticksPerDummyTurn + 10;
+        var previewTicks = ticksToCast + Math.Max(minPreviewTicks, ticksForEffect);
         var result = await Task.Run(() => simulator.Simulate(party1, party2, previewTicks), _cts.Token);
 
         result.DiceLog = diceService.DiceLog;

@@ -745,7 +745,7 @@
                       Width="160" Height="40" FontSize="14"
                       Background="#6a4a1a" BorderBrush="#d4a017"
                       IsEnabled="{Binding CanPreview}"
-                      HorizontalAlignment="Center" Margin="0,12,0,0" />
+                      HorizontalAlignment="Center" Margin="0,6,0,0" />
               <ProgressBar IsVisible="{Binding IsPreviewing}" IsIndeterminate="True"
                            Width="100" Height="4" Margin="0,4" />
             </StackPanel>
