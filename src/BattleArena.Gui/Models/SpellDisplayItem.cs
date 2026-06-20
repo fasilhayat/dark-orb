@@ -28,6 +28,11 @@ public sealed class SpellDisplayItem
     public string ManaInfo => $"Mana: {Spell.ManaCost}";
     public string FullDescription => Spell.Description;
 
+    public bool HasMovementLockEffect => Spell.OnHitEffects
+        .Exists(e => e.TargetRestriction is null && CcVisualConfig.IsCcEffect(e.Type.ToString()));
+
+    public string MovementLockIcon => "\U0001F463";
+
     public SpellDisplayItem(Spell spell)
     {
         Spell = spell;

@@ -1065,6 +1065,23 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
     public string ActiveGlowBorderBrush => IsActiveTurn ? ActiveGlowWhite : "transparent";
     public string ActiveGlowBoxShadow => IsActiveTurn ? ActiveGlowBoxShadowValue : "none";
 
+    private string _movementLockColor = "#ffffff";
+    public string MovementLockColor
+    {
+        get => _movementLockColor;
+        set => SetField(ref _movementLockColor, value);
+    }
+
+    private bool _isMovementLocked;
+    public bool IsMovementLocked
+    {
+        get => _isMovementLocked;
+        set => SetField(ref _isMovementLocked, value);
+    }
+
+    public bool HasMovementLock => IsTmLocked || IsMovementLocked;
+    public string MovementLockIcon => CcStatus is not null ? CcVisualConfig.GetIcon(CcStatus) : "\U0001F463";
+
     private string? _borderFlashColor;
     public string? BorderFlashColor
     {
@@ -1371,6 +1388,7 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
         Mana = Math.Max(0, s.Mana);
         IsAlive = s.IsAlive;
         IsTmLocked = s.IsTmLocked;
+        IsMovementLocked = s.IsMovementLocked;
         CcStatus = s.CcStatus;
         ActiveEffects = s.ActiveEffects.Count > 0 ? string.Join(", ", s.ActiveEffects.Select(e => e.Name)) : "";
         UpdateEffectBars(s.ActiveEffects);
@@ -1452,12 +1470,19 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
             case nameof(IsTmLocked):
                 Raise(nameof(TmBorderBrush));
                 Raise(nameof(BorderColor));
+                Raise(nameof(HasMovementLock));
                 UpdateTmPipes();
+                break;
+            case nameof(IsMovementLocked):
+                Raise(nameof(HasMovementLock));
+                Raise(nameof(BorderColor));
                 break;
             case nameof(CcStatus):
                 Raise(nameof(EffectsDisplay));
                 Raise(nameof(HasEffectsDisplay));
                 Raise(nameof(EffectsColor));
+                Raise(nameof(HasMovementLock));
+                Raise(nameof(MovementLockIcon));
                 break;
             case nameof(DamagePreviewOpacity):
                 break;

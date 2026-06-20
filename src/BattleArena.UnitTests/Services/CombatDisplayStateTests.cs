@@ -336,10 +336,23 @@ public class CombatDisplayStateTests
 
         state.ApplyEvent(new CombatLogEntry
         {
-            EventType = "SkippedTurn", ActorName = "Alice"
+            EventType = "SkippedTurn", ActorName = "Alice", CcLabel = "stunned"
         });
 
         Assert.True(state.TryGet("Alice")!.IsTmLocked);
+    }
+
+    [Fact]
+    public void ApplyEvent_SkippedTurn_NullCcLabel_DoesNotSetIsTmLocked()
+    {
+        var state = new CombatDisplayState([Hero("Alice")], Layout(["Alice"], []));
+
+        state.ApplyEvent(new CombatLogEntry
+        {
+            EventType = "SkippedTurn", ActorName = "Alice", CcLabel = null
+        });
+
+        Assert.False(state.TryGet("Alice")!.IsTmLocked);
     }
 
     [Fact]

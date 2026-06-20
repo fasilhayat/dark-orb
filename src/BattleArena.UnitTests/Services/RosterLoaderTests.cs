@@ -143,11 +143,12 @@ public class RosterLoaderTests : IDisposable
 
         // ── Elira Vane — Tempest battle-priest ───────────────────────────────────
         var elira = data.Heroes.First(c => c.Name == "Elira Vane");
-        Assert.Equal(4, elira.MemorizedSpells.Count);
+        Assert.Equal(5, elira.MemorizedSpells.Count);
         Assert.Contains(elira.MemorizedSpells, s => s.Name == "Chasten");
         Assert.Contains(elira.MemorizedSpells, s => s.Name == "Heal");
         Assert.Contains(elira.MemorizedSpells, s => s.Name == "Turn Undead");
         Assert.Contains(elira.MemorizedSpells, s => s.Name == "Smite");
+        Assert.Contains(elira.MemorizedSpells, s => s.Name == "Entangle");
         Assert.Equal(80, elira.MaxMana);
         Assert.Equal(11, elira.ClassId);
         Assert.Equal("Tempest", elira.ClassName);

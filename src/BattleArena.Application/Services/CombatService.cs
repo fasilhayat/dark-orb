@@ -15,6 +15,14 @@ public class CombatService : ICombatService
     private readonly IReadOnlyList<ICombatModifier> _damageCalcMods;
     private readonly IReadOnlyList<ICombatModifier> _healingMods;
 
+    /// <summary>
+    /// Predicate that determines whether an attack source should skip damage
+    /// resolution entirely (returning zero damage). Defaults to skipping when
+    /// <see cref="IAttackSource.DamageCount"/> is zero. Override for per-source
+    /// exceptions (e.g., a utility spell that also deals fixed damage).
+    /// </summary>
+    public Func<IAttackSource, bool> ShouldSkipDamage { get; set; } = static src => src.DamageCount == 0;
+
     public CombatService(IDiceService dice, ICombatStatsService combatStats,
         IEnumerable<ICombatModifier> modifiers = default!)
     {
@@ -205,6 +213,10 @@ public class CombatService : ICombatService
         EngagementRange range = EngagementRange.Melee,
         TerrainType terrain = TerrainType.Plains)
     {
+        // Allow callers to override damage resolution per-source (e.g. CC spells).
+        if (ShouldSkipDamage(source))
+            return new DamageContext { FinalDamage = 0 };
+
         // Run DamageCalculation-phase modifiers through the pipeline.
         var ctx = new CombatModifierContext
         {

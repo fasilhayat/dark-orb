@@ -22,6 +22,8 @@ public static class EffectVisualConfig
         "Electrified",
         "Confused",
         "Charmed",
+        "Root",
+        "Hold",
     };
 
     private static readonly Dictionary<string, EffectVisualTarget> _targets = new(StringComparer.OrdinalIgnoreCase)
@@ -38,6 +40,7 @@ public static class EffectVisualConfig
         ["Charmed"]     = EffectVisualTarget.ManaBar,
         ["Shocked"]   = EffectVisualTarget.TmBar,
         ["Stun"]      = EffectVisualTarget.None,
+        ["Hold"]      = EffectVisualTarget.None,
         ["Frozen"]    = EffectVisualTarget.None,
         ["Freeze"]    = EffectVisualTarget.None,
         ["Sleep"]     = EffectVisualTarget.None,

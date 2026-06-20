@@ -70,8 +70,22 @@ public sealed class CombatDisplayState
                 if (_chars.TryGetValue(e.ActorName, out var tsSt))
                 {
                     tsSt.Weapon = e.AttackSourceName ?? tsSt.Weapon;
+                    // TM-locked characters never reach TurnStart (they get SkippedTurn).
+                    // Movement-locked characters do reach TurnStart, so preserve those flags.
                     tsSt.IsTmLocked = false;
-                    tsSt.CcStatus = null;
+                    // Re-evaluate CC status from still-active effects.
+                    var turnCcEffects = tsSt.ActiveEffects
+                        .Where(d => CcVisualConfig.IsCcEffect(d.Name)).ToList();
+                    if (turnCcEffects.Count == 0)
+                    {
+                        tsSt.IsMovementLocked = false;
+                        tsSt.CcStatus = null;
+                    }
+                    else
+                    {
+                        tsSt.IsMovementLocked = turnCcEffects.Any(d => !CcVisualConfig.IsTmLockingEffect(d.Name));
+                        tsSt.CcStatus = turnCcEffects[^1].Name.ToLowerInvariant();
+                    }
                     // Tick down all active effect display durations (engine already did TickAll)
                     for (var i = tsSt.ActiveEffects.Count - 1; i >= 0; i--)
                     {
@@ -96,8 +110,19 @@ public sealed class CombatDisplayState
             case "SkippedTurn":
                 if (_chars.TryGetValue(e.ActorName, out var skSt))
                 {
-                    skSt.IsTmLocked = true;
-                    skSt.CcStatus = e.CcLabel;
+                    if (e.CcLabel is null)
+                    {
+                        skSt.CcStatus = null;
+                        skSt.IsMovementLocked = false;
+                    }
+                    else
+                    {
+                        skSt.CcStatus = e.CcLabel;
+                        if (CcVisualConfig.IsTmLockingCcLabel(e.CcLabel))
+                            skSt.IsTmLocked = true;
+                        else
+                            skSt.IsMovementLocked = true;
+                    }
                 }
                 break;
 
@@ -194,8 +219,11 @@ public sealed class CombatDisplayState
                     }
                     if (CcVisualConfig.IsCcEffect(e.StatusEffectName))
                     {
-                        applySt.IsTmLocked = true;
                         applySt.CcStatus = e.StatusEffectName.ToLowerInvariant();
+                        if (CcVisualConfig.IsTmLockingEffect(e.StatusEffectName))
+                            applySt.IsTmLocked = true;
+                        else
+                            applySt.IsMovementLocked = true;
                     }
                 }
                 break;
@@ -205,11 +233,21 @@ public sealed class CombatDisplayState
                     && _chars.TryGetValue(e.ActorName, out var expSt))
                 {
                     expSt.ActiveEffects.RemoveAll(d => d.Name == e.StatusEffectName);
-                    if (CcVisualConfig.IsCcEffect(e.StatusEffectName)
-                        && !expSt.ActiveEffects.Any(d => CcVisualConfig.IsCcEffect(d.Name)))
+                    var remainingCc = expSt.ActiveEffects
+                        .Where(d => CcVisualConfig.IsCcEffect(d.Name)).ToList();
+                    if (remainingCc.Count == 0)
                     {
                         expSt.IsTmLocked = false;
+                        expSt.IsMovementLocked = false;
                         expSt.CcStatus = null;
+                    }
+                    else
+                    {
+                        if (!remainingCc.Any(d => CcVisualConfig.IsTmLockingEffect(d.Name)))
+                            expSt.IsTmLocked = false;
+                        if (!remainingCc.Any(d => CcVisualConfig.IsCcEffect(d.Name) && !CcVisualConfig.IsTmLockingEffect(d.Name)))
+                            expSt.IsMovementLocked = false;
+                        expSt.CcStatus = remainingCc[^1].Name.ToLowerInvariant();
                     }
                 }
                 break;
@@ -219,6 +257,8 @@ public sealed class CombatDisplayState
                 if (_chars.TryGetValue(e.ActorName, out var deadSt))
                 {
                     deadSt.IsAlive = false;
+                    deadSt.IsTmLocked = false;
+                    deadSt.IsMovementLocked = false;
                     deadSt.CcStatus = null;
                     deadSt.ActiveEffects.Clear();
                 }

@@ -204,12 +204,30 @@
       ]
     },
     {
+      "name": "Entangle",
+      "school": "Deity", "damageDie": "D4", "damageCount": 0,
+      "damageType": "None", "attackBonus": 0,
+      "spellLevel": 2, "turnMeterCost": 80, "manaCost": 20,
+      "onHitEffects": [
+        { "name": "Root", "type": "Root", "target": "Target", "duration": 2, "applicationChance": 90, "resistanceType": "Magic" }
+      ]
+    },
+    {
+      "name": "Hold Person",
+      "school": "Umbramancy", "damageDie": "D4", "damageCount": 0,
+      "damageType": "None", "attackBonus": 0,
+      "spellLevel": 3, "turnMeterCost": 90, "manaCost": 30,
+      "onHitEffects": [
+        { "name": "Hold", "type": "Root", "target": "Target", "duration": 2, "applicationChance": 80, "resistanceType": "Magic" }
+      ]
+    },
+    {
       "name": "Turn Undead",
       "school": "Deity", "damageDie": "D6", "damageCount": 2,
       "damageType": "Holy", "attackBonus": 2,
       "spellLevel": 2, "turnMeterCost": 80, "manaCost": 25,
       "onHitEffects": [
-        { "name": "Fear", "type": "Fear", "target": "Target", "duration": 2, "applicationChance": 80, "resistanceType": "Magic" }
+        { "name": "Fear", "type": "Fear", "target": "Target", "duration": 2, "applicationChance": 80, "resistanceType": "Magic", "targetRestriction": "Undead" }
       ]
     }
   ],
@@ -261,7 +279,7 @@
       "strikeRating": 17, "turnSpeed": 8,
       "maxHitPoints": 56, "maxMana": 80,
       "equipment": { "chest": "Chain Mail", "rightHand": "Mace" },
-      "memorizedSpells": ["Chasten", "Heal", "Turn Undead", "Smite"]
+      "memorizedSpells": ["Chasten", "Heal", "Turn Undead", "Smite", "Entangle"]
     },
     {
       "name": "Lord Aethor Valeborn", "level": 11,
@@ -310,7 +328,7 @@
       "strikeRating": 16, "turnSpeed": 8,
       "maxHitPoints": 84, "maxMana": 120,
       "equipment": { "chest": "Plate Armor", "rightHand": "Great Mace" },
-      "memorizedSpells": ["Smite", "Flame Strike", "Heal", "Mass Heal", "Bless", "Chasten", "Holy Nova"]
+      "memorizedSpells": ["Smite", "Flame Strike", "Heal", "Mass Heal", "Bless", "Chasten", "Holy Nova", "Hold Person"]
     },
     {
       "name": "Lysander the Bard", "level": 7,

@@ -43,6 +43,10 @@
               <TextBlock Text="{Binding Name}" Foreground="{Binding NameColor}"
                          FontWeight="Bold" FontSize="15"
                          TextTrimming="CharacterEllipsis" />
+              <TextBlock Text="{Binding MovementLockIcon}" FontSize="14"
+                         IsVisible="{Binding HasMovementLock}"
+                         Foreground="{Binding MovementLockColor}"
+                         VerticalAlignment="Center" />
             </StackPanel>
             <Grid ColumnDefinitions="*,Auto">
               <TextBlock Grid.Column="0" Text="{Binding CurrentWeapon}" Foreground="White"

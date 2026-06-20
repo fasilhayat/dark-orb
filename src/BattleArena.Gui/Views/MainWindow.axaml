@@ -711,7 +711,12 @@
                           CornerRadius="4" Padding="8,6" Margin="4" Cursor="Hand">
                     <Grid ColumnDefinitions="*,Auto">
                       <StackPanel Grid.Column="0" Spacing="2">
-                        <TextBlock Text="{Binding Name}" Foreground="#d4a017" FontSize="13" FontWeight="Bold" />
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                          <TextBlock Text="{Binding Name}" Foreground="#d4a017" FontSize="13" FontWeight="Bold" />
+                          <TextBlock Text="{Binding MovementLockIcon}" FontSize="13"
+                                     IsVisible="{Binding HasMovementLockEffect}"
+                                     VerticalAlignment="Center" />
+                        </StackPanel>
                         <TextBlock Text="{Binding DamageInfo}" Foreground="#aaa" FontSize="11" />
                         <TextBlock Text="{Binding FullDescription}" Foreground="#777" FontSize="10"
                                    TextWrapping="Wrap" />

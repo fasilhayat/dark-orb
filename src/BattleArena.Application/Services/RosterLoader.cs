@@ -138,7 +138,8 @@ public static class RosterLoader
                         AttackPowerModifier  = e.AttackPowerModifier,
                         DefensePowerModifier = e.DefensePowerModifier,
                         TurnMeterModifier    = e.TurnMeterModifier,
-                        ManaRegenModifier    = e.ManaRegenModifier
+                        ManaRegenModifier    = e.ManaRegenModifier,
+                        TargetRestriction    = e.TargetRestriction
                     });
                 }
             }
@@ -354,6 +355,7 @@ public static class RosterLoader
         public int    DefensePowerModifier { get; init; }
         public int    TurnMeterModifier    { get; init; }
         public int    ManaRegenModifier    { get; init; }
+        public string? TargetRestriction { get; init; }
     }
 
     private sealed class ArmorDto

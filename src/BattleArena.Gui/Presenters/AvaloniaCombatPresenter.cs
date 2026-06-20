@@ -25,6 +25,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     private readonly VisualEventBus _visualEventBus = new();
     private readonly Dictionary<string, DispatcherTimer> _effectFlickerTimers = new();
     private readonly Dictionary<string, DispatcherTimer> _manaBarBlinkTimers = new();
+    private readonly Dictionary<string, DispatcherTimer> _movementLockTimers = new();
     private readonly Dictionary<string, List<(string EffectName, string Color)>> _effectOrder = new();
 
     private static readonly IBrush Gray = MakeBrush("#888");
@@ -405,6 +406,9 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         if (EffectVisualConfig.AffectsManaBar(effectName))
             StartManaBarBlink(characterName, effectName, color);
 
+        if (CcVisualConfig.IsCcEffect(effectName))
+            StartMovementLockBlink(characterName);
+
         StartFlickerTimer(characterName, color, darkColor, FlickerIntervalMs(effectName), effectName);
     }
 
@@ -413,12 +417,17 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         if (EffectVisualConfig.AffectsManaBar(expiredEffectName))
             StopManaBarBlink(characterName);
 
+        var removedCc = CcVisualConfig.IsCcEffect(expiredEffectName);
+
         if (_effectOrder.TryGetValue(characterName, out var list))
         {
             list.RemoveAll(e => e.EffectName == expiredEffectName);
 
             if (list.Count > 0)
             {
+                if (removedCc && !list.Exists(e => CcVisualConfig.IsCcEffect(e.EffectName)))
+                    StopMovementLockBlink(characterName);
+
                 var (lastEffect, lastColor) = list[^1];
                 var card = FindCard(characterName);
                 if (card is not null)
@@ -507,6 +516,15 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
         }
         _manaBarBlinkTimers.Clear();
 
+        foreach (var kvp in _movementLockTimers)
+        {
+            kvp.Value.Stop();
+            var card = FindCard(kvp.Key);
+            if (card is not null)
+                card.MovementLockColor = "#ffffff";
+        }
+        _movementLockTimers.Clear();
+
         _effectOrder.Clear();
     }
 
@@ -523,6 +541,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     {
         StopFlickerTimer(characterName);
         StopManaBarBlink(characterName);
+        StopMovementLockBlink(characterName);
         _effectOrder.Remove(characterName);
 
         var card = FindCard(characterName);
@@ -573,6 +592,41 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             card.ManaBarColor = "#cc44cc";
             card.ManaBarBorderBrush = "#333";
         }
+    }
+
+    private void StartMovementLockBlink(string characterName)
+    {
+        StopMovementLockBlink(characterName);
+
+        var isWhite = false;
+        var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(400) };
+        timer.Tick += (_, _) =>
+        {
+            var c = FindCard(characterName);
+            if (c is null)
+            {
+                timer.Stop();
+                _movementLockTimers.Remove(characterName);
+                return;
+            }
+            isWhite = !isWhite;
+            c.MovementLockColor = isWhite ? "#ffffff" : "#888888";
+        };
+        timer.Start();
+        _movementLockTimers[characterName] = timer;
+    }
+
+    private void StopMovementLockBlink(string characterName)
+    {
+        if (_movementLockTimers.TryGetValue(characterName, out var timer))
+        {
+            timer.Stop();
+            _movementLockTimers.Remove(characterName);
+        }
+
+        var card = FindCard(characterName);
+        if (card is not null)
+            card.MovementLockColor = "#ffffff";
     }
 
     private void AnimateHealGlow(CharCardViewModel card, double start, double width)

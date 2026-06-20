@@ -35,4 +35,7 @@ public class StatusEffect
 
     // Name of the character who cast the leech (receives the drained resource)
     public string CasterName { get; set; } = string.Empty;
+
+    /// <summary>Optional creature-type restriction (e.g. "Undead"). Null = any target.</summary>
+    public string? TargetRestriction { get; set; }
 }
