@@ -43,10 +43,6 @@
               <TextBlock Text="{Binding Name}" Foreground="{Binding NameColor}"
                          FontWeight="Bold" FontSize="15"
                          TextTrimming="CharacterEllipsis" />
-              <TextBlock Text="{Binding MovementLockIcon}" FontSize="14"
-                         IsVisible="{Binding HasMovementLock}"
-                         Foreground="{Binding MovementLockColor}"
-                         VerticalAlignment="Center" />
             </StackPanel>
             <Grid ColumnDefinitions="*,Auto">
               <TextBlock Grid.Column="0" Text="{Binding CurrentWeapon}" Foreground="White"
@@ -221,6 +217,12 @@
           </ItemsControl>
         </Border>
       </StackPanel>
+
+      <!-- Movement lock icon: pulsating foot icon in the top-right corner -->
+      <TextBlock Text="{Binding MovementLockIcon}" Foreground="{Binding MovementLockColor}"
+                 FontSize="18" FontWeight="Bold"
+                 HorizontalAlignment="Right" VerticalAlignment="Top"
+                 Margin="0,4,4,0" IsVisible="{Binding IsMovementLocked}" />
 
       <!-- Overlay layer: death or status effects -->
       <Border IsVisible="{Binding HasStatusOverlay}" Background="#80000040" CornerRadius="2"

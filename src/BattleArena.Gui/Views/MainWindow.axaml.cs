@@ -1428,7 +1428,17 @@ public partial class MainWindow : Window
             ? spell.OnHitEffects.Max(e => e.Duration)
             : 0;
         var ticksToCast = (int)Math.Ceiling((double)spell.TurnMeterCost / Math.Max(1, caster.TurnSpeed));
-        var previewTicks = ticksToCast + maxEffectDuration + 5;
+
+        // Convert effect duration (in turns) to engine ticks.
+        // The target needs to fill 100 TM per turn; each acting turn
+        // decrements duration by 2 (once in CC handler, once in acting handler).
+        var dummyTmGain = Math.Max(1,
+            dummy.TurnSpeed + (dummy.Dexterity - 10) / 2
+            + LevelProgression.TurnMeterLevelBonus(dummy.Level, LevelProgression.Archetype(dummy.ClassName)));
+        var ticksPerTurn = (int)Math.Ceiling(100.0 / dummyTmGain);
+        var effectTurns = (maxEffectDuration + 1) / 2;
+        var ticksForEffect = effectTurns * ticksPerTurn;
+        var previewTicks = ticksToCast + ticksForEffect + 10;
         var result = await Task.Run(() => simulator.Simulate(party1, party2, previewTicks), _cts.Token);
 
         result.DiceLog = diceService.DiceLog;

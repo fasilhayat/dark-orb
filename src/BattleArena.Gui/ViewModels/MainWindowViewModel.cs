@@ -1471,11 +1471,15 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
                 Raise(nameof(TmBorderBrush));
                 Raise(nameof(BorderColor));
                 Raise(nameof(HasMovementLock));
+                Raise(nameof(StatusLine));
+                Raise(nameof(HasStatusOverlay));
                 UpdateTmPipes();
                 break;
             case nameof(IsMovementLocked):
                 Raise(nameof(HasMovementLock));
                 Raise(nameof(BorderColor));
+                Raise(nameof(StatusLine));
+                Raise(nameof(HasStatusOverlay));
                 break;
             case nameof(CcStatus):
                 Raise(nameof(EffectsDisplay));

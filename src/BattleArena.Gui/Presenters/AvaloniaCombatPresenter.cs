@@ -407,7 +407,10 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
             StartManaBarBlink(characterName, effectName, color);
 
         if (CcVisualConfig.IsCcEffect(effectName))
+        {
             StartMovementLockBlink(characterName);
+            card.IsMovementLocked = true;
+        }
 
         StartFlickerTimer(characterName, color, darkColor, FlickerIntervalMs(effectName), effectName);
     }
@@ -432,6 +435,9 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                 var card = FindCard(characterName);
                 if (card is not null)
                 {
+                    if (removedCc && !list.Exists(e => CcVisualConfig.IsCcEffect(e.EffectName)))
+                        card.IsMovementLocked = false;
+
                     StopFlickerTimer(characterName);
                     var darkColor = DarkenColor(lastColor);
                     card.PersistentBorderColor = lastColor;
@@ -551,6 +557,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
                 card.HpBarBorderBrush = "#333";
                 card.HpBarFillOverride = null;
                 card.TmBarBorderBrush = "#333";
+                card.IsMovementLocked = false;
         }
     }
 
