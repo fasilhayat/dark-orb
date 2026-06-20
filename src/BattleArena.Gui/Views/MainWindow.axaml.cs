@@ -1370,6 +1370,14 @@ public partial class MainWindow : Window
             var dotName = EffectVisualConfig.GetElementDoTName(spell.ElementalType);
             if (dotName is not null && !spell.OnHitEffects.Any(e => e.Name == dotName))
             {
+                var dotDie = spell.ElementalType switch
+                {
+                    ElementalType.Fire      => DieType.D6,
+                    ElementalType.Ice       => DieType.D4,
+                    ElementalType.Lightning => DieType.D8,
+                    ElementalType.Poison    => DieType.D4,
+                    _                       => DieType.D6,
+                };
                 spell.OnHitEffects.Add(new StatusEffect
                 {
                     Name = dotName,
@@ -1377,6 +1385,8 @@ public partial class MainWindow : Window
                     Target = EffectTarget.Target,
                     Duration = 3,
                     ApplicationChance = 100,
+                    DoTDamageCount = 1,
+                    DoTDamageDie = dotDie,
                 });
             }
         }
