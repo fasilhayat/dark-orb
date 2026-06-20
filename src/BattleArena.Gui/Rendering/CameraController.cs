@@ -41,20 +41,21 @@ public class CameraController
         OffsetY = (viewHeight - canvasHeight * Zoom) / 2.0;
     }
 
-    public Viewport GetViewport(int mapWidth, int mapHeight, int tileWidth, int tileHeight,
+    public Viewport GetViewport(int mapWidth, int mapHeight, double hexSize,
         double viewWidth, double viewHeight)
     {
-        // Canvas-space coordinates of the visible area corners
         var left = -OffsetX / Zoom;
         var top = -OffsetY / Zoom;
         var right = (viewWidth - OffsetX) / Zoom;
         var bottom = (viewHeight - OffsetY) / Zoom;
 
-        // Approximate tile bounds (conservative — includes tiles partially on screen)
-        var minX = (int)Math.Floor((left / (tileWidth / 2.0) + top / (tileHeight / 2.0)) / 2.0) - 1;
-        var maxX = (int)Math.Ceiling((right / (tileWidth / 2.0) + bottom / (tileHeight / 2.0)) / 2.0) + 1;
-        var minY = (int)Math.Floor((bottom / (tileHeight / 2.0) - right / (tileWidth / 2.0)) / 2.0) - 1;
-        var maxY = (int)Math.Ceiling((top / (tileHeight / 2.0) - left / (tileWidth / 2.0)) / 2.0) + 1;
+        var topLeft = HexGrid.ScreenToGridIsometric(new PixelPosition(left, top), hexSize);
+        var bottomRight = HexGrid.ScreenToGridIsometric(new PixelPosition(right, bottom), hexSize);
+
+        var minX = Math.Min(topLeft.TileX, bottomRight.TileX) - 1;
+        var maxX = Math.Max(topLeft.TileX, bottomRight.TileX) + 1;
+        var minY = Math.Min(topLeft.TileY, bottomRight.TileY) - 1;
+        var maxY = Math.Max(topLeft.TileY, bottomRight.TileY) + 1;
 
         return new Viewport(
             Math.Clamp(minX, 0, mapWidth - 1),

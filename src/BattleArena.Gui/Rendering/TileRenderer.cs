@@ -9,8 +9,7 @@ using Sprites;
 
 public static class TileRenderer
 {
-    public const int TileWidth = 64;
-    public const int TileHeight = 32;
+    public const double HexSize = 22;
 
     public static Tileset? CurrentTileset { get; set; }
     public static Dictionary<TilePosition, Polygon> TilePolygons { get; } = new();
@@ -35,7 +34,6 @@ public static class TileRenderer
     private static Color GetHoverColor(TileType type)
     {
         var c = GetTileColor(type);
-        // Brighten by mixing with white
         return Color.FromArgb(255,
             (byte)Math.Min(255, c.R + 60),
             (byte)Math.Min(255, c.G + 60),
@@ -44,13 +42,11 @@ public static class TileRenderer
 
     public static void SetHoveredTile(TilePosition? pos)
     {
-        // Restore previous hovered tile color
         if (_hoveredTile is { } old && TilePolygons.TryGetValue(old, out var oldPoly))
             oldPoly.Fill = new SolidColorBrush(GetTileColor(_hoveredMap?[old.TileX, old.TileY].Type ?? TileType.Grass));
 
         _hoveredTile = pos;
 
-        // Set new hovered tile color
         if (pos is { } p && TilePolygons.TryGetValue(p, out var newPoly))
         {
             var type = _hoveredMap?[p.TileX, p.TileY].Type ?? TileType.Grass;
@@ -62,27 +58,7 @@ public static class TileRenderer
 
     public static (double OffsetX, double OffsetY) GetCanvasOffset(TileMap map)
     {
-        var (minX, _, minY, _) = GetMapBounds(map);
-        return (-minX, -minY);
-    }
-
-    private static (int MinX, int MaxX, int MinY, int MaxY) GetMapBounds(TileMap map)
-    {
-        var minX = int.MaxValue;
-        var maxX = int.MinValue;
-        var minY = int.MaxValue;
-        var maxY = int.MinValue;
-        for (var y = 0; y < map.Height; y++)
-        for (var x = 0; x < map.Width; x++)
-        {
-            var screen = IsometricCoordinateTranslator.TileToScreen(
-                new TilePosition(x, y), TileWidth, TileHeight);
-            if (screen.X < minX) minX = (int)screen.X;
-            if (screen.X > maxX) maxX = (int)screen.X;
-            if (screen.Y < minY) minY = (int)screen.Y;
-            if (screen.Y > maxY) maxY = (int)screen.Y;
-        }
-        return (minX, maxX, minY, maxY);
+        return HexGrid.GetCanvasOffsetIsometric(map, HexSize);
     }
 
     public static void RenderMap(TileMap map, Canvas target, Viewport? clipViewport = null)
@@ -92,12 +68,11 @@ public static class TileRenderer
         _hoveredTile = null;
         _hoveredMap = map;
 
-        var (minX, maxX, minY, maxY) = GetMapBounds(map);
+        var (minX, maxX, minY, maxY) = HexGrid.GetCanvasBoundsIsometric(map, HexSize);
         var offsetX = -minX;
         var offsetY = -minY;
-
-        target.Width = maxX - minX + TileWidth;
-        target.Height = maxY - minY + TileHeight;
+        target.Width = maxX - minX;
+        target.Height = maxY - minY;
 
         for (var y = 0; y < map.Height; y++)
         for (var x = 0; x < map.Width; x++)
@@ -106,32 +81,27 @@ public static class TileRenderer
                 continue;
 
             var tile = map[x, y];
-            var screen = IsometricCoordinateTranslator.TileToScreen(
-                new TilePosition(x, y), TileWidth, TileHeight);
+            var flatCenter = HexGrid.GridToScreen(new TilePosition(x, y), HexSize);
 
-            var cx = screen.X + offsetX;
-            var cy = screen.Y + offsetY;
+            var isoCenter = HexGrid.FlatToIsometric(flatCenter);
+            var cx = isoCenter.X + offsetX;
+            var cy = isoCenter.Y + offsetY;
 
             var color = GetTileColor(tile.Type);
-            var diamond = new Polygon
+            var rawVerts = HexGrid.GetHexVerticesIsometric(flatCenter.X, flatCenter.Y, HexSize);
+            var hex = new Polygon
             {
-                Points = new List<Point>
-                {
-                    new(cx, cy),
-                    new(cx + TileWidth / 2.0, cy + TileHeight / 2.0),
-                    new(cx, cy + TileHeight),
-                    new(cx - TileWidth / 2.0, cy + TileHeight / 2.0),
-                },
+                Points = rawVerts.ConvertAll(v => new Point(v.X + offsetX, v.Y + offsetY)),
                 Fill = new SolidColorBrush(color),
                 Stroke = new SolidColorBrush(Color.Parse("#1a1a1a")),
                 StrokeThickness = 0.5,
             };
 
-            Canvas.SetLeft(diamond, 0);
-            Canvas.SetTop(diamond, 0);
-            target.Children.Add(diamond);
+            Canvas.SetLeft(hex, 0);
+            Canvas.SetTop(hex, 0);
+            target.Children.Add(hex);
 
-            TilePolygons[new TilePosition(x, y)] = diamond;
+            TilePolygons[new TilePosition(x, y)] = hex;
         }
     }
 }

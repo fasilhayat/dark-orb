@@ -90,14 +90,13 @@ public partial class WorldView : UserControl
     {
         var (offsetX, offsetY) = TileRenderer.GetCanvasOffset(vm.Map);
 
-        // Check combatant hover first
         CombatantTile? hoveredCombatant = null;
         foreach (var c in vm.Combatants)
         {
-            var screen = IsometricCoordinateTranslator.TileToScreen(
-                c.Position, TileRenderer.TileWidth, TileRenderer.TileHeight);
-            var cx = screen.X + offsetX;
-            var cy = screen.Y + offsetY + TileRenderer.TileHeight / 2.0;
+            var flatCenter = HexGrid.GridToScreen(c.Position, TileRenderer.HexSize);
+            var isoCenter = HexGrid.FlatToIsometric(flatCenter);
+            var cx = isoCenter.X + offsetX;
+            var cy = isoCenter.Y + offsetY;
             var dx = canvasX - cx;
             var dy = canvasY - cy;
             if (Math.Sqrt(dx * dx + dy * dy) < 20)
@@ -119,7 +118,6 @@ public partial class WorldView : UserControl
                 : "";
         }
 
-        // Tile hover: when combatant is hovered, highlight their tile; else highlight cursor tile
         TilePosition? tileToHighlight;
         if (hoveredCombatant is not null)
         {
@@ -127,10 +125,9 @@ public partial class WorldView : UserControl
         }
         else
         {
-            var tileSpace = new PixelPosition(canvasX - offsetX, canvasY - offsetY);
-            var tile = IsometricCoordinateTranslator.ScreenToTile(
-                new PixelPosition(tileSpace.X, tileSpace.Y - TileRenderer.TileHeight / 2.0),
-                TileRenderer.TileWidth, TileRenderer.TileHeight);
+            var tile = HexGrid.ScreenToGridIsometric(
+                new PixelPosition(canvasX - offsetX, canvasY - offsetY),
+                TileRenderer.HexSize);
             tileToHighlight = tile.TileX >= 0 && tile.TileX < vm.Map.Width &&
                               tile.TileY >= 0 && tile.TileY < vm.Map.Height
                 ? tile : null;

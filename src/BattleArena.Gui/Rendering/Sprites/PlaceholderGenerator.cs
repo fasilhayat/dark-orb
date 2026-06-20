@@ -1,5 +1,7 @@
 namespace BattleArena.Gui.Rendering.Sprites;
 
+using System;
+using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
@@ -23,7 +25,7 @@ public static class PlaceholderGenerator
     public static Bitmap CreateTilePlaceholder(TileType type)
     {
         var color = TileColors.GetValueOrDefault(type, Colors.Magenta);
-        return CreateDiamondBitmap(TileRenderer.TileWidth, TileRenderer.TileHeight, color, Color.Parse("#1a1a1a"));
+        return CreateHexBitmap(TileRenderer.HexSize, color, Color.Parse("#1a1a1a"));
     }
 
     public static Bitmap CreatePlayerPlaceholder()
@@ -36,18 +38,19 @@ public static class PlaceholderGenerator
         return CreateCircleBitmap(24, Color.Parse("#e67e22"), Colors.White);
     }
 
-    private static Bitmap CreateDiamondBitmap(int w, int h, Color fill, Color stroke)
+    private static Bitmap CreateHexBitmap(double size, Color fill, Color stroke)
     {
-        var bitmap = new RenderTargetBitmap(new PixelSize(w, h));
+        var hexW = (int)Math.Ceiling(HexGrid.HexWidth(size));
+        var hexH = (int)Math.Ceiling(HexGrid.HexHeight(size));
+        var bitmap = new RenderTargetBitmap(new PixelSize(hexW, hexH));
         using var ctx = bitmap.CreateDrawingContext();
 
-        var points = new List<Point>
-        {
-            new(w / 2.0, 0),
-            new(w, h / 2.0),
-            new(w / 2.0, h),
-            new(0, h / 2.0),
-        };
+        var cx = hexW / 2.0;
+        var cy = hexH / 2.0;
+        var verts = HexGrid.GetHexVertices(cx, cy, size);
+        var points = new List<Point>();
+        foreach (var v in verts)
+            points.Add(v);
 
         var geom = new PolylineGeometry(points, true);
         ctx.DrawGeometry(new SolidColorBrush(fill), new Pen(new SolidColorBrush(stroke), 0.5), geom);

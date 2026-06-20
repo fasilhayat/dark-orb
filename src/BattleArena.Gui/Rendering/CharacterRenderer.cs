@@ -23,14 +23,13 @@ public static class CharacterRenderer
 
         foreach (var c in combatants)
         {
-            var screen = IsometricCoordinateTranslator.TileToScreen(
-                c.Position, TileRenderer.TileWidth, TileRenderer.TileHeight);
-            var cx = screen.X + offsetX;
-            var cy = screen.Y + offsetY + TileRenderer.TileHeight / 2.0;
+            var flatCenter = HexGrid.GridToScreen(c.Position, TileRenderer.HexSize);
+            var isoCenter = HexGrid.FlatToIsometric(flatCenter);
+            var cx = isoCenter.X + offsetX;
+            var cy = isoCenter.Y + offsetY;
 
             var container = new StackPanel { Orientation = Avalonia.Layout.Orientation.Vertical };
 
-            // Down-arrow polygon
             var fillColor = c.IsHero ? "#44cc44" : "#cc4444";
             var isHovered = HoveredCombatant == c.Position;
             if (isHovered)
@@ -54,7 +53,6 @@ public static class CharacterRenderer
             };
             container.Children.Add(arrow);
 
-            // Name tooltip (only shown on hover)
             if (isHovered)
             {
                 container.Children.Add(new TextBlock
