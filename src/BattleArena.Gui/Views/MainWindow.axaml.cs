@@ -1427,7 +1427,8 @@ public partial class MainWindow : Window
         var maxEffectDuration = spell.OnHitEffects.Count > 0
             ? spell.OnHitEffects.Max(e => e.Duration)
             : 0;
-        var previewTicks = 8 + maxEffectDuration + 1;
+        var ticksToCast = (int)Math.Ceiling((double)spell.TurnMeterCost / Math.Max(1, caster.TurnSpeed));
+        var previewTicks = ticksToCast + maxEffectDuration + 5;
         var result = await Task.Run(() => simulator.Simulate(party1, party2, previewTicks), _cts.Token);
 
         result.DiceLog = diceService.DiceLog;

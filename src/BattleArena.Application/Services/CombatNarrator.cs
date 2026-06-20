@@ -107,10 +107,10 @@ public static class CombatNarrator
 
     private static readonly string[] SpellCrushingPhrases =
     [
-        "A torrent of {element} energy slams into {target} with overwhelming power!",
-        "{attacker} unleashes a devastating {element} blast that consumes {target}!",
-        "{target} is engulfed in {element} fury conjured by {attacker}!",
-        "The {element} magic tears through {target}'s resistance like paper!"
+        "A surge of {element} energy washes over {target} with compelling force!",
+        "{attacker}'s {element} magic wraps around {target}, seizing control!",
+        "{target} is enveloped in {element} energy conjured by {attacker}!",
+        "The {element} magic courses through {target}, impeding their movements!"
     ];
 
     private static readonly string[] SpellSolidPhrases =
