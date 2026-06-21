@@ -56,14 +56,14 @@ public class WorldViewModel : INotifyPropertyChanged
 
     public List<CombatantTile> Combatants { get; } =
     [
-        new() { Name = "Ser Garrick Dawnshield", Position = new TilePosition(1, 3), IsHero = true, MaxHp = 96, CurrentHp = 96 },
-        new() { Name = "Elira Vane",            Position = new TilePosition(1, 4), IsHero = true, MaxHp = 56, CurrentHp = 56 },
-        new() { Name = "Vaelith Moonveil",      Position = new TilePosition(2, 2), IsHero = true, MaxHp = 68, CurrentHp = 68 },
-        new() { Name = "Finnick Bramblefoot",   Position = new TilePosition(2, 5), IsHero = true, MaxHp = 44, CurrentHp = 44 },
-        new() { Name = "Lord Aethor Valeborn",  Position = new TilePosition(10, 3), IsHero = false, MaxHp = 88, CurrentHp = 88 },
-        new() { Name = "Korg Stonefist",         Position = new TilePosition(10, 4), IsHero = false, MaxHp = 72, CurrentHp = 72 },
-        new() { Name = "Graveworm",             Position = new TilePosition(9, 2), IsHero = false, MaxHp = 60, CurrentHp = 60 },
-        new() { Name = "Shadowmere",            Position = new TilePosition(9, 5), IsHero = false, MaxHp = 48, CurrentHp = 48 },
+        new() { Name = "Ser Garrick Dawnshield", ClassName = "Paladin", Race = "Human", Position = new TilePosition(1, 3), IsHero = true, MaxHp = 96, CurrentHp = 96 },
+        new() { Name = "Elira Vane",            ClassName = "Priest",  Race = "Human",  Position = new TilePosition(1, 4), IsHero = true, MaxHp = 56, CurrentHp = 56 },
+        new() { Name = "Vaelith Moonveil",      ClassName = "Mage",    Race = "High Elf", Position = new TilePosition(2, 2), IsHero = true, MaxHp = 68, CurrentHp = 68 },
+        new() { Name = "Finnick Bramblefoot",   ClassName = "Rogue",   Race = "Human",  Position = new TilePosition(2, 5), IsHero = true, MaxHp = 44, CurrentHp = 44 },
+        new() { Name = "Lord Aethor Valeborn",  ClassName = "Fighter", Race = "Human",  Position = new TilePosition(10, 3), IsHero = false, MaxHp = 88, CurrentHp = 88 },
+        new() { Name = "Korg Stonefist",         ClassName = "Barbarian", Race = "Dwarf", Position = new TilePosition(10, 4), IsHero = false, MaxHp = 72, CurrentHp = 72 },
+        new() { Name = "Graveworm",             ClassName = "Monster", Race = "Undead", Position = new TilePosition(9, 2), IsHero = false, MaxHp = 60, CurrentHp = 60 },
+        new() { Name = "Shadowmere",            ClassName = "Monster", Race = "Undead", Position = new TilePosition(9, 5), IsHero = false, MaxHp = 48, CurrentHp = 48 },
     ];
 
     public event PropertyChangedEventHandler? PropertyChanged;

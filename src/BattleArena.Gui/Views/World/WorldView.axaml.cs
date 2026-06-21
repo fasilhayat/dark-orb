@@ -60,6 +60,7 @@ public partial class WorldView : UserControl
             catch { /* textures unavailable — use solid colours */ }
         }
 
+        FogOfWar.Recompute(vm.Map, vm.Combatants);
         TileRenderer.RenderMap(vm.Map, MapCanvas);
         CharacterRenderer.RenderCombatants(vm.Combatants, vm.Map, MapCanvas);
         ZoneNameText.Text = vm.ZoneName;

@@ -133,4 +133,14 @@ public static class HexGrid
         var (minX, _, minY, _) = GetCanvasBoundsIsometric(map, size);
         return (-minX, -minY);
     }
+
+    /// <summary>Hex distance between two tile positions (axial coordinate system).</summary>
+    public static int TileDistance(TilePosition a, TilePosition b)
+    {
+        var aq = a.TileX;
+        var ar = a.TileY - a.TileX / 2;
+        var bq = b.TileX;
+        var br = b.TileY - b.TileX / 2;
+        return (Math.Abs(aq - bq) + Math.Abs(ar - br) + Math.Abs(aq + ar - bq - br)) / 2;
+    }
 }

@@ -139,5 +139,30 @@ public static class TileRenderer
 
             TilePolygons[new TilePosition(x, y)] = hex;
         }
+
+        // Fog of war overlay — darken tiles not visible to friendly units
+        if (FogOfWar.CurrentFog is not null)
+        {
+            for (var y = 0; y < map.Height; y++)
+            for (var x = 0; x < map.Width; x++)
+            {
+                if (FogOfWar.IsVisible(x, y)) continue;
+
+                var tilePos = new TilePosition(x, y);
+                var flatCenter = HexGrid.GridToScreen(tilePos, HexSize);
+                var isoVerts = HexGrid.GetHexVerticesIsometric(flatCenter.X, flatCenter.Y, HexSize);
+                var points = isoVerts.ConvertAll(v => new Point(v.X + offsetX, v.Y + offsetY));
+
+                var fog = new Polygon
+                {
+                    Points = points,
+                    Fill = new SolidColorBrush(Color.Parse("#000000"), 0.65),
+                    Stroke = null,
+                };
+                Canvas.SetLeft(fog, 0);
+                Canvas.SetTop(fog, 0);
+                target.Children.Add(fog);
+            }
+        }
     }
 }
