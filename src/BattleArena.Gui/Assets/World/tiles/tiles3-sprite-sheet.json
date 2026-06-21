@@ -1,0 +1,106 @@
+{
+  "spritesheet": {
+    "width": 1536,
+    "height": 1024
+  },
+  "tiles": [
+    {
+      "id": 0,
+      "name": "grass_plains",
+      "x": 34,
+      "y": 40,
+      "width": 340,
+      "height": 300
+    },
+    {
+      "id": 1,
+      "name": "forest",
+      "x": 405,
+      "y": 40,
+      "width": 340,
+      "height": 300
+    },
+    {
+      "id": 2,
+      "name": "mountain",
+      "x": 775,
+      "y": 30,
+      "width": 340,
+      "height": 315
+    },
+    {
+      "id": 3,
+      "name": "farmland",
+      "x": 1140,
+      "y": 45,
+      "width": 340,
+      "height": 300
+    },
+
+    {
+      "id": 4,
+      "name": "desert",
+      "x": 35,
+      "y": 360,
+      "width": 340,
+      "height": 300
+    },
+    {
+      "id": 5,
+      "name": "coast",
+      "x": 405,
+      "y": 360,
+      "width": 340,
+      "height": 300
+    },
+    {
+      "id": 6,
+      "name": "swamp",
+      "x": 775,
+      "y": 360,
+      "width": 340,
+      "height": 300
+    },
+    {
+      "id": 7,
+      "name": "volcano",
+      "x": 1140,
+      "y": 360,
+      "width": 340,
+      "height": 300
+    },
+
+    {
+      "id": 8,
+      "name": "snow",
+      "x": 35,
+      "y": 690,
+      "width": 340,
+      "height": 300
+    },
+    {
+      "id": 9,
+      "name": "rocky",
+      "x": 405,
+      "y": 690,
+      "width": 340,
+      "height": 300
+    },
+    {
+      "id": 10,
+      "name": "river",
+      "x": 775,
+      "y": 690,
+      "width": 340,
+      "height": 300
+    },
+    {
+      "id": 11,
+      "name": "city",
+      "x": 1140,
+      "y": 690,
+      "width": 340,
+      "height": 300
+    }
+  ]
+}

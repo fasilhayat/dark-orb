@@ -67,8 +67,9 @@ ON CONFLICT (name) DO NOTHING;
 -- All spells from dark-orb-master-spellbook.md
 -- ============================================================
 
-INSERT INTO arena_data.spell (school_id, damage_die_id, damage_type_id, attack_type_id, name, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage, minimum_level, description)
-SELECT ss.id, dd.id, dt.id, at.id, s.name, s.mana_cost, s.turn_meter_cost, s.spell_level, s.damage_count, s.attack_bonus, s.flat_damage_bonus, s.elemental_type, s.elemental_damage, s.minimum_level, s.description
+INSERT INTO arena_data.spell (school_id, damage_die_id, damage_type_id,     attack_type_id, name, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus,
+    flat_damage_bonus, elemental_type, elemental_damage, description)
+SELECT ss.id, dd.id, dt.id, at.id, s.name, s.mana_cost, s.turn_meter_cost, s.spell_level, s.damage_count, s.attack_bonus, s.flat_damage_bonus, s.elemental_type, s.elemental_damage, s.description
 FROM (VALUES
     -- Mage Common Core (level 1-2)
     ('Stormcraft', 'D4', 'Force', 'Ranged', 'Magic Missile',    10, 60, 1, 3, 2, 0, 'Force',    1, 'Reliable force darts that strike true.  Tags: Single-Target Damage, Nuke'),
@@ -230,7 +231,7 @@ FROM (VALUES
 
     -- New Stormcraft spell (multi-target lightning)
     ('Stormcraft', 'D6', 'Lightning', 'Ranged', 'Chain Lightning', 35, 90, 4, 3, 2, 0, 'Lightning', 7, 'Lightning bolt that arcs between up to three targets in sequence.  Tags: Offensive, AoE, Nuke')
-) AS s(school_name, die_name, dmg_type_name, atk_type_name, name, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage, minimum_level, description)
+) AS s(school_name, die_name, dmg_type_name, atk_type_name, name, mana_cost, turn_meter_cost, spell_level, damage_count, attack_bonus, flat_damage_bonus, elemental_type, elemental_damage, description)
 JOIN arena_data.spell_school ss ON ss.name = s.school_name
 JOIN arena_data.die_type dd ON dd.name = s.die_name
 JOIN arena_data.damage_type dt ON dt.name = s.dmg_type_name

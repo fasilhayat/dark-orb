@@ -88,5 +88,6 @@ app.MapEquipmentEndpoints();
 app.MapAccessoriesEndpoints();
 app.MapNpcEndpoints();
 app.MapLoreEndpoints();
+app.MapQuestEndpoints();
 
 app.Run();

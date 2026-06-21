@@ -71,7 +71,7 @@ down:
 	pwsh -NoProfile -Command "'localdev','dev','test','preprod','prod' | ForEach-Object { docker compose -p dark-orb-$$_ down 2>$$null }"
 
 clean: clean-logs
-	pwsh -NoProfile -Command "'localdev','dev','test','preprod','prod' | ForEach-Object { docker compose -p dark-orb-$$_ down -v 2>$$null }"
+	pwsh -NoProfile -Command "'localdev','dev','test','preprod','prod' | ForEach-Object { docker compose -p dark-orb-$$_ stop 2>$$null; docker compose -p dark-orb-$$_ down -v 2>$$null }"
 	pwsh -NoProfile -Command "if (Test-Path '../publish') { Remove-Item -Recurse -Force '../publish' }; if (Test-Path '../publish-demo') { Remove-Item -Recurse -Force '../publish-demo' }"
 
 clean-logs:

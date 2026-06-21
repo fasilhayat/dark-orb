@@ -3,6 +3,7 @@ namespace BattleArena.Api;
 using Application.Interfaces;
 using Application.Modifiers;
 using Application.Services;
+using Application.Services.QuestValidators;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
@@ -42,5 +43,8 @@ public static class AddServices
         services.AddScoped<IGirdleRepository, GirdleRepository>();
         services.AddScoped<INpcRepository, NpcRepository>();
         services.AddScoped<IItemSetRepository, ItemSetRepository>();
+        services.AddScoped<IQuestRepository, QuestRepository>();
+        services.AddScoped<IQuestService, QuestService>();
+        services.AddSingleton<IQuestValidator, DefaultQuestValidator>();
     }
 }
