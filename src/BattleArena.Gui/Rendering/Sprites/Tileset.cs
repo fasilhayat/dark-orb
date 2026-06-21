@@ -6,14 +6,18 @@ using Models.World;
 public class Tileset
 {
     private readonly SpriteCache _cache;
+    private readonly SpriteSheet? _sheet;
 
-    public Tileset(SpriteCache cache)
+    public Tileset(SpriteCache cache, SpriteSheet? sheet = null)
     {
         _cache = cache;
+        _sheet = sheet;
     }
 
     public Bitmap? GetTile(TileType type)
     {
+        if (_sheet?.GetTile(type) is { } t)
+            return t;
         return _cache.GetSprite(TextureKey.Tile(type)) ?? PlaceholderGenerator.CreateTilePlaceholder(type);
     }
 

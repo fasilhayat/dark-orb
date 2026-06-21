@@ -2,7 +2,7 @@ namespace BattleArena.Gui.ViewModels.World;
 
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-
+using Data;
 using Models.World;
 using Rendering;
 
@@ -22,7 +22,37 @@ public class WorldViewModel : INotifyPropertyChanged
         }
     }
 
-    public string ZoneName => "Tactical Arena";
+    private string _zoneName = "Tactical Arena";
+    public string ZoneName
+    {
+        get => _zoneName;
+        set => SetField(ref _zoneName, value);
+    }
+
+    private string _terrainName = "Plains";
+    public string TerrainName
+    {
+        get => _terrainName;
+        set => SetField(ref _terrainName, value);
+    }
+
+    public IReadOnlyList<MapData> AvailableMaps => MapLoader.ListMaps();
+
+    private MapData? _currentMapData;
+    public MapData? CurrentMapData
+    {
+        get => _currentMapData;
+        set
+        {
+            if (_currentMapData?.Id == value?.Id) return;
+            _currentMapData = value;
+            if (value is not null)
+            {
+                Map = MapLoader.LoadMap(value);
+                ZoneName = value.Name;
+            }
+        }
+    }
 
     public List<CombatantTile> Combatants { get; } =
     [
@@ -37,6 +67,37 @@ public class WorldViewModel : INotifyPropertyChanged
     ];
 
     public event PropertyChangedEventHandler? PropertyChanged;
+
+    public void LoadMapById(string id)
+    {
+        var match = AvailableMaps.FirstOrDefault(m => m.Id == id);
+        if (match is not null)
+        {
+            TerrainName = match.Terrain;
+            CurrentMapData = match;
+        }
+    }
+
+    public void LoadFirstMap()
+    {
+        var maps = AvailableMaps;
+        if (maps.Count > 0)
+        {
+            TerrainName = maps[0].Terrain;
+            CurrentMapData = maps[0];
+        }
+        else
+        {
+            Map = TestMapData.CreateArenaMap();
+        }
+    }
+
+    private void SetField<T>(ref T field, T value, [CallerMemberName] string? prop = null)
+    {
+        if (EqualityComparer<T>.Default.Equals(field, value)) return;
+        field = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+    }
 
     private void OnPropertyChanged([CallerMemberName] string? name = null)
     {

@@ -48,6 +48,7 @@
 
   <ItemGroup>
     <Content Include="Assets\World\**\*" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Assets\World\maps\*.json" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="Assets\WorldMap\**\*" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

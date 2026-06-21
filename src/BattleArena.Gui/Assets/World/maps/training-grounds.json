@@ -1,0 +1,20 @@
+{
+  "id": "training-grounds",
+  "name": "Training Grounds",
+  "description": "An open field with a pond to the north-east and a rocky ridge to the north-west. A dirt road runs through the centre.",
+  "terrain": "Plains",
+  "width": 16,
+  "height": 10,
+  "tiles": [
+    "Grass","Water","Water","Water","Grass","Grass","Grass","Road","Road","Grass","Grass","Mountain","Mountain","Mountain","Mountain","Grass",
+    "Grass","Water","Water","Water","Grass","Grass","Forest","Road","Road","Forest","Grass","Mountain","Mountain","Mountain","Mountain","Grass",
+    "Grass","Water","Water","Water","Grass","Grass","Grass","Road","Road","Grass","Grass","Mountain","Mountain","Grass","Grass","Grass",
+    "Grass","Grass","Grass","Grass","Forest","Grass","Grass","Road","Road","Grass","Grass","Grass","Grass","Grass","Forest","Grass",
+    "Grass","Grass","Forest","Grass","Grass","Grass","Grass","Road","Road","Grass","Grass","Forest","Grass","Grass","Grass","Grass",
+    "Grass","Grass","Grass","Grass","Grass","Forest","Grass","Road","Road","Grass","Grass","Grass","Grass","Forest","Grass","Grass",
+    "Grass","Forest","Grass","Grass","Grass","Grass","Grass","Road","Road","Grass","Grass","Grass","Grass","Grass","Grass","Grass",
+    "Grass","Grass","Grass","Forest","Grass","Grass","Forest","Road","Road","Grass","Grass","Forest","Grass","Grass","Grass","Grass",
+    "Grass","Grass","Grass","Grass","Grass","Grass","Grass","Road","Road","Grass","Grass","Grass","Grass","Forest","Grass","Grass",
+    "Grass","Grass","Grass","Forest","Grass","Grass","Grass","Road","Road","Grass","Grass","Grass","Grass","Grass","Grass","Grass"
+  ]
+}

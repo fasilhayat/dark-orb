@@ -627,6 +627,7 @@ public partial class MainWindow : Window
         CharacterRenderer.HoveredCombatant = combatant.Position;
         CharacterRenderer.RenderCombatants(vm.Combatants, vm.Map, WorldViewControl.GetMapCanvas());
         HighlightPartyPortrait(name);
+        HighlightEnemyPortrait(name);
     }
 
     private void ClearGridHighlight()
@@ -635,6 +636,7 @@ public partial class MainWindow : Window
         CharacterRenderer.HoveredCombatant = null;
         CharacterRenderer.RenderCombatants(vm.Combatants, vm.Map, WorldViewControl.GetMapCanvas());
         HighlightPartyPortrait("");
+        HighlightEnemyPortrait("");
     }
 
     private void OnWorldMapClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -645,13 +647,122 @@ public partial class MainWindow : Window
     private void OnEnterLocationClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         PopulatePartyPanel();
-        var enemies = _vm.WorldViewModel.Combatants.Where(c => !c.IsHero).Select(c => c.Name).ToList();
-        EnemyList.ItemsSource = enemies;
+        PopulateEnemyPanel();
         WorldViewControl.CombatantHovered += name =>
         {
             HighlightPartyPortrait(name);
+            HighlightEnemyPortrait(name);
         };
         _vm.Phase = "Location";
+    }
+
+    private void PopulateEnemyPanel()
+    {
+        EnemyPanel.Children.Clear();
+        var enemies = _vm.WorldViewModel.Combatants.Where(c => !c.IsHero).ToList();
+
+        foreach (var c in enemies)
+        {
+            var card = new Border
+            {
+                Tag = c.Name,
+                Background = new SolidColorBrush(Color.Parse("#0d0d18")),
+                BorderBrush = new SolidColorBrush(Color.Parse("#1a1a2e")),
+                BorderThickness = new Thickness(1),
+                CornerRadius = new CornerRadius(4),
+                Padding = new Thickness(0, 0, 0, 4),
+                Margin = new Thickness(0, 2),
+            };
+
+            var stack = new StackPanel();
+
+            stack.Children.Add(new TextBlock
+            {
+                Text = c.Name,
+                Foreground = new SolidColorBrush(Color.Parse("#ff8888")),
+                FontSize = 10,
+                FontWeight = FontWeight.Bold,
+                Margin = new Thickness(10, 6, 0, 0),
+            });
+
+            var portrait = PortraitResolver.GetPortrait(c.Name);
+            const double pw = 80;
+            const double ph = 120;
+            if (portrait is not null)
+            {
+                var img = new Avalonia.Controls.Image
+                {
+                    Source = portrait,
+                    Width = pw,
+                    Height = ph,
+                    Stretch = Avalonia.Media.Stretch.Fill,
+                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left,
+                    Margin = new Thickness(10, 2, 10, 0),
+                };
+                img.PointerEntered += (_, _) => HighlightCombatantOnGrid(c.Name);
+                img.PointerExited += (_, _) => ClearGridHighlight();
+                stack.Children.Add(img);
+            }
+            else
+            {
+                var placeholder = new Border
+                {
+                    Width = pw, Height = pw,
+                    Background = new SolidColorBrush(Color.Parse("#2a1a1a")),
+                    CornerRadius = new CornerRadius(4),
+                    Margin = new Thickness(10, 2, 10, 0),
+                    Child = new TextBlock
+                    {
+                        Text = c.Name.Length > 0 ? c.Name[0].ToString() : "?",
+                        Foreground = new SolidColorBrush(Color.Parse("#ff6666")),
+                        FontSize = 24,
+                        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                        VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+                    },
+                };
+                placeholder.PointerEntered += (_, _) => HighlightCombatantOnGrid(c.Name);
+                placeholder.PointerExited += (_, _) => ClearGridHighlight();
+                stack.Children.Add(placeholder);
+            }
+
+            var hpFraction = c.MaxHp > 0 ? Math.Clamp((double)c.CurrentHp / c.MaxHp, 0, 1) : 0;
+            var hpBar = new Border
+            {
+                Width = pw,
+                Height = 6,
+                Background = new SolidColorBrush(Color.Parse("#1a0a0a")),
+                BorderBrush = new SolidColorBrush(Color.Parse("#441111")),
+                BorderThickness = new Thickness(1),
+                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left,
+                Margin = new Thickness(10, 2, 10, 0),
+            };
+            var hpFill = new Border
+            {
+                Width = hpFraction * (pw - 2),
+                Height = 4,
+                Background = new SolidColorBrush(Color.Parse("#ff4444")),
+                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left,
+                VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+            };
+            hpBar.Child = hpFill;
+            stack.Children.Add(hpBar);
+
+            card.Child = stack;
+            EnemyPanel.Children.Add(card);
+        }
+    }
+
+    private void HighlightEnemyPortrait(string name)
+    {
+        foreach (var child in EnemyPanel.Children)
+        {
+            if (child is Border border)
+            {
+                var isTarget = !string.IsNullOrEmpty(name) && border.Tag?.ToString() == name;
+                border.BorderBrush = new SolidColorBrush(
+                    isTarget ? Color.Parse("#ff4488") : Color.Parse("#1a1a2e"));
+            }
+        }
     }
 
     private void HighlightPartyPortrait(string name)

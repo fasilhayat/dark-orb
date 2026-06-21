@@ -1,0 +1,20 @@
+{
+  "id": "forgotten-catacombs",
+  "name": "Forgotten Catacombs",
+  "description": "A dark underground burial chamber with stone floors, walled corridors, and a sealed entrance at the south wall.",
+  "terrain": "Dungeon",
+  "width": 16,
+  "height": 10,
+  "tiles": [
+    "DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall",
+    "DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall",
+    "DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall",
+    "DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall",
+    "DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall",
+    "DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall",
+    "DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall",
+    "DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall",
+    "DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall",
+    "DungeonWall","DungeonWall","DungeonWall","DungeonEntrance","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall"
+  ]
+}

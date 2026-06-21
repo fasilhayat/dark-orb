@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using Models.World;
 using Sprites;
 
@@ -42,16 +43,19 @@ public static class TileRenderer
 
     public static void SetHoveredTile(TilePosition? pos)
     {
+        // Unhover previous tile — restore normal fill
         if (_hoveredTile is { } old && TilePolygons.TryGetValue(old, out var oldPoly))
-            oldPoly.Fill = new SolidColorBrush(GetTileColor(_hoveredMap?[old.TileX, old.TileY].Type ?? TileType.Grass));
+        {
+            var type = _hoveredMap?[old.TileX, old.TileY].Type ?? TileType.Grass;
+            var hasTexture = CurrentTileset?.GetTile(type) is not null;
+            oldPoly.Fill = new SolidColorBrush(GetTileColor(type), hasTexture ? 0.4 : 1.0);
+        }
 
         _hoveredTile = pos;
 
+        // Hover new tile — semi-transparent white overlay
         if (pos is { } p && TilePolygons.TryGetValue(p, out var newPoly))
-        {
-            var type = _hoveredMap?[p.TileX, p.TileY].Type ?? TileType.Grass;
-            newPoly.Fill = new SolidColorBrush(GetHoverColor(type));
-        }
+            newPoly.Fill = new SolidColorBrush(Colors.White, 0.25);
     }
 
     private static TileMap? _hoveredMap;
@@ -88,11 +92,43 @@ public static class TileRenderer
             var cy = isoCenter.Y + offsetY;
 
             var color = GetTileColor(tile.Type);
-            var rawVerts = HexGrid.GetHexVerticesIsometric(flatCenter.X, flatCenter.Y, HexSize);
+            var isoVerts = HexGrid.GetHexVerticesIsometric(flatCenter.X, flatCenter.Y, HexSize);
+            var points = isoVerts.ConvertAll(v => new Point(v.X + offsetX, v.Y + offsetY));
+
+            // Texture layer (bottom) — clipped to the hex shape
+            Bitmap? texture = null;
+            try { texture = CurrentTileset?.GetTile(tile.Type); }
+            catch { /* texture unavailable — use solid colour only */ }
+
+            if (texture is not null)
+            {
+                // Image must be sized to the hex bounding box, with Clip relative
+                // to the image's own origin.  Points are in canvas coords, so we
+                // compute the hex AABB and translate vertices to local space.
+                var bx = points.Min(p => p.X);
+                var by = points.Min(p => p.Y);
+                var bw = points.Max(p => p.X) - bx;
+                var bh = points.Max(p => p.Y) - by;
+                var localVerts = points.ConvertAll(p => new Point(p.X - bx, p.Y - by));
+
+                var img = new Image
+                {
+                    Source = texture,
+                    Stretch = Stretch.Fill,
+                    Width = bw,
+                    Height = bh,
+                    Clip = new PolylineGeometry(localVerts, true),
+                };
+                Canvas.SetLeft(img, bx);
+                Canvas.SetTop(img, by);
+                target.Children.Add(img);
+            }
+
+            // Solid colour overlay (top) — semi-transparent so texture shows through
             var hex = new Polygon
             {
-                Points = rawVerts.ConvertAll(v => new Point(v.X + offsetX, v.Y + offsetY)),
-                Fill = new SolidColorBrush(color),
+                Points = points,
+                Fill = new SolidColorBrush(color, texture is not null ? 0.4 : 1.0),
                 Stroke = new SolidColorBrush(Color.Parse("#1a1a1a")),
                 StrokeThickness = 0.5,
             };

@@ -1,0 +1,24 @@
+{
+  "sheet": "tiles.png",
+  "width": 192,
+  "height": 192,
+  "grid": "3x3",
+  "frameSize": "64x64",
+  "hexFootprint": { "width": 60, "height": 52 },
+  "frames": [
+    { "tile": "Grass",           "x": 0,   "y": 0,   "w": 64, "h": 64 },
+    { "tile": "Road",            "x": 64,  "y": 0,   "w": 64, "h": 64 },
+    { "tile": "Forest",          "x": 128, "y": 0,   "w": 64, "h": 64 },
+    { "tile": "Water",           "x": 0,   "y": 64,  "w": 64, "h": 64 },
+    { "tile": "Mountain",        "x": 64,  "y": 64,  "w": 64, "h": 64 },
+    { "tile": "DungeonFloor",    "x": 128, "y": 64,  "w": 64, "h": 64 },
+    { "tile": "DungeonWall",     "x": 0,   "y": 128, "w": 64, "h": 64 },
+    { "tile": "Bridge",          "x": 64,  "y": 128, "w": 64, "h": 64 },
+    { "tile": "DungeonEntrance", "x": 128, "y": 128, "w": 64, "h": 64 }
+  ],
+  "order": [
+    "Grass", "Road", "Forest",
+    "Water", "Mountain", "DungeonFloor",
+    "DungeonWall", "Bridge", "DungeonEntrance"
+  ]
+}

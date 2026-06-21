@@ -1,0 +1,20 @@
+{
+  "id": "verdant-pass",
+  "name": "Verdant Pass",
+  "description": "A lush valley with a winding river cutting through dense forest. A stone bridge spans the narrows.",
+  "terrain": "Forest",
+  "width": 16,
+  "height": 10,
+  "tiles": [
+    "Forest","Forest","Forest","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Forest","Forest","Forest","Forest",
+    "Forest","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Forest",
+    "Forest","Grass","Grass","Grass","Forest","Forest","Grass","Grass","Grass","Grass","Forest","Forest","Grass","Grass","Grass","Forest",
+    "Grass","Grass","Grass","Grass","Grass","Forest","Grass","Grass","Grass","Grass","Forest","Grass","Grass","Grass","Grass","Grass",
+    "Grass","Grass","Grass","Grass","Grass","Grass","Water","Water","Water","Water","Grass","Grass","Grass","Grass","Grass","Grass",
+    "Grass","Grass","Grass","Grass","Grass","Grass","Water","Water","Bridge","Water","Grass","Grass","Grass","Grass","Grass","Grass",
+    "Grass","Grass","Grass","Grass","Grass","Grass","Water","Water","Water","Water","Grass","Grass","Grass","Grass","Grass","Grass",
+    "Forest","Grass","Grass","Grass","Forest","Forest","Grass","Grass","Grass","Grass","Forest","Forest","Grass","Grass","Grass","Forest",
+    "Forest","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Forest",
+    "Forest","Forest","Forest","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Forest","Forest","Forest","Forest"
+  ]
+}
