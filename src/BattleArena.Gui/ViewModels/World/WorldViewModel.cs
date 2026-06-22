@@ -2,6 +2,7 @@ namespace BattleArena.Gui.ViewModels.World;
 
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Avalonia.Media.Imaging;
 using Data;
 using Models.World;
 using Rendering;
@@ -65,6 +66,15 @@ public class WorldViewModel : INotifyPropertyChanged
         new() { Name = "Graveworm",             ClassName = "Monster", Race = "Undead", Position = new TilePosition(9, 2), IsHero = false, MaxHp = 60, CurrentHp = 60 },
         new() { Name = "Shadowmere",            ClassName = "Monster", Race = "Undead", Position = new TilePosition(9, 5), IsHero = false, MaxHp = 48, CurrentHp = 48 },
     ];
+
+    private Bitmap? _backgroundImage;
+    public Bitmap? BackgroundImage
+    {
+        get => _backgroundImage;
+        set => SetField(ref _backgroundImage, value);
+    }
+
+    public bool HasBackgroundImage => _backgroundImage is not null;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

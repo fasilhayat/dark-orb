@@ -1,20 +1,20 @@
 {
   "id": "forgotten-catacombs",
-  "name": "Forgotten Catacombs",
-  "description": "A dark underground burial chamber with stone floors, walled corridors, and a sealed entrance at the south wall.",
-  "terrain": "Dungeon",
+  "name": "Ruined Pass",
+  "description": "A rocky mountain pass with a fast-flowing river cutting through. Dense forest clings to the slopes and an old stone road follows the water.",
+  "terrain": "Mountain",
   "width": 16,
   "height": 10,
   "tiles": [
-    "DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall",
-    "DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall",
-    "DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall",
-    "DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall",
-    "DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall",
-    "DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall",
-    "DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall",
-    "DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall",
-    "DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall","DungeonFloor","DungeonFloor","DungeonFloor","DungeonWall",
-    "DungeonWall","DungeonWall","DungeonWall","DungeonEntrance","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall","DungeonWall"
+    "Mountain","Mountain","Mountain","Forest","Forest","Forest","Grass","Grass","Grass","Grass","Grass","Forest","Forest","Grass","Grass","Grass",
+    "Mountain","Mountain","Forest","Forest","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Forest","Forest","Grass","Grass",
+    "Mountain","Forest","Forest","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Forest","Forest","Grass",
+    "Forest","Forest","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Forest","Forest",
+    "Forest","Grass","Grass","Grass","Grass","Grass","Water","Water","Water","Water","Grass","Grass","Grass","Grass","Grass","Forest",
+    "Forest","Grass","Grass","Grass","Grass","Grass","Water","Water","Road","Water","Grass","Grass","Grass","Grass","Grass","Forest",
+    "Forest","Forest","Grass","Grass","Grass","Grass","Water","Water","Water","Water","Grass","Grass","Grass","Grass","Forest","Forest",
+    "Grass","Forest","Forest","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Forest","Forest","Grass",
+    "Grass","Grass","Forest","Forest","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Grass","Forest","Forest","Mountain","Mountain",
+    "Grass","Grass","Grass","Forest","Forest","Grass","Grass","Grass","Grass","Grass","Grass","Forest","Forest","Mountain","Mountain","Mountain"
   ]
 }

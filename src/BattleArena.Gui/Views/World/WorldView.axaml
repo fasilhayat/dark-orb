@@ -3,12 +3,17 @@
              x:Class="BattleArena.Gui.Views.World.WorldView"
              Background="#0a0a14">
   <Grid RowDefinitions="*,Auto">
-    <Border Grid.Row="0" x:Name="MapClipRegion" ClipToBounds="True" Background="#0a0a14"
+    <Border Grid.Row="0" x:Name="MapClipRegion" ClipToBounds="True"
             PointerPressed="OnMapPointerPressed"
             PointerMoved="OnMapPointerMoved"
             PointerReleased="OnMapPointerReleased"
             PointerWheelChanged="OnMapPointerWheelChanged">
-      <Canvas x:Name="MapCanvas" Background="Transparent" />
+      <Grid>
+        <Image x:Name="MapBackgroundImage" Source="{Binding BackgroundImage}"
+               Stretch="Uniform" HorizontalAlignment="Left" VerticalAlignment="Top"
+               IsVisible="{Binding HasBackgroundImage}" />
+        <Canvas x:Name="MapCanvas" Background="Transparent" />
+      </Grid>
     </Border>
     <Border Grid.Row="1" Background="#0d0d18" BorderBrush="#1a1a2e" BorderThickness="0,1,0,0" Padding="8,3">
       <Grid ColumnDefinitions="Auto,*,Auto">
