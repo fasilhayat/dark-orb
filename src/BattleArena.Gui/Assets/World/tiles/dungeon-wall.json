@@ -1,0 +1,18 @@
+{
+  "id": "dungeon_wall",
+  "name": "Dungeon Wall",
+  "sprite": "DungeonWall.png",
+  "terrainType": "dungeon_wall",
+  "walkable": false,
+  "movementCost": 999,
+  "blocksVision": true,
+  "blocksMovement": true,
+  "hexMask": [
+    [54, 21],
+    [62, 36],
+    [40, 47],
+    [10, 43],
+    [2, 28],
+    [24, 17]
+  ]
+}

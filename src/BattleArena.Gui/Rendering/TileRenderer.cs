@@ -4,12 +4,15 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using Models.World;
+using Sprites;
 
 public static class TileRenderer
 {
     public const double HexSize = 22;
 
+    public static Tileset? CurrentTileset { get; set; }
     public static Dictionary<TilePosition, Polygon> TilePolygons { get; } = new();
 
     private static TilePosition? _hoveredTile;
@@ -41,12 +44,18 @@ public static class TileRenderer
     public static void SetHoveredTile(TilePosition? pos)
     {
         if (_hoveredTile is { } old && TilePolygons.TryGetValue(old, out var oldPoly))
-            oldPoly.Fill = new SolidColorBrush(GetTileColor(_hoveredMap?[old.TileX, old.TileY].Type ?? TileType.Grass));
+        {
+            var oldType = _hoveredMap?[old.TileX, old.TileY].Type ?? TileType.Grass;
+            Bitmap? tex = null;
+            try { tex = CurrentTileset?.GetTile(oldType); }
+            catch { }
+            oldPoly.Fill = new SolidColorBrush(GetTileColor(oldType), tex is not null ? 0.0 : 1.0);
+        }
 
         _hoveredTile = pos;
 
         if (pos is { } p && TilePolygons.TryGetValue(p, out var newPoly))
-            newPoly.Fill = new SolidColorBrush(Colors.White, 0.3);
+            newPoly.Fill = new SolidColorBrush(Colors.White, 0.25);
     }
 
     private static TileMap? _hoveredMap;
@@ -86,12 +95,54 @@ public static class TileRenderer
             var isoVerts = HexGrid.GetHexVerticesIsometric(flatCenter.X, flatCenter.Y, HexSize);
             var points = isoVerts.ConvertAll(v => new Point(v.X + offsetX, v.Y + offsetY));
 
+            // Texture layer — native 64×64 centred on hex, clipped with slight
+            // overlap to eliminate anti-aliasing gaps between adjacent tiles.
+            Bitmap? texture = null;
+            try { texture = CurrentTileset?.GetTile(tile.Type); }
+            catch { }
+
+            if (texture is not null)
+            {
+                const double texSize = 64;
+                var imgCx = isoCenter.X + offsetX;
+                var imgCy = isoCenter.Y + offsetY;
+                var imgLeft = imgCx - texSize / 2.0;
+                var imgTop = imgCy - texSize / 2.0;
+
+                // Expand clip vertices by 0.5px outward so adjacent textures overlap
+                var overlap = 0.5;
+                var cx2 = (points.Min(p => p.X) + points.Max(p => p.X)) / 2.0;
+                var cy2 = (points.Min(p => p.Y) + points.Max(p => p.Y)) / 2.0;
+                var expandedVerts = points.ConvertAll(p =>
+                {
+                    var dx = p.X - cx2;
+                    var dy = p.Y - cy2;
+                    var len = Math.Sqrt(dx * dx + dy * dy);
+                    return len > 0
+                        ? new Point(p.X + dx / len * overlap - imgLeft,
+                                     p.Y + dy / len * overlap - imgTop)
+                        : new Point(p.X - imgLeft, p.Y - imgTop);
+                });
+
+                var img = new Image
+                {
+                    Source = texture,
+                    Stretch = Stretch.None,
+                    Width = texSize,
+                    Height = texSize,
+                    Clip = new PolylineGeometry(expandedVerts, true),
+                };
+                Canvas.SetLeft(img, imgLeft);
+                Canvas.SetTop(img, imgTop);
+                target.Children.Add(img);
+            }
+
             var hex = new Polygon
             {
                 Points = points,
-                Fill = new SolidColorBrush(color),
-                Stroke = new SolidColorBrush(Color.Parse("#1a1a1a")),
-                StrokeThickness = 0.5,
+                Fill = new SolidColorBrush(color, texture is not null ? 0.0 : 1.0),
+                Stroke = texture is not null ? null : new SolidColorBrush(Color.Parse("#1a1a1a")),
+                StrokeThickness = texture is not null ? 0 : 0.5,
             };
 
             Canvas.SetLeft(hex, 0);

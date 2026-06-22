@@ -1,0 +1,20 @@
+{
+  "id": "bridge",
+  "name": "Bridge",
+  "sprite": "Bridge.png",
+  "terrainType": "bridge",
+  "walkable": true,
+  "movementCost": 1,
+  "blocksVision": false,
+  "blocksMovement": false,
+  "connects": true,
+  "connectionType": "bridge",
+  "hexMask": [
+    [54, 21],
+    [62, 36],
+    [40, 47],
+    [10, 43],
+    [2, 28],
+    [24, 17]
+  ]
+}

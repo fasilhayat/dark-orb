@@ -1,0 +1,18 @@
+{
+  "id": "grass",
+  "name": "Grass",
+  "sprite": "Grass.png",
+  "terrainType": "grass",
+  "walkable": true,
+  "movementCost": 1,
+  "blocksVision": false,
+  "blocksMovement": false,
+  "hexMask": [
+    [54, 21],
+    [62, 36],
+    [40, 47],
+    [10, 43],
+    [2, 28],
+    [24, 17]
+  ]
+}

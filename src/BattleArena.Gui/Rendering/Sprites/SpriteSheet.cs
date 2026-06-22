@@ -1,6 +1,5 @@
 namespace BattleArena.Gui.Rendering.Sprites;
 
-using System.Text.Json;
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
@@ -8,54 +7,38 @@ using Models.World;
 
 public sealed class SpriteSheet
 {
-    /// <summary>
-    /// Maps a sprite sheet tile name to a TileType.
-    /// Multiple sprite tiles can map to the same TileType.
-    /// </summary>
-    private static readonly Dictionary<string, TileType> TileNameMap = new(StringComparer.OrdinalIgnoreCase)
-    {
-        ["grass_plains"] = TileType.Grass,
-        ["farmland"]     = TileType.Grass,
-        ["forest"]       = TileType.Forest,
-        ["mountain"]     = TileType.Mountain,
-        ["rocky"]        = TileType.Mountain,
-        ["volcano"]      = TileType.Mountain,
-        ["desert"]       = TileType.Grass,
-        ["snow"]         = TileType.Grass,
-        ["coast"]        = TileType.Water,
-        ["swamp"]        = TileType.Water,
-        ["river"]        = TileType.Water,
-        ["city"]         = TileType.Road,
-    };
-
-    private readonly Bitmap _sheet;
     private readonly Bitmap?[] _frames;
 
-    public SpriteSheet(string path, string jsonPath)
+    /// <summary>
+    /// Loads tiles4.png — 3×3 grid of equal frames in TileType enum order:
+    ///   Grass(0) Road(1) Forest(2)
+    ///   Water(3) Mountain(4) DungeonFloor(5)
+    ///   DungeonWall(6) Bridge(7) DungeonEntrance(8)
+    /// </summary>
+    private const double TargetSize = 64;
+
+    public SpriteSheet(string sheetPath)
     {
-        _sheet = new Bitmap(path);
-        var json = File.ReadAllText(jsonPath);
-        var doc = JsonDocument.Parse(json);
+        var sheet = new Bitmap(sheetPath);
+        var cols = 3;
+        var rows = 3;
+        var fw = sheet.PixelSize.Width / cols;
+        var fh = sheet.PixelSize.Height / rows;
+        _frames = new Bitmap[cols * rows];
 
-        var tiles = doc.RootElement.GetProperty("tiles");
-        _frames = new Bitmap[(int)TileType.DungeonEntrance + 1];
-
-        foreach (var tile in tiles.EnumerateArray())
+        for (var i = 0; i < _frames.Length; i++)
         {
-            var name = tile.GetProperty("name").GetString() ?? "";
-            if (!TileNameMap.TryGetValue(name, out var tileType))
-                continue;
+            var col = i % cols;
+            var row = i / cols;
 
-            var x = tile.GetProperty("x").GetInt32();
-            var y = tile.GetProperty("y").GetInt32();
-            var w = tile.GetProperty("width").GetInt32();
-            var h = tile.GetProperty("height").GetInt32();
-
-            var frame = new RenderTargetBitmap(new PixelSize(w, h));
+            // Downscale the 418px frame to 64px to match the intended art size
+            var frame = new RenderTargetBitmap(new PixelSize((int)TargetSize, (int)TargetSize));
             using var ctx = frame.CreateDrawingContext();
-            ctx.DrawImage(_sheet, new Rect(x, y, w, h), new Rect(0, 0, w, h));
+            ctx.DrawImage(sheet,
+                new Rect(col * fw, row * fh, fw, fh),
+                new Rect(0, 0, TargetSize, TargetSize));
             ctx.Dispose();
-            _frames[(int)tileType] = frame;
+            _frames[i] = frame;
         }
     }
 
@@ -65,5 +48,8 @@ public sealed class SpriteSheet
         return i >= 0 && i < _frames.Length ? _frames[i] : null;
     }
 
-    public void Dispose() => _sheet.Dispose();
+    public void Dispose()
+    {
+        foreach (var f in _frames) f?.Dispose();
+    }
 }

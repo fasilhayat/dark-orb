@@ -1,0 +1,18 @@
+{
+  "id": "forest",
+  "name": "Forest",
+  "sprite": "Forest.png",
+  "terrainType": "forest",
+  "walkable": true,
+  "movementCost": 2,
+  "blocksVision": true,
+  "blocksMovement": false,
+  "hexMask": [
+    [54, 21],
+    [62, 36],
+    [40, 47],
+    [10, 43],
+    [2, 28],
+    [24, 17]
+  ]
+}

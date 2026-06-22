@@ -1,5 +1,6 @@
 namespace BattleArena.Gui.Views.World;
 
+using System.IO;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -7,6 +8,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using Models.World;
 using Rendering;
+using Rendering.Sprites;
 using ViewModels.World;
 
 public partial class WorldView : UserControl
@@ -45,6 +47,19 @@ public partial class WorldView : UserControl
 
     private void RenderMap(WorldViewModel vm)
     {
+        if (TileRenderer.CurrentTileset is null)
+        {
+            try
+            {
+                var assetRoot = Path.Combine(AppContext.BaseDirectory, "Assets");
+                var cache = new SpriteCache(assetRoot);
+                var sheetPath = Path.Combine(assetRoot, "World", "tiles", "tiles4.png");
+                SpriteSheet? sheet = File.Exists(sheetPath) ? new SpriteSheet(sheetPath) : null;
+                TileRenderer.CurrentTileset = new Tileset(cache, sheet);
+            }
+            catch { /* textures unavailable */ }
+        }
+
         TileRenderer.RenderMap(vm.Map, MapCanvas);
         CharacterRenderer.RenderCombatants(vm.Combatants, vm.Map, MapCanvas);
         ZoneNameText.Text = vm.ZoneName;

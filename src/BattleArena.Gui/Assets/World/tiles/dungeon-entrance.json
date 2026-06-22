@@ -1,0 +1,20 @@
+{
+  "id": "dungeon_entrance",
+  "name": "Dungeon Entrance",
+  "sprite": "DungeonEntrance.png",
+  "terrainType": "dungeon_entrance",
+  "walkable": true,
+  "movementCost": 1,
+  "blocksVision": false,
+  "blocksMovement": false,
+  "isTransitionTile": true,
+  "targetMap": "",
+  "hexMask": [
+    [54, 21],
+    [62, 36],
+    [40, 47],
+    [10, 43],
+    [2, 28],
+    [24, 17]
+  ]
+}

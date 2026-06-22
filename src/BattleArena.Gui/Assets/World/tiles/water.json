@@ -1,0 +1,20 @@
+{
+  "id": "water",
+  "name": "Water",
+  "sprite": "Water.png",
+  "terrainType": "water",
+  "walkable": false,
+  "movementCost": 999,
+  "blocksVision": false,
+  "blocksMovement": true,
+  "connects": true,
+  "connectionType": "river",
+  "hexMask": [
+    [54, 21],
+    [62, 36],
+    [40, 47],
+    [10, 43],
+    [2, 28],
+    [24, 17]
+  ]
+}

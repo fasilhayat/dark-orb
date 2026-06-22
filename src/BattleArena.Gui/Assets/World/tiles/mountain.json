@@ -1,0 +1,18 @@
+{
+  "id": "mountain",
+  "name": "Mountain",
+  "sprite": "Mountain.png",
+  "terrainType": "mountain",
+  "walkable": false,
+  "movementCost": 999,
+  "blocksVision": true,
+  "blocksMovement": true,
+  "hexMask": [
+    [54, 21],
+    [62, 36],
+    [40, 47],
+    [10, 43],
+    [2, 28],
+    [24, 17]
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "dungeon_floor",
+  "name": "Dungeon Floor",
+  "sprite": "DungeonFloor.png",
+  "terrainType": "dungeon_floor",
+  "walkable": true,
+  "movementCost": 1,
+  "blocksVision": false,
+  "blocksMovement": false,
+  "hexMask": [
+    [54, 21],
+    [62, 36],
+    [40, 47],
+    [10, 43],
+    [2, 28],
+    [24, 17]
+  ]
+}
