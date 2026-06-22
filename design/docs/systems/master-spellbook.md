@@ -763,7 +763,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/93_delayed_fireball.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -908,7 +908,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/88_shadow_bolt.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -927,7 +927,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/106_chill_touch.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -946,7 +946,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/89_blur.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -965,7 +965,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/106_enlarge.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -984,7 +984,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/90_dispel_magic.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1003,7 +1003,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/99_stoneskin.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1022,7 +1022,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/111_counter_spell.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1041,7 +1041,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/98_blight.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1060,7 +1060,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/105_animate_dead.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1079,7 +1079,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/91_phantasmal_killer.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1098,7 +1098,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/97_polymorph.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1117,7 +1117,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/92_udominate_person.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1136,7 +1136,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/96_globe_of_invulnerbility.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1155,7 +1155,7 @@ From the mid game onward, mage identity shifts toward school-defined picks, stro
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/112_chain_lightning.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">School</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1493,7 +1493,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/100_mass_heal.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1566,7 +1566,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/108_spiritual_weapon.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1585,7 +1585,7 @@ Priests gain broad early identity through blessings, healing, commands, wards, a
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/109_raise_dead.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1938,7 +1938,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/102_spike_growth.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -1957,7 +1957,7 @@ Druids begin with natural control and utility, then scale into storms, swarms, p
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/101_wall_of_thorns.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -2144,7 +2144,7 @@ Grants elemental resistance. Effective HP increase versus selected damage type. 
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/94_chant.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -2162,7 +2162,7 @@ Grants elemental resistance. Effective HP increase versus selected damage type. 
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/43_remove_paralysis.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -2216,7 +2216,7 @@ Enhances armor or shield quality with divine power. Armor Class increase. Yes, d
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/95_free_action.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
@@ -2489,7 +2489,7 @@ Knights begin spell-like command magic around level 9 and should feel like tacti
 <hr>
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr>
-<td style="border: none; padding-right: 12px;"><img src="spell-icons/_placeholder.png" width="120"/></td>
+<td style="border: none; padding-right: 12px;"><img src="spell-icons/104_arcane_defence_banner.png" width="120"/></td>
 <td style="border: none;">
 <table border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
 <tr><th style="border: none;">Deity</th><th style="border: none;">Level</th><th style="border: none;">Mana</th><th style="border: none;">Damage</th><th style="border: none;">Class</th><th style="border: none;">Tags</th></tr>
