@@ -2,6 +2,7 @@ namespace BattleArena.Core.Entities.Enums;
 
 public enum ArchetypeWeapon
 {
+    None,
     Dagger,
     ShortSword,
     Sword,

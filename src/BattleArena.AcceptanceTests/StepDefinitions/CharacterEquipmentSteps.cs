@@ -160,6 +160,14 @@ public class CharacterEquipmentSteps
         _character.Equipment.RightHand = new Weapon
         {
             Name = weaponName,
+            Archetype = weaponName switch
+            {
+                "Dagger" => ArchetypeWeapon.Dagger,
+                "Shortsword" => ArchetypeWeapon.ShortSword,
+                "Longsword" => ArchetypeWeapon.Sword,
+                _ => ArchetypeWeapon.Sword
+            },
+            Hands = 1,
             DamageDie = ParseDieType(dieSides),
             DamageCount = dieCount,
             DamageType = ParseDamageType(damageTypeName),
