@@ -18,4 +18,5 @@ public interface IAttackSource
     ElementalType ElementalType { get; }
     int ElementalDamage { get; }
     bool UsesIntelligence { get; }
+    bool IsFinesse { get; }
 }

@@ -112,10 +112,10 @@ public class CombatServiceTests
         var result = _sut.ResolveAttack(attacker, defender, weapon);
 
         Assert.True(result.IsHit);
-        Assert.Equal(0, result.Damage);
+        Assert.Equal(1, result.Damage);
         Assert.NotNull(result.DamageContext);
         Assert.Equal(-1, result.DamageContext!.BaseDamage);
-        Assert.Equal(0, result.DamageContext.FinalDamage);
+        Assert.Equal(1, result.DamageContext.FinalDamage);
     }
 
     [Fact]

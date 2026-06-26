@@ -58,15 +58,15 @@ Feature: Combat — Core Attack Resolution
 
     @attack
     # A natural 20 is a critical hit — it auto-hits and doubles base damage.
-    # STR 6 gives -2 mod. d4(1) + (-2) + Level/2(0) = -1. Crit: -1 * 2 = -2 → clamped to 0.
-    # Damage floor is at 0 regardless of negative STR mod.
-    Scenario: Damage cannot go below zero even with a negative strength modifier
+    # STR 6 gives -2 mod. d4(1) + (-2) + Level/2(0) = -1. Crit: -1 * 2 = -2 → clamped to 1.
+    # Damage floor is at 1 regardless of negative STR mod.
+    Scenario: Damage has a minimum floor of one even with a negative strength modifier
         Given a character with strength 6 and strike rating 19
         And the D20 roll is 20
         And the damage die roll is 1
         When the character attacks a target with armor class 5
         Then the attack should hit
-        And the damage should be 0
+        And the damage should be 1
 
     @attack
     # Higher StrikeRating means higher ClassAccuracyBase (SR is used directly; higher = better attacker).

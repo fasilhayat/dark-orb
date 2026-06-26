@@ -43,12 +43,12 @@ Feature: Combat Balance — Regression Guards
         Then the attribute modifier should be 5
 
     @balance
-    # Armor mitigation increases with defender level.
-    # Plate Armor (mitigation 5) at level 14 gives 5 * (1.0 + 14/10.0) = 12.
-    Scenario: Armor mitigation scales with defender level
+    # Armor mitigation increases with defender level (reduced scaling).
+    # Plate Armor (mitigation 4) at level 14 gives 4 * (1.0 + 14/20.0) = 6.
+    Scenario: Armor mitigation scales with defender level at reduced rate
         Given a defender with plate armor at level 14
         When mitigation is computed
-        Then the scaled mitigation should be 12
+        Then the scaled mitigation should be 6
 
     @balance
     # Luna (level 14 Priest) should consistently beat Vaelith (level 9 Fighter).

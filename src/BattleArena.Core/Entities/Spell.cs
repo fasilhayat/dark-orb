@@ -25,6 +25,7 @@ public class Spell : IAttackSource
         SpellSchool.Deity => false,
         _ => true,
     };
+    public bool IsFinesse => false;
     public bool IsHealing => DamageType == DamageType.Healing;
     public bool IsGroupHeal => IsHealing && Name.Contains("Mass");
     public string Tags { get; init; } = string.Empty;

@@ -61,15 +61,15 @@ Feature: Combat — Damage Formula
         Then the final damage should be 4
 
     @damage-formula
-    # Mitigation can exceed raw damage, but final damage is clamped to zero.
-    # BaseDamage = d4(1) + 0 + Level/2(0) = 1 (STR 10, no modifier). Mitigation = 5. 1 - 5 = -4 → 0.
-    Scenario: Final damage cannot fall below zero when mitigation exceeds base damage
+    # Mitigation can exceed raw damage, but final damage has a minimum floor of 1.
+    # BaseDamage = d4(1) + 0 + Level/2(0) = 1 (STR 10, no modifier). Mitigation = 5. 1 - 5 = -4 → 1.
+    Scenario: Final damage has a minimum floor of one even when mitigation exceeds base damage
         Given a damage formula attacker with strength 10
         And a Slashing damage weapon with D4 die
         And a damage formula target with armor mitigation of 5
         And the weapon damage die rolls 1
         When damage is resolved against the target
-        Then the final damage should be 0
+        Then the final damage should be 1
 
     @damage-formula
     # Vulnerability multiplies BaseDamage by 1.5 before applying mitigation.

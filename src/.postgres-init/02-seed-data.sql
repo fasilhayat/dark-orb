@@ -904,7 +904,7 @@ UPDATE arena_data.armor SET mitigation = 3 WHERE name IN ('Half Plate', 'Ring Ma
 
 UPDATE arena_data.armor SET mitigation = 4 WHERE name IN ('Splint Armor');
 
-UPDATE arena_data.armor SET mitigation = 5 WHERE name IN ('Plate Armor');
+UPDATE arena_data.armor SET mitigation = 4 WHERE name IN ('Plate Armor');
 
 UPDATE arena_data.armor SET mitigation = 0 WHERE name = 'Shield';
 

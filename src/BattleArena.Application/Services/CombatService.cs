@@ -100,7 +100,7 @@ public class CombatService : ICombatService
         if (attackRoll == 20 && defenseRoll == 1)
         {
             var dc = ResolveDamage(attacker, defender, source, isCritical: false, range, terrain);
-            var devastatingDamage = Math.Max(0,
+            var devastatingDamage = Math.Max(1,
                 (int)(dc.BaseDamage * 3 * dc.TypeMultiplier) - dc.ArmorMitigation + dc.ElementalModifiers);
             return new AttackResult
             {
@@ -233,7 +233,9 @@ public class CombatService : ICombatService
 
         var abilityScore = source.UsesIntelligence
             ? attacker.Intelligence
-            : source.AttackType == AttackType.Ranged ? attacker.Dexterity : attacker.Strength;
+            : source.AttackType == AttackType.Ranged ? attacker.Dexterity
+            : source.IsFinesse ? Math.Max(attacker.Strength, attacker.Dexterity)
+            : attacker.Strength;
         var attributeModifier = CalculateAbilityModifier(abilityScore);
         var weaponDiceRoll    = RollAttackDamageTotal(source);
             var levelScaling = attacker.Level / 2;
@@ -244,9 +246,11 @@ public class CombatService : ICombatService
         var scaledBase = isCritical ? baseDamage * 2 : baseDamage;
         scaledBase = (int)(scaledBase * ctx.DamageMultiplier);
 
-        var armorMitigation = (int)(defender.Equipment.TotalMitigation * (1.0 + defender.Level / 10.0));
-        var finalDamage = Math.Max(0,
-            (int)(scaledBase * typeMultiplier) - armorMitigation + source.ElementalDamage + ctx.DamageDelta);
+        var scaledMitigation = (int)(defender.Equipment.TotalMitigation * (1.0 + defender.Level / 20.0));
+        var isPhysicalDamage = source.DamageType is DamageType.Bludgeoning or DamageType.Piercing or DamageType.Slashing;
+        var effectiveMitigation = isPhysicalDamage ? scaledMitigation : scaledMitigation / 2;
+        var finalDamage = Math.Max(1,
+            (int)(scaledBase * typeMultiplier) - effectiveMitigation + source.ElementalDamage + ctx.DamageDelta);
 
         return new DamageContext
         {
@@ -256,7 +260,7 @@ public class CombatService : ICombatService
             LevelScaling      = levelScaling,
             BaseDamage        = baseDamage,
             TypeMultiplier    = typeMultiplier,
-            ArmorMitigation   = defender.Equipment.TotalMitigation,
+            ArmorMitigation   = effectiveMitigation,
             ElementalModifiers = source.ElementalDamage,
             FinalDamage       = finalDamage
         };

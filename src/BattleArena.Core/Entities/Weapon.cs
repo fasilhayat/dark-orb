@@ -20,4 +20,12 @@ public class Weapon : IAttackSource
     public ElementalType ElementalType { get; init; } = ElementalType.None;
     public int FlatDamageBonus { get; init; }
     public bool UsesIntelligence => false;
+    public bool IsFinesse => Archetype switch
+    {
+        ArchetypeWeapon.Dagger => true,
+        ArchetypeWeapon.ShortSword => true,
+        ArchetypeWeapon.Sword => true,
+        ArchetypeWeapon.Spear => true,
+        _ => false,
+    };
 }

@@ -16,4 +16,5 @@ public sealed class UnarmedStrike : IAttackSource
     public ElementalType ElementalType => ElementalType.None;
     public int ElementalDamage => 0;
     public bool UsesIntelligence => false;
+    public bool IsFinesse => false;
 }

@@ -97,7 +97,7 @@ public class CombatBalanceSteps
             Level = level,
             Equipment = new ArmorSlots
             {
-                Chest = new Armor { Name = "Plate Armor", ArmorClass = 18, Mitigation = 5 },
+                Chest = new Armor { Name = "Plate Armor", ArmorClass = 18, Mitigation = 4 },
             },
         };
     }
@@ -106,7 +106,7 @@ public class CombatBalanceSteps
     public void WhenMitigationIsComputed()
     {
         var raw = _character.Equipment.TotalMitigation;
-        var levelFactor = 1.0 + _character.Level / 10.0;
+        var levelFactor = 1.0 + _character.Level / 20.0;
         _scaledMitigation = (int)(raw * levelFactor);
     }
 
@@ -176,7 +176,7 @@ public class CombatBalanceSteps
             MaxMana = 120, CurrentMana = 120, RemainingCasts = 20,
             Equipment = new ArmorSlots
             {
-                Chest = new Armor { Name = "Plate Armor", ArmorClass = 18, Mitigation = 5 },
+                Chest = new Armor { Name = "Plate Armor", ArmorClass = 18, Mitigation = 4 },
                 RightHand = new Weapon
                 {
                     Name = "Great Mace", DamageDie = DieType.D8, DamageCount = 1,
