@@ -6,9 +6,11 @@
 
 ## Stale Makefile targets
 
+Any target referencing `BattleArena.Demo/BattleArena.Demo.csproj` or
+`battle-arena-demo` fails — the Demo project was deleted. Affected:
 `up-dev`, `up-test`, `demo-local`, `publish-demo`, `install`, `install-dev`,
-`redo-local`, `run-dev`, `dev-up` — all fail because `BattleArena.Demo.csproj`
-was deleted in `d63b1ef`. `install-gui` and `gui-local` still work.
+`redo-local`, `run-dev`, `dev-up`. `install-gui`, `gui-local`, `start-gui`,
+`build-local` (alias for `publish`), `up-local`, `up-preprod`, `up-prod` still work.
 
 ## Commands
 
@@ -17,12 +19,13 @@ All from `src/`. Solution: `src/BattleArena.sln`. .NET 8, `ImplicitUsings` + `Nu
 | Command | Action |
 |---------|--------|
 | `make test` | `dotnet test BattleArena.sln` |
-| `make test-coverage` | Coverlet + opencover |
+| `make test-coverage` | Coverlet + opencover (uses `coverlet.runsettings`) |
 | `make up-local` | DB + API in Docker (ports 5432, 8585 exposed) |
 | `make up-preprod` / `make up-prod` | DB + API only, no host ports |
 | `make down` | Stop all environment containers |
 | `make clean` | Down + wipe volumes + delete `../publish` |
-| `make gui-local` | Avalonia GUI standalone (no DB needed) |
+| `make gui-local` / `make start-gui` | Avalonia GUI standalone (no DB needed) |
+| `make build-local` | Alias for `make publish` |
 | `make publish` | Host-side `dotnet publish Api` to `../publish` (required before any `up-*`) |
 | `make sync-instructions` | Copy AGENTS.md → `.github/copilot-instructions.md` |
 | `make clean-logs` | Delete generated `combat-logs/` files |
@@ -52,7 +55,7 @@ Core never references Application/Infrastructure. Application never references I
 
 ## Constraints
 
-- **API**: pure CRUD — no dice rolling, combat, or game logic. Endpoint groups: Character, Equipment, Accessories, Npc, Lore. `CombatEndpoint.cs` is a comment tombstone. Health check at `/api/healthcheck`. Port 8585. Swagger only in Development/LocalDev. Requires `X-Api-Key` header.
+- **API**: pure CRUD — no dice rolling, combat, or game logic. Endpoint groups: Character, Equipment, Accessories, Npc, Lore, Quest, Health. `CombatEndpoint.cs` is a 2-line comment tombstone. Health check at `/api/healthcheck`. Port 8585. Swagger only in Development/LocalDev. Requires `X-Api-Key` header.
 - **GUI** (Avalonia): must never contain combat logic. `ICombatPresenter` in Presentation is the only rendering contract.
 - **DiceService**: seed-based, deterministic via `Random.Shared.Next()` or explicit constructor.
 - **No EF Core** — Npgsql + custom DbContext wrapper in Infrastructure.
@@ -69,7 +72,7 @@ Core never references Application/Infrastructure. Application never references I
 Combat services live in `Application/Services/Combat/`: AttackResolver, CombatLogger, VictoryEvaluator, TurnMeterProcessor, StatusEffectProcessor, SpellProcessor, TurnProcessor, CharacterExtensions, CombatSimulatorHelpers.
 State models: `CombatantState`, `QueuedSpellInfo` (Application/Models/Combat/); `ActorSetup` (internal).
 
-**Attack resolution** (opposed roll, never THAC0): `d20 + AttackPower >= d20 + DefensePower`. Priority in `CombatService.ResolveAttack()`: TotalReversal → DevastatingStrike → Fumble → Critical → PerfectParry → normal. Clash is a separate code path in `AttackResolver.ProcessClashAsync()` (triggered when both rolls equal). `StrikeRating` higher = better. `ArmorClass` higher = more defensive.
+**Attack resolution** (opposed roll, never THAC0): `d20 + AttackPower >= d20 + DefensePower`. Priority in `CombatService.ResolveAttack()`: TotalReversal → DevastatingStrike → PerfectParry(both 20) → Fumble → Critical → PerfectParry(def 20) → normal. `IsClash` is declared on `AttackResult` but never set to `true` in current code — the `AttackResolver.ProcessClashAsync()` code path is dead. `StrikeRating` higher = better. `ArmorClass` higher = more defensive.
 
 **HP**: >0 alive, 0 to −9 KnockedOut, −10 or lower Dead.
 
