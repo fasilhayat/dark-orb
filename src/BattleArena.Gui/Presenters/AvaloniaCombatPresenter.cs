@@ -161,6 +161,9 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
             if (!string.IsNullOrEmpty(ev.OverlayText))
                 _vm.AddOverlayMessage(ev.OverlayText, ev.Color, ev.MainForeground);
+
+            if (ev.SpellSymbol is not null)
+                _vm.AddSpellSymbolOverlay(ev.SpellSymbol.Symbol, ev.SpellSymbol.Color, ev.SpellSymbol.FontFamily);
         });
     }
 
@@ -174,6 +177,9 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
 
             if (!string.IsNullOrEmpty(ev.OverlayText))
                 _vm.AddOverlayMessage(ev.OverlayText, ev.Color, ev.MainForeground);
+
+            if (ev.SpellSymbol is not null)
+                _vm.AddSpellSymbolOverlay(ev.SpellSymbol.Symbol, ev.SpellSymbol.Color, ev.SpellSymbol.FontFamily);
         });
     }
 

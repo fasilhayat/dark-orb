@@ -127,7 +127,7 @@ Her barbarian armor is light and revealing, abdomen muscles are visible, enhanci
 
 **Equipment**
 - **Great Sword** — 1D10 Slashing, 2H
-- **Hide Armor** — AC 12, Medium
+- **Hide Armor** — AC 12, Light
 - **Band of the Bull** — Str +2
 
 ---

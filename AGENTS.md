@@ -77,6 +77,18 @@ State models: `CombatantState`, `QueuedSpellInfo` (Application/Models/Combat/); 
 
 **EventType** is a plain `string` on `CombatLogEntry` — not an enum.
 
+## Spell visual effects
+
+`Presentation/SpellSymbolRegistry.cs` maps spell names to animated Unicode symbols
+(no emojis). `CombatPlaybackEngine.EmitVisualEvents()` attaches the symbol to the
+`VisualEvent`; `AvaloniaCombatPresenter` publishes it as a centered overlay that
+grows and dissolves. Symbols are font-hinted (e.g. Segoe UI Symbol, Times New Roman)
+and colored per category — fire=orange, heal=green, charm=pink, hold=purple,
+leech=magenta.
+
+To add a new symbol: add an exact name entry or keyword rule to
+`SpellSymbolRegistry`, then the rest flows automatically.
+
 ## Testing quirks
 
 - **Always** mock `IDiceService` when testing dice-dependent methods.

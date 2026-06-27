@@ -853,7 +853,7 @@ FROM (VALUES
     ('Studded Leather',  'Leather reinforced with hundreds of iron rivets. A favorite among city guards who patrol the dangerous dock districts at night.',
                                                                                                    12, 'Light',  99, FALSE, 0, 'Common'),
     ('Hide Armor',       'The stripped hide of a cave bear, crudely cured over a campfire. Primitive but effective. Worn by the barbarian tribes of the Frozen Wastes.',
-                                                                                                   12, 'Medium', 2,  FALSE, 0, 'Common'),
+                                                                                                    12, 'Light', 99,  FALSE, 0, 'Common'),
     ('Chain Shirt',      'A shirt of interlocking rings that jingles with every step. The minimum standard for any professional soldier in the Eldergard army.',
                                                                                                    13, 'Medium', 2,  FALSE, 0, 'Common'),
     ('Scale Mail',       'Overlapping iron plates sewn onto a leather backing resembling dragon scales. Provides excellent protection against slashing attacks. Worn by dragon-hunters of the Burning Plains.',
@@ -932,6 +932,8 @@ UPDATE arena_data.armor SET turn_meter_penalty = 1 WHERE name IN ('Scale Mail', 
 UPDATE arena_data.armor SET turn_meter_penalty = 2 WHERE name IN ('Chain Mail', 'Splint Armor');
 
 UPDATE arena_data.armor SET turn_meter_penalty = 3 WHERE name IN ('Plate Armor');
+
+UPDATE arena_data.armor SET turn_meter_penalty = 1 WHERE name IN ('Hide Armor');
 
 UPDATE arena_data.armor SET turn_meter_penalty = 1 WHERE name IN ('Shield');
 

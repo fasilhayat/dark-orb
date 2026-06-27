@@ -414,6 +414,7 @@ public static class CombatPlaybackEngine
                 if (entry.IsSpell && !string.IsNullOrEmpty(entry.AttackSourceName))
                 {
                     var isUpgraded = IsUpgradedSpell(entry);
+                    var symbolEffect = SpellSymbolRegistry.Lookup(entry.AttackSourceName);
                     var ev = new VisualEvent
                     {
                         EventType = entry.EventType,
@@ -422,6 +423,7 @@ public static class CombatPlaybackEngine
                         OverlayText = entry.AttackSourceName!.ToUpperInvariant(),
                         Color = isUpgraded ? "#ffdd44" : SpellOverlayColor(entry.AttackSourceName),
                         DurationMs = isUpgraded ? 1800 : 1200,
+                        SpellSymbol = symbolEffect,
                     };
                     if (isUpgraded)
                         bus.PublishMajor(ev);
@@ -607,6 +609,9 @@ public static class CombatPlaybackEngine
                         ? entry.AttackSourceName.ToUpperInvariant()
                         : null;
                     var overlay = spellPart is not null ? $"{spellPart} {amountPart}" : $"HEALED {amountPart}";
+                    var symbolEffect = entry.AttackSourceName is not null
+                        ? SpellSymbolRegistry.Lookup(entry.AttackSourceName)
+                        : null;
                     bus.PublishNormal(new VisualEvent
                     {
                         EventType = entry.EventType,
@@ -615,6 +620,7 @@ public static class CombatPlaybackEngine
                         OverlayText = overlay,
                         HealAmount = entry.DamageDealt ?? 0,
                         Color = "#44cc44",
+                        SpellSymbol = symbolEffect,
                     });
                 }
                 break;
@@ -681,7 +687,8 @@ public static class CombatPlaybackEngine
                         LeechAmount = entry.LeechAmount ?? 0,
                         LeechCasterName = entry.LeechCasterName,
                         LeechResourceType = entry.LeechResourceType ?? "HP",
-                        EffectName = effectName
+                        EffectName = effectName,
+                        SpellSymbol = SpellSymbolRegistry.Lookup("Vampiric Touch"),
                     });
                 }
                 break;

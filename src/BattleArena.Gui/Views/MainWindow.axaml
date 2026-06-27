@@ -433,6 +433,35 @@
       </ItemsControl.ItemTemplate>
     </ItemsControl>
 
+    <!-- SPELL SYMBOL OVERLAYS: centered symbol, grows and dissolves -->
+    <ItemsControl ItemsSource="{Binding SpellSymbolOverlays}"
+                  IsHitTestVisible="False"
+                  ClipToBounds="False"
+                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+      <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+          <Grid ClipToBounds="False" />
+        </ItemsPanelTemplate>
+      </ItemsControl.ItemsPanel>
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Grid HorizontalAlignment="Center" VerticalAlignment="Center"
+                RenderTransformOrigin="0.5,0.5">
+            <TextBlock Text="{Binding Symbol}" FontSize="52" FontWeight="Bold"
+                       Foreground="{Binding Color}"
+                       Opacity="{Binding Opacity}"
+                       FontFamily="{Binding FontFamily}"
+                       TextWrapping="NoWrap"
+                       RenderTransformOrigin="0.5,0.5">
+              <TextBlock.RenderTransform>
+                <ScaleTransform ScaleX="{Binding Scale}" ScaleY="{Binding Scale}" />
+              </TextBlock.RenderTransform>
+            </TextBlock>
+          </Grid>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+
     <!-- ── SETUP PHASE ── -->
     <Grid IsVisible="{Binding IsSetupPhase}" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,*,Auto" Margin="20">
 

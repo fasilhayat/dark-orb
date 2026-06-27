@@ -22,5 +22,5 @@ public sealed class VisualEvent
     public int LeechAmount { get; init; }
     public string? LeechCasterName { get; init; }
     public string LeechResourceType { get; init; } = "HP";
-
+    public SpellSymbolEffect? SpellSymbol { get; init; }
 }

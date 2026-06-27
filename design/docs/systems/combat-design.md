@@ -133,7 +133,7 @@ Dexterity bonus is capped by the sum of `MaxDexterityBonus` across all worn armo
 | Robes | 10 | Caster | 99 | 0 |
 | Leather Armor | 11 | Light | 99 | 1 |
 | Studded Leather | 12 | Light | 99 | 1 |
-| Hide Armor | 12 | Medium | 2 | 2 |
+| Hide Armor | 12 | Light | 2 | 2 |
 | Scale Mail | 14 | Medium | 2 | 2 |
 | Chain Mail | 16 | Heavy | 0 | 3 |
 | Plate Armor | 18 | Heavy | 0 | 5 |

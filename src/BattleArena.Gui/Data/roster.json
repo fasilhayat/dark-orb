@@ -233,7 +233,7 @@
   ],
 
   "armors": [
-    { "name": "Hide Armor",      "armorClass": 12, "mitigation": 2, "maxDexterityBonus": 2, "movementPenalty": 5, "turnMeterPenalty": 0 },
+    { "name": "Hide Armor",      "armorClass": 12, "mitigation": 2, "maxDexterityBonus": 2, "movementPenalty": 5, "turnMeterPenalty": 1 },
 
     { "name": "Plate Armor",     "armorClass": 18, "mitigation": 5, "maxDexterityBonus": 0, "movementPenalty": 15, "turnMeterPenalty": 3 },
 

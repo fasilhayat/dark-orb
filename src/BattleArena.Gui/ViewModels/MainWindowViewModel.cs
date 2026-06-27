@@ -762,6 +762,22 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
 
     // ── Floating overlay messages ────────────────────────────
 
+    public ObservableCollection<SpellSymbolOverlayViewModel> SpellSymbolOverlays { get; } = [];
+    private CancellationTokenSource? _spellSymbolCts;
+
+    public void AddSpellSymbolOverlay(string symbol, string color, string fontFamily)
+    {
+        _spellSymbolCts ??= new CancellationTokenSource();
+        var overlay = new SpellSymbolOverlayViewModel(symbol, color, fontFamily);
+        SpellSymbolOverlays.Add(overlay);
+        overlay.Animate(OnSpellSymbolCompleted, _spellSymbolCts.Token);
+    }
+
+    private void OnSpellSymbolCompleted(SpellSymbolOverlayViewModel overlay)
+    {
+        SpellSymbolOverlays.Remove(overlay);
+    }
+
     public ObservableCollection<OverlayMessageViewModel> OverlayMessages { get; } = [];
     private CancellationTokenSource? _overlayCts;
 
@@ -787,7 +803,10 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     {
         _overlayCts?.Cancel();
         _overlayCts = null;
+        _spellSymbolCts?.Cancel();
+        _spellSymbolCts = null;
         OverlayMessages.Clear();
+        SpellSymbolOverlays.Clear();
     }
 
     // ── API mode ─────────────────────────────────────────────
@@ -898,6 +917,7 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
     public int ArmorClass { get; init; }
     public string WeaponStats { get; init; } = "";
     public int MagicResistance { get; init; }
+    public int TurnMeterPenalty { get; init; }
     public Bitmap? Portrait { get; init; }
 
     public bool HasPortrait => Portrait is not null;
@@ -1021,7 +1041,14 @@ public sealed class CharCardViewModel : INotifyPropertyChanged
 
     public string InfoLine => $"{SexDisplay} \u00b7 Lvl {Level,2} {Race} \u00b7 {ClassName}";
 
-    public string ArmorLine => $"{ArmorName} (AC {ArmorClass})";
+    public string ArmorLine
+    {
+        get
+        {
+            var suffix = TurnMeterPenalty > 0 ? $" TM -{TurnMeterPenalty}" : "";
+            return $"{ArmorName} (AC {ArmorClass}){suffix}";
+        }
+    }
     public string StrikeLine => $"Strike: {StrikeRating}";
     public string WeaponLine => $"Weapon: {WeaponStats}";
     public string ResistLine => $"Magic Res: {MagicResistance}";
