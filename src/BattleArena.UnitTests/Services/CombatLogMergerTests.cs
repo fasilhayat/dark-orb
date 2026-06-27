@@ -106,40 +106,42 @@ public class CombatLogMergerTests
     {
         var log = new List<CombatLogEntry>
         {
-            E(1, "TurnStart"),
-            E(1, "Attack"),
-            E(2, "TurnStart"),
-            E(2, "Damage")  // no Attack in tick 2 → dice appended at end
+            E(1, "TurnStart", "Hero"),
+            E(1, "Attack", "Hero"),
+            E(2, "TurnStart", "Villain"),
+            E(2, "Damage", "Villain")  // no Attack in tick 2
         };
         var diceLog = new List<CombatLogEntry>
         {
-            E(1, "ApiCall", "D1"),
-            E(2, "ApiCall", "D2")
+            E(1, "ApiCall", "Hero"),     // matches Attack actor in tick 1 → before Attack
+            E(2, "ApiCall", "Villain")   // no Attack for Villain → appended at end of tick 2
         };
 
         var merged = CombatLogMerger.Merge(log, diceLog);
 
         var types = merged.Select(e => e.EventType).ToList();
         var actors = merged.Select(e => e.ActorName).ToList();
-        // Tick 1: dice before Attack
+        // Tick 1: dice (Hero) before Attack (Hero)
         Assert.Equal("TurnStart", types[0]);
-        Assert.Equal("D1", actors[1]);
+        Assert.Equal("ApiCall", types[1]);
+        Assert.Equal("Hero", actors[1]);
         Assert.Equal("Attack", types[2]);
         // Tick 2: no Attack → dice after last event
         Assert.Equal("TurnStart", types[3]);
         Assert.Equal("Damage", types[4]);
-        Assert.Equal("D2", actors[5]);
+        Assert.Equal("ApiCall", types[5]);
+        Assert.Equal("Villain", actors[5]);
     }
 
     [Fact]
     public void Merge_MultipleDiceAtSameTick_AllInsertedBeforeAttack()
     {
-        var log = new List<CombatLogEntry> { E(7, "Attack") };
+        var log = new List<CombatLogEntry> { E(7, "Attack", "Hero") };
         var diceLog = new List<CombatLogEntry>
         {
-            E(7, "ApiCall", "D1"),
-            E(7, "ApiCall", "D2"),
-            E(7, "ApiCall", "D3")
+            E(7, "ApiCall", "Hero"),
+            E(7, "ApiCall", "Hero"),
+            E(7, "ApiCall", "Hero")
         };
 
         var merged = CombatLogMerger.Merge(log, diceLog);
@@ -177,7 +179,105 @@ public class CombatLogMergerTests
         var merged = CombatLogMerger.Merge(log, diceLog);
 
         var types = merged.Select(e => e.EventType).ToList();
-        // Dice inserted before Attack (the first priority event in the tick)
+        // Dice inserted before Attack (the first priority event of the matching actor in the tick)
         Assert.Equal(["RoundStart", "TurnStart", "ApiCall", "Attack", "Damage", "TurnEnd"], types);
+    }
+
+    [Fact]
+    public void Merge_MultipleActorsSameTick_DiceBeforeEachOwnAttack()
+    {
+        // Two actors act in same tick. Each actor's dice should precede their own Attack.
+        var log = new List<CombatLogEntry>
+        {
+            E(1, "TurnStart", "Finnick"),
+            E(1, "Attack", "Finnick"),
+            E(1, "Damage"),
+            E(1, "TurnStart", "Merchant Vex"),
+            E(1, "Attack", "Merchant Vex"),
+            E(1, "Damage")
+        };
+        var diceLog = new List<CombatLogEntry>
+        {
+            E(1, "ApiCall", "Finnick"),
+            E(1, "ApiCall", "Finnick"),
+            E(1, "ApiCall", "Finnick"),
+            E(1, "ApiCall", "Merchant Vex"),
+            E(1, "ApiCall", "Merchant Vex")
+        };
+
+        var merged = CombatLogMerger.Merge(log, diceLog);
+
+        var types = merged.Select(e => e.EventType).ToList();
+        var actors = merged.Select(e => e.ActorName).ToList();
+
+        // Expected: [TurnStart(F), FinnickDice(3), Attack(F), Damage, TurnStart(MV), MVDice(2), Attack(MV), Damage]
+        Assert.Equal("TurnStart", types[0]);
+        Assert.Equal("Finnick", actors[0]);
+
+        Assert.Equal("ApiCall", types[1]);
+        Assert.Equal("ApiCall", types[2]);
+        Assert.Equal("ApiCall", types[3]);
+        Assert.Equal("Finnick", actors[1]);
+
+        Assert.Equal("Attack", types[4]);
+        Assert.Equal("Finnick", actors[4]);
+
+        Assert.Equal("Damage", types[5]);
+
+        Assert.Equal("TurnStart", types[6]);
+        Assert.Equal("Merchant Vex", actors[6]);
+
+        Assert.Equal("ApiCall", types[7]);
+        Assert.Equal("ApiCall", types[8]);
+        Assert.Equal("Merchant Vex", actors[7]);
+
+        Assert.Equal("Attack", types[9]);
+        Assert.Equal("Merchant Vex", actors[9]);
+
+        Assert.Equal("Damage", types[10]);
+    }
+
+    [Fact]
+    public void Merge_SpellQueued_DiceBeforeQueuedEvent()
+    {
+        // A spellcaster's dice should appear before their SpellQueued event.
+        var log = new List<CombatLogEntry>
+        {
+            E(1, "TurnStart", "Vaelith"),
+            E(1, "SpellQueued", "Vaelith"),
+            E(1, "TurnStart", "Finnick"),
+            E(1, "Attack", "Finnick")
+        };
+        var diceLog = new List<CombatLogEntry>
+        {
+            E(1, "ApiCall", "Vaelith"),
+            E(1, "ApiCall", "Vaelith"),
+            E(1, "ApiCall", "Finnick")
+        };
+
+        var merged = CombatLogMerger.Merge(log, diceLog);
+
+        var types = merged.Select(e => e.EventType).ToList();
+        var actors = merged.Select(e => e.ActorName).ToList();
+
+        // Expected: [TurnStart(V), VaelithDice(2), SpellQueued(V), TurnStart(F), FinnickDice(1), Attack(F)]
+        Assert.Equal("TurnStart", types[0]);
+        Assert.Equal("Vaelith", actors[0]);
+
+        Assert.Equal("ApiCall", types[1]);
+        Assert.Equal("ApiCall", types[2]);
+        Assert.Equal("Vaelith", actors[1]);
+
+        Assert.Equal("SpellQueued", types[3]);
+        Assert.Equal("Vaelith", actors[3]);
+
+        Assert.Equal("TurnStart", types[4]);
+        Assert.Equal("Finnick", actors[4]);
+
+        Assert.Equal("ApiCall", types[5]);
+        Assert.Equal("Finnick", actors[5]);
+
+        Assert.Equal("Attack", types[6]);
+        Assert.Equal("Finnick", actors[6]);
     }
 }

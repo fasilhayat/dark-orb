@@ -77,6 +77,23 @@ State models: `CombatantState`, `QueuedSpellInfo` (Application/Models/Combat/); 
 
 **EventType** is a plain `string` on `CombatLogEntry` — not an enum.
 
+**Combat log .txt format**: compact block-per-turn. Each turn is a structured block:
+```
+══ TURN N ══  tick=T
+  Actor → Target [Source]
+    D20: ... | D4: ...   (dice per die-type)
+    ATTACK  HIT  [roll+AP vs def+DP]
+    DMG   formula...
+    HP   Target  before → after  (-dmg)
+    EFFECT  [name] applied  dur=N
+    END  TM before → after
+```
+Between-turn events (TM, mana, death) are standalone with `tick=T` labels.
+Dice are per-actor interleaved (merged before each actor's Attack, not batched by tick).
+Multi-attack labeled `ATTACK 1/3`, `ATTACK 2/3`.
+See `CombatLogWriter.cs` for the full format and `combat-design.md` §15 for docs.
+`CombatLogMerger` inserts ApiCall dice entries per-actor before Attack/SpellQueued events.
+
 ## Spell visual effects
 
 `Presentation/SpellSymbolRegistry.cs` maps spell names to animated Unicode symbols

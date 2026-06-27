@@ -62,7 +62,7 @@ public class CombatLogger
         {
             var critTag = GetCritTag(result);
             msg += $" | Dmg: roll({dc.WeaponDiceRoll}) + attr({dc.AttributeModifier}) + flat({dc.FlatBonuses}) + lvl({dc.LevelScaling})" +
-                   $" = {dc.BaseDamage}{critTag} x{dc.TypeMultiplier:0.0} - mit({dc.ArmorMitigation}) + elem({dc.ElementalModifiers}) = {result.Damage}";
+                   $" = {dc.BaseDamage}{critTag} x{dc.TypeMultiplier.ToString("0.0", System.Globalization.CultureInfo.InvariantCulture)} - mit({dc.ArmorMitigation}) + elem({dc.ElementalModifiers}) = {result.Damage}";
         }
 
         var ctx    = CombatNarrator.GetContext(

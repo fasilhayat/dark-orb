@@ -530,27 +530,59 @@ CombatSimulator
 ├── IDiceService          (random rolls)
 ```
 
-All combat-log events use `CombatLogEntry` with an `EventType` string:
+All combat-log events use `CombatLogEntry` with an `EventType` string.
+The full event type catalog is at `bugs-features/15-Task - EventType to Typed Constants.md`
+(42+ types). Key types relevant to reading the `.txt` log:
 
-| EventType | Meaning |
-|-----------|---------|
-| TurnMeterGain | TM increased this tick |
-| TurnStart | Actor begins their turn |
-| Attack | Hit or miss resolved |
-| Damage | HP reduced |
-| SkippedTurn | CC'd actor cannot act |
-| EffectApplied | Status effect landed |
-| EffectResisted | Resistance roll blocked the effect |
-| EffectExpired | Duration reached zero |
-| EffectReflected | On-hit effect redirected back to attacker by reflective shield |
-| DoTDamage | Damage-over-time tick |
-| FumblePenalty | Fumble side-effect applied |
-| Death | HP ≤ -10 |
-| KnockedOut | HP in range -9 to 0 |
-| PerfectParry | Defender deflects attack; gains TM bonus |
-| Clash | Mutual weapon collision; both take reduced damage |
-| DevastatingStrike | Triple-damage critical hit |
-| TotalReversal | Fumble flipped; defender gains TM, attacker penalised harder |
+| EventType | .txt prefix | Meaning |
+|-----------|-------------|---------|
+| TurnStart | `══ TURN N ══` | Actor begins their turn (opens a block) |
+| TurnEnd | `END  TM` | Actor ends turn (closes block) |
+| Attack | `ATTACK` | Hit or miss resolved |
+| Damage | `DMG` / `HP` | Damage formula / HP change |
+| TurnMeterGain | `TM` | Turn meter hit 100 (ready to act) |
+| ApiCall | `DICE` | Dice roll (interleaved per-actor before their Attack) |
+| EffectApplied | `EFFECT` | Status effect landed |
+| EffectResisted | `RESIST` | Resistance roll blocked |
+| EffectExpired | `EXPIRED` | Duration reached zero |
+| Death | `*** DEATH` | HP ≤ -10 |
+| KnockedOut | `*** KNOCKOUT` | HP -9 to 0 |
+| Healed | `HEAL` | HP restored |
+| ManaDeduct | `MANA` | Mana spent on a spell |
+| ManaRegen | `MANA` | Mana recovered between turns |
+| SpellQueued | `QUEUE` | Caster began charging a spell |
+| RoundStart | `══ ROUND N ══` | Round boundary marker |
+
+### Combat log `.txt` format
+
+The human-readable log uses a **compact block-per-turn** format. Each turn is grouped
+into a structured block with tick number on the header line. Dice are interleaved
+per-actor (merged just before that actor's Attack event, not batched by tick).
+
+```
+══ TURN   1 ═══════════════════════════════════════════════════════════════════════  tick=1
+  Finnick → Vaelith  [Dagger]
+    D20: 19 18  |  D4: 3  |  D100: 65
+    ATTACK  HIT  [19+22=41 vs 18+22=22]
+    "The attack deflects off Vaelith Moonveil's armour but still draws blood."
+    DMG   roll(3)+attr(5)+flat(0)+lvl(4)=12 ×1.0 -mit(2)+elem(0)=10
+    HP   Vaelith          45 →   35  (-10)
+    END  TM 115 → 36
+```
+
+Between-turn events (TM readiness, ManaRegen, Death from DoT) appear outside blocks
+with tick labels:
+
+```
+  TM  Vaelith       100 → 114  [READY]  tick=1
+  MANA  Vaelith regens 4 mana  (70 → 74)  tick=2
+  *** DEATH  [DEAD] Merchant Vex has been slain! (HP: -10)  tick=1
+```
+
+ManaDeduct events for a spellcaster are absorbed into their turn block when they
+immediately precede the caster's TurnStart.
+
+Multi-attack turns are labeled `ATTACK 1/3`, `ATTACK 2/3` etc. within a single block.
 
 ### API Endpoint
 

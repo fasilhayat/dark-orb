@@ -119,169 +119,326 @@ public static class CombatLogWriter
         sb.AppendLine();
 
         int turnNo = 0;
-        int lastTick = -1;
+        bool inTurn = false;
+        int attackNo = 0;
+        int totalAttacksInTurn = 0;
+        string? turnActor = null;
+        List<string> pendingDice = new();
+        CombatLogEntry? pendingMana = null;
 
-        foreach (var e in result.Log)
+        // Peek ahead to count Attack entries for multi-attack labeling.
+        int CountAttacksForCurrentActor(int fromIndex)
         {
-            // Skip raw TM gain noise — only show READY/ACTIVE transitions
+            int count = 0;
+            for (int i = fromIndex; i < result.Log.Count; i++)
+            {
+                var e2 = result.Log[i];
+                if (e2.EventType == "TurnStart" && e2.ActorName != turnActor) break;
+                if (e2.EventType == "TurnEnd") break;
+                if (e2.EventType == "Attack" && e2.ActorName == turnActor) count++;
+            }
+            return count;
+        }
+
+        void FlushPendingMana()
+        {
+            if (pendingMana != null)
+            {
+                sb.AppendLine($"  MANA  {pendingMana.Message}  tick={pendingMana.Tick}");
+                pendingMana = null;
+            }
+        }
+
+        void FlushDice()
+        {
+            if (pendingDice.Count == 0) return;
+            var parts = pendingDice
+                .Select(d => d.Split(" → "))
+                .GroupBy(p => p[0])
+                .Select(g => $"{char.ToUpperInvariant(g.Key[0]) + g.Key[1..]}: {string.Join(" ", g.Select(p => p[1]))}");
+            sb.AppendLine($"    {string.Join("  |  ", parts)}");
+            pendingDice.Clear();
+        }
+
+        for (int i = 0; i < result.Log.Count; i++)
+        {
+            var e = result.Log[i];
+
+            // Skip raw TM gain noise — only show READY transitions
             if (e.EventType == "TurnMeterGain")
             {
-                if (!e.IsReady && !e.IsActive) continue;
-                if (e.IsActive) continue; // shown via TurnStart already
-                sb.AppendLine($"  [{e.Tick,5}]  TM  {e.ActorName,-12}  {e.TurnMeterBefore,3} → {e.TurnMeterAfter,3}  [READY TO ACT]");
-                lastTick = e.Tick;
+                if (!e.IsReady || e.IsActive) continue;
+                FlushPendingMana();
+                sb.AppendLine($"  TM  {e.ActorName,-12}  {e.TurnMeterBefore,3} → {e.TurnMeterAfter,3}  [READY]  tick={e.Tick}");
                 continue;
             }
 
+            // ── In-turn events ────────────────────────────────────────────────
+            if (inTurn)
+            {
+                switch (e.EventType)
+                {
+                    case "ApiCall":
+                        var diceMsg = e.Message;
+                        int arrowIdx = diceMsg.IndexOf(" → ");
+                        if (arrowIdx > 0)
+                        {
+                            int spaceIdx = diceMsg.LastIndexOf(' ', arrowIdx - 1);
+                            var die = spaceIdx >= 0 ? diceMsg[(spaceIdx + 1)..arrowIdx] : diceMsg[..arrowIdx];
+                            pendingDice.Add($"{die} → {diceMsg[(arrowIdx + 3)..]}");
+                        }
+                        continue;
+
+                    case "ExtraAttack":
+                        continue;
+
+                    case "Attack":
+                        FlushDice();
+                        attackNo++;
+                        if (attackNo == 1)
+                            totalAttacksInTurn = CountAttacksForCurrentActor(i);
+
+                        var hitMiss = e.IsHit == true ? "HIT" : "MISS";
+                        var tags = "";
+                        if (e.IsCritical == true) tags += "  CRIT!";
+                        if (e.IsFumble == true) tags += "  FUMBLE!";
+                        if (e.IsDevastatingStrike == true) tags += "  DEVASTATING!";
+                        if (e.IsClash == true) tags += "  CLASH!";
+                        if (e.IsPerfectParry == true) tags += "  PARRY!";
+                        if (e.IsTotalReversal == true) tags += "  REVERSAL!";
+                        int atkTotal = (e.DieRoll ?? 0) + (e.AttackPower ?? 0);
+                        int defTotal = (e.DefenseRoll ?? 0) + (e.DefensePower ?? 0);
+                        var atkLabel = totalAttacksInTurn > 1 ? $" {attackNo}/{totalAttacksInTurn}" : "";
+                        sb.AppendLine($"    ATTACK{atkLabel}  {hitMiss}{tags}  [{e.DieRoll}+{e.AttackPower}={atkTotal} vs {e.DefenseRoll}+{e.DefensePower}={defTotal}]");
+                        if (!string.IsNullOrEmpty(e.Phrase))
+                            sb.AppendLine($"    \"{e.Phrase}\"");
+                        // Damage formula embedded in Attack entry message
+                        if (e.IsHit == true && !string.IsNullOrEmpty(e.Message))
+                        {
+                            int dmgIdx = e.Message.IndexOf(" | Dmg: ", StringComparison.Ordinal);
+                            if (dmgIdx >= 0)
+                                sb.AppendLine($"    DMG   {e.Message[(dmgIdx + 8)..]}");
+                        }
+                        continue;
+
+                    case "Damage":
+                        if (e.TargetHpBefore.HasValue)
+                            sb.AppendLine($"    HP   {e.ActorName,-12}  {e.TargetHpBefore,4} → {e.TargetHpAfter,4}  (-{e.DamageDealt})");
+                        continue;
+
+                    case "EffectApplied":
+                        sb.AppendLine($"    EFFECT  [{e.StatusEffectName}] applied  dur={e.EffectDuration}");
+                        continue;
+
+                    case "EffectResisted":
+                        sb.AppendLine($"    RESIST  [{e.StatusEffectName}]  rolled {e.ResistRoll} vs {e.ResistThreshold}");
+                        continue;
+
+                    case "EffectExpired":
+                        sb.AppendLine($"    EXPIRED  [{e.StatusEffectName}] worn off {e.ActorName}");
+                        continue;
+
+                    case "DoTTick":
+                        sb.AppendLine($"    DOT  {e.ActorName}  -{e.DamageDealt} HP  [{e.StatusEffectName}]");
+                        continue;
+
+                    case "FumblePenalty":
+                        sb.AppendLine($"    FUMBLE  {e.ActorName} — attack power penalised next turn");
+                        continue;
+
+                    case "Healed":
+                        sb.AppendLine($"    HEAL  {e.ActorName}  +{e.DamageDealt} HP  ({e.TargetHpBefore} → {e.TargetHpAfter})  [{e.AttackSourceName}]");
+                        continue;
+
+                    case "LeechTick":
+                        var lsym = e.LeechResourceType == "Mana" ? "♦" : "♥";
+                        var lres = e.LeechResourceType == "Mana" ? "mana" : "HP";
+                        sb.AppendLine($"    LEECH  {lsym} {e.ActorName} -{e.LeechAmount} {lres} → {e.LeechCasterName} +{e.LeechAmount}  [{e.StatusEffectName}]");
+                        continue;
+
+                    case "ManaRegen":
+                        sb.AppendLine($"    MANA  {e.Message}");
+                        continue;
+
+                    case "ManaDeduct":
+                        sb.AppendLine($"    MANA  {e.Message}");
+                        continue;
+
+                    case "Death":
+                    case "KnockedOut":
+                        sb.AppendLine($"    *** {e.EventType}  {e.Message}");
+                        continue;
+
+                    case "PerfectParry":
+                        sb.AppendLine($"    PARRY  {e.ActorName}  TM {e.TurnMeterBefore} → {e.TurnMeterAfter}");
+                        continue;
+
+                    case "TotalReversal":
+                        sb.AppendLine($"    REVERSAL  {e.ActorName}  TM {e.TurnMeterBefore} → {e.TurnMeterAfter}");
+                        continue;
+
+                    case "Clash":
+                        sb.AppendLine($"    CLASH  {e.ActorName} vs {e.TargetName}");
+                        continue;
+
+                    case "DevastatingStrike":
+                        sb.AppendLine($"    DEVAST  {e.ActorName} → {e.TargetName}  ×3  ({e.DamageDealt} dmg)");
+                        continue;
+
+                    case "SkippedTurn":
+                        sb.AppendLine($"    SKIP  {e.ActorName}  {e.Message}");
+                        continue;
+
+                    case "TurnEnd":
+                        FlushDice();
+                        sb.AppendLine($"    END  TM {e.TurnMeterBefore} → {e.TurnMeterAfter}");
+                        inTurn = false;
+                        totalAttacksInTurn = 0;
+                        continue;
+                }
+
+                if (e.SoundDescription is not null)
+                    sb.AppendLine($"    ♪ {e.SoundDescription}");
+
+                continue;
+            }
+
+            // ── Inter-turn / standalone events ─────────────────────────────────
             switch (e.EventType)
             {
+                case "RoundStart":
+                    sb.AppendLine($"\n══ ROUND {e.RoundNumber} ═══════════════════════════════════════════════════════════════════════  tick={e.Tick}");
+                    break;
+
+                case "RoundEnd":
+                    break;
+
                 case "TurnStart":
-                    if (e.Tick != lastTick) sb.AppendLine();
-                    turnNo++;
-                    var spell = e.IsSpell ? " (spell)" : "";
-                    sb.AppendLine($"  [{e.Tick,5}]  ══ TURN {turnNo,3} ══  {e.ActorName,-12} → {e.TargetName,-12}  [{e.AttackSourceName}{spell}]");
-                    lastTick = e.Tick;
-                    break;
+                    FlushPendingMana();
 
-                case "Attack":
-                    var hit   = e.IsHit == true ? "HIT" : "MISS";
-                    var crit  = e.IsCritical == true      ? " !! CRITICAL !!"      : "";
-                    var fumb  = e.IsFumble  == true       ? " ~~ FUMBLE ~~"        : "";
-                    var spcl  = e.IsDevastatingStrike == true ? " *** DEVASTATING STRIKE ***" :
-                                e.IsClash             == true ? " ~~ CLASH ~~"               :
-                                e.IsPerfectParry      == true ? " >> PERFECT PARRY <<"        :
-                                e.IsTotalReversal     == true ? " *** TOTAL REVERSAL ***"     : "";
-                    var defRoll = e.DefenseRoll.HasValue ? $"  d20_def={e.DefenseRoll,2}" : "";
-                    var total = (e.DieRoll ?? 0) + (e.AttackPower ?? 0);
-                    sb.AppendLine($"           Attack   d20_atk={e.DieRoll,2}{defRoll}  +AP {e.AttackPower,3}  vs DP {e.DefensePower,3}  total={total,3}  -> {hit}{crit}{fumb}{spcl}");
-                    if (!string.IsNullOrEmpty(e.Phrase))
-                        sb.AppendLine($"                    \"{e.Phrase}\"");
-                    if (e.IsHit == true && !string.IsNullOrEmpty(e.Message))
+                    // If a ManaDeduct for this actor was buffered, absorb into the turn block
+                    if (pendingMana?.ActorName == e.ActorName)
                     {
-                        var dmgIdx = e.Message.IndexOf(" | Dmg: ", StringComparison.Ordinal);
-                        if (dmgIdx >= 0)
-                            sb.AppendLine($"           Damage   {e.Message[(dmgIdx + 8)..]}");
+                        sb.AppendLine($"\n══ TURN {++turnNo,3} ═══════════════════════════════════════════════════════════════════════  tick={e.Tick}");
+                        var sp = e.IsSpell == true ? " (spell)" : "";
+                        sb.AppendLine($"  {e.ActorName} → {e.TargetName}  [{e.AttackSourceName}{sp}]");
+                        sb.AppendLine($"    MANA  {pendingMana.Message}");
+                        pendingMana = null;
                     }
-                    break;
+                    else
+                    {
+                        sb.AppendLine($"\n══ TURN {++turnNo,3} ═══════════════════════════════════════════════════════════════════════  tick={e.Tick}");
+                        var sp = e.IsSpell == true ? " (spell)" : "";
+                        sb.AppendLine($"  {e.ActorName} → {e.TargetName}  [{e.AttackSourceName}{sp}]");
+                    }
 
-                case "Damage":
-                    sb.AppendLine($"           Damage   {e.ActorName,-12}  HP {e.TargetHpBefore,4} → {e.TargetHpAfter,4}  (-{e.DamageDealt})");
-                    break;
-
-                case "FumblePenalty":
-                    sb.AppendLine($"           FUMBLE   {e.ActorName} — attack power penalised next turn");
-                    break;
-
-                case "PerfectParry":
-                    sb.AppendLine($"           PARRY    {e.ActorName} — perfect parry! TM {e.TurnMeterBefore} -> {e.TurnMeterAfter}");
-                    break;
-
-                case "TotalReversal":
-                    sb.AppendLine($"           REVERSAL {e.ActorName} — total reversal! TM {e.TurnMeterBefore} -> {e.TurnMeterAfter}");
-                    break;
-
-                case "Clash":
-                    sb.AppendLine($"           CLASH    {e.ActorName} vs {e.TargetName} — weapons collide, mutual damage");
-                    break;
-
-                case "DevastatingStrike":
-                    sb.AppendLine($"           DEVAST   {e.ActorName} -> {e.TargetName} — x3 damage ({e.DamageDealt} dealt)");
-                    break;
-
-                case "EffectApplied":
-                    sb.AppendLine($"           Effect   [{e.StatusEffectName}] applied to {e.ActorName}  (duration {e.EffectDuration?.ToString() ?? "?"} turns)");
-                    break;
-
-                case "EffectResisted":
-                    sb.AppendLine($"           Resisted [{e.StatusEffectName}] by {e.ActorName}  (rolled {e.ResistRoll} vs threshold {e.ResistThreshold})");
-                    break;
-
-                case "EffectExpired":
-                    sb.AppendLine($"           Expired  [{e.StatusEffectName}] worn off {e.ActorName}");
-                    break;
-
-                case "DoTTick":
-                    sb.AppendLine($"           DoT      {e.ActorName,-12}  suffers {e.DamageDealt} {e.StatusEffectName} damage");
-                    break;
-
-                case "SkippedTurn":
-                    sb.AppendLine($"  [{e.Tick,5}]  SKIP  {e.ActorName,-12}  {e.Message}");
-                    lastTick = e.Tick;
-                    break;
-
-                case "TurnEnd":
-                    // Mark the end of a turn visually
-                    sb.AppendLine($"                    TM after turn: {e.ActorName} → {e.TurnMeterAfter}");
-                    break;
-
-                case "Death":
-                    sb.AppendLine();
-                    sb.AppendLine($"  [{e.Tick,5}]  *** DEATH    : {e.Message}");
-                    lastTick = e.Tick;
-                    break;
-
-                case "KnockedOut":
-                    sb.AppendLine();
-                    sb.AppendLine($"  [{e.Tick,5}]  *** KNOCKOUT : {e.Message}");
-                    lastTick = e.Tick;
-                    break;
-
-                case "ApiCall":
-                    sb.AppendLine($"  [{e.Tick,5}]  DICE  {e.Message}");
-                    lastTick = e.Tick;
-                    break;
-
-                case "SpellQueued":
-                    sb.AppendLine($"  [{e.Tick,5}]  QUEUE  {e.Message}");
-                    lastTick = e.Tick;
-                    break;
-
-                case "SpellCharging":
-                    sb.AppendLine($"  [{e.Tick,5}]  CHARGE  {e.Message}");
-                    lastTick = e.Tick;
-                    break;
-
-                case "SpellLost":
-                    sb.AppendLine($"  [{e.Tick,5}]  LOST  {e.Message}");
-                    lastTick = e.Tick;
-                    break;
-
-                case "ConcentrationPass":
-                    sb.AppendLine($"  [{e.Tick,5}]  CONC  {e.Message}");
-                    lastTick = e.Tick;
-                    break;
-
-                case "ManaRegen":
-                    sb.AppendLine($"  [{e.Tick,5}]  MANA  {e.Message}");
-                    lastTick = e.Tick;
-                    break;
-
-                case "InsufficientMana":
-                    sb.AppendLine($"  [{e.Tick,5}]  NOMANA  {e.Message}");
-                    lastTick = e.Tick;
+                    inTurn = true;
+                    turnActor = e.ActorName;
+                    attackNo = 0;
+                    pendingDice.Clear();
                     break;
 
                 case "ManaDeduct":
-                    sb.AppendLine($"  [{e.Tick,5}]  MANACOST  {e.Message}");
-                    lastTick = e.Tick;
+                    pendingMana = e;
+                    break;
+
+                case "ApiCall":
+                    FlushPendingMana();
+                    sb.AppendLine($"  DICE  {e.Message}  tick={e.Tick}");
+                    break;
+
+                case "Death":
+                case "KnockedOut":
+                    FlushPendingMana();
+                    sb.AppendLine($"  *** {e.EventType}  {e.Message}  tick={e.Tick}");
+                    break;
+
+                case "SkippedTurn":
+                    FlushPendingMana();
+                    sb.AppendLine($"  SKIP  {e.ActorName}  {e.Message}  tick={e.Tick}");
+                    break;
+
+                case "ManaRegen":
+                    FlushPendingMana();
+                    sb.AppendLine($"  MANA  {e.Message}  tick={e.Tick}");
+                    break;
+
+                case "InsufficientMana":
+                    FlushPendingMana();
+                    sb.AppendLine($"  NOMANA  {e.Message}  tick={e.Tick}");
                     break;
 
                 case "Healed":
-                    sb.AppendLine($"  [{e.Tick,5}]  HEALED {e.ActorName,-12}  +{e.DamageDealt} HP  ({e.TargetHpBefore} \u2192 {e.TargetHpAfter})  [{e.AttackSourceName}]");
-                    lastTick = e.Tick;
+                    FlushPendingMana();
+                    sb.AppendLine($"  HEAL  {e.ActorName}  +{e.DamageDealt} HP  ({e.TargetHpBefore} → {e.TargetHpAfter})  [{e.AttackSourceName}]  tick={e.Tick}");
                     break;
 
                 case "LeechTick":
-                    var leechSymbol = e.LeechResourceType == "Mana" ? "\u2666" : "\uD83E\uDE78";
-                    var leechResName = e.LeechResourceType == "Mana" ? "mana" : "HP";
-                    sb.AppendLine($"  [{e.Tick,5}]  LEECH  {leechSymbol} {e.ActorName} loses {e.LeechAmount} {leechResName} \u2192 transferred to {e.LeechCasterName} (+{e.LeechAmount})  [{e.StatusEffectName}]");
-                    lastTick = e.Tick;
+                    FlushPendingMana();
+                    var lsym2 = e.LeechResourceType == "Mana" ? "♦" : "♥";
+                    var lres2 = e.LeechResourceType == "Mana" ? "mana" : "HP";
+                    sb.AppendLine($"  LEECH  {lsym2} {e.ActorName} -{e.LeechAmount} {lres2} → {e.LeechCasterName} +{e.LeechAmount}  [{e.StatusEffectName}]  tick={e.Tick}");
                     break;
 
+                case "DoTTick":
+                    FlushPendingMana();
+                    sb.AppendLine($"  DOT  {e.ActorName}  -{e.DamageDealt} HP  [{e.StatusEffectName}]  tick={e.Tick}");
+                    break;
+
+                case "EffectApplied":
+                    FlushPendingMana();
+                    sb.AppendLine($"  EFFECT  [{e.StatusEffectName}] applied to {e.ActorName}  dur={e.EffectDuration?.ToString() ?? "?"}  tick={e.Tick}");
+                    break;
+
+                case "EffectResisted":
+                    FlushPendingMana();
+                    sb.AppendLine($"  RESIST  [{e.StatusEffectName}] by {e.ActorName}  ({e.ResistRoll} vs {e.ResistThreshold})  tick={e.Tick}");
+                    break;
+
+                case "EffectExpired":
+                    FlushPendingMana();
+                    sb.AppendLine($"  EXPIRED  [{e.StatusEffectName}] worn off {e.ActorName}  tick={e.Tick}");
+                    break;
+
+                case "SpellQueued":
+                    FlushPendingMana();
+                    sb.AppendLine($"  QUEUE  {e.Message}  tick={e.Tick}");
+                    break;
+
+                case "SpellCharging":
+                    FlushPendingMana();
+                    sb.AppendLine($"  CHARGE  {e.Message}  tick={e.Tick}");
+                    break;
+
+                case "SpellLost":
+                    FlushPendingMana();
+                    sb.AppendLine($"  LOST  {e.Message}  tick={e.Tick}");
+                    break;
+
+                case "ConcentrationPass":
+                    FlushPendingMana();
+                    sb.AppendLine($"  CONC  {e.Message}  tick={e.Tick}");
+                    break;
+
+                case "PetSummoned":
+                    FlushPendingMana();
+                    sb.AppendLine($"  SUMMON  {e.ActorName}  tick={e.Tick}");
+                    break;
+
+                case "PetExpired":
+                    FlushPendingMana();
+                    sb.AppendLine($"  DISMISS  {e.ActorName}  tick={e.Tick}");
+                    break;
+
+                default:
+                    // Unknown event — show raw message if present
+                    if (!string.IsNullOrEmpty(e.Message))
+                        sb.AppendLine($"  {e.EventType}  {e.Message}  tick={e.Tick}");
+                    break;
             }
 
-            if (e.SoundDescription is not null)
-                sb.AppendLine($"                      \u266a {e.SoundDescription}");
+            if (e.SoundDescription is not null && !inTurn)
+                sb.AppendLine($"  ♪ {e.SoundDescription}");
         }
 
         // ── Summary ──────────────────────────────────────────────────────────────
