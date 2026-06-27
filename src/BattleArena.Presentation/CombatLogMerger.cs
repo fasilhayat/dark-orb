@@ -27,10 +27,20 @@ public static class CombatLogMerger
         var merged = new List<CombatLogEntry>(log.Count + diceLog.Count);
         var insertedKeys = new HashSet<(int Tick, string Actor)>();
 
+        string? currentActor = null;
+
         for (int i = 0; i < log.Count; i++)
         {
             var entry = log[i];
+            if (entry.EventType == "TurnStart")
+                currentActor = entry.ActorName;
+
             var key = (entry.Tick, entry.ActorName ?? "");
+
+            // Healed events store ActorName as the target, but dice are logged
+            // under the caster name. Use the current turn's actor instead.
+            if (entry.EventType == "Healed" && currentActor != null)
+                key = (entry.Tick, currentActor);
 
             // Insert this actor's dice before their first priority event
             if (Array.IndexOf(_insertBeforePriority, entry.EventType) >= 0

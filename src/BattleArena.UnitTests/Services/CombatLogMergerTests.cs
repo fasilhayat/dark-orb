@@ -238,6 +238,43 @@ public class CombatLogMergerTests
     }
 
     [Fact]
+    public void Merge_Healed_MismatchedActor_UsesCurrentTurnActor()
+    {
+        // Healed events store ActorName as the target, but dice are under the caster.
+        // The merger should use the current turn's actor (tracked from TurnStart) for the key.
+        var log = new List<CombatLogEntry>
+        {
+            E(1, "TurnStart", "Priestess"),
+            // Healed with ActorName=Elira (target), but dice under Priestess (caster)
+            new() { Tick = 1, EventType = "Healed", ActorName = "Elira" },
+            E(1, "TurnEnd", "Priestess")
+        };
+        var diceLog = new List<CombatLogEntry>
+        {
+            E(1, "ApiCall", "Priestess"),
+            E(1, "ApiCall", "Priestess")
+        };
+
+        var merged = CombatLogMerger.Merge(log, diceLog);
+
+        var types = merged.Select(e => e.EventType).ToList();
+        var actors = merged.Select(e => e.ActorName).ToList();
+
+        // Expected: [TurnStart(Priestess), ApiCall, ApiCall, Healed(Elira), TurnEnd]
+        Assert.Equal("TurnStart", types[0]);
+        Assert.Equal("Priestess", actors[0]);
+
+        Assert.Equal("ApiCall", types[1]);
+        Assert.Equal("ApiCall", types[2]);
+        Assert.Equal("Priestess", actors[1]);
+
+        Assert.Equal("Healed", types[3]);
+        Assert.Equal("Elira", actors[3]);
+
+        Assert.Equal("TurnEnd", types[4]);
+    }
+
+    [Fact]
     public void Merge_SpellQueued_DiceBeforeQueuedEvent()
     {
         // A spellcaster's dice should appear before their SpellQueued event.
