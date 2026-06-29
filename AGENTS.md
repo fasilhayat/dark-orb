@@ -1,7 +1,9 @@
 # BattleArena — AI instructions (OpenCode)
 
 > Canonical source. Edit this file, then run `make sync-instructions` from `src/`
-> to mirror to `.github/copilot-instructions.md`.
+> to mirror to `.github/copilot-instructions.md`. The sync script lives in
+> `scripts/sync-instructions.ps1`, which is gitignored (`/scripts` in `.gitignore`)
+> — on a fresh clone, this file must exist locally for the target to work.
 
 ## Stale Makefile targets
 
@@ -61,7 +63,7 @@ Core never references Application/Infrastructure. Application never references I
 - **No CI**, no `Directory.Build.props`.
 - **Makefile targets are Windows-only** — uses `pwsh`, `cmd`, `powershell`.
 - **Docker**: `dotnet publish` on host, COPY pre-built output. No NuGet restore inside containers.
-- **PostgreSQL init** in `src/.postgres-init/` runs alphabetically: `01-schema.sql`, `02-seed-data.sql`, `03-characters.sql`, `04-bestiary.sql`.
+- **PostgreSQL init** in `src/.postgres-init/` runs alphabetically: `01-schema.sql`, `02-seed-data.sql`, `03-characters.sql`, `04-bestiary.sql`, `05-quests.sql`, `06-quest-seed.sql`.
 - **Setup**: copy `src/.env.example` to `src/.env` (defaults to `localdev`).
 - **NuGet config**: repo-root `nuget.config` (nuget.org only).
 
