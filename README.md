@@ -50,7 +50,7 @@ The world lore is documented in [design/docs/](design/docs/), organized into ref
 
 ### Core lore pillars
 
-1. **Races**: Human, Elf, Dwarf, Lizard, Undead, Kobold, Demon, Orc, Ogre, Gladefolk
+1. **Races**: Human, Elf, Dwarf, Orc, Gladefolk (non playable: Undead, Kobold, Demon, Ogre, Lizard)
 2. **Classes**: Barbarian, Knight, Paladin, Priest, Mage, Bard, Druid, Fighter, Rogue
 3. **Deities**: Light and Dark alignments, with separate domains such as Heaven, Moon, Fire, Shadow, and Darkness
 4. **Pets**: Predators and familiar creatures with class/race restrictions
