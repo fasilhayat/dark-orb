@@ -1238,4 +1238,4 @@ Creatures of the natural world infused with primal magic. Fey are capricious, an
 
 ---
 
-*Last updated: May 2026 — 10 creature categories, 68 stat blocks spanning levels 1–12+, all three tiers (Lesser / Normal / Greater). Includes all playable races as opponents (Human, Elf, Dwarf, Orc, Dark Elf, Lizardfolk, Gladefolk, Kobold, Ogre) plus beasts, monstrosities, undead, spirits & ghosts, demons, constructs, dragons, celestials, and fey. Creatures inspired by Greek, Norse, Celtic, Slavic, Japanese, Egyptian, Arabian, and Scottish mythologies.*
+*Last updated: June 2026 — 10 creature categories, 68 stat blocks spanning levels 1–12+, all three tiers (Lesser / Normal / Greater). Includes all playable races as opponents (Human, Elf, Dwarf, Orc, Gladefolk) plus non-playable races (Lizardfolk, Kobold, Ogre, Dark Elf, Undead, Demon) and beasts, monstrosities, spirits & ghosts, constructs, dragons, celestials, and fey. Creatures inspired by Greek, Norse, Celtic, Slavic, Japanese, Egyptian, Arabian, and Scottish mythologies.*

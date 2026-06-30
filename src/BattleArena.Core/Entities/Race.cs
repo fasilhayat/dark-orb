@@ -22,4 +22,5 @@ public class Race
     public int IntelligenceMax { get; set; } = 18;
     public int WisdomMax { get; set; } = 18;
     public int CharismaMax { get; set; } = 18;
+    public bool IsPlayable { get; set; } = true;
 }

@@ -56,7 +56,7 @@ Subraces: Mountain Dwarf, Hill Dwarf
 
 ---
 
-### Lizard (Descendants of Lesser Dragons)
+### Lizard (Non-Playable — NPC/Monster Only) (Descendants of Lesser Dragons)
 *Scales shimmering like gemstones, the lizardfolk are the Silent Children of the Sun. They are descendants of the lesser dragons, evolved from those ancient bloodlines when the world was young. The draconic heritage runs deep in their veins — their scales, their resilience, their cold patience all echo the great wyrms. To outsiders they seem emotionless, but among their own kind they share deep bonds of loyalty. Swamp Lizards glide through poisonous marshes, Desert Lizards endure the searing heat, and Forest Lizards strike from the canopy with terrifying precision.*
 
 | Str | Dex | Sta | Int | Wis | Cha |
@@ -64,7 +64,6 @@ Subraces: Mountain Dwarf, Hill Dwarf
 | +2 | +0 | +1 | +0 | +0 | +0 |
 
 Special Ability: **Poison Immunity** — Immune to poison damage and the poisoned condition.
-Available classes: Priest, Druid, Fighter
 Subraces: Swamp Lizard, Desert Lizard, Forest Lizard
 
 ---
@@ -82,7 +81,7 @@ Special Abilities: **Fear Immunity**, **Cause Fear**, **Stun**
 
 ---
 
-### Kobold
+### Kobold (Non-Playable — NPC/Monster Only)
 *Small, scaly, and underestimated by every other race, kobolds are survivors. They dwell in the cracks of the world — forgotten mines, sewer networks, and the underbellies of great cities. Their natural cunning and magic resistance have kept them alive against larger, stronger foes. A kobold's greatest weapon is not their claw or fang, but their cleverness. They build traps that would impress dwarves and tunnels that baffle even elves.*
 
 | Str | Dex | Sta | Int | Wis | Cha |
@@ -90,11 +89,10 @@ Special Abilities: **Fear Immunity**, **Cause Fear**, **Stun**
 | +0 | +2 | +0 | +1 | +0 | +0 |
 
 Special Ability: **Magic Resistance** — Advantage on saving throws against magical effects.
-Available classes: Priest, Mage, Fighter, Rogue
 
 ---
 
-### Demon
+### Demon (Non-Playable — NPC/Monster Only)
 *Hailing from the infernal planes beyond the mortal veil, demons are creatures of pure elemental chaos. Each demon embodies a primal force — fire demons burn with endless rage, shadow demons hunger for fear and despair. They enter the mortal world through rifts and summonings, bringing destruction in their wake. Yet some demons reject their nature, seeking redemption in a world that fears and despises them.*
 
 | Str | Dex | Sta | Int | Wis | Cha |
@@ -119,7 +117,7 @@ Subraces: Green Orc, Blue Orc, Red Orc
 
 ---
 
-### Ogre
+### Ogre (Non-Playable — NPC/Monster Only)
 *Titans reduced by ages of separation from their divine ancestors, ogres are the largest of the mortal races. Standing twelve feet tall and built of solid muscle and thick bone, they are living battering rams. Mountain Ogres possess residual magic resistance from their giant bloodline, Hill Ogres throw boulders with deadly accuracy, Desert Ogres endure the harshest climates, and Forest Ogres can regenerate wounds at an alarming rate.*
 
 | Str | Dex | Sta | Int | Wis | Cha |
@@ -127,7 +125,6 @@ Subraces: Green Orc, Blue Orc, Red Orc
 | +3 | +0 | +2 | +0 | +0 | +0 |
 
 Special Abilities: **Magic Resistance**, **Extra Strength**
-Available classes: Barbarian, Fighter
 Subraces: Mountain Ogre, Hill Ogre, Desert Ogre, Forest Ogre
 
 ---

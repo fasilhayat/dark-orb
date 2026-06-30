@@ -27,9 +27,11 @@ public static class EquipmentEndpoint
             return Results.Ok(armor);
         });
 
-        app.MapGet("/v1/races", async (IRaceRepository raceRepository) =>
+        app.MapGet("/v1/races", async (IRaceRepository raceRepository, bool? playableOnly) =>
         {
-            var races = await raceRepository.GetAllAsync();
+            var races = playableOnly == true
+                ? await raceRepository.GetPlayableAsync()
+                : await raceRepository.GetAllAsync();
             return Results.Ok(races);
         });
 

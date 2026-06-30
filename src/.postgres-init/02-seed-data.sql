@@ -264,8 +264,8 @@ INSERT INTO arena_data.race (name, description, base_movement_speed, strength_bo
     ('Half-Elf', 'Bridging two worlds, half-elves carry the grace of their elven heritage and the adaptability of their human blood. They are charismatic diplomats, natural leaders, and gifted magic-users. Welcomed in both human cities and elven enclaves yet belonging fully to neither, their dual heritage grants them insight and empathy beyond their years. Their pointed ears and ageless features hint at elven ancestry, while their drive and ambition are purely human.', 30, 0, 1, 0, 1, 0, 2, 0);
 
 
--- Non-playable races (Undead, Demon)
-UPDATE arena_data.race SET is_playable = FALSE WHERE name IN ('Undead', 'Demon');
+-- Non-playable races (Undead, Demon, Kobold, Ogre, Lizard)
+UPDATE arena_data.race SET is_playable = FALSE WHERE name IN ('Undead', 'Demon', 'Kobold', 'Ogre', 'Lizard');
 
 
 -- Racial stat minimums and maximums

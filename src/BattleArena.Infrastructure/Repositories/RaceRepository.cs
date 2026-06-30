@@ -20,6 +20,13 @@ public class RaceRepository : IRaceRepository
         return await _context.ExecuteQueryAsync("fn_get_races", MapRace);
     }
 
+    public async Task<List<Race>> GetPlayableAsync()
+    {
+        return (await _context.ExecuteQueryAsync("fn_get_races", MapRace))
+            .Where(r => r.IsPlayable)
+            .ToList();
+    }
+
     public async Task<Race?> GetByIdAsync(int id)
     {
         var results = await _context.ExecuteQueryAsync(
@@ -144,6 +151,9 @@ public class RaceRepository : IRaceRepository
         if (reader["intelligence_max"] != DBNull.Value) race.IntelligenceMax = (int)reader["intelligence_max"];
         if (reader["wisdom_max"] != DBNull.Value) race.WisdomMax = (int)reader["wisdom_max"];
         if (reader["charisma_max"] != DBNull.Value) race.CharismaMax = (int)reader["charisma_max"];
+
+        if (reader["is_playable"] != DBNull.Value)
+            race.IsPlayable = (bool)reader["is_playable"];
 
         return race;
     }

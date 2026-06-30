@@ -366,15 +366,15 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
 
     private static readonly Dictionary<string, string[]> ClassRaceRestrictions = new()
     {
-        ["Barbarian"] = ["Human", "Orc", "Ogre", "Dwarf"],
+        ["Barbarian"] = ["Human", "Orc", "Dwarf"],
         ["Knight"]    = ["Human", "Elf", "Dwarf", "Orc"],
         ["Paladin"]   = ["Human", "Elf", "Dwarf"],
-        ["Priest"]    = ["Human", "Elf", "Dwarf", "Lizard", "Kobold", "Gladefolk", "Orc"],
-        ["Mage"]      = ["Human", "Elf", "Kobold"],
+        ["Priest"]    = ["Human", "Elf", "Dwarf", "Gladefolk", "Orc"],
+        ["Mage"]      = ["Human", "Elf"],
         ["Bard"]      = ["Human", "Elf", "Gladefolk"],
-        ["Druid"]     = ["Human", "Elf", "Gladefolk", "Lizard"],
-        ["Fighter"]   = ["Human", "Elf", "Dwarf", "Lizard", "Kobold", "Orc", "Ogre", "Gladefolk"],
-        ["Rogue"]     = ["Human", "Elf", "Dwarf", "Gladefolk", "Kobold"],
+        ["Druid"]     = ["Human", "Elf", "Gladefolk"],
+        ["Fighter"]   = ["Human", "Elf", "Dwarf", "Orc", "Gladefolk"],
+        ["Rogue"]     = ["Human", "Elf", "Dwarf", "Gladefolk"],
         ["Ranger"]    = ["Human", "Elf", "Dwarf", "Gladefolk", "Half-Elf"]
     };
 
@@ -383,10 +383,7 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         ["Human"]     = [],
         ["Elf"]       = ["High Elf", "Dark Elf", "Forest Elf"],
         ["Dwarf"]     = ["Mountain Dwarf", "Hill Dwarf"],
-        ["Lizard"]    = ["Swamp Lizard", "Desert Lizard", "Forest Lizard"],
-        ["Kobold"]    = ["Cave Kobold", "Desert Kobold", "Swamp Kobold", "Forest Kobold"],
         ["Orc"]       = ["Green Orc", "Blue Orc", "Red Orc"],
-        ["Ogre"]      = ["Mountain Ogre", "Hill Ogre", "Desert Ogre", "Forest Ogre"],
         ["Gladefolk"] = ["Forest Gladefolk", "Hill Gladefolk"],
         ["Half-Elf"]  = ["Half-High-Elf", "Half-Wood-Elf"]
     };
