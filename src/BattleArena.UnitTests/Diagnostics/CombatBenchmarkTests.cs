@@ -146,7 +146,7 @@ public class CombatBenchmarkTests(ITestOutputHelper out_)
                 MakeSpell("Heal", DieType.D8, 2, 0, DamageType.Healing, SpellSchool.Deity, 25, 6),
                 MakeSpell("Mass Heal", DieType.D6, 3, 0, DamageType.Healing, SpellSchool.Deity, 50, 4),
                 MakeSpell("Mind Siphon", DieType.D4, 1, 0, DamageType.Shadow, SpellSchool.Umbramancy, 30, 3,
-                    onHit: [new() { Name = "LeechMana", Type = StatusEffectType.Leech, Duration = 3, ApplicationChance = 80, LeechPerTurn = 6, LeechResourceType = "Mana", ResistanceType = ResistanceType.Shadow }]),
+                    onHit: [new() { Name = "LeechMana", Type = StatusEffectType.Leech, Duration = 3, ApplicationChance = 80, LeechPerTurn = 6, LeechResourceType = LeechResources.Mana, ResistanceType = ResistanceType.Shadow }]),
             ],
         };
         golem.CurrentHitPoints = golem.MaxHitPoints;

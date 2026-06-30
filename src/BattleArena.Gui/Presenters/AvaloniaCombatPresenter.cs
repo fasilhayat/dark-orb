@@ -8,6 +8,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using BattleArena.Application.Interfaces;
 using BattleArena.Application.Models;
+using BattleArena.Core.Entities;
 using BattleArena.Application.Services;
 using BattleArena.Gui.ViewModels;
 using BattleArena.Presentation;
@@ -1096,7 +1097,7 @@ internal sealed class AvaloniaCombatPresenter : ICombatPresenter
     {
         var targetColor = NameBrush(state.IsHeroSide(e.ActorName), e.ActorName, null);
         var casterColor = NameBrush(state.IsHeroSide(e.LeechCasterName), e.LeechCasterName, targetColor);
-        var effectName = e.StatusEffectName ?? (e.LeechResourceType == "Mana" ? "LeechMana" : "Leech");
+        var effectName = e.StatusEffectName ?? (e.LeechResourceType == LeechResources.Mana ? "LeechMana" : "Leech");
         var config = TransferEffectRegistry.GetConfig(effectName);
         var leechColor = MakeBrush(config.TransferColor);
         return

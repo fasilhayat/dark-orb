@@ -36,10 +36,10 @@ internal class StatusEffectProcessor
             var casterState = states.FirstOrDefault(s => s.Character.Name == casterName);
             if (casterState is null || !casterState.Character.IsAlive) continue;
 
-            var resourceType = leechEffect.LeechResourceType ?? "HP";
+            var resourceType = leechEffect.LeechResourceType ?? LeechResources.Hp;
             var leechAmount = leechEffect.LeechPerTurn;
 
-            if (resourceType == "HP")
+            if (resourceType == LeechResources.Hp)
             {
                 var targetBefore = actorState.Character.CurrentHitPoints;
                 actorState.Character.CurrentHitPoints -= leechAmount;
@@ -56,7 +56,7 @@ internal class StatusEffectProcessor
                     EventType          = "LeechTick",
                     LeechAmount        = leechAmount,
                     LeechCasterName    = casterName,
-                    LeechResourceType  = "HP",
+                    LeechResourceType  = LeechResources.Hp,
                     LeechTargetAfter   = actorState.Character.CurrentHitPoints,
                     LeechCasterAfter   = casterState.Character.CurrentHitPoints,
                     StatusEffectName   = leechEffect.Name,
@@ -65,7 +65,7 @@ internal class StatusEffectProcessor
                     Message            = $"{actorState.Character.Name} loses {leechAmount} HP to {casterName}'s {leechEffect.Name}.  {casterName} gains {leechAmount} HP."
                 });
             }
-            else if (resourceType == "Mana")
+            else if (resourceType == LeechResources.Mana)
             {
                 var targetBefore = actorState.Character.CurrentMana;
                 actorState.Character.CurrentMana = Math.Max(0, targetBefore - leechAmount);
@@ -83,7 +83,7 @@ internal class StatusEffectProcessor
                     EventType          = "LeechTick",
                     LeechAmount        = actualDrain,
                     LeechCasterName    = casterName,
-                    LeechResourceType  = "Mana",
+                    LeechResourceType  = LeechResources.Mana,
                     LeechTargetAfter   = actorState.Character.CurrentMana,
                     LeechCasterAfter   = casterState.Character.CurrentMana,
                     StatusEffectName   = leechEffect.Name,
@@ -103,10 +103,10 @@ internal class StatusEffectProcessor
         if (effect.LeechPerTurn <= 0) return;
         
         var casterName = casterState.Character.Name;
-        var resourceType = effect.LeechResourceType ?? "HP";
+        var resourceType = effect.LeechResourceType ?? LeechResources.Hp;
         var leechAmount = effect.LeechPerTurn;
 
-        if (resourceType == "HP")
+        if (resourceType == LeechResources.Hp)
         {
             var targetHpBefore = actorState.Character.CurrentHitPoints;
             actorState.Character.CurrentHitPoints -= leechAmount;
@@ -123,7 +123,7 @@ internal class StatusEffectProcessor
                 EventType          = "LeechTick",
                 LeechAmount        = leechAmount,
                 LeechCasterName    = casterName,
-                LeechResourceType  = "HP",
+                LeechResourceType  = LeechResources.Hp,
                 LeechTargetAfter   = actorState.Character.CurrentHitPoints,
                 LeechCasterAfter   = casterState.Character.CurrentHitPoints,
                 StatusEffectName   = effect.Name,
@@ -132,7 +132,7 @@ internal class StatusEffectProcessor
                 Message            = $"{actorState.Character.Name} loses {leechAmount} HP to {casterName}'s {effect.Name}.  {casterName} gains {leechAmount} HP."
             });
         }
-        else if (resourceType == "Mana")
+        else if (resourceType == LeechResources.Mana)
         {
             var targetManaBefore = actorState.Character.CurrentMana;
             actorState.Character.CurrentMana = Math.Max(0, targetManaBefore - leechAmount);
@@ -150,7 +150,7 @@ internal class StatusEffectProcessor
                 EventType          = "LeechTick",
                 LeechAmount        = actualDrain,
                 LeechCasterName    = casterName,
-                LeechResourceType  = "Mana",
+                LeechResourceType  = LeechResources.Mana,
                 LeechTargetAfter   = actorState.Character.CurrentMana,
                 LeechCasterAfter   = casterState.Character.CurrentMana,
                 StatusEffectName   = effect.Name,
@@ -314,7 +314,7 @@ internal class StatusEffectProcessor
                 ApplicationChance    = template.ApplicationChance,
                 Source               = spell.Name,
                 LeechPerTurn         = template.LeechPerTurn,
-                LeechResourceType    = template.LeechResourceType ?? "HP",
+                LeechResourceType    = template.LeechResourceType ?? LeechResources.Hp,
                 CasterName           = template.Type == StatusEffectType.Leech ? caster.Name : string.Empty
             };
 
@@ -367,7 +367,7 @@ internal class StatusEffectProcessor
                     ApplicationChance    = template.ApplicationChance,
                     Source               = spell.Name,
                     LeechPerTurn         = template.LeechPerTurn,
-                    LeechResourceType    = template.LeechResourceType ?? "HP",
+                    LeechResourceType    = template.LeechResourceType ?? LeechResources.Hp,
                     CasterName           = template.Type == StatusEffectType.Leech ? caster.Name : string.Empty
                 };
 
@@ -503,7 +503,7 @@ internal class StatusEffectProcessor
                 TurnMeterModifier = template.TurnMeterModifier, StackRule = template.StackRule,
                 ApplicationChance = template.ApplicationChance, Source = spell.Name,
                 LeechPerTurn = template.LeechPerTurn,
-                LeechResourceType = template.LeechResourceType ?? "HP",
+                LeechResourceType = template.LeechResourceType ?? LeechResources.Hp,
                 CasterName = template.Type == StatusEffectType.Leech ? attacker.Name : string.Empty
             };
 

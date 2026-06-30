@@ -1,3 +1,5 @@
+using BattleArena.Core.Entities;
+
 namespace BattleArena.Presentation;
 
 public sealed class VisualEvent
@@ -21,6 +23,6 @@ public sealed class VisualEvent
     // Leech transfer visualization
     public int LeechAmount { get; init; }
     public string? LeechCasterName { get; init; }
-    public string LeechResourceType { get; init; } = "HP";
+    public string LeechResourceType { get; init; } = LeechResources.Hp;
     public SpellSymbolEffect? SpellSymbol { get; init; }
 }

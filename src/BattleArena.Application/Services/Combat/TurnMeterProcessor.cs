@@ -38,7 +38,7 @@ internal class TurnMeterProcessor
                 var leech = s.Character.ActiveStatusEffects
                     .FirstOrDefault(e => e.Type == StatusEffectType.Leech
                         && e.LeechPerTurn > 0
-                        && e.LeechResourceType == "Mana"
+                        && e.LeechResourceType == LeechResources.Mana
                         && !string.IsNullOrEmpty(e.CasterName));
 
                 if (leech is not null)
@@ -57,7 +57,7 @@ internal class TurnMeterProcessor
                             Tick = tick, ActorName = s.Character.Name,
                             EventType = "LeechTick", LeechAmount = redirectAmount,
                             LeechCasterName = leech.CasterName,
-                            LeechResourceType = "Mana",
+                            LeechResourceType = LeechResources.Mana,
                             LeechTargetAfter = s.Character.CurrentMana,
                             LeechCasterAfter = leechCaster.Character.CurrentMana,
                             StatusEffectName = leech.Name,

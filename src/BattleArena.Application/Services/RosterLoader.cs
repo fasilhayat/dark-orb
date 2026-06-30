@@ -350,7 +350,7 @@ public static class RosterLoader
         public int    DamagePerTurn     { get; init; }
         public int    HealingPerTurn    { get; init; }
         public int    LeechPerTurn      { get; init; }
-        public string LeechResourceType { get; init; } = "HP";
+        public string LeechResourceType { get; init; } = LeechResources.Hp;
         public int    AttackPowerModifier  { get; init; }
         public int    DefensePowerModifier { get; init; }
         public int    TurnMeterModifier    { get; init; }

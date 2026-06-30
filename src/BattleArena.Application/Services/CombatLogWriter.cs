@@ -251,8 +251,8 @@ public static class CombatLogWriter
                         continue;
 
                     case "LeechTick":
-                        var lsym = e.LeechResourceType == "Mana" ? "♦" : "♥";
-                        var lres = e.LeechResourceType == "Mana" ? "mana" : "HP";
+                        var lsym = e.LeechResourceType == LeechResources.Mana ? "♦" : "♥";
+                        var lres = e.LeechResourceType == LeechResources.Mana ? "mana" : "HP";
                         sb.AppendLine($"    LEECH  {lsym} {e.ActorName} -{e.LeechAmount} {lres} → {e.LeechCasterName} +{e.LeechAmount}  [{e.StatusEffectName}]");
                         continue;
 
@@ -375,8 +375,8 @@ public static class CombatLogWriter
 
                 case "LeechTick":
                     FlushPendingMana();
-                    var lsym2 = e.LeechResourceType == "Mana" ? "♦" : "♥";
-                    var lres2 = e.LeechResourceType == "Mana" ? "mana" : "HP";
+                        var lsym2 = e.LeechResourceType == LeechResources.Mana ? "♦" : "♥";
+                    var lres2 = e.LeechResourceType == LeechResources.Mana ? "mana" : "HP";
                     sb.AppendLine($"  LEECH  {lsym2} {e.ActorName} -{e.LeechAmount} {lres2} → {e.LeechCasterName} +{e.LeechAmount}  [{e.StatusEffectName}]  tick={e.Tick}");
                     break;
 

@@ -683,7 +683,7 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
         {
             Name = "Mind Leech", Type = StatusEffectType.Leech,
             Target = EffectTarget.Target, Duration = 3,
-            LeechPerTurn = 5, LeechResourceType = "Mana",
+            LeechPerTurn = 5, LeechResourceType = LeechResources.Mana,
             ApplicationChance = 100, ResistanceType = ResistanceType.Magic
         };
         var siphonSpell = MakeSpell("Mind Siphon", DieType.D4, 1, 2, mindLeech);
@@ -710,7 +710,7 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
         // Every leech tick must involve the caster and target
         foreach (var lt in leechTicks)
         {
-            Assert.Equal("Mana", lt.LeechResourceType);
+            Assert.Equal(LeechResources.Mana, lt.LeechResourceType);
             Assert.Equal("Siphoner", lt.LeechCasterName);
             Assert.Equal("Target", lt.ActorName);
             Assert.True(lt.LeechAmount > 0);
@@ -751,7 +751,7 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
         {
             Name = "Mind Leech", Type = StatusEffectType.Leech,
             Duration = 2, LeechPerTurn = 3,
-            LeechResourceType = "Mana",
+            LeechResourceType = LeechResources.Mana,
             ApplicationChance = 100,
             CasterName = "C"
         });
@@ -770,7 +770,7 @@ public class CombatDiagnosticTests(ITestOutputHelper out_)
         // Verify all leech ticks transfer from T to C
         foreach (var lt in leechTicks)
         {
-            Assert.Equal("Mana", lt.LeechResourceType);
+            Assert.Equal(LeechResources.Mana, lt.LeechResourceType);
             Assert.Equal("C", lt.LeechCasterName);
             Assert.Equal("T", lt.ActorName);
         }

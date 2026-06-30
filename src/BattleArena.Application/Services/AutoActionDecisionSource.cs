@@ -120,9 +120,9 @@ public class AutoActionDecisionSource : IActionDecisionSource
         {
             if (eff.Type != StatusEffectType.Leech || eff.LeechPerTurn <= 0)
                 continue;
-            if (eff.LeechResourceType == "Mana" && actor.CurrentMana >= actor.EffectiveMaxMana)
+            if (eff.LeechResourceType == LeechResources.Mana && actor.CurrentMana >= actor.EffectiveMaxMana)
                 return false;
-            if (eff.LeechResourceType == "HP" && actor.CurrentHitPoints >= actor.MaxHitPoints)
+            if (eff.LeechResourceType == LeechResources.Hp && actor.CurrentHitPoints >= actor.MaxHitPoints)
                 return false;
         }
         return true;

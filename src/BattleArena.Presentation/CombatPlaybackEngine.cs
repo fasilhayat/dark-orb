@@ -1,6 +1,7 @@
 namespace BattleArena.Presentation;
 
 using BattleArena.Application.Models;
+using BattleArena.Core.Entities;
 
 public static class CombatPlaybackEngine
 {
@@ -673,9 +674,9 @@ public static class CombatPlaybackEngine
                 if (entry.LeechAmount > 0 && entry.LeechCasterName is not null)
                 {
                     var effectName = entry.StatusEffectName ?? "Leech";
-                    var resourceLabel = entry.LeechResourceType == "Mana" ? "MANA" : "HP";
+                    var resourceLabel = entry.LeechResourceType == LeechResources.Mana ? "MANA" : "HP";
                     var config = TransferEffectRegistry.GetConfig(
-                        entry.LeechResourceType == "Mana" ? "LeechMana" : effectName);
+                        entry.LeechResourceType == LeechResources.Mana ? "LeechMana" : effectName);
                     bus.PublishNormal(new VisualEvent
                     {
                         EventType = entry.EventType,
@@ -686,7 +687,7 @@ public static class CombatPlaybackEngine
                         DurationMs = config.DurationMs,
                         LeechAmount = entry.LeechAmount ?? 0,
                         LeechCasterName = entry.LeechCasterName,
-                        LeechResourceType = entry.LeechResourceType ?? "HP",
+                        LeechResourceType = entry.LeechResourceType ?? LeechResources.Hp,
                         EffectName = effectName,
                         SpellSymbol = SpellSymbolRegistry.Lookup("Vampiric Touch"),
                     });

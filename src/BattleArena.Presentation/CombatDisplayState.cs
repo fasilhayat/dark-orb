@@ -1,6 +1,7 @@
 namespace BattleArena.Presentation;
 
 using BattleArena.Application.Models;
+using BattleArena.Core.Entities;
 
 /// <summary>
 /// Tracks the visual state of all combatants during playback.
@@ -161,17 +162,17 @@ public sealed class CombatDisplayState
             case "LeechTick":
                 if (_chars.TryGetValue(e.ActorName, out var leechTargetSt))
                 {
-                    if (e.LeechResourceType == "HP" && e.LeechTargetAfter.HasValue)
+                    if (e.LeechResourceType == LeechResources.Hp && e.LeechTargetAfter.HasValue)
                         leechTargetSt.Hp = e.LeechTargetAfter.Value;
-                    else if (e.LeechResourceType == "Mana" && e.LeechTargetAfter.HasValue)
+                    else if (e.LeechResourceType == LeechResources.Mana && e.LeechTargetAfter.HasValue)
                         leechTargetSt.Mana = e.LeechTargetAfter.Value;
                     UpdateEffectOnTick(leechTargetSt, e);
                 }
                 if (e.LeechCasterName is not null && _chars.TryGetValue(e.LeechCasterName, out var leechCasterSt))
                 {
-                    if (e.LeechResourceType == "HP" && e.LeechCasterAfter.HasValue)
+                    if (e.LeechResourceType == LeechResources.Hp && e.LeechCasterAfter.HasValue)
                         leechCasterSt.Hp = e.LeechCasterAfter.Value;
-                    else if (e.LeechResourceType == "Mana" && e.LeechCasterAfter.HasValue)
+                    else if (e.LeechResourceType == LeechResources.Mana && e.LeechCasterAfter.HasValue)
                         leechCasterSt.Mana = e.LeechCasterAfter.Value;
                 }
                 break;

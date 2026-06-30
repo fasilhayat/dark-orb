@@ -31,7 +31,7 @@ public class StatusEffect
     public int LeechPerTurn { get; set; }
 
     // "HP" or "Mana" — which resource is drained
-    public string LeechResourceType { get; set; } = "HP";
+    public string LeechResourceType { get; set; } = LeechResources.Hp;
 
     // Name of the character who cast the leech (receives the drained resource)
     public string CasterName { get; set; } = string.Empty;

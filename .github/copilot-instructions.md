@@ -90,6 +90,9 @@ Priority in `CombatService.ResolveAttack()`:
 
 **HP**: >0 alive, 0 to −9 KnockedOut, −10 or lower Dead.
 
+**LeechResourceType**: use `LeechResources.Hp` / `LeechResources.Mana` constants
+from `Core/Entities/LeechResources.cs` instead of raw `"HP"` / `"Mana"` strings.
+
 **EventType** is a plain `string` on `CombatLogEntry` (not an enum). EventType values flow through `CombatLogWriter.cs` (30+ values: TurnStart, TurnEnd, Attack, Damage, TurnMeterGain, ManaDeduct, ManaRegen, SpellQueued, SpellCharging, SpellLost, SpellDisrupted, ConcentrationPass, InsufficientMana, SummonPet, PetSummoned, PetExpired, SummonFailed, Healed, DoTTick, HoTTick, LeechTick, EffectApplied, EffectResisted, EffectExpired, EffectReflected, FumblePenalty, Death, KnockedOut, SkippedTurn, ExtraAttack, Move, RoundStart, RoundEnd, Clash, DevastatingStrike, PerfectParry, TotalReversal, ApiCall, TurnMeterSnapshot).
 
 **Combat log**: `CombatLogWriter.Write()` produces a `.txt` (compact block-per-turn) + companion `.json` file for replay. The `.json` can be loaded via `CombatReplayer.ReplayFromFile()` for deterministic replay. `CombatLogMerger` inserts ApiCall dice entries per-actor before Attack/SpellQueued events.
